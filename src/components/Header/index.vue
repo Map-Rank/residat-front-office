@@ -43,7 +43,6 @@
           iconSize="w-5 h-5"
         />
         <IconWithLabel svgContent="src\assets\icons\chat.svg" labelText="Chat" iconSize="w-5 h-5" />
-        <!-- ... other navigation links ... -->
       </nav>
       <br />
 
@@ -75,12 +74,11 @@ export default {
   },
   data() {
     return {
-      isMenuOpen: false // State to track the toggle status of the menu
+      isMenuOpen: false 
     }
   }
 }
 </script>
 
 <style>
-/* Additional styles if needed */
 </style>

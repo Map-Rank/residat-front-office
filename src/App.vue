@@ -7,7 +7,7 @@
 </template>
 
 <script >
-// import IconWithLabel from './components/IconWithLabel/index.vue';
+
 import HeaderApp from './components/Header/index.vue'
 
 export default{
