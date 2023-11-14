@@ -1,24 +1,20 @@
 
 <template>
 
-<h1 class="text-3xl font-bold underline">
-    Hello world!
-  </h1>
-  <icon-with-label
-      svgContent="src\assets\images\logo-medium.svg"
-      labelText="Dashboard"
-      iconSize="w-20 h-20" 
-    >
-  </icon-with-label>
+    <header-app></header-app>
+
+
 </template>
 
 <script >
-import IconWithLabel from './components/IconWithLabel/index.vue';
+// import IconWithLabel from './components/IconWithLabel/index.vue';
+import HeaderApp from './components/Header/index.vue'
 
 export default{
     name:'App',
     components:{
-        IconWithLabel,
+        // IconWithLabel,
+        HeaderApp
     },
 
     data(){
@@ -32,3 +28,6 @@ export default{
 <style scoped>
 
 </style>
+
+
+
