@@ -1,16 +1,11 @@
 @import './base.css';
 
 #app {
-  max-width: 1280px;
+  /* max-width: 1280px; */
   margin: 0 auto;
 
   font-weight: normal;
 }
 
 
-@media (min-width: 1024px) {
 
-  #app {
-    padding: 0px 100px;
-  }
-}
