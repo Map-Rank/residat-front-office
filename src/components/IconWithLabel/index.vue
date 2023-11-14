@@ -1,13 +1,11 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
    <div class="icon-with-label">
-    <div
-    v-html="svgContent"
-    :class="iconSizeClass"
-    ></div>
+    <img :src="svgContent" :class="iconSize"  />
     <div class="label">
         {{ labelText }}
     </div>
+    <div>{{ iconSizeClass }}</div>
    </div>
 </template>
 
@@ -28,11 +26,6 @@
                 require:true
             },
 
-        computed:{
-            iconSizeClass(){
-                return this.iconSize
-            }
-        }
         }
         
     }
