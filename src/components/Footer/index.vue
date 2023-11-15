@@ -1,13 +1,13 @@
 <template>
-    <footer class=" text-white p-4">
-      <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
+    <footer class=" text-white p-4 ">
+      <div class="  mx-100 flex flex-col md:flex-row justify-between items-center">
         <!-- Left Side -->
         <div class="flex flex-col md:space-y-10">
             <div class="flex flex-col items-center md:flex-row mb-4 md:mb-0">
-                <a href="#" class="mb-2 md:mb-0 md:mr-6">Privacy</a>
-                <a href="#" class="mb-2 md:mb-0 md:mr-6">Terms</a>
-                <a href="#" class="mb-2 md:mb-0 md:mr-6">Contact</a>
-                <a href="#" class="mb-2 md:mb-0 md:mr-6">About</a>
+                <a href="#" class="text mb-2 md:mb-0 md:mr-6">Privacy</a>
+                <a href="#" class="text mb-2 md:mb-0 md:mr-6">Terms</a>
+                <a href="#" class="text mb-2 md:mb-0 md:mr-6">Contact</a>
+                <a href="#" class="text mb-2 md:mb-0 md:mr-6">About</a>
             </div>
 
             <div class="flex flex-col md:flex-row items-center">
@@ -23,8 +23,10 @@
                 </a>
               </div>
               <!-- Copyright -->
-              <div>
-                © {{ currentYear }} Map and Rank
+              <div >
+               <span class="text" > © {{ currentYear }} 
+                  Map and Rank 
+                </span>
               </div>
             </div>
         </div>
@@ -32,7 +34,7 @@
 
         <!-- Right Side -->
         <div class="flex flex-col md:flex-row items-center sm:mt-5">
-            <img src="src\assets\images\logo-medium-white.svg" alt="">
+            <img src="@\assets\images\Logos\logo-medium-white.svg" alt="">
         </div>
       </div>
     </footer>
@@ -53,5 +55,16 @@
 footer{
     background-color:  #021D40;
 }
+
+.text{
+
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px; 
+  font-family: 'Raleway';
+}
+
+
   </style>
   
