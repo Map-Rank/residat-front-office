@@ -1,14 +1,15 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <header>
+  <header class="my-4 mx-100">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center  space-x-6 p-4 md:hidden">
-      <img src="src\assets\images\logo-small.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
       <div class="flex-grow items-center">
+
         <input
           type="search"
           placeholder="Search"
-          class="h-8 p-2  bg-gray-300 rounded-md w-full w-3"
+          class="h-8 p-2 w-10 bg-gray-300 rounded-md w-full w-3"
         />
       </div>
     </div>
@@ -19,7 +20,7 @@
       class="flex-col md:flex-row md:flex item-center"
     >
       <!-- Logo -->
-      <img src="src\assets\images\logo-small.svg" alt="Logo" class="h-15 m-4" />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 " />
 
       <!-- Search bar -->
       <div class="flex-grow items-center">
@@ -31,35 +32,50 @@
       </div>
 
       <!-- Navigation Links -->
-      <nav class="flex flex-col md:flex-row items-center space-x-5">
+      <nav class="flex flex-col md:flex-row items-center space-x-10">
         <IconWithLabel
-          svgContent="src\assets\icons\dashboard.svg"
+          svgContent="src\assets\icons\dashboard-outline.svg"
+          svgContentHover="src\assets\icons\dashboard-fill.svg"
           labelText="Dashboard"
-          iconSize="w-5 h-5"
+          iconSize="w-8 h-8"
         />
         <IconWithLabel
-          svgContent="src\assets\icons\community.svg"
+          svgContent="src\assets\icons\community-outline.svg"
+          svgContentHover="src\assets\icons\community-fill.svg"
           labelText="Community"
-          iconSize="w-5 h-5"
+          iconSize="w-8 h-8"
         />
-        <IconWithLabel svgContent="src\assets\icons\chat.svg" labelText="Chat" iconSize="w-5 h-5" />
+        <IconWithLabel 
+        svgContent="src\assets\icons\chat-outline.svg"
+        svgContentHover="src\assets\icons\chat-fill.svg" 
+        labelText="Chat" 
+        iconSize="w-8 h-8" />
+
+        
+        <IconWithLabel
+          svgContent="src\assets\icons\profile-outline.svg"
+          svgContentHover="src\assets\icons\profile-fill.svg"
+          labelText="Profile"
+          iconSize="w-8 h-8"
+        />
+
+        <IconWithLabel
+          svgContent="src\assets\icons\post-outline.svg"
+          svgContentHover="src\assets\icons\post-fill.svg"
+          labelText="Subscribe"
+          iconSize="w-9 h-9"
+        />
+
+        <IconWithLabel
+          svgContent="src\assets\icons\subscribe-outline.svg"
+          svgContentHover="src\assets\icons\subscribe-fill.svg"
+          labelText="Subscribe"
+          iconSize="w-9 h-9"
+        />
       </nav>
       <br />
 
-      <!-- Profile, Post, Subscribe -->
-      <div class="flex flex-col md:flex-row items-center space-x-5 ml-5">
-        <IconWithLabel
-          svgContent="src\assets\icons\profile.svg"
-          labelText="Profile"
-          iconSize="w-5 h-5"
-        />
-        <IconWithLabel svgContent="src\assets\icons\home.svg" labelText="Home" iconSize="w-5 h-5" />
-        <IconWithLabel
-          svgContent="src\assets\icons\premium.svg"
-          labelText="Subscribe"
-          iconSize="w-5 h-5"
-        />
-      </div>
+ 
     </div>
   </header>
 </template>
