@@ -6,6 +6,7 @@
         <header-app></header-app>
 
         <body >
+
             <community></community>
         </body>
     </div>
@@ -19,7 +20,7 @@
 
 import HeaderApp from './components/Header/index.vue'
 import FooterApp from './components/Footer/index.vue'
-import Community from './components/Community/index.vue'
+import Community from './views/Community/index.vue'
 
 
 export default{

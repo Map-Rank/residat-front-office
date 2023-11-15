@@ -20,39 +20,20 @@
       <!-- Main Content Area: Posts -->
       <main class="col-span-2 shadow-sm">
           <!-- Post -->
-          <article class="bg-white p-4 rounded-lg shadow-md">
-              <!-- Post Header -->
-              <header class="mb-4">
-                  <div class="flex items-center justify-between">
-              <h3 class="font-bold text-lg">User-name</h3>
-              <span class="text-sm text-gray-600">Posted: 20 October</span>
-            </div>
-   
-            <h2 class="font-bold text-xl my-2">Heavy rains, landslide in Cameroon's west kill at least 34</h2>
-          </header>
-          <!-- Post Content -->
           <div>
-            <p>Introduction UNICEF, the United Nations International Children's Emergency Fund, is a globally recognized organization dedicated to...</p>
-            <!-- Post Images -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
-              <img src="@\assets\images\Community\Post1.png" alt="Description of image 1" />
-              <img src="@\assets\images\Community\Post1.png" alt="Description of image 2" />
-              <!-- ... more images ... -->
-            </div>
-          </div>
-          <!-- Post Interaction Area -->
-          <footer class="flex items-center justify-between mt-4">
-            <div>
-              <span>National embassy and 214 others liked your post</span>
-              <span>25 Comments</span>
-            </div>
-            <div>
-              <button class="text-blue-500">Like</button>
-              <button class="text-blue-500">Comment</button>
-              <button class="text-blue-500">Share</button>
-            </div>
-          </footer>
-        </article>
+    <PostComponent
+      username="User-name"
+      postDate="Posted: 20 October"
+      postTitle="Heavy rains, landslide in Cameroon's west kill at least 34"
+      postContent="Introduction UNICEF, the United Nations International Children's Emergency Fund, is a globally recognized organization dedicated to..."
+      userProfileImage="/path-to-user-profile.jpg"
+      :postImages="[
+        { src: '@\assets\images\Community\Post1.png', alt: 'Description of image 1' },
+        { src: '@\assets\images\Community\Post1.png', alt: 'Description of image 2' }
+      ]"
+    />
+  </div>
+    
         <!-- ... other posts ... -->
       </main>
 
@@ -76,6 +57,8 @@
   </template>
   
   <script>
+
+  import PostComponent from '../../components/Post/index.vue'
   export default {
     // eslint-disable-next-line vue/multi-word-component-names
     name:'Community',
@@ -86,6 +69,9 @@
         topics: ['Agriculture', 'Economy', 'Environment', 'Education']
         // ... other data ...
       };
+    },
+    components:{
+      PostComponent
     }
   }
   </script>
