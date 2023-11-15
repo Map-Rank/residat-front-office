@@ -24,7 +24,7 @@
               </div>
               <!-- Copyright -->
               <div>
-                © 2023 Map and Rank
+                © {{ currentYear }} Map and Rank
               </div>
             </div>
         </div>
@@ -40,7 +40,12 @@
   
   <script>
   export default {
-    name: 'FooterApp'
+    name: 'FooterApp',
+    computed:{
+      currentYear(){
+        return  new Date().getFullYear();
+      }
+    }
   }
   </script>
   
