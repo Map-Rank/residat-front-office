@@ -1,9 +1,10 @@
 
 <template>
 
+    <header-app></header-app>
+    
     <div class="contain">
 
-        <header-app></header-app>
 
         <body >
             <h1>body</h1>

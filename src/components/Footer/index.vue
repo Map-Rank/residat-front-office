@@ -1,5 +1,5 @@
 <template>
-    <footer class=" text-white p-4 px-24 ">
+    <footer class=" text-white p-4">
       <div class="max-w-6xl mx-auto flex flex-col md:flex-row justify-between items-center">
         <!-- Left Side -->
         <div class="flex flex-col md:space-y-10">
