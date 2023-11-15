@@ -3,7 +3,7 @@
   <header>
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center  space-x-6 p-4 md:hidden">
-      <img src="src\assets\images\logo-small.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
       <div class="flex-grow items-center">
         <input
           type="search"
@@ -19,7 +19,7 @@
       class="flex-col md:flex-row md:flex item-center"
     >
       <!-- Logo -->
-      <img src="src\assets\images\logo-small.svg" alt="Logo" class="h-15 m-4" />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 m-4" />
 
       <!-- Search bar -->
       <div class="flex-grow items-center">

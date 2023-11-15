@@ -13,13 +13,13 @@
             <div class="flex flex-col md:flex-row items-center">
               <div class="flex mb-4 md:mb-0">
                 <a href="#" class="mr-4">
-                  <img src="src\assets\icons\facebook.svg" alt="Facebook" class="w-6 h-6"/>
+                  <img src="@\assets\icons\facebook.svg" alt="Facebook" class="w-6 h-6"/>
                 </a>
                 <a href="#" class="mr-4">
-                  <img src="src\assets\icons\insta.svg" alt="Instagram" class="w-6 h-6"/>
+                  <img src="@\assets\icons\insta.svg" alt="Instagram" class="w-6 h-6"/>
                 </a>
                 <a href="#" class="mr-4">
-                  <img src="src\assets\icons\linkedin.svg" alt="LinkedIn" class="w-6 h-6"/>
+                  <img src="@\assets\icons\linkedin.svg" alt="LinkedIn" class="w-6 h-6"/>
                 </a>
               </div>
               <!-- Copyright -->
@@ -32,7 +32,7 @@
 
         <!-- Right Side -->
         <div class="flex flex-col md:flex-row items-center sm:mt-5">
-            <img src="src\assets\images\logo-medium-white.svg" alt="">
+            <img src="@\assets\images\Logos\logo-medium-white.svg" alt="">
         </div>
       </div>
     </footer>

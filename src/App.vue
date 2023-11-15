@@ -6,7 +6,7 @@
         <header-app></header-app>
 
         <body >
-            <h1>body</h1>
+            <community></community>
         </body>
     </div>
 
@@ -19,14 +19,15 @@
 
 import HeaderApp from './components/Header/index.vue'
 import FooterApp from './components/Footer/index.vue'
+import Community from './components/Community/index.vue'
 
 
 export default{
     name:'App',
     components:{
-        // IconWithLabel,
         HeaderApp,
-        FooterApp
+        FooterApp,
+        Community,
     },
 
     data(){
@@ -40,7 +41,7 @@ export default{
 <style scoped >
 
 body{
-    height: 50vh;
+    /* height: 50vh; */
 }
 
 @media (min-width: 1024px) {
