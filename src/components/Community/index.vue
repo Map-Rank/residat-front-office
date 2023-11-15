@@ -25,17 +25,18 @@
           </div>
         </div>
       </aside>
-  
+      
       <!-- Main Content Area: Posts -->
-      <main class="col-span-3">
-        <!-- Post -->
-        <article class="bg-white p-4 rounded-lg shadow-md">
-          <!-- Post Header -->
-          <header class="mb-4">
-            <div class="flex items-center justify-between">
+      <main class="col-span-2">
+          <!-- Post -->
+          <article class="bg-white p-4 rounded-lg shadow-md">
+              <!-- Post Header -->
+              <header class="mb-4">
+                  <div class="flex items-center justify-between">
               <h3 class="font-bold text-lg">User-name</h3>
               <span class="text-sm text-gray-600">Posted: 20 October</span>
             </div>
+   
             <h2 class="font-bold text-xl my-2">Heavy rains, landslide in Cameroon's west kill at least 34</h2>
           </header>
           <!-- Post Content -->
@@ -63,6 +64,34 @@
         </article>
         <!-- ... other posts ... -->
       </main>
+
+
+      <aside class="col-span-1">
+              <!-- Sectors -->
+              <div class="bg-gray-200 p-4 rounded-lg">
+                <h2 class="font-bold mb-4">Sectors</h2>
+                <ul>
+                  <li v-for="sector in sectors" :key="sector">
+                    <label class="flex items-center space-x-2">
+                      <input type="checkbox" />
+                      <span>{{ sector }}</span>
+                    </label>
+                  </li>
+                </ul>
+              </div>
+              <!-- Recommended Topics -->
+              <div class="bg-gray-200 p-4 rounded-lg mt-4">
+                <h2 class="font-bold mb-4">Recommended topics</h2>
+                <div class="flex flex-wrap gap-2">
+                  <span class="bg-blue-500 text-white px-2 py-1 rounded" v-for="topic in topics" :key="topic">
+                    {{ topic }}
+                  </span>
+                </div>
+              </div>
+            </aside>
+
+
+
     </div>
   </template>
   
