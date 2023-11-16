@@ -1,15 +1,11 @@
 
 <template>
 
-    <div class="contain">
-
-        <header-app></header-app>
-
-        <body >
-
-            <community></community>
+    <header-app></header-app>
+    
+        <body class="px-100">
+            <h1>body</h1>
         </body>
-    </div>
 
     <footer-app></footer-app>
 
@@ -42,14 +38,8 @@ export default{
 <style scoped >
 
 body{
-    /* height: 50vh; */
-}
-
-@media (min-width: 1024px) {
-
-.contain {
-padding: 0px 100px;
-}
+    height: 50vh;
+    background: var(--primary-light, #E6E8EC);
 }
 </style>
 
