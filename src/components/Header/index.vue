@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/multi-word-component-names -->
 <template>
-  <header class="my-4 mx-100">
+  <header class="py-4 md:px-100">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center  space-x-6 p-4 md:hidden">
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
@@ -96,5 +96,10 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+
+header{
+  background-color: var(--white-normal, #FFF);
+}
 </style>
+

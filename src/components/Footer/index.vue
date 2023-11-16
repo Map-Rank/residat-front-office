@@ -57,12 +57,13 @@ footer{
 }
 
 .text{
+  color: var(--white-normal, #FFF);
 
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 24px; 
-  font-family: 'Raleway';
+font-family: Raleway;
+font-size: 16px;
+font-style: normal;
+font-weight: 500;
+line-height: 24px;
 }
 
 
