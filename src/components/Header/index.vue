@@ -38,8 +38,10 @@
           :svgContentHover="items.svgContentHover"
           :svgContent="items.svgContent"
           :labelText="items.labelText"
+          :labelTextBottom="items.labelText"
           :iconSize="items.iconSize"
           :isActive="items.isActive"
+          :bottom="items.bottom"
           @toggleActive="toggleActive(index)"
           :key="index"
         ></icon-with-label>
@@ -68,42 +70,48 @@ export default {
           svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
           labelText: 'Dashboard',
           iconSize: this.iconSize,
-          isActive: false
+          isActive: false,
+          bottom: true
         },
         {
           svgContent: 'src\\assets\\icons\\community-outline.svg',
           svgContentHover: 'src\\assets\\icons\\community-fill.svg',
           labelText: 'Community',
           iconSize: this.iconSize,
-          isActive: false
+          isActive: false,
+          bottom: true
         },
         {
           svgContent: 'src\\assets\\icons\\chat-outline.svg',
           svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
           labelText: 'Chat',
           iconSize: this.iconSize,
-          isActive: false
+          isActive: false,
+          bottom: true
         },
         {
           svgContent: 'src\\assets\\icons\\profile-outline.svg',
           svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
           labelText: 'Profile',
           iconSize: this.iconSize,
-          isActive: false
+          isActive: false,
+          bottom: true
         },
         {
           svgContent: 'src\\assets\\icons\\post-outline.svg',
           svgContentHover: 'src\\assets\\icons\\post-fill.svg',
           labelText: 'Post',
           iconSize: this.iconSize,
-          isActive: false
+          isActive: false,
+          bottom: true
         },
         {
           svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
           svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
           labelText: 'Subscribe',
           iconSize: this.iconSize,
-          isActive: false
+          isActive: false,
+          bottom: true
         }
       ]
     }

@@ -72,6 +72,8 @@
       <hr />
       <!-- lower section  -->
       <div class="flex justify-between">
+
+
         <button class="text-blue-500">Like</button>
         <button class="text-blue-500">Comment</button>
         <button class="text-blue-500">Share</button>
@@ -82,8 +84,13 @@
 
 <script>
 import '../../assets/css/global.scss'
+// import IconWithLabel from '../../components/IconWithLabel'
+
 export default {
   name: 'PostComponent',
+  components:{
+    // IconWithLabel
+  },
   props: {
     username: String,
     postDate: String,

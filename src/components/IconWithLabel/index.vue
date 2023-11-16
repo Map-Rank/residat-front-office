@@ -1,18 +1,25 @@
 <template>
   <div
-    class="icon-with-label grid place-items-center"
+    class="icon-with-label relative"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
-    @click="toggleActive"
+    @click="handleClick"
   >
-    <img
-      :src="hover || isActive ? svgContentHover : svgContent"
-      :class="iconSize"
-      class="items-center mb-1"
-    />
-    <div class="label text-center">
-      {{ labelText }}
+    <!-- Label -->
+    <div 
+      :class="['label', positionClass[position]]" 
+      v-for="(position, index) in ['top', 'left', 'right', 'bottom']" 
+      :key="index"
+      v-show="this[position]"
+    >
+      {{ this[`labelText${position.charAt(0).toUpperCase() + position.slice(1)}`] }}
     </div>
+
+    <!-- Image -->
+    <img
+      :src="imageSource"
+      :class="[iconSize, 'block mx-auto']"
+    />
   </div>
 </template>
 
@@ -22,34 +29,49 @@ export default {
   props: {
     svgContent: {
       type: String,
-      require: true
+      required: true
     },
     svgContentHover: {
       type: String,
-      require: true
-    },
-    labelText: {
-      type: String,
-      require: true
+      required: true
     },
     iconSize: {
       type: String,
-      require: true
+      required: true
     },
     isActive: {
-      type: Boolean
-    }
+      type: Boolean,
+      default: false
+    },
+    right: Boolean,
+    left: Boolean,
+    top: Boolean,
+    bottom: Boolean,
+    labelTextTop: String,
+    labelTextRight: String,
+    labelTextBottom: String,
+    labelTextLeft: String,
   },
   data() {
     return {
-      hover: false
+      hover: false,
+      positionClass: {
+        top: 'absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full',
+        left: 'absolute left-0 top-1/2 transform -translate-x-full -translate-y-1/2',
+        right: 'absolute right-0 top-1/2 transform translate-x-full -translate-y-1/2',
+        bottom: 'absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full'
+      }
     }
   },
-
+  computed: {
+    imageSource() {
+      return this.hover || this.isActive ? this.svgContentHover : this.svgContent;
+    }
+  },
   methods: {
-    toggleActive() {
-      this.$emit('toggleActive')
-      console.log(this.isActive)
+    handleClick() {
+      this.$emit('toggleActive');
+      this.$emit('customFunction');
     }
   }
 }
@@ -59,11 +81,8 @@ export default {
 .label {
   color: var(--gray-dark, #505050);
   text-align: center;
-  /* Captions/C2 */
   font-family: Raleway;
   font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
   line-height: 16px; /* 160% */
 }
 
