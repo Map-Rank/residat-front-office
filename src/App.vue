@@ -3,8 +3,8 @@
 
     <header-app></header-app>
     
-        <body class="px-100">
-            <h1>body</h1>
+        <body class="md:px-100">
+            <community></community>
         </body>
 
     <footer-app></footer-app>
@@ -38,7 +38,6 @@ export default{
 <style scoped >
 
 body{
-    height: 50vh;
     background: var(--primary-light, #E6E8EC);
 }
 </style>
