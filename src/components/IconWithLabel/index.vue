@@ -3,54 +3,96 @@
     class="icon-with-label relative"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
-    @click="handleClick"
+    @click="handleClick()"
   >
-    <!-- Label -->
-    <div 
-      :class="['label', positionClass[position]]" 
-      v-for="(position, index) in ['top', 'left', 'right', 'bottom']" 
-      :key="index"
-      v-show="this[position]"
+    <!-- Label on Top -->
+    <div
+      class="label "
+      :class="positionClass.top"
+      v-show="top"
     >
-      {{ this[`labelText${position.charAt(0).toUpperCase() + position.slice(1)}`] }}
+      {{ labelTextTop }}
+    </div>
+
+    <!-- Label on Left -->
+    <div
+      class="label "
+      :class="positionClass.left"
+      v-show="left"
+    >
+      {{ labelTextLeft }}
     </div>
 
     <!-- Image -->
     <img
-      :src="imageSource"
-      :class="[iconSize, 'block mx-auto']"
+      :src="hover || isActive ? svgContentHover : svgContent"
+      :class="this.iconSize ? this.iconSize : 'w-4 h-4'"
     />
+
+    <!-- Label on Right -->
+    <div
+      class="label "
+      :class="positionClass.right"
+      v-show="right"
+    >
+      {{ labelTextRight }}
+    </div>
+
+    <!-- Label on Bottom -->
+    <div
+      class="label "
+      :class="positionClass.bottom"
+      v-show="bottom"
+    >
+      {{ labelTextBottom }}
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'IconWithLabel',
+
   props: {
     svgContent: {
       type: String,
-      required: true
+      require: true
     },
     svgContentHover: {
       type: String,
-      required: true
+      require: true
+    },
+    labelText: {
+      type: String,
+      require: true
     },
     iconSize: {
       type: String,
-      required: true
+      require: true
     },
     isActive: {
+      type: Boolean
+    },
+    right: {
       type: Boolean,
       default: false
     },
-    right: Boolean,
-    left: Boolean,
-    top: Boolean,
-    bottom: Boolean,
+    left: {
+      type: Boolean,
+      default: false
+    },
+    top: {
+      type: Boolean,
+      default: false
+    },
+    bottom: {
+      type: Boolean,
+      default: false
+    },
     labelTextTop: String,
     labelTextRight: String,
     labelTextBottom: String,
-    labelTextLeft: String,
+    labelTextLeft: String
   },
   data() {
     return {
@@ -63,16 +105,14 @@ export default {
       }
     }
   },
-  computed: {
-    imageSource() {
-      return this.hover || this.isActive ? this.svgContentHover : this.svgContent;
-    }
-  },
+
   methods: {
-    handleClick() {
-      this.$emit('toggleActive');
-      this.$emit('customFunction');
-    }
+    handleClick(){
+      console.log(this.iconSize)
+      console.log(this.isActive)
+      this.$emit('toggleActive')
+      this.$emit('customFunction')
+    },
   }
 }
 </script>
@@ -81,9 +121,15 @@ export default {
 .label {
   color: var(--gray-dark, #505050);
   text-align: center;
+  /* Captions/C2 */
   font-family: Raleway;
   font-size: 10px;
+  font-style: normal;
+  font-weight: 400;
   line-height: 16px; /* 160% */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .icon-with-label:hover {

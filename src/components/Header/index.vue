@@ -34,14 +34,14 @@
       <!-- Navigation Links -->
       <nav class="flex flex-col md:flex-row items-center space-x-10">
         <icon-with-label
-          v-for="(items, index) in navItems"
-          :svgContentHover="items.svgContentHover"
-          :svgContent="items.svgContent"
-          :labelText="items.labelText"
-          :labelTextBottom="items.labelText"
-          :iconSize="items.iconSize"
-          :isActive="items.isActive"
-          :bottom="items.bottom"
+          v-for="(item, index) in navItems"
+          :svgContentHover="item.svgContentHover"
+          :svgContent="item.svgContent"
+          :labelText="item.labelText"
+          :labelTextBottom="item.labelText"
+          :iconSize="this.iconSize"
+          :isActive="item.isActive"
+          :bottom="item.bottom"
           @toggleActive="toggleActive(index)"
           :key="index"
         ></icon-with-label>
@@ -62,14 +62,13 @@ export default {
   data() {
     return {
       isMenuOpen: false,
-      iconSize: 'w-8 h-8',
+      iconSize: 'w-7 h-7',
       //Array of all icon-with-label
       navItems: [
         {
           svgContent: 'src\\assets\\icons\\dashboard-outline.svg',
           svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
           labelText: 'Dashboard',
-          iconSize: this.iconSize,
           isActive: false,
           bottom: true
         },
@@ -77,7 +76,6 @@ export default {
           svgContent: 'src\\assets\\icons\\community-outline.svg',
           svgContentHover: 'src\\assets\\icons\\community-fill.svg',
           labelText: 'Community',
-          iconSize: this.iconSize,
           isActive: false,
           bottom: true
         },
@@ -85,7 +83,6 @@ export default {
           svgContent: 'src\\assets\\icons\\chat-outline.svg',
           svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
           labelText: 'Chat',
-          iconSize: this.iconSize,
           isActive: false,
           bottom: true
         },
@@ -93,7 +90,6 @@ export default {
           svgContent: 'src\\assets\\icons\\profile-outline.svg',
           svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
           labelText: 'Profile',
-          iconSize: this.iconSize,
           isActive: false,
           bottom: true
         },
@@ -101,7 +97,6 @@ export default {
           svgContent: 'src\\assets\\icons\\post-outline.svg',
           svgContentHover: 'src\\assets\\icons\\post-fill.svg',
           labelText: 'Post',
-          iconSize: this.iconSize,
           isActive: false,
           bottom: true
         },
@@ -109,7 +104,6 @@ export default {
           svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
           svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
           labelText: 'Subscribe',
-          iconSize: this.iconSize,
           isActive: false,
           bottom: true
         }

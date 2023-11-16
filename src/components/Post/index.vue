@@ -1,5 +1,5 @@
 <template>
-  <article class="bg-white grid gap-3 rounded-lg overflow-hidden shadow-lg mb-4 py-3">
+  <article class="bg-white   rounded-lg overflow-hidden shadow-lg  py-3">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5">
       <div class="user-profile flex items-center space-x-2">
@@ -47,9 +47,9 @@
     </div>
 
     <!-- Post Interaction Area -->
-    <footer class="grid p-5">
+    <footer class=" p-5">
       <!-- upper section  -->
-      <div class="flex justify-between">
+      <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -69,14 +69,25 @@
         </div>
         <span class="ml-4 caption-c1-bold">{{ comments.length }} Comments</span>
       </div>
-      <hr />
+
+ 
       <!-- lower section  -->
-      <div class="flex justify-between">
-
-
-        <button class="text-blue-500">Like</button>
-        <button class="text-blue-500">Comment</button>
-        <button class="text-blue-500">Share</button>
+      <div class="flex justify-between ">
+        
+        <icon-with-label
+          v-for="(item , index) in iconLabels"
+          :svgContentHover="item.svgContentHover"
+          :svgContent="item.svgContent"
+          :labelText="item.labelText"
+          :labelTextRight="item.labelText"
+          :iconSize="item.iconSize"
+          :isActive="item.isActive"
+          :right="item.right"
+          @toggleActive="toggleActive(index)"
+          :key="index"
+          class="flex-shrink-0"
+        ></icon-with-label>
+      
       </div>
     </footer>
   </article>
@@ -84,12 +95,52 @@
 
 <script>
 import '../../assets/css/global.scss'
-// import IconWithLabel from '../../components/IconWithLabel'
+import IconWithLabel from '../IconWithLabel/index.vue'
 
 export default {
   name: 'PostComponent',
+  data(){
+    return {
+      iconSize:"w3 h3",
+      iconLabels: [
+        {
+          svgContent: 'src\\assets\\icons\\dashboard-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
+          labelText: 'Like',
+          iconSize: this.iconSize,
+          isActive: false,
+          right:true
+        },
+        {
+          svgContent: 'src\\assets\\icons\\community-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\community-fill.svg',
+          labelText: 'Comment',
+          iconSize: this.iconSize,
+          isActive: false,
+          right:true
+        },
+        {
+          svgContent: 'src\\assets\\icons\\chat-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
+          labelText: 'Archieve',
+          iconSize: this.iconSize,
+          isActive: false,
+          right:true
+        },
+        {
+          svgContent: 'src\\assets\\icons\\profile-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
+          labelText: 'Share',
+          iconSize: this.iconSize,
+          isActive: false,
+          right:true
+        }
+      
+      ]
+    }
+  },
   components:{
-    // IconWithLabel
+    IconWithLabel
   },
   props: {
     username: String,
@@ -126,6 +177,9 @@ hr {
   font-style: normal;
   font-weight: 600;
   line-height: 16px; /* 160% */
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .p3 {
   color: var(--body-normal, #242424);

@@ -17,7 +17,7 @@
     </aside>
 
     <!-- Main Content Area: Posts -->
-    <main class="col-span-2 shadow-sm">
+    <main class=" col-span-2 shadow-sm">
       <!-- Post -->
       <div>
         <PostComponent
