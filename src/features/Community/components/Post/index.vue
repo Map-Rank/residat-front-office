@@ -1,5 +1,5 @@
 <template>
-  <article class="bg-white   rounded-lg overflow-hidden py-3">
+  <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
       <div class="user-profile flex items-center space-x-2">
@@ -10,7 +10,7 @@
         </div>
       </div>
 
-      <div class="menu">
+      <div class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
           <svg class="w-6 h-6" fill="true" stroke="currentColor" viewBox="0 0 24 24">
@@ -21,9 +21,14 @@
         </button>
 
         <!-- Dropdown Menu -->
-        <div v-show="treu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Delete</a>
+        <div
+          v-show="isMenuVisible"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
+        >
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Share</a>
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+            >Not Intrested</a
+          >
           <!-- ... other menu items ... -->
         </div>
       </div>
@@ -32,11 +37,11 @@
     <!-- Post Content -->
     <div class="px-5 mb-2">
       <h5 class="mb-1">{{ postTitle }}</h5>
-      <p class="p3 content ">{{ postContent }}</p>
+      <p class="p3 content">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1  ">
+    <div class="grid grid-cols-2 sm:grid-cols-2 gap-0.5">
       <img
         v-for="(image, index) in postImages"
         :src="image.src"
@@ -47,7 +52,7 @@
     </div>
 
     <!-- Post Interaction Area -->
-    <footer class=" p-5">
+    <footer class="p-5">
       <!-- upper section  -->
       <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
@@ -70,12 +75,10 @@
         <span class="ml-4 caption-c1-bold">{{ comments.length }} Comments</span>
       </div>
 
- 
       <!-- lower section  -->
-      <div class="flex justify-between ">
-        
+      <div class="flex justify-between">
         <icon-with-label
-          v-for="(item , index) in iconLabels"
+          v-for="(item, index) in iconLabels"
           :svgContentHover="item.svgContentHover"
           :svgContent="item.svgContent"
           :labelTextRight="item.labelText"
@@ -87,11 +90,8 @@
           :key="index"
           class="flex-shrink-0"
         ></icon-with-label>
-      
       </div>
     </footer>
-
-
   </article>
 </template>
 
@@ -101,45 +101,41 @@ import IconWithLabel from '../../../../components/common/IconWithLabel/index.vue
 
 export default {
   name: 'PostComponent',
-  data(){
+  data() {
     return {
-      iconDesktopSize:"w-6 h-6",
-      iconMobileSize:"w-5 h-5",
+      iconDesktopSize: 'w-6 h-6',
+      iconMobileSize: 'w-5 h-5',
+      isMenuVisible: false,
       iconLabels: [
         {
           svgContent: 'src\\assets\\icons\\heart-outline.svg',
           svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
           labelText: 'Like',
-          isActive: false,
-          right:true
+          right: true
         },
         {
           svgContent: 'src\\assets\\icons\\comment-outline.svg',
           svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
           labelText: 'Comment',
-          isActive: false,
-          right:true
+          right: true
         },
         {
           svgContent: 'src\\assets\\icons\\archieved-outline.svg',
           svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
-          isActive: false,
-          right:true
+          right: true
         },
         {
           svgContent: 'src\\assets\\icons\\share-fill.svg',
           svgContentHover: 'src\\assets\\icons\\share-fill.svg',
           labelText: 'Share',
-          isActive: false,
-          right:true
+          right: true
         }
-      
       ]
     }
   },
 
-  methods : {
+  methods: {
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
         if (i == index) {
@@ -148,10 +144,14 @@ export default {
 
         return item
       })
+    },
+    toggleMenu() {
+      this.isMenuVisible = !this.isMenuVisible
+      console.log(this.isMenuVisible)
     }
   },
 
-  components:{
+  components: {
     IconWithLabel
   },
   props: {
@@ -162,38 +162,30 @@ export default {
     userProfileImage: String,
     listLikers: Array,
     comments: Array,
-    postImages: Array 
+    postImages: Array
   }
 }
 </script>
 
 <style scoped>
-hr {
-  width: 560.001px;
-  height: 0.2px;
-  background: #6b6b6b;
-}
-.caption-c1 {
-  color: #6b6b6b;
-  font-family: Raleway;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 133.333% */
-}
-
+.caption-c1,
 .caption-c1-bold {
   color: var(--primary-normal, #021d40);
   font-family: Raleway;
   font-size: 10px;
   font-style: normal;
-  font-weight: 600;
   line-height: 16px; /* 160% */
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.p3 {
+
+.caption-c1-bold {
+  font-weight: 600;
+}
+
+.p3,
+.content {
   color: var(--body-normal, #242424);
   font-family: Raleway;
   font-size: 14px;
@@ -202,14 +194,7 @@ hr {
   line-height: 20px; /* 142.857% */
 }
 
-.content{
-  color: var(--body-normal, #242424);
-
-/* Paragraphs/P3 */
-font-family: Raleway;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 20px; 
+.content {
+  font-weight: 500;
 }
 </style>

@@ -63,7 +63,8 @@ export default {
       require: true
     },
     isActive: {
-      type: Boolean
+      type: Boolean,
+      default: false
     },
     right: {
       type: Boolean,
