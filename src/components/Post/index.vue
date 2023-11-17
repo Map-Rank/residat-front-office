@@ -32,7 +32,7 @@
     <!-- Post Content -->
     <div class="px-5 mb-2">
       <h5 class="mb-1">{{ postTitle }}</h5>
-      <p class="p3">{{ postContent }}</p>
+      <p class="p3 content ">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
@@ -200,5 +200,16 @@ hr {
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 142.857% */
+}
+
+.content{
+  color: var(--body-normal, #242424);
+
+/* Paragraphs/P3 */
+font-family: Raleway;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 20px; 
 }
 </style>

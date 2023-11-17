@@ -1,15 +1,15 @@
 <!-- eslint-disable no-useless-escape -->
-<!-- eslint-disable vue/multi-word-component-names -->
 <template>
   <header class="py-4 md:px-100">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 p-4 md:hidden">
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+
       <div class="flex-grow items-center">
         <input
           type="search"
           placeholder="Search"
-          class="h-8 p-2 w-10 bg-gray-300 rounded-md w-full w-3"
+          class="search gray h-8 p-2 w-10  rounded-md w-full w-3"
         />
       </div>
     </div>
@@ -18,17 +18,23 @@
     <div
       :class="{ flex: isMenuOpen, hidden: !isMenuOpen }"
       class="flex-col md:flex-row md:flex item-center"
+
     >
+
       <!-- Logo -->
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
 
       <!-- Search bar -->
-      <div class="flex-grow items-center">
-        <input
-          type="search"
-          placeholder="Search"
-          class="h-8 p-2 m-4 bg-gray-300 rounded-md w-full md:w-auto"
-        />
+      <div class="  flex flex-grow    items-center">
+        <div class="search flex p-2  ml-5 rounded-lg ">
+
+          <img src="@\assets\icons\Search.svg" alt="">
+          <input
+            type="search"
+            placeholder="Search "
+            class="flex-grow bg-transparent ml-3  focus:border-none rounded-md outline-none  hover:border-none transition-colors duration-200"
+          />
+        </div>
       </div>
 
       <!-- Navigation Links -->
@@ -63,7 +69,6 @@ export default {
     return {
       isMenuOpen: false,
       iconSize: 'w-7 h-7',
-      //Array of all icon-with-label
       navItems: [
         {
           svgContent: 'src\\assets\\icons\\dashboard-outline.svg',
@@ -127,6 +132,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.search{
+  background-color: var(--primary-light, #E6E8EC);
+  border-color:#E6E8EC ;
+}
+
 header {
   background-color: var(--white-normal, #fff);
 }
