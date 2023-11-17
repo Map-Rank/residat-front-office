@@ -10,6 +10,44 @@ This template should help get you started developing with Vue 3 in Vite.
 
 See [Vite Configuration Reference](https://vitejs.dev/config/).
 
+## Residat Project Structure
+```sh
+    Residat-Front-Office
+    ├─ .vscode/              # Editor configuration files
+    ├─ dist/                 # Compiled files ready for deployment
+    ├─ node_modules/         # npm packages
+    ├─ public/               # Public assets like index.html
+    ├─ src/                  # Source code for the application
+    │  ├─ assets/            # Global assets (images, fonts, etc.)
+    │  ├─ components/        # Reusable Vue components
+    │  │  ├─ base/           # Base components (e.g., BaseButton)
+    │  │  ├─ common/         # Common components (Header, Footer)
+    │  │  └─ ui/             # UI components (e.g., Modal, Dropdown)
+    │  ├─ features/          # Feature-specific components and logic
+    │  │  ├─ ChatRoom/       # Chatroom components and services
+    │  │  └─ Community/      # Community components and services
+    │  ├─ router/            # Vue-router configuration
+    │  ├─ stores/            # Vuex store modules
+    │  ├─ App.vue            # Root Vue component
+    │  └─ main.js            # Entry point for the Vue app
+    ├─ tests/                # Test suite
+    │  ├─ e2e/               # End-to-end tests
+    │  └─ unit/              # Unit tests
+    ├─ .dockerignore         # Files to exclude from Docker context
+    ├─ .eslintrc.js          # ESLint configuration
+    ├─ .gitignore            # Files excluded from git
+    ├─ .prettierrc.json      # Prettier configuration
+    ├─ Dockerfile            # Docker configuration for builds
+    ├─ index.html            # Entry HTML file
+    ├─ package-lock.json     # Auto-generated package lock for npm
+    ├─ package.json          # Project metadata and dependencies
+    ├─ postcss.config.js     # PostCSS configuration
+    ├─ README.md             # Project documentation
+    ├─ tailwind.config.js    # Tailwind CSS configuration
+    ├─ vite.config.js        # Vite configuration
+    └─ vitest.config.js      # Vitest configuration
+```
+
 ## Project Setup
 
 ```sh
@@ -39,3 +77,5 @@ npm run test:unit
 ```sh
 npm run lint
 ```
+
+

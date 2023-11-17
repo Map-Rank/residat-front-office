@@ -1,13 +1,26 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import CommunityView from '../features/Community/CommunityView.vue'
+import ChatRoomView from '../features/ChatRoom/ChatRommView.vue'
+import DashBoardView from '../features/DashBaord/DashBoardView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'home',
-    //   component: HomeView
-    // },
+    {
+      path: '/',
+      name: 'community',
+      component: CommunityView
+    },
+    {
+      path: '/chat-room',
+      name: 'chat-room',
+      component: ChatRoomView
+    },
+    {
+      path: '/dashbaord',
+      name: 'dashbaord',
+      component: DashBoardView
+    },
     // {
     //   path: '/about',
     //   name: 'about',

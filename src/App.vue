@@ -3,8 +3,8 @@
 
     <header-app></header-app>
     
-        <body class="px-100">
-            <h1>body</h1>
+        <body class="md:px-100 pb-5">
+            <router-view></router-view>
         </body>
 
     <footer-app></footer-app>
@@ -14,16 +14,17 @@
 
 <script >
 
-import HeaderApp from './components/Header/index.vue'
-import FooterApp from './components/Footer/index.vue'
+import HeaderApp from './components/common/Header/index.vue'
+import FooterApp from './components/common/Footer/index.vue'
+// import CommunityView from './features/Community/CommunityView.vue'
 
 
 export default{
     name:'App',
     components:{
-        // IconWithLabel,
         HeaderApp,
-        FooterApp
+        FooterApp,
+        // CommunityView,
     },
 
     data(){
@@ -37,8 +38,8 @@ export default{
 <style scoped >
 
 body{
-    height: 50vh;
     background: var(--primary-light, #E6E8EC);
+    min-height:80vh
 }
 </style>
 
