@@ -3,6 +3,7 @@
   <header class="py-4 md:px-100">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 p-4 md:hidden">
+      
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
 
       <div class="flex-grow items-center">
@@ -48,6 +49,7 @@
           :iconDesktopSize="this.iconSize"
           :isActive="item.isActive"
           :bottom="item.bottom"
+          :routerName="item.routerName"
           @clickIcon="clickIcon(index)"
           :key="index"
         ></icon-with-label>
@@ -75,21 +77,24 @@ export default {
           svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
           labelText: 'Dashboard',
           isActive: false,
-          bottom: true
+          bottom: true,
+          routerName:'dashbaord'
         },
         {
           svgContent: 'src\\assets\\icons\\community-outline.svg',
           svgContentHover: 'src\\assets\\icons\\community-fill.svg',
           labelText: 'Community',
           isActive: false,
-          bottom: true
+          bottom: true,
+          routerName:'community'
         },
         {
           svgContent: 'src\\assets\\icons\\chat-outline.svg',
           svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
           labelText: 'Chat',
           isActive: false,
-          bottom: true
+          bottom: true,
+        routerName:'chat-room'
         },
         {
           svgContent: 'src\\assets\\icons\\profile-outline.svg',

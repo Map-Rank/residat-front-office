@@ -3,8 +3,8 @@
 
     <header-app></header-app>
     
-        <body class="md:px-100">
-            <community-view></community-view>
+        <body class="md:px-100 pb-5">
+            <router-view></router-view>
         </body>
 
     <footer-app></footer-app>
@@ -16,7 +16,7 @@
 
 import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
-import CommunityView from './features/Community/CommunityView.vue'
+// import CommunityView from './features/Community/CommunityView.vue'
 
 
 export default{
@@ -24,7 +24,7 @@ export default{
     components:{
         HeaderApp,
         FooterApp,
-        CommunityView,
+        // CommunityView,
     },
 
     data(){
@@ -39,6 +39,7 @@ export default{
 
 body{
     background: var(--primary-light, #E6E8EC);
+    min-height:80vh
 }
 </style>
 

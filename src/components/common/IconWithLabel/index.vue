@@ -4,37 +4,40 @@
     :class="top || bottom ? 'grid place-items-center' : 'flex items-center'"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
-    @click="handleClick()"
+    @click.prevent="handleClick()"
   >
-    <!-- Label on Top -->
-    <span :class="this.textCss" v-show="top">
-      {{ labelTextTop }}
-    </span>
+    <router-link :to="{ name: routerName }" class="contents">
+      <!-- Label on Top -->
+      <span :class="this.textCss" v-show="top">
+        {{ labelTextTop }}
+      </span>
 
-    <!-- Label on left -->
-    <span :class="this.textCss" v-show="left">
-      {{ labelTextRight }}
-    </span>
-    <!-- Image -->
-    <img
-      :src="hover || isActive ? svgContentHover : svgContent"
-      class="m-1"
-      :class="[
-        hover || isActive ? iconDesktopSize : iconMobileSize,
-        'md:' + iconDesktopSize,
-        'sm:' + iconMobileSize
-      ]"
-    />
+      <!-- Label on left -->
+      <span :class="this.textCss" v-show="left">
+        {{ labelTextRight }}
+      </span>
+      <!-- Image -->
 
-    <!-- Label on Right -->
-    <span :class="this.textCss" v-show="right">
-      {{ labelTextRight }}
-    </span>
+      <img
+        :src="hover || isActive ? svgContentHover : svgContent"
+        class="m-1"
+        :class="[
+          hover || isActive ? iconDesktopSize : iconMobileSize,
+          'md:' + iconDesktopSize,
+          'sm:' + iconMobileSize
+        ]"
+      />
 
-    <!-- Label on Bottom -->
-    <span :class="this.textCss" v-show="bottom">
-      {{ labelTextBottom }}
-    </span>
+      <!-- Label on Right -->
+      <span :class="this.textCss" v-show="right">
+        {{ labelTextRight }}
+      </span>
+
+      <!-- Label on Bottom -->
+      <span :class="this.textCss" v-show="bottom">
+        {{ labelTextBottom }}
+      </span>
+    </router-link>
   </div>
 </template>
 
@@ -82,6 +85,10 @@ export default {
       type: Boolean,
       default: false
     },
+    routerName: {
+      type: String
+      // default: null
+    },
     labelTextTop: String,
     labelTextRight: String,
     labelTextBottom: String,
@@ -96,11 +103,9 @@ export default {
 
   methods: {
     handleClick() {
-      console.log(this.iconSize)
-      console.log(this.isActive)
       this.$emit('clickIcon')
       this.$emit('customFunction')
-      console.log(this.textCss)
+      console.log(this.routerName)
     }
   }
 }
