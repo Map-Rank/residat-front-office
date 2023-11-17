@@ -39,10 +39,10 @@
           :svgContent="item.svgContent"
           :labelText="item.labelText"
           :labelTextBottom="item.labelText"
-          :iconSize="this.iconSize"
+          :iconDesktopSize="this.iconSize"
           :isActive="item.isActive"
           :bottom="item.bottom"
-          @toggleActive="toggleActive(index)"
+          @clickIcon="clickIcon(index)"
           :key="index"
         ></icon-with-label>
       </nav>
@@ -113,7 +113,7 @@ export default {
 
   methods: {
     //This is the method that permit us to change an icon-with-label to active and is called by the child component
-    toggleActive(index) {
+    clickIcon(index) {
       this.navItems = this.navItems.map((item, i) => {
         if (i == index) {
           return { ...item, isActive: !item.isActive }

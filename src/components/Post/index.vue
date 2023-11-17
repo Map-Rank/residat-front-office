@@ -1,5 +1,5 @@
 <template>
-  <article class="bg-white   rounded-lg overflow-hidden shadow-lg  py-3">
+  <article class="bg-white   rounded-lg overflow-hidden py-3">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5">
       <div class="user-profile flex items-center space-x-2">
@@ -78,12 +78,12 @@
           v-for="(item , index) in iconLabels"
           :svgContentHover="item.svgContentHover"
           :svgContent="item.svgContent"
-          :labelText="item.labelText"
           :labelTextRight="item.labelText"
-          :iconSize="item.iconSize"
+          :iconDesktopSize="this.iconDesktopSize"
+          :iconMobileSize="this.iconMobileSize"
           :isActive="item.isActive"
           :right="item.right"
-          @toggleActive="toggleActive(index)"
+          @clickIcon="clickIcon(index)"
           :key="index"
           class="flex-shrink-0"
         ></icon-with-label>
@@ -101,37 +101,34 @@ export default {
   name: 'PostComponent',
   data(){
     return {
-      iconSize:"w3 h3",
+      iconDesktopSize:"w-6 h-6",
+      iconMobileSize:"w-5 h-5",
       iconLabels: [
         {
-          svgContent: 'src\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
+          svgContent: 'src\\assets\\icons\\heart-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
           labelText: 'Like',
-          iconSize: this.iconSize,
           isActive: false,
           right:true
         },
         {
-          svgContent: 'src\\assets\\icons\\community-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\community-fill.svg',
+          svgContent: 'src\\assets\\icons\\comment-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
           labelText: 'Comment',
-          iconSize: this.iconSize,
           isActive: false,
           right:true
         },
         {
-          svgContent: 'src\\assets\\icons\\chat-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
+          svgContent: 'src\\assets\\icons\\archieved-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
-          iconSize: this.iconSize,
           isActive: false,
           right:true
         },
         {
-          svgContent: 'src\\assets\\icons\\profile-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
+          svgContent: 'src\\assets\\icons\\share-fill.svg',
+          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
           labelText: 'Share',
-          iconSize: this.iconSize,
           isActive: false,
           right:true
         }
@@ -139,6 +136,19 @@ export default {
       ]
     }
   },
+
+  methods : {
+    clickIcon(index) {
+      this.iconLabels = this.iconLabels.map((item, i) => {
+        if (i == index) {
+          return { ...item, isActive: !item.isActive }
+        }
+
+        return item
+      })
+    }
+  },
+
   components:{
     IconWithLabel
   },

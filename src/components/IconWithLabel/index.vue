@@ -1,6 +1,7 @@
 <template>
   <div
     class="icon-with-label relative"
+    :class="top || bottom ? 'relative' : 'flex items-center'"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click="handleClick()"
@@ -13,32 +14,35 @@
     >
       {{ labelTextTop }}
     </div>
-
-    <!-- Label on Left -->
-    <div
+    
+    <!-- Label on left -->
+    <span
       class="label "
-      :class="positionClass.left"
       v-show="left"
     >
-      {{ labelTextLeft }}
-    </div>
-
+      {{ labelTextRight }}
+    </span>
     <!-- Image -->
     <img
       :src="hover || isActive ? svgContentHover : svgContent"
-      :class="this.iconSize ? this.iconSize : 'w-4 h-4'"
+      :class="[
+    hover || isActive ? iconDesktopSize : iconMobileSize, 
+    'md:' + (iconDesktopSize), 
+    'sm:' + (iconMobileSize)
+  ]"
     />
 
     <!-- Label on Right -->
-    <div
-      class="label "
-      :class="positionClass.right"
-      v-show="right"
+    <span
+    class="label "
+    :class="positionClass.right"
+    v-show="right"
     >
-      {{ labelTextRight }}
-    </div>
-
-    <!-- Label on Bottom -->
+    {{ labelTextRight }}
+  </span>
+  
+  
+  <!-- Label on Bottom -->
     <div
       class="label "
       :class="positionClass.bottom"
@@ -64,9 +68,12 @@ export default {
     },
     labelText: {
       type: String,
+    },
+    iconDesktopSize: {
+      type: String,
       require: true
     },
-    iconSize: {
+    iconMobileSize: {
       type: String,
       require: true
     },
@@ -99,8 +106,8 @@ export default {
       hover: false,
       positionClass: {
         top: 'absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full',
-        left: 'absolute left-0 top-1/2 transform -translate-x-full -translate-y-1/2',
-        right: 'absolute right-0 top-1/2 transform translate-x-full -translate-y-1/2',
+        left: 'mr-1',
+        right: 'ml-1',
         bottom: 'absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full'
       }
     }
@@ -110,7 +117,7 @@ export default {
     handleClick(){
       console.log(this.iconSize)
       console.log(this.isActive)
-      this.$emit('toggleActive')
+      this.$emit('clickIcon')
       this.$emit('customFunction')
     },
   }
@@ -121,7 +128,6 @@ export default {
 .label {
   color: var(--gray-dark, #505050);
   text-align: center;
-  /* Captions/C2 */
   font-family: Raleway;
   font-size: 10px;
   font-style: normal;
@@ -139,7 +145,6 @@ export default {
   color: var(--primary-normal, #021d40);
   text-align: center;
 
-  /* Captions/C2-Bold */
   font-family: Raleway;
   font-size: 10px;
   font-style: normal;
