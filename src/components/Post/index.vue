@@ -1,7 +1,7 @@
 <template>
   <article class="bg-white   rounded-lg overflow-hidden py-3">
     <!-- Post Header with User Information -->
-    <header class="flex justify-between px-5">
+    <header class="flex justify-between px-5 mb-3">
       <div class="user-profile flex items-center space-x-2">
         <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
         <div>
@@ -30,13 +30,13 @@
     </header>
 
     <!-- Post Content -->
-    <div class="px-5">
+    <div class="px-5 mb-2">
       <h5 class="mb-1">{{ postTitle }}</h5>
       <p class="p3">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1  ">
       <img
         v-for="(image, index) in postImages"
         :src="image.src"
@@ -90,6 +90,8 @@
       
       </div>
     </footer>
+
+
   </article>
 </template>
 
@@ -160,7 +162,7 @@ export default {
     userProfileImage: String,
     listLikers: Array,
     comments: Array,
-    postImages: Array // Should be an array of objects with 'src' and 'alt' keys
+    postImages: Array 
   }
 }
 </script>
