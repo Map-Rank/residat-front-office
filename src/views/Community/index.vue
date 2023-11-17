@@ -1,15 +1,15 @@
 <template>
-  <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-4">
+  <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10">
     <!-- Sidebar: Sectors and Topics -->
     <aside class="col-span-1 hidden sm:block">
       <!-- Sectors -->
-      <sector
+      <sector-side
       :sectorArray="this.sectors"
-      ></sector>
+      ></sector-side>
     </aside>
 
     <!-- Main Content Area: Posts -->
-    <main class=" col-span-2 shadow-sm">
+    <main class=" col-span-2 sm:px-4 ">
       <div>
         <PostComponent
           username="User-name"
@@ -31,7 +31,7 @@
 
     <aside class="col-span-1 hidden sm:block">
       <!-- Recommended Topics -->
-      <div class="bg-gray-200 p-4 rounded-lg">
+      <!-- <div class="bg-gray-200 p-4 rounded-lg">
         <h2 class="font-bold mb-4">Recommended topics</h2>
         <div class="flex flex-wrap gap-2">
           <span
@@ -42,14 +42,21 @@
             {{ topic }}
           </span>
         </div>
-      </div>
+      </div> -->
+
+      <recently-posted-side
+      :topics="this.topics"
+      :recentPosts="recentPosts"
+      ></recently-posted-side>
+      
     </aside>
   </div>
 </template>
 
 <script>
 import PostComponent from '../../components/Post/index.vue'
-import Sector from '../../components/Sector/index.vue'
+import SectorSide from '../../components/SectorSide/index.vue'
+import RecentlyPostedSide from '../../components/RecentlyPostedSide/index.vue'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Community',
@@ -57,13 +64,29 @@ export default {
   data() {
     return {
       sectors: ['Agriculture', 'Infrastructure', 'Health', 'Socials'],
-      topics: ['Agriculture', 'Economy', 'Environment', 'Education']
-      // ... other data ...
+      topics: ['Agriculture', 'Economy', 'Environment', 'Education'],
+      recentPosts: [
+    {
+      author: 'Arpit Chandak',
+      title: 'The Blog that make the difference in out commun',
+      logoImg:
+        'https://th.bing.com/th/id/R.22d59dd756c5ffe8f8109bf18e93cf61?rik=j%2bU%2f3h0s8BuFyg&pid=ImgRaw&r=0',
+      postedDate: 'Posted: 1 days ago'
+    },
+    {
+      author: 'Arpit Chandak',
+      title: 'The Blog that make the difference in out commun',
+      logoImg:
+        'https://th.bing.com/th/id/OIP.PYfgkkj0Rba0QZdJfqgCWQHaG5?w=591&h=551&rs=1&pid=ImgDetMain',
+      postedDate: 'Posted: 1 days ago'
+    }
+  ]
     }
   },
   components: {
     PostComponent,
-    Sector,
+    SectorSide,
+    RecentlyPostedSide,
   }
 }
 </script>

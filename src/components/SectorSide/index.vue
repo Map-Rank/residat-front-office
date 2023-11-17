@@ -19,7 +19,7 @@
 <script>
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
-  name: 'Sector',
+  name: 'SectorSide',
   data() {
     return {
       sectors: this.sectorArray // initialize with your set of sectors
