@@ -4,7 +4,7 @@
     <header-app></header-app>
     
         <body class="md:px-100">
-            <community></community>
+            <community-view></community-view>
         </body>
 
     <footer-app></footer-app>
@@ -14,9 +14,9 @@
 
 <script >
 
-import HeaderApp from './components/Header/index.vue'
-import FooterApp from './components/Footer/index.vue'
-import Community from './views/Community/index.vue'
+import HeaderApp from './components/common/Header/index.vue'
+import FooterApp from './components/common/Footer/index.vue'
+import CommunityView from './features/Community/CommunityView.vue'
 
 
 export default{
@@ -24,7 +24,7 @@ export default{
     components:{
         HeaderApp,
         FooterApp,
-        Community,
+        CommunityView,
     },
 
     data(){

@@ -96,8 +96,8 @@
 </template>
 
 <script>
-import '../../assets/css/global.scss'
-import IconWithLabel from '../IconWithLabel/index.vue'
+import '../../../../assets/css/global.scss'
+import IconWithLabel from '../../../../components/common/IconWithLabel/index.vue'
 
 export default {
   name: 'PostComponent',

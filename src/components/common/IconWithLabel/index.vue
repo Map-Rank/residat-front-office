@@ -18,7 +18,7 @@
     <!-- Image -->
     <img
       :src="hover || isActive ? svgContentHover : svgContent"
-      class="mr-1"
+      class="m-1"
       :class="[
         hover || isActive ? iconDesktopSize : iconMobileSize,
         'md:' + iconDesktopSize,
