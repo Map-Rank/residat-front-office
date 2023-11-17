@@ -1,55 +1,40 @@
 <template>
   <div
     class="icon-with-label relative"
-    :class="top || bottom ? 'relative' : 'flex items-center'"
+    :class="top || bottom ? 'grid place-items-center' : 'flex items-center'"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click="handleClick()"
   >
     <!-- Label on Top -->
-    <div
-      class="label "
-      :class="positionClass.top"
-      v-show="top"
-    >
+    <span :class="this.textCss" v-show="top">
       {{ labelTextTop }}
-    </div>
-    
+    </span>
+
     <!-- Label on left -->
-    <span
-      class="label "
-      v-show="left"
-    >
+    <span :class="this.textCss" v-show="left">
       {{ labelTextRight }}
     </span>
     <!-- Image -->
     <img
       :src="hover || isActive ? svgContentHover : svgContent"
+      class="mr-1"
       :class="[
-    hover || isActive ? iconDesktopSize : iconMobileSize, 
-    'md:' + (iconDesktopSize), 
-    'sm:' + (iconMobileSize)
-  ]"
+        hover || isActive ? iconDesktopSize : iconMobileSize,
+        'md:' + iconDesktopSize,
+        'sm:' + iconMobileSize
+      ]"
     />
 
     <!-- Label on Right -->
-    <span
-    class="label "
-    :class="positionClass.right"
-    v-show="right"
-    >
-    {{ labelTextRight }}
-  </span>
-  
-  
-  <!-- Label on Bottom -->
-    <div
-      class="label "
-      :class="positionClass.bottom"
-      v-show="bottom"
-    >
+    <span :class="this.textCss" v-show="right">
+      {{ labelTextRight }}
+    </span>
+
+    <!-- Label on Bottom -->
+    <span :class="this.textCss" v-show="bottom">
       {{ labelTextBottom }}
-    </div>
+    </span>
   </div>
 </template>
 
@@ -67,7 +52,7 @@ export default {
       require: true
     },
     labelText: {
-      type: String,
+      type: String
     },
     iconDesktopSize: {
       type: String,
@@ -104,22 +89,18 @@ export default {
   data() {
     return {
       hover: false,
-      positionClass: {
-        top: 'absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-full',
-        left: 'mr-1',
-        right: 'ml-1',
-        bottom: 'absolute bottom-0 left-1/2 transform -translate-x-1/2 translate-y-full'
-      }
+      textCss: 'label'
     }
   },
 
   methods: {
-    handleClick(){
+    handleClick() {
       console.log(this.iconSize)
       console.log(this.isActive)
       this.$emit('clickIcon')
       this.$emit('customFunction')
-    },
+      console.log(this.textCss)
+    }
   }
 }
 </script>
