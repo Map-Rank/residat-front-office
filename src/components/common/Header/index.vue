@@ -2,7 +2,7 @@
 <template>
   <header class="py-4 md:px-100">
     <!-- Mobile view: Hamburger icon -->
-    <div class="flex justify-between items-center space-x-6 p-4 md:hidden">
+    <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
       
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
 
@@ -13,6 +13,18 @@
           class="search gray h-8 p-2 w-10  rounded-md w-full w-3"
         />
       </div>
+
+      <icon-with-label
+          svgContentHover='src\assets\icons\profile-outline.svg'
+          svgContent="src\\assets\\icons\\profile-fill.svg"
+          labelText="Profile"
+          labelTextBottom="Profile"
+          iconDesktopSize="this.iconSize"
+          :isActive="true"
+          :bottom="false"
+          routerName="dashbaord"
+          @clickIcon="clickIcon(index)"
+      ></icon-with-label>
     </div>
 
     <!-- Full menu for larger screens, hidden menu for mobile -->
