@@ -41,15 +41,47 @@
     </div>
 
     <!-- Post Images -->
-    <div class="grid grid-cols-2 sm:grid-cols-2 gap-0.5">
+    <div>
+    <!-- Container for the first image -->
+    <div v-if="postImages.length > 2 || postImages.length == 1 " class=" flex mb-0.5">
       <img
-        v-for="(image, index) in postImages"
-        :src="image.src"
-        :alt="image.alt"
-        :key="index"
-        class="w-full h-auto"
+        :src="postImages[0].src"
+        :alt="postImages[0].alt"
+        class="w-full h-auto object-cover"
       />
     </div>
+
+    <div v-if="postImages.length == 2 " class=" flex mb-0.5">
+      <img
+        :src="postImages[0].src"
+        :alt="postImages[0].alt"
+        class="w-1/2 h-1/2 "
+      />
+      <img
+        :src="postImages[1].src"
+        :alt="postImages[1].alt"
+        class="w-1/2 h-1/2 "
+      />
+    </div>
+
+    <!-- Container for the rest of the images displayed in a single row -->
+    <div v-if="postImages.length > 2" class="flex gap-0.5 overflow-hidden">
+      <img
+        v-for="(image, index) in postImages.slice(1, 4)"
+        :src="image.src"
+        :alt="image.alt"
+        :key="image.src"
+        class="flex-grow h-auto w-4 object-cover"
+        :style="{ 'flex-basis': calculateFlexBasis(index) }"
+      />
+      <!-- "See more" box if there are more images than can be shown -->
+      <div v-if="postImages.length > 4" class="flex-grow h-auto flex justify-center items-center bg-black-200 cursor-pointer">
+        +{{ postImages.length - 4 }} more
+      </div>
+    </div>
+  </div>
+
+
 
     <!-- Post Interaction Area -->
     <footer class="p-5">
@@ -148,12 +180,31 @@ export default {
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
       console.log(this.isMenuVisible)
-    }
+    },
+
+    calculateFlexBasis() {
+      // Calculate the flex-basis based on the number of images
+      const numberOfImages = this.postImages.length - 1; // minus the first image
+      const maxImagesToShow = 3;
+      if (numberOfImages > maxImagesToShow) {
+        // If more than 3 images, each gets an equal share of space
+        return `${100 / maxImagesToShow}%`;
+      }
+      // If fewer than 3 images, they grow equally to fill the space
+      return `${100 / numberOfImages}%`;
+    },
+
   },
 
   components: {
     IconWithLabel
   },
+  computed: {
+    slicedImages() {
+      return this.postImages.slice(1).filter((image, index) => index < 3);
+    }
+  },
+  
   props: {
     username: String,
     postDate: String,
@@ -174,7 +225,7 @@ export default {
   font-family: Raleway;
   font-size: 10px;
   font-style: normal;
-  line-height: 16px; /* 160% */
+  line-height: 16px; 
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -184,7 +235,7 @@ export default {
   font-weight: 600;
 }
 
-.p3,
+
 .content {
   color: var(--body-normal, #242424);
   font-family: Raleway;
@@ -194,7 +245,24 @@ export default {
   line-height: 20px; /* 142.857% */
 }
 
-.content {
-  font-weight: 500;
+@media only screen and (max-width: 480px) {
+  .content {
+    /* Add your mobile styles here. For example: */
+    font-size: 10px;
+    line-height: 16px; /* Adjust line height for smaller text */ 
+  }
+
+  h5{
+    color: var(--primary-normal, #021D40);
+
+/* Desktop/H6-SemiBold */
+font-family: Raleway;
+font-size: 12px;
+font-style: normal;
+font-weight: 600;
+line-height: 16px; 
+  }
 }
+
+
 </style>
