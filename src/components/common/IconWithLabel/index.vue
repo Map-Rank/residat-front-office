@@ -1,12 +1,11 @@
 <template>
-  <div
+  <router-link :to="{ name: routerName }" 
     class="icon-with-label relative"
     :class="top || bottom ? 'grid place-items-center' : 'flex items-center'"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click.prevent="handleClick()"
   >
-    <router-link :to="{ name: routerName }" class="contents">
       <!-- Label on Top -->
       <span :class="this.textCss" v-show="top">
         {{ labelTextTop }}
@@ -37,8 +36,7 @@
       <span :class="this.textCss" v-show="bottom">
         {{ labelTextBottom }}
       </span>
-    </router-link>
-  </div>
+  </router-link>
 </template>
 
 <script>
