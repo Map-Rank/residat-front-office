@@ -1,7 +1,7 @@
 import './assets/main.css'
 import './assets/base.css'
 import './assets/css/global.scss'
-
+import VeeValidatePlugin from './plugins/validation'
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
@@ -12,5 +12,6 @@ const app = createApp(App)
 
 app.use(createPinia())
 app.use(router)
+app.use(VeeValidatePlugin )
 
 app.mount('#app')
