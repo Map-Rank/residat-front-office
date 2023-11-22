@@ -1,100 +1,160 @@
+<!-- eslint-disable vue/no-parsing-error -->
 <template>
 
-    <div>
-  
-      <div
-    class="text-white text-center font-bold p-4 rounded mb-4"
-    v-if="login_show_alert"
-    :class="login_alert_varient"
-  >
-    {{ login_alert_message }}
-  </div>
-    <vee-form
-     @submit="loginForm" 
-     :validation-schema="loginSchema">
-      <!-- Email -->
-      <div class="mb-3">
-        <label class="inline-block mb-2">Email</label>
-        <vee-field
-          name="email"
-          type="email"
-          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          placeholder="Enter Email"
-        />
-        <ErrorMessage class="text-red-600" name="email" />
-      </div>
-      <!-- Password -->
-      <div class="mb-3">
-        <label class="inline-block mb-2">Password</label>
-        <vee-field
-          type="password"
-          name="password"
-          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          placeholder="Password"
-        />
-        <ErrorMessage class="text-red-600" name="password" />
-      </div>
-      <button
-        type="submit"
-        :disabled="login_in_submission"
-        class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
-      >
-        Submit
-      </button>
-    </vee-form>
-    </div>
-  
-  </template>
-  
-  <script>
-  
-  import { ErrorMessage } from 'vee-validate'
-  
-  export default {
-      name:'LoginForm',
-    data() {
-      return {
-        loginSchema: {
-          email: 'required|email',
-          password: 'required|max:100'
-        },
-        login_in_submission:false,
-        login_show_alert:false,
-        login_alert_varient:"bg-blue-500",
-        login_alert_message:"please wait we are login you in "
-      }
-    },
-    methods :{ 
-  
+  <div>
 
-  
-      async loginForm() {
-          this.login_in_submission = true,
-        this.login_show_alert = true,
-        this.login_alert_varient = "bg-blue-500",
-        this.login_alert_message = "please wait we are login you in "
-  
-        // try {
-        //   await this.authenticate(val)
-        // } catch (error) {
-        //     console.log(error);
-        //     this.login_alert_varient = "bg-red-500",
-        //     this.login_alert_message = "invalid credentials try again"
-        // return          
-        // };
-  
-  
-        this.login_alert_varient = "bg-green-500",
-        this.login_alert_message = "Sucess you are login"
-        window.location.reload()      
-  
-      }
+    <div
+      class="text-white text-center font-bold p-4 rounded mb-4 "
+      v-show="reg_show_alert"
+      :class="reg_alert_varient"
+    >
+      {{ reg_alert_message }}
+    </div>
+
+
+    <vee-form :validation-schema="schema" @submit="registerForm" :initial-values="userData">
 
       
-    },
-    components:{
-      ErrorMessage
-    }
-  }
-  </script>
+      
+
+      <!-- Email -->
+      <div class="mb-6">
+        <label class="inline-block mb-2">Email</label>
+        <vee-field
+        name="email"
+        type="email"
+        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        placeholder="Enter Email"
+        />
+        <ErrorMessage class="text-danger-normal" name="email" />
+      </div>
   
+
+      <!-- Password -->
+      <div class="mb-6">
+        <label class="inline-block mb-2">Password</label>
+        <vee-field name="password" :bails="false" v-slot="{ field, errors }">
+          <input
+            type="password"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            placeholder="Password"
+            v-bind="field"
+          />
+          <div class="text-danger-normal" v-for="error in errors" :key="error">
+            {{ error }}
+          </div>
+        </vee-field>
+        <ErrorMessage class="text-danger-normal" name="password" />
+      </div>
+
+
+      <button
+        type="submit"
+        class="block w-full bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
+        :disable="reg_in_submission"
+      >
+        Sign up
+      </button>
+    </vee-form>
+    
+
+    <div class="flex space-x-2">
+
+      <button-ui
+        leftIcon="src\assets\icons\colored\google.svg"
+        label="Google"
+        color="bg-white-gray"
+        :isRounded="true"
+        >
+      </button-ui>
+      <button-ui
+      leftIcon="src\assets\icons\colored\facebook.svg"
+      label="Apple"
+      color="bg-white-gray"
+      :isRounded="true"
+      >
+    </button-ui>
+    
+    <button-ui
+    leftIcon="src\assets\icons\colored\facebook.svg"
+        label="Facebook"
+        color="bg-white-gray"
+        :isRounded="true"
+      >
+      </button-ui>
+
+    </div>
+
+  </div>
+</template>
+
+<script>
+import ButtonUi from '../../../components/base/ButtonUi.vue'
+
+export default {
+  name: 'LoginForm',
+  data() {
+    return {
+      schema: {
+        name: 'required|min:3|max:50',
+        first_name: 'required|min:3|max:50',
+        second_name: 'required|min:3|max:50',
+        location: 'required|max:50',
+        telephone: 'required|min:3|max:12',
+        email: 'required|email',
+        age: 'required|min_value:18,max_value:100',
+        password: 'required',
+        confirm_password: 'required|passwords_mismatch:@password',
+        country: 'required|country_excluded:USA',
+        tos: 'required|tos'
+      },
+      userData: {
+        country: 'USA'
+      },
+      reg_in_submission: false,
+      reg_show_alert: false,
+      reg_alert_varient: 'bg-blue-500',
+      reg_alert_message: 'please wait your account is being created '
+    }
+  },
+
+  methods: {
+
+
+   async registerForm() {
+      ;(this.reg_in_submission = true),
+        (this.reg_show_alert = true),
+        (this.reg_alert_varient = 'bg-blue-500'),
+        (this.reg_alert_message = 'Wait we are creating your account ')
+        
+ 
+        
+
+
+        this.reg_in_submission = true,
+        this.reg_show_alert = true,
+        this.reg_alert_varient = 'bg-green-500',
+        this.reg_alert_message = 'Sucessful register '
+
+    
+    }
+  },
+  components:{
+    ButtonUi
+  }
+}
+</script>
+
+<style>
+
+label{
+color: var(--content-secondary, #374151);
+
+/* Paragraphs/P3/Medium */
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 20px; /* 142.857% */
+}
+</style>

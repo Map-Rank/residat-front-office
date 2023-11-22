@@ -1,9 +1,10 @@
+<!-- eslint-disable vue/no-parsing-error -->
 <template>
 
     <div>
   
       <div
-        class="text-white text-center font-bold p-4 rounded mb-4"
+        class="text-white text-center font-bold p-4 rounded mb-4 "
         v-show="reg_show_alert"
         :class="reg_alert_varient"
       >
@@ -12,42 +13,80 @@
   
   
       <vee-form :validation-schema="schema" @submit="registerForm" :initial-values="userData">
-        <!-- Name -->
-        <div class="mb-3">
-          <label class="inline-block mb-2">Name</label>
+        <!-- First Name -->
+        <div class="mb-6">
+          <label class="inline-block mb-4">First Name</label>
           <vee-field
-            name="name"
+            name="first_name"
             :rules="'required|min:3|max:50|alpha_spaces'"
             as="input"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Enter Name"
+            placeholder="Enter First Name"
           />
-          <ErrorMessage class="text-red-600" name="name" />
+          <ErrorMessage class="text-danger-normal" name="first_name" />
         </div>
+
+        <!-- Second Name -->
+        <div class="mb-6">
+          <label class="inline-block mb-2">Second Name</label>
+          <vee-field
+            name="second_name"
+            :rules="'required|min:3|max:50|alpha_spaces'"
+            as="input"
+            type="text"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            placeholder="Enter Second Name"
+          />
+          <ErrorMessage class="text-danger-normal" name="second_name" />
+        </div>
+        
+        
+
         <!-- Email -->
-        <div class="mb-3">
+        <div class="mb-6">
           <label class="inline-block mb-2">Email</label>
           <vee-field
-            name="email"
-            type="email"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Enter Email"
+          name="email"
+          type="email"
+          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          placeholder="Enter Email"
           />
-          <ErrorMessage class="text-red-600" name="email" />
+          <ErrorMessage class="text-danger-normal" name="email" />
         </div>
-        <!-- Age -->
-        <div class="mb-3">
-          <label class="inline-block mb-2">Age</label>
+        
+        <!-- Location -->
+        <div class="mb-6">
+          <label class="inline-block mb-2">Location</label>
           <vee-field
-            name="age"
-            type="number"
+            name="location"
+            :rules="'required|min:3|max:50|alpha_spaces'"
+            as="input"
+            type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            placeholder="Enter Second Name"
           />
-          <ErrorMessage class="text-red-600" name="age" />
+          <ErrorMessage class="text-danger-normal" name="location" />
         </div>
+
+
+        <!-- Location -->
+        <div class="mb-6">
+          <label class="inline-block mb-2">Telephone</label>
+          <vee-field
+            name="telephone"
+            :rules="'required|min:3|max:50|alpha_spaces'"
+            as="input"
+            type="text"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            placeholder="Enter Second Name"
+          />
+          <ErrorMessage class="text-danger-normal" name="telephone" />
+        </div>
+
+
         <!-- Password -->
-        <div class="mb-3">
+        <div class="mb-6">
           <label class="inline-block mb-2">Password</label>
           <vee-field name="password" :bails="false" v-slot="{ field, errors }">
             <input
@@ -56,14 +95,14 @@
               placeholder="Password"
               v-bind="field"
             />
-            <div class="text-red-600" v-for="error in errors" :key="error">
+            <div class="text-danger-normal" v-for="error in errors" :key="error">
               {{ error }}
             </div>
           </vee-field>
-          <ErrorMessage class="text-red-600" name="password" />
+          <ErrorMessage class="text-danger-normal" name="password" />
         </div>
         <!-- Confirm Password -->
-        <div class="mb-3">
+        <div class="mb-6">
           <label class="inline-block mb-2">Confirm Password</label>
           <vee-field
             name="confirm_password"
@@ -71,54 +110,63 @@
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Confirm Password"
           />
-          <ErrorMessage class="text-red-600" name="confirm_password" />
+          <ErrorMessage class="text-danger-normal" name="confirm_password" />
         </div>
-        <!-- Country -->
-        <div class="mb-3">
-          <label class="inline-block mb-2">Country</label>
-          <vee-field
-            as="select"
-            name="country"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          >
-            <option value="USA">USA</option>
-            <option value="Mexico">Mexico</option>
-            <option value="Germany">Germany</option>
-          </vee-field>
-          <ErrorMessage class="text-red-600" name="country" />
-        </div>
-        <!-- TOS -->
-        <div class="mb-3 pl-6">
-          <vee-field
-            type="checkbox"
-            value="1"
-            name="tos"
-            class="w-4 h-4 float-left -ml-6 mt-1 rounded"
-          />
-          <label class="inline-block">Accept terms of service</label> <br />
-          <ErrorMessage class="text-red-600" name="tos" />
-        </div>
+
+
         <button
           type="submit"
-          class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-600"
+          class="block w-full bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
           :disable="reg_in_submission"
         >
           Submit
         </button>
       </vee-form>
-  
+      
+
+      <div class="flex space-x-2">
+
+        <button-ui
+          leftIcon="src\assets\icons\colored\google.svg"
+          label="Google"
+          color="bg-white-gray"
+          :isRounded="true"
+          >
+        </button-ui>
+        <button-ui
+        leftIcon="src\assets\icons\colored\facebook.svg"
+        label="Apple"
+        color="bg-white-gray"
+        :isRounded="true"
+        >
+      </button-ui>
+      
+      <button-ui
+      leftIcon="src\assets\icons\colored\facebook.svg"
+          label="Facebook"
+          color="bg-white-gray"
+          :isRounded="true"
+        >
+        </button-ui>
+
+      </div>
   
     </div>
   </template>
   
   <script>
-  
+  import ButtonUi from '../../../components/base/ButtonUi.vue'
+
   export default {
     name: 'RegisterForm',
     data() {
       return {
         schema: {
           name: 'required|min:3|max:50',
+          first_name: 'required|min:3|max:50',
+          second_name: 'required|min:3|max:50',
+          location: 'required|max:50',
+          telephone: 'required|min:3|max:12',
           email: 'required|email',
           age: 'required|min_value:18,max_value:100',
           password: 'required',
@@ -156,9 +204,24 @@
   
       
       }
+    },
+    components:{
+      ButtonUi
     }
   }
   </script>
   
-  <style></style>
+  <style>
+
+label{
+  color: var(--content-secondary, #374151);
+
+/* Paragraphs/P3/Medium */
+font-family: Inter;
+font-size: 14px;
+font-style: normal;
+font-weight: 500;
+line-height: 20px; /* 142.857% */
+}
+</style>
   
