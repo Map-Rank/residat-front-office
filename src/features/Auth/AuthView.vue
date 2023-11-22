@@ -2,7 +2,7 @@
     <div>
       <div class="fixed z-10 inset-0 overflow-y-auto" id="modal" >
         <div
-          class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
+          class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0"
         >
         <!-- //the backgroup shadow effect -->
           <div class="back fixed inset-0 transition-opacity">
@@ -13,13 +13,12 @@
           <!-- <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span> -->
   
           <div
-            class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform  w-1/2 transition-all sm:my-8 sm:align-middle sm:w-1/2 sm:w-full"
+            class="inline-block md:py-9 md:px-28 align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform  w-3/4 transition-all sm:my-8 sm:align-middle sm:w-3/5 "
           >
             <!-- Add margin if you want to see some of the overlay behind the modal-->
             <div class="py-4 text-left px-6">
               <!--Title-->
               <div class="flex justify-between items-center pb-4">
-                <p class="text-2xl font-bold">Your Account</p>
                 <!-- Modal Close Button -->
                 <div class="modal-close cursor-pointer z-50" @click="closeAuthModel">
                   <i class="fas fa-times"></i>
@@ -30,28 +29,28 @@
   
               <ul class="flex flex-wrap mb-4">
                 <li class="flex-auto text-center">
-                  <a
-                    @click.prevent="() => (tab = login)"
-                    :class="{
+                  <button-ui
+                  label="Sign Up"
+                  :color="{
                       'hover:text-white text-white bg-blue-600': tab === login,
                       'hover:text-blue-600': tab === register
                     }"
-                    class="block rounded py-3 px-4 transition"
-                    href="#"
-                    >Login</a
-                  >
+                  width="full"
+                  @clickButton="clickButton()"
+                  > 
+                  </button-ui>
                 </li>
                 <li class="flex-auto text-center">
-                  <a
-                    @click.prevent="() => (tab = register)"
-                    :class="{
-                      'hover:text-white text-white bg-blue-600': tab === register,
+                  <button-ui
+                  label="Register"
+                  :color="{
+                      'hover:text-white text-white bg-blue-600': tab === login,
                       'hover:text-blue-600': tab === register
                     }"
-                    class="block rounded py-3 px-4 transition"
-                    href="#"
-                    >Register</a
-                  >
+                  width="full"
+                  @clickButton="clickButton()"
+                  > 
+                  </button-ui>
                 </li>
               </ul>
   
@@ -76,6 +75,7 @@
   <script>
   import LoginForm from './components/LoginForm.vue'
   import RegisterForm from './components/RegisterForm.vue'
+  import ButtonUi from '../../components/base/ButtonUi.vue'
   import '../../plugins/validation'
   
   export default {
@@ -87,11 +87,17 @@
         register: 'register',
       }
     },
+    methods:{
+      clickButton() {
+        this.tab == this.login ? this.tab = this.register : this.tab = this.login
+    }
+    },
    
     components: {
       // ErrorMessage,
       LoginForm,
-      RegisterForm
+      RegisterForm,
+      ButtonUi
     }
   }
   </script>
