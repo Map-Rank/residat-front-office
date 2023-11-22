@@ -1,14 +1,15 @@
 
 <template>
 
-    <header-app></header-app>
+    <!-- <header-app></header-app> -->
     
         <body class="md:px-100 pb-5">
-            <router-view></router-view>
+            <!-- <router-view></router-view> -->
+            <auth-view></auth-view>
         </body>
     
     <bottom-navigation-app-app class="mobile-nav md:hidden"></bottom-navigation-app-app>
-    <footer-app></footer-app>
+    <!-- <footer-app></footer-app> -->
 
 
 
@@ -19,15 +20,15 @@
 import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
-// import CommunityView from './features/Community/CommunityView.vue'
-
+import AuthView from './features/Auth/AuthView.vue'
 
 export default{
     name:'App',
     components:{
         HeaderApp,
         FooterApp,
-        BottomNavigationAppApp
+        BottomNavigationAppApp,
+        AuthView
         // CommunityView,
     },
 
@@ -43,7 +44,7 @@ export default{
 
 body{
     background: var(--primary-light, #E6E8EC);
-    min-height:80vh
+    /* min-height:80vh */
 }
 
 
