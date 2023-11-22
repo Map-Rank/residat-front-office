@@ -13,7 +13,7 @@
           <!-- <span class="hidden sm:inline-block sm:align-middle sm:h-screen">&#8203;</span> -->
   
           <div
-            class="inline-block md:py-9 md:px-28 align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform  w-3/4 transition-all sm:my-8 sm:align-middle sm:w-3/5 "
+            class="inline-block md:py-9 md:px-28 align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform  w-3/4 transition-all sm:my-8 sm:align-middle sm:w-3/5 "
           >
             <!-- Add margin if you want to see some of the overlay behind the modal-->
             <div class="py-4 text-left px-6">
@@ -44,8 +44,8 @@
                   <button-ui
                   label="Register"
                   :color="{
-                      'hover:text-white text-white bg-blue-600': tab === login,
-                      'hover:text-blue-600': tab === register
+                      'hover:text-white text-white bg-blue-600': tab === register,
+                      'hover:text-blue-600': tab === login
                     }"
                   width="full"
                   @clickButton="clickButton()"

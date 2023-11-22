@@ -2,10 +2,10 @@
   <button
     :class="[
       'flex items-center justify-center gap-2 px-4 py-2 transition rounded-none',
-      'disabled:opacity-50 disabled:cursor-not-allowed bg-black',
+      'disabled:opacity-50 disabled:cursor-not-allowed ',
       isRounded ? 'rounded-full' : 'rounded-lg',
+      color,
       buttonWidthClass,
-      buttonColorClass,
       hoverShadowClass
     ]"
     :disabled="isDisabled"
@@ -30,7 +30,7 @@ export default {
     rightIcon: String,
     isDisabled: Boolean,
     hoverState: Boolean,
-    color: String,
+    color: Object ,
     loading: Boolean,
     isRounded: {
       type: Boolean,
@@ -42,9 +42,6 @@ export default {
     },
   },
   computed: {
-    buttonColorClass() {
-      return this.color ? `bg-${this.color}-500 text-white` : 'bg-blue-500 text-white';
-    },
     hoverShadowClass() {
       return this.hoverState ? 'hover:shadow-md' : '';
     },
