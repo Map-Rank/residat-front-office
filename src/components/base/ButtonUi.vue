@@ -1,9 +1,9 @@
 <template>
   <button
     :class="[
-      'flex items-center justify-center gap-2 px-2 py-2 transition rounded',
+      'flex items-center justify-center gap-2 px-2 py-2 transition ',
       'disabled:opacity-50 disabled:cursor-not-allowed ',
-      isRounded ? 'rounded-full' : 'rounded-lg',
+      isRounded ? 'rounded-full' :'',
       color,
       colorObject,
       buttonWidthClass,
@@ -38,7 +38,6 @@ export default {
     loading: Boolean,
     isRounded: {
       type: Boolean,
-      default: false,
     },
     width: {
       type: String,

@@ -17,16 +17,16 @@
 
 <script >
 
-import HeaderApp from './components/common/Header/index.vue'
-import FooterApp from './components/common/Footer/index.vue'
+// import HeaderApp from './components/common/Header/index.vue'
+// import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
 import AuthView from './features/Auth/AuthView.vue'
 
 export default{
     name:'App',
     components:{
-        HeaderApp,
-        FooterApp,
+        // HeaderApp,
+        // FooterApp,
         BottomNavigationAppApp,
         AuthView
         // CommunityView,

@@ -58,32 +58,6 @@
     </vee-form>
     
 
-    <div class="flex space-x-2">
-
-      <button-ui
-        leftIcon="src\assets\icons\colored\google.svg"
-        label="Google"
-        color="bg-white-gray"
-        :isRounded="true"
-        >
-      </button-ui>
-      <button-ui
-      leftIcon="src\assets\icons\colored\facebook.svg"
-      label="Apple"
-      color="bg-white-gray"
-      :isRounded="true"
-      >
-    </button-ui>
-    
-    <button-ui
-    leftIcon="src\assets\icons\colored\facebook.svg"
-        label="Facebook"
-        color="bg-white-gray"
-        :isRounded="true"
-      >
-      </button-ui>
-
-    </div>
 
   </div>
 </template>
