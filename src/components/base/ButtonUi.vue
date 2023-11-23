@@ -13,7 +13,7 @@
     @click.prevent="handleClick()"
   >
     <img v-if="leftIcon" :src="leftIcon" alt="Left icon" class="w-5 h-5" />
-    <span>
+    <span :class="[textColor,colorObject]">
       {{ label }}
     </span>
     <img v-if="rightIcon" :src="rightIcon" alt="Right icon" class="w-5 h-5" />
@@ -36,6 +36,9 @@ export default {
     colorObject: Object ,
     color:String,
     loading: Boolean,
+    textColor:{
+      type:String,
+    },
     isRounded: {
       type: Boolean,
     },

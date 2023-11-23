@@ -1,7 +1,9 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
 
-  <div>
+  <div class="flex flex-col space-y-6">
+
+    <h3 class="text-center">WELCOME BACK</h3>
 
     <div
       class="text-white text-center font-bold p-4 rounded mb-4 "
@@ -14,8 +16,6 @@
 
     <vee-form :validation-schema="schema" @submit="registerForm" :initial-values="userData">
 
-      
-      
 
       <!-- Email -->
       <div class="mb-6">
@@ -40,9 +40,9 @@
             placeholder="Password"
             v-bind="field"
           />
-          <div class="text-danger-normal" v-for="error in errors" :key="error">
+          <!-- <div class="text-danger-normal" v-for="error in errors" :key="error">
             {{ error }}
-          </div>
+          </div> -->
         </vee-field>
         <ErrorMessage class="text-danger-normal" name="password" />
       </div>

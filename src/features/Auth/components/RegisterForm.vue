@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
-  <div class="my-8">
+  <div class="my-8 flex-col space-y-6">
     <div
       class="text-white text-center font-bold p-4 rounded mb-4"
       v-show="reg_show_alert"
@@ -10,7 +10,11 @@
     </div>
 
     <vee-form :validation-schema="schema" @submit="registerForm" :initial-values="userData">
-      <div v-if="this.currentStep === this.step_1">
+      <div 
+      class="flex-col space-y-6"
+      v-if="this.currentStep === this.step_1">
+
+        <h3 class="text-center">PERSONAL INFORMATION</h3>
         <!-- First Name -->
         <div class="mb-6">
           <label class="inline-block mb-4">First Name</label>
@@ -84,7 +88,7 @@
         </div>
 
         <!-- Confirm Password -->
-        <div class="mb-6">
+        <div class="mb-6 ">
           <label class="inline-block mb-2">Confirm Password</label>
           <vee-field
             name="confirm_password"
@@ -98,12 +102,17 @@
         <button-ui
           label="Next"
           color="bg-secondary-normal"
+          textColor="text-white"
           :isRounded="true"
           @clickButton="clickButton()"
         ></button-ui>
       </div>
 
-      <div v-if="this.currentStep === this.step_2">
+      <div
+      class="flex-col space-y-6"
+      v-if="this.currentStep === this.step_2">
+
+        <h3 class="text-center">SPECIFIC INFORMATION</h3>
         <!-- Location -->
         <div class="mb-6">
           <label class="inline-block mb-2">Location</label>
@@ -165,10 +174,11 @@
           <ErrorMessage class="text-red-600" name="tos" />
         </div>
 
-        <div class="flex space-x-4">
+        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
           <button-ui
             label="Previous"
             color="bg-secondary-normal"
+            textColor="text-white"
             :isRounded="true"
             @clickButton="clickButton()"
           ></button-ui>

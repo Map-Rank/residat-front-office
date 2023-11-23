@@ -10,7 +10,7 @@
         </div>
 
         <div
-          class="inline-block mx-2 md:py-9 md:px-28 align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform w-full transition-all sm:my-8 sm:align-middle sm:w-3/5"
+          class="inline-block mx-2 md:py-9 sm:px-6 md:px-20 align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform w-full transition-all sm:my-8 sm:align-middle sm:w-3/5"
         >
           <!-- Add margin if you want to see some of the overlay behind the modal-->
           <div class="py-4 text-left px-6">
@@ -29,7 +29,7 @@
                 <button-ui
                   label="Sign Up"
                   :colorObject="{
-                    'hover:text-white text-white bg-secondary-hover': tab === login,
+                    'hover:text-white text-white bg-secondary-hover ': tab === login,
                     'hover:text-secondary-normal': tab === register
                   }"
                   width="full"
@@ -59,11 +59,12 @@
 
             <!-- Social Buttons -->
 
-            <div class="flex flex-col space-y-2 sm:flex-row sm:space-x-3">
+            <div class="flex flex-col space-y-3 sm:space-y-0 sm:flex-row sm:space-x-3">
               <button-ui
-                leftIcon="src\assets\icons\colored\google.svg"
-                label="Google"
+                leftIcon="src\assets\icons\colored\facebook.svg"
+                label="Apple"
                 color="bg-white-gray"
+                textColor="text-black-dark"
                 :isRounded="true"
               >
               </button-ui>
@@ -71,6 +72,7 @@
                 leftIcon="src\assets\icons\colored\facebook.svg"
                 label="Apple"
                 color="bg-white-gray"
+                textColor="text-black-dark"
                 :isRounded="true"
               >
               </button-ui>
@@ -79,6 +81,7 @@
                 leftIcon="src\assets\icons\colored\facebook.svg"
                 label="Facebook"
                 color="bg-white-gray"
+                textColor="text-black-dark"
                 :isRounded="true"
               >
               </button-ui>
