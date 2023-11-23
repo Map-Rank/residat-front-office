@@ -1,34 +1,28 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
-
   <div class="flex flex-col space-y-6">
-
     <h3 class="text-center">WELCOME BACK</h3>
 
     <div
-      class="text-white text-center font-bold p-4 rounded mb-4 "
+      class="text-white text-center font-bold p-4 rounded mb-4"
       v-show="reg_show_alert"
       :class="reg_alert_varient"
     >
       {{ reg_alert_message }}
     </div>
 
-
     <vee-form :validation-schema="schema" @submit="registerForm" :initial-values="userData">
-
-
       <!-- Email -->
       <div class="mb-6">
         <label class="inline-block mb-2">Email</label>
         <vee-field
-        name="email"
-        type="email"
-        class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-        placeholder="Enter Email"
+          name="email"
+          type="email"
+          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          placeholder="Enter Email"
         />
         <ErrorMessage class="text-danger-normal" name="email" />
       </div>
-  
 
       <!-- Password -->
       <div class="mb-6">
@@ -47,7 +41,6 @@
         <ErrorMessage class="text-danger-normal" name="password" />
       </div>
 
-
       <button
         type="submit"
         class="block w-full bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
@@ -56,14 +49,10 @@
         Sign up
       </button>
     </vee-form>
-    
-
-
   </div>
 </template>
 
 <script>
-import ButtonUi from '../../../components/base/ButtonUi.vue'
 
 export default {
   name: 'LoginForm',
@@ -93,42 +82,33 @@ export default {
   },
 
   methods: {
-
-
-   async registerForm() {
+    async registerForm() {
       ;(this.reg_in_submission = true),
         (this.reg_show_alert = true),
         (this.reg_alert_varient = 'bg-blue-500'),
         (this.reg_alert_message = 'Wait we are creating your account ')
-        
- 
-        
 
-
-        this.reg_in_submission = true,
-        this.reg_show_alert = true,
-        this.reg_alert_varient = 'bg-green-500',
-        this.reg_alert_message = 'Sucessful register '
-
-    
+      ;(this.reg_in_submission = true),
+        (this.reg_show_alert = true),
+        (this.reg_alert_varient = 'bg-green-500'),
+        (this.reg_alert_message = 'Sucessful register ')
     }
   },
-  components:{
-    ButtonUi
+  components: {
+    
   }
 }
 </script>
 
 <style>
+label {
+  color: var(--content-secondary, #374151);
 
-label{
-color: var(--content-secondary, #374151);
-
-/* Paragraphs/P3/Medium */
-font-family: Inter;
-font-size: 14px;
-font-style: normal;
-font-weight: 500;
-line-height: 20px; /* 142.857% */
+  /* Paragraphs/P3/Medium */
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
 }
 </style>
