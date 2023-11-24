@@ -43,6 +43,7 @@
 
       <button
         type="submit"
+        @click="Login()"
         class="block w-full bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
         :disable="reg_in_submission"
       >
@@ -53,6 +54,8 @@
 </template>
 
 <script>
+import {mapStores} from 'pinia'
+import useAuthStore from '../../../stores/auth'
 
 export default {
   name: 'LoginForm',
@@ -80,18 +83,15 @@ export default {
       reg_alert_message: 'please wait your account is being created '
     }
   },
+  computed:{
+    ...mapStores(useAuthStore),
+  },
 
   methods: {
-    async registerForm() {
-      ;(this.reg_in_submission = true),
-        (this.reg_show_alert = true),
-        (this.reg_alert_varient = 'bg-blue-500'),
-        (this.reg_alert_message = 'Wait we are creating your account ')
-
-      ;(this.reg_in_submission = true),
-        (this.reg_show_alert = true),
-        (this.reg_alert_varient = 'bg-green-500'),
-        (this.reg_alert_message = 'Sucessful register ')
+    async Login() {
+      this.authStore.isloggedIn = !this.authStore.isloggedIn;
+      console.log(this.authStore.isloggedIn)
+      console.log('clicked')
     }
   },
   components: {

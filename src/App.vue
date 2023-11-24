@@ -1,11 +1,11 @@
 
 <template>
 
-    <!-- <header-app></header-app> -->
+    <header-app></header-app>
     
         <body class="md:px-100 pb-5">
-            <!-- <router-view></router-view> -->
-            <auth-view></auth-view>
+            <router-view></router-view>
+            <!-- <auth-view></auth-view> -->
         </body>
     
     <bottom-navigation-app-app class="mobile-nav md:hidden"></bottom-navigation-app-app>
@@ -17,18 +17,18 @@
 
 <script >
 
-// import HeaderApp from './components/common/Header/index.vue'
+import HeaderApp from './components/common/Header/index.vue'
 // import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
-import AuthView from './features/Auth/AuthView.vue'
+// import AuthView from './features/Auth/AuthView.vue'
 
 export default{
     name:'App',
     components:{
-        // HeaderApp,
+        HeaderApp,
         // FooterApp,
         BottomNavigationAppApp,
-        AuthView
+        // AuthView
         // CommunityView,
     },
 

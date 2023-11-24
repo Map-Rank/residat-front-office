@@ -185,6 +185,7 @@
 
           <button
             type="submit"
+            @click="registerForm()"
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
             :disable="reg_in_submission"
           >
@@ -198,6 +199,8 @@
 
 <script>
 import ButtonUi from '../../../components/base/ButtonUi.vue'
+import {mapStores ,mapWritableState} from 'pinia'
+import useAuthStore from '../../../stores/auth'
 
 export default {
   name: 'RegisterForm',
@@ -261,19 +264,20 @@ export default {
         ? (this.currentStep = this.step_2)
         : (this.currentStep = this.step_1)
     },
+
     async registerForm() {
-      ;(this.reg_in_submission = true),
-        (this.reg_show_alert = true),
-        (this.reg_alert_varient = 'bg-blue-500'),
-        (this.reg_alert_message = 'Wait we are creating your account ')
-      ;(this.reg_in_submission = true),
-        (this.reg_show_alert = true),
-        (this.reg_alert_varient = 'bg-green-500'),
-        (this.reg_alert_message = 'Sucessful register ')
+
+      this.isloggedIn = !this.isloggedIn;
+      console.log(this.isloggedIn)
+      console.log('clicked')
     }
   },
   components: {
     ButtonUi
+  },
+  computed:{
+    ...mapStores(useAuthStore),
+    ...mapWritableState(useAuthStore,['isloggedIn'])
   }
 }
 </script>
