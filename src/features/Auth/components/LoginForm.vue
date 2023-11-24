@@ -1,19 +1,24 @@
+<!-- eslint-disable vue/no-parsing-error -->
 <template>
+  <div class="flex flex-col space-y-6">
+    <h3 class="text-center">WELCOME BACK</h3>
 
-    <div>
-  
-      <div
-    class="text-white text-center font-bold p-4 rounded mb-4"
-    v-if="login_show_alert"
-    :class="login_alert_varient"
-  >
-    {{ login_alert_message }}
-  </div>
+    <div
+      class="text-white text-center font-bold p-4 rounded mb-4"
+      v-show="reg_show_alert"
+      :class="reg_alert_varient"
+    >
+      {{ reg_alert_message }}
+    </div>
+
     <vee-form
-     @submit="loginForm" 
-     :validation-schema="loginSchema">
+      :validation-schema="schema"
+      @submit="Login"
+      v-slot="{ handleSubmit }"
+      :initial-values="userData"
+    >
       <!-- Email -->
-      <div class="mb-3">
+      <div class="mb-6">
         <label class="inline-block mb-2">Email</label>
         <vee-field
           name="email"
@@ -21,80 +26,95 @@
           class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           placeholder="Enter Email"
         />
-        <ErrorMessage class="text-red-600" name="email" />
+        <ErrorMessage class="text-danger-normal" name="email" />
       </div>
+
       <!-- Password -->
-      <div class="mb-3">
+      <div class="mb-6">
         <label class="inline-block mb-2">Password</label>
-        <vee-field
-          type="password"
-          name="password"
-          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          placeholder="Password"
-        />
-        <ErrorMessage class="text-red-600" name="password" />
+        <vee-field name="password" :bails="false" v-slot="{ field, errors }">
+          <input
+            type="password"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            placeholder="Password"
+            v-bind="field"
+          />
+          <!-- <div class="text-danger-normal" v-for="error in errors" :key="error">
+            {{ error }}
+          </div> -->
+        </vee-field>
+        <ErrorMessage class="text-danger-normal" name="password" />
       </div>
-      <button
-        type="submit"
-        :disabled="login_in_submission"
-        class="block w-full bg-purple-600 text-white py-1.5 px-3 rounded transition hover:bg-purple-700"
-      >
-        Submit
-      </button>
+        <div class=" flex justify-center   ">
+          <button
+            type="submit"
+            class="sm:w-1/2  bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
+            @click="handleSubmit(Login())"
+          >
+            Sign up
+          </button>
+        </div>
     </vee-form>
-    </div>
-  
-  </template>
-  
-  <script>
-  
-  import { ErrorMessage } from 'vee-validate'
-  
-  export default {
-      name:'LoginForm',
-    data() {
-      return {
-        loginSchema: {
-          email: 'required|email',
-          password: 'required|max:100'
-        },
-        login_in_submission:false,
-        login_show_alert:false,
-        login_alert_varient:"bg-blue-500",
-        login_alert_message:"please wait we are login you in "
-      }
-    },
-    methods :{ 
-  
+  </div>
+</template>
 
-  
-      async loginForm() {
-          this.login_in_submission = true,
-        this.login_show_alert = true,
-        this.login_alert_varient = "bg-blue-500",
-        this.login_alert_message = "please wait we are login you in "
-  
-        // try {
-        //   await this.authenticate(val)
-        // } catch (error) {
-        //     console.log(error);
-        //     this.login_alert_varient = "bg-red-500",
-        //     this.login_alert_message = "invalid credentials try again"
-        // return          
-        // };
-  
-  
-        this.login_alert_varient = "bg-green-500",
-        this.login_alert_message = "Sucess you are login"
-        window.location.reload()      
-  
-      }
+<script>
+import { mapStores } from 'pinia'
+import useAuthStore from '../../../stores/auth'
+import { useRouter } from 'vue-router'
 
-      
-    },
-    components:{
-      ErrorMessage
+export default {
+  name: 'LoginForm',
+  setup() {},
+  data() {
+    const router = useRouter()
+    return {
+      router,
+      schema: {
+        name: 'required|min:3|max:50',
+        first_name: 'required|min:3|max:50',
+        second_name: 'required|min:3|max:50',
+        location: 'required|max:50',
+        telephone: 'required|min:3|max:12',
+        email: 'required|email',
+        age: 'required|min_value:18,max_value:100',
+        password: 'required',
+        confirm_password: 'required|passwords_mismatch:@password',
+        country: 'required|country_excluded:USA',
+        tos: 'required|tos'
+      },
+      userData: {
+        country: 'USA'
+      },
+      reg_in_submission: false,
+      reg_show_alert: false,
+      reg_alert_varient: 'bg-blue-500',
+      reg_alert_message: 'please wait your account is being created '
     }
-  }
-  </script>
-  
+  },
+  computed: {
+    ...mapStores(useAuthStore)
+  },
+
+  methods: {
+    Login() {
+      this.authStore.isloggedIn = !this.authStore.isloggedIn
+      this.$router.push({ name: 'community' })
+    }
+  },
+  components: {}
+}
+</script>
+
+<style>
+label {
+  color: var(--content-secondary, #374151);
+
+  /* Paragraphs/P3/Medium */
+  font-family: Inter;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}
+</style>

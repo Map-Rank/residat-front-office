@@ -1,26 +1,29 @@
 
 <template>
 
-    <!-- <header-app></header-app> -->
+    <header-app
+    :class="hiddenClass"
+    ></header-app>
     
         <body class="md:px-100 pb-5">
-            <!-- <router-view></router-view> -->
-            <auth-view></auth-view>
+            <router-view></router-view>
         </body>
     
-    <bottom-navigation-app-app class="mobile-nav md:hidden"></bottom-navigation-app-app>
-    <!-- <footer-app></footer-app> -->
+    <bottom-navigation-app-app 
+    :class="hiddenClass"
+    class="mobile-nav md:hidden"></bottom-navigation-app-app>
+    <footer-app></footer-app>
 
 
 
 </template>
 
 <script >
-
+import {mapState} from 'pinia'
+import useAuthStore from './stores/auth'
 import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
-import AuthView from './features/Auth/AuthView.vue'
 
 export default{
     name:'App',
@@ -28,15 +31,16 @@ export default{
         HeaderApp,
         FooterApp,
         BottomNavigationAppApp,
-        AuthView
-        // CommunityView,
     },
 
     data(){
         return{
         dashboardIcon:'<svg></svg>'
         }
-    }
+    },
+    computed:{
+    ...mapState(useAuthStore,['hiddenClass'])
+  }
 }
 </script>
 
@@ -44,7 +48,6 @@ export default{
 
 body{
     background: var(--primary-light, #E6E8EC);
-    /* min-height:80vh */
 }
 
 
@@ -56,7 +59,6 @@ body{
 
 @media only screen and (max-width: 480px) {
   .mobile-nav {
-    /* On mobile size screens, make the nav fixed at the bottom */
     position: fixed;
     bottom: 0;
     background-color: #fff;

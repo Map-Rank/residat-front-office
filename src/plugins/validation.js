@@ -1,5 +1,5 @@
 
-import {Form as VeeForm ,configure, Field as VeeField , defineRule,ErrorMessage} from 'vee-validate';
+import {Form as VeeForm ,configure, Field as VeeField ,defineRule,ErrorMessage} from 'vee-validate';
 import {required , not_one_of as excluded , confirmed ,max ,min , email , min_value as minVal , max_value as maxVal} from '@vee-validate/rules';
 export default {
     install(app){
