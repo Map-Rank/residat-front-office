@@ -11,7 +11,12 @@
       {{ reg_alert_message }}
     </div>
 
-    <vee-form :validation-schema="schema" @submit="registerForm" :initial-values="userData">
+    <vee-form
+      :validation-schema="schema"
+      @submit="Login"
+      v-slot="{ handleSubmit }"
+      :initial-values="userData"
+    >
       <!-- Email -->
       <div class="mb-6">
         <label class="inline-block mb-2">Email</label>
@@ -43,9 +48,8 @@
 
       <button
         type="submit"
-        @click="Login()"
         class="block w-full bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
-        :disable="reg_in_submission"
+        @click="handleSubmit(Login())"
       >
         Sign up
       </button>
@@ -54,13 +58,17 @@
 </template>
 
 <script>
-import {mapStores} from 'pinia'
+import { mapStores } from 'pinia'
 import useAuthStore from '../../../stores/auth'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'LoginForm',
+  setup() {},
   data() {
+    const router = useRouter()
     return {
+      router,
       schema: {
         name: 'required|min:3|max:50',
         first_name: 'required|min:3|max:50',
@@ -83,20 +91,17 @@ export default {
       reg_alert_message: 'please wait your account is being created '
     }
   },
-  computed:{
-    ...mapStores(useAuthStore),
+  computed: {
+    ...mapStores(useAuthStore)
   },
 
   methods: {
-    async Login() {
-      this.authStore.isloggedIn = !this.authStore.isloggedIn;
-      console.log(this.authStore.isloggedIn)
-      console.log('clicked')
+    Login() {
+      this.authStore.isloggedIn = !this.authStore.isloggedIn
+      this.$router.push({ name: 'community' })
     }
   },
-  components: {
-    
-  }
+  components: {}
 }
 </script>
 

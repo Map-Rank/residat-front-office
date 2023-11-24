@@ -25,6 +25,7 @@
           :bottom="false"
           routerName="dashbaord"
           @clickIcon="clickIcon(index)"
+          :class="hiddenClass"
       ></icon-with-label>
     </div>
 

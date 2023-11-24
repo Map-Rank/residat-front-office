@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
-  <div class="my-8 flex-col space-y-6">
+  <div class=" flex-col ">
     <div
       class="text-white text-center font-bold p-4 rounded mb-4"
       v-show="reg_show_alert"
