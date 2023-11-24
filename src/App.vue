@@ -1,7 +1,9 @@
 
 <template>
 
-    <header-app></header-app>
+    <header-app
+    :class="hiddenClass"
+    ></header-app>
     
         <body class="md:px-100 pb-5">
             <router-view></router-view>

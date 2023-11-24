@@ -11,7 +11,7 @@
           type="search"
           placeholder="Search"
           class="search gray h-8 p-2 w-10  rounded-md w-full w-3"
-          :class="hiddenClass"
+         
         />
       </div>
 
@@ -25,7 +25,7 @@
           :bottom="false"
           routerName="dashbaord"
           @clickIcon="clickIcon(index)"
-          :class="hiddenClass"
+         
       ></icon-with-label>
     </div>
 
@@ -41,7 +41,7 @@
 
       <!-- Search bar -->
       <div 
-      :class="hiddenClass"
+     
       class="  flex flex-grow    items-center">
         <div class="search flex p-2  ml-5 rounded-lg ">
 
@@ -49,7 +49,7 @@
           <input
             type="search"
             placeholder="Search "
-            :class="hiddenClass"
+           
             class="flex-grow bg-transparent ml-3  focus:border-none rounded-md outline-none  hover:border-none transition-colors duration-200"
           />
         </div>
@@ -69,7 +69,7 @@
           :routerName="item.routerName"
           @clickIcon="clickIcon(index)"
           :key="index"
-          :class="hiddenClass"
+         
         ></icon-with-label>
       </nav>
       <br />

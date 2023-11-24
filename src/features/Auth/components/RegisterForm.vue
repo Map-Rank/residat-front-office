@@ -99,13 +99,22 @@
           <ErrorMessage class="text-danger-normal" name="confirm_password" />
         </div>
 
-        <button-ui
-          label="Next"
-          color="bg-secondary-normal"
-          textColor="text-white"
-          :isRounded="true"
-          @clickButton="clickButton()"
-        ></button-ui>
+        <div class="sm:px-">
+
+      
+
+
+          <div class=" flex justify-center   ">
+          <button
+            type="text"
+            class="sm:w-1/2  bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
+            @click="clickButton()"
+          >
+            Next
+          </button>
+        </div>
+        </div>
+
       </div>
 
       <div
@@ -174,7 +183,7 @@
           <ErrorMessage class="text-red-600" name="tos" />
         </div>
 
-        <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+        <div class="flex  flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4">
           <button-ui
             label="Previous"
             color="bg-secondary-normal"
@@ -267,7 +276,7 @@ export default {
 
     async registerForm() {
 
-      this.isloggedIn = !this.isloggedIn;
+      // this.isloggedIn = !this.isloggedIn;
       console.log(this.isloggedIn)
       console.log('clicked')
     }

@@ -45,14 +45,15 @@
         </vee-field>
         <ErrorMessage class="text-danger-normal" name="password" />
       </div>
-
-      <button
-        type="submit"
-        class="block w-full bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
-        @click="handleSubmit(Login())"
-      >
-        Sign up
-      </button>
+        <div class=" flex justify-center   ">
+          <button
+            type="submit"
+            class="sm:w-1/2  bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
+            @click="handleSubmit(Login())"
+          >
+            Sign up
+          </button>
+        </div>
     </vee-form>
   </div>
 </template>
