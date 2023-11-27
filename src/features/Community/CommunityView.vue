@@ -1,37 +1,39 @@
 <template>
-  <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10">
-    <!-- Sidebar: Sectors and Topics -->
-    <aside class="col-span-1 hidden sm:block">
-      <!-- Sectors -->
-      <sector-side :sectorArray="this.sectors"></sector-side>
-    </aside>
-
-    <!-- Main Content Area: Posts -->
-    <main class="col-span-2 sm:px-4">
-      <div class="space-y-5">
-        <PostComponent
-          v-for="(post, index) in posts"
-          :key="index"
-          :username="post.username"
-          :postDate="post.postDate"
-          :postTitle="post.postTitle"
-          :postContent="post.postContent"
-          :userProfileImage="post.userProfileImage"
-          :listLikers="post.listLikers"
-          :comments="post.comments"
-          :postImages="post.postImages"
-        />
-      </div>
-    </main>
-
-    <aside class="col-span-1 hidden sm:block">
-      <recently-posted-side :topics="this.topics" :recentPosts="recentPosts"></recently-posted-side>
-    </aside>
+  <div class="md:px-100 pb-5">
+    <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10">
+      <!-- Sidebar: Sectors and Topics -->
+      <aside class="col-span-1 hidden sm:block">
+        <!-- Sectors -->
+        <sector-side :sectorArray="this.sectors"></sector-side>
+      </aside>
+  
+      <!-- Main Content Area: Posts -->
+      <main class="col-span-2 sm:px-4">
+        <div class="space-y-5">
+          <PostComponent
+            v-for="(post, index) in posts"
+            :key="index"
+            :username="post.username"
+            :postDate="post.postDate"
+            :postTitle="post.postTitle"
+            :postContent="post.postContent"
+            :userProfileImage="post.userProfileImage"
+            :listLikers="post.listLikers"
+            :comments="post.comments"
+            :postImages="post.postImages"
+          />
+        </div>
+      </main>
+  
+      <aside class="col-span-1 hidden sm:block">
+        <recently-posted-side :topics="this.topics" :recentPosts="recentPosts"></recently-posted-side>
+      </aside>
+    </div>
   </div>
 </template>
 
 <script>
-import PostComponent from './components/Post/index.vue'
+import PostComponent from '../../components/common/Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 export default {

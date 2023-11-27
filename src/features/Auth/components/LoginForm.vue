@@ -47,12 +47,14 @@
       </div>
         <div class=" flex justify-center   ">
           <button
-            type="submit"
-            class="sm:w-1/2  bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
-            @click="handleSubmit(Login())"
+              type="submit"
+              class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
+              @click="handleSubmit(Login())"
           >
-            Sign up
+              Sign up
           </button>
+          
+
         </div>
     </vee-form>
   </div>
@@ -62,6 +64,8 @@
 import { mapStores } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import { useRouter } from 'vue-router'
+import ButtonUi from '../../../components/base/ButtonUi.vue'
+
 
 export default {
   name: 'LoginForm',
@@ -102,7 +106,9 @@ export default {
       this.$router.push({ name: 'community' })
     }
   },
-  components: {}
+  components: {
+    ButtonUi
+  }
 }
 </script>
 

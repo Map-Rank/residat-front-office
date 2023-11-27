@@ -114,13 +114,14 @@ export default {
           isActive: false,
           bottom: true,
         routerName:'chat-room'
-        },
-        {
-          svgContent: 'src\\assets\\icons\\profile-outline.svg',
+      },
+      {
+        svgContent: 'src\\assets\\icons\\profile-outline.svg',
           svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
           labelText: 'Profile',
           isActive: false,
-          bottom: true
+          bottom: true,
+          routerName:'social-profile'
         },
         {
           svgContent: 'src\\assets\\icons\\post-outline.svg',

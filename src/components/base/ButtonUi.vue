@@ -3,7 +3,8 @@
     :class="[
       'flex items-center justify-center gap-2 px-2 py-2 transition ',
       'disabled:opacity-50 disabled:cursor-not-allowed ',
-      isRounded ? 'rounded-full' :'',
+      isRoundedFull ? 'rounded-full' : '',
+      isRoundedMd ? 'rounded-lg' : '',
       color,
       colorObject,
       buttonWidthClass,
@@ -12,8 +13,8 @@
     :disabled="isDisabled"
     @click.prevent="handleClick()"
   >
-    <img v-if="leftIcon" :src="leftIcon" alt="Left icon" class="w-5 h-5" />
-    <span :class="[textColor,colorObject]">
+    <img v-if="leftIcon" :src="leftIcon" alt="Left icon" class="w-6 h-6" />
+    <span :class="[textCss, colorObject]">
       {{ label }}
     </span>
     <img v-if="rightIcon" :src="rightIcon" alt="Right icon" class="w-5 h-5" />
@@ -27,46 +28,49 @@ export default {
   props: {
     label: {
       type: String,
-      required: true,
+      required: true
     },
     leftIcon: String,
     rightIcon: String,
     isDisabled: Boolean,
     hoverState: Boolean,
-    colorObject: Object ,
-    color:String,
+    colorObject: Object,
+    color: String,
     loading: Boolean,
-    textColor:{
-      type:String,
+    isRoundedMd:Boolean,
+    textCss: {
+      type: String
     },
-    isRounded: {
-      type: Boolean,
+    isRoundedFull: {
+      type: Boolean
     },
     width: {
       type: String,
-      default: 'full', // full, auto, or any specific width like 1/2, 1/3, etc.
-    },
+      default: 'full' // full, auto, or any specific width like 1/2, 1/3, etc.
+    }
   },
   computed: {
     hoverShadowClass() {
-      return this.hoverState ? 'hover:shadow-md' : '';
+      return this.hoverState ? 'hover:shadow-md' : ''
     },
     buttonWidthClass() {
-      return {
-        full: 'w-full',
-        auto: 'w-auto',
-      }[this.width] || `w-${this.width}`;
-    },
+      return (
+        {
+          full: 'w-full',
+          auto: 'w-auto'
+        }[this.width] || `w-${this.width}`
+      )
+    }
   },
   methods: {
     handleClick() {
-      if (!this.isDisabled &&  !this.loading) {
+      if (!this.isDisabled && !this.loading) {
         console.log('clicked')
-      this.$emit('clickButton')
+        this.$emit('clickButton')
       }
-    },
-  },
-};
+    }
+  }
+}
 </script>
 
 <style scoped>
@@ -79,14 +83,13 @@ export default {
   animation: spin 1s linear infinite;
 }
 
-span{
-
-font-family: Raleway;
-font-size: 14px;
-font-style: normal;
-font-weight: 400;
-line-height: 20px; /* 171.429% */
-letter-spacing: 0.75px;
+span {
+  font-family: Raleway;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 171.429% */
+  letter-spacing: 0.75px;
 }
 
 @keyframes spin {

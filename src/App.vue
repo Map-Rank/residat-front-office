@@ -5,7 +5,7 @@
     :class="hiddenClass"
     ></header-app>
     
-        <body class="md:px-100 pb-5">
+        <body class="">
             <router-view></router-view>
         </body>
     
