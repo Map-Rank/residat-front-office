@@ -5,22 +5,29 @@ import DashBoardView from '../features/DashBaord/DashBoardView.vue'
 import AuthView from '../features/Auth/AuthView.vue'
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue'
 import CreatePost from '../features/CreatePost/CreatePost.vue'
+import PostDetails from '../components/common/Post/components/PostDetails.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/',
+      name: 'post-details',
+      component: PostDetails
+    },
     {
       path: '/social-profile',
       name: 'social-profile',
       component: SocialProfile
     },
     {
-      path: '/',
+      path: '/create-post',
       name: 'create-post',
       component: CreatePost
     },
     {
-      path: '/community',
+      path: '/',
       name: 'community',
       component: CommunityView
     },

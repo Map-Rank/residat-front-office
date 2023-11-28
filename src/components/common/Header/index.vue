@@ -10,7 +10,7 @@
         <input
           type="search"
           placeholder="Search"
-          class="search gray h-8 p-2 w-10  rounded-md w-full w-3"
+          class="search gray h-8 p-2 rounded-md w-full w-3"
          
         />
       </div>
@@ -128,7 +128,8 @@ export default {
           svgContentHover: 'src\\assets\\icons\\post-fill.svg',
           labelText: 'Post',
           isActive: false,
-          bottom: true
+          bottom: true,
+          routerName:'create-post'
         },
         {
           svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
