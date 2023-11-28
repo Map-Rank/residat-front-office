@@ -1,5 +1,10 @@
 <template>
   <div class="container mx-auto p-6">
+    <div class="flex justify-center mb-9">
+
+        <h2>Share your thoughts</h2>
+    </div>
+
     <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
       <div class="grid mb-5">
         <label class="inline-block mb-2">Sector</label>
