@@ -2,7 +2,7 @@
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
 
-        <h2>Share your thoughts</h2>
+        <h3 class="uppercase font-semibold">Share your thoughts</h3>
     </div>
 
     <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
