@@ -1,74 +1,92 @@
 <template>
-    <div class="container  mx-auto p-6 ">
-        <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
-          <div class="grid mb-5">
-            <label class="inline-block mb-2">Sector</label>
-            <span>Select your sector of interest</span>
-          </div>
-          <div class="grid grid-cols-3 gap-7 content-between">
-            <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
-              <vee-field
-                :name="sector.name"
-                type="checkbox"
-                :id="sector.name"
-                class="rounded text-primary-normal focus:ring-primary-light"
-              />
-              <label :for="sector.name" class="ml-2 block text-sm text-body-dark">
-                {{ sector.label }}
-              </label>
-            </div>
-          </div>
+  <div class="container mx-auto p-6">
+    <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
+      <div class="grid mb-5">
+        <label class="inline-block mb-2">Sector</label>
+        <span>Select your sector of interest</span>
+      </div>
+      <div class="grid grid-cols-2 md:grid-cols-5 gap-7 content-between">
+        <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
+          <base-checkbox
+            :key="sector.name"
+            :list="sector"
+            @change="updateCheckedItems"
+          ></base-checkbox>
         </div>
-
-
-        <div class=" mx-auto p-6 bg-white rounded-lg shadow">
-            <h2 class="text-xl font-semibold mb-4">Create a New Post</h2>
-            <form @submit.prevent="submitPost">
-              <div class="mb-4">
-                <textarea
-                  v-model="postContent"
-                  placeholder="What's on your mind?"
-                  class="w-full p-4 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
-                  rows="4"
-                ></textarea>
-              </div>
-              <div class="mb-4">
-                <label class="block mb-2">Attach images (optional):</label>
-                <input type="file" @change="handleImageUpload" multiple class="file:mr-4 file:py-2 file:px-4 file:border-0 file:text-sm file:font-semibold file:bg-primary-normal file:text-white hover:file:bg-primary-hover" />
-              </div>
-              <button
-                type="submit"
-                class="px-6 py-2 bg-primary-normal text-white rounded-lg hover:bg-primary-hover focus:outline-none focus:ring-2 focus:ring-primary-dark"
-              >
-                Post
-              </button>
-            </form>
-        </div>
+      </div>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name:'CreatePost',
-    data() {
-      return {
-        postContent: '',
-        images: [],
-        schema: {
-        name: 'required|min:3|max:50',
-        first_name: 'required|min:3|max:50',
-        second_name: 'required|min:3|max:50',
-        company_name: 'min:3|max:50',
-        location: 'required|max:50',
-        telephone: 'required|min:3|max:12',
-        email: 'required|email',
+
+    <div class="mx-auto p-6 space-y-4 bg-white rounded-lg shadow">
+      <div class="flex items-center space-x-4">
+        <img src="public\images\profile.png" alt="" />
+        <h2 class="text-sm md:text-lg  font-light text-gray-normal mb-4">
+          Hello happy to share to our community
+        </h2>
+      </div>
+      <form @submit.prevent="submitPost">
+        <div class="mb-4">
+          <textarea
+            v-model="postContent"
+            placeholder="what will you share today ..."
+            class="w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
+            rows="4"
+          ></textarea>
+        </div>
+        <div class="mb-4">
+          <label class="block mb-2">Attach images (optional):</label>
+<div class="flex space-x-4">
+
+    <base-image-picker
+      :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
+      :type="'file'"
+      :label="'Add Image'"
+      @handleFileChange="handleImageUpload"
+      
+      >
+    </base-image-picker>
+    
+    <base-image-picker
+    :iconImg="'src\\assets\\icons\\colored\\video-clip.svg'"
+    :type="'file'"
+    :label="'Add Video'"
+      @handleFileChange="handleImageUpload"
+      
+    >
+    </base-image-picker>
+</div>
+        </div>
+      </form>
+    </div>
+
+    <div class="flex justify-center mt-5">
+      <div class="flex w-full sm:w-1/2">
+        <button-ui
+          :textCss="'text-white font-bold'"
+          :label="'Create Post'"
+          :color="'bg-secondary-normal '"
+          :isRoundedFull="true"
+        ></button-ui>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import BaseImagePicker from '../../components/base/BaseImagePicker.vue'
+import ButtonUi from '../../components/base/ButtonUi.vue'
+import BaseCheckbox from '../../components/base/BaseCheckbox.vue'
+
+export default {
+  name: 'CreatePost',
+  data() {
+    return {
+      postContent: '',
+      images: [],
+      schema: {
         age: 'required|min_value:18,max_value:100',
-        password: 'required',
-        confirm_password: 'required|passwords_mismatch:@password',
-        country: 'required|country_excluded:USA',
         tos: 'required|tos'
       },
-        sectors: [
+      sectors: [
         {
           name: 'agriculture',
           label: 'Agriculture',
@@ -92,35 +110,43 @@
         },
         { name: 'socials', label: 'Socials', checked: false, value: 'Socials', required: true }
         // Add more sectors as needed
-      ],
-      };
+      ]
+    }
+  },
+  components: {
+    BaseImagePicker,
+    ButtonUi,
+    BaseCheckbox
+  },
+  methods: {
+    submitPost() {
+      console.log('Post content:', this.postContent)
+      console.log('Attached images:', this.images)
+      // Clear the form
+      this.postContent = ''
+      this.images = []
     },
-    methods: {
-      submitPost() {
-        // Here you would handle the submission of the post content and the images
-        // This is where you would integrate with your backend service or state management
-        console.log('Post content:', this.postContent);
-        console.log('Attached images:', this.images);
-        // Clear the form
-        this.postContent = '';
-        this.images = [];
-        // Show a success message or handle errors
-      },
-      handleImageUpload(event) {
-        const files = Array.from(event.target.files);
-        this.images = files.map((file) => ({
-          name: file.name,
-          url: URL.createObjectURL(file),
-        }));
-      },
+    handleImageUpload(file) {
+      this.images = file.map((file) => ({
+        name: file.name,
+        url: URL.createObjectURL(file)
+      }))
     },
-  };
-  </script>
-  
-  <style scoped>
-  /* Additional styles if needed */
-  .container{
-    height: 100vh;
+
+    updateCheckedItems({ name, checked }) {
+      if (checked) {
+        this.checkedItems.push(name);
+      } else {
+        this.checkedItems = this.checkedItems.filter((item) => item !== name);
+      }
+    }
+  },
   }
-  </style>
-  
+
+</script>
+
+<style scoped>
+.container {
+  height: 100vh;
+}
+</style>

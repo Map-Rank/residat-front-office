@@ -25,6 +25,7 @@ import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
 
+
 export default{
     name:'App',
     components:{
