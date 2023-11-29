@@ -10,7 +10,7 @@
         <input
           type="search"
           placeholder="Search"
-          class="search gray h-8 p-2 w-10  rounded-md w-full w-3"
+          class="search gray h-8 p-2 rounded-md w-full w-3"
          
         />
       </div>
@@ -114,20 +114,22 @@ export default {
           isActive: false,
           bottom: true,
         routerName:'chat-room'
-        },
-        {
-          svgContent: 'src\\assets\\icons\\profile-outline.svg',
+      },
+      {
+        svgContent: 'src\\assets\\icons\\profile-outline.svg',
           svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
           labelText: 'Profile',
           isActive: false,
-          bottom: true
+          bottom: true,
+          routerName:'social-profile'
         },
         {
           svgContent: 'src\\assets\\icons\\post-outline.svg',
           svgContentHover: 'src\\assets\\icons\\post-fill.svg',
           labelText: 'Post',
           isActive: false,
-          bottom: true
+          bottom: true,
+          routerName:'create-post'
         },
         {
           svgContent: 'src\\assets\\icons\\subscribe-outline.svg',

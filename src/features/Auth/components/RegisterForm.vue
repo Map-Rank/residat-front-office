@@ -1,6 +1,6 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
-  <div class=" flex-col ">
+  <div class="flex-col">
     <div
       class="text-white text-center font-bold p-4 rounded mb-4"
       v-show="reg_show_alert"
@@ -10,10 +10,7 @@
     </div>
 
     <vee-form :validation-schema="schema" @submit="registerForm" :initial-values="userData">
-      <div 
-      class="flex-col space-y-6"
-      v-if="this.currentStep === this.step_1">
-
+      <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
         <h3 class="text-center">PERSONAL INFORMATION</h3>
         <!-- First Name -->
         <div class="mb-6">
@@ -88,7 +85,7 @@
         </div>
 
         <!-- Confirm Password -->
-        <div class="mb-6 ">
+        <div class="mb-6">
           <label class="inline-block mb-2">Confirm Password</label>
           <vee-field
             name="confirm_password"
@@ -100,27 +97,19 @@
         </div>
 
         <div class="sm:px-">
-
-      
-
-
-          <div class=" flex justify-center   ">
-          <button
-            type="text"
-            class="sm:w-1/2  bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
-            @click="clickButton()"
-          >
-            Next
-          </button>
+          <div class="flex justify-center">
+            <button-ui
+              label="Next"
+              color="bg-secondary-normal"
+              textCss="text-white"
+              :isRoundedFull="true"
+              @clickButton="clickButton()"
+            ></button-ui>
+          </div>
         </div>
-        </div>
-
       </div>
 
-      <div
-      class="flex-col space-y-6"
-      v-if="this.currentStep === this.step_2">
-
+      <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
         <h3 class="text-center">SPECIFIC INFORMATION</h3>
         <!-- Location -->
         <div class="mb-6">
@@ -183,12 +172,12 @@
           <ErrorMessage class="text-red-600" name="tos" />
         </div>
 
-        <div class="flex  flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4">
+        <div class="flex flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4">
           <button-ui
             label="Previous"
             color="bg-secondary-normal"
-            textColor="text-white"
-            :isRounded="true"
+            textCss="text-white"
+            :isRoundedFull="true"
             @clickButton="clickButton()"
           ></button-ui>
 
@@ -208,7 +197,7 @@
 
 <script>
 import ButtonUi from '../../../components/base/ButtonUi.vue'
-import {mapStores ,mapWritableState} from 'pinia'
+import { mapStores, mapWritableState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 
 export default {
@@ -275,7 +264,6 @@ export default {
     },
 
     async registerForm() {
-
       // this.isloggedIn = !this.isloggedIn;
       console.log(this.isloggedIn)
       console.log('clicked')
@@ -284,9 +272,9 @@ export default {
   components: {
     ButtonUi
   },
-  computed:{
+  computed: {
     ...mapStores(useAuthStore),
-    ...mapWritableState(useAuthStore,['isloggedIn'])
+    ...mapWritableState(useAuthStore, ['isloggedIn'])
   }
 }
 </script>

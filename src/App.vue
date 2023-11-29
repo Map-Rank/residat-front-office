@@ -5,7 +5,7 @@
     :class="hiddenClass"
     ></header-app>
     
-        <body class="md:px-100 pb-5">
+        <body class="">
             <router-view></router-view>
         </body>
     
@@ -24,6 +24,7 @@ import useAuthStore from './stores/auth'
 import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
+
 
 export default{
     name:'App',

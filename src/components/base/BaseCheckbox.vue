@@ -1,33 +1,60 @@
 <template>
-    <div class="flex items-center mb-2">
-      <vee-field :name="name" :rules="rules" v-slot="{ field, error }">
-        <input
-          type="checkbox"
-          v-bind="field"
-          class="rounded text-primary-normal focus:ring-primary-light"
-        />
-        <label :for="name" class="ml-2 block text-sm text-body-dark">{{ label }}</label>
-      </vee-field>
-      <span class="text-danger-normal">{{ error }}</span>
-    </div>
-  </template>
-  
-  <script>
-  export default {
-    props: {
-      name: {
-        type: String,
-        required: true
-      },
-      label: {
-        type: String,
-        required: true
-      },
-      rules: {
-        type: Object,
-        required: true
-      }
-    }
-  }
-  </script>
-  
+  <div class="checkbox-container">
+    <input
+      :name="list.name"
+      type="checkbox"
+      :id="list.name"
+      class="rounded text-primary-normal focus:ring-primary-light checkbox-input"
+      v-model="checked"
+      @change="updateCheckedItems"
+    />
+    <label :for="list.name" class="checkbox-label">{{ list.name }}</label>
+  </div>
+</template>
+
+<script>
+export default {
+  name:'BaseCheckbox',
+  props: {
+    list: Object,
+  },
+  data() {
+    return {
+      checked: false,
+    };
+  },
+  methods: {
+    updateCheckedItems() {
+      this.$emit('change', { name: this.list.name, checked: this.checked });
+    },
+  },
+};
+</script>
+
+<style scoped>
+.checkbox-container {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-input {
+  width: 24px;
+  height: 24px;
+}
+
+.checkbox-label {
+  margin-left: 10px;
+  color: var(--body-dark, #1B1B1B);
+
+/* Paragraphs/P2 */
+font-family: Raleway;
+font-size: 16px;
+font-style: normal;
+font-weight: 400;
+line-height: 24px; /* 150% */
+}
+
+.checkbox-input:checked + .checkbox-label {
+  font-weight: 600;
+}
+</style>

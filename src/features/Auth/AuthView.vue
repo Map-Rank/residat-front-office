@@ -30,7 +30,7 @@
 
             <!-- Tabs -->
 
-            <ul class="flex flex-wrap mb-4 border-2 border-secondary-normal ">
+            <ul class="flex flex-wrap mb-4 border-2 border-secondary-normal">
               <li class="flex-auto text-center border-secondary-normal">
                 <button-ui
                   label="Sign Up"
@@ -70,16 +70,16 @@
                 leftIcon="src\assets\icons\colored\google.svg"
                 label="Google"
                 color="bg-white-gray"
-                textColor="text-black-dark"
-                :isRounded="true"
+                textCss="text-black-dark"
+                :isRoundedFull="true"
               >
               </button-ui>
               <button-ui
                 leftIcon="src\assets\icons\colored\apple.svg"
                 label="Apple"
                 color="bg-white-gray"
-                textColor="text-black-dark"
-                :isRounded="true"
+                textCss="text-black-dark"
+                :isRoundedFull="true"
               >
               </button-ui>
 
@@ -87,8 +87,8 @@
                 leftIcon="src\assets\icons\colored\facebook.svg"
                 label="Facebook"
                 color="bg-white-gray"
-                textColor="text-black-dark"
-                :isRounded="true"
+                textCss="text-black-dark"
+                :isRoundedFull="true"
               >
               </button-ui>
             </div>
