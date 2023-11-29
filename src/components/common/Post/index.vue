@@ -77,18 +77,7 @@
       <!-- upper section  -->
       <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="20"
-            viewBox="0 0 16 20"
-            fill="none"
-          >
-            <path
-              d="M7.38843 4.28963C5.69278 2.57693 2.94954 2.5686 1.26122 4.2739C-0.427101 5.9792 -0.418861 8.75004 1.27679 10.4627L7.55368 16.8028C7.81404 17.0657 8.23617 17.0657 8.49652 16.8028L14.7408 10.4994C16.4252 8.78856 16.4199 6.02549 14.7239 4.31249C13.0252 2.59671 10.2807 2.58838 8.58936 4.29673L7.99299 4.90026L7.38843 4.28963Z"
-              fill="#505050"
-            />
-          </svg>
+          <img src="src\assets\icons\heart-fill.svg" alt="" />
           <span class="caption-c1-bold"
             >{{ listLikers[1] }} and {{ listLikers.length }} other likes</span
           >
@@ -108,9 +97,27 @@
           :isActive="item.isActive"
           :right="item.right"
           @clickIcon="clickIcon(index)"
+          @customFunction="toggleCommentBox(index)"
           :key="index"
           class="flex-shrink-0"
         ></icon-with-label>
+      </div>
+
+      <!-- comment section -->
+      <div v-if="showCommentBox" class="flex items-center mt-3">
+        <img class="h-9 w-9" src="public\images\unicef_logo.png" alt="" />
+        <div class="border w-full flex p-2 ml-5 rounded-lg">
+          <input
+            type="search"
+            placeholder="Search "
+            class="flex-grow bg-transparent ml-3 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
+          />
+          <input type="file" class="hidden" @change="handleFileChange" />
+          <img src="@\assets\icons\image-fill.svg" alt="" />
+        </div>
+        <button class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg  focus:outline-none">
+          Post
+        </button>
       </div>
     </footer>
   </article>
@@ -121,9 +128,10 @@
 <script>
 import '../../../assets/css/global.scss'
 import IconWithLabel from '../IconWithLabel/index.vue'
-import PostDetails from '../PostDetails/PostDetails.vue'
+import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import { usePostStore } from './store/postStore'
+import BaseImagePickerVue from '../../base/BaseImagePicker.vue'
 
 export default {
   name: 'PostComponent',
@@ -132,6 +140,7 @@ export default {
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isMenuVisible: false,
+      showCommentBox: false,
       iconLabels: [
         {
           svgContent: 'src\\assets\\icons\\heart-outline.svg',
@@ -164,7 +173,10 @@ export default {
         userImage: this.userProfileImage,
         content: this.postContent,
         postDate: this.postDate,
-        images: ['src\\assets\\images\\Community\\Post1.png','src\\assets\\images\\Community\\Post1.png'],
+        images: [
+          'src\\assets\\images\\Community\\Post1.png',
+          'src\\assets\\images\\Community\\Post1.png'
+        ],
         comments: [
           {
             username: 'Commenter One',
@@ -194,9 +206,22 @@ export default {
       })
     },
 
+    handleFileChange(event) {
+      const file = event.target.files[0]
+      if (file) {
+        this.$emit('handleFileChange', file)
+      }
+    },
+
     showDetails() {
       this.togglePostDetails()
       console.log('click')
+    },
+    toggleCommentBox(index) {
+      if (index == 1) {
+        this.showCommentBox = !this.showCommentBox
+      }
+      return
     },
 
     toggleMenu() {
@@ -214,12 +239,20 @@ export default {
       }
       // If fewer than 3 images, they grow equally to fill the space
       return `${100 / numberOfImages}%`
+    },
+
+    handleImageUpload(file) {
+      this.images = file.map((file) => ({
+        name: file.name,
+        url: URL.createObjectURL(file)
+      }))
     }
   },
 
   components: {
     IconWithLabel,
-    PostDetails
+    PostDetails,
+    BaseImagePickerVue
   },
   computed: {
     ...mapWritableState(usePostStore, ['showPostDetails']),

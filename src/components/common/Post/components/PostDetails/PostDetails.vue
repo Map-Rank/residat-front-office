@@ -90,7 +90,7 @@
                 <button
                   class="btn text-green-500 px-6 py-2 rounded-lg hover:bg-white focus:outline-none"
                 >
-                  Post
+                  send
                 </button>
               </div>
             </div>
@@ -104,7 +104,7 @@
 
 <script>
 import { mapActions } from 'pinia'
-import { usePostStore } from '../post/store/postStore'
+import { usePostStore } from '../../store/postStore'
 
 export default {
   name: 'PostDetails',

@@ -7,6 +7,7 @@
       <span class="ml-2  text-sm sm:text-base leading-normal">{{ label }}</span>
       <input :type="type" class="hidden" @change="handleFileChange" :accept="accept" />
     </label>
+    
   </div>
 </template>
 
