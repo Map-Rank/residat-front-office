@@ -5,7 +5,7 @@ import DashBoardView from '../features/DashBaord/DashBoardView.vue'
 import AuthView from '../features/Auth/AuthView.vue'
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue'
 import CreatePost from '../features/CreatePost/CreatePost.vue'
-import PostDetails from '../components/common/Post/components/PostDetails.vue'
+import PostDetails from '../components/common/PostDetails/PostDetails.vue'
 
 
 const router = createRouter({

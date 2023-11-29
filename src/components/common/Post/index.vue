@@ -125,11 +125,15 @@
       </div>
     </footer>
   </article>
+
+  <post-details></post-details>
+  
 </template>
 
 <script>
 import '../../../assets/css/global.scss'
 import IconWithLabel from '../IconWithLabel/index.vue'
+import PostDetails from '../PostDetails/PostDetails.vue'
 
 export default {
   name: 'PostComponent',
@@ -197,7 +201,8 @@ export default {
   },
 
   components: {
-    IconWithLabel
+    IconWithLabel,
+    PostDetails
   },
   computed: {
     slicedImages() {
