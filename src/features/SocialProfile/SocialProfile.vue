@@ -55,7 +55,7 @@
 <script>
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
-import PostComponent from '../../components/common/post/index.vue'
+import PostComponent from '../Post/index.vue'
 export default {
   name: 'SocialProfile',
 

@@ -126,12 +126,12 @@
 </template>
 
 <script>
-import '../../../assets/css/global.scss'
-import IconWithLabel from '../IconWithLabel/index.vue'
+import '../../assets/css/global.scss'
+import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import { usePostStore } from './store/postStore'
-import BaseImagePickerVue from '../../base/BaseImagePicker.vue'
+// import BaseImagePickerVue from '../../base/BaseImagePicker.vue'
 
 export default {
   name: 'PostComponent',
@@ -252,7 +252,7 @@ export default {
   components: {
     IconWithLabel,
     PostDetails,
-    BaseImagePickerVue
+    // BaseImagePickerVue
   },
   computed: {
     ...mapWritableState(usePostStore, ['showPostDetails']),

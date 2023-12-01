@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import PostComponent from '../../components/common/Post/index.vue'
+import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 export default {

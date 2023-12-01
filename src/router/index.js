@@ -11,11 +11,6 @@ import CreatePost from '../features/CreatePost/CreatePost.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'post-details',
-    //   component: PostDetails
-    // },
     {
       path: '/social-profile',
       name: 'social-profile',
@@ -27,12 +22,12 @@ const router = createRouter({
       component: CreatePost
     },
     {
-      path: '/',
+      path: '/community',
       name: 'community',
       component: CommunityView
     },
     {
-      path: '/authentication',
+      path: '/',
       name: 'authentication',
       component: AuthView
     },
