@@ -129,7 +129,19 @@ export default {
         // ... more post data
       ]
     }
-  }
+  },
+  created() {
+    // This lifecycle hook is where you would fetch your post data
+    this.fetchPosts();
+  },
+  methods: {
+    fetchPosts() {
+      // Logic to fetch posts from a store or API
+      // For example, using a Vuex action:
+      // this.$store.dispatch('fetchPosts');
+    },
+  },
+
 }
 </script>
 

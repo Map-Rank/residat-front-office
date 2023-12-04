@@ -131,11 +131,23 @@ export default {
       this.postContent = ''
       this.images = []
     },
-    handleImageUpload(file) {
-      this.images = file.map((file) => ({
-        name: file.name,
-        url: URL.createObjectURL(file)
-      }))
+    handleImageUpload(type, files) {
+      const fileList = Array.from(files);
+      fileList.forEach((file) => {
+        const url = URL.createObjectURL(file);
+        if (type === 'image') {
+          this.images.push({ name: file.name, url });
+        } else if (type === 'video') {
+          this.videos.push({ name: file.name, url });
+        }
+      });
+    },
+
+    resetForm() {
+      this.postContent = '';
+      this.images = [];
+      this.videos = [];
+      this.sectors.forEach(sector => sector.checked = false);
     },
 
     updateCheckedItems({ name, checked }) {
