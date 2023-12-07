@@ -6,7 +6,7 @@
       {{ regAlertMessage }}
     </div>
 
-    <vee-form :validation-schema="schema" @submit="login" v-slot="{ handleSubmit }" :initial-values="userData">
+    <vee-form :validation-schema="schema" @submit="login"  >
       <!-- Email -->
       <div class="mb-6">
         <label for="email" class="inline-block mb-2">Email</label>
@@ -42,7 +42,7 @@
         <button
           type="submit"
           class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
-          @click="handleSubmit(login)"
+          @click="login"
         >
           Sign up
         </button>
@@ -81,9 +81,10 @@ export default {
   },
 
   methods: {
-    login() {
-      this.authStore.isloggedIn = !this.authStore.isloggedIn;
-      this.$router.push({ name: 'community' });
+    login(values) {
+      // this.authStore.isloggedIn = !this.authStore.isloggedIn;
+      // this.$router.push({ name: 'community' });
+      console.log(values)
     }
   },
   components: {
