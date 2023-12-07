@@ -2,11 +2,14 @@
   <div class="flex flex-col space-y-6">
     <h3 class="text-center">WELCOME BACK</h3>
 
-    <div :class="[regAlertVariant, 'text-white', 'text-center', 'font-bold', 'p-4', 'rounded', 'mb-4']" v-show="regShowAlert">
+    <div
+      :class="[regAlertVariant, 'text-white', 'text-center', 'font-bold', 'p-4', 'rounded', 'mb-4']"
+      v-show="regShowAlert"
+    >
       {{ regAlertMessage }}
     </div>
 
-    <vee-form :validation-schema="schema" @submit="login"  >
+    <vee-form :validation-schema="schema" @submit="login">
       <!-- Email -->
       <div class="mb-6">
         <label for="email" class="inline-block mb-2">Email</label>
@@ -23,7 +26,7 @@
       <!-- Password -->
       <div class="mb-6">
         <label for="password" class="inline-block mb-2">Password</label>
-        <vee-field name="password" :bails="false" v-slot="{ field}">
+        <vee-field name="password" :bails="false" v-slot="{ field }">
           <input
             id="password"
             type="password"
@@ -52,20 +55,21 @@
 </template>
 
 <script>
-import { mapStores } from 'pinia';
-import useAuthStore from '../../../stores/auth';
-import { useRouter } from 'vue-router';
+import { mapStores } from 'pinia'
+import useAuthStore from '../../../stores/auth'
+import { loginUser } from '../services/authService'
+import { useRouter } from 'vue-router'
 
 export default {
   name: 'LoginForm',
   setup() {},
   data() {
-    const router = useRouter();
+    const router = useRouter()
     return {
       router,
       schema: {
         email: 'required|email',
-        password: 'required',
+        password: 'required'
       },
       userData: {
         country: 'USA'
@@ -74,23 +78,34 @@ export default {
       regShowAlert: false,
       regAlertVariant: 'bg-blue-500',
       regAlertMessage: 'Please wait, your account is being created.'
-    };
+    }
   },
   computed: {
     ...mapStores(useAuthStore)
   },
 
   methods: {
-    login(values) {
-      // this.authStore.isloggedIn = !this.authStore.isloggedIn;
-      // this.$router.push({ name: 'community' });
+    handleSuccess(token) {
+      console.log(token)
+      this.authStore.isloggedIn = !this.authStore.isloggedIn
+      this.$router.push({ name: 'community' })
+    },
+
+    handleError(message) {
+      // Custom logic for handling error response
+      // console.error('Handling error:', message)
+      console.log(message)
+    },
+
+    async login(values) {
       console.log(values)
+      await loginUser(values, this.handleSuccess, this.handleError)
     }
   },
   components: {
     // ButtonUi
   }
-};
+}
 </script>
 
 <style>

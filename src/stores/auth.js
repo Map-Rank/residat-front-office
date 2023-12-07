@@ -4,7 +4,7 @@ import { defineStore } from 'pinia';
 export default defineStore('auth', {
   state: () => ({
     user: null,
-    isloggedIn: true
+    isloggedIn: false
   }),
 
   getters: {

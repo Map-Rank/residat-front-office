@@ -1,6 +1,7 @@
 import { makeApiCall } from '@/api'; // Import the makeApiCall function
 
 const registerEndpoint = '/register';
+const loginEndpoint='/login'
 
 const registerUser = async (userData, onSuccess, onError) => {
   try {
@@ -27,4 +28,33 @@ const registerUser = async (userData, onSuccess, onError) => {
   }
 };
 
-export { registerUser };
+
+
+
+const loginUser = async (userCredentials, onSuccess, onError) => {
+
+  console.log(userCredentials)
+  try {
+    const formData = new FormData();
+
+    // Append email and password to formData
+    formData.append('email', userCredentials.email);
+    formData.append('password', userCredentials.password);
+
+    // Use makeApiCall for the API request
+    const response = await makeApiCall(loginEndpoint, formData);
+    
+    // Assuming the API call returns a token upon successful login
+    const token = response.data.token;
+    
+    // Handle successful login
+    onSuccess(token);
+  } catch (error) {
+    onError("Login Error: Unable to log in with the provided credentials");
+    console.error('Login error:', error);
+    throw error;
+  }
+};
+
+
+export { registerUser , loginUser };
