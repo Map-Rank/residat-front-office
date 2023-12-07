@@ -168,8 +168,10 @@
           </div>
         </div>
 
-        <!-- TOS -->
         <div class="mb-3 pl-6">
+          <!-- TOS -->
+  
+
           <vee-field
             type="checkbox"
             value="1"
@@ -319,6 +321,13 @@ export default {
     },
 
     async registerForm() {
+
+      ;(this.reg_in_submission = true),
+        (this.reg_show_alert = true),
+        (this.reg_alert_varient = 'bg-blue-500'),
+        (this.reg_alert_message = 'Wait we are creating your account ')
+
+
       try {
         const response = await registerUser(this.formData, this.handleSuccess, this.handleError)
         if (response.status) {
@@ -330,6 +339,12 @@ export default {
         }
       } catch (error) {
         console.log(error)
+        ;(this.reg_in_submission = false),
+            // (this.reg_show_alert = false),
+            (this.reg_alert_varient = 'bg-red-500'),
+            (this.reg_alert_message = 'Unexpescted error please try letter')
+            console.log(error);
+ 
       }
     }
   },

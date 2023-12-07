@@ -3,10 +3,11 @@
     <h3 class="text-center">WELCOME BACK</h3>
 
     <div
-      :class="[regAlertVariant, 'text-white', 'text-center', 'font-bold', 'p-4', 'rounded', 'mb-4']"
-      v-show="regShowAlert"
+      class="text-white text-center font-bold p-4 rounded mb-4"
+      v-if="login_show_alert"
+      :class="login_alert_varient"
     >
-      {{ regAlertMessage }}
+      {{ login_alert_message }}
     </div>
 
     <vee-form :validation-schema="schema" @submit="login">
@@ -44,6 +45,7 @@
       <div class="flex justify-center">
         <button
           type="submit"
+          :disabled="login_in_submission"
           class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
           @click="login"
         >
@@ -74,10 +76,10 @@ export default {
       userData: {
         country: 'USA'
       },
-      regInSubmission: false,
-      regShowAlert: false,
-      regAlertVariant: 'bg-blue-500',
-      regAlertMessage: 'Please wait, your account is being created.'
+      login_in_submission: false,
+      login_show_alert: false,
+      login_alert_varient: 'bg-blue-500',
+      login_alert_message: 'please wait we are login you in '
     }
   },
   computed: {
@@ -98,8 +100,23 @@ export default {
     },
 
     async login(values) {
+      this.login_in_submission = true,
+      this.login_show_alert = true,
+      this.login_alert_varient = "bg-blue-500",
+      this.login_alert_message = "please wait we are login you in "
+
+
+      try {
+        await loginUser(values, this.handleSuccess, this.handleError)
+      } catch (error) {
+          console.log(error);
+          this.login_alert_varient = "bg-red-500",
+          this.login_alert_message = "invalid credentials try again"
+      return          
+      };
+
+
       console.log(values)
-      await loginUser(values, this.handleSuccess, this.handleError)
     }
   },
   components: {
