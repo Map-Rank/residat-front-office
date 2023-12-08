@@ -45,9 +45,9 @@
       <div class="flex justify-center">
         <button
           type="submit"
-          :disabled="login_in_submission"
           class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
-          @click="login"
+          @click="login()"
+          :disabled="login_in_submission"
         >
           Sign up
         </button>
@@ -67,7 +67,10 @@ export default {
   setup() {},
   data() {
     const router = useRouter()
+    const authStore = useAuthStore()
+
     return {
+      authStore,
       router,
       schema: {
         email: 'required|email',
@@ -89,6 +92,8 @@ export default {
   methods: {
     handleSuccess(token) {
       console.log(token)
+      // this.authStore.setUser(user)
+      console.log('Current User:', this.authStore.getCurrentUser);
       this.authStore.isloggedIn = !this.authStore.isloggedIn
       this.$router.push({ name: 'community' })
     },
@@ -100,6 +105,8 @@ export default {
     },
 
     async login(values) {
+
+
       this.login_in_submission = true,
       this.login_show_alert = true,
       this.login_alert_varient = "bg-blue-500",
@@ -107,11 +114,16 @@ export default {
 
 
       try {
-        await loginUser(values, this.handleSuccess, this.handleError)
+        await loginUser(values,this.authStore, this.handleSuccess, this.handleError)
+        this.authStore.displayUser()
+        this.authStore.isloggedIn = true
+
       } catch (error) {
           console.log(error);
           this.login_alert_varient = "bg-red-500",
           this.login_alert_message = "invalid credentials try again"
+          this.login_in_submission= false
+
       return          
       };
 

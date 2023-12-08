@@ -10,18 +10,24 @@ export default defineStore('auth', {
   getters: {
     hiddenClass(state) {
       return !state.isloggedIn ? 'hidden' : ''
-    }
+    },
+    getCurrentUser(state) {
+      return state.user;
+    },
+  
   }
   ,
   actions: {
-    logIn(userCredentials) {
-      // Logic for logging in
-      // After successful login, set the user state
-      this.user = { ...userCredentials };
+    setUser(userData) {
+      this.user = userData;
+      this.isloggedIn = true;
     },
+    
     logOut() {
       // Logic for logging out
       this.user = null;
+      this.isloggedIn = false;
+      localStorage.removeItem('authToken'); 
     },
   },
 });

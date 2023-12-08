@@ -6,11 +6,7 @@
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
 
       <div class="flex-grow items-center">
-        <input
-          type="search"
-          placeholder="Search"
-          class="search gray h-8 p-2 rounded-md "
-        />
+        <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
       </div>
 
       <icon-with-label
@@ -61,6 +57,18 @@
           @clickIcon="clickIcon(index)"
           :key="index"
         ></icon-with-label>
+
+        <icon-with-label
+          svgContentHover="src\assets\icons\profile-outline.svg"
+          svgContent="src\\assets\\icons\\profile-fill.svg"
+          labelText="Logout"
+          labelTextBottom="Logout"
+          iconDesktopSize="this.iconSize"
+          :isActive="true"
+          :bottom="false"
+          routerName="dashbaord"
+          @clickIcon="this.authStore.logout"
+        ></icon-with-label>
       </nav>
       <br />
     </div>
@@ -71,13 +79,20 @@
 import IconWithLabel from '../IconWithLabel/index.vue'
 import { mapState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
+import { useRouter } from 'vue-router'
+
 export default {
   name: 'HeaderApp',
   components: {
     IconWithLabel
   },
   data() {
+    const authStore = useAuthStore()
+    const router = useRouter()
+
     return {
+      authStore,
+      router,
       isMenuOpen: false,
       iconSize: 'w-7 h-7',
       navItems: [
@@ -142,6 +157,11 @@ export default {
 
         return { ...item, isActive: false }
       })
+    },
+
+    logout() {
+      this.authStore.logout
+      this.$router.push({ name: '/' })
     }
   },
   computed: {
