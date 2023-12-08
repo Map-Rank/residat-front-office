@@ -37,7 +37,6 @@ const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
 
   try {
     const formData = new FormData();
-    console.log(userCredentials)
 
     formData.append('email', userCredentials.email);
     formData.append('password', userCredentials.password);

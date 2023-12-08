@@ -68,9 +68,38 @@
               type="tel"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               placeholder="Enter phone number"
+              />
+              <ErrorMessage class="text-danger-normal" name="phone" />
+            </div>
+            
+            <!-- date of birth -->
+          <div class="mb-6">
+            <label class="inline-block mb-2">Date of Birth</label>
+            <vee-field
+              name="dob"
+              v-model="formData.date_of_birth"
+              :rules="schema.dob"
+              as="input"
+              type="date"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              placeholder="Select date of birth"
             />
-            <ErrorMessage class="text-danger-normal" name="phone" />
+            <ErrorMessage class="text-danger-normal" name="dob" />
           </div>
+          
+            <!-- User Gender  -->
+          <div class="mb-6">
+            <label class="inline-block mb-2">Gender</label>
+            <select 
+            v-model="formData.gender" 
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded">
+              <option value="">Select gender</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          
 
           <!-- Password -->
           <div class="mb-6">
@@ -225,7 +254,8 @@ export default {
         last_name: 'required|min:3|max:50',
         phone: 'required|min:3|max:12',
         email: 'required|email',
-        password: 'required',
+        password: 'required|min:6',
+        dob: 'required',
         confirm_password: 'required|passwords_mismatch:@password',
         tos: 'required|tos',
         company_name: 'min:3|max:50',

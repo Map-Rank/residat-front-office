@@ -85,42 +85,33 @@ export default {
     }
   },
 
-
   methods: {
     handleSuccess() {
-      console.log('Current User:', this.authStore.getCurrentUser);
+      console.log('Current User:', this.authStore.getCurrentUser)
       this.authStore.isloggedIn = !this.authStore.isloggedIn
       this.$router.push({ name: 'community' })
     },
 
     handleError(message) {
-      // Custom logic for handling error response
-      // console.error('Handling error:', message)
       console.log(message)
     },
 
     async login(values) {
-
-
-      this.login_in_submission = true,
-      this.login_show_alert = true,
-      this.login_alert_varient = "bg-blue-500",
-      this.login_alert_message = "please wait we are login you in "
-
+      ;(this.login_in_submission = true),
+        (this.login_show_alert = true),
+        (this.login_alert_varient = 'bg-blue-500'),
+        (this.login_alert_message = 'please wait we are login you in ')
 
       try {
-        await loginUser(values,this.authStore, this.handleSuccess, this.handleError)
-        this.authStore.displayUser()
-
+        await loginUser(values, this.authStore, this.handleSuccess, this.handleError)
       } catch (error) {
-          console.log(error);
-          this.login_alert_varient = "bg-red-500",
-          this.login_alert_message = "invalid credentials try again"
-          this.login_in_submission= false
+        console.log(error)
+        ;(this.login_alert_varient = 'bg-red-500'),
+          (this.login_alert_message = 'invalid credentials try again')
+        this.login_in_submission = false
 
-      return          
-      };
-
+        return
+      }
 
       console.log(values)
     }

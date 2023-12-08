@@ -1,28 +1,34 @@
 <template>
   <div class="h-full">
     <div class="bg-white p-6">
-        <top-profile-info
-  :profileImageUrl="'public\\images\\unicef.png'"
-  profileName="Unicef International"
-  :followersCount="500"
-  :postsCount="34"
-  :isCurrentUser="true"
-/>
-
+      <!-- <top-profile-info
+        :profileImageUrl="'public\\images\\unicef.png'"
+        profileName="Unicef International"
+        :followersCount="500"
+        :postsCount="34"
+        :isCurrentUser="true"
+      /> -->
+      <top-profile-info
+        :profileImageUrl=" 'public\\images\\unicef.png'"
+        :profileName="`${user.first_name} ${user.last_name}`"
+        :followersCount="500" 
+        :postsCount="posts.length"
+        :isCurrentUser="true"
+      />
     </div>
 
     <div class="md:px-100 pb-5">
-      <div class="container  mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4">
-        <!-- Sidebar: Sectors and Topics -->
-        <aside class="col-span-1   mb-2 sm:block">
+      <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4">
+        <aside class="col-span-1 mb-2 sm:block">
+
           <about-user-info
-            username="Unicef International"
-            description="The UN, through the United Nations Children's Fund UNICEF and specialized agencies such as the World Health Organization WHO."
-            location="From Yaounde, Cameroon"
-            phone="+320 236 259 6361"
-            email="unicef@gmail.org"
-            joinDate="10-03-2023"
-            website="unicef.org"
+            :username="`${user.first_name} ${user.last_name}`"
+            :description="'Your description here'" 
+            :location="'From ' + user.address" 
+            :phone="user.phone"
+            :email="user.email"
+            :joinDate="formatDate(user.created_at)"
+            :website="'your-website-url.com'"
           />
         </aside>
 
@@ -44,9 +50,7 @@
           </div>
         </main>
 
-        <aside class="col-span-1 hidden sm:block">
-        
-        </aside>
+        <aside class="col-span-1 hidden sm:block"></aside>
       </div>
     </div>
   </div>
@@ -56,14 +60,10 @@
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
+import useAuthStore from '@/stores/auth'
+import { mapState } from 'pinia'
 export default {
   name: 'SocialProfile',
-
-  components: {
-    PostComponent,
-    AboutUserInfo,
-    TopProfileInfo
-  },
 
   data() {
     return {
@@ -130,9 +130,26 @@ export default {
       ]
     }
   },
+
+computed:{
+  ...mapState(useAuthStore,['user'])
+},
+
+
+
+  components: {
+    PostComponent,
+    AboutUserInfo,
+    TopProfileInfo
+  },
+
+
+
+ 
   created() {
     // This lifecycle hook is where you would fetch your post data
-    this.fetchPosts();
+    this.fetchPosts()
+    console.log(this.user)
   },
   methods: {
     fetchPosts() {
@@ -140,11 +157,12 @@ export default {
       // For example, using a Vuex action:
       // this.$store.dispatch('fetchPosts');
     },
-  },
-
+    formatDate(date) {
+      // Simple date formatting, adjust as needed
+      return new Date(date).toLocaleDateString();
+    },
+  }
 }
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
