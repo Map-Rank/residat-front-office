@@ -57,7 +57,6 @@
 </template>
 
 <script>
-import { mapStores } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import { loginUser } from '../services/authService'
 import { useRouter } from 'vue-router'
@@ -85,14 +84,10 @@ export default {
       login_alert_message: 'please wait we are login you in '
     }
   },
-  computed: {
-    ...mapStores(useAuthStore)
-  },
+
 
   methods: {
-    handleSuccess(token) {
-      console.log(token)
-      // this.authStore.setUser(user)
+    handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser);
       this.authStore.isloggedIn = !this.authStore.isloggedIn
       this.$router.push({ name: 'community' })
@@ -116,7 +111,6 @@ export default {
       try {
         await loginUser(values,this.authStore, this.handleSuccess, this.handleError)
         this.authStore.displayUser()
-        this.authStore.isloggedIn = true
 
       } catch (error) {
           console.log(error);

@@ -1,5 +1,6 @@
 <template>
-  <header-app :class="hiddenClass"></header-app>
+  <!-- <header-app :class="hiddenClass"></header-app> -->
+  <header-app ></header-app>
 
   <body class="">
     <router-view></router-view>

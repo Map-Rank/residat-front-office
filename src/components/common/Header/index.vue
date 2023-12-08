@@ -65,9 +65,8 @@
           labelTextBottom="Logout"
           iconDesktopSize="this.iconSize"
           :isActive="true"
-          :bottom="false"
-          routerName="dashbaord"
-          @clickIcon="this.authStore.logout"
+          :bottom="true"
+          @clickIcon="logout"
         ></icon-with-label>
       </nav>
       <br />
@@ -160,8 +159,8 @@ export default {
     },
 
     logout() {
-      this.authStore.logout
-      this.$router.push({ name: '/' })
+      this.authStore.logOut()
+      this.$router.push({ name: 'authentication' })
     }
   },
   computed: {

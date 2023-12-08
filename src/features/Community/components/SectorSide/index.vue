@@ -6,7 +6,6 @@
         <base-checkbox
             :key="sector.name"
             :list="sector"
-            @change="updateCheckedItems"
           ></base-checkbox>
       </li>
     </ul>

@@ -54,7 +54,7 @@ const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
     localStorage.setItem('authToken',token);
 
 
-    onSuccess(token);
+    onSuccess();
   } catch (error) {
     onError("Login Error: Unable to log in with the provided credentials");
     console.error('Login error:', error);

@@ -21,6 +21,7 @@ export default defineStore('auth', {
     setUser(userData) {
       this.user = userData;
       this.isloggedIn = true;
+      console.log('loginState: '+this.isloggedIn)
     },
     
     logOut() {
@@ -28,6 +29,7 @@ export default defineStore('auth', {
       this.user = null;
       this.isloggedIn = false;
       localStorage.removeItem('authToken'); 
+      console.log('Logout Successful!!!!')
     },
   },
 });
