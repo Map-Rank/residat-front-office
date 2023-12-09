@@ -1,56 +1,56 @@
-
 <template>
+  <!-- <header-app :class="hiddenClass"></header-app> -->
+  <header-app ></header-app>
 
-    <header-app></header-app>
-    
-    <div class="contain">
+  <body class="">
+    <router-view></router-view>
+  </body>
 
-
-        <body >
-            <h1>body</h1>
-        </body>
-    </div>
-
-    <footer-app></footer-app>
-
-
+  <bottom-navigation-app-app
+    :class="hiddenClass"
+    class="mobile-nav md:hidden"
+  ></bottom-navigation-app-app>
+  <footer-app></footer-app>
 </template>
 
-<script >
+<script>
+import { mapState } from 'pinia'
+import useAuthStore from './stores/auth'
+import HeaderApp from './components/common/Header/index.vue'
+import FooterApp from './components/common/Footer/index.vue'
+import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
 
-import HeaderApp from './components/Header/index.vue'
-import FooterApp from './components/Footer/index.vue'
+export default {
+  name: 'App',
+  components: {
+    HeaderApp,
+    FooterApp,
+    BottomNavigationAppApp
+  },
 
-
-export default{
-    name:'App',
-    components:{
-        // IconWithLabel,
-        HeaderApp,
-        FooterApp
-    },
-
-    data(){
-        return{
-        dashboardIcon:'<svg></svg>'
-        }
-    }
+  computed: {
+    ...mapState(useAuthStore, ['hiddenClass'])
+  }
 }
 </script>
 
-<style scoped >
-
-body{
-    height: 50vh;
+<style scoped>
+body {
+  background: var(--primary-light, #e6e8ec);
 }
 
-@media (min-width: 1024px) {
-
-.contain {
-padding: 0px 100px;
+/* By default, the nav is not fixed */
+.mobile-nav {
+  position: static;
 }
+
+@media only screen and (max-width: 480px) {
+  .mobile-nav {
+    position: fixed;
+    bottom: 0;
+    background-color: #fff;
+    width: 100%; /* Make sure it spans the full width of the screen */
+    z-index: 999; /* Optional: Use a high z-index value to ensure the nav appears above other elements */
+  }
 }
 </style>
-
-
-
