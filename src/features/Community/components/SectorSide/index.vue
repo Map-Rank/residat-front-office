@@ -1,24 +1,23 @@
 <template>
   <div class="bg-gray-200 rounded-lg">
-    <h2 class="title font-bold mb-5">Sectors</h2>
+    <h2 class="title text-primary-normal font-bold mb-5">Sectors</h2>
     <ul class="grid space-y-6">
       <li v-for="sector in sectorArray" :key="sector">
-        <label class="flex items-center space-x-2">
-          <input
-            type="checkbox"
-            :id="'checkbox-' + sector"
-            class="form-checkbox h-6 w-6 border-3 border-transparent rounded bg-transparent checked:bg-blue-500 checked:border-transparent focus:outline-none transition duration-200"
-          />
-          <span class="label">{{ sector }}</span>
-        </label>
+        <base-checkbox
+            :key="sector.name"
+            :list="sector"
+          ></base-checkbox>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
+import BaseCheckbox from '../../../../components/base/BaseCheckbox.vue';
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
+
   name: 'SectorSide',
   data() {
     return {
@@ -30,13 +29,15 @@ export default {
       type: Array,
       required: true
     }
+  },
+  components:{
+    BaseCheckbox
   }
 }
 </script>
 
 <style scoped>
 .title {
-  color: var(--primary-normal, #021d40);
   font-family: Raleway;
   font-size: 20px;
   font-style: normal;

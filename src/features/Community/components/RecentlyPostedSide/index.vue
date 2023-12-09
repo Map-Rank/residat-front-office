@@ -17,14 +17,7 @@
       </ul>
     </section>
 
-    <section>
-      <h2 class="title mb-5">Recommended Topics</h2>
-      <div class="flex flex-wrap gap-2">
-        <span class="button" v-for="topic in topics" :key="topic">
-          {{ topic }}
-        </span>
-      </div>
-    </section>
+
   </div>
 </template>
 
@@ -32,10 +25,6 @@
 export default {
   name: 'RecentlyPosted',
   props: {
-    topics: {
-      type: Array,
-      required: true
-    },
     recentPosts: {
       type: Array,
       required: true

@@ -6,7 +6,7 @@
         <!-- Sectors -->
         <sector-side :sectorArray="this.sectors"></sector-side>
       </aside>
-  
+
       <!-- Main Content Area: Posts -->
       <main class="col-span-2 sm:px-4">
         <div class="space-y-5">
@@ -24,16 +24,19 @@
           />
         </div>
       </main>
-  
+
       <aside class="col-span-1 hidden sm:block">
-        <recently-posted-side :topics="this.topics" :recentPosts="recentPosts"></recently-posted-side>
+        <recently-posted-side
+          :topics="this.topics"
+          :recentPosts="recentPosts"
+        ></recently-posted-side>
       </aside>
     </div>
   </div>
 </template>
 
 <script>
-import PostComponent from '../../components/common/Post/index.vue'
+import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 export default {
@@ -42,7 +45,31 @@ export default {
 
   data() {
     return {
-      sectors: ['Agriculture', 'Infrastructure', 'Health', 'Socials'],
+      sectors: [
+        {
+          name: 'agriculture',
+          label: 'Agriculture',
+          checked: false,
+          value: 'Agriculture',
+          required: true
+        },
+        {
+          name: 'agriculture',
+          label: 'Agriculture',
+          checked: false,
+          value: 'Agriculture',
+          required: true
+        },
+        {
+          name: 'education',
+          label: 'Education',
+          checked: false,
+          value: 'Education',
+          required: true
+        },
+        { name: 'socials', label: 'Socials', checked: false, value: 'Socials', required: true }
+        // Add more sectors as needed
+      ],
       topics: ['Agriculture', 'Economy', 'Environment', 'Education'],
       posts: [
         {
