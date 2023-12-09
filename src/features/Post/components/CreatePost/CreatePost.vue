@@ -59,15 +59,13 @@
 
         <div class="flex justify-center mt-5">
           <div class="flex w-full sm:w-1/2">
-            
             <button
-            type="submit"
-            @click="submitPost"
-            class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-          >
-            Submit
-          </button>
-            
+              type="submit"
+              @click="submitPost"
+              class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+            >
+              Submit
+            </button>
           </div>
         </div>
       </form>
@@ -77,7 +75,6 @@
 
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
-import ButtonUi from '@/components/base/ButtonUi.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import { createPost } from '../../services/postService'
 
@@ -123,13 +120,10 @@ export default {
   },
   components: {
     BaseImagePicker,
-    ButtonUi,
     BaseCheckbox
   },
   methods: {
     async submitPost() {
-
-
       console.log(this.formData)
       const response = await createPost(this.formData)
       console.log(response)
@@ -137,8 +131,6 @@ export default {
       // Clear the form
       this.formData.post_content = ''
       this.formData.images = []
-
-
     },
     handleImageUpload(type, files) {
       const fileList = Array.from(files)
