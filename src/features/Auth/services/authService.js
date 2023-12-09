@@ -1,8 +1,8 @@
 import { makeApiCall } from '@/api'; // Import the makeApiCall function
+import { API_ENDPOINTS } from '../../../constants';
 
-
-const registerEndpoint = '/register';
-const loginEndpoint='/login'
+// const registerEndpoint = '/register';
+// const loginEndpoint='/login'
 
 const registerUser = async (userData, onSuccess, onError) => {
   try {
@@ -19,7 +19,7 @@ const registerUser = async (userData, onSuccess, onError) => {
     formData.append('zone_id', 1);
 
     // Use makeApiCall for the API request
-    const response = await makeApiCall(registerEndpoint, formData);
+    const response = await makeApiCall(API_ENDPOINTS.register, formData);
     return response;
   }
   catch (error) {
@@ -42,7 +42,7 @@ const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
     formData.append('password', userCredentials.password);
 
     // Use makeApiCall for the API request
-    const response = await makeApiCall(loginEndpoint, formData);
+    const response = await makeApiCall(API_ENDPOINTS.login, formData);
 
     console.log(response.data.data)
     const user =response.data.data

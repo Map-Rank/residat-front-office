@@ -1,8 +1,7 @@
 <template>
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
-
-        <h3 class="uppercase font-semibold">Share your thoughts</h3>
+      <h3 class="uppercase font-semibold">Share your thoughts</h3>
     </div>
 
     <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
@@ -24,14 +23,14 @@
     <div class="mx-auto p-6 space-y-4 bg-white rounded-lg shadow">
       <div class="flex items-center space-x-4">
         <img src="public\images\profile.png" alt="" />
-        <h2 class="text-sm md:text-lg  font-light text-gray-normal mb-4">
+        <h2 class="text-sm md:text-lg font-light text-gray-normal mb-4">
           Hello happy to share to our community
         </h2>
       </div>
       <form @submit.prevent="submitPost">
         <div class="mb-4">
           <textarea
-            v-model="postContent"
+            v-model="formData.post_content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
             rows="4"
@@ -39,57 +38,58 @@
         </div>
         <div class="mb-4">
           <label class="block mb-2">Attach images (optional):</label>
-<div class="flex space-x-4">
+          <div class="flex space-x-4">
+            <base-image-picker
+              :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
+              :type="'file'"
+              :label="'Add Image'"
+              @handleFileChange="handleImageUpload"
+            >
+            </base-image-picker>
 
-    <base-image-picker
-      :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
-      :type="'file'"
-      :label="'Add Image'"
-      @handleFileChange="handleImageUpload"
-      
-      >
-    </base-image-picker>
-    
-    <base-image-picker
-    :iconImg="'src\\assets\\icons\\colored\\video-clip.svg'"
-    :type="'file'"
-    :label="'Add Video'"
-      @handleFileChange="handleImageUpload"
-      
-    >
-    </base-image-picker>
-</div>
+            <base-image-picker
+              :iconImg="'src\\assets\\icons\\colored\\video-clip.svg'"
+              :type="'file'"
+              :label="'Add Video'"
+              @handleFileChange="handleImageUpload"
+            >
+            </base-image-picker>
+          </div>
+        </div>
+
+        <div class="flex justify-center mt-5">
+          <div class="flex w-full sm:w-1/2">
+            <button
+              type="submit"
+              @click="submitPost"
+              class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+            >
+              Submit
+            </button>
+          </div>
         </div>
       </form>
-    </div>
-
-    <div class="flex justify-center mt-5">
-      <div class="flex w-full sm:w-1/2">
-        <button-ui
-          :textCss="'text-white font-bold'"
-          :label="'Create Post'"
-          :color="'bg-secondary-normal '"
-          :isRoundedFull="true"
-        ></button-ui>
-      </div>
     </div>
   </div>
 </template>
 
 <script>
-import BaseImagePicker from '../../components/base/BaseImagePicker.vue'
-import ButtonUi from '../../components/base/ButtonUi.vue'
-import BaseCheckbox from '../../components/base/BaseCheckbox.vue'
+import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
+import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
+import { createPost } from '../../services/postService'
 
 export default {
   name: 'CreatePost',
   data() {
     return {
-      postContent: '',
-      images: [],
       schema: {
         age: 'required|min_value:18,max_value:100',
         tos: 'required|tos'
+      },
+      formData: {
+        post_content: '',
+        zone_id: '',
+        images: []
       },
       sectors: [
         {
@@ -120,46 +120,46 @@ export default {
   },
   components: {
     BaseImagePicker,
-    ButtonUi,
     BaseCheckbox
   },
   methods: {
-    submitPost() {
-      console.log('Post content:', this.postContent)
-      console.log('Attached images:', this.images)
+    async submitPost() {
+      console.log(this.formData)
+      const response = await createPost(this.formData)
+      console.log(response)
+
       // Clear the form
-      this.postContent = ''
-      this.images = []
+      this.formData.post_content = ''
+      this.formData.images = []
     },
     handleImageUpload(type, files) {
-      const fileList = Array.from(files);
+      const fileList = Array.from(files)
       fileList.forEach((file) => {
-        const url = URL.createObjectURL(file);
+        const url = URL.createObjectURL(file)
         if (type === 'image') {
-          this.images.push({ name: file.name, url });
+          this.formData.images.push({ name: file.name, url })
         } else if (type === 'video') {
-          this.videos.push({ name: file.name, url });
+          this.videos.push({ name: file.name, url })
         }
-      });
+      })
     },
 
     resetForm() {
-      this.postContent = '';
-      this.images = [];
-      this.videos = [];
-      this.sectors.forEach(sector => sector.checked = false);
+      this.post_content = ''
+      this.formData.images = []
+      this.videos = []
+      this.sectors.forEach((sector) => (sector.checked = false))
     },
 
     updateCheckedItems({ name, checked }) {
       if (checked) {
-        this.checkedItems.push(name);
+        this.checkedItems.push(name)
       } else {
-        this.checkedItems = this.checkedItems.filter((item) => item !== name);
+        this.checkedItems = this.checkedItems.filter((item) => item !== name)
       }
     }
-  },
   }
-
+}
 </script>
 
 <style scoped>
