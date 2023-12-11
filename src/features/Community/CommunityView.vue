@@ -39,9 +39,20 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
+import {getPosts} from '@/features/Post/services/postService.js'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Community',
+
+  async created() {
+    try {
+      this.posts = await getPosts();
+      console.log('completly fetch all post ')
+    } catch (error) {
+      console.error('Failed to load posts:', error);
+      // Handle the error, e.g., show an error message
+    }
+  },
 
   data() {
     return {
@@ -72,64 +83,51 @@ export default {
       ],
       topics: ['Agriculture', 'Economy', 'Environment', 'Education'],
       posts: [
-        {
-          username: 'User-name',
-          postDate: 'Posted: 20 October',
-          postTitle: "Heavy rains, landslide in Cameroon's west kill at least 34",
-          postContent:
-            "Introduction UNICEF, the United Nations International Children's Emergency Fund, is a globally recognized organization dedicated to...",
-          userProfileImage:
-            'https://th.bing.com/th/id/R.007eff93a66b6a7de41ee3e7ca553e92?rik=kiX%2fqnsUx6REXw&pid=ImgRaw&r=0',
-          listLikers: Array(22).fill('national embassy'),
-          comments: Array(22).fill('national embassy'),
-          postImages: [
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 1'
+      {
+            id: 12,
+            text: null,
+            images: [],
+            creator: {
+                id: 2,
+                first_name: "Konno",
+                last_name: "Desire",
+                code: null,
+                email: "admin@gmail.com",
+                phone: "690160047",
+                address: null,
+                avatar: null,
+                date_of_birth: "2023-12-11",
+                gender: "male",
+                zone_id: 1,
+                role: [
+                    {
+                        id: 2,
+                        name: "default",
+                        guard_name: "web",
+                        created_at: "2023-12-11T06:57:09.000000Z",
+                        updated_at: "2023-12-11T06:57:09.000000Z",
+                        pivot: {
+                            model_type: "App\\Models\\User",
+                            model_id: 2,
+                            role_id: 2
+                        }
+                    }
+                ],
+                active: 1,
+                verified: 0,
+                activated_at: "2023-12-11 08:50:56",
+                email_verified_at: "2023-12-11T08:50:29.000000Z",
+                created_at: "2023-12-11T07:47:14.000000Z",
+                updated_at: "2023-12-11T07:47:14.000000Z"
             },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 2'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 3'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 4'
-            }
-          ]
+            like_count: 0,
+            comment_count: 0,
+            share_count: 0,
+            published_at: "2023-12-11 00:00:00",
+            created_at: "2023-12-11T09:39:45.000000Z"
         },
-        {
-          username: 'User-name',
-          postDate: 'Posted: 20 October',
-          postTitle: "Heavy rains, landslide in Cameroon's west kill at least 34",
-          postContent:
-            "Introduction UNICEF, the United Nations International Children's Emergency Fund, is a globally recognized organization dedicated to...",
-          userProfileImage:
-            'https://th.bing.com/th/id/R.007eff93a66b6a7de41ee3e7ca553e92?rik=kiX%2fqnsUx6REXw&pid=ImgRaw&r=0',
-          listLikers: Array(22).fill('national embassy'),
-          comments: Array(22).fill('national embassy'),
-          postImages: [
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 1'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 2'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 3'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 4'
-            }
-          ]
-        }
+       
+        
         // ... more post data
       ],
       recentPosts: [

@@ -85,6 +85,7 @@ import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import { createPost } from '../../services/postService'
 import { useRouter } from 'vue-router'
 
+
 export default {
   name: 'CreatePost',
   data() {

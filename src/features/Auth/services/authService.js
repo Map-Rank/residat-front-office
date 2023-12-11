@@ -1,8 +1,8 @@
-import { makeApiCall } from '@/api'; // Import the makeApiCall function
+import { makeApiPostCall } from '@/api'; // Import the makeApiPostCall function
 
 
 const registerEndpoint = '/register';
-const loginEndpoint='/login'
+const loginEndpoint = '/login'
 
 const registerUser = async (userData, onSuccess, onError) => {
   try {
@@ -18,8 +18,8 @@ const registerUser = async (userData, onSuccess, onError) => {
     formData.append('gender', userData.gender);
     formData.append('zone_id', 1);
 
-    // Use makeApiCall for the API request
-    const response = await makeApiCall(registerEndpoint, formData);
+    // Use makeApiPostCall for the API request
+    const response = await makeApiPostCall(registerEndpoint, formData);
     return response;
   }
   catch (error) {
@@ -32,7 +32,7 @@ const registerUser = async (userData, onSuccess, onError) => {
 
 
 
-const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
+const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
 
 
   try {
@@ -41,16 +41,16 @@ const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
     formData.append('email', userCredentials.email);
     formData.append('password', userCredentials.password);
 
-    // Use makeApiCall for the API request
-    const response = await makeApiCall(loginEndpoint, formData);
+    // Use makeApiPostCall for the API request
+    const response = await makeApiPostCall(loginEndpoint, formData);
 
     console.log(response.data.data)
-    const user =response.data.data
+    const user = response.data.data
     const token = response.data.data.token;
 
     //storing user in the store and also the token in localStorage
     authStore.setUser(user)
-    localStorage.setItem('authToken',token);
+    localStorage.setItem('authToken', token);
 
 
     onSuccess();
@@ -62,4 +62,4 @@ const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
 };
 
 
-export { registerUser , loginUser };
+export { registerUser, loginUser };

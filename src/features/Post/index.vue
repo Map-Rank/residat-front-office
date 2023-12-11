@@ -41,7 +41,7 @@
     </div>
 
     <!-- Post Images -->
-    <div @click.prevent="showDetails()">
+    <div @click.prevent="showDetails()" v-if="postImages">
       <!-- Container for the first image -->
       <div v-if="postImages.length > 2 || postImages.length == 1" class="flex mb-0.5">
         <img :src="postImages[0].src" :alt="postImages[0].alt" class="w-full h-auto object-cover" />
@@ -78,7 +78,7 @@
       <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
           <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold"
+          <span class="caption-c1-bold" v-if="listLikers"
             >{{ listLikers[1] }} and {{ listLikers.length }} other likes</span
           >
         </div>
