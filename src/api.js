@@ -11,15 +11,15 @@ const api = axios.create({
 });
 
 // Function to make API calls
-const makeApiCall = async (endpoint, formData) => {
-
+const makeApiCall = async (endpoint, formData, authToken) => {
     const response = await api.post(endpoint, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            'Authorization': `Bearer ${authToken}`
+        }
     });
     return response;
-
 }
+
 
 export { api, makeApiCall };

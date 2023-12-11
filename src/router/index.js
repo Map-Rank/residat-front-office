@@ -4,7 +4,7 @@ import ChatRoomView from '../features/ChatRoom/ChatRommView.vue'
 import DashBoardView from '../features/DashBaord/DashBoardView.vue'
 import AuthView from '../features/Auth/AuthView.vue'
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue'
-import CreatePost from '../features/CreatePost/CreatePost.vue'
+import CreatePost from '../features/Post/components/CreatePost/CreatePost.vue'
 // import PostDetails from '../components/common/PostDetails/PostDetails.vue'
 
 
