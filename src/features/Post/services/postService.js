@@ -1,14 +1,14 @@
 import { makeApiCall } from '@/api'; // Import the makeApiCall function
+import {  LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js';
 
 
-const createPostEndPoint = '/create';
 const currentDate = new Date().toISOString().split('T')[0];
 
 
 const createPost = async (postData, onSuccess, onError) => {
   try {
     const formData = new FormData();
-    const authToken = localStorage.getItem('authToken');
+    const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken);
 
     // Append user data to formData
     formData.append('content', postData.content);
@@ -16,7 +16,7 @@ const createPost = async (postData, onSuccess, onError) => {
     formData.append('zone_id', 1);
 
     // Use makeApiCall for the API request
-    const response = await makeApiCall(createPostEndPoint, formData,authToken);
+    const response = await makeApiCall(API_ENDPOINTS.createPost, formData,authToken);
     console.log(response.data)
     return response.data;
   }

@@ -61,10 +61,16 @@
           <div class="flex w-full sm:w-1/2">
             <button
               type="submit"
-              @click.prevent="submitPost()"
-              class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+              @click.prevent="submitPost"
+              :class="
+                this.isLoading
+                  ? 'bg-gray-400 cursor-wait'
+                  : 'bg-secondary-normal hover:bg-secondary-hover'
+              "
+              :disabled="this.isLoading"
+              class="block w-full text-white py-1.5 rounded-full transition"
             >
-              Create Post
+              {{ this.isLoading ? 'Creating...' : 'Create Post' }}
             </button>
           </div>
         </div>
@@ -76,26 +82,21 @@
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import {createPost } from '../../services/postService'
+import { createPost } from '../../services/postService'
 import { useRouter } from 'vue-router'
-
 
 export default {
   name: 'CreatePost',
   data() {
     const router = useRouter()
 
-
     return {
       router,
+      isLoading: false,
       formData: {
         content: '',
         images: [],
-        video: [],
-      },
-      schema: {
-        age: 'required|min_value:18,max_value:100',
-        tos: 'required|tos'
+        video: []
       },
       sectors: [
         {
@@ -130,15 +131,17 @@ export default {
     BaseCheckbox
   },
   methods: {
-   async submitPost() {
-      console.log('form data:', this.formData)
-
+    async submitPost() {
+      // console.log('form data:', this.formData)
+      this.isLoading = true;
       const response = await createPost(this.formData, this.handleSuccess, this.handleError)
+      this.isLoading = false;
       if (response.status) {
-          this.$router.push({ name: 'community' })
-        } else {
-          console.log(response.data.errors)
-        }
+        this.$router.push({ name: 'community' })
+      } else {
+        console.log(response.data.errors)
+        this.isLoading = false;
+      }
       // Clear the form
       this.content = ''
       this.images = []
