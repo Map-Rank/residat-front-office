@@ -13,14 +13,13 @@
           <PostComponent
             v-for="(post, index) in posts"
             :key="index"
-            :username="post.username"
+            :username="`${post.creator.first_name} ${post.creator.last_name} `"
             :postDate="post.postDate"
-            :postTitle="post.postTitle"
-            :postContent="post.postContent"
-            :userProfileImage="post.userProfileImage"
-            :listLikers="post.listLikers"
-            :comments="post.comments"
-            :postImages="post.postImages"
+            :postContent="post.content"
+            :userProfileImage="post.creator.avatar"
+            :like_count="post.like_count"
+            :comment_count="post.comment_count"
+            :postImages="post.images"
           />
         </div>
       </main>
@@ -47,7 +46,7 @@ export default {
   async created() {
     try {
       this.posts = await getPosts();
-      console.log('completly fetch all post ')
+      console.log('completly fetch all post' )  //TODO
     } catch (error) {
       console.error('Failed to load posts:', error);
       // Handle the error, e.g., show an error message
@@ -83,51 +82,7 @@ export default {
       ],
       topics: ['Agriculture', 'Economy', 'Environment', 'Education'],
       posts: [
-      {
-            id: 12,
-            text: null,
-            images: [],
-            creator: {
-                id: 2,
-                first_name: "Konno",
-                last_name: "Desire",
-                code: null,
-                email: "admin@gmail.com",
-                phone: "690160047",
-                address: null,
-                avatar: null,
-                date_of_birth: "2023-12-11",
-                gender: "male",
-                zone_id: 1,
-                role: [
-                    {
-                        id: 2,
-                        name: "default",
-                        guard_name: "web",
-                        created_at: "2023-12-11T06:57:09.000000Z",
-                        updated_at: "2023-12-11T06:57:09.000000Z",
-                        pivot: {
-                            model_type: "App\\Models\\User",
-                            model_id: 2,
-                            role_id: 2
-                        }
-                    }
-                ],
-                active: 1,
-                verified: 0,
-                activated_at: "2023-12-11 08:50:56",
-                email_verified_at: "2023-12-11T08:50:29.000000Z",
-                created_at: "2023-12-11T07:47:14.000000Z",
-                updated_at: "2023-12-11T07:47:14.000000Z"
-            },
-            like_count: 0,
-            comment_count: 0,
-            share_count: 0,
-            published_at: "2023-12-11 00:00:00",
-            created_at: "2023-12-11T09:39:45.000000Z"
-        },
-       
-        
+ 
         // ... more post data
       ],
       recentPosts: [

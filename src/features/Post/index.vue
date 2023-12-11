@@ -36,7 +36,7 @@
 
     <!-- Post Content -->
     <div class="px-5 mb-2">
-      <h5 class="mb-1">{{ postTitle }}</h5>
+      <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
       <p class="p3 content">{{ postContent }}</p>
     </div>
 
@@ -78,11 +78,11 @@
       <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
           <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold" v-if="listLikers"
-            >{{ listLikers[1] }} and {{ listLikers.length }} other likes</span
+          <span class="caption-c1-bold" 
+            >{{ like_count }} and other likes</span
           >
         </div>
-        <span class="ml-4 caption-c1-bold">{{ comments.length }} Comments</span>
+        <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
       </div>
 
       <!-- lower section  -->
@@ -268,8 +268,8 @@ export default {
     postTitle: String,
     postContent: String,
     userProfileImage: String,
-    listLikers: Array,
-    comments: Array,
+    like_count: Number,
+    comment_count: Number,
     postImages: Array
   }
 }
