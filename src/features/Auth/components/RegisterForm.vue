@@ -363,9 +363,6 @@ export default {
         if (response.status) {
           this.authStore.isloggedIn = !this.authStore.isloggedIn
           this.$router.push({ name: 'community' })
-          const token = response.data.data.token;
-          console.log(token)
-          console.log('Registration Successfull')
         } else {
           console.log(response.data.errors[0])
         }

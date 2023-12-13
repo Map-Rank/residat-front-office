@@ -9,9 +9,9 @@
         :isCurrentUser="true"
       /> -->
       <top-profile-info
-        :profileImageUrl=" 'public\\images\\unicef.png'"
+        :profileImageUrl="'public\\images\\unicef.png'"
         :profileName="`${user.first_name} ${user.last_name}`"
-        :followersCount="500" 
+        :followersCount="500"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />
@@ -20,11 +20,10 @@
     <div class="md:px-100 pb-5">
       <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4">
         <aside class="col-span-1 mb-2 sm:block">
-
           <about-user-info
             :username="`${user.first_name} ${user.last_name}`"
-            :description="'Your description here'" 
-            :location="'From ' + user.address" 
+            :description="'Your description here'"
+            :location="'From ' + user.address"
             :phone="user.phone"
             :email="user.email"
             :joinDate="formatDate(user.created_at)"
@@ -60,13 +59,16 @@
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
-import useAuthStore from '@/stores/auth'
-import { mapState } from 'pinia'
+// import useAuthStore from '@/stores/auth'
+// import { mapState } from 'pinia'
+import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
+
 export default {
   name: 'SocialProfile',
 
   data() {
     return {
+      user: '',
       posts: [
         {
           username: 'User-name',
@@ -131,11 +133,9 @@ export default {
     }
   },
 
-computed:{
-  ...mapState(useAuthStore,['user'])
-},
-
-
+  computed: {
+    // ...mapState(useAuthStore,['user'])
+  },
 
   components: {
     PostComponent,
@@ -143,24 +143,19 @@ computed:{
     TopProfileInfo
   },
 
-
-
- 
   created() {
-    // This lifecycle hook is where you would fetch your post data
-    this.fetchPosts()
+    const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo)
+    if (storedUser) {
+      this.user = JSON.parse(storedUser)
+    }
+
     console.log(this.user)
   },
   methods: {
-    fetchPosts() {
-      // Logic to fetch posts from a store or API
-      // For example, using a Vuex action:
-      // this.$store.dispatch('fetchPosts');
-    },
     formatDate(date) {
       // Simple date formatting, adjust as needed
-      return new Date(date).toLocaleDateString();
-    },
+      return new Date(date).toLocaleDateString()
+    }
   }
 }
 </script>

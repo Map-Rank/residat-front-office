@@ -16,7 +16,6 @@ const createPost = async (postData, onSuccess, onError) => {
     postData.images.forEach((image, index) => {
       const imageUrl = URL.createObjectURL(image)
       // console.log('the image url are :'+imageUrl)
-
       formData.append(`images[${index}]`, imageUrl)
     })
 
