@@ -1,3 +1,4 @@
+
 import { makeApiPostCall , makeApiGetCall} from '@/api'; // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js';
 
@@ -62,11 +63,6 @@ const likePost = async(postId)=>{
     throw error; 
   }
 }
-
-
-
-
-
 
 
 
