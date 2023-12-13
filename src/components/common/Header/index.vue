@@ -59,8 +59,8 @@
         ></icon-with-label>
 
         <icon-with-label
-          svgContentHover="src\assets\icons\profile-outline.svg"
-          svgContent="src\\assets\\icons\\profile-fill.svg"
+          svgContentHover="src\assets\icons\logout.svg"
+          svgContent="src\\assets\\icons\\logout.svg"
           labelText="Logout"
           labelTextBottom="Logout"
           iconDesktopSize="this.iconSize"
@@ -79,6 +79,7 @@ import IconWithLabel from '../IconWithLabel/index.vue'
 import { mapState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import { useRouter } from 'vue-router'
+// import {logOut} from '../../../features/Auth/services/authService'
 
 export default {
   name: 'HeaderApp',
@@ -159,7 +160,7 @@ export default {
     },
 
     logout() {
-      this.authStore.logOut()
+      // logOut()
       this.$router.push({ name: 'authentication' })
     }
   },

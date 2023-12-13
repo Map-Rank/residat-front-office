@@ -42,9 +42,7 @@ const createPost = async (postData, onSuccess, onError) => {
 
 const getPosts = async () => {
   try {
-    console.log(authToken)
     const response = await makeApiGetCall(API_ENDPOINTS.getPosts,authToken);
-    console.log('this are all the post '+response.data.data)
     return response.data.data; 
   } catch (error) {
     console.error('Error fetching posts:', error);
@@ -53,6 +51,17 @@ const getPosts = async () => {
 };
 
 
+const likePost = async(postId)=>{
+  try {
+    console.log(authToken)
+    const response = await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`,null,authToken);
+    console.log('this are all the post '+response.data.data)
+    return response.data.data; 
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error; 
+  }
+}
 
 
 
@@ -60,4 +69,6 @@ const getPosts = async () => {
 
 
 
-export { createPost ,getPosts};
+
+
+export { createPost ,getPosts,likePost};

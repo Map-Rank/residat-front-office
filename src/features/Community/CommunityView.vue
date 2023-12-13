@@ -13,6 +13,7 @@
           <PostComponent
             v-for="(post, index) in posts"
             :key="index"
+            :postId="post.id"
             :username="`${post.creator.first_name} ${post.creator.last_name} `"
             :postDate="post.postDate"
             :postContent="post.content"
@@ -46,6 +47,8 @@ export default {
   async created() {
     try {
       this.posts = await getPosts();
+
+      
       console.log('completly fetch all post' )  //TODO
     } catch (error) {
       console.error('Failed to load posts:', error);
