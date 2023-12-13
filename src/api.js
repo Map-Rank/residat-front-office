@@ -10,6 +10,7 @@ const api = axios.create({
   },
 });
 
+
 const makeApiPostCall = async (endpoint, postData, authToken) => {
   const response = await api.post(endpoint, postData, {
     headers: {
@@ -26,11 +27,12 @@ const makeApiGetCall = async (endpoint, authToken,id) => {
   const response = await api.get(url, {
     headers: {
       'Authorization': `Bearer ${authToken}`
+
     }
   });
   return response;
 }
 
 
-
 export { api, makeApiPostCall, makeApiGetCall };
+

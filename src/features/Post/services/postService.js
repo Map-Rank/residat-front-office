@@ -1,3 +1,4 @@
+
 import { makeApiPostCall , makeApiGetCall} from '@/api'; // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js';
 
@@ -54,10 +55,5 @@ const getPosts = async () => {
 
 
 
-
-
-
-
-
-
 export { createPost ,getPosts};
+
