@@ -110,7 +110,8 @@ export default {
   name: 'PostDetails',
   data() {
     return {
-      currentImageIndex: 0
+      currentImageIndex: 0,
+      
     }
   },
   props: {

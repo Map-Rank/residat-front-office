@@ -36,12 +36,12 @@
 
     <!-- Post Content -->
     <div class="px-5 mb-2">
-      <h5 class="mb-1">{{ postTitle }}</h5>
+      <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
       <p class="p3 content">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
-    <div @click.prevent="showDetails()">
+    <div @click.prevent="showDetails()" v-if="postImages">
       <!-- Container for the first image -->
       <div v-if="postImages.length > 2 || postImages.length == 1" class="flex mb-0.5">
         <img :src="postImages[0].src" :alt="postImages[0].alt" class="w-full h-auto object-cover" />
@@ -78,11 +78,11 @@
       <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
           <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold"
-            >{{ listLikers[1] }} and {{ listLikers.length }} other likes</span
+          <span class="caption-c1-bold" 
+            >{{ like_count }} and other likes</span
           >
         </div>
-        <span class="ml-4 caption-c1-bold">{{ comments.length }} Comments</span>
+        <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
       </div>
 
       <!-- lower section  -->
@@ -268,8 +268,8 @@ export default {
     postTitle: String,
     postContent: String,
     userProfileImage: String,
-    listLikers: Array,
-    comments: Array,
+    like_count: Number,
+    comment_count: Number,
     postImages: Array
   }
 }

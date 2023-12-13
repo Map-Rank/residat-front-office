@@ -22,6 +22,7 @@ export default defineStore('auth', {
       this.user = userData;
       this.isloggedIn = true;
       console.log('loginState: '+this.isloggedIn)
+      console.log('úser information is correctly set in store')
     },
     
     logOut() {

@@ -1,2 +1,2 @@
 export * from './localStorageKeys';
-export * from './apiVariables';
+export * from './apiEndpoints';

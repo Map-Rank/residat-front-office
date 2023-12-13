@@ -1,8 +1,8 @@
-import { makeApiCall } from '@/api'; // Import the makeApiCall function
-import { API_ENDPOINTS } from '../../../constants';
 
-// const registerEndpoint = '/register';
-// const loginEndpoint='/login'
+import { makeApiPostCall } from '@/api'; // Import the makeApiPostCall function
+import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js';
+
+
 
 const registerUser = async (userData, onSuccess, onError) => {
   try {
@@ -18,8 +18,16 @@ const registerUser = async (userData, onSuccess, onError) => {
     formData.append('gender', userData.gender);
     formData.append('zone_id', 1);
 
-    // Use makeApiCall for the API request
-    const response = await makeApiCall(API_ENDPOINTS.register, formData);
+
+    // Use makeApiPostCall for the API request
+    const response = await makeApiPostCall(API_ENDPOINTS.register, formData);
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken);   //TODO remove this and but it in logout function later
+   
+    const token = response.data.data.token;
+    console.log('register successfull !!!!')
+    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token);
+
+
     return response;
   }
   catch (error) {
@@ -32,7 +40,7 @@ const registerUser = async (userData, onSuccess, onError) => {
 
 
 
-const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
+const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
 
 
   try {
@@ -41,16 +49,20 @@ const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
     formData.append('email', userCredentials.email);
     formData.append('password', userCredentials.password);
 
-    // Use makeApiCall for the API request
-    const response = await makeApiCall(API_ENDPOINTS.login, formData);
+
+    // Use makeApiPostCall for the API request
+    const response = await makeApiPostCall(API_ENDPOINTS.login, formData);
+
 
     console.log(response.data.data)
-    const user =response.data.data
+    const user = response.data.data
     const token = response.data.data.token;
 
-    //storing user in the store and also the token in localStorage
+    localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken);  //TODO remove this and but it in logout function later
+
+
     authStore.setUser(user)
-    localStorage.setItem('authToken',token);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token);
 
 
     onSuccess();
@@ -61,5 +73,11 @@ const loginUser = async (userCredentials,authStore, onSuccess, onError) => {
   }
 };
 
+// const logOut = async (authStore)=>{
+//   authStore.logOut()
+// }
 
-export { registerUser , loginUser };
+
+
+
+export { registerUser, loginUser };
