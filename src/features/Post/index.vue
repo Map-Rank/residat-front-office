@@ -14,21 +14,14 @@
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
           <svg class="w-6 h-6" fill="true" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              d="M5 12a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4z"
-            />
+            <path d="M5 12a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4z" />
           </svg>
         </button>
 
         <!-- Dropdown Menu -->
-        <div
-          v-show="isMenuVisible"
-          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
-        >
+        <div v-show="isMenuVisible" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
           <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Share</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >Not Intrested</a
-          >
+          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Not Intrested</a>
           <!-- ... other menu items ... -->
         </div>
       </div>
@@ -54,19 +47,11 @@
 
       <!-- Container for the rest of the images displayed in a single row -->
       <div v-if="postImages.length > 2" class="flex gap-0.5 overflow-hidden">
-        <img
-          v-for="(image, index) in postImages.slice(1, 4)"
-          :src="image.src"
-          :alt="image.alt"
-          :key="image.src"
-          class="flex-grow h-auto w-4 object-cover"
-          :style="{ 'flex-basis': calculateFlexBasis(index) }"
-        />
+        <img v-for="(image, index) in postImages.slice(1, 4)" :src="image.src" :alt="image.alt" :key="image.src"
+          class="flex-grow h-auto w-4 object-cover" :style="{ 'flex-basis': calculateFlexBasis(index) }" />
         <!-- "See more" box if there are more images than can be shown -->
-        <div
-          v-if="postImages.length > 4"
-          class="flex-grow h-auto flex justify-center items-center bg-black-200 cursor-pointer"
-        >
+        <div v-if="postImages.length > 4"
+          class="flex-grow h-auto flex justify-center items-center bg-black-200 cursor-pointer">
           +{{ postImages.length - 4 }} more
         </div>
       </div>
@@ -78,40 +63,32 @@
       <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
           <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold" 
-            >{{ like_count }} and other likes</span
-          >
+          <span class="caption-c1-bold">{{ like_count }} and other likes</span>
         </div>
         <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
       </div>
 
       <!-- lower section  -->
       <div class="flex justify-between">
-        <icon-with-label
-          v-for="(item, index) in iconLabels"
-          :svgContentHover="item.svgContentHover"
-          :svgContent="item.svgContent"
-          :labelTextRight="item.labelText"
-          :iconDesktopSize="this.iconDesktopSize"
-          :iconMobileSize="this.iconMobileSize"
-          :isActive="item.isActive"
-          :right="item.right"
-          @clickIcon="clickIcon(index)"
-          @customFunction="toggleCommentBox(index)"
-          :key="index"
-          class="flex-shrink-0"
-        ></icon-with-label>
+
+
+
+
+        <icon-with-label v-for="(item, index) in iconLabels" :svgContentHover="item.svgContentHover"
+          :svgContent="item.svgContent" :labelTextRight="item.labelText" :iconDesktopSize="this.iconDesktopSize"
+          :iconMobileSize="this.iconMobileSize" :isActive="item.isActive" :right="item.right"
+          @clickIcon="clickIcon(index)" @customFunction="customFunction(index)" :key="index"
+          class="flex-shrink-0"></icon-with-label>
+
+
       </div>
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
         <img class="h-9 w-9" src="public\images\unicef_logo.png" alt="" />
         <div class="border w-full flex p-2 ml-5 rounded-lg">
-          <input
-            type="search"
-            placeholder="Search "
-            class="flex-grow bg-transparent ml-3 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
-          />
+          <input type="search" placeholder="Search "
+            class="flex-grow bg-transparent ml-3 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200" />
           <input type="file" class="hidden" @change="handleFileChange" />
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
@@ -131,6 +108,7 @@ import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import { usePostStore } from './store/postStore'
+import { likePost } from '../Post/services/postService'
 // import BaseImagePickerVue from '../../base/BaseImagePicker.vue'
 
 export default {
@@ -168,33 +146,25 @@ export default {
         }
       ],
 
-      post: {
-        username: this.username,
-        userImage: this.userProfileImage,
-        content: this.postContent,
-        postDate: this.postDate,
-        images: [
-          'src\\assets\\images\\Community\\Post1.png',
-          'src\\assets\\images\\Community\\Post1.png'
-        ],
-        comments: [
-          {
-            username: 'Commenter One',
-            userImage: 'public\\images\\comment.png',
-            text: 'What a wonderful post I find this article very interesting'
-          },
-          {
-            username: 'Commenter Two',
-            userImage: 'public\\images\\comment.png',
-            text: 'Insightful read, thanks for sharing!'
-          }
-        ]
-      }
+
     }
   },
 
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails']),
+
+    async customFunction(index) {
+
+      if (index === 0) {
+        await likePost(this.postId)
+        return
+      }
+      if (index === 1) {
+        this.showCommentBox = !this.showCommentBox
+        return
+      }
+
+    },
 
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
@@ -205,6 +175,8 @@ export default {
         return item
       })
     },
+
+
 
     handleFileChange(event) {
       const file = event.target.files[0]
@@ -217,12 +189,7 @@ export default {
       this.togglePostDetails()
       console.log('click')
     },
-    toggleCommentBox(index) {
-      if (index == 1) {
-        this.showCommentBox = !this.showCommentBox
-      }
-      return
-    },
+
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
@@ -270,7 +237,8 @@ export default {
     userProfileImage: String,
     like_count: Number,
     comment_count: Number,
-    postImages: Array
+    postImages: Array,
+    postId: Number
   }
 }
 </script>
@@ -298,14 +266,16 @@ export default {
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
+  /* 142.857% */
 }
 
 @media only screen and (max-width: 480px) {
   .content {
     /* Add your mobile styles here. For example: */
     font-size: 10px;
-    line-height: 16px; /* Adjust line height for smaller text */
+    line-height: 16px;
+    /* Adjust line height for smaller text */
   }
 
   h5 {
