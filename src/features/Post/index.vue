@@ -71,28 +71,13 @@
       <!-- lower section  -->
       <div class="flex justify-between">
 
-        <icon-with-label 
-        :svgContentHover="'src\\assets\\icons\\heart-outline.svg'"
-          :svgContent="'src\\assets\\icons\\heart-outline.svg'" 
-          :labelTextRight="'Like'"
-           :iconDesktopSize="this.iconDesktopSize"
-          :iconMobileSize="this.iconMobileSize" 
-          :isActive="false" 
-          :right="true"     
-           @customFunction="likePost()"
-          class="flex-shrink-0"></icon-with-label>
 
 
-        <icon-with-label v-for="(item, index) in iconLabels" 
-        :svgContentHover="item.svgContentHover"
-          :svgContent="item.svgContent" 
-          :labelTextRight="item.labelText"
-           :iconDesktopSize="this.iconDesktopSize"
-          :iconMobileSize="this.iconMobileSize" 
-          :isActive="item.isActive" 
-          :right="item.right"
-          @clickIcon="clickIcon(index)"
-           @customFunction="toggleCommentBox(index)" :key="index"
+
+        <icon-with-label v-for="(item, index) in iconLabels" :svgContentHover="item.svgContentHover"
+          :svgContent="item.svgContent" :labelTextRight="item.labelText" :iconDesktopSize="this.iconDesktopSize"
+          :iconMobileSize="this.iconMobileSize" :isActive="item.isActive" :right="item.right"
+          @clickIcon="clickIcon(index)" @customFunction="customFunction(index)" :key="index"
           class="flex-shrink-0"></icon-with-label>
 
 
@@ -123,7 +108,7 @@ import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import { usePostStore } from './store/postStore'
-import {likePost} from '../Post/services/postService'
+import { likePost } from '../Post/services/postService'
 // import BaseImagePickerVue from '../../base/BaseImagePicker.vue'
 
 export default {
@@ -135,12 +120,12 @@ export default {
       isMenuVisible: false,
       showCommentBox: false,
       iconLabels: [
-        // {
-        //   svgContent: 'src\\assets\\icons\\heart-outline.svg',
-        //   svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
-        //   labelText: 'Like',
-        //   right: true
-        // },
+        {
+          svgContent: 'src\\assets\\icons\\heart-outline.svg',
+          svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
+          labelText: 'Like',
+          right: true
+        },
         {
           svgContent: 'src\\assets\\icons\\comment-outline.svg',
           svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
@@ -168,6 +153,19 @@ export default {
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails']),
 
+    async customFunction(index) {
+
+      if (index === 0) {
+        await likePost(this.postId)
+        return
+      }
+      if (index === 1) {
+        this.showCommentBox = !this.showCommentBox
+        return
+      }
+
+    },
+
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
         if (i == index) {
@@ -178,9 +176,7 @@ export default {
       })
     },
 
-    async likePost(){
-      await likePost(this.postId)
-    },
+
 
     handleFileChange(event) {
       const file = event.target.files[0]
@@ -194,12 +190,6 @@ export default {
       console.log('click')
     },
 
-    toggleCommentBox(index) {
-      if (index == 1) {
-        this.showCommentBox = !this.showCommentBox
-      }
-      return
-    },
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
