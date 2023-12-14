@@ -21,6 +21,7 @@
             :like_count="post.like_count"
             :comment_count="post.comment_count"
             :postImages="post.images"
+            :post="post"
           />
         </div>
       </main>

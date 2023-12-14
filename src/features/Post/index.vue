@@ -35,7 +35,7 @@
     </header>
 
     <!-- Post Content -->
-    <div class="px-5 mb-2">
+    <div @click.prevent="showDetails()"  class="px-5 mb-2 cursor-pointer">
       <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
       <p class="p3 content">{{ postContent }}</p>
     </div>
@@ -189,10 +189,15 @@ export default {
         this.showCommentBox = !this.showCommentBox
         return
       }
+      if (index === 2) {
+        console.log(this.post)
+        return
+      }
     },
 
     async commentPost(){
         await commentPost(this.postId,this.commentData)
+        this.showCommentBox = !this.showCommentBox
     },
 
     clickIcon(index) {
@@ -214,6 +219,7 @@ export default {
 
     showDetails() {
       this.togglePostDetails()
+      console.log(this.post)
       console.log('click')
     },
 
@@ -264,7 +270,8 @@ export default {
     like_count: Number,
     comment_count: Number,
     postImages: Array,
-    postId: Number
+    postId: Number,
+    post:Object,
   }
 }
 </script>
