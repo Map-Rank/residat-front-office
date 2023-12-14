@@ -13,7 +13,7 @@ const api = axios.create({
 const makeApiPostCall = async (endpoint, postData, authToken) => {
   const response = await api.post(endpoint, postData, {
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'multipart/form-data',
       'Authorization': `Bearer ${authToken}`
     }
   });

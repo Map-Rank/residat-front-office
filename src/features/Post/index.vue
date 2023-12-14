@@ -178,7 +178,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails']),
+    ...mapActions(usePostStore, ['togglePostDetails','setCurrentPost']),
 
     async customFunction(index) {
       if (index === 0) {
@@ -219,7 +219,8 @@ export default {
 
     showDetails() {
       this.togglePostDetails()
-      console.log(this.post)
+      this.setCurrentPost(this.post)
+      // console.log(this.post)
       console.log('click')
     },
 

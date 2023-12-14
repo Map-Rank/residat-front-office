@@ -20,7 +20,11 @@
               <div class="mt-5 relative pb-4 mr-5 items-start">
                 <div class="flex justify-between">
                   <div class="flex space-x-2 mb-4">
-                    <img class="w-10 h-10 rounded-full" :src="post.creator.avatar" alt="User profile" />
+                    <img
+                      class="w-10 h-10 rounded-full"
+                      :src="post.creator.avatar"
+                      alt="User profile"
+                    />
                     <div class="flex-1">
                       <h5 class="font-bold">{{ post.creator.first_name }}</h5>
                       <div class="text-sm text-gray-600">{{ post.published_at }}</div>
@@ -35,7 +39,7 @@
 
               <!-- list of Comment  -->
               <div class=" ">
-                <div  class="space-y-2">
+                <div class="space-y-2">
                   <div
                     v-for="(comment, index) in post.comments"
                     :key="index"
@@ -87,7 +91,11 @@
 
                 <!-- Post button -->
                 <button
-                @click="()=>{ console.log(post.comments);}"
+                  @click="
+                    () => {
+                      console.log(this.post)
+                    }
+                  "
                   class="btn text-green-500 px-6 py-2 rounded-lg hover:bg-white focus:outline-none"
                 >
                   send
@@ -108,19 +116,22 @@ import { usePostStore } from '../../store/postStore'
 
 export default {
   name: 'PostDetails',
+
+  created() {
+    const postStore = usePostStore()
+    this.post = postStore.currentPost
+  },
   data() {
     return {
       currentImageIndex: 0,
-    
-      
+      post: []
     }
   },
   props: {
-    post: {
-      type: Object,
-      required: true
-    },
-   
+    // post: {
+    //   type: Object,
+    //   required: true
+    // },
   },
   computed: {
     currentImage() {
@@ -129,8 +140,6 @@ export default {
   },
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails']),
-
-
 
     dismiss() {
       this.togglePostDetails()
