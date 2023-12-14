@@ -25,7 +25,7 @@ export default {
   },
   methods: {
     updateCheckedItems() {
-      this.$emit('change', { name: this.list.name, checked: this.checked });
+      this.$emit('change', { list: this.list, checked: this.checked });
     },
   },
 };

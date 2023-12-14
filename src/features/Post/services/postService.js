@@ -12,6 +12,10 @@ const createPost = async (postData, onSuccess, onError) => {
     formData.append('content', postData.content)
     formData.append('published_at', currentDate)
     formData.append('zone_id', 1)
+    // formData.append('sectors', postData.sectorId)
+    postData.sectorId.forEach((sectorId, index) => {
+      formData.append(`sectors[${index}]`, sectorId)
+    })
     // Append images
     postData.images.forEach((image, index) => {
       const imageUrl = URL.createObjectURL(image)

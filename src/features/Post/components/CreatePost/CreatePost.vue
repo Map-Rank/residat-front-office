@@ -14,7 +14,7 @@
           <base-checkbox
             :key="sector.name"
             :list="sector"
-            @change="updateCheckedItems"
+            @change="updatesectorChecked"
           ></base-checkbox>
         </div>
       </div>
@@ -107,9 +107,11 @@ export default {
       formData: {
         content: '',
         images: [],
-        videos: []
+        videos: [],
+        sectorChecked:[],
+        sectorId:[],
       },
-      sectors: []
+      sectors: [],
     }
   },
   components: {
@@ -121,6 +123,7 @@ export default {
     async submitPost() {
       // console.log('form data:', this.formData)
       this.isLoading = true
+      // console.log(this.formData)
       const response = await createPost(this.formData, this.handleSuccess, this.handleError)
       this.isLoading = false
       if (response.status) {
@@ -129,9 +132,8 @@ export default {
         console.log(response.data.errors)
         this.isLoading = false
       }
-      // Clear the form
-      this.content = ''
-      this.images = []
+
+      this.resetForm()
     },
 
     handleImageUpload(files) {
@@ -156,11 +158,13 @@ export default {
       this.sectors.forEach((sector) => (sector.checked = false))
     },
 
-    updateCheckedItems({ name, checked }) {
+    //TODO corncidered the fact that unchecked sectors should be remove an updated 
+    updatesectorChecked({ list, checked }) {
       if (checked) {
-        this.checkedItems.push(name)
+        this.formData.sectorChecked.push(list)
+        this.formData.sectorId.push(list.id)
       } else {
-        this.checkedItems = this.checkedItems.filter((item) => item !== name)
+        this.formData.sectorChecked = this.formData.sectorChecked.filter((item) => item !== name)
       }
     }
   }
