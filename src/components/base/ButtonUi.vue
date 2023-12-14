@@ -1,5 +1,6 @@
 <template>
   <button
+  :type="type"
     :class="[
       'flex items-center justify-center gap-2 px-2 py-2 transition ',
       'disabled:opacity-50 disabled:cursor-not-allowed ',
@@ -38,6 +39,7 @@ export default {
     color: String,
     loading: Boolean,
     isRoundedMd:Boolean,
+    type:String,
     textCss: {
       type: String
     },
