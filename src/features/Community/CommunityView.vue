@@ -27,7 +27,6 @@
 
       <aside class="col-span-1 hidden sm:block">
         <recently-posted-side
-          :topics="this.topics"
           :recentPosts="recentPosts"
         ></recently-posted-side>
       </aside>
@@ -39,55 +38,31 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
-import {getPosts} from '@/features/Post/services/postService.js'
+import { getPosts } from '@/features/Post/services/postService.js'
+import useSectorStore from '@/stores/sectorStore.js'
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Community',
 
   async created() {
-    try {
-      this.posts = await getPosts();
+    const sectorStore = useSectorStore()
 
-      
-      console.log('completly fetch all post' )  //TODO
+    try {
+      this.posts = await getPosts()
+      this.sectors = sectorStore.getAllSectors
+
+      console.log('completly fetch all post') //TODO
     } catch (error) {
-      console.error('Failed to load posts:', error);
+      console.error('Failed to load posts:', error)
       // Handle the error, e.g., show an error message
     }
   },
 
   data() {
     return {
-      sectors: [
-        {
-          name: 'agriculture',
-          label: 'Agriculture',
-          checked: false,
-          value: 'Agriculture',
-          required: true
-        },
-        {
-          name: 'agriculture',
-          label: 'Agriculture',
-          checked: false,
-          value: 'Agriculture',
-          required: true
-        },
-        {
-          name: 'education',
-          label: 'Education',
-          checked: false,
-          value: 'Education',
-          required: true
-        },
-        { name: 'socials', label: 'Socials', checked: false, value: 'Socials', required: true }
-        // Add more sectors as needed
-      ],
-      topics: ['Agriculture', 'Economy', 'Environment', 'Education'],
-      posts: [
- 
-        // ... more post data
-      ],
+      sectors: [],
+      posts: [],
       recentPosts: [
         {
           author: 'Arpit Chandak',
