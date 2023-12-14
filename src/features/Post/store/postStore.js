@@ -4,6 +4,7 @@ import { defineStore } from 'pinia';
 export const usePostStore =  defineStore('post', {
   state: () => ({
     showPostDetails: false,
+    
     currentPost: null,
     // Other related states
   }),
@@ -15,5 +16,9 @@ export const usePostStore =  defineStore('post', {
       console.log('toogle done')
     //   this.currentPost = post;
     },
+    setCurrentPost(post){
+      this.currentPost=post
+      console.log(this.currentPost)
+    }
   },
 });
