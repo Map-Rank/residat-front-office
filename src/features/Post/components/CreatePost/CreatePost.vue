@@ -123,8 +123,6 @@ export default {
   methods: {
     async submitPost() {
       console.log('form data:', this.formData)
-      // this.isLoading = true
-      // // console.log(this.formData)
       const response = await createPost(this.formData, this.handleSuccess, this.handleError)
       this.isLoading = false
       if (response.status) {

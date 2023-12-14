@@ -35,7 +35,7 @@ const createPost = async (postData, onSuccess, onError) => {
       }
     })
 
-    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken)
+    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken,true)
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)
     }

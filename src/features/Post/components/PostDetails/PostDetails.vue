@@ -119,7 +119,7 @@ export default {
 
   created() {
     const postStore = usePostStore()
-    this.post = postStore.currentPost
+    this.post = postStore.postToShowDetails
   },
   data() {
     return {
