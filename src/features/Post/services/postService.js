@@ -15,21 +15,12 @@ const createPost = async (postData, onSuccess, onError) => {
     // Append images
     postData.images.forEach((image, index) => {
       const imageUrl = URL.createObjectURL(image)
-      // console.log('the image url are :'+imageUrl)
       formData.append(`images[${index}]`, imageUrl)
     })
 
-    console.log(
-      'form data:',
-      formData.forEach((data) => {
-        //TODO remove this later
-        console.log(data)
-      })
-    )
 
     // Use makeApiPostCall for the API request
     const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken)
-    console.log(response.data)
     return response.data
   } catch (error) {
     onError('Server Error: Internal server error')

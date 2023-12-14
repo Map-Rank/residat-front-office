@@ -17,8 +17,6 @@ const registerUser = async (userData, onSuccess, onError) => {
 
     // Use makeApiPostCall for the API request
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData)
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken) //TODO remove this and but it in logout function later
-
     const token = response.data.data.token
     console.log('register successfull !!!!')
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
