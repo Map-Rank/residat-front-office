@@ -1,7 +1,7 @@
 <template>
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
-      <h3 class="uppercase font-semibold">Share your thoughts</h3>
+      <h3 class="uppercase font-semibold">{{ isEditing? 'Your Editing a post':'Share your thoughts'}}</h3>
     </div>
 
     <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
@@ -70,7 +70,13 @@
               :disabled="this.isLoading"
               class="block w-full text-white py-1.5 rounded-full transition"
             >
-              {{ this.isLoading ? 'Creating...' : 'Create Post' }}
+              
+              {{ 
+                !isEditing?
+                this.isLoading ? 'Creating...' : 'Create Post' :
+                this.isLoading ? 'Updating Post...' : 'Update Post' 
+              
+              }}
             </button>
           </div>
         </div>
@@ -82,14 +88,23 @@
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import { createPost } from '../../services/postService'
+import { createPost,updatePost } from '../../services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
+import usePostStore from '../../store/postStore.js'
 
 export default {
   name: 'CreatePost',
   async created() {
     const sectorStore = useSectorStore()
+    const postStore = usePostStore()
+
+    if(postStore.postToEdit){
+      this.isEditing = true
+      this.formData = postStore.postToEdit
+    }
+
+    // postStore.postToEdit != null ? (this.isEditing = true) : (this.isEditing = false)
 
     try {
       this.sectors = sectorStore.getAllSectors
@@ -104,15 +119,16 @@ export default {
     return {
       router,
       isLoading: false,
+      isEditing: false,
       formData: {
         content: '',
         images: [],
         videos: [],
-        sectorChecked:[],
-        sectorId:[],
-        zone_id:1,
+        sectorChecked: [],
+        sectorId: [],
+        zone_id: 1
       },
-      sectors: [],
+      sectors: []
     }
   },
   components: {
@@ -123,7 +139,18 @@ export default {
   methods: {
     async submitPost() {
       console.log('form data:', this.formData)
-      const response = await createPost(this.formData, this.handleSuccess, this.handleError)
+      let response
+
+      if(this.isEditing){
+
+         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
+         console.log('update post complete')
+      }
+
+         response = await createPost(this.formData, this.handleSuccess, this.handleError) 
+      
+      
+
       this.isLoading = false
       if (response.status) {
         this.resetForm()
@@ -132,7 +159,6 @@ export default {
         console.log(response.data.errors)
         this.isLoading = false
       }
-
     },
 
     handleImageUpload(files) {
@@ -157,7 +183,7 @@ export default {
       this.sectors.forEach((sector) => (sector.checked = false))
     },
 
-    //TODO corncidered the fact that unchecked sectors should be remove an updated 
+    //TODO corncidered the fact that unchecked sectors should be remove an updated
     updatesectorChecked({ list, checked }) {
       if (checked) {
         this.formData.sectorChecked.push(list)

@@ -24,6 +24,28 @@ const makeApiPostCall = async (endpoint, postData, authToken, ismedia) => {
   return response
 }
 
+
+const makeApiUpdateCall = async (endpoint, postData,id, authToken, ismedia) => {
+  let contentType
+
+  if (ismedia) {
+    contentType = 'multipart/form-data'
+  } else {
+    contentType = 'application/json'
+  }
+
+  let url = id ? `${endpoint}/${id}` : endpoint
+  
+  const response = await api.put(url, postData, {
+    headers: {
+      'Content-Type': contentType,
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+
+  return response
+}
+
 const makeApiGetCall = async (endpoint, authToken, id) => {
   let url = id ? `${endpoint}/${id}` : endpoint
   const response = await api.get(url, {
@@ -34,4 +56,4 @@ const makeApiGetCall = async (endpoint, authToken, id) => {
   return response
 }
 
-export { api, makeApiPostCall, makeApiGetCall }
+export { api, makeApiPostCall, makeApiGetCall,makeApiUpdateCall }

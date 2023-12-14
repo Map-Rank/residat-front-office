@@ -112,7 +112,7 @@
 
 <script>
 import { mapActions } from 'pinia'
-import { usePostStore } from '../../store/postStore'
+import usePostStore  from '../../store/postStore'
 
 export default {
   name: 'PostDetails',

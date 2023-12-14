@@ -1,7 +1,7 @@
 
 import { defineStore } from 'pinia';
 
-export const usePostStore =  defineStore('post', {
+export default defineStore('post', {
   state: () => ({
     showPostDetails: false,
     postToShowDetails: null,
@@ -24,3 +24,5 @@ export const usePostStore =  defineStore('post', {
     }
   },
 });
+
+
