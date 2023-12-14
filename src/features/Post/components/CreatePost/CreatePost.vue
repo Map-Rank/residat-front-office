@@ -110,6 +110,7 @@ export default {
         videos: [],
         sectorChecked:[],
         sectorId:[],
+        zone_id:1,
       },
       sectors: [],
     }
@@ -121,19 +122,19 @@ export default {
   },
   methods: {
     async submitPost() {
-      // console.log('form data:', this.formData)
-      this.isLoading = true
-      // console.log(this.formData)
+      console.log('form data:', this.formData)
+      // this.isLoading = true
+      // // console.log(this.formData)
       const response = await createPost(this.formData, this.handleSuccess, this.handleError)
       this.isLoading = false
       if (response.status) {
+        this.resetForm()
         this.$router.push({ name: 'community' })
       } else {
         console.log(response.data.errors)
         this.isLoading = false
       }
 
-      this.resetForm()
     },
 
     handleImageUpload(files) {
