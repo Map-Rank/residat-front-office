@@ -132,18 +132,19 @@ const likePost = async (postId) => {
   }
 }
 
-const likePost = async (postId) => {
+const sharePost = async (postId) => {
   try {
-    await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`, null, authToken)
+    await makeApiPostCall(`${API_ENDPOINTS.sharePost}/${postId}`, null, authToken)
+    console.log('share compplet!!')
   } catch (error) {
-    console.error('Error fetching posts:', error)
+    console.error('Error sharing posts:', error)
     throw error
   }
 }
 
 const deletePost = async (postId) => {
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.delete}/${postId}`, authToken)
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deletePost}/${postId}`, authToken)
     console.log('delete post sucess 1!!!  '+response.data)
   } catch (error) {
     console.error('Error deleting posts:', error)
@@ -166,4 +167,4 @@ const commentPost = async (postId, commentData) => {
   }
 }
 
-export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost}
+export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost , sharePost}

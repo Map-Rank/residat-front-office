@@ -143,7 +143,7 @@ import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import  usePostStore  from './store/postStore'
-import { likePost, commentPost ,deletePost} from '../Post/services/postService'
+import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 
@@ -176,17 +176,17 @@ export default {
           right: true
         },
         {
+          svgContent: 'src\\assets\\icons\\share-fill.svg',
+          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
+          labelText: 'Share',
+          right: true
+        },
+        {
           svgContent: 'src\\assets\\icons\\archieved-outline.svg',
           svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
         },
-        {
-          svgContent: 'src\\assets\\icons\\share-fill.svg',
-          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
-          labelText: 'Share',
-          right: true
-        }
       ]
     }
   },
@@ -215,10 +215,10 @@ export default {
         return
       }
       if (index === 2) {
-        console.log(this.post)
+        await sharePost(this.postId)
         return
       }
-
+      
       if (index === 3) {
         console.log(this.post)
         return
