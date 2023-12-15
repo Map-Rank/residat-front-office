@@ -38,6 +38,10 @@
             rows="4"
           ></textarea>
         </div>
+
+
+
+
         <div class="mb-4">
           <label class="block mb-2">Attach images (optional):</label>
           <div class="flex space-x-4">

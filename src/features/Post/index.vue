@@ -51,36 +51,14 @@
     </div>
 
     <!-- Post Images -->
-    <div @click.prevent="showDetails()" v-if="postImages">
-      <!-- Container for the first image -->
-      <div v-if="postImages.length > 2 || postImages.length == 1" class="flex mb-0.5">
-        <img :src="postImages[0].src" :alt="postImages[0].alt" class="w-full h-auto object-cover" />
-      </div>
+   
 
-      <div v-if="postImages.length == 2" class="flex mb-0.5">
-        <img :src="postImages[0].src" :alt="postImages[0].alt" class="w-1/2 h-1/2" />
-        <img :src="postImages[1].src" :alt="postImages[1].alt" class="w-1/2 h-1/2" />
-      </div>
+    <image-post-gallery
+    :Images="postImages"
+    @customFunction="showDetails"
+    >
 
-      <!-- Container for the rest of the images displayed in a single row -->
-      <div v-if="postImages.length > 2" class="flex gap-0.5 overflow-hidden">
-        <img
-          v-for="(image, index) in postImages.slice(1, 4)"
-          :src="image.src"
-          :alt="image.alt"
-          :key="image.src"
-          class="flex-grow h-auto w-4 object-cover"
-          :style="{ 'flex-basis': calculateFlexBasis(index) }"
-        />
-        <!-- "See more" box if there are more images than can be shown -->
-        <div
-          v-if="postImages.length > 4"
-          class="flex-grow h-auto flex justify-center items-center bg-black-200 cursor-pointer"
-        >
-          +{{ postImages.length - 4 }} more
-        </div>
-      </div>
-    </div>
+    </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="p-5">
@@ -146,6 +124,7 @@ import  usePostStore  from './store/postStore'
 import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
+import ImagePostGallery from '@/components/common/ImagePostGallery/index.vue'
 
 export default {
   name: 'PostComponent',
@@ -294,7 +273,8 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
   components: {
     IconWithLabel,
     PostDetails,
-    ButtonUi
+    ButtonUi,
+    ImagePostGallery,
     // BaseImagePickerVue
   },
   computed: {
