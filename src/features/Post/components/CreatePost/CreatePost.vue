@@ -126,7 +126,6 @@ export default {
         videos: [],
         sectorChecked: [],
         sectorId: [],
-        zone_id: 1
       },
       sectors: []
     }
@@ -138,7 +137,6 @@ export default {
   },
   methods: {
     async submitPost() {
-      console.log('form data:', this.formData)
       let response
 
       if(this.isEditing){
@@ -166,7 +164,8 @@ export default {
         console.error('No files provided or the provided data is not an array')
         return
       }
-
+      //here i empty my image array //TODO find a better method 
+      this.formData.images.length = 0
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
           this.formData.images.push(file)

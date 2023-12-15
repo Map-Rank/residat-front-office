@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall, makeApiUpdateCall } from '@/api' // Import the makeApiPostCall function
+import { makeApiPostCall, makeApiGetCall } from '@/api' // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const currentDate = new Date().toISOString().split('T')[0]
@@ -11,7 +11,7 @@ const createPost = async (postData, onSuccess, onError) => {
 
     formData.append('content', postData.content)
     formData.append('published_at', currentDate) // Ensure this is a valid date
-    formData.append('zone_id', postData.zone_id) // Ensure this is a valid zone ID
+    formData.append('zone_id', 1) // Ensure this is a valid zone ID
 
     // Append media files
     postData.images.forEach((image, index) => {
@@ -56,15 +56,16 @@ const updatePost = async (postData, onSuccess, onError) => {
 
     formData.append('content', postData.content)
     formData.append('published_at', currentDate) // Ensure this is a valid date
-    formData.append('zone_id', postData.zone_id) // Ensure this is a valid zone ID
+    formData.append('zone_id', '1') // Ensure this is a valid zone ID
+    formData.append('_method', 'PUT') // Ensure this is a valid zone ID
 
-    let data = JSON.stringify({
-      content: postData.content,
-      published_at: currentDate,
-      zone_id: postData.zone_id,
-      media: [...postData.images],
-      // sectors: [...postData.sectorId]
-    });
+    // let data = JSON.stringify({
+    //   content: postData.content,
+    //   published_at: currentDate,
+    //   zone_id: postData.zone_id,
+    //   media: [...postData.images],
+    //   // sectors: [...postData.sectorId]
+    // });
 
     // Append media files
     postData.images.forEach((image, index) => {
@@ -88,12 +89,16 @@ const updatePost = async (postData, onSuccess, onError) => {
       }
     })
 
-    const response = await makeApiUpdateCall(
+    console.log('form data:', formData)
+    console.log('post id' + postData.id)
+
+
+    const response = await makeApiPostCall(
       API_ENDPOINTS.updatePost,
-      data,
-      postData.id,
+      formData,
       authToken,
-      true
+      true,
+      postData.id,
     )
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)

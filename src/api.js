@@ -5,7 +5,7 @@ const api = axios.create({
   // baseURL: 'http://localhost:8000/api/',
 })
 
-const makeApiPostCall = async (endpoint, postData, authToken, ismedia) => {
+const makeApiPostCall = async (endpoint, postData, authToken, ismedia ,id) => {
   let contentType
 
   if (ismedia) {
@@ -13,30 +13,9 @@ const makeApiPostCall = async (endpoint, postData, authToken, ismedia) => {
   } else {
     contentType = 'application/json'
   }
-
-  const response = await api.post(endpoint, postData, {
-    headers: {
-      'Content-Type': contentType,
-      Authorization: `Bearer ${authToken}`
-    }
-  })
-
-  return response
-}
-
-
-const makeApiUpdateCall = async (endpoint, postData,id, authToken, ismedia) => {
-  let contentType
-
-  if (ismedia) {
-    contentType = 'multipart/form-data'
-  } else {
-    contentType = 'application/json'
-  }
-
   let url = id ? `${endpoint}/${id}` : endpoint
   
-  const response = await api.put(url, postData, {
+  const response = await api.post(url, postData, {
     headers: {
       'Content-Type': contentType,
       Authorization: `Bearer ${authToken}`
@@ -45,6 +24,8 @@ const makeApiUpdateCall = async (endpoint, postData,id, authToken, ismedia) => {
 
   return response
 }
+
+
 
 const makeApiGetCall = async (endpoint, authToken, id) => {
   let url = id ? `${endpoint}/${id}` : endpoint
@@ -56,4 +37,4 @@ const makeApiGetCall = async (endpoint, authToken, id) => {
   return response
 }
 
-export { api, makeApiPostCall, makeApiGetCall,makeApiUpdateCall }
+export { api, makeApiPostCall, makeApiGetCall }
