@@ -1,5 +1,6 @@
 import { makeApiPostCall, makeApiGetCall,makeApiDeleteCall } from '@/api' // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import postStore from '../store/postStore'
 
 const currentDate = new Date().toISOString().split('T')[0]
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
@@ -55,39 +56,32 @@ const updatePost = async (postData, onSuccess, onError) => {
     const authToken = localStorage.getItem('authToken')
 
     formData.append('content', postData.content)
-    formData.append('published_at', currentDate) // Ensure this is a valid date
-    formData.append('zone_id', '1') // Ensure this is a valid zone ID
-    formData.append('_method', 'PUT') // Ensure this is a valid zone ID
+    formData.append('published_at', currentDate) 
+    formData.append('zone_id', '1') 
+    formData.append('_method', 'PUT') 
 
-    // let data = JSON.stringify({
-    //   content: postData.content,
-    //   published_at: currentDate,
-    //   zone_id: postData.zone_id,
-    //   media: [...postData.images],
-    //   // sectors: [...postData.sectorId]
-    // });
 
-    // Append media files
-    postData.images.forEach((image, index) => {
-      if (
-        [
-          'image/jpeg',
-          'image/png',
-          'image/jpg',
-          'image/gif',
-          'application/pdf',
-          'video/mp4',
-          'video/mov',
-          'video/avi',
-          'video/wmv',
-          'audio/mp3'
-        ].includes(image.type)
-      ) {
-        formData.append(`media[${index}]`, image, image.name)
-      } else {
-        console.log('not correct format')
-      }
-    })
+    // // Append media files
+    // postData.images.forEach((image, index) => {
+    //   if (
+    //     [
+    //       'image/jpeg',
+    //       'image/png',
+    //       'image/jpg',
+    //       'image/gif',
+    //       'application/pdf',
+    //       'video/mp4',
+    //       'video/mov',
+    //       'video/avi',
+    //       'video/wmv',
+    //       'audio/mp3'
+    //     ].includes(image.type)
+    //   ) {
+    //     formData.append(`media[${index}]`, image, image.name)
+    //   } else {
+    //     console.log('not correct format')
+    //   }
+    // })
 
     console.log('form data:', formData)
     console.log('post id' + postData.id)

@@ -194,10 +194,22 @@ export default {
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
 
-    async deletePost() {
-      console.log('delete post ')
-      await deletePost(this.postId)
-    },
+async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
+  if (window.confirm(alertMessage)) {
+    console.log('Deleting post', this.postId);
+    try {
+      await deletePost(this.postId);
+      console.log('Post deleted successfully');
+      // Additional success handling can be done here
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      // Error handling can be done here
+    }
+  } else {
+    console.log('Post deletion cancelled by user');
+  }
+}
+,
 
     editPost() {
       console.log('edit post ')

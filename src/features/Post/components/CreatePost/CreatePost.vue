@@ -1,7 +1,9 @@
 <template>
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
-      <h3 class="uppercase font-semibold">{{ isEditing? 'Your Editing a post':'Share your thoughts'}}</h3>
+      <h3 class="uppercase font-semibold">
+        {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
+      </h3>
     </div>
 
     <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
@@ -70,12 +72,14 @@
               :disabled="this.isLoading"
               class="block w-full text-white py-1.5 rounded-full transition"
             >
-              
-              {{ 
-                !isEditing?
-                this.isLoading ? 'Creating...' : 'Create Post' :
-                this.isLoading ? 'Updating Post...' : 'Update Post' 
-              
+              {{
+                !isEditing
+                  ? this.isLoading
+                    ? 'Creating...'
+                    : 'Create Post'
+                  : this.isLoading
+                    ? 'Updating Post...'
+                    : 'Update Post'
               }}
             </button>
           </div>
@@ -88,7 +92,7 @@
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import { createPost,updatePost } from '../../services/postService'
+import { createPost, updatePost } from '../../services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../../store/postStore.js'
@@ -98,8 +102,8 @@ export default {
   async created() {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
-
-    if(postStore.postToEdit){
+    
+    if (postStore.postToEdit) {
       this.isEditing = true
       this.formData = postStore.postToEdit
     }
@@ -115,9 +119,11 @@ export default {
 
   data() {
     const router = useRouter()
+    const postStore = usePostStore()
 
     return {
       router,
+      postStore,
       isLoading: false,
       isEditing: false,
       formData: {
@@ -125,7 +131,7 @@ export default {
         images: [],
         videos: [],
         sectorChecked: [],
-        sectorId: [],
+        sectorId: []
       },
       sectors: []
     }
@@ -139,15 +145,17 @@ export default {
     async submitPost() {
       let response
 
-      if(this.isEditing){
-
-         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
-         console.log('update post complete')
+      if (this.isEditing) {
+        response = await updatePost(this.formData, this.handleSuccess, this.handleError)
+        console.log(response.status)
+        response.status ? (this.postStore.postToEdit = null) : null
+        console.log('update post complete')
+        this.resetForm()
+        this.$router.push({ name: 'community' })
+        return
       }
 
-         response = await createPost(this.formData, this.handleSuccess, this.handleError) 
-      
-      
+      response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
       this.isLoading = false
       if (response.status) {
@@ -164,7 +172,7 @@ export default {
         console.error('No files provided or the provided data is not an array')
         return
       }
-      //here i empty my image array //TODO find a better method 
+      //here i empty my image array //TODO find a better method
       this.formData.images.length = 0
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
