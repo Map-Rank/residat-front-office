@@ -143,7 +143,7 @@ import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import  usePostStore  from './store/postStore'
-import { likePost, commentPost } from '../Post/services/postService'
+import { likePost, commentPost ,deletePost} from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 
@@ -194,8 +194,9 @@ export default {
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
 
-    deletePost() {
+    async deletePost() {
       console.log('delete post ')
+      await deletePost(this.postId)
     },
 
     editPost() {
@@ -214,6 +215,11 @@ export default {
         return
       }
       if (index === 2) {
+        console.log(this.post)
+        return
+      }
+
+      if (index === 3) {
         console.log(this.post)
         return
       }

@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall } from '@/api' // Import the makeApiPostCall function
+import { makeApiPostCall, makeApiGetCall,makeApiDeleteCall } from '@/api' // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const currentDate = new Date().toISOString().split('T')[0]
@@ -132,6 +132,25 @@ const likePost = async (postId) => {
   }
 }
 
+const likePost = async (postId) => {
+  try {
+    await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`, null, authToken)
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
+const deletePost = async (postId) => {
+  try {
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.delete}/${postId}`, authToken)
+    console.log('delete post sucess 1!!!  '+response.data)
+  } catch (error) {
+    console.error('Error deleting posts:', error)
+    throw error
+  }
+}
+
 const commentPost = async (postId, commentData) => {
   try {
     const response = await makeApiPostCall(
@@ -147,4 +166,4 @@ const commentPost = async (postId, commentData) => {
   }
 }
 
-export { createPost, getPosts, likePost, commentPost, updatePost }
+export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost}

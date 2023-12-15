@@ -8,6 +8,7 @@ export const API_ENDPOINTS = {
     commentPost: '/comment',
     updatePost: '/update',
     sector: '/sector',
+    delete: '/delete',
     // other endpoints...
   };
   
