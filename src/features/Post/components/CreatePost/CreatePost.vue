@@ -22,34 +22,43 @@
       </div>
     </div>
 
-    <div class="mx-auto p-6 space-y-4 bg-white rounded-lg shadow">
+    <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <div class="flex items-center space-x-4">
         <img src="public\images\profile.png" alt="" />
         <h2 class="text-sm md:text-lg font-light text-gray-normal mb-4">
           Hello happy to share to our community
         </h2>
       </div>
-      <form @submit.prevent="submitPost">
-        <div class="mb-4">
+      <form
+      class="h-3/4"
+      @submit.prevent="submitPost">
+        <div class=" flex mb-4" >
           <textarea
             v-model="formData.content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
             rows="4"
           ></textarea>
+
+          <div class="w-1/2">
+      
+            <image-post-gallery
+            :Images="formData.images"
+            >
+        
+            </image-post-gallery>
+          </div>
         </div>
-
-
-
-
+        
+        
         <div class="mb-4">
           <label class="block mb-2">Attach images (optional):</label>
           <div class="flex space-x-4">
             <base-image-picker
-              :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
-              :type="'file'"
-              :label="'Add Image'"
-              @handleFileChange="handleImageUpload"
+            :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
+            :type="'file'"
+            :label="'Add Image'"
+            @handleFileChange="handleImageUpload"
             >
             </base-image-picker>
 
@@ -58,22 +67,23 @@
               :type="'file'"
               :label="'Add Video'"
               @handleFileChange="handleImageUpload"
-            >
+              >
             </base-image-picker>
           </div>
         </div>
-
+      
+        
         <div class="flex justify-center mt-5">
           <div class="flex w-full sm:w-1/2">
             <button
-              type="submit"
-              @click.prevent="submitPost"
+            type="submit"
+            @click.prevent="submitPost"
               :class="
                 this.isLoading
-                  ? 'bg-gray-400 cursor-wait'
-                  : 'bg-secondary-normal hover:bg-secondary-hover'
-              "
-              :disabled="this.isLoading"
+                ? 'bg-gray-400 cursor-wait'
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+                "
+                :disabled="this.isLoading"
               class="block w-full text-white py-1.5 rounded-full transition"
             >
               {{
@@ -81,17 +91,18 @@
                   ? this.isLoading
                     ? 'Creating...'
                     : 'Create Post'
-                  : this.isLoading
+                    : this.isLoading
                     ? 'Updating Post...'
                     : 'Update Post'
-              }}
-            </button>
-          </div>
+                  }}
+                </button>
+              </div>
+            </div>
+          </form>
+         
         </div>
-      </form>
-    </div>
-  </div>
-</template>
+      </div>
+    </template>
 
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
@@ -100,6 +111,8 @@ import { createPost, updatePost } from '../../services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../../store/postStore.js'
+import ImagePostGallery from '@/components/common/ImagePostGallery/index.vue'
+
 
 export default {
   name: 'CreatePost',
@@ -137,13 +150,15 @@ export default {
         sectorChecked: [],
         sectorId: []
       },
-      sectors: []
+      sectors: [],
+      
     }
   },
   components: {
     BaseImagePicker,
     // ButtonUi,
-    BaseCheckbox
+    BaseCheckbox,
+    ImagePostGallery
   },
   methods: {
     async submitPost() {
@@ -177,7 +192,8 @@ export default {
         return
       }
       //here i empty my image array //TODO find a better method
-      this.formData.images.length = 0
+
+      // this.formData.images.length = 0
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
           this.formData.images.push(file)
@@ -208,7 +224,5 @@ export default {
 </script>
 
 <style scoped>
-.container {
-  height: 100vh;
-}
+
 </style>

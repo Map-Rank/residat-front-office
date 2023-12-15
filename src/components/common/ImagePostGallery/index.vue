@@ -1,5 +1,5 @@
 <template>
-  <div @click.prevent="handleClick" v-if="Images">
+  <div  class="" @click.prevent="handleClick" v-if="Images">
     <!-- Container for the first image -->
     <div v-if="Images.length > 2 || Images.length === 1" class="flex mb-0.5">
       <img :src="Images[0].src" :alt="Images[0].alt" class="w-full h-auto object-cover" />

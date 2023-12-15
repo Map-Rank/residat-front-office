@@ -51,7 +51,6 @@
     </div>
 
     <!-- Post Images -->
-   
 
     <image-post-gallery
     :Images="postImages"
