@@ -1,5 +1,8 @@
+
 import { makeApiPostCall } from '@/api' // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+
+
 
 const registerUser = async (userData, onSuccess, onError) => {
   try {
@@ -15,17 +18,20 @@ const registerUser = async (userData, onSuccess, onError) => {
     formData.append('gender', userData.gender)
     formData.append('zone_id', 1)
 
+
     // Use makeApiPostCall for the API request
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData)
     const token = response.data.data.token
     console.log('register successfull !!!!')
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
 
+
     return response
   } catch (error) {
     onError('Server Error: Internal server error')
     console.error('Registration error:', error)
     throw error
+
   }
 }
 
@@ -36,8 +42,11 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
     formData.append('email', userCredentials.email)
     formData.append('password', userCredentials.password)
 
+
     // Use makeApiPostCall for the API request
     const response = await makeApiPostCall(API_ENDPOINTS.login, formData)
+
+
 
     const user = response.data.data
     const token = response.data.data.token
