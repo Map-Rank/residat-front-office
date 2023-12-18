@@ -15,7 +15,7 @@
       <div class="mb-6">
         <label for="email" class="inline-block mb-2">Email</label>
         <vee-field
-        v-model="userData.email"
+          v-model="userData.email"
           id="email"
           name="email"
           type="email"
@@ -28,9 +28,9 @@
       <!-- Password -->
       <div class="mb-6">
         <label for="password" class="inline-block mb-2">Password</label>
-        <vee-field name="password" >
+        <vee-field name="password">
           <input
-          v-model="userData.password"
+            v-model="userData.password"
             id="password"
             type="password"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
@@ -90,17 +90,18 @@ export default {
   methods: {
     handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = !this.authStore.isloggedIn
+      this.authStore.isloggedIn = true
       this.$router.push({ name: 'community' })
     },
 
     handleError(errors) {
       console.log(errors)
-      this.login_alert_message = JSON.stringify(errors.email[0])
+      ;(this.login_alert_varient = 'bg-red-500'),
+        (this.login_in_submission = false)(
+          (this.login_alert_message = JSON.stringify(errors.email[0]))
+        )
       console.log(JSON.stringify(errors.email[0]))
-      console.log(JSON.stringify(errors.zone_id[0]) )
-
-     
+      console.log(JSON.stringify(errors.zone_id[0]))
     },
 
     async login(values) {
@@ -113,10 +114,6 @@ export default {
         await loginUser(this.userData, this.authStore, this.handleSuccess, this.handleError)
       } catch (error) {
         console.log(error)
-        ;(this.login_alert_varient = 'bg-red-500'),
-          // (this.login_alert_message = 'invalid credentials try again')
-        this.login_in_submission = false
-
         return
       }
 
