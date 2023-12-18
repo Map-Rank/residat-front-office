@@ -66,7 +66,7 @@
           iconDesktopSize="this.iconSize"
           :isActive="true"
           :bottom="true"
-          @clickIcon="logout"
+          @customFunction="logout"
         ></icon-with-label>
       </nav>
       <br />
@@ -76,10 +76,8 @@
 
 <script>
 import IconWithLabel from '../IconWithLabel/index.vue'
-import { mapState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import { useRouter } from 'vue-router'
-// import {logOut} from '../../../features/Auth/services/authService'
 
 export default {
   name: 'HeaderApp',
@@ -160,13 +158,11 @@ export default {
     },
 
     logout() {
-      // logOut()
+      this.authStore.logOut()
       this.$router.push({ name: 'authentication' })
     }
   },
-  computed: {
-    ...mapState(useAuthStore, ['hiddenClass'])
-  }
+
 }
 </script>
 

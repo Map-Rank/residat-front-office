@@ -6,6 +6,9 @@ export const API_ENDPOINTS = {
     getPosts: '/posts',
     likePost: '/like',
     commentPost: '/comment',
+
+    updatePost: '/update',
+    sector: '/sector',
     // other endpoints...
   };
   
