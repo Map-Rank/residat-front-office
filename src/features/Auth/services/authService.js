@@ -23,8 +23,8 @@ const registerUser = async (userData, onSuccess, onError) => {
 
     return response
   } catch (error) {
-    onError('Server Error: Internal server error')
-    console.error('Registration error:', error)
+    onError(error.response.data.errors)
+    // console.error(error.response.data)
     throw error
   }
 }
@@ -50,8 +50,8 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
 
     onSuccess()
   } catch (error) {
-    onError('Login Error: Unable to log in with the provided credentials')
-    console.error('Login error:', error)
+    onError(error.response.data.errors)
+    // console.error(error.response.data)
     throw error
   }
 }

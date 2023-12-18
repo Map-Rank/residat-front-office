@@ -292,7 +292,7 @@ export default {
       reg_in_submission: false,
       reg_show_alert: false,
       reg_alert_varient: 'bg-blue-500',
-      reg_alert_message: 'please wait your account is being created '
+      reg_alert_message: 'please wait your account is being created ',
     }
   },
 
@@ -336,10 +336,13 @@ export default {
       console.log('Handling success:', message)
     },
 
-    handleError(message) {
-      // Custom logic for handling error response
-      // console.error('Handling error:', message)
-      console.log(message)
+    handleError(errors) {
+      console.log(errors)
+      this.reg_alert_message = JSON.stringify(errors.email[0])
+      console.log(JSON.stringify(errors.email[0]))
+      console.log(JSON.stringify(errors.zone_id[0]) )
+
+     
     },
 
     async registerForm() {
@@ -350,6 +353,7 @@ export default {
 
       try {
         const response = await registerUser(this.formData, this.handleSuccess, this.handleError)
+        console.log('this is my responce: ' + response.data)
         if (response.status) {
           this.authStore.isloggedIn = !this.authStore.isloggedIn
           this.$router.push({ name: 'community' })
@@ -357,12 +361,11 @@ export default {
           console.log(response.data.errors[0])
         }
       } catch (error) {
-        console.log(error)
+        // console.log(error)
         ;(this.reg_in_submission = false),
           // (this.reg_show_alert = false),
-          (this.reg_alert_varient = 'bg-red-500'),
-          (this.reg_alert_message = 'Unexpescted error please try letter')
-        console.log(error)
+          (this.reg_alert_varient = 'bg-red-500')
+          // (this.reg_alert_message = null)
       }
     }
   },

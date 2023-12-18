@@ -94,8 +94,13 @@ export default {
       this.$router.push({ name: 'community' })
     },
 
-    handleError(message) {
-      console.log(message)
+    handleError(errors) {
+      console.log(errors)
+      this.login_alert_message = JSON.stringify(errors.email[0])
+      console.log(JSON.stringify(errors.email[0]))
+      console.log(JSON.stringify(errors.zone_id[0]) )
+
+     
     },
 
     async login(values) {
@@ -109,7 +114,7 @@ export default {
       } catch (error) {
         console.log(error)
         ;(this.login_alert_varient = 'bg-red-500'),
-          (this.login_alert_message = 'invalid credentials try again')
+          // (this.login_alert_message = 'invalid credentials try again')
         this.login_in_submission = false
 
         return
