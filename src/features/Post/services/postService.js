@@ -34,6 +34,11 @@ const createPost = async (postData, onSuccess, onError) => {
         console.log('not correct format')
       }
     })
+    
+    postData.sectorId.forEach((id, index, ) => {
+      formData.append(`sectors[${index}]`, id)
+
+    })
 
     const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
     if (onSuccess && typeof onSuccess === 'function') {
