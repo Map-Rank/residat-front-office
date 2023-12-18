@@ -2,14 +2,15 @@
   <button
   :type="type"
     :class="[
-      'flex items-center justify-center gap-2 px-2 py-2 transition ',
+      'flex items-center  gap-2 px-2 py-2 transition ',
       'disabled:opacity-50 disabled:cursor-not-allowed ',
       isRoundedFull ? 'rounded-full' : '',
       isRoundedMd ? 'rounded-lg' : '',
       color,
       colorObject,
       buttonWidthClass,
-      hoverShadowClass
+      hoverShadowClass,
+      customCss
     ]"
     :disabled="isDisabled"
     @click.prevent="handleClick()"
@@ -34,6 +35,7 @@ export default {
     leftIcon: String,
     rightIcon: String,
     isDisabled: Boolean,
+    customCss:String,
     hoverState: Boolean,
     colorObject: Object,
     color: String,
@@ -67,7 +69,6 @@ export default {
   methods: {
     handleClick() {
       if (!this.isDisabled && !this.loading) {
-        console.log('clicked')
         this.$emit('clickButton')
       }
     }

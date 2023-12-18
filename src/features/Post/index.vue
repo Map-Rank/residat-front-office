@@ -25,17 +25,27 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Share</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >Not Intrested</a
+          <button-ui
+            :label="'Edit'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="editPost()"
           >
-          <!-- ... other menu items ... -->
+          </button-ui>
+
+          <button-ui
+            :label="'Delete'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="deletePost()"
+          >
+          </button-ui>
         </div>
       </div>
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showDetails()"  class="px-5 mb-2 cursor-pointer">
+    <div @click.prevent="showDetails()" class="px-5 mb-2 cursor-pointer">
       <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
       <p class="p3 content">{{ postContent }}</p>
     </div>
@@ -115,7 +125,7 @@
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
         <button
-        @click.prevent="commentPost()"
+          @click.prevent="commentPost()"
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -132,14 +142,18 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
-import { usePostStore } from './store/postStore'
-import { likePost ,commentPost} from '../Post/services/postService'
-// import BaseImagePickerVue from '../../base/BaseImagePicker.vue'
+import  usePostStore  from './store/postStore'
+import { likePost, commentPost } from '../Post/services/postService'
+import ButtonUi from '../../components/base/ButtonUi.vue'
+import { useRoute } from 'vue-router'
 
 export default {
   name: 'PostComponent',
   data() {
+
+    const route = useRoute()
     return {
+      route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isMenuVisible: false,
@@ -178,7 +192,17 @@ export default {
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails','setCurrentPost']),
+    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
+
+    deletePost() {
+      console.log('delete post ')
+    },
+
+    editPost() {
+      console.log('edit post ')
+      this.setpostToEdit(this.post)
+      this.$router.push({ name: 'create-post' })
+    },
 
     async customFunction(index) {
       if (index === 0) {
@@ -195,9 +219,9 @@ export default {
       }
     },
 
-    async commentPost(){
-        await commentPost(this.postId,this.commentData)
-        this.showCommentBox = !this.showCommentBox
+    async commentPost() {
+      await commentPost(this.postId, this.commentData)
+      this.showCommentBox = !this.showCommentBox
     },
 
     clickIcon(index) {
@@ -219,7 +243,7 @@ export default {
 
     showDetails() {
       this.togglePostDetails()
-      this.setCurrentPost(this.post)
+      this.setpostToShowDetails(this.post)
       // console.log(this.post)
       console.log('click')
     },
@@ -251,7 +275,8 @@ export default {
 
   components: {
     IconWithLabel,
-    PostDetails
+    PostDetails,
+    ButtonUi
     // BaseImagePickerVue
   },
   computed: {
@@ -272,7 +297,7 @@ export default {
     comment_count: Number,
     postImages: Array,
     postId: Number,
-    post:Object,
+    post: Object
   }
 }
 </script>

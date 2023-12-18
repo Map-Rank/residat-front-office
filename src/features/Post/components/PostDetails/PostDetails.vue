@@ -112,14 +112,14 @@
 
 <script>
 import { mapActions } from 'pinia'
-import { usePostStore } from '../../store/postStore'
+import usePostStore  from '../../store/postStore'
 
 export default {
   name: 'PostDetails',
 
   created() {
     const postStore = usePostStore()
-    this.post = postStore.currentPost
+    this.post = postStore.postToShowDetails
   },
   data() {
     return {
