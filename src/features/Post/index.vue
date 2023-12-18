@@ -143,7 +143,9 @@ import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import  usePostStore  from './store/postStore'
+
 import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
+
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 
@@ -194,6 +196,7 @@ export default {
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
 
+
 async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
   if (window.confirm(alertMessage)) {
     console.log('Deleting post', this.postId);
@@ -210,6 +213,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
   }
 }
 ,
+
 
     editPost() {
       console.log('edit post ')

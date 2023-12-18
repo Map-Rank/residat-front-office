@@ -1,10 +1,11 @@
 <template>
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
+
       <h3 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
       </h3>
-    </div>
+
 
     <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
       <div class="grid mb-5">
@@ -72,6 +73,7 @@
               :disabled="this.isLoading"
               class="block w-full text-white py-1.5 rounded-full transition"
             >
+
               {{
                 !isEditing
                   ? this.isLoading
@@ -80,6 +82,9 @@
                   : this.isLoading
                     ? 'Updating Post...'
                     : 'Update Post'
+
+              
+
               }}
             </button>
           </div>
@@ -92,7 +97,9 @@
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
+
 import { createPost, updatePost } from '../../services/postService'
+
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../../store/postStore.js'
@@ -102,8 +109,12 @@ export default {
   async created() {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
+
     
     if (postStore.postToEdit) {
+
+
+
       this.isEditing = true
       this.formData = postStore.postToEdit
     }
@@ -132,6 +143,7 @@ export default {
         videos: [],
         sectorChecked: [],
         sectorId: []
+
       },
       sectors: []
     }
@@ -145,6 +157,7 @@ export default {
     async submitPost() {
       let response
 
+
       if (this.isEditing) {
         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
         console.log(response.status)
@@ -156,6 +169,7 @@ export default {
       }
 
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
+
 
       this.isLoading = false
       if (response.status) {
@@ -172,7 +186,9 @@ export default {
         console.error('No files provided or the provided data is not an array')
         return
       }
+
       //here i empty my image array //TODO find a better method
+
       this.formData.images.length = 0
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {

@@ -86,6 +86,7 @@ const updatePost = async (postData, onSuccess, onError) => {
     //   }
     // })
 
+
     console.log('form data:', formData)
     console.log('post id' + postData.id)
 
@@ -166,4 +167,5 @@ const commentPost = async (postId, commentData) => {
 
 
 export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost , sharePost}
+
 
