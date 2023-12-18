@@ -288,7 +288,7 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_2',
+      currentStep: 'step_1',
       reg_in_submission: false,
       reg_show_alert: false,
       reg_alert_varient: 'bg-blue-500',

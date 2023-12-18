@@ -32,18 +32,19 @@
       <form
       class="h-3/4"
       @submit.prevent="submitPost">
-        <div class=" flex mb-4" >
+        <div class=" flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2"  >
           <textarea
             v-model="formData.content"
             placeholder="what will you share today ..."
-            class="w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
+            class="w-full  rounded-lg focus:outline-none focus:ring-2 "
             rows="4"
           ></textarea>
 
-          <div class="w-1/2">
+          <div class="sm:w-1/2 ">
       
             <image-post-gallery
-            :Images="formData.images"
+            class=""
+            :Images="Images"
             >
         
             </image-post-gallery>
@@ -143,6 +144,14 @@ export default {
       postStore,
       isLoading: false,
       isEditing: false,
+      Images: [
+        { src: 'https://via.placeholder.com/150', alt: 'Image 1' },
+        { src: 'https://via.placeholder.com/150', alt: 'Image 2' },
+        { src: 'https://via.placeholder.com/150', alt: 'Image 3' },
+        // { src: 'https://via.placeholder.com/150', alt: 'Image 4' },
+        // { src: 'https://via.placeholder.com/150', alt: 'Image 4' },
+        // ...additional images
+      ],
       formData: {
         content: '',
         images: [],

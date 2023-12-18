@@ -7,7 +7,6 @@
   </body>
 
   <bottom-navigation-app-app
-    :class="hiddenClass"
     class="mobile-nav md:hidden"
   ></bottom-navigation-app-app>
   <footer-app></footer-app>

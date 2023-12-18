@@ -1,6 +1,5 @@
 import { makeApiPostCall, makeApiGetCall,makeApiDeleteCall } from '@/api' // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
-import postStore from '../store/postStore'
 
 const currentDate = new Date().toISOString().split('T')[0]
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
