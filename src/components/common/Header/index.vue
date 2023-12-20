@@ -17,7 +17,7 @@
         iconDesktopSize="this.iconSize"
         :isActive="true"
         :bottom="false"
-        routerName="dashbaord"
+        routerName="social-profile"
         @clickIcon="clickIcon(index)"
       ></icon-with-label>
     </div>

@@ -288,7 +288,7 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_2',
+      currentStep: 'step_1',
       reg_in_submission: false,
       reg_show_alert: false,
       reg_alert_varient: 'bg-blue-500',
@@ -331,15 +331,17 @@ export default {
       this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
     },
 
-    handleSuccess(message) {
-      // Custom logic for handling successful response
-      console.log('Handling success:', message)
+    handleSuccess() {
+      this.authStore.isloggedIn = true
+      this.$router.push({ name: 'community' })
     },
 
-    handleError(message) {
-      // Custom logic for handling error response
-      // console.error('Handling error:', message)
-      console.log(message)
+    handleError(errors) {
+      console.log(errors)
+      ;(this.reg_in_submission = false), (this.reg_alert_varient = 'bg-red-500')
+      this.reg_alert_message = JSON.stringify(errors.email[0])
+      console.log(JSON.stringify(errors.email[0]))
+      console.log(JSON.stringify(errors.zone_id[0]))
     },
 
     async registerForm() {
@@ -350,18 +352,8 @@ export default {
 
       try {
         const response = await registerUser(this.formData, this.handleSuccess, this.handleError)
-        if (response.status) {
-          this.authStore.isloggedIn = !this.authStore.isloggedIn
-          this.$router.push({ name: 'community' })
-        } else {
-          console.log(response.data.errors[0])
-        }
+        console.log('this is my responce: ' + response.data)
       } catch (error) {
-        console.log(error)
-        ;(this.reg_in_submission = false),
-          // (this.reg_show_alert = false),
-          (this.reg_alert_varient = 'bg-red-500'),
-          (this.reg_alert_message = 'Unexpescted error please try letter')
         console.log(error)
       }
     }

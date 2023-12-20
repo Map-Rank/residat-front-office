@@ -1,20 +1,21 @@
 <template>
-    <div>
-<h1>DashBoardView</h1>
-    </div>
+  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <UnderConstruction></UnderConstruction>
+</div>
 </template>
 
 <script>
-export default {
-    name:"DashBoardView",
-    data () {
-        
+import UnderConstruction from '@/components/common/Pages/UnderConstruction.vue'
 
-        return {}
+export default {
+
+    name: "DashBoardView",
+    components:{
+        UnderConstruction,
     }
 }
 </script>
 
-<style lang="scss" scoped>
-
+<style scoped>
+/* You can add additional styles here if needed */
 </style>

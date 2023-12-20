@@ -1,14 +1,14 @@
 <template>
-  <!-- <header-app :class="hiddenClass"></header-app> -->
-  <header-app ></header-app>
+  <header-app :class="hiddenClass"></header-app>
+  <!-- <header-app ></header-app> -->
 
   <body class="">
     <router-view></router-view>
   </body>
 
   <bottom-navigation-app-app
-    :class="hiddenClass"
     class="mobile-nav md:hidden"
+    :class="hiddenClass"
   ></bottom-navigation-app-app>
   <footer-app></footer-app>
 </template>

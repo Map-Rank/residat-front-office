@@ -23,22 +23,30 @@
       </div>
     </div>
 
-    <div class="mx-auto p-6 space-y-4 bg-white rounded-lg shadow">
+    <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <div class="flex items-center space-x-4">
         <img src="public\images\profile.png" alt="" />
         <h2 class="text-sm md:text-lg font-light text-gray-normal mb-4">
           Hello happy to share to our community
         </h2>
       </div>
-      <form @submit.prevent="submitPost">
-        <div class="mb-4">
-          <textarea
+      <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
+        <ErrorMessage class="text-danger-normal" name="content" />
+        <div class="flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2">
+          <vee-field
+            name="content"
+            :rules="schema.content"
+            as="textarea"
             v-model="formData.content"
             placeholder="what will you share today ..."
-            class="w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
+            class="w-full rounded-lg focus:outline-none focus:ring-2"
             rows="4"
-          ></textarea>
+          ></vee-field>
+          <div class="sm:w-1/2">
+            <image-preview-gallery class="" :Images="imagesToPreview"> </image-preview-gallery>
+          </div>
         </div>
+
         <div class="mb-4">
           <label class="block mb-2">Attach images (optional):</label>
           <div class="flex space-x-4">
@@ -50,13 +58,13 @@
             >
             </base-image-picker>
 
-            <base-image-picker
+            <!-- <base-image-picker
               :iconImg="'src\\assets\\icons\\colored\\video-clip.svg'"
               :type="'file'"
               :label="'Add Video'"
               @handleFileChange="handleImageUpload"
             >
-            </base-image-picker>
+            </base-image-picker> -->
           </div>
         </div>
 
@@ -89,7 +97,7 @@
             </button>
           </div>
         </div>
-      </form>
+      </vee-form>
     </div>
   </div>
 </template>
@@ -103,6 +111,7 @@ import { createPost, updatePost } from '../../services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../../store/postStore.js'
+import ImagePreviewGallery from '@/components/common/ImagePreviewGallery/index.vue'
 
 export default {
   name: 'CreatePost',
@@ -110,7 +119,7 @@ export default {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
 
-    
+
     if (postStore.postToEdit) {
 
 
@@ -133,10 +142,14 @@ export default {
     const postStore = usePostStore()
 
     return {
+      schema: {
+        content: 'required'
+      },
       router,
       postStore,
       isLoading: false,
       isEditing: false,
+      imagesToPreview: [],
       formData: {
         content: '',
         images: [],
@@ -151,11 +164,22 @@ export default {
   components: {
     BaseImagePicker,
     // ButtonUi,
-    BaseCheckbox
+    BaseCheckbox,
+    ImagePreviewGallery
   },
   methods: {
+
+    handleError(){
+
+      this.isLoading = false
+    },
     async submitPost() {
+      if (this.formData.content == '') {
+        return
+      }
+
       let response
+      this.isLoading = true
 
 
       if (this.isEditing) {
@@ -171,28 +195,34 @@ export default {
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
 
-      this.isLoading = false
       if (response.status) {
         this.resetForm()
         this.$router.push({ name: 'community' })
-      } else {
-        console.log(response.data.errors)
-        this.isLoading = false
+      }
+
+      if (response.data.status) {
+        // console.log(response.data.errors)
       }
     },
 
     handleImageUpload(files) {
-      if (!files || !Array.isArray(files)) {
+      if (!files || !files.length) {
         console.error('No files provided or the provided data is not an array')
         return
       }
 
-      //here i empty my image array //TODO find a better method
+      // Reset existing images and previews
+      this.formData.images = []
+      this.imagesToPreview = []
 
-      this.formData.images.length = 0
+
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
           this.formData.images.push(file)
+
+          // Create a URL for the image and add it to imagesToPreview
+          const imageUrl = URL.createObjectURL(file)
+          this.imagesToPreview.push({ src: imageUrl, alt: file.name })
         } else if (file.type.startsWith('video/')) {
           this.formData.videos.push(file)
         }
@@ -219,8 +249,4 @@ export default {
 }
 </script>
 
-<style scoped>
-.container {
-  height: 100vh;
-}
-</style>
+<style scoped></style>

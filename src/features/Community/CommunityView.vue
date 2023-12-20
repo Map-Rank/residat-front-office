@@ -14,10 +14,10 @@
             v-for="(post, index) in posts"
             :key="index"
             :postId="post.id"
-            :username="`${post.creator.first_name} ${post.creator.last_name} `"
+            :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
             :postDate="post.postDate"
             :postContent="post.content"
-            :userProfileImage="post.creator.avatar"
+            :userProfileImage="post.creator[0].avatar"
             :like_count="post.like_count"
             :comment_count="post.comment_count"
             :postImages="post.images"
@@ -27,9 +27,7 @@
       </main>
 
       <aside class="col-span-1 hidden sm:block">
-        <recently-posted-side
-          :recentPosts="recentPosts"
-        ></recently-posted-side>
+        <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
       </aside>
     </div>
   </div>

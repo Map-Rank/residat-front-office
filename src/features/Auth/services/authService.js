@@ -24,12 +24,13 @@ const registerUser = async (userData, onSuccess, onError) => {
     const token = response.data.data.token
     console.log('register successfull !!!!')
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    onSuccess()
 
 
     return response
   } catch (error) {
-    onError('Server Error: Internal server error')
-    console.error('Registration error:', error)
+    onError(error.response.data.errors)
+    // console.error(error.response.data)
     throw error
 
   }
@@ -59,15 +60,13 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
 
     onSuccess()
   } catch (error) {
-    onError('Login Error: Unable to log in with the provided credentials')
-    console.error('Login error:', error)
+    onError(error.response.data.errors)
     throw error
   }
 }
 
-const logOut = async (authStore)=>{
+const logOut = async (authStore) => {
   authStore.logOut()
- 
 }
 
-export { registerUser, loginUser,logOut }
+export { registerUser, loginUser, logOut }

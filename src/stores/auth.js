@@ -4,13 +4,13 @@ import { LOCAL_STORAGE_KEYS } from '../constants/localStorageKeys';
 
 export default defineStore('auth', {
   state: () => ({
-    user: null,
+    user: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo)),
     isloggedIn: false
   }),
 
   getters: {
     hiddenClass(state) {
-      return !state.isloggedIn ? 'hidden' : ''
+      return state.user ==null ? 'hidden' : ''
     },
     getCurrentUser(state) {
       return state.user;
