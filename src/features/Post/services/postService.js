@@ -63,30 +63,6 @@ const updatePost = async (postData, onSuccess, onError) => {
     formData.append('published_at', currentDate) 
     formData.append('zone_id', '1') 
     formData.append('_method', 'PUT') 
-
-
-    // // Append media files
-    // postData.images.forEach((image, index) => {
-    //   if (
-    //     [
-    //       'image/jpeg',
-    //       'image/png',
-    //       'image/jpg',
-    //       'image/gif',
-    //       'application/pdf',
-    //       'video/mp4',
-    //       'video/mov',
-    //       'video/avi',
-    //       'video/wmv',
-    //       'audio/mp3'
-    //     ].includes(image.type)
-    //   ) {
-    //     formData.append(`media[${index}]`, image, image.name)
-    //   } else {
-    //     console.log('not correct format')
-    //   }
-    // })
-
     console.log('form data:', formData)
     console.log('post id' + postData.id)
 
@@ -115,6 +91,17 @@ const getPosts = async () => {
   try {
     const response = await makeApiGetCall(API_ENDPOINTS.getPosts, authToken)
     return response.data.data
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
+const getUserPosts = async () => {
+  try {
+    const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
+    return response.data.data
+
   } catch (error) {
     console.error('Error fetching posts:', error)
     throw error
@@ -165,4 +152,4 @@ const commentPost = async (postId, commentData) => {
   }
 }
 
-export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost , sharePost}
+export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost , sharePost ,getUserPosts}

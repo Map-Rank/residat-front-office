@@ -27,9 +27,7 @@
       </main>
 
       <aside class="col-span-1 hidden sm:block">
-        <recently-posted-side
-          :recentPosts="recentPosts"
-        ></recently-posted-side>
+        <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
       </aside>
     </div>
   </div>

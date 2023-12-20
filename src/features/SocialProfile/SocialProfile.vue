@@ -31,10 +31,10 @@
               v-for="(post, index) in posts"
               :key="index"
               :postId="post.id"
-              :username="`${post.creator.first_name} ${post.creator.last_name} `"
-              :postDate="post.postDate"
+              :username="`${userPost.first_name} ${userPost.last_name} `"
+              :postDate="post.created_at"
               :postContent="post.content"
-              :userProfileImage="post.creator.avatar"
+              :userProfileImage="userPost.avatar"
               :like_count="post.like_count"
               :comment_count="post.comment_count"
               :postImages="post.images"
@@ -53,7 +53,7 @@
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
-import { getPosts } from '@/features/Post/services/postService.js'
+import { getUserPosts } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
 
@@ -64,7 +64,9 @@ export default {
     const sectorStore = useSectorStore()
 
     try {
-      this.posts = await getPosts()
+      this.userPost = await getUserPosts()
+      this.posts = this.userPost.my_posts
+
       this.sectors = sectorStore.getAllSectors
     } catch (error) {
       console.error('Failed to load posts:', error)
@@ -79,7 +81,8 @@ export default {
   data() {
     return {
       user: '',
-      posts: []
+      posts: [],
+      userPost: null
     }
   },
 
