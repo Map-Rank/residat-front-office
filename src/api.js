@@ -41,5 +41,18 @@ const makeApiGetCall = async (endpoint, authToken, id) => {
   return response
 }
 
-export { api, makeApiPostCall, makeApiGetCall }
+
+const makeApiDeleteCall = async (endpoint, authToken) => {
+
+
+  const response = await api.delete(endpoint, {
+    headers: {
+      Authorization: `Bearer ${authToken}`
+    }
+  })
+  return response
+}
+
+export { api, makeApiPostCall, makeApiGetCall ,makeApiDeleteCall}
+
 

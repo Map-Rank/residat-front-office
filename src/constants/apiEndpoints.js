@@ -9,6 +9,8 @@ export const API_ENDPOINTS = {
 
     updatePost: '/update',
     sector: '/sector',
+    deletePost: '/delete',
+    sharePost: '/share',
     // other endpoints...
   };
   

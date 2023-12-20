@@ -148,7 +148,9 @@ import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 
 import  usePostStore  from './store/postStore'
-import { likePost, commentPost } from '../Post/services/postService'
+
+import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
+
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 
@@ -182,17 +184,17 @@ export default {
           right: true
         },
         {
+          svgContent: 'src\\assets\\icons\\share-fill.svg',
+          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
+          labelText: 'Share',
+          right: true
+        },
+        {
           svgContent: 'src\\assets\\icons\\archieved-outline.svg',
           svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
         },
-        {
-          svgContent: 'src\\assets\\icons\\share-fill.svg',
-          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
-          labelText: 'Share',
-          right: true
-        }
       ]
     }
   },
@@ -201,9 +203,24 @@ export default {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
 
 
-    deletePost() {
-      console.log('delete post ')
-    },
+async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
+  if (window.confirm(alertMessage)) {
+    console.log('Deleting post', this.postId);
+    try {
+      await deletePost(this.postId);
+      console.log('Post deleted successfully');
+      // Additional success handling can be done here
+    } catch (error) {
+      console.error('Error deleting post:', error);
+      // Error handling can be done here
+    }
+  } else {
+    console.log('Post deletion cancelled by user');
+  }
+}
+,
+
+
 
     editPost() {
       console.log('edit post ')
@@ -222,6 +239,11 @@ export default {
       }
 
       if (index === 2) {
+        await sharePost(this.postId)
+        return
+      }
+      
+      if (index === 3) {
         console.log(this.post)
         return
       }
