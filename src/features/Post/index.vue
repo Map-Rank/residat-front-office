@@ -25,11 +25,13 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
+
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="editPost()"
+
           >
           </button-ui>
 
@@ -103,6 +105,7 @@
         </div>
         <button
           @click.prevent="commentPost()"
+
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -121,9 +124,11 @@ import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import  usePostStore  from './store/postStore'
 import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
+
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import ImagePostGallery from '@/components/common/ImagePostGallery/index.vue'
+
 
 export default {
   name: 'PostComponent',
@@ -172,22 +177,12 @@ export default {
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
 
-async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
-  if (window.confirm(alertMessage)) {
-    console.log('Deleting post', this.postId);
-    try {
-      await deletePost(this.postId);
-      console.log('Post deleted successfully');
-      // Additional success handling can be done here
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      // Error handling can be done here
-    }
-  } else {
-    console.log('Post deletion cancelled by user');
-  }
-}
-,
+    async deletePost() {
+      console.log('delete post ')
+      await deletePost(this.postId)
+
+    },
+
 
     editPost() {
       console.log('edit post ')
@@ -205,6 +200,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
         console.log(this.postImages)
         return
       }
+
       if (index === 2) {
         await sharePost(this.postId)
         return
@@ -219,6 +215,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
     async commentPost() {
       await commentPost(this.postId, this.commentData)
       this.showCommentBox = !this.showCommentBox
+
     },
 
     clickIcon(index) {
@@ -275,6 +272,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
     PostDetails,
     ButtonUi,
     ImagePostGallery,
+
     // BaseImagePickerVue
   },
   computed: {
