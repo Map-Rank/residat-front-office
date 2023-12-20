@@ -25,6 +25,7 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
+
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
@@ -40,6 +41,7 @@
             @clickButton="deletePost()"
           >
           </button-ui>
+
         </div>
       </div>
     </header>
@@ -125,7 +127,9 @@
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
         <button
-          @click.prevent="commentPost()"
+
+        @click.prevent="commentPost()"
+
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -142,10 +146,12 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
+
 import  usePostStore  from './store/postStore'
 import { likePost, commentPost } from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
+
 
 export default {
   name: 'PostComponent',
@@ -194,6 +200,7 @@ export default {
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
 
+
     deletePost() {
       console.log('delete post ')
     },
@@ -213,6 +220,7 @@ export default {
         this.showCommentBox = !this.showCommentBox
         return
       }
+
       if (index === 2) {
         console.log(this.post)
         return
@@ -222,6 +230,7 @@ export default {
     async commentPost() {
       await commentPost(this.postId, this.commentData)
       this.showCommentBox = !this.showCommentBox
+
     },
 
     clickIcon(index) {
@@ -275,8 +284,10 @@ export default {
 
   components: {
     IconWithLabel,
+
     PostDetails,
     ButtonUi
+
     // BaseImagePickerVue
   },
   computed: {
