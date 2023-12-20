@@ -31,6 +31,7 @@
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="editPost()"
+
           >
           </button-ui>
 
@@ -41,7 +42,6 @@
             @clickButton="deletePost()"
           >
           </button-ui>
-
         </div>
       </div>
     </header>
@@ -127,8 +127,7 @@
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
         <button
-
-        @click.prevent="commentPost()"
+          @click.prevent="commentPost()"
 
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
@@ -146,9 +145,7 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
-
 import  usePostStore  from './store/postStore'
-
 import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
 
 import ButtonUi from '../../components/base/ButtonUi.vue'
@@ -202,24 +199,11 @@ export default {
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
 
+    async deletePost() {
+      console.log('delete post ')
+      await deletePost(this.postId)
 
-async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
-  if (window.confirm(alertMessage)) {
-    console.log('Deleting post', this.postId);
-    try {
-      await deletePost(this.postId);
-      console.log('Post deleted successfully');
-      // Additional success handling can be done here
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      // Error handling can be done here
-    }
-  } else {
-    console.log('Post deletion cancelled by user');
-  }
-}
-,
-
+    },
 
 
     editPost() {
@@ -306,7 +290,6 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
 
   components: {
     IconWithLabel,
-
     PostDetails,
     ButtonUi
 

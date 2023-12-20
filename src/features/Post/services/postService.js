@@ -201,13 +201,6 @@ const commentPost = async (postId, commentData) => {
 }
 
 
-  } catch (error) {
-    console.error('Error Commenting Post:', error)
-    throw error
-  }
-}
-
-
 export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost , sharePost}
 
 
