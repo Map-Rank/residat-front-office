@@ -104,7 +104,7 @@ import { createPost, updatePost } from '../Post/services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../Post/store/postStore.js'
-import ImagePreviewGallery from '@/components/common/ImagePreviewGallery/index.vue'
+import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
 
 export default {
   name: 'CreatePost',
