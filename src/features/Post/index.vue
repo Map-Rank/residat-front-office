@@ -2,13 +2,7 @@
   <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
-      <div class="user-profile flex items-center space-x-2">
-        <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
-        <div>
-          <h5 class="font-bold">{{ username }}</h5>
-          <span class="caption-c1">{{ postDate }}</span>
-        </div>
-      </div>
+      <UserPostInfo :post-date="postDate" :user-profile-image="userProfileImage" :username="username" />
 
       <div class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
@@ -62,13 +56,7 @@
     <!-- Post Interaction Area -->
     <footer class="p-5">
       <!-- upper section  -->
-      <div class="flex justify-between border-b mb-2 pb-2">
-        <div class="flex items-center space-x-1">
-          <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold">{{ like_count }} and other likes</span>
-        </div>
-        <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
-      </div>
+      <InteractionPostStatistics :comment_count="comment_count" :like_count="like_count" />
 
       <!-- lower section  -->
       <div class="flex justify-between">
@@ -118,12 +106,14 @@
 import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
-import { mapWritableState, mapActions } from 'pinia'
-import  usePostStore  from './store/postStore'
-import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
+import { mapActions, mapWritableState } from 'pinia'
+import usePostStore from './store/postStore'
+import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import ImagePostGallery from '@/components/common/ImagePostGallery/index.vue'
+import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
+import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 
 export default {
   name: 'PostComponent',
@@ -271,6 +261,8 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
   },
 
   components: {
+    InteractionPostStatistics,
+    UserPostInfo,
     IconWithLabel,
     PostDetails,
     ButtonUi,
@@ -301,21 +293,6 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
 </script>
 
 <style scoped>
-.caption-c1,
-.caption-c1-bold {
-  color: var(--primary-normal, #021d40);
-  font-family: Raleway;
-  font-size: 10px;
-  font-style: normal;
-  line-height: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.caption-c1-bold {
-  font-weight: 600;
-}
 
 .content {
   color: var(--body-normal, #242424);

@@ -100,10 +100,10 @@
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import { createPost, updatePost } from '../../services/postService'
+import { createPost, updatePost } from '../Post/services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
-import usePostStore from '../../store/postStore.js'
+import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/common/ImagePreviewGallery/index.vue'
 
 export default {
