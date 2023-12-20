@@ -25,6 +25,7 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
+
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
@@ -40,6 +41,7 @@
             @clickButton="deletePost()"
           >
           </button-ui>
+
         </div>
       </div>
     </header>
@@ -125,7 +127,9 @@
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
         <button
-          @click.prevent="commentPost()"
+
+        @click.prevent="commentPost()"
+
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -142,12 +146,14 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
+
 import  usePostStore  from './store/postStore'
 
 import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
 
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
+
 
 export default {
   name: 'PostComponent',
@@ -215,6 +221,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
 ,
 
 
+
     editPost() {
       console.log('edit post ')
       this.setpostToEdit(this.post)
@@ -230,6 +237,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
         this.showCommentBox = !this.showCommentBox
         return
       }
+
       if (index === 2) {
         await sharePost(this.postId)
         return
@@ -244,6 +252,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
     async commentPost() {
       await commentPost(this.postId, this.commentData)
       this.showCommentBox = !this.showCommentBox
+
     },
 
     clickIcon(index) {
@@ -297,8 +306,10 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
 
   components: {
     IconWithLabel,
+
     PostDetails,
     ButtonUi
+
     // BaseImagePickerVue
   },
   computed: {
