@@ -147,6 +147,7 @@ import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
 import  usePostStore  from './store/postStore'
 import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
+
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 
@@ -203,6 +204,7 @@ export default {
       await deletePost(this.postId)
 
     },
+
 
     editPost() {
       console.log('edit post ')
