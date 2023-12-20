@@ -33,6 +33,7 @@ const makeApiGetCall = async (endpoint, authToken, id) => {
   let url = id ? `${endpoint}/${id}` : endpoint
   const response = await api.get(url, {
     headers: {
+
       Authorization: `Bearer ${authToken}`
 
     }
@@ -52,4 +53,5 @@ const makeApiDeleteCall = async (endpoint, authToken) => {
 }
 
 export { api, makeApiPostCall, makeApiGetCall ,makeApiDeleteCall}
+
 

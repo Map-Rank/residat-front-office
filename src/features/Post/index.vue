@@ -25,11 +25,13 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
+
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="editPost()"
+
           >
           </button-ui>
 
@@ -126,6 +128,7 @@
         </div>
         <button
           @click.prevent="commentPost()"
+
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -146,6 +149,7 @@ import  usePostStore  from './store/postStore'
 import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
+
 
 export default {
   name: 'PostComponent',
@@ -197,6 +201,7 @@ export default {
     async deletePost() {
       console.log('delete post ')
       await deletePost(this.postId)
+
     },
 
     editPost() {
@@ -214,6 +219,7 @@ export default {
         this.showCommentBox = !this.showCommentBox
         return
       }
+
       if (index === 2) {
         await sharePost(this.postId)
         return
@@ -228,6 +234,7 @@ export default {
     async commentPost() {
       await commentPost(this.postId, this.commentData)
       this.showCommentBox = !this.showCommentBox
+
     },
 
     clickIcon(index) {
@@ -283,6 +290,7 @@ export default {
     IconWithLabel,
     PostDetails,
     ButtonUi
+
     // BaseImagePickerVue
   },
   computed: {
