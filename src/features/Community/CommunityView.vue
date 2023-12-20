@@ -13,21 +13,21 @@
           <PostComponent
             v-for="(post, index) in posts"
             :key="index"
-            :username="post.username"
+            :postId="post.id"
+            :username="`${post.creator.first_name} ${post.creator.last_name} `"
             :postDate="post.postDate"
-            :postTitle="post.postTitle"
-            :postContent="post.postContent"
-            :userProfileImage="post.userProfileImage"
-            :listLikers="post.listLikers"
-            :comments="post.comments"
-            :postImages="post.postImages"
+            :postContent="post.content"
+            :userProfileImage="post.creator.avatar"
+            :like_count="post.like_count"
+            :comment_count="post.comment_count"
+            :postImages="post.images"
+            :post="post"
           />
         </div>
       </main>
 
       <aside class="col-span-1 hidden sm:block">
         <recently-posted-side
-          :topics="this.topics"
           :recentPosts="recentPosts"
         ></recently-posted-side>
       </aside>
@@ -39,99 +39,31 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
+import { getPosts } from '@/features/Post/services/postService.js'
+import useSectorStore from '@/stores/sectorStore.js'
+
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Community',
 
+  async created() {
+    const sectorStore = useSectorStore()
+
+    try {
+      this.posts = await getPosts()
+      this.sectors = sectorStore.getAllSectors
+
+      console.log('completly fetch all post') //TODO
+    } catch (error) {
+      console.error('Failed to load posts:', error)
+      // Handle the error, e.g., show an error message
+    }
+  },
+
   data() {
     return {
-      sectors: [
-        {
-          name: 'agriculture',
-          label: 'Agriculture',
-          checked: false,
-          value: 'Agriculture',
-          required: true
-        },
-        {
-          name: 'agriculture',
-          label: 'Agriculture',
-          checked: false,
-          value: 'Agriculture',
-          required: true
-        },
-        {
-          name: 'education',
-          label: 'Education',
-          checked: false,
-          value: 'Education',
-          required: true
-        },
-        { name: 'socials', label: 'Socials', checked: false, value: 'Socials', required: true }
-        // Add more sectors as needed
-      ],
-      topics: ['Agriculture', 'Economy', 'Environment', 'Education'],
-      posts: [
-        {
-          username: 'User-name',
-          postDate: 'Posted: 20 October',
-          postTitle: "Heavy rains, landslide in Cameroon's west kill at least 34",
-          postContent:
-            "Introduction UNICEF, the United Nations International Children's Emergency Fund, is a globally recognized organization dedicated to...",
-          userProfileImage:
-            'https://th.bing.com/th/id/R.007eff93a66b6a7de41ee3e7ca553e92?rik=kiX%2fqnsUx6REXw&pid=ImgRaw&r=0',
-          listLikers: Array(22).fill('national embassy'),
-          comments: Array(22).fill('national embassy'),
-          postImages: [
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 1'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 2'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 3'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 4'
-            }
-          ]
-        },
-        {
-          username: 'User-name',
-          postDate: 'Posted: 20 October',
-          postTitle: "Heavy rains, landslide in Cameroon's west kill at least 34",
-          postContent:
-            "Introduction UNICEF, the United Nations International Children's Emergency Fund, is a globally recognized organization dedicated to...",
-          userProfileImage:
-            'https://th.bing.com/th/id/R.007eff93a66b6a7de41ee3e7ca553e92?rik=kiX%2fqnsUx6REXw&pid=ImgRaw&r=0',
-          listLikers: Array(22).fill('national embassy'),
-          comments: Array(22).fill('national embassy'),
-          postImages: [
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 1'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 2'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 3'
-            },
-            {
-              src: 'https://th.bing.com/th/id/OIP.bxjnCc07ZANhF94zX2MjyQHaE6?rs=1&pid=ImgDetMain',
-              alt: 'Description of image 4'
-            }
-          ]
-        }
-        // ... more post data
-      ],
+      sectors: [],
+      posts: [],
       recentPosts: [
         {
           author: 'Arpit Chandak',

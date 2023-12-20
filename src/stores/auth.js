@@ -1,5 +1,6 @@
 // src/stores/auth.js
 import { defineStore } from 'pinia';
+import { LOCAL_STORAGE_KEYS } from '../constants/localStorageKeys';
 
 export default defineStore('auth', {
   state: () => ({
@@ -19,16 +20,17 @@ export default defineStore('auth', {
   ,
   actions: {
     setUser(userData) {
+      console.log(userData)
       this.user = userData;
       this.isloggedIn = true;
-      console.log('loginState: '+this.isloggedIn)
     },
     
     logOut() {
       // Logic for logging out
       this.user = null;
       this.isloggedIn = false;
-      localStorage.removeItem('authToken'); 
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.userInfo)
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken); 
       console.log('Logout Successful!!!!')
     },
   },

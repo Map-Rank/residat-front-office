@@ -15,6 +15,7 @@
       <div class="mb-6">
         <label for="email" class="inline-block mb-2">Email</label>
         <vee-field
+        v-model="userData.email"
           id="email"
           name="email"
           type="email"
@@ -27,13 +28,13 @@
       <!-- Password -->
       <div class="mb-6">
         <label for="password" class="inline-block mb-2">Password</label>
-        <vee-field name="password" :bails="false" v-slot="{ field }">
+        <vee-field name="password" >
           <input
+          v-model="userData.password"
             id="password"
             type="password"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Password"
-            v-bind="field"
           />
           <!-- <div class="text-danger-normal" v-for="error in errors" :key="error">
             {{ error }}
@@ -46,7 +47,7 @@
         <button
           type="submit"
           class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
-          @click="login()"
+          @click.prevent="login()"
           :disabled="login_in_submission"
         >
           Sign up
@@ -76,7 +77,8 @@ export default {
         password: 'required'
       },
       userData: {
-        country: 'USA'
+        email: '',
+        password: ''
       },
       login_in_submission: false,
       login_show_alert: false,
@@ -103,7 +105,7 @@ export default {
         (this.login_alert_message = 'please wait we are login you in ')
 
       try {
-        await loginUser(values, this.authStore, this.handleSuccess, this.handleError)
+        await loginUser(this.userData, this.authStore, this.handleSuccess, this.handleError)
       } catch (error) {
         console.log(error)
         ;(this.login_alert_varient = 'bg-red-500'),

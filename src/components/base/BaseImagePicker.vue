@@ -5,7 +5,7 @@
     >
       <img :src="iconImg" v-if="iconImg" alt="input icon">
       <span class="ml-2  text-sm sm:text-base leading-normal">{{ label }}</span>
-      <input :type="type" class="hidden" @change="handleFileChange" :accept="accept" />
+      <input :type="type" class="hidden" @change="handleFileChange" :accept="accept" multiple />
     </label>
     
   </div>
@@ -31,9 +31,11 @@ export default {
   },
   methods: {
     handleFileChange(event) {
-      const file = event.target.files[0];
-      if (file) {
-        this.$emit('handleFileChange', file);
+      const files = event.target.files;
+      if (files.length > 0) {
+        // Emit an array of selected files
+        this.$emit('handleFileChange', Array.from(files));
+
       }
     },
   },

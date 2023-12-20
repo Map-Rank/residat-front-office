@@ -1,8 +1,11 @@
 <template>
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
-      <h3 class="uppercase font-semibold">Share your thoughts</h3>
-    </div>
+
+      <h3 class="uppercase font-semibold">
+        {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
+      </h3>
+
 
     <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
       <div class="grid mb-5">
@@ -14,7 +17,7 @@
           <base-checkbox
             :key="sector.name"
             :list="sector"
-            @change="updateCheckedItems"
+            @change="updatesectorChecked"
           ></base-checkbox>
         </div>
       </div>
@@ -30,7 +33,7 @@
       <form @submit.prevent="submitPost">
         <div class="mb-4">
           <textarea
-            v-model="formData.post_content"
+            v-model="formData.content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
             rows="4"
@@ -61,10 +64,28 @@
           <div class="flex w-full sm:w-1/2">
             <button
               type="submit"
-              @click="submitPost"
-              class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+              @click.prevent="submitPost"
+              :class="
+                this.isLoading
+                  ? 'bg-gray-400 cursor-wait'
+                  : 'bg-secondary-normal hover:bg-secondary-hover'
+              "
+              :disabled="this.isLoading"
+              class="block w-full text-white py-1.5 rounded-full transition"
             >
-              Submit
+
+              {{
+                !isEditing
+                  ? this.isLoading
+                    ? 'Creating...'
+                    : 'Create Post'
+                  : this.isLoading
+                    ? 'Updating Post...'
+                    : 'Update Post'
+
+              
+
+              }}
             </button>
           </div>
         </div>
@@ -76,86 +97,122 @@
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
 import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-import { createPost } from '../../services/postService'
+
+import { createPost, updatePost } from '../../services/postService'
+
+import { useRouter } from 'vue-router'
+import useSectorStore from '@/stores/sectorStore.js'
+import usePostStore from '../../store/postStore.js'
 
 export default {
   name: 'CreatePost',
+  async created() {
+    const sectorStore = useSectorStore()
+    const postStore = usePostStore()
+
+    
+    if (postStore.postToEdit) {
+
+
+
+      this.isEditing = true
+      this.formData = postStore.postToEdit
+    }
+
+    // postStore.postToEdit != null ? (this.isEditing = true) : (this.isEditing = false)
+
+    try {
+      this.sectors = sectorStore.getAllSectors
+    } catch (error) {
+      console.error('Failed to load sector:', error)
+    }
+  },
+
   data() {
+    const router = useRouter()
+    const postStore = usePostStore()
+
     return {
-      schema: {
-        age: 'required|min_value:18,max_value:100',
-        tos: 'required|tos'
-      },
+      router,
+      postStore,
+      isLoading: false,
+      isEditing: false,
       formData: {
-        post_content: '',
-        zone_id: '',
-        images: []
+        content: '',
+        images: [],
+        videos: [],
+        sectorChecked: [],
+        sectorId: []
+
       },
-      sectors: [
-        {
-          name: 'agriculture',
-          label: 'Agriculture',
-          checked: false,
-          value: 'Agriculture',
-          required: true
-        },
-        {
-          name: 'agriculture',
-          label: 'Agriculture',
-          checked: false,
-          value: 'Agriculture',
-          required: true
-        },
-        {
-          name: 'education',
-          label: 'Education',
-          checked: false,
-          value: 'Education',
-          required: true
-        },
-        { name: 'socials', label: 'Socials', checked: false, value: 'Socials', required: true }
-        // Add more sectors as needed
-      ]
+      sectors: []
     }
   },
   components: {
     BaseImagePicker,
+    // ButtonUi,
     BaseCheckbox
   },
   methods: {
     async submitPost() {
-      console.log(this.formData)
-      const response = await createPost(this.formData)
-      console.log(response)
+      let response
 
-      // Clear the form
-      this.formData.post_content = ''
-      this.formData.images = []
+
+      if (this.isEditing) {
+        response = await updatePost(this.formData, this.handleSuccess, this.handleError)
+        console.log(response.status)
+        response.status ? (this.postStore.postToEdit = null) : null
+        console.log('update post complete')
+        this.resetForm()
+        this.$router.push({ name: 'community' })
+        return
+      }
+
+      response = await createPost(this.formData, this.handleSuccess, this.handleError)
+
+
+      this.isLoading = false
+      if (response.status) {
+        this.resetForm()
+        this.$router.push({ name: 'community' })
+      } else {
+        console.log(response.data.errors)
+        this.isLoading = false
+      }
     },
-    handleImageUpload(type, files) {
-      const fileList = Array.from(files)
-      fileList.forEach((file) => {
-        const url = URL.createObjectURL(file)
-        if (type === 'image') {
-          this.formData.images.push({ name: file.name, url })
-        } else if (type === 'video') {
-          this.videos.push({ name: file.name, url })
+
+    handleImageUpload(files) {
+      if (!files || !Array.isArray(files)) {
+        console.error('No files provided or the provided data is not an array')
+        return
+      }
+
+      //here i empty my image array //TODO find a better method
+
+      this.formData.images.length = 0
+      files.forEach((file) => {
+        if (file.type.startsWith('image/')) {
+          this.formData.images.push(file)
+        } else if (file.type.startsWith('video/')) {
+          this.formData.videos.push(file)
         }
       })
     },
 
     resetForm() {
-      this.post_content = ''
+      this.formData.content = ''
       this.formData.images = []
-      this.videos = []
+      this.formData.videos = []
       this.sectors.forEach((sector) => (sector.checked = false))
     },
 
-    updateCheckedItems({ name, checked }) {
+    //TODO corncidered the fact that unchecked sectors should be remove an updated
+    updatesectorChecked({ list, checked }) {
       if (checked) {
-        this.checkedItems.push(name)
+        this.formData.sectorChecked.push(list)
+        this.formData.sectorId.push(list.id)
       } else {
-        this.checkedItems = this.checkedItems.filter((item) => item !== name)
+        this.formData.sectorChecked = this.formData.sectorChecked.filter((item) => item !== name)
       }
     }
   }
