@@ -1,4 +1,4 @@
-import { makeApiPostCall } from '@/api' // Import the makeApiPostCall function
+import { makeApiPostCall } from '@/api' 
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const registerUser = async (userData, onSuccess, onError) => {
@@ -15,7 +15,6 @@ const registerUser = async (userData, onSuccess, onError) => {
     formData.append('gender', userData.gender)
     formData.append('zone_id', 1)
 
-    // Use makeApiPostCall for the API request
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData)
     const token = response.data.data.token
     console.log('register successfull !!!!')
@@ -25,7 +24,6 @@ const registerUser = async (userData, onSuccess, onError) => {
     return response
   } catch (error) {
     onError(error.response.data.errors)
-    // console.error(error.response.data)
     throw error
   }
 }
@@ -37,7 +35,6 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
     formData.append('email', userCredentials.email)
     formData.append('password', userCredentials.password)
 
-    // Use makeApiPostCall for the API request
     const response = await makeApiPostCall(API_ENDPOINTS.login, formData)
 
     const user = response.data.data
@@ -48,6 +45,7 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
     authStore.setUser(user)
     localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
 
     onSuccess()
   } catch (error) {

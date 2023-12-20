@@ -2,7 +2,11 @@
   <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
-      <UserPostInfo :post-date="postDate" :user-profile-image="userProfileImage" :username="username" />
+      <UserPostInfo
+        :post-date="postDate"
+        :user-profile-image="userProfileImage"
+        :username="username"
+      />
 
       <div class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
@@ -46,20 +50,7 @@
 
     <!-- Post Images -->
 
-    <image-post-gallery
-    :Images="postImages"
-    @customFunction="showDetails"
-    >
-    
-  </image-post-gallery>
-<!--   
-  <ImageGallery
-  :imageHost="imageHost"
-  :Images="postImages"
-    
-    ></ImageGallery> -->
-
-    
+    <image-post-gallery :Images="postImages" @customFunction="showDetails"> </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="p-5">
@@ -120,7 +111,6 @@ import { commentPost, deletePost, likePost, sharePost } from '../Post/services/p
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
-import ImageGallery from '../../components/gallery/ImageGallery.vue'
 import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
@@ -128,14 +118,13 @@ import { URL_LINK } from '@/constants/url.js'
 export default {
   name: 'PostComponent',
   data() {
-
     const route = useRoute()
     return {
       route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isMenuVisible: false,
-      imageHost:URL_LINK.imageHostLink,
+      imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
       commentData: {
         text: ' ',
@@ -165,31 +154,29 @@ export default {
           svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
-        },
+        }
       ]
     }
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
+    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails', 'setpostToEdit']),
 
-async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
-  if (window.confirm(alertMessage)) {
-    console.log('Deleting post', this.postId);
-    try {
-      await deletePost(this.postId);
-      console.log('Post deleted successfully');
-      // Additional success handling can be done here
-    } catch (error) {
-      console.error('Error deleting post:', error);
-      // Error handling can be done here
-    }
-  } else {
-    console.log('Post deletion cancelled by user');
-  }
-}
-,
-
+    async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
+      if (window.confirm(alertMessage)) {
+        console.log('Deleting post', this.postId)
+        try {
+          await deletePost(this.postId)
+          console.log('Post deleted successfully')
+          // Additional success handling can be done here
+        } catch (error) {
+          console.error('Error deleting post:', error)
+          // Error handling can be done here
+        }
+      } else {
+        console.log('Post deletion cancelled by user')
+      }
+    },
     editPost() {
       console.log('edit post ')
       this.setpostToEdit(this.post)
@@ -210,7 +197,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
         await sharePost(this.postId)
         return
       }
-      
+
       if (index === 3) {
         console.log(this.post)
         return
@@ -277,8 +264,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
     IconWithLabel,
     PostDetails,
     ButtonUi,
-    ImagePostGallery,
-    ImageGallery,
+    ImagePostGallery
     // BaseImagePickerVue
   },
   computed: {
@@ -305,7 +291,6 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
 </script>
 
 <style scoped>
-
 .content {
   color: var(--body-normal, #242424);
   font-family: Raleway;

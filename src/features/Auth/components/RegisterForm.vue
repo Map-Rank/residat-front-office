@@ -234,7 +234,6 @@
 </template>
 
 <script>
-// import ButtonUi from '../../../components/base/ButtonUi.vue'
 import { mapStores, mapWritableState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
@@ -308,7 +307,6 @@ export default {
       ]
 
       try {
-        // Validate each field in the list
         const validationResults = await Promise.all(
           fieldsToValidate.map((field) => this.$refs.form.validateField(field))
         )
@@ -357,9 +355,6 @@ export default {
         console.log(error)
       }
     }
-  },
-  components: {
-    // ButtonUi
   },
   computed: {
     ...mapStores(useAuthStore),

@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall,makeApiDeleteCall } from '@/api' // Import the makeApiPostCall function
+import { makeApiPostCall, makeApiGetCall,makeApiDeleteCall } from '@/api' 
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const currentDate = new Date().toISOString().split('T')[0]
@@ -10,8 +10,8 @@ const createPost = async (postData, onSuccess, onError) => {
     const authToken = localStorage.getItem('authToken')
 
     formData.append('content', postData.content)
-    formData.append('published_at', currentDate) // Ensure this is a valid date
-    formData.append('zone_id', 1) // Ensure this is a valid zone ID
+    formData.append('published_at', currentDate) 
+    formData.append('zone_id', 1) 
 
     // Append media files
     postData.images.forEach((image, index) => {
@@ -141,7 +141,6 @@ const commentPost = async (postId, commentData) => {
   try {
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.commentPost}/${postId}`,
-      //here we are force to convert to string since the backend only accept stringify object
       JSON.stringify({ text: commentData.text }),
       authToken
     )

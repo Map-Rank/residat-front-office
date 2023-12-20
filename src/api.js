@@ -2,10 +2,9 @@ import axios from 'axios'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_BASE_URL
-  // baseURL: 'http://localhost:8000/api/',
 })
 
-const makeApiPostCall = async (endpoint, postData, authToken, ismedia ,id) => {
+const makeApiPostCall = async (endpoint, postData, authToken, ismedia, id) => {
   let contentType
 
   if (ismedia) {
@@ -14,7 +13,7 @@ const makeApiPostCall = async (endpoint, postData, authToken, ismedia ,id) => {
     contentType = 'application/json'
   }
   let url = id ? `${endpoint}/${id}` : endpoint
-  
+
   const response = await api.post(url, postData, {
     headers: {
       'Content-Type': contentType,
@@ -24,8 +23,6 @@ const makeApiPostCall = async (endpoint, postData, authToken, ismedia ,id) => {
 
   return response
 }
-
-
 
 const makeApiGetCall = async (endpoint, authToken, id) => {
   let url = id ? `${endpoint}/${id}` : endpoint
@@ -38,7 +35,6 @@ const makeApiGetCall = async (endpoint, authToken, id) => {
 }
 
 const makeApiDeleteCall = async (endpoint, authToken) => {
-
   const response = await api.delete(endpoint, {
     headers: {
       Authorization: `Bearer ${authToken}`
@@ -47,4 +43,4 @@ const makeApiDeleteCall = async (endpoint, authToken) => {
   return response
 }
 
-export { api, makeApiPostCall, makeApiGetCall ,makeApiDeleteCall}
+export { api, makeApiPostCall, makeApiGetCall, makeApiDeleteCall }

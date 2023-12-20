@@ -36,9 +36,6 @@
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Password"
           />
-          <!-- <div class="text-danger-normal" v-for="error in errors" :key="error">
-            {{ error }}
-          </div> -->
         </vee-field>
         <ErrorMessage class="text-danger-normal" name="password" />
       </div>
@@ -120,9 +117,7 @@ export default {
       console.log(values)
     }
   },
-  components: {
-    // ButtonUi
-  }
+
 }
 </script>
 

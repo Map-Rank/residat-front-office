@@ -6,29 +6,10 @@
       </h3>
     </div>
 
-    <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
-      <div class="grid mb-5">
-        <label class="inline-block mb-2">Sector</label>
-        <span>Select your sector of interest</span>
-      </div>
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-7 content-between">
-        <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
-          <base-checkbox
-            :key="sector.name"
-            :list="sector"
-            @change="updatesectorChecked"
-          ></base-checkbox>
-        </div>
-      </div>
-    </div>
+    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updatesectorChecked" />
 
     <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
-      <div class="flex items-center space-x-4">
-        <img src="public\images\profile.png" alt="" />
-        <h2 class="text-sm md:text-lg font-light text-gray-normal mb-4">
-          Hello happy to share to our community
-        </h2>
-      </div>
+      <TopContentForm />
       <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
         <ErrorMessage class="text-danger-normal" name="content" />
         <div class="flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2">
@@ -56,14 +37,6 @@
               @handleFileChange="handleImageUpload"
             >
             </base-image-picker>
-
-            <!-- <base-image-picker
-              :iconImg="'src\\assets\\icons\\colored\\video-clip.svg'"
-              :type="'file'"
-              :label="'Add Video'"
-              @handleFileChange="handleImageUpload"
-            >
-            </base-image-picker> -->
           </div>
         </div>
 
@@ -99,12 +72,13 @@
 
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
-import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
 import { createPost, updatePost } from '../Post/services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
+import SectorDisplayForm from '@/features/CreatePost/components/SectorDisplayForm.vue'
+import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 
 export default {
   name: 'CreatePost',
@@ -116,8 +90,6 @@ export default {
       this.isEditing = true
       this.formData = postStore.postToEdit
     }
-
-    // postStore.postToEdit != null ? (this.isEditing = true) : (this.isEditing = false)
 
     try {
       this.sectors = sectorStore.getAllSectors
@@ -150,15 +122,14 @@ export default {
     }
   },
   components: {
+    TopContentForm,
+    SectorDisplayForm,
     BaseImagePicker,
     // ButtonUi,
-    BaseCheckbox,
     ImagePreviewGallery
   },
   methods: {
-
-    handleError(){
-
+    handleError() {
       this.isLoading = false
     },
     async submitPost() {
@@ -233,5 +204,3 @@ export default {
   }
 }
 </script>
-
-<style scoped></style>

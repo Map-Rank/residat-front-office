@@ -3,7 +3,6 @@
     <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10">
       <!-- Sidebar: Sectors and Topics -->
       <aside class="col-span-1 hidden sm:block">
-        <!-- Sectors -->
         <sector-side :sectorArray="this.sectors"></sector-side>
       </aside>
 
@@ -54,7 +53,6 @@ export default {
       console.log('completly fetch all post') //TODO
     } catch (error) {
       console.error('Failed to load posts:', error)
-      // Handle the error, e.g., show an error message
     }
   },
 
@@ -88,6 +86,3 @@ export default {
 }
 </script>
 
-<style>
-/* Additional styles can be added here if needed */
-</style>
