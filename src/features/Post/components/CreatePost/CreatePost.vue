@@ -42,7 +42,7 @@
             rows="4"
           ></vee-field>
           <div class="sm:w-1/2">
-            <image-post-gallery class="" :Images="imagesToPreview"> </image-post-gallery>
+            <image-preview-gallery class="" :Images="imagesToPreview"> </image-preview-gallery>
           </div>
         </div>
 
@@ -104,7 +104,7 @@ import { createPost, updatePost } from '../../services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../../store/postStore.js'
-import ImagePostGallery from '@/components/common/ImagePostGallery/index.vue'
+import ImagePreviewGallery from '@/components/common/ImagePreviewGallery/index.vue'
 
 export default {
   name: 'CreatePost',
@@ -153,7 +153,7 @@ export default {
     BaseImagePicker,
     // ButtonUi,
     BaseCheckbox,
-    ImagePostGallery
+    ImagePreviewGallery
   },
   methods: {
 

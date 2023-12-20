@@ -202,6 +202,7 @@ async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       }
       if (index === 1) {
         this.showCommentBox = !this.showCommentBox
+        console.log(this.postImages)
         return
       }
       if (index === 2) {
