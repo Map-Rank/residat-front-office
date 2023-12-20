@@ -1,11 +1,12 @@
 
 import { defineStore } from 'pinia';
 
-export const usePostStore =  defineStore('post', {
+export default defineStore('post', {
   state: () => ({
     showPostDetails: false,
-    currentPost: null,
-    // Other related states
+    postToShowDetails: null,
+    postToEdit:null,
+
   }),
   getters: {
   },
@@ -13,7 +14,15 @@ export const usePostStore =  defineStore('post', {
     togglePostDetails() {
       this.showPostDetails = !this.showPostDetails;
       console.log('toogle done')
-    //   this.currentPost = post;
     },
+    setpostToShowDetails(post){
+      this.postToShowDetails=post
+    },
+    setpostToEdit(post){
+      this.postToEdit=post
+      console.log(this.postToEdit)
+    }
   },
 });
+
+

@@ -68,11 +68,11 @@
               type="tel"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               placeholder="Enter phone number"
-              />
-              <ErrorMessage class="text-danger-normal" name="phone" />
-            </div>
-            
-            <!-- date of birth -->
+            />
+            <ErrorMessage class="text-danger-normal" name="phone" />
+          </div>
+
+          <!-- date of birth -->
           <div class="mb-6">
             <label class="inline-block mb-2">Date of Birth</label>
             <vee-field
@@ -86,20 +86,20 @@
             />
             <ErrorMessage class="text-danger-normal" name="dob" />
           </div>
-          
-            <!-- User Gender  -->
+
+          <!-- User Gender  -->
           <div class="mb-6">
             <label class="inline-block mb-2">Gender</label>
-            <select 
-            v-model="formData.gender" 
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded">
+            <select
+              v-model="formData.gender"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            >
               <option value="">Select gender</option>
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
           </div>
-          
 
           <!-- Password -->
           <div class="mb-6">
@@ -180,18 +180,17 @@
             <label class="inline-block mb-2">Sector</label>
             <span>Select your sector of interest</span>
           </div>
-          <div class="grid grid-cols-3 gap-7 content-between">
+          <div v-if="sectors" class="grid grid-cols-3 gap-7 content-between">
             <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
               <vee-field
                 :name="sector.name"
                 type="checkbox"
                 v-model="formData.selectedSectors"
-                :value="sector.value"
                 :id="sector.name"
                 class="rounded text-primary-normal focus:ring-primary-light"
               />
               <label :for="sector.name" class="ml-2 block text-sm text-body-dark">
-                {{ sector.label }}
+                {{ sector.name }}
               </label>
             </div>
           </div>
@@ -199,7 +198,6 @@
 
         <div class="mb-3 pl-6">
           <!-- TOS -->
-  
 
           <vee-field
             type="checkbox"
@@ -239,11 +237,23 @@
 // import ButtonUi from '../../../components/base/ButtonUi.vue'
 import { mapStores, mapWritableState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
+import useSectorStore from '@/stores/sectorStore.js'
 import { registerUser } from '../services/authService'
 import { useRouter } from 'vue-router'
 
 export default {
   name: 'RegisterForm',
+
+  async created() {
+    const sectorStore = useSectorStore()
+
+    try {
+      this.sectors = sectorStore.getAllSectors
+    } catch (error) {
+      console.error('Failed to load sector:', error)
+    }
+  },
+
   data() {
     const router = useRouter()
     return {
@@ -275,28 +285,10 @@ export default {
         selectedSectors: [],
         tos: true
       },
-
-      sectors: [
-        {
-          name: 'agriculture',
-          label: 'Agriculture',
-          checked: false,
-          value: 'Agriculture',
-          required: true
-        },
-        {
-          name: 'education',
-          label: 'Education',
-          checked: false,
-          value: 'Education',
-          required: true
-        },
-        { name: 'socials', label: 'Socials', checked: false, value: 'Socials', required: true }
-        // Add more sectors as needed
-      ],
+      sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_1',
+      currentStep: 'step_2',
       reg_in_submission: false,
       reg_show_alert: false,
       reg_alert_varient: 'bg-blue-500',
@@ -351,30 +343,26 @@ export default {
     },
 
     async registerForm() {
-
       ;(this.reg_in_submission = true),
         (this.reg_show_alert = true),
         (this.reg_alert_varient = 'bg-blue-500'),
         (this.reg_alert_message = 'Wait we are creating your account ')
-
 
       try {
         const response = await registerUser(this.formData, this.handleSuccess, this.handleError)
         if (response.status) {
           this.authStore.isloggedIn = !this.authStore.isloggedIn
           this.$router.push({ name: 'community' })
-          console.log('Registration Successfull')
         } else {
           console.log(response.data.errors[0])
         }
       } catch (error) {
         console.log(error)
         ;(this.reg_in_submission = false),
-            // (this.reg_show_alert = false),
-            (this.reg_alert_varient = 'bg-red-500'),
-            (this.reg_alert_message = 'Unexpescted error please try letter')
-            console.log(error);
- 
+          // (this.reg_show_alert = false),
+          (this.reg_alert_varient = 'bg-red-500'),
+          (this.reg_alert_message = 'Unexpescted error please try letter')
+        console.log(error)
       }
     }
   },

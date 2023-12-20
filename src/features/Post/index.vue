@@ -25,23 +25,35 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Share</a>
-          <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-            >Not Intrested</a
+
+          <button-ui
+            :label="'Edit'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="editPost()"
+
           >
-          <!-- ... other menu items ... -->
+          </button-ui>
+
+          <button-ui
+            :label="'Delete'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="deletePost()"
+          >
+          </button-ui>
         </div>
       </div>
     </header>
 
     <!-- Post Content -->
-    <div class="px-5 mb-2">
-      <h5 class="mb-1">{{ postTitle }}</h5>
+    <div @click.prevent="showDetails()" class="px-5 mb-2 cursor-pointer">
+      <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
       <p class="p3 content">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
-    <div @click.prevent="showDetails()">
+    <div @click.prevent="showDetails()" v-if="postImages">
       <!-- Container for the first image -->
       <div v-if="postImages.length > 2 || postImages.length == 1" class="flex mb-0.5">
         <img :src="postImages[0].src" :alt="postImages[0].alt" class="w-full h-auto object-cover" />
@@ -78,11 +90,9 @@
       <div class="flex justify-between border-b mb-2 pb-2">
         <div class="flex items-center space-x-1">
           <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold"
-            >{{ listLikers[1] }} and {{ listLikers.length }} other likes</span
-          >
+          <span class="caption-c1-bold">{{ like_count }} and other likes</span>
         </div>
-        <span class="ml-4 caption-c1-bold">{{ comments.length }} Comments</span>
+        <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
       </div>
 
       <!-- lower section  -->
@@ -97,7 +107,7 @@
           :isActive="item.isActive"
           :right="item.right"
           @clickIcon="clickIcon(index)"
-          @customFunction="toggleCommentBox(index)"
+          @customFunction="customFunction(index)"
           :key="index"
           class="flex-shrink-0"
         ></icon-with-label>
@@ -108,6 +118,7 @@
         <img class="h-9 w-9" src="public\images\unicef_logo.png" alt="" />
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
+            v-model="commentData.text"
             type="search"
             placeholder="Search "
             class="flex-grow bg-transparent ml-3 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
@@ -115,7 +126,11 @@
           <input type="file" class="hidden" @change="handleFileChange" />
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
-        <button class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg  focus:outline-none">
+        <button
+          @click.prevent="commentPost()"
+
+          class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
+        >
           Post
         </button>
       </div>
@@ -130,17 +145,28 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapWritableState, mapActions } from 'pinia'
-import { usePostStore } from './store/postStore'
-// import BaseImagePickerVue from '../../base/BaseImagePicker.vue'
+import  usePostStore  from './store/postStore'
+import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
+
+import ButtonUi from '../../components/base/ButtonUi.vue'
+import { useRoute } from 'vue-router'
+
 
 export default {
   name: 'PostComponent',
   data() {
+
+    const route = useRoute()
     return {
+      route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isMenuVisible: false,
       showCommentBox: false,
+      commentData: {
+        text: ' ',
+        image: ' '
+      },
       iconLabels: [
         {
           svgContent: 'src\\assets\\icons\\heart-outline.svg',
@@ -155,46 +181,63 @@ export default {
           right: true
         },
         {
+          svgContent: 'src\\assets\\icons\\share-fill.svg',
+          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
+          labelText: 'Share',
+          right: true
+        },
+        {
           svgContent: 'src\\assets\\icons\\archieved-outline.svg',
           svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
         },
-        {
-          svgContent: 'src\\assets\\icons\\share-fill.svg',
-          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
-          labelText: 'Share',
-          right: true
-        }
-      ],
-
-      post: {
-        username: this.username,
-        userImage: this.userProfileImage,
-        content: this.postContent,
-        postDate: this.postDate,
-        images: [
-          'src\\assets\\images\\Community\\Post1.png',
-          'src\\assets\\images\\Community\\Post1.png'
-        ],
-        comments: [
-          {
-            username: 'Commenter One',
-            userImage: 'public\\images\\comment.png',
-            text: 'What a wonderful post I find this article very interesting'
-          },
-          {
-            username: 'Commenter Two',
-            userImage: 'public\\images\\comment.png',
-            text: 'Insightful read, thanks for sharing!'
-          }
-        ]
-      }
+      ]
     }
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails']),
+    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
+
+    async deletePost() {
+      console.log('delete post ')
+      await deletePost(this.postId)
+
+    },
+
+
+    editPost() {
+      console.log('edit post ')
+      this.setpostToEdit(this.post)
+      this.$router.push({ name: 'create-post' })
+    },
+
+    async customFunction(index) {
+      if (index === 0) {
+        await likePost(this.postId)
+        return
+      }
+      if (index === 1) {
+        this.showCommentBox = !this.showCommentBox
+        return
+      }
+
+      if (index === 2) {
+        await sharePost(this.postId)
+        return
+      }
+      
+      if (index === 3) {
+        console.log(this.post)
+        return
+      }
+    },
+
+    async commentPost() {
+      await commentPost(this.postId, this.commentData)
+      this.showCommentBox = !this.showCommentBox
+
+    },
 
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
@@ -215,13 +258,9 @@ export default {
 
     showDetails() {
       this.togglePostDetails()
+      this.setpostToShowDetails(this.post)
+      // console.log(this.post)
       console.log('click')
-    },
-    toggleCommentBox(index) {
-      if (index == 1) {
-        this.showCommentBox = !this.showCommentBox
-      }
-      return
     },
 
     toggleMenu() {
@@ -252,6 +291,8 @@ export default {
   components: {
     IconWithLabel,
     PostDetails,
+    ButtonUi
+
     // BaseImagePickerVue
   },
   computed: {
@@ -268,9 +309,11 @@ export default {
     postTitle: String,
     postContent: String,
     userProfileImage: String,
-    listLikers: Array,
-    comments: Array,
-    postImages: Array
+    like_count: Number,
+    comment_count: Number,
+    postImages: Array,
+    postId: Number,
+    post: Object
   }
 }
 </script>
@@ -298,14 +341,16 @@ export default {
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 20px; /* 142.857% */
+  line-height: 20px;
+  /* 142.857% */
 }
 
 @media only screen and (max-width: 480px) {
   .content {
     /* Add your mobile styles here. For example: */
     font-size: 10px;
-    line-height: 16px; /* Adjust line height for smaller text */
+    line-height: 16px;
+    /* Adjust line height for smaller text */
   }
 
   h5 {
