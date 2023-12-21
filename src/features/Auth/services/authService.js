@@ -1,7 +1,7 @@
 import { makeApiPostCall } from '@/api' 
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
-const registerUser = async (userData, onSuccess, onError) => {
+const registerUser = async (userData, authStore , onSuccess, onError) => {
   try {
     const formData = new FormData()
 
@@ -16,9 +16,15 @@ const registerUser = async (userData, onSuccess, onError) => {
     formData.append('zone_id', 1)
 
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData)
+    const user = response.data.data
     const token = response.data.data.token
+
     console.log('register successfull !!!!')
+
+    authStore.setUser(user)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
     onSuccess()
 
     return response

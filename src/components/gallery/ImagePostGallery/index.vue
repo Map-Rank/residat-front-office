@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { URL_LINK } from '../../../constants';
+import { URL_LINK } from '@/constants';
 
 export default {
   name: "ImagePostGallery",

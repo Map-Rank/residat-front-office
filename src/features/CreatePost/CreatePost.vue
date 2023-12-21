@@ -6,7 +6,7 @@
       </h3>
     </div>
 
-    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updatesectorChecked" />
+    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" />
 
     <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm />
@@ -125,7 +125,6 @@ export default {
     TopContentForm,
     SectorDisplayForm,
     BaseImagePicker,
-    // ButtonUi,
     ImagePreviewGallery
   },
   methods: {
@@ -157,9 +156,7 @@ export default {
         this.$router.push({ name: 'community' })
       }
 
-      if (response.data.status) {
-        // console.log(response.data.errors)
-      }
+  
     },
 
     handleImageUpload(files) {
@@ -168,7 +165,6 @@ export default {
         return
       }
 
-      // Reset existing images and previews
       this.formData.images = []
       this.imagesToPreview = []
 
@@ -176,7 +172,6 @@ export default {
         if (file.type.startsWith('image/')) {
           this.formData.images.push(file)
 
-          // Create a URL for the image and add it to imagesToPreview
           const imageUrl = URL.createObjectURL(file)
           this.imagesToPreview.push({ src: imageUrl, alt: file.name })
         } else if (file.type.startsWith('video/')) {
@@ -192,8 +187,7 @@ export default {
       this.sectors.forEach((sector) => (sector.checked = false))
     },
 
-    //TODO corncidered the fact that unchecked sectors should be remove an updated
-    updatesectorChecked({ list, checked }) {
+    updateSectorChecked({ list, checked }) {
       if (checked) {
         this.formData.sectorChecked.push(list)
         this.formData.sectorId.push(list.id)

@@ -38,6 +38,7 @@
               :like_count="post.like_count"
               :comment_count="post.comment_count"
               :postImages="post.images"
+              :showMenu="true"
               :post="post"
             />
           </div>

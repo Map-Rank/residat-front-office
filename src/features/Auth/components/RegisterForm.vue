@@ -255,7 +255,10 @@ export default {
 
   data() {
     const router = useRouter()
+    const authStore = useAuthStore()
+
     return {
+      authStore,
       router,
       schema: {
         name: 'required|min:3|max:50',
@@ -349,7 +352,7 @@ export default {
         (this.reg_alert_message = 'Wait we are creating your account ')
 
       try {
-        const response = await registerUser(this.formData, this.handleSuccess, this.handleError)
+        const response = await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError)
         console.log('this is my responce: ' + response.data)
       } catch (error) {
         console.log(error)

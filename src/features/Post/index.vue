@@ -8,7 +8,7 @@
         :username="username"
       />
 
-      <div class="menu relative">
+      <div v-if="showMenu" class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
           <svg class="w-6 h-6" fill="true" stroke="currentColor" viewBox="0 0 24 24">
@@ -161,17 +161,15 @@ export default {
 
   methods: {
     ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails', 'setpostToEdit']),
-
+    
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       if (window.confirm(alertMessage)) {
         console.log('Deleting post', this.postId)
         try {
           await deletePost(this.postId)
-          console.log('Post deleted successfully')
-          // Additional success handling can be done here
+          window.location.reload();
         } catch (error) {
           console.error('Error deleting post:', error)
-          // Error handling can be done here
         }
       } else {
         console.log('Post deletion cancelled by user')
@@ -183,32 +181,34 @@ export default {
       this.$router.push({ name: 'create-post' })
     },
 
-    async customFunction(index) {
-      if (index === 0) {
-        await likePost(this.postId)
-        return
-      }
-      if (index === 1) {
-        this.showCommentBox = !this.showCommentBox
-        console.log(this.postImages)
-        return
-      }
-      if (index === 2) {
-        await sharePost(this.postId)
-        return
-      }
-
-      if (index === 3) {
-        console.log(this.post)
-        return
+  async customFunction(index) {
+    switch (index) {
+      case 0:
+        await likePost(this.postId);
+        window.location.reload();
+        break;
+      case 1:
+        this.showCommentBox = !this.showCommentBox;
+        console.log(this.postImages);
+        break;
+        case 2:
+          await sharePost(this.postId);
+          window.location.reload();
+          break;
+          case 3:
+            console.log(this.post);
+        window.location.reload();
+        break;
       }
     },
-
+    
+    
     async commentPost() {
       await commentPost(this.postId, this.commentData)
       this.showCommentBox = !this.showCommentBox
+      window.location.reload();
     },
-
+    
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
         if (i == index) {
@@ -285,6 +285,11 @@ export default {
     comment_count: Number,
     postImages: Array,
     postId: Number,
+   showMenu: {
+     type: Boolean,
+     default: false
+   },
+   
     post: Object
   }
 }
