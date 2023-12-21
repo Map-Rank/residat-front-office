@@ -2,15 +2,13 @@
   <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
-      <div class="user-profile flex items-center space-x-2">
-        <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
-        <div>
-          <h5 class="font-bold">{{ username }}</h5>
-          <span class="caption-c1">{{ postDate }}</span>
-        </div>
-      </div>
+      <UserPostInfo
+        :post-date="postDate"
+        :user-profile-image="userProfileImage"
+        :username="username"
+      />
 
-      <div class="menu relative">
+      <div v-if="showMenu" class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
           <svg class="w-6 h-6" fill="true" stroke="currentColor" viewBox="0 0 24 24">
@@ -54,23 +52,12 @@
 
     <!-- Post Images -->
 
-    <image-post-gallery
-    :Images="postImages"
-    @customFunction="showDetails"
-    >
-
-    </image-post-gallery>
+    <image-post-gallery :Images="postImages" @customFunction="showDetails"> </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="p-5">
       <!-- upper section  -->
-      <div class="flex justify-between border-b mb-2 pb-2">
-        <div class="flex items-center space-x-1">
-          <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold">{{ like_count }} and other likes</span>
-        </div>
-        <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
-      </div>
+      <InteractionPostStatistics :comment_count="comment_count" :like_count="like_count" />
 
       <!-- lower section  -->
       <div class="flex justify-between">
@@ -121,25 +108,27 @@
 import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
-import { mapWritableState, mapActions } from 'pinia'
-import  usePostStore  from './store/postStore'
-import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
-
+import { mapActions, mapWritableState } from 'pinia'
+import usePostStore from './store/postStore'
+import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
-import ImagePostGallery from '@/components/common/ImagePostGallery/index.vue'
+import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
+import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
+import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
+import { URL_LINK } from '@/constants/url.js'
 
 
 export default {
   name: 'PostComponent',
   data() {
-
     const route = useRoute()
     return {
       route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isMenuVisible: false,
+      imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
       commentData: {
         text: ' ',
@@ -169,55 +158,61 @@ export default {
           svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
-        },
+        }
       ]
     }
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
-
-    async deletePost() {
-      console.log('delete post ')
-      await deletePost(this.postId)
-
+    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails', 'setpostToEdit']),
+    
+    async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
+      if (window.confirm(alertMessage)) {
+        console.log('Deleting post', this.postId)
+        try {
+          await deletePost(this.postId)
+          window.location.reload();
+        } catch (error) {
+          console.error('Error deleting post:', error)
+        }
+      } else {
+        console.log('Post deletion cancelled by user')
+      }
     },
-
-
     editPost() {
       console.log('edit post ')
       this.setpostToEdit(this.post)
       this.$router.push({ name: 'create-post' })
     },
 
-    async customFunction(index) {
-      if (index === 0) {
-        await likePost(this.postId)
-        return
-      }
-      if (index === 1) {
-        this.showCommentBox = !this.showCommentBox
-        console.log(this.postImages)
-        return
-      }
-
-      if (index === 2) {
-        await sharePost(this.postId)
-        return
-      }
-      
-      if (index === 3) {
-        console.log(this.post)
-        return
+  async customFunction(index) {
+    switch (index) {
+      case 0:
+        await likePost(this.postId);
+        window.location.reload();
+        break;
+      case 1:
+        this.showCommentBox = !this.showCommentBox;
+        console.log(this.postImages);
+        break;
+        case 2:
+          await sharePost(this.postId);
+          window.location.reload();
+          break;
+          case 3:
+            console.log(this.post);
+        window.location.reload();
+        break;
       }
     },
-
+    
+    
     async commentPost() {
       await commentPost(this.postId, this.commentData)
       this.showCommentBox = !this.showCommentBox
-
+      window.location.reload();
     },
-
+    
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
         if (i == index) {
@@ -268,11 +263,12 @@ export default {
   },
 
   components: {
+    InteractionPostStatistics,
+    UserPostInfo,
     IconWithLabel,
     PostDetails,
     ButtonUi,
-    ImagePostGallery,
-
+    ImagePostGallery
     // BaseImagePickerVue
   },
   computed: {
@@ -293,28 +289,17 @@ export default {
     comment_count: Number,
     postImages: Array,
     postId: Number,
+   showMenu: {
+     type: Boolean,
+     default: false
+   },
+   
     post: Object
   }
 }
 </script>
 
 <style scoped>
-.caption-c1,
-.caption-c1-bold {
-  color: var(--primary-normal, #021d40);
-  font-family: Raleway;
-  font-size: 10px;
-  font-style: normal;
-  line-height: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.caption-c1-bold {
-  font-weight: 600;
-}
-
 .content {
   color: var(--body-normal, #242424);
   font-family: Raleway;

@@ -1,7 +1,7 @@
 <template>
     <div class="flex flex-col items-center">
       <!-- Logo/Profile Image -->
-      <img :src="profileImageUrl" alt="Profile Image" class="w-26 h-26 rounded-full mb-4" />
+      <img :src="profileImageUrl"  alt="Profile Image" class="w-14 h-14 rounded-full mb-4" />
   
       <!-- Profile Name -->
       <h2 class="text-2xl font-semibold text-gray-800 mb-1">{{ profileName }}</h2>

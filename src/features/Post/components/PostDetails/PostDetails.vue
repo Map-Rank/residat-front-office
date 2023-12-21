@@ -4,10 +4,10 @@
       <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
         <div class="box grid md:grid-cols-2 bg-black shadow rounded-lg w-4/5 mx-auto">
           <!-- Display post images  -->
-          <div class="flex items-center mt-1 sm:mt-3">
-            <div v-if="post.images && post.images.length" class="flex space-x-2 p-20 w-full h-full">
+          <div class="flex items-center mt-1 ">
+            <div v-if="post.images && post.images.length" class="flex space-x-2  w-full h-full">
               <!-- <button class="text-white" @click="prevImage">Prev</button> -->
-              <img :src="currentImage" class="object-cover rounded" alt="Post image" />
+              <img :src="`${imageHost}${currentImage}`" class="object-cover " alt="Post image" />
               <!-- <button class="text-white" @click="nextImage">Next</button> -->
             </div>
           </div>
@@ -113,6 +113,7 @@
 <script>
 import { mapActions } from 'pinia'
 import usePostStore  from '../../store/postStore'
+import { URL_LINK } from '@/constants';
 
 export default {
   name: 'PostDetails',
@@ -124,18 +125,15 @@ export default {
   data() {
     return {
       currentImageIndex: 0,
-      post: []
+      post: [],
+        imageHost:URL_LINK.imageHostLink
     }
   },
   props: {
-    // post: {
-    //   type: Object,
-    //   required: true
-    // },
   },
   computed: {
     currentImage() {
-      return this.post.images[this.currentImageIndex]
+      return this.post.images[this.currentImageIndex].url
     }
   },
   methods: {

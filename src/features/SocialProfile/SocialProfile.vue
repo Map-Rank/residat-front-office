@@ -2,9 +2,9 @@
   <div class="h-full">
     <div class="bg-white p-6">
       <top-profile-info
-        :profileImageUrl="'public\\images\\unicef.png'"
+        :profileImageUrl="`${imageHost}${user.avatar}`"
         :profileName="`${user.first_name} ${user.last_name}`"
-        :followersCount="500"
+        :followersCount="0"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />
@@ -34,10 +34,11 @@
               :username="`${userPost.first_name} ${userPost.last_name} `"
               :postDate="post.created_at"
               :postContent="post.content"
-              :userProfileImage="userPost.avatar"
+              :userProfileImage="`${imageHost}${user.avatar}`"
               :like_count="post.like_count"
               :comment_count="post.comment_count"
               :postImages="post.images"
+              :showMenu="true"
               :post="post"
             />
           </div>
@@ -56,6 +57,8 @@ import PostComponent from '../Post/index.vue'
 import { getUserPosts } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
+import { URL_LINK } from '@/constants';
+
 
 export default {
   name: 'SocialProfile',
@@ -82,7 +85,9 @@ export default {
     return {
       user: '',
       posts: [],
-      userPost: null
+      userPost: null,
+      imageHost:URL_LINK.imageHostLink
+
     }
   },
 
@@ -94,7 +99,6 @@ export default {
 
   methods: {
     formatDate(date) {
-      // Simple date formatting, adjust as needed
       return new Date(date).toLocaleDateString()
     }
   }

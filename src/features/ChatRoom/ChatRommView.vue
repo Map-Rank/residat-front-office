@@ -1,25 +1,20 @@
 <template>
-    <div>
-        <UnderConstruction></UnderConstruction>
-    </div>
+  <div>
+    <UnderConstruction></UnderConstruction>
+  </div>
 </template>
 
 <script>
-    import UnderConstruction from '@/components/common/Pages/UnderConstruction.vue'
+import UnderConstruction from '@/components/common/Pages/UnderConstruction.vue'
 export default {
-
-    name:"ChatRoomView",
-    data () {
-        
-
-        return {}
-    },
-    components:{
-        UnderConstruction
-    }
+  name: 'ChatRoomView',
+  data() {
+    return {}
+  },
+  components: {
+    UnderConstruction
+  }
 }
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

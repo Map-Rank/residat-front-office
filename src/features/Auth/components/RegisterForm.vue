@@ -234,7 +234,6 @@
 </template>
 
 <script>
-// import ButtonUi from '../../../components/base/ButtonUi.vue'
 import { mapStores, mapWritableState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
@@ -256,7 +255,10 @@ export default {
 
   data() {
     const router = useRouter()
+    const authStore = useAuthStore()
+
     return {
+      authStore,
       router,
       schema: {
         name: 'required|min:3|max:50',
@@ -308,7 +310,6 @@ export default {
       ]
 
       try {
-        // Validate each field in the list
         const validationResults = await Promise.all(
           fieldsToValidate.map((field) => this.$refs.form.validateField(field))
         )
@@ -351,15 +352,12 @@ export default {
         (this.reg_alert_message = 'Wait we are creating your account ')
 
       try {
-        const response = await registerUser(this.formData, this.handleSuccess, this.handleError)
+        const response = await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError)
         console.log('this is my responce: ' + response.data)
       } catch (error) {
         console.log(error)
       }
     }
-  },
-  components: {
-    // ButtonUi
   },
   computed: {
     ...mapStores(useAuthStore),

@@ -11,6 +11,12 @@
       <img :src="`${imageHost}${Images[1].url}`" :alt="Images[1].alt" class="w-1/2 h-1/2" />
     </div>
 
+
+
+
+
+
+    
     <!-- Container for the rest of the images displayed in a single row -->
     <div v-if="Images.length > 2" class="flex gap-0.5 overflow-hidden">
       <img
@@ -34,13 +40,13 @@
 </template>
 
 <script>
-import { URL } from '../../../constants';
+import { URL_LINK } from '@/constants';
 
 export default {
   name: "ImagePostGallery",
   data(){
     return{
-      imageHost:URL.imageHostLink
+      imageHost:URL_LINK.imageHostLink
     }
   },
   props: {

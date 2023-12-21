@@ -19,7 +19,7 @@
         :alt="image.alt"
         :key="image.src"
         class="flex-grow h-auto w-4 object-cover"
-        :style="{ 'flex-basis': calculateFlexBasis(index) }"
+        :style="{ 'flex-basis': calculateFlexBasis() }"
       />
       
       <!-- "See more" box if there are more images than can be shown -->

@@ -4,8 +4,8 @@ import { LOCAL_STORAGE_KEYS } from '../constants/localStorageKeys';
 
 export default defineStore('auth', {
   state: () => ({
-    user: JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo)),
-    isloggedIn: false
+    user: null,
+    isloggedIn: null
   }),
 
   getters: {
@@ -19,6 +19,23 @@ export default defineStore('auth', {
   }
   ,
   actions: {
+
+    initializeAuthState() {
+      try {
+        const userInfo = localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo);
+        if (userInfo) {
+          this.user = JSON.parse(userInfo);
+          this.isLoggedIn = this.user? true : false;
+        }
+        
+      } catch (error) {
+        console.error('Failed to parse user info:', error);
+        // Handle error, possibly resetting auth state
+        this.resetAuthState();
+      }
+    },
+
+
     setUser(userData) {
       console.log(userData)
       this.user = userData;
