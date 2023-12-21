@@ -1,13 +1,13 @@
 import { makeApiPostCall, makeApiGetCall,makeApiDeleteCall } from '@/api' 
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
+
 const currentDate = new Date().toISOString().split('T')[0]
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const createPost = async (postData, onSuccess, onError) => {
   try {
     const formData = new FormData()
-    const authToken = localStorage.getItem('authToken')
 
     formData.append('content', postData.content)
     formData.append('published_at', currentDate) 
@@ -49,10 +49,12 @@ const createPost = async (postData, onSuccess, onError) => {
     if (onError && typeof onError === 'function') {
       onError('Server Error: Internal server error')
     }
+
     console.error('Post Creation error:', error)
     throw error
   }
 }
+
 
 const updatePost = async (postData, onSuccess, onError) => {
   try {
@@ -63,6 +65,7 @@ const updatePost = async (postData, onSuccess, onError) => {
     formData.append('published_at', currentDate) 
     formData.append('zone_id', '1') 
     formData.append('_method', 'PUT') 
+
     console.log('form data:', formData)
     console.log('post id' + postData.id)
 
@@ -86,6 +89,7 @@ const updatePost = async (postData, onSuccess, onError) => {
     throw error
   }
 }
+
 
 const getPosts = async () => {
   try {
@@ -139,12 +143,14 @@ const deletePost = async (postId) => {
 
 const commentPost = async (postId, commentData) => {
   try {
+
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.commentPost}/${postId}`,
       JSON.stringify({ text: commentData.text }),
       authToken
     )
     console.log('Comment successfullty send!!!' + response.data.data)
+
   } catch (error) {
     console.error('Error Commenting Post:', error)
     throw error
@@ -152,3 +158,4 @@ const commentPost = async (postId, commentData) => {
 }
 
 export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost , sharePost ,getUserPosts}
+

@@ -15,6 +15,7 @@ const makeApiPostCall = async (endpoint, postData, authToken, ismedia, id) => {
   let url = id ? `${endpoint}/${id}` : endpoint
 
   const response = await api.post(url, postData, {
+
     headers: {
       'Content-Type': contentType,
       Authorization: `Bearer ${authToken}`
@@ -28,11 +29,14 @@ const makeApiGetCall = async (endpoint, authToken, id) => {
   let url = id ? `${endpoint}/${id}` : endpoint
   const response = await api.get(url, {
     headers: {
+
       Authorization: `Bearer ${authToken}`
+
     }
   })
   return response
 }
+
 
 const makeApiDeleteCall = async (endpoint, authToken) => {
   const response = await api.delete(endpoint, {

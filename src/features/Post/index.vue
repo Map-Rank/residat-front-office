@@ -23,11 +23,13 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
+
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="editPost()"
+
           >
           </button-ui>
 
@@ -90,6 +92,7 @@
         </div>
         <button
           @click.prevent="commentPost()"
+
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -114,6 +117,7 @@ import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
 import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
+
 
 export default {
   name: 'PostComponent',

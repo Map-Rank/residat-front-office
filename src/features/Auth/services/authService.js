@@ -27,10 +27,12 @@ const registerUser = async (userData, authStore , onSuccess, onError) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
     onSuccess()
 
+
     return response
   } catch (error) {
     onError(error.response.data.errors)
     throw error
+
   }
 }
 
@@ -42,6 +44,8 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
     formData.append('password', userCredentials.password)
 
     const response = await makeApiPostCall(API_ENDPOINTS.login, formData)
+
+
 
     const user = response.data.data
     const token = response.data.data.token

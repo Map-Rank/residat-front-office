@@ -1,10 +1,11 @@
 <template>
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
+
       <h3 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
       </h3>
-    </div>
+
 
     <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" />
 
@@ -53,6 +54,7 @@
               :disabled="this.isLoading"
               class="block w-full text-white py-1.5 rounded-full transition"
             >
+
               {{
                 !isEditing
                   ? this.isLoading
@@ -61,12 +63,16 @@
                   : this.isLoading
                     ? 'Updating Post...'
                     : 'Update Post'
+
+              
+
               }}
             </button>
           </div>
         </div>
       </vee-form>
     </div>
+  </div>
   </div>
 </template>
 
@@ -86,7 +92,11 @@ export default {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
 
+
     if (postStore.postToEdit) {
+
+
+
       this.isEditing = true
       this.formData = postStore.postToEdit
     }
@@ -117,6 +127,7 @@ export default {
         videos: [],
         sectorChecked: [],
         sectorId: []
+
       },
       sectors: []
     }
@@ -139,6 +150,7 @@ export default {
       let response
       this.isLoading = true
 
+
       if (this.isEditing) {
         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
         console.log(response.status)
@@ -150,6 +162,7 @@ export default {
       }
 
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
+
 
       if (response.status) {
         this.resetForm()
@@ -167,6 +180,7 @@ export default {
 
       this.formData.images = []
       this.imagesToPreview = []
+
 
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
