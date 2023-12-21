@@ -16,7 +16,7 @@
             :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
             :postDate="post.postDate"
             :postContent="post.content"
-            :userProfileImage="post.creator[0].avatar"
+            :userProfileImage="`${imageHost}${post.creator[0].avatar}`"
             :like_count="post.like_count"
             :comment_count="post.comment_count"
             :postImages="post.images"
@@ -38,6 +38,8 @@ import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 import { getPosts } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
+import { URL_LINK } from '@/constants';
+
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -60,6 +62,7 @@ export default {
     return {
       sectors: [],
       posts: [],
+      imageHost:URL_LINK.imageHostLink,
       recentPosts: [
         {
           author: 'Arpit Chandak',
