@@ -2,16 +2,17 @@
   <div class="">
     <div class="fixed z-10 inset-0 back overflow-y-auto" id="modal">
       <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
-        <div 
-        :class="`box grid ${post.images.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'} bg-black shadow rounded-lg w-4/5 mx-auto`"
+        <div
+          :class="`box grid ${
+            post.images.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
+          } bg-black shadow rounded-lg w-4/5 mx-auto`"
         >
           <!-- Display post images  -->
-          <div  class="flex items-center mt-1 "  v-if="post.images.length > 0">
-            <div v-if="post.images && post.images.length" class="flex space-x-2  w-full h-full">
-              <!-- <button class="text-white" @click="prevImage">Prev</button> -->
+          <div class="flex items-center justify-center mt-1" v-if="post.images.length > 0">
+            <!-- <div v-if="post.images && post.images.length" class="flex space-x-2  w-full h-full">
               <img :src="`${imageHost}${currentImage}`" class="object-cover " alt="Post image" />
-              <!-- <button class="text-white" @click="nextImage">Next</button> -->
-            </div>
+            </div> -->
+            <ImageSlider :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
@@ -114,8 +115,9 @@
 
 <script>
 import { mapActions } from 'pinia'
-import usePostStore  from '../../store/postStore'
-import { URL_LINK } from '@/constants';
+import usePostStore from '../../store/postStore'
+import { URL_LINK } from '@/constants'
+import ImageSlider from '../../../../components/gallery/ImageSlider.vue'
 
 export default {
   name: 'PostDetails',
@@ -124,15 +126,17 @@ export default {
     const postStore = usePostStore()
     this.post = postStore.postToShowDetails
   },
+  components: {
+    ImageSlider
+  },
   data() {
     return {
       currentImageIndex: 0,
       post: [],
-        imageHost:URL_LINK.imageHostLink
+      imageHost: URL_LINK.imageHostLink
     }
   },
-  props: {
-  },
+  props: {},
   computed: {
     currentImage() {
       return this.post.images[this.currentImageIndex].url
