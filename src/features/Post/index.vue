@@ -121,12 +121,15 @@ import { URL_LINK } from '@/constants/url.js'
 
 export default {
   name: 'PostComponent',
+  emits: ['postFetch','updatePost'],
   data() {
     const route = useRoute()
     return {
       route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
+      likeCount:this.like_count,
+      customPost:this.post,
       isMenuVisible: false,
       imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
@@ -189,19 +192,22 @@ export default {
     switch (index) {
       case 0:
         await likePost(this.postId);
-        window.location.reload();
+        // this.likeCount = this.likeCount + 1
+        this.customPost.like_count++;
+        this.$emit('updatePost', this.customPost); 
+        // this.$emit('postFetch');
         break;
-      case 1:
-        this.showCommentBox = !this.showCommentBox;
-        console.log(this.postImages);
-        break;
-        case 2:
-          await sharePost(this.postId);
-          window.location.reload();
+        case 1:
+          this.showCommentBox = !this.showCommentBox;
+          console.log(this.postImages);
           break;
-          case 3:
-            console.log(this.post);
-        window.location.reload();
+          case 2:
+            await sharePost(this.postId);
+            this.$emit('postFetch');
+                break;
+            case 3:
+              console.log(this.post);
+              this.$emit('postFetch');
         break;
       }
     },
@@ -209,6 +215,7 @@ export default {
     
     async commentPost() {
       await commentPost(this.postId, this.commentData)
+      // this.$emit('postFetch');
       this.showCommentBox = !this.showCommentBox
       window.location.reload();
     },

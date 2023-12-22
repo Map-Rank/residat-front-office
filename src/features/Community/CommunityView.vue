@@ -8,10 +8,17 @@
 
       <!-- Main Content Area: Posts -->
       <main class="col-span-2 sm:px-4">
-        <div class="space-y-5">
+        <div v-if="loading" class="flex justify-center">
+            <img src="src\assets\images\loadinPlant.gif" alt="Loading..."/>
+        </div>
+        
+
+        <div v-if="!loading" class="space-y-5">
           <PostComponent
             v-for="(post, index) in posts"
             :key="index"
+            @updatePost="handleUpdatePost"
+            @postFetch="handlePostFetch"
             :postId="post.id"
             :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
             :postDate="post.postDate"
@@ -38,31 +45,41 @@ import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 import { getPosts } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
-import { URL_LINK } from '@/constants';
-
+import { URL_LINK } from '@/constants'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Community',
 
   async created() {
-    const sectorStore = useSectorStore()
-
     try {
-      this.posts = await getPosts()
-      this.sectors = sectorStore.getAllSectors
+      // this.posts = await getPosts()
+      window.addEventListener('scroll', this.handleScroll);
+    this.fetchPosts();
 
       console.log('completly fetch all post') //TODO
     } catch (error) {
       console.error('Failed to load posts:', error)
     }
   },
+  beforeUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  },
 
   data() {
+    const sectorStore = useSectorStore()
+
     return {
-      sectors: [],
+      // sectors: [],
+      loading: false,
+      sectors: sectorStore.getAllSectors,
+      // posts : getPosts(),
       posts: [],
-      imageHost:URL_LINK.imageHostLink,
+      allPosts: [],
+      limit: 10,
+      currentPage: 0,
+
+      imageHost: URL_LINK.imageHostLink,
       recentPosts: [
         {
           author: 'Arpit Chandak',
@@ -81,6 +98,44 @@ export default {
       ]
     }
   },
+
+  methods: {
+    async fetchPosts() {
+      this.loading = true;
+      try {
+        this.allPosts = await getPosts()
+        this.loadMorePosts(); // Load initial posts
+        this.loading = false;
+      } catch (error) {
+        console.error('Failed to load posts:', error)
+      }
+    },
+
+    loadMorePosts() {
+      const nextPosts = this.allPosts.slice(this.currentPage * this.limit, (this.currentPage + 1) * this.limit);
+      this.posts.push(...nextPosts);
+      this.currentPage++;
+    },
+    handleScroll() {
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        this.loadMorePosts();
+      }
+    },
+    handleUpdatePost(updatedPost) {
+      const index = this.posts.findIndex((p) => p.id === updatedPost.id);
+      if (index !== -1) {
+        this.posts[index] = updatedPost;
+      }
+    },
+
+
+    async handlePostFetch() {
+      await this.fetchPosts()
+      console.log('fetch compltee')
+    }
+    // ... other methods
+  },
   components: {
     PostComponent,
     SectorSide,
@@ -88,4 +143,3 @@ export default {
   }
 }
 </script>
-

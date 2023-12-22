@@ -2,9 +2,11 @@
   <div class="">
     <div class="fixed z-10 inset-0 back overflow-y-auto" id="modal">
       <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
-        <div class="box grid md:grid-cols-2 bg-black shadow rounded-lg w-4/5 mx-auto">
+        <div 
+        :class="`box grid ${post.images.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'} bg-black shadow rounded-lg w-4/5 mx-auto`"
+        >
           <!-- Display post images  -->
-          <div class="flex items-center mt-1 ">
+          <div  class="flex items-center mt-1 "  v-if="post.images.length > 0">
             <div v-if="post.images && post.images.length" class="flex space-x-2  w-full h-full">
               <!-- <button class="text-white" @click="prevImage">Prev</button> -->
               <img :src="`${imageHost}${currentImage}`" class="object-cover " alt="Post image" />
@@ -15,18 +17,18 @@
           <!-- Post details and information  -->
 
           <div class="info grid grid-rows-2 h-full pl-5 py-3">
-            <div>
+            <div class="h-full">
               <!-- user informations -->
               <div class="mt-5 relative pb-4 mr-5 items-start">
                 <div class="flex justify-between">
                   <div class="flex space-x-2 mb-4">
                     <img
                       class="w-10 h-10 rounded-full"
-                      :src="post.creator.avatar"
+                      :src="post.creator[0].avatar"
                       alt="User profile"
                     />
                     <div class="flex-1">
-                      <h5 class="font-bold">{{ post.creator.first_name }}</h5>
+                      <h5 class="font-bold">{{ post.creator[0].first_name }}</h5>
                       <div class="text-sm text-gray-600">{{ post.published_at }}</div>
                     </div>
                   </div>
@@ -38,7 +40,7 @@
               </div>
 
               <!-- list of Comment  -->
-              <div class=" ">
+              <div class="overflow-auto h-full">
                 <div class="space-y-2">
                   <div
                     v-for="(comment, index) in post.comments"

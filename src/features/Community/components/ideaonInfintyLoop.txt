@@ -1,0 +1,84 @@
+To achieve a user experience where posts are loaded as the user scrolls down (commonly known as "infinite scrolling"), you can implement a strategy that fetches posts in chunks and loads more as the user reaches the bottom of the page. Vue doesn't have a built-in method for infinite scrolling, but you can use a combination of event listeners and methods to achieve this behavior.
+
+Here's a high-level approach you can take:
+
+1. **Initial Data Load**: When the component is created, load the initial set of posts.
+
+2. **Scroll Event Listener**: Attach a scroll event listener to the window or a specific scrollable container that triggers when the user scrolls near the bottom of the page.
+
+3. **Fetching More Data**: When the scroll event is triggered, fetch the next set of posts from the backend and append them to the existing posts array.
+
+4. **Throttling/Debouncing**: To prevent too many calls to your server, implement throttling or debouncing on the scroll event listener.
+
+Here is a simplified example of how you might set up your component to use infinite scrolling:
+
+```vue
+<template>
+  <!-- your template here -->
+</template>
+
+<script>
+import { onMounted, onUnmounted, ref } from 'vue';
+import { getPosts } from '@/features/Post/services/postService.js';
+
+export default {
+  name: 'Community',
+  setup() {
+    const posts = ref([]);
+    let page = 1;
+    const limit = 10; // Determine how many posts to fetch per page
+
+    const fetchPosts = async () => {
+      try {
+        const response = await getPosts(page, limit);
+        posts.value.push(...response.data.data);
+      } catch (error) {
+        console.error('Failed to load posts:', error);
+      }
+    };
+
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+      if (scrollTop + clientHeight >= scrollHeight - 5) { // 5px before reaching the bottom
+        page++;
+        fetchPosts();
+      }
+    };
+
+    onMounted(() => {
+      window.addEventListener('scroll', handleScroll);
+      fetchPosts(); // Initial fetch
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('scroll', handleScroll);
+    });
+
+    return {
+      posts,
+    };
+  },
+};
+</script>
+```
+
+In this example, `getPosts` should be modified to accept `page` and `limit` parameters that allow the backend to return the correct chunk of data:
+
+```javascript
+const getPosts = async (page, limit) => {
+  try {
+    const response = await makeApiGetCall(`${API_ENDPOINTS.getPosts}?page=${page}&limit=${limit}`, authToken);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching posts:', error);
+    throw error;
+  }
+};
+```
+
+Note that this example assumes your backend API supports pagination with `page` and `limit` query parameters.
+
+Adjust the `handleScroll` method's logic to suit the layout and styling of your page. You might need to modify the scroll event threshold based on your specific UI.
+
+This is a high-level overview and starting point. You will likely need to adjust the logic to fit the exact behavior and performance you're looking for.
