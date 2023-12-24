@@ -9,10 +9,8 @@
         >
           <!-- Display post images  -->
           <div class="flex items-center justify-center mt-1" v-if="post.images.length > 0">
-            <!-- <div v-if="post.images && post.images.length" class="flex space-x-2  w-full h-full">
-              <img :src="`${imageHost}${currentImage}`" class="object-cover " alt="Post image" />
-            </div> -->
-            <ImageSlider :images="post.images"></ImageSlider>
+            
+            <ImageSlider  class="w-full " :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
@@ -25,7 +23,7 @@
                   <div class="flex space-x-2 mb-4">
                     <img
                       class="w-10 h-10 rounded-full"
-                      :src="post.creator[0].avatar"
+                      :src="`${imageHost}${post.creator[0].avatar}`"
                       alt="User profile"
                     />
                     <div class="flex-1">
@@ -50,7 +48,7 @@
                   >
                     <img
                       class="w-10 h-10 rounded-full"
-                      :src="comment.user.avatar"
+                      :src="`${imageHost}${comment.user.avatar}`"
                       alt="User profile"
                     />
 
@@ -79,17 +77,17 @@
             </div>
 
             <!-- comment interaction section -->
-            <div class="mt-auto space-y-4 w-full">
+            <div class="mt-auto space-y-4 w-full ">
               <div class="flex space-x-4">
                 <img src="src\assets\icons\heart.svg" alt="" />
                 <img src="src\assets\icons\bookmark.svg" alt="" />
               </div>
 
-              <div class="flex space-x-4">
+              <div class="flex justify-between space-x-4">
                 <input
                   type="text"
                   placeholder="Add a comments"
-                  class="w-3/4 p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  class="w-full p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 />
 
                 <!-- Post button -->

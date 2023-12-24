@@ -1,9 +1,12 @@
 <template>
   <div class="grid content-center">
-    <transition-group name="fade" tag="div">
-      <div v-for="i in [currentIndex]" :key="i">
-        <img :src="`${imageHost}${currentImg.url}`" />
-        <!-- <img :src="currentImg.url" /> -->
+    <transition-group class=" " name="fade" tag="div">
+      <div 
+      class=""
+      v-for="i in [currentIndex]" :key="i">
+        <img 
+        class="w-full"
+        :src="`${imageHost}${currentImg.url}`" />
       </div>
     </transition-group>
     <div class="flex justify-center">
@@ -30,12 +33,6 @@ export default {
   name: 'ImageSlider',
   data() {
     return {
-    //   images: [
-    //     'https://th.bing.com/th/id/OIP.--fIfxVLQzY5x-9ew68KeQHaEo?w=327&h=180&c=7&r=0&o=5&pid=1.7',
-    //     'src/assets/images/AuthView/auth-background.png',
-    //     'src/assets/images/AuthView/auth-background.png',
-    //     'src/assets/images/AuthView/auth-background.png'
-    //   ],
       timer: null,
       imageHost: URL_LINK.imageHostLink,
       currentIndex: 0
@@ -46,14 +43,8 @@ export default {
     images:Array
   },
 
-  //   mounted: function () {
-  //     this.startSlide()
-  //   },
 
   methods: {
-    // startSlide: function () {
-    //   this.timer = setInterval(this.next, 5000)
-    // },
 
     next: function () {
       this.currentIndex += 1
@@ -75,4 +66,13 @@ export default {
 .w {
   color: aliceblue;
 }
+
+/* Add styles within your component's <style> tag */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+  opacity: 0;
+}
+
 </style>

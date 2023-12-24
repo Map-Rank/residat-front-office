@@ -57,7 +57,7 @@
     <!-- Post Interaction Area -->
     <footer class="p-5">
       <!-- upper section  -->
-      <InteractionPostStatistics :comment_count="comment_count" :like_count="like_count" />
+      <InteractionPostStatistics :comment_count="customPost.comment_count" :like_count="like_count" />
 
       <!-- lower section  -->
       <div class="flex justify-between">
@@ -192,7 +192,6 @@ export default {
     switch (index) {
       case 0:
         await likePost(this.postId);
-        // this.likeCount = this.likeCount + 1
         this.customPost.like_count++;
         this.$emit('updatePost', this.customPost); 
         // this.$emit('postFetch');
@@ -217,7 +216,8 @@ export default {
       await commentPost(this.postId, this.commentData)
       // this.$emit('postFetch');
       this.showCommentBox = !this.showCommentBox
-      window.location.reload();
+      this.customPost.comment_count++;
+      // window.location.reload();
     },
     
     clickIcon(index) {
@@ -250,7 +250,6 @@ export default {
     },
 
     calculateFlexBasis() {
-      // Calculate the flex-basis based on the number of images
       const numberOfImages = this.postImages.length - 1 // minus the first image
       const maxImagesToShow = 3
       if (numberOfImages > maxImagesToShow) {
