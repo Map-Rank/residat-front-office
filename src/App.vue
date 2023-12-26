@@ -11,7 +11,7 @@
       :class="hiddenClass"
     ></bottom-navigation-app-app>
 
-    <footer-app class="mt-auto"></footer-app>
+    <!-- <footer-app class="mt-auto" :class="!hiddenClass"></footer-app> -->
   </div>
 </template>
 

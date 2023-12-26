@@ -1,6 +1,8 @@
 <template>
   <div class="md:px-100 h-full">
-    <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10">
+    <div 
+    :class="{ 'scroll-lock': scrollLocked }"
+    class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10">
       <!-- Sidebar: Sectors and Topics -->
       <aside class="col-span-1 hidden sm:block">
         <sector-side
@@ -11,9 +13,6 @@
 
       <!-- Main Content Area: Posts -->
       <main class="col-span-2 sm:px-4">
-        <!-- <div v-if="loading" class="flex h-full justify-center items-center">
-           <img src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s" class="h-7 w-7" alt="Loading..."/>
-       </div> -->
         <div v-if="topLoading" class="flex h-full justify-center">
           <img
             src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s"
@@ -25,10 +24,9 @@
         <div v-if="showPageRefresh">
           <RefreshError
             :imageUrl="'src\\assets\\images\\Community\\loading.svg'"
-            :errorMessage="'Sorry could not load post'"
+            :errorMessage="errorMessage"
             @refreshPage="refreshPage()"
           ></RefreshError>
-          <!-- <img src="src\assets\images\Community\loading.svg" alt="" srcset=""> -->
         </div>
 
         <div v-if="!topLoading || !bottomLoading" class="space-y-5">
@@ -36,7 +34,7 @@
             v-for="(post, index) in posts"
             :key="index"
             @updatePost="handleUpdatePost"
-            @postFetch="handlePostFetch"
+            @postFetch="fetchPosts"
             :postId="post.id"
             :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
             :postDate="post.postDate"
@@ -49,7 +47,7 @@
           />
         </div>
 
-        <div v-if="bottomLoading" class="flex h-full justify-center">
+        <div v-if="bottomLoading" class="flex  my-7 h-full justify-center">
           <img
             src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s"
             class="h-7 w-7"
@@ -80,16 +78,15 @@ export default {
 
   async created() {
     try {
-      window.addEventListener('scroll', this.handleScroll)
-      this.topLoading = true
       await this.fetchPosts()
       this.topLoading = false
-      // console.log('completly fetch all post') //TODO
     } catch (error) {
       console.error('Failed to load posts:', error)
     }
   },
-
+  mounted() {
+    window.addEventListener('scroll', this.handleScroll)
+  },
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll)
   },
@@ -98,13 +95,15 @@ export default {
     const sectorStore = useSectorStore()
 
     return {
-      // sectors: [],
+      scrollLocked: false,
       topLoading: false,
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
-      // sectorChecked: [],
       sectorId: [],
-      
+      loadingPosts: false,
+      debounceTimer: null,
+      errorMessage:'Sorry no post found',
+
       posts: [],
       allPosts: [],
       showPageRefresh: false,
@@ -133,37 +132,18 @@ export default {
   },
 
   methods: {
-    async updateSectorChecked({ list, checked }) {
-      if (!list || list.id === undefined) {
+    updateSectorChecked({ list, checked }) {
+      this.showPageRefresh = false
+      if (!list?.id) {
         console.error("Invalid 'list' object or missing 'id'")
         return
       }
-
-      if (checked) {
-        console.log('old sectors: ', this.sectorId)
-        this.sectorId.push(list.id)
-
-        // Attempt to fetch posts and handle potential errors
-        try {
-          this.posts = await getPostsBySectors(this.sectorId)
-        } catch (error) {
-          console.error('Error fetching posts by sectors:', error)
-        }
-
-        console.log('updated sectors: ', this.sectorId)
-      } else {
-        console.log('new sectors: ', this.sectorId)
-        this.sectorId = this.sectorId.filter((id) => id !== list.id)
-
-        // If no sectors are selected, fetch all posts
-        if (this.sectorId.length === 0) {
-          try {
-            await this.fetchPosts()
-          } catch (error) {
-            console.error('Error fetching posts:', error)
-          }
-        }
-      }
+      
+      this.sectorId = checked
+      ? [...this.sectorId, list.id]
+      : this.sectorId.filter((id) => id !== list.id)
+      
+      this.fetchPosts()
     },
 
     async filterPostBySectors() {
@@ -172,58 +152,71 @@ export default {
 
     async fetchPosts() {
       try {
-        this.posts = await getPosts(this.page, this.size)
+        this.topLoading=true
+        this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+        if(this.posts.length == 0){
+          this.showPageRefresh =true
+          this.errorMessage = 'No post found under this sector , chose another sector or uncheck sector'
+        }else{
+          
+          this.showPageRefresh =false
+        }
+
       }
     },
-
     async refreshPage() {
       this.topLoading = true
       this.showPageRefresh = false
-      try {
-        this.posts = await getPosts(this.page, this.size)
-        this.topLoading = false
-      } catch (error) {
-        console.error('Failed to load posts:', error)
-        this.topLoading = false
-        this.showPageRefresh = true
-      }
+      await this.fetchPosts()
     },
 
     async loadMorePosts() {
-      let nextPosts
-       nextPosts = await getPosts(this.page, this.size)
-      console.log(nextPosts)
-      this.posts.push(...nextPosts);
-      // this.page++;
+      if (this.loadingPosts || this.showPageRefresh) return
+      this.loadingPosts = true
+      this.bottomLoading = true
+      this.scrollLocked = true; 
+
+      try {
+        let nextPosts = await getPosts(this.page, this.size)
+        this.posts.push(...nextPosts)
+      } catch (error) {
+        console.error('Failed to load more posts:', error)
+      } finally {
+        this.loadingPosts = false
+        this.bottomLoading = false
+        this.scrollLocked = false;
+      }
     },
+
     handleScroll() {
       const { scrollTop, scrollHeight, clientHeight } = document.documentElement
 
       if (scrollTop === 0) {
-        console.log('User has reached the top of the page')
+        // Top of page
       }
 
-      if (scrollTop + clientHeight >= scrollHeight - 50) {
-        console.log('User is near the bottom of the page')
-        this.page++
-        this.loadMorePosts()
+      if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loadingPosts) {
+        if (this.debounceTimer) clearTimeout(this.debounceTimer)
+
+        this.debounceTimer = setTimeout(() => {
+          this.page++
+          this.loadMorePosts()
+        }, 500)
       }
     },
 
     handleUpdatePost(updatedPost) {
       const index = this.posts.findIndex((p) => p.id === updatedPost.id)
       if (index !== -1) {
-        this.posts[index] = updatedPost
+        this.$set(this.posts, index, updatedPost)
       }
-    },
-
-    async handlePostFetch() {
-      await this.fetchPosts()
-      console.log('fetch compltee')
     }
+
   },
   components: {
     PostComponent,
@@ -233,3 +226,11 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.scroll-lock {
+  overflow: hidden;
+  height: 100%;
+}
+</style>
+

@@ -12,3 +12,5 @@ import {URL_LINK} from '@/constants'
 export function formatHostImageUrl(currentImage) {
   return `${URL_LINK.imageHostLink}${currentImage}`;
 }
+
+
