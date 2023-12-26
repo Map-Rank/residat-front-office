@@ -8,13 +8,28 @@
 
       <!-- Main Content Area: Posts -->
       <main class="col-span-2 sm:px-4">
-       <div v-if="loading" class="flex h-full justify-center items-center">
+       <!-- <div v-if="loading" class="flex h-full justify-center items-center">
+           <img src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s" class="h-7 w-7" alt="Loading..."/>
+       </div> -->
+       <div v-if="topLoading" class="flex h-full justify-center ">
            <img src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s" class="h-7 w-7" alt="Loading..."/>
        </div>
-       
-        
 
-        <div v-if="!loading" class="space-y-5">
+       
+
+       <div v-if="showPageRefresh">
+        <RefreshError
+        :imageUrl="'src\\assets\\images\\Community\\loading.svg'"
+        :errorMessage="'Sorry could not load post'"
+        @refreshPage="refreshPage()"
+        ></RefreshError>
+        <!-- <img src="src\assets\images\Community\loading.svg" alt="" srcset=""> -->
+
+       </div>
+       
+       
+
+        <div v-if="!topLoading || !bottomLoading " class="space-y-5">
           <PostComponent
             v-for="(post, index) in posts"
             :key="index"
@@ -31,6 +46,10 @@
             :post="post"
           />
         </div>
+
+       <div v-if="bottomLoading" class="flex h-full justify-center ">
+           <img src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s" class="h-7 w-7" alt="Loading..."/>
+       </div>
       </main>
 
       <aside class="col-span-1 hidden sm:block">
@@ -47,6 +66,7 @@ import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 import { getPosts , getPostsBySectors} from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
+import RefreshError from '@/components/common/Pages/RefreshError.vue'
 
 
 export default {
@@ -56,13 +76,16 @@ export default {
   async created() {
     try {
       window.addEventListener('scroll', this.handleScroll);
-    this.fetchPosts();
-
-      console.log('completly fetch all post') //TODO
+      this.topLoading = true;
+    await this.fetchPosts();
+    this.topLoading = false;
+      // console.log('completly fetch all post') //TODO
     } catch (error) {
       console.error('Failed to load posts:', error)
     }
   },
+
+
   beforeUnmount() {
     window.removeEventListener('scroll', this.handleScroll);
   },
@@ -72,14 +95,16 @@ export default {
 
     return {
       // sectors: [],
-      loading: false,
+      topLoading: false,
+      bottomLoading: false,
       sectors: sectorStore.getAllSectors,
       // sectorChecked: [],
       sectorId:[],
       posts: [],
       allPosts: [],
-      limit: 100,
-      currentPage: 0,
+      showPageRefresh:false,
+      size: 20,
+      page: 0,
 
       imageHost: URL_LINK.imageHostLink,
       recentPosts: [
@@ -143,27 +168,51 @@ async updateSectorChecked({ list, checked }) {
     },
 
     async fetchPosts() {
-      this.loading = true;
+      // this.loading = true;
       try {
-        this.allPosts = await getPosts()
-        this.loadMorePosts(); 
-        this.loading = false;
+        this.posts = await getPosts(this.page,this.size)
+        // this.loadMorePosts(); 
+        // this.loading = false;
       } catch (error) {
         console.error('Failed to load posts:', error)
+        this.showPageRefresh=true
+
       }
+    },
+    async refreshPage() {
+      this.topLoading=true
+      this.showPageRefresh=false
+      try {
+        this.posts = await getPosts(this.page,this.size)
+        this.topLoading=false
+      } catch (error) {
+        console.error('Failed to load posts:', error)
+        this.topLoading=false
+        this.showPageRefresh=true
+
+      }
+     
     },
 
-    loadMorePosts() {
-      const nextPosts = this.allPosts.slice(this.currentPage * this.limit, (this.currentPage + 1) * this.limit);
-      this.posts.push(...nextPosts);
-      this.currentPage++;
-    },
-    handleScroll() {
-      const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
-      if (scrollTop + clientHeight >= scrollHeight - 5) {
-        this.loadMorePosts();
-      }
-    },
+    // loadMorePosts() {
+    //   const nextPosts = this.allPosts.slice(this.page * this.size, (this.page + 1) * this.size);
+    //   this.posts.push(...nextPosts);
+    //   this.page++;
+    // },
+handleScroll() {
+  const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+
+  if (scrollTop === 0) {
+    console.log('User has reached the top of the page');
+  }
+
+  if (scrollTop + clientHeight >= scrollHeight - 50) {
+    console.log('User is near the bottom of the page');
+    this.page++;
+    this.fetchPosts();
+  }
+},
+
     handleUpdatePost(updatedPost) {
       const index = this.posts.findIndex((p) => p.id === updatedPost.id);
       if (index !== -1) {
@@ -178,12 +227,12 @@ async updateSectorChecked({ list, checked }) {
       await this.fetchPosts()
       console.log('fetch compltee')
     }
-    // ... other methods
   },
   components: {
     PostComponent,
     SectorSide,
-    RecentlyPostedSide
+    RecentlyPostedSide,
+    RefreshError
   }
 }
 </script>

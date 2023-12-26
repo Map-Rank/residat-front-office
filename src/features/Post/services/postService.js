@@ -91,9 +91,13 @@ const updatePost = async (postData, onSuccess, onError) => {
 }
 
 
-const getPosts = async () => {
+const getPosts = async (page,size) => {
+  let params = new URLSearchParams({
+    size: size.toString(),
+    page: page.toString(),
+  });
   try {
-    const response = await makeApiGetCall(API_ENDPOINTS.getPosts, authToken)
+    const response = await makeApiGetCall(`${API_ENDPOINTS.getPosts}?${params.toString()}`, authToken)
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
