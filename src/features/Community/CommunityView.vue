@@ -1,16 +1,17 @@
 <template>
-  <div class="md:px-100 pb-5">
+  <div class="md:px-100  h-full">
     <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10">
       <!-- Sidebar: Sectors and Topics -->
       <aside class="col-span-1 hidden sm:block">
-        <sector-side :sectorArray="this.sectors"></sector-side>
+        <sector-side :sectorArray="this.sectors" :updatesectorChecked="updateSectorChecked"></sector-side>
       </aside>
 
       <!-- Main Content Area: Posts -->
       <main class="col-span-2 sm:px-4">
-        <div v-if="loading" class="flex justify-center">
-            <img src="src\assets\images\loadinPlant.gif" alt="Loading..."/>
-        </div>
+       <div v-if="loading" class="flex h-full justify-center items-center">
+           <img src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s" class="h-7 w-7" alt="Loading..."/>
+       </div>
+       
         
 
         <div v-if="!loading" class="space-y-5">
@@ -43,9 +44,10 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
-import { getPosts } from '@/features/Post/services/postService.js'
+import { getPosts , getPostsBySectors} from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
+
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -53,7 +55,6 @@ export default {
 
   async created() {
     try {
-      // this.posts = await getPosts()
       window.addEventListener('scroll', this.handleScroll);
     this.fetchPosts();
 
@@ -73,10 +74,11 @@ export default {
       // sectors: [],
       loading: false,
       sectors: sectorStore.getAllSectors,
-      // posts : getPosts(),
+      // sectorChecked: [],
+      sectorId:[],
       posts: [],
       allPosts: [],
-      limit: 10,
+      limit: 100,
       currentPage: 0,
 
       imageHost: URL_LINK.imageHostLink,
@@ -100,11 +102,51 @@ export default {
   },
 
   methods: {
+
+async updateSectorChecked({ list, checked }) {
+  if (!list || list.id === undefined) {
+    console.error("Invalid 'list' object or missing 'id'");
+    return; 
+  }
+
+  if (checked) {
+    console.log('old sectors: ', this.sectorId);
+    this.sectorId.push(list.id);
+    
+    // Attempt to fetch posts and handle potential errors
+    try {
+      this.posts = await getPostsBySectors(this.sectorId);
+    } catch (error) {
+      console.error('Error fetching posts by sectors:', error);
+    }
+    
+    console.log('updated sectors: ', this.sectorId);
+  } else {
+    console.log('new sectors: ', this.sectorId);
+    this.sectorId = this.sectorId.filter((id) => id !== list.id);
+
+    // If no sectors are selected, fetch all posts
+    if (this.sectorId.length === 0) {
+      try {
+        await this.fetchPosts();
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      }
+    }
+  }
+}
+
+   ,
+    async filterPostBySectors(){
+
+      this.allPosts = await getPostsBySectors()
+    },
+
     async fetchPosts() {
       this.loading = true;
       try {
         this.allPosts = await getPosts()
-        this.loadMorePosts(); // Load initial posts
+        this.loadMorePosts(); 
         this.loading = false;
       } catch (error) {
         console.error('Failed to load posts:', error)
@@ -128,6 +170,8 @@ export default {
         this.posts[index] = updatedPost;
       }
     },
+
+    
 
 
     async handlePostFetch() {

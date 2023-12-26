@@ -1,16 +1,18 @@
 <template>
-  <header-app :class="hiddenClass"></header-app>
-  <!-- <header-app ></header-app> -->
+  <div class="body flex flex-col min-h-screen">
+    <header-app :class="hiddenClass"></header-app>
 
-  <body class="">
-    <router-view></router-view>
-  </body>
+    <main class="flex-grow h-full">
+      <router-view></router-view>
+    </main>
 
-  <bottom-navigation-app-app
-    class="mobile-nav md:hidden"
-    :class="hiddenClass"
-  ></bottom-navigation-app-app>
-  <footer-app></footer-app>
+    <bottom-navigation-app-app
+      class="mobile-nav block md:hidden"
+      :class="hiddenClass"
+    ></bottom-navigation-app-app>
+
+    <footer-app class="mt-auto"></footer-app>
+  </div>
 </template>
 
 <script>
@@ -35,11 +37,10 @@ export default {
 </script>
 
 <style scoped>
-body {
+.body {
   background: var(--primary-light, #e6e8ec);
 }
 
-/* By default, the nav is not fixed */
 .mobile-nav {
   position: static;
 }
@@ -49,8 +50,8 @@ body {
     position: fixed;
     bottom: 0;
     background-color: #fff;
-    width: 100%; /* Make sure it spans the full width of the screen */
-    z-index: 999; /* Optional: Use a high z-index value to ensure the nav appears above other elements */
+    width: 100%; 
+    z-index: 999; 
   }
 }
 </style>

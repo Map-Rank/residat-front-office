@@ -101,6 +101,24 @@ const getPosts = async () => {
   }
 }
 
+const getPostsBySectors = async (sectorId) => {
+  try {
+
+    let params = new URLSearchParams({
+      // size: size.toString(),
+      // page: page.toString(),
+      sectors: JSON.stringify(sectorId) 
+    });
+
+    const response = await makeApiGetCall(`${API_ENDPOINTS.getPosts}?${params.toString()}`, authToken)
+   console.log('post filtered!!')
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
 const getUserPosts = async () => {
   try {
     const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
@@ -157,5 +175,5 @@ const commentPost = async (postId, commentData) => {
   }
 }
 
-export { createPost, getPosts, likePost, commentPost, updatePost ,deletePost , sharePost ,getUserPosts}
+export { createPost, getPosts , getPostsBySectors, likePost, commentPost, updatePost ,deletePost , sharePost ,getUserPosts}
 

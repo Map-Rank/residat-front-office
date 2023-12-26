@@ -79,7 +79,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <img class="h-9 w-9" src="public\images\unicef_logo.png" alt="" />
+        <img class="h-9 w-9"  :src="userProfileImage" alt="" />
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -214,6 +214,7 @@ export default {
     
     async commentPost() {
       await commentPost(this.postId, this.commentData)
+      this.commentData.text=''
       // this.$emit('postFetch');
       this.showCommentBox = !this.showCommentBox
       this.customPost.comment_count++;
