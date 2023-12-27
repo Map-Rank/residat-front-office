@@ -57,7 +57,7 @@
     <!-- Post Interaction Area -->
     <footer class="p-5">
       <!-- upper section  -->
-      <InteractionPostStatistics :comment_count="comment_count" :like_count="like_count" />
+      <InteractionPostStatistics :comment_count="customPost.comment_count" :like_count="like_count" />
 
       <!-- lower section  -->
       <div class="flex justify-between">
@@ -79,7 +79,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <img class="h-9 w-9" src="public\images\unicef_logo.png" alt="" />
+        <img class="h-9 w-9"  :src="userProfileImage" alt="" />
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -121,12 +121,15 @@ import { URL_LINK } from '@/constants/url.js'
 
 export default {
   name: 'PostComponent',
+  emits: ['postFetch','updatePost'],
   data() {
     const route = useRoute()
     return {
       route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
+      likeCount:this.like_count,
+      customPost:this.post,
       isMenuVisible: false,
       imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
@@ -189,19 +192,21 @@ export default {
     switch (index) {
       case 0:
         await likePost(this.postId);
-        window.location.reload();
+        this.customPost.like_count++;
+        this.$emit('updatePost', this.customPost); 
+        // this.$emit('postFetch');
         break;
-      case 1:
-        this.showCommentBox = !this.showCommentBox;
-        console.log(this.postImages);
-        break;
-        case 2:
-          await sharePost(this.postId);
-          window.location.reload();
+        case 1:
+          this.showCommentBox = !this.showCommentBox;
+          console.log(this.postImages);
           break;
-          case 3:
-            console.log(this.post);
-        window.location.reload();
+          case 2:
+            await sharePost(this.postId);
+            this.$emit('postFetch');
+                break;
+            case 3:
+              console.log(this.post);
+              this.$emit('postFetch');
         break;
       }
     },
@@ -209,8 +214,11 @@ export default {
     
     async commentPost() {
       await commentPost(this.postId, this.commentData)
+      this.commentData.text=''
+      // this.$emit('postFetch');
       this.showCommentBox = !this.showCommentBox
-      window.location.reload();
+      this.customPost.comment_count++;
+      // window.location.reload();
     },
     
     clickIcon(index) {
@@ -243,7 +251,6 @@ export default {
     },
 
     calculateFlexBasis() {
-      // Calculate the flex-basis based on the number of images
       const numberOfImages = this.postImages.length - 1 // minus the first image
       const maxImagesToShow = 3
       if (numberOfImages > maxImagesToShow) {

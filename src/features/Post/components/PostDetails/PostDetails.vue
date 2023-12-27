@@ -2,31 +2,32 @@
   <div class="">
     <div class="fixed z-10 inset-0 back overflow-y-auto" id="modal">
       <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
-        <div class="box grid md:grid-cols-2 bg-black shadow rounded-lg w-4/5 mx-auto">
+        <div
+          :class="`box grid ${
+            post.images.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
+          } bg-black shadow rounded-lg w-4/5 mx-auto`"
+        >
           <!-- Display post images  -->
-          <div class="flex items-center mt-1 ">
-            <div v-if="post.images && post.images.length" class="flex space-x-2  w-full h-full">
-              <!-- <button class="text-white" @click="prevImage">Prev</button> -->
-              <img :src="`${imageHost}${currentImage}`" class="object-cover " alt="Post image" />
-              <!-- <button class="text-white" @click="nextImage">Next</button> -->
-            </div>
+          <div class="flex items-center justify-center mt-1" v-if="post.images.length > 0">
+            
+            <ImageSlider  class="w-full " :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
 
           <div class="info grid grid-rows-2 h-full pl-5 py-3">
-            <div>
+            <div class="h-full">
               <!-- user informations -->
               <div class="mt-5 relative pb-4 mr-5 items-start">
                 <div class="flex justify-between">
                   <div class="flex space-x-2 mb-4">
                     <img
                       class="w-10 h-10 rounded-full"
-                      :src="post.creator.avatar"
+                      :src="`${imageHost}${post.creator[0].avatar}`"
                       alt="User profile"
                     />
                     <div class="flex-1">
-                      <h5 class="font-bold">{{ post.creator.first_name }}</h5>
+                      <h5 class="font-bold">{{ post.creator[0].first_name }}</h5>
                       <div class="text-sm text-gray-600">{{ post.published_at }}</div>
                     </div>
                   </div>
@@ -38,7 +39,7 @@
               </div>
 
               <!-- list of Comment  -->
-              <div class=" ">
+              <div class="overflow-auto h-full">
                 <div class="space-y-2">
                   <div
                     v-for="(comment, index) in post.comments"
@@ -47,7 +48,7 @@
                   >
                     <img
                       class="w-10 h-10 rounded-full"
-                      :src="comment.user.avatar"
+                      :src="`${imageHost}${comment.user.avatar}`"
                       alt="User profile"
                     />
 
@@ -76,17 +77,17 @@
             </div>
 
             <!-- comment interaction section -->
-            <div class="mt-auto space-y-4 w-full">
+            <div class="mt-auto space-y-4 w-full ">
               <div class="flex space-x-4">
                 <img src="src\assets\icons\heart.svg" alt="" />
                 <img src="src\assets\icons\bookmark.svg" alt="" />
               </div>
 
-              <div class="flex space-x-4">
+              <div class="flex justify-between space-x-4">
                 <input
                   type="text"
                   placeholder="Add a comments"
-                  class="w-3/4 p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  class="w-full p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
                 />
 
                 <!-- Post button -->
@@ -112,8 +113,9 @@
 
 <script>
 import { mapActions } from 'pinia'
-import usePostStore  from '../../store/postStore'
-import { URL_LINK } from '@/constants';
+import usePostStore from '../../store/postStore'
+import { URL_LINK } from '@/constants'
+import ImageSlider from '../../../../components/gallery/ImageSlider.vue'
 
 export default {
   name: 'PostDetails',
@@ -122,15 +124,17 @@ export default {
     const postStore = usePostStore()
     this.post = postStore.postToShowDetails
   },
+  components: {
+    ImageSlider
+  },
   data() {
     return {
       currentImageIndex: 0,
       post: [],
-        imageHost:URL_LINK.imageHostLink
+      imageHost: URL_LINK.imageHostLink
     }
   },
-  props: {
-  },
+  props: {},
   computed: {
     currentImage() {
       return this.post.images[this.currentImageIndex].url

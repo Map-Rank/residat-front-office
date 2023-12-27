@@ -1,10 +1,12 @@
 <template>
   <div class="container mx-auto p-6">
+
     <div class="flex justify-center mb-9">
 
       <h3 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
       </h3>
+    </div>
 
 
     <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" />
@@ -24,7 +26,7 @@
             rows="4"
           ></vee-field>
           <div class="sm:w-1/2">
-            <image-preview-gallery class="" :Images="imagesToPreview"> </image-preview-gallery>
+            <image-preview-gallery class="" :Images="imagesToPreview" @removeImage="removeImage"> </image-preview-gallery>
           </div>
         </div>
 
@@ -73,7 +75,7 @@
       </vee-form>
     </div>
   </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
@@ -142,6 +144,9 @@ export default {
     handleError() {
       this.isLoading = false
     },
+    removeImage(index) {
+    this.imagesToPreview.splice(index, 1);
+  },
     async submitPost() {
       if (this.formData.content == '') {
         return

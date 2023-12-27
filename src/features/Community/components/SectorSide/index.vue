@@ -4,9 +4,10 @@
     <ul class="grid space-y-6">
       <li v-for="sector in sectorArray" :key="sector">
         <base-checkbox
-            :key="sector.name"
-            :list="sector"
-          ></base-checkbox>
+          :key="sector.name"
+          :list="sector"
+          @change="updatesectorChecked"
+        ></base-checkbox>
       </li>
     </ul>
   </div>
@@ -28,7 +29,8 @@ export default {
     sectorArray: {
       type: Array,
       required: true
-    }
+    },
+    updatesectorChecked: {}
   },
   components:{
     BaseCheckbox
