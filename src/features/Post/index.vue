@@ -23,13 +23,11 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
-
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="editPost()"
-
           >
           </button-ui>
 
@@ -52,12 +50,16 @@
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showDetails"> </image-post-gallery>
+    <image-post-gallery :Images="postImages" @customFunction="showDetails">
+    </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="p-5">
       <!-- upper section  -->
-      <InteractionPostStatistics :comment_count="customPost.comment_count" :like_count="like_count" />
+      <InteractionPostStatistics
+        :comment_count="customPost.comment_count"
+        :like_count="like_count"
+      />
 
       <!-- lower section  -->
       <div class="flex justify-between">
@@ -79,7 +81,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <img class="h-9 w-9"  :src="userProfileImage" alt="" />
+        <img class="h-9 w-9" :src="userProfileImage" alt="" />
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -91,8 +93,7 @@
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
         <button
-          @click.prevent="commentPost()"
-
+          @click.prevent="commentPost(this.commentData)"
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -101,173 +102,182 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails" ></post-details>
+  <post-details v-if="showPostDetails"  @commentPost="commentPost"></post-details>
 </template>
 
 <script>
-import '../../assets/css/global.scss'
-import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
-import PostDetails from './components/PostDetails/PostDetails.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import usePostStore from './store/postStore'
-import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
-import ButtonUi from '../../components/base/ButtonUi.vue'
-import { useRoute } from 'vue-router'
-import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
-import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
-import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
-import { URL_LINK } from '@/constants/url.js'
-
+import "../../assets/css/global.scss";
+import IconWithLabel from "../../components/common/IconWithLabel/index.vue";
+import PostDetails from "./components/PostDetails/PostDetails.vue";
+import { mapActions, mapWritableState } from "pinia";
+import usePostStore from "./store/postStore";
+import {
+  commentPost,
+  deletePost,
+  likePost,
+  sharePost,
+} from "../Post/services/postService";
+import ButtonUi from "../../components/base/ButtonUi.vue";
+import { useRoute } from "vue-router";
+import ImagePostGallery from "@/components/gallery/ImagePostGallery/index.vue";
+import UserPostInfo from "@/features/Post/components/UserPostInfo/UserPostInfo.vue";
+import InteractionPostStatistics from "@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue";
+import { URL_LINK } from "@/constants/url.js";
 
 export default {
-  name: 'PostComponent',
-  emits: ['postFetch','updatePost'],
+  name: "PostComponent",
+  emits: ["postFetch", "updatePost"],
   data() {
-    const route = useRoute()
+    const route = useRoute();
     return {
       route,
-      iconDesktopSize: 'w-6 h-6',
-      iconMobileSize: 'w-5 h-5',
-      likeCount:this.like_count,
-      customPost:this.post,
+      iconDesktopSize: "w-6 h-6",
+      iconMobileSize: "w-5 h-5",
+      likeCount: this.like_count,
+      customPost: this.post,
       isMenuVisible: false,
       imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
       commentData: {
-        text: ' ',
-        image: ' '
+        text: " ",
+        image: " ",
       },
       iconLabels: [
         {
-          svgContent: 'src\\assets\\icons\\heart-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
-          labelText: 'Like',
-          right: true
+          svgContent: "src\\assets\\icons\\heart-outline.svg",
+          svgContentHover: "src\\assets\\icons\\heart-fill.svg",
+          labelText: "Like",
+          right: true,
         },
         {
-          svgContent: 'src\\assets\\icons\\comment-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
-          labelText: 'Comment',
-          right: true
+          svgContent: "src\\assets\\icons\\comment-outline.svg",
+          svgContentHover: "src\\assets\\icons\\comment-fill.svg",
+          labelText: "Comment",
+          right: true,
         },
         {
-          svgContent: 'src\\assets\\icons\\share-fill.svg',
-          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
-          labelText: 'Share',
-          right: true
+          svgContent: "src\\assets\\icons\\share-fill.svg",
+          svgContentHover: "src\\assets\\icons\\share-fill.svg",
+          labelText: "Share",
+          right: true,
         },
         {
-          svgContent: 'src\\assets\\icons\\archieved-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
-          labelText: 'Archieve',
-          right: true
-        }
-      ]
-    }
+          svgContent: "src\\assets\\icons\\archieved-outline.svg",
+          svgContentHover: "src\\assets\\icons\\archieved-fill.svg",
+          labelText: "Archieve",
+          right: true,
+        },
+      ],
+    };
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails', 'setpostToEdit','setpostIdToShowDetails']),
-    
-    async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
+    ...mapActions(usePostStore, [
+      "togglePostDetails",
+      "setpostToShowDetails",
+      "setpostToEdit",
+      "setpostIdToShowDetails",
+    ]),
+
+    async deletePost(alertMessage = "Are you sure you want to delete this post?") {
       if (window.confirm(alertMessage)) {
-        console.log('Deleting post', this.postId)
+        console.log("Deleting post", this.postId);
         try {
-          await deletePost(this.postId)
+          await deletePost(this.postId);
           window.location.reload();
         } catch (error) {
-          console.error('Error deleting post:', error)
+          console.error("Error deleting post:", error);
         }
       } else {
-        console.log('Post deletion cancelled by user')
+        console.log("Post deletion cancelled by user");
       }
     },
     editPost() {
-      console.log('edit post ')
-      this.setpostToEdit(this.post)
-      this.$router.push({ name: 'create-post' })
+      console.log("edit post ");
+      this.setpostToEdit(this.post);
+      this.$router.push({ name: "create-post" });
     },
 
-  async customFunction(index) {
-    switch (index) {
-      case 0:
-        await likePost(this.postId);
-        this.customPost.like_count++;
-        this.$emit('updatePost', this.customPost); 
-        // this.$emit('postFetch');
-        break;
+    async customFunction(index) {
+      switch (index) {
+        case 0:
+          await likePost(this.postId);
+          this.customPost.like_count++;
+          this.$emit("updatePost", this.customPost);
+          // this.$emit('postFetch');
+          break;
         case 1:
           this.showCommentBox = !this.showCommentBox;
           console.log(this.postImages);
           break;
-          case 2:
-            await sharePost(this.postId);
-            this.$emit('postFetch');
-                break;
-            case 3:
-              console.log(this.post);
-              this.$emit('postFetch');
-        break;
+        case 2:
+          await sharePost(this.postId);
+          this.$emit("postFetch");
+          break;
+        case 3:
+          console.log(this.post);
+          this.$emit("postFetch");
+          break;
       }
     },
-    
-    
-    async commentPost() {
-      await commentPost(this.postId, this.commentData)
-      this.commentData.text=''
-      // this.$emit('postFetch');
-      this.showCommentBox = !this.showCommentBox
+
+    async commentPost(text) {
+      // await commentPost(this.postId, this.commentData);
+      console.log(text)
+      await commentPost(this.postId, text);
+      this.commentData.text = "";
+      this.showCommentBox = !this.showCommentBox;
       this.customPost.comment_count++;
       // window.location.reload();
     },
-    
+
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
         if (i == index) {
-          return { ...item, isActive: !item.isActive }
+          return { ...item, isActive: !item.isActive };
         }
 
-        return item
-      })
+        return item;
+      });
     },
 
     handleFileChange(event) {
-      const file = event.target.files[0]
+      const file = event.target.files[0];
       if (file) {
-        this.$emit('handleFileChange', file)
+        this.$emit("handleFileChange", file);
       }
     },
 
     showDetails() {
-      this.togglePostDetails()
-      this.setpostToShowDetails(this.post)
-      this.setpostIdToShowDetails(this.post.id)
+      this.togglePostDetails();
+      this.setpostToShowDetails(this.post);
+      this.setpostIdToShowDetails(this.post.id);
       // console.log(this.post)
       // console.log(this.post.id)
     },
 
     toggleMenu() {
-      this.isMenuVisible = !this.isMenuVisible
-      console.log(this.isMenuVisible)
+      this.isMenuVisible = !this.isMenuVisible;
+      console.log(this.isMenuVisible);
     },
 
     calculateFlexBasis() {
-      const numberOfImages = this.postImages.length - 1 // minus the first image
-      const maxImagesToShow = 3
+      const numberOfImages = this.postImages.length - 1; // minus the first image
+      const maxImagesToShow = 3;
       if (numberOfImages > maxImagesToShow) {
         // If more than 3 images, each gets an equal share of space
-        return `${100 / maxImagesToShow}%`
+        return `${100 / maxImagesToShow}%`;
       }
       // If fewer than 3 images, they grow equally to fill the space
-      return `${100 / numberOfImages}%`
+      return `${100 / numberOfImages}%`;
     },
 
     handleImageUpload(file) {
       this.images = file.map((file) => ({
         name: file.name,
-        url: URL.createObjectURL(file)
-      }))
-    }
+        url: URL.createObjectURL(file),
+      }));
+    },
   },
 
   components: {
@@ -276,15 +286,15 @@ export default {
     IconWithLabel,
     PostDetails,
     ButtonUi,
-    ImagePostGallery
+    ImagePostGallery,
     // BaseImagePickerVue
   },
   computed: {
-    ...mapWritableState(usePostStore, ['showPostDetails']),
+    ...mapWritableState(usePostStore, ["showPostDetails"]),
 
     slicedImages() {
-      return this.postImages.slice(1).filter((image, index) => index < 3)
-    }
+      return this.postImages.slice(1).filter((image, index) => index < 3);
+    },
   },
 
   props: {
@@ -297,14 +307,14 @@ export default {
     comment_count: Number,
     postImages: Array,
     postId: Number,
-   showMenu: {
-     type: Boolean,
-     default: false
-   },
-   
-    post: Object
-  }
-}
+    showMenu: {
+      type: Boolean,
+      default: false,
+    },
+
+    post: Object,
+  },
+};
 </script>
 
 <style scoped>

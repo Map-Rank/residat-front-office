@@ -8,7 +8,10 @@
           } bg-black shadow rounded-lg w-4/5 mx-auto`"
         >
           <!-- Display post images  -->
-          <div class="flex items-center justify-center mt-1" v-if="post.images.length > 0">
+          <div
+            class="flex items-center justify-center mt-1"
+            v-if="post.images.length > 0"
+          >
             <ImageSlider class="w-full" :images="post.images"></ImageSlider>
           </div>
 
@@ -18,23 +21,13 @@
             <div class="h-full">
               <!-- user informations -->
               <div class="mt-5 relative pb-4 mr-5 items-start">
-                <div class="flex justify-between">
-                  <div class="flex space-x-2 mb-4">
-                    <img
-                      class="w-10 h-10 rounded-full"
-                      :src="`${imageHost}${post.creator[0].avatar}`"
-                      alt="User profile"
-                    />
-                    <div class="flex-1">
-                      <h5 class="font-bold">{{ post.creator[0].first_name }}</h5>
-                      <div class="text-sm text-gray-600">{{ post.published_at }}</div>
-                    </div>
-                  </div>
+                <div class="flex items-start justify-between border-b-2">
+                  <UserInfoPostDetails :image-host="imageHost" :post="post" />
+
                   <button @click="dismiss()">
                     <img src="src\assets\icons\dismiss.svg" alt="" />
                   </button>
                 </div>
-                <p class="border-b-2 pb-3">{{ post.content }}</p>
               </div>
 
               <!-- list of Comment  -->
@@ -45,31 +38,7 @@
                     :key="index"
                     class="flex items-start space-x-4"
                   >
-                    <img
-                      class="w-10 h-10 rounded-full"
-                      :src="`${imageHost}${comment.user.avatar}`"
-                      alt="User profile"
-                    />
-
-                    <div>
-                      <div>
-                        <div>
-                          <h5 class="comment-user-name">{{ comment.user.first_name }}</h5>
-                          <div class="comment-text">{{ comment.text }}</div>
-                          <div class="text-sm caption-1">{{ comment.created_at }}</div>
-                        </div>
-
-                        <div class="flex space-x-2 mt-2">
-                          <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
-                            Like
-                          </button>
-
-                          <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
-                            Comment
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                    <CommentInfoBox :comment="comment" :image-host="imageHost" />
                   </div>
                 </div>
               </div>
@@ -84,6 +53,7 @@
 
               <div class="flex justify-between space-x-4">
                 <input
+                  v-model="commentText"
                   type="text"
                   placeholder="Add a comments"
                   class="w-full p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -93,7 +63,7 @@
                 <button
                   @click="
                     () => {
-                      console.log(this.post)
+                      commentPost()
                     }
                   "
                   class="btn text-green-500 px-6 py-2 rounded-lg hover:bg-white focus:outline-none"
@@ -111,57 +81,66 @@
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import usePostStore from '../../store/postStore'
-import { getSpecificPost } from '../../services/postService'
-import { URL_LINK } from '@/constants'
-import ImageSlider from '../../../../components/gallery/ImageSlider.vue'
+import { mapActions } from "pinia";
+import usePostStore from "../../store/postStore";
+import { URL_LINK } from "@/constants";
+import ImageSlider from "../../../../components/gallery/ImageSlider.vue";
+import CommentInfoBox from "@/features/Post/components/PostDetails/components/CommentInfoBox.vue";
+import UserInfoPostDetails from "@/features/Post/components/PostDetails/components/UserInfoPostDetails.vue";
 
 export default {
-  name: 'PostDetails',
+  name: "PostDetails",
 
   async created() {
-    const postStore = usePostStore()
+    const postStore = usePostStore();
 
     // this.post = await getSpecificPost(postStore.postIdToShowDetail)
     // console.log(this.post)
-    this.post = postStore.postToShowDetails
+    this.post = postStore.postToShowDetails;
   },
   components: {
-    ImageSlider
+    UserInfoPostDetails,
+    CommentInfoBox,
+    ImageSlider,
   },
   data() {
     return {
       currentImageIndex: 0,
       post: [],
-      imageHost: URL_LINK.imageHostLink
-    }
+      commentText: "",
+      imageHost: URL_LINK.imageHostLink,
+    };
   },
   props: {},
   computed: {
     currentImage() {
-      return this.post.images[this.currentImageIndex].url
-    }
+      return this.post.images[this.currentImageIndex].url;
+    },
   },
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails']),
+    ...mapActions(usePostStore, ["togglePostDetails"]),
+
+    commentPost(){
+     this.$emit('commentPost', { text: this.commentText })
+    }
+    ,
 
     dismiss() {
-      this.togglePostDetails()
+      this.togglePostDetails();
     },
     nextImage() {
       if (this.currentImageIndex < this.post.images.length - 1) {
-        this.currentImageIndex + 1
+        this.currentImageIndex + 1;
       }
-      console.log(this.currentImageIndex)
+      console.log(this.currentImageIndex);
     },
     prevImage() {
       if (this.currentImageIndex > 0) {
-        this.currentImageIndex--
+        this.currentImageIndex--;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -169,22 +148,9 @@ export default {
   background: rgba(13, 13, 13, 0.3);
 }
 
-.btn2 {
-  color: var(--gray-normal, #6b6b6b);
-
-  /* Buttons/B2-Bold */
-  font-family: Raleway;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20px; /* 142.857% */
-}
-
 .btn {
   text-align: center;
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
+  font-feature-settings: "clig" off, "liga" off;
 
   /* Desktop / Link Small */
   font-family: Poppins;
@@ -205,38 +171,5 @@ export default {
   .info {
     height: 60vh;
   }
-}
-
-.comment-user-name {
-  color: #000;
-
-  /* Paragraphs/P3-Bold */
-  font-family: Raleway;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-
-.comment-text {
-  color: #000;
-
-  /* Paragraphs/P4 */
-  font-family: Raleway;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 133.333% */
-}
-
-.caption-1 {
-  color: var(--gray-normal, #6b6b6b);
-
-  /* Captions/C1 */
-  font-family: Raleway;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 133.333% */
 }
 </style>
