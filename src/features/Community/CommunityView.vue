@@ -14,11 +14,7 @@
       <!-- Main Content Area: Posts -->
       <main class="col-span-2 sm:px-4">
         <div v-if="topLoading" class="flex h-full justify-center">
-          <img
-            src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s"
-            class="h-7 w-7"
-            alt="Loading..."
-          />
+          <LoadingIndicator />
         </div>
 
         <div v-if="showPageRefresh">
@@ -48,11 +44,7 @@
         </div>
 
         <div v-if="bottomLoading" class="flex  my-7 h-full justify-center">
-          <img
-            src="https://media1.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif?cid=ecf05e47lfs3a4sfo5nk2z7h8e4uw3eqww1rwlnxt178wkqc&ep=v1_stickers_search&rid=giphy.gif&ct=s"
-            class="h-7 w-7"
-            alt="Loading..."
-          />
+          <LoadingIndicator />
         </div>
       </main>
 
@@ -71,6 +63,7 @@ import { getPosts, getPostsBySectors } from '@/features/Post/services/postServic
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
+import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -189,8 +182,8 @@ export default {
     async refreshPage() {
       this.topLoading = true
       this.showPageRefresh = false
-      window.location.reload();
       await this.fetchPosts()
+      window.location.reload();
     },
 
     async loadMorePosts() {
@@ -237,6 +230,7 @@ export default {
 
   },
   components: {
+    LoadingIndicator,
     PostComponent,
     SectorSide,
     RecentlyPostedSide,

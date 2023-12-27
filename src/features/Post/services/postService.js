@@ -88,7 +88,7 @@ const updatePost = async (postData, onSuccess, onError) => {
 
 const getPosts = async (page, size) => {
   let defaultSize = 10
-  let defaultPage = 
+  let defaultPage = 0
 
   size = size || defaultSize
   page = page || defaultPage

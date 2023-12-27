@@ -102,7 +102,7 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails"  @commentPost="commentPost"></post-details>
+  <post-details v-if="showPostDetails"  @commentPost="commentPost" :postId="post.id"></post-details>
 </template>
 
 <script>

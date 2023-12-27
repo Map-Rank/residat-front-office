@@ -17,30 +17,32 @@
 
           <!-- Post details and information  -->
 
-          <div class="info grid grid-rows-2 h-full pl-5 py-3">
-            <div class="h-full">
-              <!-- user informations -->
-              <div class="mt-5 relative pb-4 mr-5 items-start">
-                <div class="flex items-start justify-between border-b-2">
-                  <UserInfoPostDetails :image-host="imageHost" :post="post" />
+          <div class="info grid grid-rows-custom pl-5 py-3">
+            <!-- user informations -->
+            <div class="mt-5 relative pb-4 mr-5 items-start">
+              <div class="flex items-start justify-between border-b-2">
+                <UserInfoPostDetails :image-host="imageHost" :post="post" />
 
-                  <button @click="dismiss()">
-                    <img src="src\assets\icons\dismiss.svg" alt="" />
-                  </button>
+                <button @click="dismiss()">
+                  <img src="src\assets\icons\dismiss.svg" alt="" />
+                </button>
+              </div>
+            </div>
+
+            <!-- list of Comment  -->
+            <div class="overflow-auto">
+              <div v-if="!loading" class="space-y-2">
+                <div
+                  v-for="(comment, index) in post.comments"
+                  :key="index"
+                  class="flex items-start space-x-4"
+                >
+                  <CommentInfoBox :comment="comment" :image-host="imageHost" />
                 </div>
               </div>
 
-              <!-- list of Comment  -->
-              <div class="overflow-auto h-full">
-                <div class="space-y-2">
-                  <div
-                    v-for="(comment, index) in post.comments"
-                    :key="index"
-                    class="flex items-start space-x-4"
-                  >
-                    <CommentInfoBox :comment="comment" :image-host="imageHost" />
-                  </div>
-                </div>
+              <div v-if="loading" class="flex justify-center items-center">
+                <loading-indicator />
               </div>
             </div>
 
@@ -63,7 +65,7 @@
                 <button
                   @click="
                     () => {
-                      commentPost()
+                      commentPost();
                     }
                   "
                   class="btn text-green-500 px-6 py-2 rounded-lg hover:bg-white focus:outline-none"
@@ -77,7 +79,6 @@
       </div>
     </div>
   </div>
-  <!-- </div>  -->
 </template>
 
 <script>
@@ -87,6 +88,8 @@ import { URL_LINK } from "@/constants";
 import ImageSlider from "../../../../components/gallery/ImageSlider.vue";
 import CommentInfoBox from "@/features/Post/components/PostDetails/components/CommentInfoBox.vue";
 import UserInfoPostDetails from "@/features/Post/components/PostDetails/components/UserInfoPostDetails.vue";
+import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
+import { commentPost } from "@/features/Post/services/postService";
 
 export default {
   name: "PostDetails",
@@ -99,6 +102,7 @@ export default {
     this.post = postStore.postToShowDetails;
   },
   components: {
+    LoadingIndicator,
     UserInfoPostDetails,
     CommentInfoBox,
     ImageSlider,
@@ -108,10 +112,16 @@ export default {
       currentImageIndex: 0,
       post: [],
       commentText: "",
+      loading: false,
       imageHost: URL_LINK.imageHostLink,
     };
   },
-  props: {},
+  props: {
+    postId: {
+      type: Number,
+      required: true,
+    },
+  },
   computed: {
     currentImage() {
       return this.post.images[this.currentImageIndex].url;
@@ -120,11 +130,21 @@ export default {
   methods: {
     ...mapActions(usePostStore, ["togglePostDetails"]),
 
-    commentPost(){
-     this.$emit('commentPost', { text: this.commentText })
-    }
-    ,
-
+    async commentPost() {
+      // this.$emit('commentPost', { text: this.commentText })
+      this.loading = true;
+      
+      try {
+        await commentPost(this.postId, { text: this.commentText });
+    // this.post = await getSpecificPost(postStore.postIdToShowDetail)
+      } catch (error) {
+        this.loading = false;
+      }
+      finally{
+        this.commentText=''
+        this.loading = false;
+      }
+    },
     dismiss() {
       this.togglePostDetails();
     },
@@ -148,6 +168,11 @@ export default {
   background: rgba(13, 13, 13, 0.3);
 }
 
+.grid-rows-custom {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
 .btn {
   text-align: center;
   font-feature-settings: "clig" off, "liga" off;
@@ -161,7 +186,7 @@ export default {
   letter-spacing: 0.75px;
 }
 .info {
-  background: var(--Sections, #f5f2f2);
+  background: #f5f2f2;
 }
 .info {
   height: 80vh;
