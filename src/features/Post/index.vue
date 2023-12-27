@@ -101,7 +101,7 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails" :post="this.post"></post-details>
+  <post-details v-if="showPostDetails" ></post-details>
 </template>
 
 <script>
@@ -167,7 +167,7 @@ export default {
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails', 'setpostToEdit']),
+    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails', 'setpostToEdit','setpostIdToShowDetails']),
     
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       if (window.confirm(alertMessage)) {
@@ -241,8 +241,9 @@ export default {
     showDetails() {
       this.togglePostDetails()
       this.setpostToShowDetails(this.post)
+      this.setpostIdToShowDetails(this.post.id)
       // console.log(this.post)
-      console.log('click')
+      // console.log(this.post.id)
     },
 
     toggleMenu() {

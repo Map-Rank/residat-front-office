@@ -79,6 +79,7 @@ export default {
   async created() {
     try {
       await this.fetchPosts()
+      // this.posts = await getPosts()
       this.topLoading = false
     } catch (error) {
       console.error('Failed to load posts:', error)
@@ -143,14 +144,10 @@ export default {
       ? [...this.sectorId, list.id]
       : this.sectorId.filter((id) => id !== list.id)
       
-      this.fetchPosts()
+      this.filterPostBySectors()
     },
 
     async filterPostBySectors() {
-      this.allPosts = await getPostsBySectors()
-    },
-
-    async fetchPosts() {
       try {
         this.topLoading=true
         this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null)
@@ -169,9 +166,30 @@ export default {
 
       }
     },
+
+    async fetchPosts() {
+      try {
+        this.topLoading=true
+        this.posts = await getPosts()
+      } catch (error) {
+        console.error('Failed to load posts:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+        if(this.posts.length == 0){
+          this.showPageRefresh =true
+          this.errorMessage = 'Could not get post refresh your page or check your connection'
+        }else{
+          
+          this.showPageRefresh =false
+        }
+
+      }
+    },
     async refreshPage() {
       this.topLoading = true
       this.showPageRefresh = false
+      window.location.reload();
       await this.fetchPosts()
     },
 

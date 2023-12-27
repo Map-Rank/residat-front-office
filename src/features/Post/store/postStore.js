@@ -5,6 +5,7 @@ export default defineStore('post', {
   state: () => ({
     showPostDetails: false,
     postToShowDetails: null,
+    postIdToShowDetail: null,
     postToEdit:null,
 
   }),
@@ -17,6 +18,9 @@ export default defineStore('post', {
     },
     setpostToShowDetails(post){
       this.postToShowDetails=post
+    },
+    setpostIdToShowDetails(id){
+      this.postIdToShowDetail=id
     },
     setpostToEdit(post){
       this.postToEdit=post

@@ -9,8 +9,7 @@
         >
           <!-- Display post images  -->
           <div class="flex items-center justify-center mt-1" v-if="post.images.length > 0">
-            
-            <ImageSlider  class="w-full " :images="post.images"></ImageSlider>
+            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
@@ -77,7 +76,7 @@
             </div>
 
             <!-- comment interaction section -->
-            <div class="mt-auto space-y-4 w-full ">
+            <div class="mt-auto space-y-4 w-full">
               <div class="flex space-x-4">
                 <img src="src\assets\icons\heart.svg" alt="" />
                 <img src="src\assets\icons\bookmark.svg" alt="" />
@@ -114,14 +113,18 @@
 <script>
 import { mapActions } from 'pinia'
 import usePostStore from '../../store/postStore'
+import { getSpecificPost } from '../../services/postService'
 import { URL_LINK } from '@/constants'
 import ImageSlider from '../../../../components/gallery/ImageSlider.vue'
 
 export default {
   name: 'PostDetails',
 
-  created() {
+  async created() {
     const postStore = usePostStore()
+
+    // this.post = await getSpecificPost(postStore.postIdToShowDetail)
+    // console.log(this.post)
     this.post = postStore.postToShowDetails
   },
   components: {

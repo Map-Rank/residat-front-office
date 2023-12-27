@@ -1,12 +1,8 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
   <div class="flex-col">
-    <div
-      class="text-white text-center font-bold p-4 rounded mb-4"
-      v-show="reg_show_alert"
-      :class="reg_alert_varient"
-    >
-      {{ reg_alert_message }}
+    <div>
+      <AlertForm></AlertForm>
     </div>
 
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
@@ -239,6 +235,9 @@ import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
 import { registerUser } from '../services/authService'
 import { useRouter } from 'vue-router'
+import { AlertStates } from '@/components'
+import useAlertStore from '@/stores/alertStore'
+import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 
 export default {
   name: 'RegisterForm',
@@ -256,9 +255,11 @@ export default {
   data() {
     const router = useRouter()
     const authStore = useAuthStore()
+    const alertStore = useAlertStore()
 
     return {
       authStore,
+      alertStore,
       router,
       schema: {
         name: 'required|min:3|max:50',
@@ -292,10 +293,10 @@ export default {
       step_2: 'step_2',
       currentStep: 'step_1',
       reg_in_submission: false,
-      reg_show_alert: false,
-      reg_alert_varient: 'bg-blue-500',
-      reg_alert_message: 'please wait your account is being created '
     }
+  },
+  components: {
+    AlertForm
   },
 
   methods: {
@@ -332,27 +333,25 @@ export default {
       this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
     },
 
-    handleSuccess() {
-      this.authStore.isloggedIn = true
-      this.$router.push({ name: 'community' })
-    },
 
     handleError(errors) {
-      console.log(errors)
-      ;(this.reg_in_submission = false), (this.reg_alert_varient = 'bg-red-500')
-      this.reg_alert_message = JSON.stringify(errors.email[0])
-      console.log(JSON.stringify(errors.email[0]))
-      console.log(JSON.stringify(errors.zone_id[0]))
+      if (errors.email && errors.email.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
+      } else if (errors.zone_id && errors.zone_id.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0])
+      }
     },
 
     async registerForm() {
-      ;(this.reg_in_submission = true),
-        (this.reg_show_alert = true),
-        (this.reg_alert_varient = 'bg-blue-500'),
-        (this.reg_alert_message = 'Wait we are creating your account ')
+      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are creating your account...');
 
       try {
-        const response = await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError)
+        const response = await registerUser(
+          this.formData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError
+        )
         console.log('this is my responce: ' + response.data)
       } catch (error) {
         console.log(error)
