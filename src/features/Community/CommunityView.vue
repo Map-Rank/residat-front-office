@@ -28,8 +28,7 @@
         <div v-if="!topLoading || !bottomLoading" class="space-y-5">
           <PostComponent
             v-for="(post, index) in posts"
-            :key="index"
-            @updatePost="handleUpdatePost"
+            :key="post.id"
             @postFetch="fetchPosts"
             :postId="post.id"
             :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
@@ -221,12 +220,6 @@ export default {
       }
     },
 
-    handleUpdatePost(updatedPost) {
-      const index = this.posts.findIndex((p) => p.id === updatedPost.id)
-      if (index !== -1) {
-        this.$set(this.posts, index, updatedPost)
-      }
-    }
 
   },
   components: {

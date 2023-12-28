@@ -1,5 +1,6 @@
 
 import { defineStore } from 'pinia';
+import { getSpecificPost } from "@/features/Post/services/postService";
 
 export default defineStore('post', {
   state: () => ({
@@ -14,7 +15,6 @@ export default defineStore('post', {
   actions: {
     togglePostDetails() {
       this.showPostDetails = !this.showPostDetails;
-      console.log('toogle done')
     },
     setpostToShowDetails(post){
       this.postToShowDetails=post
@@ -25,7 +25,20 @@ export default defineStore('post', {
     setpostToEdit(post){
       this.postToEdit=post
       console.log(this.postToEdit)
-    }
+    },
+    async showDetails(id) {
+        try {
+            // const post = await someAsyncFunctionToFetchPostById(id);
+            const post = await getSpecificPost(id)
+            this.setpostIdToShowDetails(id);
+            this.setpostToShowDetails(post);
+            this.togglePostDetails();
+        } catch (error) {
+            console.error('Error fetching post details:', error);
+            // Handle errors here, like showing a notification to the user
+        }
+    },
+    
   },
 });
 

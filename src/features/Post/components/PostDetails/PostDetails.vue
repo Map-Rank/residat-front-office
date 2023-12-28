@@ -2,15 +2,16 @@
   <div class="">
     <div class="fixed z-10 inset-0 back overflow-y-auto" id="modal">
       <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
-        <div
-          :class="`box grid ${
-            post.medias.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
-          } bg-black shadow rounded-lg w-4/5 mx-auto`"
-        >
+      <div
+        :class="`box grid ${
+          post && post.medias && post.medias.length === 0? 'grid-cols-auto' : 'md:grid-cols-2'
+        } bg-black shadow rounded-lg w-4/5 mx-auto`"
+      >
+      
           <!-- Display post images  -->
           <div
             class="flex items-center justify-center mt-1"
-            v-if="post.medias.length > 0"
+            v-if="post.medias && post.medias.length > 0"
           >
             <ImageSlider class="w-full" :images="post.medias"></ImageSlider>
           </div>
@@ -37,7 +38,7 @@
                   :key="index"
                   class="flex items-start space-x-4"
                 >
-                  <CommentInfoBox :comment="comment" :image-host="imageHost" />
+                  <CommentInfoBox   :comment="comment" :image-host="imageHost" />
                 </div>
               </div>
 
@@ -97,10 +98,11 @@ export default {
   async created() {
     const postStore = usePostStore();
 
-    this.post = await getSpecificPost(postStore.postIdToShowDetail)
-    console.log(this.post)
+    // this.post = await getSpecificPost(postStore.postIdToShowDetail)
+    this.postId = postStore.postIdToShowDetail
     // console.log(this.post)
-    // this.post = postStore.postToShowDetails;
+    // console.log(this.post)
+    this.post = postStore.postToShowDetails;
   },
   components: {
     LoadingIndicator,
@@ -111,17 +113,18 @@ export default {
   data() {
     return {
       currentImageIndex: 0,
-      post: [],
+      post: null,
       commentText: "",
       loading: false,
+      postId:null,
       imageHost: URL_LINK.imageHostLink,
     };
   },
   props: {
-    postId: {
-      type: Number,
-      required: true,
-    },
+    // postId: {
+    //   type: Number,
+    //   required: true,
+    // },
   },
   computed: {
     currentImage() {
@@ -132,7 +135,6 @@ export default {
     ...mapActions(usePostStore, ["togglePostDetails"]),
 
     async commentPost() {
-      // this.$emit('commentPost', { text: this.commentText })
       this.loading = true;
       
       try {

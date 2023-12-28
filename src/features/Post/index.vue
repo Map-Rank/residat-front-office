@@ -43,14 +43,14 @@
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showDetails()" class="px-5 mb-2 cursor-pointer">
+    <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
       <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
       <p class="p3 content">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showDetails">
+    <image-post-gallery :Images="postImages" @customFunction="showDetails(this.post.id)">
     </image-post-gallery>
 
     <!-- Post Interaction Area -->
@@ -102,7 +102,7 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails"  @commentPost="commentPost" :postId="post.id"></post-details>
+  <post-details  v-if="showPostDetails"  ></post-details>
 </template>
 
 <script>
@@ -176,6 +176,7 @@ export default {
       "togglePostDetails",
       "setpostToShowDetails",
       "setpostToEdit",
+      "showDetails",
       "setpostIdToShowDetails",
     ]),
 
@@ -203,7 +204,6 @@ export default {
         case 0:
           await likePost(this.postId);
           this.customPost.like_count++;
-          this.$emit("updatePost", this.customPost);
           // this.$emit('postFetch');
           break;
         case 1:
@@ -248,13 +248,15 @@ export default {
       }
     },
 
-    showDetails() {
-      this.togglePostDetails();
-      this.setpostToShowDetails(this.post);
-      this.setpostIdToShowDetails(this.post.id);
-      // console.log(this.post)
-      // console.log(this.post.id)
-    },
+    // showPostDetails() {
+    //   this.showDetails(this.post.id)
+    //   this.setpostIdToShowDetails(this.post.id);
+
+    //   this.togglePostDetails();
+    //   // this.setpostToShowDetails(this.post);
+    //   // console.log(this.post)
+    //   // console.log(this.post.id)
+    // },
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible;

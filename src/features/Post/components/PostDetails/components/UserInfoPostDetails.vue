@@ -19,7 +19,7 @@
 export default {
   name: 'UserInfoPostDetails',
   props: {
-    imageHost: {},
+    imageHost: String,
     post: {}
   }
 }
