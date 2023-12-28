@@ -5,7 +5,7 @@
       <top-profile-info
       v-if="!isLoading"
         :profileImageUrl="`${imageHost}${userPost.avatar}`"
-        :profileName="`${user.first_name} ${user.last_name}`"
+        :profileName="`${userPost.first_name} ${userPost.last_name}`"
         :followersCount="0"
         :postsCount="posts.length"
         :isCurrentUser="true"
@@ -16,12 +16,12 @@
       <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4">
         <aside class="col-span-1 mb-2 sm:block">
           <about-user-info
-          :username="`${user.first_name} ${user.last_name}`"
+          :username="`${userPost.first_name} ${userPost.last_name}`"
           :description="'Your description here'"
           :location="'From ' + user.address"
-          :phone="user.phone"
-          :email="user.email"
-          :joinDate="formatDate(user.created_at)"
+          :phone="userPost.phone"
+          :email="userPost.email"
+          :joinDate="formatDate(userPost.created_at)"
           :website="'your-website-url.com'"
           />
         </aside>

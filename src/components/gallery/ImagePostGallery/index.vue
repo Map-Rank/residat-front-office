@@ -63,7 +63,6 @@ export default {
 
     handleClick() {
       this.$emit('customFunction')
-      console.log(`${URL.imageHostLink}`)
     },
     calculateFlexBasis() {
       // Calculate the flex-basis based on the number of images
