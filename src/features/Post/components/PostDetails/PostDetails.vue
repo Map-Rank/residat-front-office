@@ -100,8 +100,6 @@ export default {
 
     // this.post = await getSpecificPost(postStore.postIdToShowDetail)
     this.postId = postStore.postIdToShowDetail
-    // console.log(this.post)
-    // console.log(this.post)
     this.post = postStore.postToShowDetails;
   },
   components: {
@@ -120,12 +118,7 @@ export default {
       imageHost: URL_LINK.imageHostLink,
     };
   },
-  props: {
-    // postId: {
-    //   type: Number,
-    //   required: true,
-    // },
-  },
+
   computed: {
     currentImage() {
       return this.post.medias[this.currentImageIndex].url;

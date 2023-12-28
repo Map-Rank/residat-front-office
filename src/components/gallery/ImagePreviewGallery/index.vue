@@ -8,6 +8,21 @@
       </div>
     </div>
 
+    <div v-if="ImagesFromHostToPreview && ImagesFromHostToPreview.length > 0" class="flex mb-0.5">
+      <div class="image-container">
+        <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
+        <img
+          :src="
+            ImagesFromHostToPreview != null
+              ? formatHostImageUrl(ImagesFromHostToPreview[0].url)
+              : Images[0].url
+          "
+          :alt="'image'"
+          class="w-full h-auto object-cover"
+        />
+      </div>
+    </div>
+
     <!-- Container for two images side by side -->
     <div v-if="Images.length === 2" class="flex mb-0.5">
       <div class="image-container w-2/5 h-1/2">
@@ -18,6 +33,20 @@
         <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
 
         <img :src="Images[1].src" :alt="Images[1].alt" class="" />
+      </div>
+    </div>
+
+    <div v-if="ImagesFromHostToPreview != null">
+      <div v-if="ImagesFromHostToPreview.length === 2" class="flex mb-0.5">
+        <div class="image-container w-2/5 h-1/2">
+          <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
+          <img :src="formatHostImageUrl(ImagesFromHostToPreview[0].url)" :alt="'image'" class="" />
+        </div>
+        <div class="image-container w-2/5 h-1/2">
+          <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
+
+          <img :src="formatHostImageUrl(ImagesFromHostToPreview[1].url)" :alt="'image'" class="" />
+        </div>
       </div>
     </div>
 
@@ -44,14 +73,25 @@
 </template>
 
 <script>
+  import { formatHostImageUrl } from '@/utils/formating'
+
 export default {
   name: 'ImagePreviewGallery',
+  data() {
+      return {
+        formatHostImageUrl
+      }
+    },
   emits: ['removeImage'],
   props: {
     Images: {
       type: Array,
       required: true
-    }
+    },
+    ImagesFromHostToPreview: {
+        type: Array,
+        default: () => []
+      },
   },
   methods: {
     showDetails() {
