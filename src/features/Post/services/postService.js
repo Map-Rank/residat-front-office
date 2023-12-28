@@ -184,12 +184,11 @@ const deletePost = async (postId) => {
 
 const commentPost = async (postId, commentData) => {
   try {
-    const response = await makeApiPostCall(
+    await makeApiPostCall(
       `${API_ENDPOINTS.commentPost}/${postId}`,
       JSON.stringify({ text: commentData.text }),
       authToken
     )
-    console.log('Comment successfullty send!!!' + response.data.data)
   } catch (error) {
     console.error('Error Commenting Post:', error)
     throw error
