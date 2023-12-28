@@ -50,8 +50,14 @@
             <!-- comment interaction section -->
             <div class="mt-auto space-y-4 w-full">
               <div class="flex space-x-4">
-                <img src="src\assets\icons\heart.svg" alt="" />
-                <img src="src\assets\icons\bookmark.svg" alt="" />
+                <div class="flex justify-between mb-2 pb-2">
+                  <div class="flex items-center space-x-1">
+                    <img src="src\assets\icons\heart-fill.svg" alt="" />
+                    <span class="caption-c1-bold">{{ post.likes.length }}  likes</span>
+                    <img src="src\assets\icons\share-fill.svg" alt="" />
+                    <span class="ml-4 caption-c1-bold">{{ post.shares.length }} Shares</span>
+                  </div>
+                </div>
               </div>
 
               <div class="flex justify-between space-x-4">

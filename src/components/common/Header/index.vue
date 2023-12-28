@@ -127,13 +127,13 @@ export default {
           bottom: true,
           routerName: 'create-post'
         },
-        {
-          svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
-          labelText: 'Subscribe',
-          isActive: false,
-          bottom: true
-        }
+        // {
+        //   svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
+        //   svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
+        //   labelText: 'Subscribe',
+        //   isActive: false,
+        //   bottom: true
+        // }
       ]
     }
   },
