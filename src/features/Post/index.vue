@@ -134,9 +134,12 @@ export default {
       iconMobileSize: "w-5 h-5",
       likeCount: this.like_count,
       customPost: this.post,
+      customLiked:this.liked,
+      hasLikeouUnlike:false,
       isMenuVisible: false,
       imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
+      isCommenting:false,
       commentData: {
         text: " ",
         image: " ",
@@ -146,12 +149,14 @@ export default {
           svgContent: "src\\assets\\icons\\heart-outline.svg",
           svgContentHover: "src\\assets\\icons\\heart-fill.svg",
           labelText: "Like",
+          isActive:this.customLiked,
           right: true,
         },
         {
           svgContent: "src\\assets\\icons\\comment-outline.svg",
           svgContentHover: "src\\assets\\icons\\comment-fill.svg",
           labelText: "Comment",
+          isActive:this.isCommenting,
           right: true,
         },
         {
@@ -202,11 +207,22 @@ export default {
       switch (index) {
         case 0:
           await likePost(this.postId);
-          this.customPost.like_count++;
+          if(this.customLiked){
+            this.customLiked = false
+            this.customPost.like_count--;
+            console.log(this.customLiked)
+          }else{
+            this.customLiked = true
+            console.log(this.customLiked)
+            this.customPost.like_count++;
+
+          }
+          // hasLikeouUnlike ? 
           // this.$emit('postFetch');
           break;
         case 1:
           this.showCommentBox = !this.showCommentBox;
+          this.isCommenting = true
           console.log(this.postImages);
           break;
         case 2:
@@ -221,10 +237,10 @@ export default {
     },
 
     async commentPost(text) {
-      // await commentPost(this.postId, this.commentData);
-      console.log(text)
+
       await commentPost(this.postId, text);
       this.commentData.text = "";
+      this.isCommenting = false
       this.showCommentBox = !this.showCommentBox;
       this.customPost.comment_count++;
       // window.location.reload();
@@ -308,6 +324,7 @@ export default {
     comment_count: Number,
     postImages: Array,
     postId: Number,
+    liked:Boolean,
     showMenu: {
       type: Boolean,
       default: false,

@@ -333,6 +333,12 @@ export default {
       this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
     },
 
+    handleSuccess() {
+      console.log("Current User:", this.authStore.getCurrentUser);
+      this.authStore.isloggedIn = true;
+      this.$router.push({ name: "community" });
+    },
+
 
     handleError(errors) {
       if (errors.email && errors.email.length > 0) {
@@ -346,13 +352,12 @@ export default {
       this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are creating your account...');
 
       try {
-        const response = await registerUser(
+        await registerUser(
           this.formData,
           this.authStore,
           this.handleSuccess,
           this.handleError
         )
-        console.log('this is my responce: ' + response.data)
       } catch (error) {
         console.log(error)
       }

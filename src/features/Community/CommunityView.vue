@@ -34,6 +34,7 @@
             :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
             :postDate="post.postDate"
             :postContent="post.content"
+            :liked="post.liked"
             :userProfileImage="`${imageHost}${post.creator[0].avatar}`"
             :like_count="post.like_count"
             :comment_count="post.comment_count"
