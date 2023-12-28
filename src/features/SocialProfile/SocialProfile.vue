@@ -1,8 +1,10 @@
 <template>
   <div class="h-full">
-    <div class="bg-white p-6">
+    <div class="bg-white p-6 flex justify-center">
+      <loading-indicator v-if="isLoading"></loading-indicator>
       <top-profile-info
-        :profileImageUrl="`${imageHost}${user.avatar}`"
+      v-if="!isLoading"
+        :profileImageUrl="`${imageHost}${userPost.avatar}`"
         :profileName="`${user.first_name} ${user.last_name}`"
         :followersCount="0"
         :postsCount="posts.length"
@@ -14,33 +16,43 @@
       <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4">
         <aside class="col-span-1 mb-2 sm:block">
           <about-user-info
-            :username="`${user.first_name} ${user.last_name}`"
-            :description="'Your description here'"
-            :location="'From ' + user.address"
-            :phone="user.phone"
-            :email="user.email"
-            :joinDate="formatDate(user.created_at)"
-            :website="'your-website-url.com'"
+          :username="`${user.first_name} ${user.last_name}`"
+          :description="'Your description here'"
+          :location="'From ' + user.address"
+          :phone="user.phone"
+          :email="user.email"
+          :joinDate="formatDate(user.created_at)"
+          :website="'your-website-url.com'"
           />
         </aside>
-
+        
         <!-- Main Content Area: Posts -->
         <main class="col-span-2 sm:px-4">
           <div class="space-y-5">
-            <PostComponent
-              v-for="(post, index) in posts"
-              :key="index"
-              :postId="post.id"
-              :username="`${userPost.first_name} ${userPost.last_name} `"
-              :postDate="post.created_at"
-              :postContent="post.content"
-              :userProfileImage="`${imageHost}${user.avatar}`"
-              :like_count="post.like_count"
-              :comment_count="post.comment_count"
-              :postImages="post.images"
-              :showMenu="true"
-              :post="post"
-            />
+            <div class="flex justify-center">
+
+              <loading-indicator v-if="isLoading"></loading-indicator>
+            </div>
+
+            <div
+            v-if="!isLoading"
+            >
+
+              <PostComponent
+                v-for="(post, index) in posts"
+                :key="index"
+                :postId="post.id"
+                :username="`${userPost.first_name} ${userPost.last_name} `"
+                :postDate="post.created_at"
+                :postContent="post.content"
+                :userProfileImage="`${imageHost}${userPost.avatar}`"
+                :like_count="post.like_count"
+                :comment_count="post.comment_count"
+                :postImages="post.images"
+                :showMenu="true"
+                :post="post"
+              />
+            </div>
           </div>
         </main>
 
@@ -58,6 +70,8 @@ import { getUserPosts } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
 import { URL_LINK } from '@/constants';
+import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+
 
 
 export default {
@@ -67,8 +81,12 @@ export default {
     const sectorStore = useSectorStore()
 
     try {
+      this.isLoading = true
+
       this.userPost = await getUserPosts()
       this.posts = this.userPost.my_posts
+      this.isLoading = false
+
 
       this.sectors = sectorStore.getAllSectors
     } catch (error) {
@@ -86,6 +104,8 @@ export default {
       user: '',
       posts: [],
       userPost: null,
+      isLoading: false,
+
       imageHost:URL_LINK.imageHostLink
 
     }
@@ -94,7 +114,9 @@ export default {
   components: {
     PostComponent,
     AboutUserInfo,
-    TopProfileInfo
+    TopProfileInfo,
+    LoadingIndicator
+
   },
 
   methods: {
