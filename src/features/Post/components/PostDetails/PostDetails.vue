@@ -4,15 +4,15 @@
       <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
         <div
           :class="`box grid ${
-            post.images.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
+            post.medias.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
           } bg-black shadow rounded-lg w-4/5 mx-auto`"
         >
           <!-- Display post images  -->
           <div
             class="flex items-center justify-center mt-1"
-            v-if="post.images.length > 0"
+            v-if="post.medias.length > 0"
           >
-            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
+            <ImageSlider class="w-full" :images="post.medias"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
@@ -33,7 +33,7 @@
             <div class="overflow-auto">
               <div v-if="!loading" class="space-y-2">
                 <div
-                  v-for="(comment, index) in post.comments"
+                  v-for="(comment, index) in post.post_comments"
                   :key="index"
                   class="flex items-start space-x-4"
                 >
@@ -89,7 +89,7 @@ import ImageSlider from "../../../../components/gallery/ImageSlider.vue";
 import CommentInfoBox from "@/features/Post/components/PostDetails/components/CommentInfoBox.vue";
 import UserInfoPostDetails from "@/features/Post/components/PostDetails/components/UserInfoPostDetails.vue";
 import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
-import { commentPost } from "@/features/Post/services/postService";
+import { commentPost ,getSpecificPost } from "@/features/Post/services/postService";
 
 export default {
   name: "PostDetails",
@@ -97,9 +97,10 @@ export default {
   async created() {
     const postStore = usePostStore();
 
-    // this.post = await getSpecificPost(postStore.postIdToShowDetail)
+    this.post = await getSpecificPost(postStore.postIdToShowDetail)
+    console.log(this.post)
     // console.log(this.post)
-    this.post = postStore.postToShowDetails;
+    // this.post = postStore.postToShowDetails;
   },
   components: {
     LoadingIndicator,
@@ -124,7 +125,7 @@ export default {
   },
   computed: {
     currentImage() {
-      return this.post.images[this.currentImageIndex].url;
+      return this.post.medias[this.currentImageIndex].url;
     },
   },
   methods: {
@@ -136,7 +137,7 @@ export default {
       
       try {
         await commentPost(this.postId, { text: this.commentText });
-    // this.post = await getSpecificPost(postStore.postIdToShowDetail)
+    this.post = await getSpecificPost(this.postId)
       } catch (error) {
         this.loading = false;
       }
@@ -149,7 +150,7 @@ export default {
       this.togglePostDetails();
     },
     nextImage() {
-      if (this.currentImageIndex < this.post.images.length - 1) {
+      if (this.currentImageIndex < this.post.medias.length - 1) {
         this.currentImageIndex + 1;
       }
       console.log(this.currentImageIndex);
