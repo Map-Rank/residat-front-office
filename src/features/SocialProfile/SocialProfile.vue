@@ -4,12 +4,18 @@
       <loading-indicator v-if="isLoading"></loading-indicator>
       <top-profile-info
       v-if="!isLoading"
-        :profileImageUrl="`${imageHost}${userPost.avatar}`"
         :profileName="`${userPost.first_name} ${userPost.last_name}`"
         :followersCount="0"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />
+      <!-- v-if="!isLoading"
+        :profileImageUrl="userPost.avatar"
+        :profileName="`${userPost.first_name} ${userPost.last_name}`"
+        :followersCount="0"
+        :postsCount="posts.length"
+        :isCurrentUser="true"
+      /> -->
     </div>
 
     <div class="md:px-100 pb-5">
@@ -69,7 +75,6 @@ import PostComponent from '../Post/index.vue'
 import { getUserPosts } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
-import { URL_LINK } from '@/constants';
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 
 
@@ -105,9 +110,6 @@ export default {
       posts: [],
       userPost: null,
       isLoading: false,
-
-      imageHost:URL_LINK.imageHostLink
-
     }
   },
 
