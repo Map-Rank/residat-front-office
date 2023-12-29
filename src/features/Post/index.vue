@@ -80,7 +80,10 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <img class="h-9 w-9" :src="userProfileImage" alt="" />
+        <AvatarPlaceholderVue 
+        :username="username"
+    :size="20"
+    ></AvatarPlaceholderVue>
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -117,6 +120,7 @@ import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
 import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
+import AvatarPlaceholderVue from '../../components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
 
 export default {
   name: 'PostComponent',
@@ -141,28 +145,28 @@ export default {
       },
       iconLabels: [
         {
-          svgContent: 'src\\assets\\icons\\heart-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
+          svgContent: 'public\\assets\\icons\\heart-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\heart-fill.svg',
           labelText: 'Like',
           isActive: this.customLiked,
           right: true
         },
         {
-          svgContent: 'src\\assets\\icons\\comment-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
+          svgContent: 'public\\assets\\icons\\comment-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\comment-fill.svg',
           labelText: 'Comment',
           isActive: this.isCommenting,
           right: true
         },
         {
-          svgContent: 'src\\assets\\icons\\share-fill.svg',
-          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
+          svgContent: 'public\\assets\\icons\\share-fill.svg',
+          svgContentHover: 'public\\assets\\icons\\share-fill.svg',
           labelText: 'Share',
           right: true
         },
         {
-          svgContent: 'src\\assets\\icons\\archieved-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
+          svgContent: 'public\\assets\\icons\\archieved-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
         }
@@ -293,8 +297,8 @@ export default {
     IconWithLabel,
     PostDetails,
     ButtonUi,
-    ImagePostGallery
-    // BaseImagePickerVue
+    ImagePostGallery,
+    AvatarPlaceholderVue
   },
   computed: {
     ...mapWritableState(usePostStore, ['showPostDetails']),

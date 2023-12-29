@@ -34,31 +34,31 @@ export default {
       iconSize: 'w-7 h-7',
       navItems: [
         {
-          svgContent: 'src\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
+          svgContent: 'publicassets\\icons\\dashboard-outline.svg',
+          svgContentHover: 'publicassets\\icons\\dashboard-fill.svg',
           labelText: 'Dashboard',
           isActive: false,
           routerName: 'dashbaord'
         },
         {
-          svgContent: 'src\\assets\\icons\\community-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\community-fill.svg',
+          svgContent: 'publicassets\\icons\\community-outline.svg',
+          svgContentHover: 'publicassets\\icons\\community-fill.svg',
           labelText: 'Community',
           isActive: false,
         //   bottom: true,
           routerName: 'community'
         },
         {
-          svgContent: 'src\\assets\\icons\\add-circle-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\add-circle-outline.svg',
+          svgContent: 'publicassets\\icons\\add-circle-outline.svg',
+          svgContentHover: 'publicassets\\icons\\add-circle-outline.svg',
           labelText: 'Make Post',
           isActive: false,
         //   bottom: true,
           routerName: 'create-post'
         },
         {
-          svgContent: 'src\\assets\\icons\\chat-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
+          svgContent: 'publicassets\\icons\\chat-outline.svg',
+          svgContentHover: 'publicassets\\icons\\chat-fill.svg',
           labelText: 'Profile',
           isActive: false,
         //   bottom: true

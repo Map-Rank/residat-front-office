@@ -105,7 +105,7 @@ export default {
   position: absolute;
   right: 0;
   left: 0;
-  background-image: url("src/assets/images/AuthView/auth-background.png");
+  background-image: url("public/assets/images/AuthView/auth-background.png");
   background-size: cover;
   background-position: center;
 }
