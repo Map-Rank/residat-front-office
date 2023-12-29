@@ -54,7 +54,7 @@ export default {
           labelText: 'Make Post',
           isActive: false,
         //   bottom: true,
-          routerName: 'chat-room'
+          routerName: 'create-post'
         },
         {
           svgContent: 'src\\assets\\icons\\chat-outline.svg',

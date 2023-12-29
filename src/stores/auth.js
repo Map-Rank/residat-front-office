@@ -5,12 +5,12 @@ import { LOCAL_STORAGE_KEYS } from '../constants/localStorageKeys';
 export default defineStore('auth', {
   state: () => ({
     user: null,
-    isloggedIn: false
+    isloggedIn: null
   }),
 
   getters: {
     hiddenClass(state) {
-      return !state.isloggedIn ? 'hidden' : ''
+      return state.user ==null ? 'hidden' : ''
     },
     getCurrentUser(state) {
       return state.user;
@@ -19,6 +19,23 @@ export default defineStore('auth', {
   }
   ,
   actions: {
+
+    initializeAuthState() {
+      try {
+        const userInfo = localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo);
+        if (userInfo) {
+          this.user = JSON.parse(userInfo);
+          this.isLoggedIn = this.user? true : false;
+        }
+        
+      } catch (error) {
+        console.error('Failed to parse user info:', error);
+        // Handle error, possibly resetting auth state
+        this.resetAuthState();
+      }
+    },
+
+
     setUser(userData) {
       console.log(userData)
       this.user = userData;

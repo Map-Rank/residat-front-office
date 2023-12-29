@@ -29,12 +29,12 @@
           <span>{{ joinDate }}</span>
         </div>
       </template>
-      <template v-if="website">
+      <!-- <template v-if="website">
         <div class="flex items-center">
           <img src="@/assets/icons/link.svg" alt="Website" />
           <span>{{ website }}</span>
         </div>
-      </template>
+      </template> -->
     </div>
   </div>
 </template>

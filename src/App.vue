@@ -1,16 +1,21 @@
 <template>
-  <!-- <header-app :class="hiddenClass"></header-app> -->
-  <header-app ></header-app>
+  <div>
+    
+  </div>
+  <div class="body flex flex-col min-h-screen">
+    <header-app :class="hiddenClass"></header-app>
 
-  <body class="">
-    <router-view></router-view>
-  </body>
+    <main class="flex-grow h-full">
+      <router-view></router-view>
+    </main>
 
-  <bottom-navigation-app-app
-    :class="hiddenClass"
-    class="mobile-nav md:hidden"
-  ></bottom-navigation-app-app>
-  <footer-app></footer-app>
+    <bottom-navigation-app-app
+      class="mobile-nav block md:hidden"
+      :class="hiddenClass"
+    ></bottom-navigation-app-app>
+
+    <!-- <footer-app class="mt-auto" :class="!hiddenClass"></footer-app> -->
+  </div>
 </template>
 
 <script>
@@ -19,13 +24,15 @@ import useAuthStore from './stores/auth'
 import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
+import AlertForm from './components/common/AlertFrom/AlertForm.vue'
 
 export default {
   name: 'App',
   components: {
     HeaderApp,
     FooterApp,
-    BottomNavigationAppApp
+    BottomNavigationAppApp,
+    AlertForm
   },
 
   computed: {
@@ -35,11 +42,10 @@ export default {
 </script>
 
 <style scoped>
-body {
+.body {
   background: var(--primary-light, #e6e8ec);
 }
 
-/* By default, the nav is not fixed */
 .mobile-nav {
   position: static;
 }
@@ -49,8 +55,8 @@ body {
     position: fixed;
     bottom: 0;
     background-color: #fff;
-    width: 100%; /* Make sure it spans the full width of the screen */
-    z-index: 999; /* Optional: Use a high z-index value to ensure the nav appears above other elements */
+    width: 100%; 
+    z-index: 999; 
   }
 }
 </style>

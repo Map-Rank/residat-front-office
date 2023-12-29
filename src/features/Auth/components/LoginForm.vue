@@ -2,12 +2,8 @@
   <div class="flex flex-col space-y-6">
     <h3 class="text-center">WELCOME BACK</h3>
 
-    <div
-      class="text-white text-center font-bold p-4 rounded mb-4"
-      v-if="login_show_alert"
-      :class="login_alert_varient"
-    >
-      {{ login_alert_message }}
+    <div>
+      <AlertForm></AlertForm>
     </div>
 
     <vee-form :validation-schema="schema" @submit="login">
@@ -15,7 +11,7 @@
       <div class="mb-6">
         <label for="email" class="inline-block mb-2">Email</label>
         <vee-field
-        v-model="userData.email"
+          v-model="userData.email"
           id="email"
           name="email"
           type="email"
@@ -28,17 +24,14 @@
       <!-- Password -->
       <div class="mb-6">
         <label for="password" class="inline-block mb-2">Password</label>
-        <vee-field name="password" >
+        <vee-field name="password">
           <input
-          v-model="userData.password"
+            v-model="userData.password"
             id="password"
             type="password"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             placeholder="Password"
           />
-          <!-- <div class="text-danger-normal" v-for="error in errors" :key="error">
-            {{ error }}
-          </div> -->
         </vee-field>
         <ErrorMessage class="text-danger-normal" name="password" />
       </div>
@@ -50,7 +43,7 @@
           @click.prevent="login()"
           :disabled="login_in_submission"
         >
-          Sign up
+          Sign In
         </button>
       </div>
     </vee-form>
@@ -58,70 +51,80 @@
 </template>
 
 <script>
-import useAuthStore from '../../../stores/auth'
-import { loginUser } from '../services/authService'
-import { useRouter } from 'vue-router'
+import useAuthStore from "../../../stores/auth";
+import { loginUser } from "../services/authService";
+import { useRouter } from "vue-router";
+import AlertForm from "../../../components/common/AlertFrom/AlertForm.vue";
+import { AlertStates } from "@/components";
+import useAlertStore from '@/stores/alertStore';
 
 export default {
-  name: 'LoginForm',
+  name: "LoginForm",
   setup() {},
   data() {
-    const router = useRouter()
-    const authStore = useAuthStore()
+    const router = useRouter();
+    const authStore = useAuthStore();
+    const alertStore = useAlertStore();
 
     return {
       authStore,
+      alertStore,
       router,
       schema: {
-        email: 'required|email',
-        password: 'required'
+        email: "required|email",
+        password: "required",
       },
       userData: {
-        email: '',
-        password: ''
+        email: "",
+        password: "",
       },
       login_in_submission: false,
-      login_show_alert: false,
-      login_alert_varient: 'bg-blue-500',
-      login_alert_message: 'please wait we are login you in '
-    }
+    };
   },
+
+  components:{
+    AlertForm
+  },
+
 
   methods: {
     handleSuccess() {
-      console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = !this.authStore.isloggedIn
-      this.$router.push({ name: 'community' })
+      console.log("Current User:", this.authStore.getCurrentUser);
+      this.authStore.isloggedIn = true;
+      this.$router.push({ name: "community" });
     },
 
-    handleError(message) {
-      console.log(message)
+
+    handleError  (errors) {
+      if (errors.email && errors.email.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.email[0]);
+      } else if (errors.zone_id && errors.zone_id.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0]);
+      }
     },
 
+
+    
     async login(values) {
-      ;(this.login_in_submission = true),
-        (this.login_show_alert = true),
-        (this.login_alert_varient = 'bg-blue-500'),
-        (this.login_alert_message = 'please wait we are login you in ')
+        this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ');
+
 
       try {
-        await loginUser(this.userData, this.authStore, this.handleSuccess, this.handleError)
+        await loginUser(
+          this.userData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError
+        );
       } catch (error) {
-        console.log(error)
-        ;(this.login_alert_varient = 'bg-red-500'),
-          (this.login_alert_message = 'invalid credentials try again')
-        this.login_in_submission = false
-
-        return
+        // console.log(error)
+        return;
       }
 
-      console.log(values)
-    }
+      console.log(values);
+    },
   },
-  components: {
-    // ButtonUi
-  }
-}
+};
 </script>
 
 <style>

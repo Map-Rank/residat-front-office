@@ -1,12 +1,8 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
   <div class="flex-col">
-    <div
-      class="text-white text-center font-bold p-4 rounded mb-4"
-      v-show="reg_show_alert"
-      :class="reg_alert_varient"
-    >
-      {{ reg_alert_message }}
+    <div>
+      <AlertForm></AlertForm>
     </div>
 
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
@@ -234,12 +230,14 @@
 </template>
 
 <script>
-// import ButtonUi from '../../../components/base/ButtonUi.vue'
 import { mapStores, mapWritableState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
 import { registerUser } from '../services/authService'
 import { useRouter } from 'vue-router'
+import { AlertStates } from '@/components'
+import useAlertStore from '@/stores/alertStore'
+import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 
 export default {
   name: 'RegisterForm',
@@ -256,7 +254,12 @@ export default {
 
   data() {
     const router = useRouter()
+    const authStore = useAuthStore()
+    const alertStore = useAlertStore()
+
     return {
+      authStore,
+      alertStore,
       router,
       schema: {
         name: 'required|min:3|max:50',
@@ -288,12 +291,12 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_2',
+      currentStep: 'step_1',
       reg_in_submission: false,
-      reg_show_alert: false,
-      reg_alert_varient: 'bg-blue-500',
-      reg_alert_message: 'please wait your account is being created '
     }
+  },
+  components: {
+    AlertForm
   },
 
   methods: {
@@ -308,7 +311,6 @@ export default {
       ]
 
       try {
-        // Validate each field in the list
         const validationResults = await Promise.all(
           fieldsToValidate.map((field) => this.$refs.form.validateField(field))
         )
@@ -331,43 +333,35 @@ export default {
       this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
     },
 
-    handleSuccess(message) {
-      // Custom logic for handling successful response
-      console.log('Handling success:', message)
+    handleSuccess() {
+      console.log("Current User:", this.authStore.getCurrentUser);
+      this.authStore.isloggedIn = true;
+      this.$router.push({ name: "community" });
     },
 
-    handleError(message) {
-      // Custom logic for handling error response
-      // console.error('Handling error:', message)
-      console.log(message)
+
+    handleError(errors) {
+      if (errors.email && errors.email.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
+      } else if (errors.zone_id && errors.zone_id.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0])
+      }
     },
 
     async registerForm() {
-      ;(this.reg_in_submission = true),
-        (this.reg_show_alert = true),
-        (this.reg_alert_varient = 'bg-blue-500'),
-        (this.reg_alert_message = 'Wait we are creating your account ')
+      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are creating your account...');
 
       try {
-        const response = await registerUser(this.formData, this.handleSuccess, this.handleError)
-        if (response.status) {
-          this.authStore.isloggedIn = !this.authStore.isloggedIn
-          this.$router.push({ name: 'community' })
-        } else {
-          console.log(response.data.errors[0])
-        }
+        await registerUser(
+          this.formData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError
+        )
       } catch (error) {
-        console.log(error)
-        ;(this.reg_in_submission = false),
-          // (this.reg_show_alert = false),
-          (this.reg_alert_varient = 'bg-red-500'),
-          (this.reg_alert_message = 'Unexpescted error please try letter')
         console.log(error)
       }
     }
-  },
-  components: {
-    // ButtonUi
   },
   computed: {
     ...mapStores(useAuthStore),

@@ -2,15 +2,13 @@
   <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
-      <div class="user-profile flex items-center space-x-2">
-        <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
-        <div>
-          <h5 class="font-bold">{{ username }}</h5>
-          <span class="caption-c1">{{ postDate }}</span>
-        </div>
-      </div>
+      <UserPostInfo
+        :post-date="postDate"
+        :user-profile-image="userProfileImage"
+        :username="username"
+      />
 
-      <div class="menu relative">
+      <div v-if="showMenu" class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
           <svg class="w-6 h-6" fill="true" stroke="currentColor" viewBox="0 0 24 24">
@@ -25,13 +23,11 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
-
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="editPost()"
-
           >
           </button-ui>
 
@@ -47,53 +43,22 @@
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showDetails()" class="px-5 mb-2 cursor-pointer">
-      <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
+    <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
       <p class="p3 content">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
-    <div @click.prevent="showDetails()" v-if="postImages">
-      <!-- Container for the first image -->
-      <div v-if="postImages.length > 2 || postImages.length == 1" class="flex mb-0.5">
-        <img :src="postImages[0].src" :alt="postImages[0].alt" class="w-full h-auto object-cover" />
-      </div>
 
-      <div v-if="postImages.length == 2" class="flex mb-0.5">
-        <img :src="postImages[0].src" :alt="postImages[0].alt" class="w-1/2 h-1/2" />
-        <img :src="postImages[1].src" :alt="postImages[1].alt" class="w-1/2 h-1/2" />
-      </div>
-
-      <!-- Container for the rest of the images displayed in a single row -->
-      <div v-if="postImages.length > 2" class="flex gap-0.5 overflow-hidden">
-        <img
-          v-for="(image, index) in postImages.slice(1, 4)"
-          :src="image.src"
-          :alt="image.alt"
-          :key="image.src"
-          class="flex-grow h-auto w-4 object-cover"
-          :style="{ 'flex-basis': calculateFlexBasis(index) }"
-        />
-        <!-- "See more" box if there are more images than can be shown -->
-        <div
-          v-if="postImages.length > 4"
-          class="flex-grow h-auto flex justify-center items-center bg-black-200 cursor-pointer"
-        >
-          +{{ postImages.length - 4 }} more
-        </div>
-      </div>
-    </div>
+    <image-post-gallery :Images="postImages" @customFunction="showDetails(this.post.id)">
+    </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="p-5">
       <!-- upper section  -->
-      <div class="flex justify-between border-b mb-2 pb-2">
-        <div class="flex items-center space-x-1">
-          <img src="src\assets\icons\heart-fill.svg" alt="" />
-          <span class="caption-c1-bold">{{ like_count }} and other likes</span>
-        </div>
-        <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
-      </div>
+      <InteractionPostStatistics
+        :comment_count="customPost.comment_count"
+        :like_count="like_count"
+      />
 
       <!-- lower section  -->
       <div class="flex justify-between">
@@ -115,7 +80,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <img class="h-9 w-9" src="public\images\unicef_logo.png" alt="" />
+        <img class="h-9 w-9" :src="userProfileImage" alt="" />
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -127,8 +92,7 @@
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
         <button
-          @click.prevent="commentPost()"
-
+          @click.prevent="commentPost(this.commentData)"
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -137,32 +101,40 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails" :post="this.post"></post-details>
+  <post-details v-if="showPostDetails"></post-details>
 </template>
 
 <script>
 import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import PostDetails from './components/PostDetails/PostDetails.vue'
-import { mapWritableState, mapActions } from 'pinia'
-import  usePostStore  from './store/postStore'
-import { likePost, commentPost ,deletePost , sharePost} from '../Post/services/postService'
-
+import { mapActions, mapWritableState } from 'pinia'
+import usePostStore from './store/postStore'
+import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
-
+import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
+import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
+import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
+import { URL_LINK } from '@/constants/url.js'
 
 export default {
   name: 'PostComponent',
+  emits: ['postFetch', 'updatePost'],
   data() {
-
     const route = useRoute()
     return {
       route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
+      likeCount: this.like_count,
+      customPost: this.post,
+      customLiked: this.liked,
+      hasLikeouUnlike: false,
       isMenuVisible: false,
+      imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
+      isCommenting: false,
       commentData: {
         text: ' ',
         image: ' '
@@ -172,12 +144,14 @@ export default {
           svgContent: 'src\\assets\\icons\\heart-outline.svg',
           svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
           labelText: 'Like',
+          isActive: this.customLiked,
           right: true
         },
         {
           svgContent: 'src\\assets\\icons\\comment-outline.svg',
           svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
           labelText: 'Comment',
+          isActive: this.isCommenting,
           right: true
         },
         {
@@ -191,21 +165,33 @@ export default {
           svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
-        },
+        }
       ]
     }
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails','setpostToEdit']),
+    ...mapActions(usePostStore, [
+      'togglePostDetails',
+      'setpostToShowDetails',
+      'setpostToEdit',
+      'showDetails',
+      'setpostIdToShowDetails'
+    ]),
 
-    async deletePost() {
-      console.log('delete post ')
-      await deletePost(this.postId)
-
+    async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
+      if (window.confirm(alertMessage)) {
+        console.log('Deleting post', this.postId)
+        try {
+          await deletePost(this.postId)
+          window.location.reload()
+        } catch (error) {
+          console.error('Error deleting post:', error)
+        }
+      } else {
+        console.log('Post deletion cancelled by user')
+      }
     },
-
-
     editPost() {
       console.log('edit post ')
       this.setpostToEdit(this.post)
@@ -213,30 +199,41 @@ export default {
     },
 
     async customFunction(index) {
-      if (index === 0) {
-        await likePost(this.postId)
-        return
-      }
-      if (index === 1) {
-        this.showCommentBox = !this.showCommentBox
-        return
-      }
-
-      if (index === 2) {
-        await sharePost(this.postId)
-        return
-      }
-      
-      if (index === 3) {
-        console.log(this.post)
-        return
+      switch (index) {
+        case 0:
+          await likePost(this.postId)
+          if (this.customLiked) {
+            this.customLiked = false
+            this.customPost.like_count--
+            console.log(this.customLiked)
+          } else {
+            this.customLiked = true
+            this.customPost.like_count++
+          }
+          break
+        case 1:
+          this.isCommenting = true
+          this.showCommentBox = !this.showCommentBox
+          console.log(this.postImages)
+          break
+        case 2:
+          await sharePost(this.postId)
+          this.$emit('postFetch')
+          break
+        case 3:
+          console.log(this.post)
+          this.$emit('postFetch')
+          break
       }
     },
 
-    async commentPost() {
-      await commentPost(this.postId, this.commentData)
-      this.showCommentBox = !this.showCommentBox
+    async commentPost(text) {
+      await commentPost(this.postId, text)
+      this.commentData.text = ''
+      this.isCommenting = false
 
+      this.showCommentBox = !this.showCommentBox
+      this.customPost.comment_count++
     },
 
     clickIcon(index) {
@@ -256,12 +253,15 @@ export default {
       }
     },
 
-    showDetails() {
-      this.togglePostDetails()
-      this.setpostToShowDetails(this.post)
-      // console.log(this.post)
-      console.log('click')
-    },
+    // showPostDetails() {
+    //   this.showDetails(this.post.id)
+    //   this.setpostIdToShowDetails(this.post.id);
+
+    //   this.togglePostDetails();
+    //   // this.setpostToShowDetails(this.post);
+    //   // console.log(this.post)
+    //   // console.log(this.post.id)
+    // },
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
@@ -269,7 +269,6 @@ export default {
     },
 
     calculateFlexBasis() {
-      // Calculate the flex-basis based on the number of images
       const numberOfImages = this.postImages.length - 1 // minus the first image
       const maxImagesToShow = 3
       if (numberOfImages > maxImagesToShow) {
@@ -289,10 +288,12 @@ export default {
   },
 
   components: {
+    InteractionPostStatistics,
+    UserPostInfo,
     IconWithLabel,
     PostDetails,
-    ButtonUi
-
+    ButtonUi,
+    ImagePostGallery
     // BaseImagePickerVue
   },
   computed: {
@@ -313,28 +314,18 @@ export default {
     comment_count: Number,
     postImages: Array,
     postId: Number,
+    liked: Boolean,
+    showMenu: {
+      type: Boolean,
+      default: false
+    },
+
     post: Object
   }
 }
 </script>
 
 <style scoped>
-.caption-c1,
-.caption-c1-bold {
-  color: var(--primary-normal, #021d40);
-  font-family: Raleway;
-  font-size: 10px;
-  font-style: normal;
-  line-height: 16px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.caption-c1-bold {
-  font-weight: 600;
-}
-
 .content {
   color: var(--body-normal, #242424);
   font-family: Raleway;

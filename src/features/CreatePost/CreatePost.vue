@@ -1,44 +1,38 @@
 <template>
   <div class="container mx-auto p-6">
     <div class="flex justify-center mb-9">
-
       <h3 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
       </h3>
-
-
-    <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
-      <div class="grid mb-5">
-        <label class="inline-block mb-2">Sector</label>
-        <span>Select your sector of interest</span>
-      </div>
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-7 content-between">
-        <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
-          <base-checkbox
-            :key="sector.name"
-            :list="sector"
-            @change="updatesectorChecked"
-          ></base-checkbox>
-        </div>
-      </div>
     </div>
 
-    <div class="mx-auto p-6 space-y-4 bg-white rounded-lg shadow">
-      <div class="flex items-center space-x-4">
-        <img src="public\images\profile.png" alt="" />
-        <h2 class="text-sm md:text-lg font-light text-gray-normal mb-4">
-          Hello happy to share to our community
-        </h2>
-      </div>
-      <form @submit.prevent="submitPost">
-        <div class="mb-4">
-          <textarea
+    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" />
+
+    <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
+      <TopContentForm />
+      <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
+        <ErrorMessage class="text-danger-normal" name="content" />
+        <div class="flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2">
+          <vee-field
+            name="content"
+            :rules="schema.content"
+            as="textarea"
             v-model="formData.content"
             placeholder="what will you share today ..."
-            class="w-full rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-normal"
+            class="w-full rounded-lg focus:outline-none focus:ring-2"
             rows="4"
-          ></textarea>
+          ></vee-field>
+          <div class="sm:w-1/2">
+            <image-preview-gallery
+              class=""
+              :Images="imagesToFromLocalPreview"
+              :ImagesFromHostToPreview="imagesFromHostToPreview"
+              @removeImage="removeImage"
+            >
+            </image-preview-gallery>
+          </div>
         </div>
+
         <div class="mb-4">
           <label class="block mb-2">Attach images (optional):</label>
           <div class="flex space-x-4">
@@ -46,14 +40,6 @@
               :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
               :type="'file'"
               :label="'Add Image'"
-              @handleFileChange="handleImageUpload"
-            >
-            </base-image-picker>
-
-            <base-image-picker
-              :iconImg="'src\\assets\\icons\\colored\\video-clip.svg'"
-              :type="'file'"
-              :label="'Add Video'"
               @handleFileChange="handleImageUpload"
             >
             </base-image-picker>
@@ -73,7 +59,6 @@
               :disabled="this.isLoading"
               class="block w-full text-white py-1.5 rounded-full transition"
             >
-
               {{
                 !isEditing
                   ? this.isLoading
@@ -82,27 +67,24 @@
                   : this.isLoading
                     ? 'Updating Post...'
                     : 'Update Post'
-
-              
-
               }}
             </button>
           </div>
         </div>
-      </form>
+      </vee-form>
     </div>
   </div>
 </template>
 
 <script>
 import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
-import BaseCheckbox from '@/components/base/BaseCheckbox.vue'
-
-import { createPost, updatePost } from '../../services/postService'
-
+import { createPost, updatePost } from '../Post/services/postService'
 import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
-import usePostStore from '../../store/postStore.js'
+import usePostStore from '../Post/store/postStore.js'
+import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
+import SectorDisplayForm from '@/features/CreatePost/components/SectorDisplayForm.vue'
+import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 
 export default {
   name: 'CreatePost',
@@ -110,16 +92,12 @@ export default {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
 
-    
     if (postStore.postToEdit) {
-
-
-
       this.isEditing = true
       this.formData = postStore.postToEdit
+      // this.imagesToFromLocalPreview = postStore.postToEdit.images
+      this.imagesFromHostToPreview = postStore.postToEdit.images
     }
-
-    // postStore.postToEdit != null ? (this.isEditing = true) : (this.isEditing = false)
 
     try {
       this.sectors = sectorStore.getAllSectors
@@ -133,30 +111,45 @@ export default {
     const postStore = usePostStore()
 
     return {
+      schema: {
+        content: 'required'
+      },
       router,
       postStore,
       isLoading: false,
       isEditing: false,
+      imagesToFromLocalPreview: [],
+      imagesFromHostToPreview: [],
       formData: {
         content: '',
         images: [],
         videos: [],
         sectorChecked: [],
         sectorId: []
-
       },
       sectors: []
     }
   },
   components: {
+    TopContentForm,
+    SectorDisplayForm,
     BaseImagePicker,
-    // ButtonUi,
-    BaseCheckbox
+    ImagePreviewGallery
   },
   methods: {
+    handleError() {
+      this.isLoading = false
+    },
+    removeImage(index) {
+      this.imagesToFromLocalPreview.splice(index, 1)
+    },
     async submitPost() {
-      let response
+      if (this.formData.content == '') {
+        return
+      }
 
+      let response
+      this.isLoading = true
 
       if (this.isEditing) {
         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
@@ -170,33 +163,34 @@ export default {
 
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
-
-      this.isLoading = false
       if (response.status) {
         this.resetForm()
         this.$router.push({ name: 'community' })
-      } else {
-        console.log(response.data.errors)
-        this.isLoading = false
       }
     },
 
     handleImageUpload(files) {
-      if (!files || !Array.isArray(files)) {
+      if (!files || !files.length) {
         console.error('No files provided or the provided data is not an array')
         return
       }
 
-      //here i empty my image array //TODO find a better method
+      
+      this.formData.images = []
+      this.imagesToFromLocalPreview = []
 
-      this.formData.images.length = 0
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
           this.formData.images.push(file)
+
+          const imageUrl = URL.createObjectURL(file)
+          this.imagesToFromLocalPreview.push({ src: imageUrl, alt: file.name })
         } else if (file.type.startsWith('video/')) {
           this.formData.videos.push(file)
         }
       })
+      
+      this.imagesFromHostToPreview=null
     },
 
     resetForm() {
@@ -206,8 +200,7 @@ export default {
       this.sectors.forEach((sector) => (sector.checked = false))
     },
 
-    //TODO corncidered the fact that unchecked sectors should be remove an updated
-    updatesectorChecked({ list, checked }) {
+    updateSectorChecked({ list, checked }) {
       if (checked) {
         this.formData.sectorChecked.push(list)
         this.formData.sectorId.push(list.id)
@@ -218,9 +211,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-.container {
-  height: 100vh;
-}
-</style>

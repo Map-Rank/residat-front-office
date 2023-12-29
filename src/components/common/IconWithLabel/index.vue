@@ -103,7 +103,6 @@ export default {
     handleClick() {
       this.$emit('clickIcon')
       this.$emit('customFunction')
-      console.log(this.routerName)
     }
   }
 }
