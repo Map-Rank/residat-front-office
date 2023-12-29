@@ -1,13 +1,10 @@
 <template>
   <div class="container mx-auto p-6">
-
     <div class="flex justify-center mb-9">
-
       <h3 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
       </h3>
     </div>
-
 
     <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" />
 
@@ -26,7 +23,13 @@
             rows="4"
           ></vee-field>
           <div class="sm:w-1/2">
-            <image-preview-gallery class="" :Images="imagesToPreview" @removeImage="removeImage"> </image-preview-gallery>
+            <image-preview-gallery
+              class=""
+              :Images="imagesToFromLocalPreview"
+              :ImagesFromHostToPreview="imagesFromHostToPreview"
+              @removeImage="removeImage"
+            >
+            </image-preview-gallery>
           </div>
         </div>
 
@@ -56,7 +59,6 @@
               :disabled="this.isLoading"
               class="block w-full text-white py-1.5 rounded-full transition"
             >
-
               {{
                 !isEditing
                   ? this.isLoading
@@ -65,9 +67,6 @@
                   : this.isLoading
                     ? 'Updating Post...'
                     : 'Update Post'
-
-              
-
               }}
             </button>
           </div>
@@ -75,7 +74,6 @@
       </vee-form>
     </div>
   </div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -94,13 +92,11 @@ export default {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
 
-
     if (postStore.postToEdit) {
-
-
-
       this.isEditing = true
       this.formData = postStore.postToEdit
+      // this.imagesToFromLocalPreview = postStore.postToEdit.images
+      this.imagesFromHostToPreview = postStore.postToEdit.images
     }
 
     try {
@@ -122,14 +118,14 @@ export default {
       postStore,
       isLoading: false,
       isEditing: false,
-      imagesToPreview: [],
+      imagesToFromLocalPreview: [],
+      imagesFromHostToPreview: [],
       formData: {
         content: '',
         images: [],
         videos: [],
         sectorChecked: [],
         sectorId: []
-
       },
       sectors: []
     }
@@ -145,8 +141,8 @@ export default {
       this.isLoading = false
     },
     removeImage(index) {
-    this.imagesToPreview.splice(index, 1);
-  },
+      this.imagesToFromLocalPreview.splice(index, 1)
+    },
     async submitPost() {
       if (this.formData.content == '') {
         return
@@ -154,7 +150,6 @@ export default {
 
       let response
       this.isLoading = true
-
 
       if (this.isEditing) {
         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
@@ -168,13 +163,10 @@ export default {
 
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
-
       if (response.status) {
         this.resetForm()
         this.$router.push({ name: 'community' })
       }
-
-  
     },
 
     handleImageUpload(files) {
@@ -183,20 +175,22 @@ export default {
         return
       }
 
+      
       this.formData.images = []
-      this.imagesToPreview = []
-
+      this.imagesToFromLocalPreview = []
 
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
           this.formData.images.push(file)
 
           const imageUrl = URL.createObjectURL(file)
-          this.imagesToPreview.push({ src: imageUrl, alt: file.name })
+          this.imagesToFromLocalPreview.push({ src: imageUrl, alt: file.name })
         } else if (file.type.startsWith('video/')) {
           this.formData.videos.push(file)
         }
       })
+      
+      this.imagesFromHostToPreview=null
     },
 
     resetForm() {

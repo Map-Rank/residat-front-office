@@ -1,6 +1,5 @@
-import { makeApiPostCall, makeApiGetCall,makeApiDeleteCall } from '@/api' 
+import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
-
 
 const currentDate = new Date().toISOString().split('T')[0]
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
@@ -10,8 +9,8 @@ const createPost = async (postData, onSuccess, onError) => {
     const formData = new FormData()
 
     formData.append('content', postData.content)
-    formData.append('published_at', currentDate) 
-    formData.append('zone_id', 1) 
+    formData.append('published_at', currentDate)
+    formData.append('zone_id', 1)
 
     // Append media files
     postData.images.forEach((image, index) => {
@@ -34,10 +33,9 @@ const createPost = async (postData, onSuccess, onError) => {
         console.log('not correct format')
       }
     })
-    
-    postData.sectorId.forEach((id, index, ) => {
-      formData.append(`sectors[${index}]`, id)
 
+    postData.sectorId.forEach((id, index) => {
+      formData.append(`sectors[${index}]`, id)
     })
 
     const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
@@ -55,27 +53,25 @@ const createPost = async (postData, onSuccess, onError) => {
   }
 }
 
-
 const updatePost = async (postData, onSuccess, onError) => {
   try {
     const formData = new FormData()
     const authToken = localStorage.getItem('authToken')
 
     formData.append('content', postData.content)
-    formData.append('published_at', currentDate) 
-    formData.append('zone_id', '1') 
-    formData.append('_method', 'PUT') 
+    formData.append('published_at', currentDate)
+    formData.append('zone_id', '1')
+    formData.append('_method', 'PUT')
 
     console.log('form data:', formData)
     console.log('post id' + postData.id)
-
 
     const response = await makeApiPostCall(
       API_ENDPOINTS.updatePost,
       formData,
       authToken,
       true,
-      postData.id,
+      postData.id
     )
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)
@@ -90,14 +86,36 @@ const updatePost = async (postData, onSuccess, onError) => {
   }
 }
 
+const getPosts = async (page, size) => {
+  let defaultSize = 10
+  let defaultPage = 0
 
-const getPosts = async (page,size) => {
+  size = size || defaultSize
+  page = page || defaultPage
+
   let params = new URLSearchParams({
     size: size.toString(),
-    page: page.toString(),
-  });
+    page: page.toString()
+  })
+
   try {
-    const response = await makeApiGetCall(`${API_ENDPOINTS.getPosts}?${params.toString()}`, authToken)
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
+      authToken
+    )
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
+const getSpecificPost = async (id) => {
+  try {
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.showSpecificPost}/${id.toString()}`,
+      authToken
+    )
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -107,15 +125,17 @@ const getPosts = async (page,size) => {
 
 const getPostsBySectors = async (sectorId) => {
   try {
-
     let params = new URLSearchParams({
       // size: size.toString(),
       // page: page.toString(),
-      sectors: JSON.stringify(sectorId) 
-    });
+      sectors: JSON.stringify(sectorId)
+    })
 
-    const response = await makeApiGetCall(`${API_ENDPOINTS.getPosts}?${params.toString()}`, authToken)
-   console.log('post filtered!!')
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
+      authToken
+    )
+    console.log('post filtered!!')
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -127,7 +147,6 @@ const getUserPosts = async () => {
   try {
     const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
     return response.data.data
-
   } catch (error) {
     console.error('Error fetching posts:', error)
     throw error
@@ -156,7 +175,7 @@ const sharePost = async (postId) => {
 const deletePost = async (postId) => {
   try {
     const response = await makeApiDeleteCall(`${API_ENDPOINTS.deletePost}/${postId}`, authToken)
-    console.log('delete post sucess 1!!!  '+response.data)
+    console.log('delete post sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting posts:', error)
     throw error
@@ -165,19 +184,26 @@ const deletePost = async (postId) => {
 
 const commentPost = async (postId, commentData) => {
   try {
-
-    const response = await makeApiPostCall(
+    await makeApiPostCall(
       `${API_ENDPOINTS.commentPost}/${postId}`,
       JSON.stringify({ text: commentData.text }),
       authToken
     )
-    console.log('Comment successfullty send!!!' + response.data.data)
-
   } catch (error) {
     console.error('Error Commenting Post:', error)
     throw error
   }
 }
 
-export { createPost, getPosts , getPostsBySectors, likePost, commentPost, updatePost ,deletePost , sharePost ,getUserPosts}
-
+export {
+  createPost,
+  getPosts,
+  getSpecificPost,
+  getPostsBySectors,
+  likePost,
+  commentPost,
+  updatePost,
+  deletePost,
+  sharePost,
+  getUserPosts
+}

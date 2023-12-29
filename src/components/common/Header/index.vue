@@ -127,13 +127,13 @@ export default {
           bottom: true,
           routerName: 'create-post'
         },
-        {
-          svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
-          labelText: 'Subscribe',
-          isActive: false,
-          bottom: true
-        }
+        // {
+        //   svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
+        //   svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
+        //   labelText: 'Subscribe',
+        //   isActive: false,
+        //   bottom: true
+        // }
       ]
     }
   },
@@ -150,10 +150,20 @@ export default {
       })
     },
 
+
     logout() {
-      this.authStore.logOut()
-      this.$router.push({ name: 'authentication' })
+      this.authStore.logOut();
+      this.$router.push({ name: 'authentication' }).catch(err => {
+        // Ignore the Vue Router error regarding navigating to the page we are currently on.
+        if (err.name !== 'NavigationDuplicated') {
+          console.error(err);
+        }
+      });
+      // setTimeout(() => {
+      //   window.location.reload();
+      // }, 100); // Adjust the timeout duration as needed. //TODO remove this when possible
     }
+    
   },
 
 }

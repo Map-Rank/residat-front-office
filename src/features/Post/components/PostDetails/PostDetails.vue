@@ -2,89 +2,67 @@
   <div class="">
     <div class="fixed z-10 inset-0 back overflow-y-auto" id="modal">
       <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
-        <div
-          :class="`box grid ${
-            post.images.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
-          } bg-black shadow rounded-lg w-4/5 mx-auto`"
-        >
+      <div
+        :class="`box grid ${
+          post && post.medias && post.medias.length === 0? 'grid-cols-auto' : 'md:grid-cols-2'
+        } bg-black shadow rounded-lg w-4/5 mx-auto`"
+      >
+      
           <!-- Display post images  -->
-          <div class="flex items-center justify-center mt-1" v-if="post.images.length > 0">
-            
-            <ImageSlider  class="w-full " :images="post.images"></ImageSlider>
+          <div
+            class="flex items-center justify-center mt-1"
+            v-if="post.medias && post.medias.length > 0"
+          >
+            <ImageSlider class="w-full" :images="post.medias"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
 
-          <div class="info grid grid-rows-2 h-full pl-5 py-3">
-            <div class="h-full">
-              <!-- user informations -->
-              <div class="mt-5 relative pb-4 mr-5 items-start">
-                <div class="flex justify-between">
-                  <div class="flex space-x-2 mb-4">
-                    <img
-                      class="w-10 h-10 rounded-full"
-                      :src="`${imageHost}${post.creator[0].avatar}`"
-                      alt="User profile"
-                    />
-                    <div class="flex-1">
-                      <h5 class="font-bold">{{ post.creator[0].first_name }}</h5>
-                      <div class="text-sm text-gray-600">{{ post.published_at }}</div>
-                    </div>
-                  </div>
-                  <button @click="dismiss()">
-                    <img src="src\assets\icons\dismiss.svg" alt="" />
-                  </button>
+          <div class="info grid grid-rows-custom pl-5 py-3">
+            <!-- user informations -->
+            <div class="mt-5 relative pb-4 mr-5 items-start">
+              <div class="flex items-start justify-between border-b-2">
+                <UserInfoPostDetails :image-host="imageHost" :post="post" />
+
+                <button @click="dismiss()">
+                  <img src="src\assets\icons\dismiss.svg" alt="" />
+                </button>
+              </div>
+            </div>
+
+            <!-- list of Comment  -->
+            <div class="overflow-auto">
+              <div v-if="!loading" class="space-y-2">
+                <div
+                  v-for="(comment, index) in post.post_comments"
+                  :key="index"
+                  class="flex items-start space-x-4"
+                >
+                  <CommentInfoBox   :comment="comment" :image-host="imageHost" />
                 </div>
-                <p class="border-b-2 pb-3">{{ post.content }}</p>
               </div>
 
-              <!-- list of Comment  -->
-              <div class="overflow-auto h-full">
-                <div class="space-y-2">
-                  <div
-                    v-for="(comment, index) in post.comments"
-                    :key="index"
-                    class="flex items-start space-x-4"
-                  >
-                    <img
-                      class="w-10 h-10 rounded-full"
-                      :src="`${imageHost}${comment.user.avatar}`"
-                      alt="User profile"
-                    />
-
-                    <div>
-                      <div>
-                        <div>
-                          <h5 class="comment-user-name">{{ comment.user.first_name }}</h5>
-                          <div class="comment-text">{{ comment.text }}</div>
-                          <div class="text-sm caption-1">{{ comment.created_at }}</div>
-                        </div>
-
-                        <div class="flex space-x-2 mt-2">
-                          <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
-                            Like
-                          </button>
-
-                          <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
-                            Comment
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+              <div v-if="loading" class="flex justify-center items-center">
+                <loading-indicator />
               </div>
             </div>
 
             <!-- comment interaction section -->
-            <div class="mt-auto space-y-4 w-full ">
+            <div class="mt-auto space-y-4 w-full">
               <div class="flex space-x-4">
-                <img src="src\assets\icons\heart.svg" alt="" />
-                <img src="src\assets\icons\bookmark.svg" alt="" />
+                <div class="flex justify-between mb-2 pb-2">
+                  <div class="flex items-center space-x-1">
+                    <img src="src\assets\icons\heart-fill.svg" alt="" />
+                    <span class="caption-c1-bold">{{ post.likes.length }}  likes</span>
+                    <img src="src\assets\icons\share-fill.svg" alt="" />
+                    <span class="ml-4 caption-c1-bold">{{ post.shares.length }} Shares</span>
+                  </div>
+                </div>
               </div>
 
               <div class="flex justify-between space-x-4">
                 <input
+                  v-model="commentText"
                   type="text"
                   placeholder="Add a comments"
                   class="w-full p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
@@ -94,7 +72,7 @@
                 <button
                   @click="
                     () => {
-                      console.log(this.post)
+                      commentPost();
                     }
                   "
                   class="btn text-green-500 px-6 py-2 rounded-lg hover:bg-white focus:outline-none"
@@ -108,57 +86,83 @@
       </div>
     </div>
   </div>
-  <!-- </div>  -->
 </template>
 
 <script>
-import { mapActions } from 'pinia'
-import usePostStore from '../../store/postStore'
-import { URL_LINK } from '@/constants'
-import ImageSlider from '../../../../components/gallery/ImageSlider.vue'
+import { mapActions } from "pinia";
+import usePostStore from "../../store/postStore";
+import { URL_LINK } from "@/constants";
+import ImageSlider from "../../../../components/gallery/ImageSlider.vue";
+import CommentInfoBox from "@/features/Post/components/PostDetails/components/CommentInfoBox.vue";
+import UserInfoPostDetails from "@/features/Post/components/PostDetails/components/UserInfoPostDetails.vue";
+import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
+import { commentPost ,getSpecificPost } from "@/features/Post/services/postService";
 
 export default {
-  name: 'PostDetails',
+  name: "PostDetails",
 
-  created() {
-    const postStore = usePostStore()
-    this.post = postStore.postToShowDetails
+  async created() {
+    const postStore = usePostStore();
+
+    // this.post = await getSpecificPost(postStore.postIdToShowDetail)
+    this.postId = postStore.postIdToShowDetail
+    this.post = postStore.postToShowDetails;
   },
   components: {
-    ImageSlider
+    LoadingIndicator,
+    UserInfoPostDetails,
+    CommentInfoBox,
+    ImageSlider,
   },
   data() {
     return {
       currentImageIndex: 0,
-      post: [],
-      imageHost: URL_LINK.imageHostLink
-    }
+      post: null,
+      commentText: "",
+      loading: false,
+      postId:null,
+      imageHost: URL_LINK.imageHostLink,
+    };
   },
-  props: {},
+
   computed: {
     currentImage() {
-      return this.post.images[this.currentImageIndex].url
-    }
+      return this.post.medias[this.currentImageIndex].url;
+    },
   },
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails']),
+    ...mapActions(usePostStore, ["togglePostDetails"]),
 
+    async commentPost() {
+      this.loading = true;
+      
+      try {
+        await commentPost(this.postId, { text: this.commentText });
+    this.post = await getSpecificPost(this.postId)
+      } catch (error) {
+        this.loading = false;
+      }
+      finally{
+        this.commentText=''
+        this.loading = false;
+      }
+    },
     dismiss() {
-      this.togglePostDetails()
+      this.togglePostDetails();
     },
     nextImage() {
-      if (this.currentImageIndex < this.post.images.length - 1) {
-        this.currentImageIndex + 1
+      if (this.currentImageIndex < this.post.medias.length - 1) {
+        this.currentImageIndex + 1;
       }
-      console.log(this.currentImageIndex)
+      console.log(this.currentImageIndex);
     },
     prevImage() {
       if (this.currentImageIndex > 0) {
-        this.currentImageIndex--
+        this.currentImageIndex--;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -166,22 +170,14 @@ export default {
   background: rgba(13, 13, 13, 0.3);
 }
 
-.btn2 {
-  color: var(--gray-normal, #6b6b6b);
-
-  /* Buttons/B2-Bold */
-  font-family: Raleway;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 20px; /* 142.857% */
+.grid-rows-custom {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
 }
 
 .btn {
   text-align: center;
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
+  font-feature-settings: "clig" off, "liga" off;
 
   /* Desktop / Link Small */
   font-family: Poppins;
@@ -192,7 +188,7 @@ export default {
   letter-spacing: 0.75px;
 }
 .info {
-  background: var(--Sections, #f5f2f2);
+  background: #f5f2f2;
 }
 .info {
   height: 80vh;
@@ -202,38 +198,5 @@ export default {
   .info {
     height: 60vh;
   }
-}
-
-.comment-user-name {
-  color: #000;
-
-  /* Paragraphs/P3-Bold */
-  font-family: Raleway;
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-}
-
-.comment-text {
-  color: #000;
-
-  /* Paragraphs/P4 */
-  font-family: Raleway;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 133.333% */
-}
-
-.caption-1 {
-  color: var(--gray-normal, #6b6b6b);
-
-  /* Captions/C1 */
-  font-family: Raleway;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 133.333% */
 }
 </style>

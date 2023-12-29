@@ -1,33 +1,31 @@
 <template>
-  <div  class="" @click.prevent="handleClick" v-if="Images">
+  <div class="" @click.prevent="handleClick" v-if="Images">
     <!-- Container for the first image -->
     <div v-if="Images.length > 2 || Images.length === 1" class="flex mb-0.5">
-      <img :src="`${imageHost}${Images[0].url}`" :alt="Images[0].alt" class="w-full h-auto object-cover" />
+      <img
+        :src="formatHostImageUrl(Images[0].url)"
+        :alt="Images[0].alt"
+        class="w-full h-auto object-cover"
+      />
     </div>
 
     <!-- Container for two images side by side -->
     <div v-if="Images.length === 2" class="flex mb-0.5">
-      <img :src="`${imageHost}${Images[0].url}`" :alt="Images[0].alt" class="w-1/2 h-1/2" />
-      <img :src="`${imageHost}${Images[1].url}`" :alt="Images[1].alt" class="w-1/2 h-1/2" />
+      <img :src="formatHostImageUrl(Images[0].url)" :alt="Images[0].alt" class="w-1/2 h-1/2" />
+      <img :src="formatHostImageUrl(Images[1].url)" :alt="Images[1].alt" class="w-1/2 h-1/2" />
     </div>
 
-
-
-
-
-
-    
     <!-- Container for the rest of the images displayed in a single row -->
     <div v-if="Images.length > 2" class="flex gap-0.5 overflow-hidden">
       <img
         v-for="(image, index) in Images.slice(1, 4)"
-        :src="`${imageHost}${image.url}`"
+        :src="formatHostImageUrl(image.url)"
         :alt="image.alt"
         :key="image.src"
         class="flex-grow h-auto w-4 object-cover"
         :style="{ 'flex-basis': calculateFlexBasis(index) }"
       />
-      
+
       <!-- "See more" box if there are more images than can be shown -->
       <div
         v-if="Images.length > 4"
@@ -40,13 +38,15 @@
 </template>
 
 <script>
-import { URL_LINK } from '@/constants';
+import { URL_LINK } from '@/constants'
+import { formatHostImageUrl } from '@/utils/formating'
 
 export default {
-  name: "ImagePostGallery",
-  data(){
-    return{
-      imageHost:URL_LINK.imageHostLink
+  name: 'ImagePostGallery',
+  data() {
+    return {
+      imageHost: URL_LINK.imageHostLink,
+      formatHostImageUrl
     }
   },
   props: {
@@ -55,20 +55,18 @@ export default {
       required: true
     }
   },
+
   methods: {
     showDetails() {
-      // Logic to show image details or perform any action on click
-      console.log('Showing image details...');
+      console.log('Showing image details...')
     },
 
     handleClick() {
       this.$emit('customFunction')
-      // console.log(this.routerName)
-      console.log(`${URL.imageHostLink}`)
     },
     calculateFlexBasis() {
-     // Calculate the flex-basis based on the number of images
-     const numberOfImages = this.Images.length - 1 // minus the first image
+      // Calculate the flex-basis based on the number of images
+      const numberOfImages = this.Images.length - 1 // minus the first image
       const maxImagesToShow = 3
       if (numberOfImages > maxImagesToShow) {
         // If more than 3 images, each gets an equal share of space
@@ -78,7 +76,7 @@ export default {
       return `${100 / numberOfImages}%`
     }
   }
-};
+}
 </script>
 
 <style scoped>

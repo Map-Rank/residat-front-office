@@ -23,13 +23,11 @@
           v-show="isMenuVisible"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
         >
-
           <button-ui
             :label="'Edit'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="editPost()"
-
           >
           </button-ui>
 
@@ -45,19 +43,22 @@
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showDetails()" class="px-5 mb-2 cursor-pointer">
-      <!-- <h5 class="mb-1">{{ postTitle }}</h5> -->
+    <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
       <p class="p3 content">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showDetails"> </image-post-gallery>
+    <image-post-gallery :Images="postImages" @customFunction="showDetails(this.post.id)">
+    </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="p-5">
       <!-- upper section  -->
-      <InteractionPostStatistics :comment_count="customPost.comment_count" :like_count="like_count" />
+      <InteractionPostStatistics
+        :comment_count="customPost.comment_count"
+        :like_count="like_count"
+      />
 
       <!-- lower section  -->
       <div class="flex justify-between">
@@ -79,7 +80,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <img class="h-9 w-9"  :src="userProfileImage" alt="" />
+        <img class="h-9 w-9" :src="userProfileImage" alt="" />
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -91,8 +92,7 @@
           <img src="@\assets\icons\image-fill.svg" alt="" />
         </div>
         <button
-          @click.prevent="commentPost()"
-
+          @click.prevent="commentPost(this.commentData)"
           class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
@@ -101,7 +101,7 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails" :post="this.post"></post-details>
+  <post-details v-if="showPostDetails"></post-details>
 </template>
 
 <script>
@@ -118,21 +118,23 @@ import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.v
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
 
-
 export default {
   name: 'PostComponent',
-  emits: ['postFetch','updatePost'],
+  emits: ['postFetch', 'updatePost'],
   data() {
     const route = useRoute()
     return {
       route,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
-      likeCount:this.like_count,
-      customPost:this.post,
+      likeCount: this.like_count,
+      customPost: this.post,
+      customLiked: this.liked,
+      hasLikeouUnlike: false,
       isMenuVisible: false,
       imageHost: URL_LINK.imageHostLink,
       showCommentBox: false,
+      isCommenting: false,
       commentData: {
         text: ' ',
         image: ' '
@@ -142,12 +144,14 @@ export default {
           svgContent: 'src\\assets\\icons\\heart-outline.svg',
           svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
           labelText: 'Like',
+          isActive: this.customLiked,
           right: true
         },
         {
           svgContent: 'src\\assets\\icons\\comment-outline.svg',
           svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
           labelText: 'Comment',
+          isActive: this.isCommenting,
           right: true
         },
         {
@@ -167,14 +171,20 @@ export default {
   },
 
   methods: {
-    ...mapActions(usePostStore, ['togglePostDetails', 'setpostToShowDetails', 'setpostToEdit']),
-    
+    ...mapActions(usePostStore, [
+      'togglePostDetails',
+      'setpostToShowDetails',
+      'setpostToEdit',
+      'showDetails',
+      'setpostIdToShowDetails'
+    ]),
+
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       if (window.confirm(alertMessage)) {
         console.log('Deleting post', this.postId)
         try {
           await deletePost(this.postId)
-          window.location.reload();
+          window.location.reload()
         } catch (error) {
           console.error('Error deleting post:', error)
         }
@@ -188,39 +198,44 @@ export default {
       this.$router.push({ name: 'create-post' })
     },
 
-  async customFunction(index) {
-    switch (index) {
-      case 0:
-        await likePost(this.postId);
-        this.customPost.like_count++;
-        this.$emit('updatePost', this.customPost); 
-        // this.$emit('postFetch');
-        break;
+    async customFunction(index) {
+      switch (index) {
+        case 0:
+          await likePost(this.postId)
+          if (this.customLiked) {
+            this.customLiked = false
+            this.customPost.like_count--
+            console.log(this.customLiked)
+          } else {
+            this.customLiked = true
+            this.customPost.like_count++
+          }
+          break
         case 1:
-          this.showCommentBox = !this.showCommentBox;
-          console.log(this.postImages);
-          break;
-          case 2:
-            await sharePost(this.postId);
-            this.$emit('postFetch');
-                break;
-            case 3:
-              console.log(this.post);
-              this.$emit('postFetch');
-        break;
+          this.isCommenting = true
+          this.showCommentBox = !this.showCommentBox
+          console.log(this.postImages)
+          break
+        case 2:
+          await sharePost(this.postId)
+          this.$emit('postFetch')
+          break
+        case 3:
+          console.log(this.post)
+          this.$emit('postFetch')
+          break
       }
     },
-    
-    
-    async commentPost() {
-      await commentPost(this.postId, this.commentData)
-      this.commentData.text=''
-      // this.$emit('postFetch');
+
+    async commentPost(text) {
+      await commentPost(this.postId, text)
+      this.commentData.text = ''
+      this.isCommenting = false
+
       this.showCommentBox = !this.showCommentBox
-      this.customPost.comment_count++;
-      // window.location.reload();
+      this.customPost.comment_count++
     },
-    
+
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
         if (i == index) {
@@ -238,12 +253,15 @@ export default {
       }
     },
 
-    showDetails() {
-      this.togglePostDetails()
-      this.setpostToShowDetails(this.post)
-      // console.log(this.post)
-      console.log('click')
-    },
+    // showPostDetails() {
+    //   this.showDetails(this.post.id)
+    //   this.setpostIdToShowDetails(this.post.id);
+
+    //   this.togglePostDetails();
+    //   // this.setpostToShowDetails(this.post);
+    //   // console.log(this.post)
+    //   // console.log(this.post.id)
+    // },
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
@@ -296,11 +314,12 @@ export default {
     comment_count: Number,
     postImages: Array,
     postId: Number,
-   showMenu: {
-     type: Boolean,
-     default: false
-   },
-   
+    liked: Boolean,
+    showMenu: {
+      type: Boolean,
+      default: false
+    },
+
     post: Object
   }
 }

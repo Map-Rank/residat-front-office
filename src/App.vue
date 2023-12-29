@@ -1,4 +1,7 @@
 <template>
+  <div>
+    
+  </div>
   <div class="body flex flex-col min-h-screen">
     <header-app :class="hiddenClass"></header-app>
 
@@ -21,13 +24,15 @@ import useAuthStore from './stores/auth'
 import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
+import AlertForm from './components/common/AlertFrom/AlertForm.vue'
 
 export default {
   name: 'App',
   components: {
     HeaderApp,
     FooterApp,
-    BottomNavigationAppApp
+    BottomNavigationAppApp,
+    AlertForm
   },
 
   computed: {

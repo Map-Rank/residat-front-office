@@ -2,12 +2,8 @@
   <div class="flex flex-col space-y-6">
     <h3 class="text-center">WELCOME BACK</h3>
 
-    <div
-      class="text-white text-center font-bold p-4 rounded mb-4"
-      v-if="login_show_alert"
-      :class="login_alert_varient"
-    >
-      {{ login_alert_message }}
+    <div>
+      <AlertForm></AlertForm>
     </div>
 
     <vee-form :validation-schema="schema" @submit="login">
@@ -47,7 +43,7 @@
           @click.prevent="login()"
           :disabled="login_in_submission"
         >
-          Sign up
+          Sign In
         </button>
       </div>
     </vee-form>
@@ -55,70 +51,80 @@
 </template>
 
 <script>
-import useAuthStore from '../../../stores/auth'
-import { loginUser } from '../services/authService'
-import { useRouter } from 'vue-router'
+import useAuthStore from "../../../stores/auth";
+import { loginUser } from "../services/authService";
+import { useRouter } from "vue-router";
+import AlertForm from "../../../components/common/AlertFrom/AlertForm.vue";
+import { AlertStates } from "@/components";
+import useAlertStore from '@/stores/alertStore';
 
 export default {
-  name: 'LoginForm',
+  name: "LoginForm",
   setup() {},
   data() {
-    const router = useRouter()
-    const authStore = useAuthStore()
+    const router = useRouter();
+    const authStore = useAuthStore();
+    const alertStore = useAlertStore();
 
     return {
       authStore,
+      alertStore,
       router,
       schema: {
-        email: 'required|email',
-        password: 'required'
+        email: "required|email",
+        password: "required",
       },
       userData: {
-        email: '',
-        password: ''
+        email: "",
+        password: "",
       },
       login_in_submission: false,
-      login_show_alert: false,
-      login_alert_varient: 'bg-blue-500',
-      login_alert_message: 'please wait we are login you in '
-    }
+    };
   },
+
+  components:{
+    AlertForm
+  },
+
 
   methods: {
     handleSuccess() {
-      console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = true
-      this.$router.push({ name: 'community' })
+      console.log("Current User:", this.authStore.getCurrentUser);
+      this.authStore.isloggedIn = true;
+      this.$router.push({ name: "community" });
     },
 
-    handleError(errors) {
-      console.log(errors)
-      ;(this.login_alert_varient = 'bg-red-500'),
-        (this.login_in_submission = false)(
-          (this.login_alert_message = JSON.stringify(errors.email[0]))
-        )
-      console.log(JSON.stringify(errors.email[0]))
-      console.log(JSON.stringify(errors.zone_id[0]))
+
+    handleError  (errors) {
+      if (errors.email && errors.email.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.email[0]);
+      } else if (errors.zone_id && errors.zone_id.length > 0) {
+        this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0]);
+      }
     },
 
+
+    
     async login(values) {
-      ;(this.login_in_submission = true),
-        (this.login_show_alert = true),
-        (this.login_alert_varient = 'bg-blue-500'),
-        (this.login_alert_message = 'please wait we are login you in ')
+        this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ');
+
 
       try {
-        await loginUser(this.userData, this.authStore, this.handleSuccess, this.handleError)
+        await loginUser(
+          this.userData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError
+        );
       } catch (error) {
-        console.log(error)
-        return
+        // console.log(error)
+        return;
       }
 
-      console.log(values)
-    }
+      console.log(values);
+    },
   },
-
-}
+};
 </script>
 
 <style>

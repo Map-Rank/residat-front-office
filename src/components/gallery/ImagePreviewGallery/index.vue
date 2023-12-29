@@ -8,6 +8,26 @@
       </div>
     </div>
 
+    <div v-if="ImagesFromHostToPreview != null">
+      <div
+        v-if="ImagesFromHostToPreview.length > 2 || ImagesFromHostToPreview.length === 1"
+        class="flex mb-0.5"
+      >
+        <div class="image-container">
+          <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
+          <img
+            :src="
+              ImagesFromHostToPreview != null
+                ? formatHostImageUrl(ImagesFromHostToPreview[0].url)
+                : Images[0].url
+            "
+            :alt="'image'"
+            class="w-full h-auto object-cover"
+          />
+        </div>
+      </div>
+    </div>
+
     <!-- Container for two images side by side -->
     <div v-if="Images.length === 2" class="flex mb-0.5">
       <div class="image-container w-2/5 h-1/2">
@@ -21,8 +41,31 @@
       </div>
     </div>
 
-    <div v-if="Images.length > 2" class="flex gap-0.5 overflow-hidden">
+    <div v-if="ImagesFromHostToPreview != null">
+      <div v-if="ImagesFromHostToPreview != null">
+        <div v-if="ImagesFromHostToPreview.length === 2" class="flex mb-0.5">
+          <div class="image-container w-2/5 h-1/2">
+            <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
+            <img
+              :src="formatHostImageUrl(ImagesFromHostToPreview[0].url)"
+              :alt="'image'"
+              class=""
+            />
+          </div>
+          <div class="image-container w-2/5 h-1/2">
+            <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
 
+            <img
+              :src="formatHostImageUrl(ImagesFromHostToPreview[1].url)"
+              :alt="'image'"
+              class=""
+            />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div v-if="Images.length > 2" class="flex gap-0.5 overflow-hidden">
       <img
         v-for="image in Images.slice(1, 4)"
         :src="image.src"
@@ -40,17 +83,49 @@
         +{{ Images.length - 4 }} more
       </div>
     </div>
+
+    <div v-if="ImagesFromHostToPreview != null">
+      <div v-if="ImagesFromHostToPreview.length > 2" class="flex gap-0.5 overflow-hidden">
+        <img
+          v-for="image in ImagesFromHostToPreview.slice(1, 4)"
+          :src="formatHostImageUrl(image.url)"
+          :alt="image.alt"
+          :key="image.url"
+          class="flex-grow h-auto w-4 object-cover"
+          :style="{ 'flex-basis': calculateFlexBasisFromHost() }"
+        />
+
+        <!-- "See more" box if there are more images than can be shown -->
+        <div
+          v-if="ImagesFromHostToPreview.length > 4"
+          class="flex-grow h-auto flex justify-center items-center bg-black opacity-50 cursor-pointer"
+        >
+          +{{ ImagesFromHostToPreview.length - 4 }} more
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { formatHostImageUrl } from '@/utils/formating'
+
 export default {
   name: 'ImagePreviewGallery',
+  data() {
+    return {
+      formatHostImageUrl
+    }
+  },
   emits: ['removeImage'],
   props: {
     Images: {
       type: Array,
       required: true
+    },
+    ImagesFromHostToPreview: {
+      type: Array,
+      default: () => []
     }
   },
   methods: {
@@ -70,6 +145,17 @@ export default {
     calculateFlexBasis() {
       // Calculate the flex-basis based on the number of images
       const numberOfImages = this.Images.length - 1 // minus the first image
+      const maxImagesToShow = 3
+      if (numberOfImages > maxImagesToShow) {
+        // If more than 3 images, each gets an equal share of space
+        return `${100 / maxImagesToShow}%`
+      }
+      // If fewer than 3 images, they grow equally to fill the space
+      return `${100 / numberOfImages}%`
+    },
+    calculateFlexBasisFromHost() {
+      // Calculate the flex-basis based on the number of images
+      const numberOfImages = this.ImagesFromHostToPreview.length - 1 // minus the first image
       const maxImagesToShow = 3
       if (numberOfImages > maxImagesToShow) {
         // If more than 3 images, each gets an equal share of space
