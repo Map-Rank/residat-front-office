@@ -15,7 +15,7 @@
             </div>
             <div class="flex justify-center">
               <img
-                src="assets/images/Logos/logo-medium.svg"
+                src="@\assets\images\Logos\logo-medium.svg"
                 alt="Logo"
                 class="mx-auto"
               />
