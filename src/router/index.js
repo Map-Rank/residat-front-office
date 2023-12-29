@@ -15,19 +15,19 @@ const router = createRouter({
       path: '/social-profile',
       name: 'social-profile',
       component: SocialProfile,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
     {
       path: '/create-post',
       name: 'create-post',
       component: CreatePost,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
     {
       path: '/community',
       name: 'community',
       component: CommunityView,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
     {
       path: '/',
@@ -38,13 +38,13 @@ const router = createRouter({
       path: '/chat-room',
       name: 'chat-room',
       component: ChatRoomView,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
     {
-      path: '/dashbaord', // Corrected the spelling of 'dashboard'
+      path: '/dashbaord',
       name: 'dashbaord',
       component: DashBoardView,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
   ]
 });

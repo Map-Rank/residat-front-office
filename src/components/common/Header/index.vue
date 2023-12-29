@@ -11,7 +11,7 @@
 
       <icon-with-label
         svgContentHover="src\assets\icons\profile-outline.svg"
-        svgContent="src\\assets\\icons\\profile-fill.svg"
+        svgContent="public\\assets\\icons\\profile-fill.svg"
         labelText="Profile"
         labelTextBottom="Profile"
         iconDesktopSize="this.iconSize"
@@ -51,7 +51,7 @@
 
         <icon-with-label
           svgContentHover="src\assets\icons\logout.svg"
-          svgContent="src\\assets\\icons\\logout.svg"
+          svgContent="public\\assets\\icons\\logout.svg"
           labelText="Logout"
           labelTextBottom="Logout"
           iconDesktopSize="this.iconSize"
@@ -88,52 +88,45 @@ export default {
       iconSize: 'w-7 h-7',
       navItems: [
         {
-          svgContent: 'src\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
+          svgContent: 'public\\assets\\icons\\dashboard-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\dashboard-fill.svg',
           labelText: 'Dashboard',
           isActive: false,
           bottom: true,
           routerName: 'dashbaord'
         },
         {
-          svgContent: 'src\\assets\\icons\\community-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\community-fill.svg',
+          svgContent: 'public\\assets\\icons\\community-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\community-fill.svg',
           labelText: 'Community',
           isActive: false,
           bottom: true,
           routerName: 'community'
         },
         {
-          svgContent: 'src\\assets\\icons\\chat-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
+          svgContent: 'public\\assets\\icons\\chat-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\chat-fill.svg',
           labelText: 'Chat',
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
         },
         {
-          svgContent: 'src\\assets\\icons\\profile-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
+          svgContent: 'public\\assets\\icons\\profile-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\profile-fill.svg',
           labelText: 'Profile',
           isActive: false,
           bottom: true,
           routerName: 'social-profile'
         },
         {
-          svgContent: 'src\\assets\\icons\\post-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\post-fill.svg',
+          svgContent: 'public\\assets\\icons\\post-outline.svg',
+          svgContentHover: 'public\\assets\\icons\\post-fill.svg',
           labelText: 'Post',
           isActive: false,
           bottom: true,
           routerName: 'create-post'
         },
-        // {
-        //   svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
-        //   svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
-        //   labelText: 'Subscribe',
-        //   isActive: false,
-        //   bottom: true
-        // }
       ]
     }
   },
@@ -159,9 +152,6 @@ export default {
           console.error(err);
         }
       });
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 100); // Adjust the timeout duration as needed. //TODO remove this when possible
     }
     
   },

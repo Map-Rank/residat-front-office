@@ -40,7 +40,7 @@
             <label class="block mb-2">Attach images (optional):</label>
             <div class="flex space-x-4">
               <base-image-picker
-                :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
+                :iconImg="'publicassets\\icons\\colored\\image-icon.svg'"
                 :type="'file'"
                 :label="'Add Image'"
                 @handleFileChange="handleImageUpload"
@@ -48,7 +48,7 @@
               </base-image-picker>
   
               <base-image-picker
-                :iconImg="'src\\assets\\icons\\colored\\video-clip.svg'"
+                :iconImg="'publicassets\\icons\\colored\\video-clip.svg'"
                 :type="'file'"
                 :label="'Add Video'"
                 @handleFileChange="handleImageUpload"

@@ -1,0 +1,7 @@
+RewriteEngine On
+# If requested resource exists as a file or directory, serve it directly
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Otherwise, rewrite request to the `index.html`
+RewriteRule ^ index.html [QSA,L]
