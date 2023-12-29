@@ -20,7 +20,7 @@
 
         <div v-if="showPageRefresh">
           <RefreshError
-            :imageUrl="'public\\assets\\images\\Community\\loading.svg'"
+            :imageUrl="'assets\\images\\Community\\loading.svg'"
             :errorMessage="errorMessage"
             @refreshPage="refreshPage()"
           ></RefreshError>

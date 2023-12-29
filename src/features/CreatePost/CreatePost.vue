@@ -37,7 +37,7 @@
           <label class="block mb-2">Attach images (optional):</label>
           <div class="flex space-x-4">
             <base-image-picker
-              :iconImg="'public\\assets\\icons\\colored\\image-icon.svg'"
+              :iconImg="'assets\\icons\\colored\\image-icon.svg'"
               :type="'file'"
               :label="'Add Image'"
               @handleFileChange="handleImageUpload"
