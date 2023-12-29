@@ -25,7 +25,7 @@
                 <UserInfoPostDetails :image-host="imageHost" :post="post" />
 
                 <button @click="dismiss()">
-                  <img src="src\assets\icons\dismiss.svg" alt="" />
+                  <img src="@\assets\icons\dismiss.svg" alt="" />
                 </button>
               </div>
             </div>
@@ -52,9 +52,9 @@
               <div class="flex space-x-4">
                 <div class="flex justify-between mb-2 pb-2">
                   <div class="flex items-center space-x-1">
-                    <img src="src\assets\icons\heart-fill.svg" alt="" />
+                    <img src="@\assets\icons\heart-fill.svg" alt="" />
                     <span class="caption-c1-bold">{{ post.likes.length }}  likes</span>
-                    <img src="src\assets\icons\share-fill.svg" alt="" />
+                    <img src="@\assets\icons\share-fill.svg" alt="" />
                     <span class="ml-4 caption-c1-bold">{{ post.shares.length }} Shares</span>
                   </div>
                 </div>

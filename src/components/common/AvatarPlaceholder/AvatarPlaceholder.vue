@@ -58,7 +58,7 @@
     ); /* Adjust font size based on the size of the avatar */
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     justify-content: center;
   }
   </style>
