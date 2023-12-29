@@ -10,8 +10,8 @@
       </div>
 
       <icon-with-label
-        svgContentHover="src\assets\icons\profile-outline.svg"
-        svgContent="public\\assets\\icons\\profile-fill.svg"
+        svgContentHover="public\assets\icons\profile-outline.svg"
+        svgContent="assets\\icons\\profile-fill.svg"
         labelText="Profile"
         labelTextBottom="Profile"
         iconDesktopSize="this.iconSize"
@@ -51,7 +51,7 @@
 
         <icon-with-label
           svgContentHover="src\assets\icons\logout.svg"
-          svgContent="public\\assets\\icons\\logout.svg"
+          svgContent="assets\\icons\\logout.svg"
           labelText="Logout"
           labelTextBottom="Logout"
           iconDesktopSize="this.iconSize"
@@ -88,40 +88,40 @@ export default {
       iconSize: 'w-7 h-7',
       navItems: [
         {
-          svgContent: 'public\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: 'public\\assets\\icons\\dashboard-fill.svg',
+          svgContent: 'assets\\icons\\dashboard-outline.svg',
+          svgContentHover: 'assets\\icons\\dashboard-fill.svg',
           labelText: 'Dashboard',
           isActive: false,
           bottom: true,
           routerName: 'dashbaord'
         },
         {
-          svgContent: 'public\\assets\\icons\\community-outline.svg',
-          svgContentHover: 'public\\assets\\icons\\community-fill.svg',
+          svgContent: 'assets\\icons\\community-outline.svg',
+          svgContentHover: 'assets\\icons\\community-fill.svg',
           labelText: 'Community',
           isActive: false,
           bottom: true,
           routerName: 'community'
         },
         {
-          svgContent: 'public\\assets\\icons\\chat-outline.svg',
-          svgContentHover: 'public\\assets\\icons\\chat-fill.svg',
+          svgContent: 'assets\\icons\\chat-outline.svg',
+          svgContentHover: 'assets\\icons\\chat-fill.svg',
           labelText: 'Chat',
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
         },
         {
-          svgContent: 'public\\assets\\icons\\profile-outline.svg',
-          svgContentHover: 'public\\assets\\icons\\profile-fill.svg',
+          svgContent: 'assets\\icons\\profile-outline.svg',
+          svgContentHover: 'assets\\icons\\profile-fill.svg',
           labelText: 'Profile',
           isActive: false,
           bottom: true,
           routerName: 'social-profile'
         },
         {
-          svgContent: 'public\\assets\\icons\\post-outline.svg',
-          svgContentHover: 'public\\assets\\icons\\post-fill.svg',
+          svgContent: 'assets\\icons\\post-outline.svg',
+          svgContentHover: 'assets\\icons\\post-fill.svg',
           labelText: 'Post',
           isActive: false,
           bottom: true,

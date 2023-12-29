@@ -37,9 +37,9 @@ export default {
     return {
       links: ['Privacy', 'Terms', 'Contact', 'About'],
       imgSrcs: [
-        'public\\assets\\icons\\insta.svg',
-        'public\\assets\\icons\\linkedin.svg',
-        'public\\assets\\icons\\facebook.svg',
+        'assets\\icons\\insta.svg',
+        'assets\\icons\\linkedin.svg',
+        'assets\\icons\\facebook.svg',
       ]
     }
   },
