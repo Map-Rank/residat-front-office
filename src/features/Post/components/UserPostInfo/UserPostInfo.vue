@@ -1,6 +1,10 @@
 <template>
   <div class="user-profile flex items-center space-x-2">
-    <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
+    <!-- <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" /> -->
+    <avatar-placeholder
+    :username="username"
+    :size="20"
+  />
     <div>
       <h5 class="font-bold">{{ username }}</h5>
       <span class="caption-c1">{{ postDate }}</span>
@@ -8,8 +12,12 @@
   </div>
 </template>
 <script>
+import AvatarPlaceholder from '../../../../components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
 export default {
   name: 'UserPostInfo',
+  components:{
+    AvatarPlaceholder
+  },
   props: {
     postDate: {},
     userProfileImage: {},

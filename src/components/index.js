@@ -8,3 +8,5 @@ export * from './common/Header/index.vue'
 export * from './/base/ButtonUi.vue'
 export * from './/base/BaseCheckbox.vue'
 export * from './/base/BaseImagePicker.vue'
+
+// export * from './common/AvatarPlaceholder/AvatarPlaceholder.vue'
