@@ -6,33 +6,36 @@
         <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0">
           <div class="space-y-3">
             <div class="flex space-x-4 items-center">
-              <img class="h-8 w-8 rounded-xl" :src="post.logoImg" alt="" loading="lazy" />
-              <span class="user-name">{{ post.author }}</span>
+              <avatar-placeholder :username="`${post.creator[0].first_name} ${post.creator[0].last_name}`" :size="20" />
+              <span class="user-name">{{ `${post.creator[0].first_name} ${post.creator[0].last_name}` }}</span>
             </div>
 
-            <h5 class="post-title">{{ post.title }}</h5>
-            <p class="caption-C1">{{ post.postedDate }}</p>
+            <h5 class="post-title">{{ post.content }}</h5>
+            <p class="caption-C1">{{ post.published_at }}</p>
           </div>
         </li>
       </ul>
     </section>
-
-
   </div>
 </template>
 
 <script>
+import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
+
 export default {
   name: 'RecentlyPosted',
+  components: {
+    AvatarPlaceholder
+  },
   props: {
     recentPosts: {
       type: Array,
       required: true
-    }
+    },
+    // username:String
   }
 }
 </script>
-
 
 <style scoped>
 .title {

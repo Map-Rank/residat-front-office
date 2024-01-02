@@ -8,7 +8,7 @@
       <template v-if="location">
         <div class="flex items-center">
           <img src="@/assets/icons/location.svg" alt="Location" />
-          <span>{{ location }}</span>
+          <span>From {{ location }}</span>
         </div>
       </template>
       <template v-if="phone">

@@ -1,3 +1,5 @@
+<!-- eslint-disable vue/no-use-computed-property-like-method -->
+<!-- eslint-disable-next-line vue/no-use-computed-property-like-method -->
 <!-- eslint-disable no-useless-escape -->
 <template>
   <header class="py-4 md:px-100">
@@ -10,8 +12,8 @@
       </div>
 
       <icon-with-label
-        svgContentHover="@\assets\icons\profile-outline.svg"
-        svgContent="@\assets\icons\profile-fill.svg"
+        svgContentHover="assets\icons\profile-outline.svg"
+        svgContent="assets\icons\profile-fill.svg"
         labelText="Profile"
         labelTextBottom="Profile"
         iconDesktopSize="this.iconSize"
@@ -42,16 +44,15 @@
           :labelText="item.labelText"
           :labelTextBottom="item.labelText"
           :iconDesktopSize="this.iconSize"
-          :isActive="item.isActive"
+          :isActive="isActive(item.routerName)"
           :bottom="item.bottom"
           :routerName="item.routerName"
-          @clickIcon="clickIcon(index)"
           :key="index"
         ></icon-with-label>
 
         <icon-with-label
-          svgContentHover="@\assets\icons\logout.svg"
-          svgContent="@\assets\icons\logout.svg"
+          svgContentHover="\assets\icons\logout.svg"
+          svgContent="\assets\icons\logout.svg"
           labelText="Logout"
           labelTextBottom="Logout"
           iconDesktopSize="this.iconSize"
@@ -84,6 +85,8 @@ export default {
     return {
       authStore,
       router,
+      // isMenuOpen : ref(false),
+      isActiveRoute: '',
       isMenuOpen: false,
       iconSize: 'w-7 h-7',
       navItems: [
@@ -126,36 +129,31 @@ export default {
           isActive: false,
           bottom: true,
           routerName: 'create-post'
-        },
+        }
       ]
     }
   },
 
-  methods: {
-    //This is the method that permit us to change an icon-with-label to active and is called by the child component
-    clickIcon(index) {
-      this.navItems = this.navItems.map((item, i) => {
-        if (i == index) {
-          return { ...item, isActive: !item.isActive }
-        }
 
-        return { ...item, isActive: false }
-      })
+  methods: {
+    isActive(routerName) {
+      if (this.$route.name === routerName) {
+        return true
+      } else {
+        return false
+      }
     },
 
-
     logout() {
-      this.authStore.logOut();
-      this.$router.push({ name: 'authentication' }).catch(err => {
+      this.authStore.logOut()
+      this.$router.push({ name: 'authentication' }).catch((err) => {
         // Ignore the Vue Router error regarding navigating to the page we are currently on.
         if (err.name !== 'NavigationDuplicated') {
-          console.error(err);
+          console.error(err)
         }
-      });
+      })
     }
-    
-  },
-
+  }
 }
 </script>
 
