@@ -1,21 +1,17 @@
 <template>
   <div class="h-full">
     <div class="bg-white p-6 flex justify-center">
-      <loading-indicator v-if="isLoading"></loading-indicator>
+    
+      <LoadingIndicator v-if="isLoading"/>
       <top-profile-info
       v-if="!isLoading"
-        :profileName="`${userPost.first_name} ${userPost.last_name}`"
+      :profile-image-url="''"
+      :profileName="`${userPost.first_name} ${userPost.last_name}`"
         :followersCount="0"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />
-      <!-- v-if="!isLoading"
-        :profileImageUrl="userPost.avatar"
-        :profileName="`${userPost.first_name} ${userPost.last_name}`"
-        :followersCount="0"
-        :postsCount="posts.length"
-        :isCurrentUser="true"
-      /> -->
+
     </div>
 
     <div class="md:px-100 pb-5">
@@ -24,7 +20,7 @@
           <about-user-info
           :username="`${userPost.first_name} ${userPost.last_name}`"
           :description="'Your description here'"
-          :location="'From ' + user.address"
+          :location="user.address"
           :phone="userPost.phone"
           :email="userPost.email"
           :joinDate="formatDate(userPost.created_at)"
@@ -37,7 +33,7 @@
           <div class="space-y-5">
             <div class="flex justify-center">
 
-              <loading-indicator v-if="isLoading"></loading-indicator>
+              <LoadingIndicator v-if="isLoading"/>
             </div>
 
             <div
@@ -73,7 +69,6 @@ import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
 import { getUserPosts } from '@/features/Post/services/postService.js'
-import useSectorStore from '@/stores/sectorStore.js'
 import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 
@@ -83,19 +78,20 @@ export default {
   name: 'SocialProfile',
 
   async created() {
-    const sectorStore = useSectorStore()
 
     try {
       this.isLoading = true
+      console.log(this.isLoading)
 
       this.userPost = await getUserPosts()
       this.posts = this.userPost.my_posts
-      this.isLoading = false
-
-
-      this.sectors = sectorStore.getAllSectors
+      
+      
     } catch (error) {
       console.error('Failed to load posts:', error)
+    } finally{
+      this.isLoading = false
+
     }
 
     const storedUser = localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo)
@@ -109,7 +105,7 @@ export default {
       user: '',
       posts: [],
       userPost: null,
-      isLoading: false,
+      isLoading: true,
     }
   },
 
