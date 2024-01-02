@@ -100,6 +100,8 @@
           <!-- Password -->
           <div class="mb-6">
             <label class="inline-block mb-2">Password</label>
+
+
             <vee-field
               name="password"
               type="password"
@@ -141,20 +143,7 @@
 
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
         <h3 class="text-center">SPECIFIC INFORMATION</h3>
-        <!-- Location -->
-        <!-- <div class="mb-6">
-          <label class="inline-block mb-2">Location</label>
-          <vee-field
-            name="location"
-            :rules="schema.location"
-            v-model="formData.location"
-            as="input"
-            type="text"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Enter Second Name"
-          />
-          <ErrorMessage class="text-danger-normal" name="location" />
-        </div> -->
+
 
         <div class="flex flex-row space-x-4 justify-between ">
           <div class="w-1/2">
@@ -309,6 +298,7 @@ export default {
         selectedSectors: [],
         tos: true
       },
+      showPassword: false,
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
@@ -322,6 +312,10 @@ export default {
   },
 
   methods: {
+
+    togglePasswordVisibility() {
+      this.showPassword = !this.showPassword
+    },
     async nextStep() {
       const fieldsToValidate = [
         'first_name',
