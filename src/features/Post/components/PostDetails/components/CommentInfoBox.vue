@@ -1,9 +1,13 @@
 <template>
-  <img
+  <avatar-placeholder
+  :username="`${comment.user.first_name} ${comment.user.second_name}`"
+></avatar-placeholder>
+<!-- immage that will be gotten from host -->
+  <!-- <img
     class="w-10 h-10 rounded-full"
     :src="`${imageHost}${comment.user.avatar}`"
     alt="User profile"
-  />
+  /> -->
   <div>
     <div>
       <div>
@@ -25,8 +29,15 @@
   </div>
 </template>
 <script>
+import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
+
 export default {
   name: 'CommentInfoBox',
+  components:{
+    AvatarPlaceholder
+
+  }
+  ,
   props: {
     comment: {},
     imageHost: {}
