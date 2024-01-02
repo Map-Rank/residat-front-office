@@ -6,7 +6,8 @@ export default defineStore('post', {
     showPostDetails: false,
     postToShowDetails: null,
     postIdToShowDetail: null,
-    postToEdit: null
+    postToEdit: null,
+    postToView: null
   }),
   getters: {},
   actions: {
@@ -27,6 +28,10 @@ export default defineStore('post', {
     setpostToEdit(post) {
       this.postToEdit = post
       console.log(this.postToEdit)
+    },
+    showPostDetail(post) {
+      this.postToView = post
+      console.log(this.postToView)
     },
     async showDetails(id) {
       try {
