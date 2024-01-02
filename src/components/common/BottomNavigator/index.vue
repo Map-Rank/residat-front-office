@@ -10,10 +10,9 @@
           :labelText="item.labelText"
           :labelTextBottom="item.labelText"
           :iconDesktopSize="this.iconSize"
-          :isActive="item.isActive"
+          :isActive="isActive(item.routerName)"
           :bottom="item.bottom"
           :routerName="item.routerName"
-          @clickIcon="clickIcon(index)"
           :key="index"
         ></icon-with-label>
       </nav>
@@ -68,16 +67,15 @@ export default {
   },
 
   methods: {
-    //This is the method that permit us to change an icon-with-label to active and is called by the child component
-    clickIcon(index) {
-      this.navItems = this.navItems.map((item, i) => {
-        if (i == index) {
-          return { ...item, isActive: !item.isActive }
-        }
 
-        return { ...item, isActive: false }
-      })
-    }
+    isActive(routerName) {
+      if (this.$route.name === routerName) {
+        return true
+      } else {
+        return false
+      }
+    },
+
   }
 }
 </script>
