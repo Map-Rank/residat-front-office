@@ -37,10 +37,13 @@
             </div>
 
             <div
+            class="space-y-5"
             v-if="!isLoading"
             >
 
-              <PostComponent
+
+            
+            <PostComponent
                 v-for="(post, index) in posts"
                 :key="index"
                 :postId="post.id"
