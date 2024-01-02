@@ -142,7 +142,7 @@
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
         <h3 class="text-center">SPECIFIC INFORMATION</h3>
         <!-- Location -->
-        <div class="mb-6">
+        <!-- <div class="mb-6">
           <label class="inline-block mb-2">Location</label>
           <vee-field
             name="location"
@@ -154,9 +154,21 @@
             placeholder="Enter Second Name"
           />
           <ErrorMessage class="text-danger-normal" name="location" />
+        </div> -->
+
+        <div class="flex flex-row space-x-4 justify-between ">
+          <div class="w-1/2">
+            <label class="inline-block mb-2">Choose Division</label>
+            <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+          </div>
+          <div class="w-1/2">
+            <label class="inline-block mb-2">Choose Sub-division</label>
+            <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+          </div>
         </div>
 
-        <!-- Location -->
+
+        <!-- Company -->
         <div class="mb-6">
           <label class="inline-block mb-2">Company Name</label>
           <vee-field
@@ -238,6 +250,7 @@ import { useRouter } from 'vue-router'
 import { AlertStates } from '@/components'
 import useAlertStore from '@/stores/alertStore'
 import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
+import BaseDropdown from '@/components/base/BaseDropdown.vue'
 
 export default {
   name: 'RegisterForm',
@@ -261,6 +274,10 @@ export default {
       authStore,
       alertStore,
       router,
+      dropdownOptions: [
+        { label: 'Option 1', value: 'option1' },
+        { label: 'Option 2', value: 'option2' }
+      ],
       schema: {
         name: 'required|min:3|max:50',
         first_name: 'required|min:3|max:50',
@@ -291,12 +308,13 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_1',
-      reg_in_submission: false,
+      currentStep: 'step_2',
+      reg_in_submission: false
     }
   },
   components: {
-    AlertForm
+    AlertForm,
+    BaseDropdown
   },
 
   methods: {
@@ -334,11 +352,10 @@ export default {
     },
 
     handleSuccess() {
-      console.log("Current User:", this.authStore.getCurrentUser);
-      this.authStore.isloggedIn = true;
-      this.$router.push({ name: "community" });
+      console.log('Current User:', this.authStore.getCurrentUser)
+      this.authStore.isloggedIn = true
+      this.$router.push({ name: 'community' })
     },
-
 
     handleError(errors) {
       if (errors.email && errors.email.length > 0) {
@@ -349,15 +366,13 @@ export default {
     },
 
     async registerForm() {
-      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are creating your account...');
+      this.alertStore.setAlert(
+        AlertStates.PROCESSING,
+        'please wait we are creating your account...'
+      )
 
       try {
-        await registerUser(
-          this.formData,
-          this.authStore,
-          this.handleSuccess,
-          this.handleError
-        )
+        await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError)
       } catch (error) {
         console.log(error)
       }
