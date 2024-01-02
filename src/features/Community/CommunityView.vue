@@ -50,7 +50,8 @@
       </main>
 
       <aside class="col-span-1 hidden sm:block">
-        <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+        <recently-posted-side
+        :recentPosts="recentPosts"></recently-posted-side>
       </aside>
     </div>
   </div>
@@ -108,20 +109,7 @@ export default {
 
       imageHost: URL_LINK.imageHostLink,
       recentPosts: [
-        {
-          author: "Arpit Chandak",
-          title: "The Blog that make the difference in out commun",
-          logoImg:
-            "https://th.bing.com/th/id/R.22d59dd756c5ffe8f8109bf18e93cf61?rik=j%2bU%2f3h0s8BuFyg&pid=ImgRaw&r=0",
-          postedDate: "Posted: 1 days ago",
-        },
-        {
-          author: "Arpit Chandak",
-          title: "The Blog that make the difference in out commun",
-          logoImg:
-            "https://th.bing.com/th/id/OIP.PYfgkkj0Rba0QZdJfqgCWQHaG5?w=591&h=551&rs=1&pid=ImgDetMain",
-          postedDate: "Posted: 1 days ago",
-        },
+
       ],
     };
   },
@@ -164,6 +152,7 @@ export default {
       try {
         this.topLoading = true;
         this.posts = await getPosts();
+        this.recentPosts = await getPosts('0','5')
       } catch (error) {
         console.error("Failed to load posts:", error);
         this.showPageRefresh = true;

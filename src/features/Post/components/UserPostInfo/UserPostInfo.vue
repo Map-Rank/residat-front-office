@@ -12,7 +12,7 @@
   </div>
 </template>
 <script>
-import AvatarPlaceholder from '../../../../components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
+import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
 export default {
   name: 'UserPostInfo',
   components:{
