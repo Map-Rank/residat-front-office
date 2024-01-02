@@ -10,8 +10,8 @@
       </div>
 
       <icon-with-label
-        svgContentHover="public\assets\icons\profile-outline.svg"
-        svgContent="assets\\icons\\profile-fill.svg"
+        svgContentHover="@\assets\icons\profile-outline.svg"
+        svgContent="@\assets\icons\profile-fill.svg"
         labelText="Profile"
         labelTextBottom="Profile"
         iconDesktopSize="this.iconSize"
@@ -50,8 +50,8 @@
         ></icon-with-label>
 
         <icon-with-label
-          svgContentHover="src\assets\icons\logout.svg"
-          svgContent="assets\\icons\\logout.svg"
+          svgContentHover="@\assets\icons\logout.svg"
+          svgContent="@\assets\icons\logout.svg"
           labelText="Logout"
           labelTextBottom="Logout"
           iconDesktopSize="this.iconSize"
