@@ -8,6 +8,7 @@ import AuthView from '../features/Auth/AuthView.vue';
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue';
 import CreatePost from '../features/CreatePost/CreatePost.vue';
 import ShowPost from '@/components/common/ShowPost/index.vue'
+import OTP from '@/features/Auth/components/OTP.vue'
 import ViewProfileUser from '../features/SocialProfile/ShowProfileUser.vue'
 
 const router = createRouter({
@@ -35,6 +36,11 @@ const router = createRouter({
       path: '/',
       name: 'authentication',
       component: AuthView
+    },
+    {
+      path: '/otp',
+      name: 'opt',
+      component: OTP
     },
     {
       path: '/chat-room',

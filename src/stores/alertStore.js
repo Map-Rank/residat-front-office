@@ -5,17 +5,20 @@ export default defineStore('alert', {
   state: () => ({
     message: '',
     variant: AlertStates.INFO,
+    timeOut:2000,
     show: false
   }),
   actions: {
-    setAlert(variant, message) {
+    setAlert(variant, message,timeOut) {
       this.message = message
       this.variant= variant,
+      timeOut ? this.timeOut = timeOut : null,
+
       this.show = true
 
       setTimeout(() => {
         this.show = false
-      }, 2000)
+      }, this.timeOut)
     }
   }
 })
