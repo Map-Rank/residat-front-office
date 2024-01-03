@@ -206,7 +206,6 @@ export default {
     },
 
     viewPost(){
-      this.setpostToEdit(this.post)
       this.$router.push({ name: 'show-post', params: { id: this.post.id } })
     },
 
