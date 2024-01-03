@@ -38,6 +38,14 @@
             @clickButton="deletePost()"
           >
           </button-ui>
+
+          <button-ui
+            :label="'View'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="viewPost()"
+          >
+          </button-ui>
         </div>
       </div>
     </header>
@@ -196,6 +204,11 @@ export default {
         console.log('Post deletion cancelled by user')
       }
     },
+
+    viewPost(){
+      this.$router.push({ name: 'show-post', params: { id: this.post.id } })
+    },
+
     editPost() {
       console.log('edit post ')
       this.setpostToEdit(this.post)

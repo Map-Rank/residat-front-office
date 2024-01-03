@@ -7,6 +7,7 @@ import DashBoardView from '../features/DashBaord/DashBoardView.vue';
 import AuthView from '../features/Auth/AuthView.vue';
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue';
 import CreatePost from '../features/CreatePost/CreatePost.vue';
+import ShowPost from '@/components/common/ShowPost/index.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -44,6 +45,12 @@ const router = createRouter({
       path: '/dashbaord',
       name: 'dashbaord',
       component: DashBoardView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/show-post/:id',
+      name: 'show-post',
+      component: ShowPost,
       meta: { requiresAuth: true }
     },
   ]

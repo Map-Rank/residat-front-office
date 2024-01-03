@@ -1,5 +1,5 @@
 <template>
-  <div class="" @click.prevent="handleClick" v-if="Images">
+  <div class="hover:cursor-pointer" @click.prevent="handleClick" v-if="Images">
     <!-- Container for the first image -->
     <div v-if="Images.length > 2 || Images.length === 1" class="flex mb-0.5">
       <img
