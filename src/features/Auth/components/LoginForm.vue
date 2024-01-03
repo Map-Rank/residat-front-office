@@ -127,7 +127,7 @@ export default {
     },
 
     async login(values) {
-      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ')
+      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ',10000)
 
       try {
         await loginUser(this.userData, this.authStore, this.handleSuccess, this.handleError)

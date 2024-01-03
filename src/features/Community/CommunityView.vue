@@ -84,9 +84,9 @@ export default {
   name: "Community",
 
   async created() {
+
     try {
       await this.fetchPosts();
-      // this.posts = await getPosts()
       this.topLoading = false;
     } catch (error) {
       console.error("Failed to load posts:", error);
@@ -105,6 +105,7 @@ export default {
 
     return {
       zoneName: authStore.user.zone.name,
+      authStore,
       scrollLocked: false,
       topLoading: false,
       bottomLoading: false,
@@ -163,12 +164,11 @@ export default {
     },
 
     async fetchPosts() {
-      console.log(this.zoneName)
 
       try {
         this.topLoading = true;
-        this.posts = await getPosts();
-        this.recentPosts = await getPosts('0','5')
+        this.posts = await getPosts('0','10',this.authStore.user.token);
+        this.recentPosts = await getPosts('0','5',this.authStore.user.token)
       } catch (error) {
         console.error("Failed to load posts:", error);
         this.showPageRefresh = true;
