@@ -53,6 +53,7 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
     localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken) //TODO remove this and but it in logout function later
 
     authStore.setUser(user)
+    authStore.settoken(token)
     localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
     localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)

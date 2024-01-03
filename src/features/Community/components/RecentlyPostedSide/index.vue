@@ -6,12 +6,17 @@
         <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0">
           <div class="space-y-3">
             <div class="flex space-x-4 items-center">
-              <avatar-placeholder :username="`${post.creator[0].first_name} ${post.creator[0].last_name}`" :size="20" />
-              <span class="user-name">{{ `${post.creator[0].first_name} ${post.creator[0].last_name}` }}</span>
+              <avatar-placeholder
+                :username="`${post.creator[0].first_name} ${post.creator[0].last_name}`"
+                :size="20"
+              />
+              <span class="user-name user-name">{{
+                `${post.creator[0].first_name} ${post.creator[0].last_name}`
+              }}</span>
             </div>
 
-            <h5 class="post-title">{{ post.content }}</h5>
-            <p class="caption-C1">{{ post.published_at }}</p>
+            <h5 class="post-title hover:cursor-pointer">{{ truncateText(post.content ,70 )  }}</h5>
+            <p class="caption-C1">{{ formatDate(post.published_at) }}</p>
           </div>
         </li>
       </ul>
@@ -21,9 +26,16 @@
 
 <script>
 import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
+import { formatDate , truncateText} from '@/utils/formating'
 
 export default {
   name: 'RecentlyPosted',
+  data() {
+    return {
+      formatDate,
+      truncateText
+    }
+  },
   components: {
     AvatarPlaceholder
   },
@@ -31,7 +43,7 @@ export default {
     recentPosts: {
       type: Array,
       required: true
-    },
+    }
     // username:String
   }
 }
@@ -69,7 +81,7 @@ export default {
   font-weight: 400;
   line-height: 16px; /* 133.333% */
 }
-.post-title {
+.user-name {
   color: var(--body-dark, #1b1b1b);
 
   /* Desktop/H5 */
@@ -81,7 +93,7 @@ export default {
   letter-spacing: -0.225px;
 }
 
-.user-name {
+.post-title {
   color: var(--body-normal, #242424);
 
   /* Paragraphs/P3 */

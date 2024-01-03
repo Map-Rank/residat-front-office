@@ -111,7 +111,7 @@ export default {
   methods: {
     handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = true
+      this.authStore.isloggedIn = true      
       this.$router.push({ name: 'community' })
     },
     togglePasswordVisibility() {

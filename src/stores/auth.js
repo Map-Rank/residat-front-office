@@ -5,6 +5,7 @@ import { LOCAL_STORAGE_KEYS } from '../constants/localStorageKeys';
 export default defineStore('auth', {
   state: () => ({
     user: null,
+    token:null,
     isloggedIn: null
   }),
 
@@ -40,6 +41,9 @@ export default defineStore('auth', {
       console.log(userData)
       this.user = userData;
       this.isloggedIn = true;
+    },
+    settoken(token) {
+      this.token = token;
     },
     
     logOut() {
