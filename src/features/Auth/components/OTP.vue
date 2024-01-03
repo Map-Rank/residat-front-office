@@ -1,6 +1,6 @@
 <template>
     <div class="flex justify-center items-center h-screen bg-gray-100 ">
-      <div class=" w-1/2 bg-white shadow-lg  rounded-lg p-5">
+      <div class=" w-3/2 bg-white shadow-lg  rounded-lg p-5">
         <div class="text-center">
           <img src="/assets/images/Pages/Two factor authentication.svg" alt="Mail Icon" class="mx-auto mb-4" />
           <h2 class="text-xl font-semibold mb-2">OTP Verification</h2>
