@@ -1,6 +1,6 @@
 <template>
     <div
-        :class="`box grid ${
+        :class="`mt-5 box grid ${
           post && post.medias && post.medias.length === 0? 'grid-cols-auto' : 'md:grid-cols-2'
         } bg-black shadow rounded-lg w-4/5 mx-auto`"
       >
@@ -21,9 +21,9 @@
               <div class="flex items-start justify-between border-b-2">
                 <UserInfoPostDetails :image-host="imageHost" :post="post" />
 
-                <button @click="dismiss()">
+                <!-- <button @click="dismiss()">
                   <img src="@\assets\icons\dismiss.svg" alt="" />
-                </button>
+                </button> -->
               </div>
             </div>
 
@@ -157,3 +157,38 @@ export default {
 
 }
 </script>
+<style scoped>
+.back {
+  background: rgba(13, 13, 13, 0.3);
+}
+
+.grid-rows-custom {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+}
+
+.btn {
+  text-align: center;
+  font-feature-settings: "clig" off, "liga" off;
+
+  /* Desktop / Link Small */
+  font-family: Poppins;
+  font-size: 16px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 28px; /* 175% */
+  letter-spacing: 0.75px;
+}
+.info {
+  background: #f5f2f2;
+}
+.info {
+  height: 80vh;
+}
+
+@media only screen and (max-width: 600px) {
+  .info {
+    height: 60vh;
+  }
+}
+</style>
