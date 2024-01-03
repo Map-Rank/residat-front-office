@@ -156,6 +156,17 @@ const getUserPosts = async () => {
   }
 }
 
+const getUserProfile = async (id) => {
+  try {
+    const endpoint = `/profile/detail/${id}`; // Générez l'URL avec l'id
+    const response = await makeApiGetCall(endpoint, authToken);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
 const likePost = async (postId) => {
   try {
     await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`, null, authToken)
@@ -208,5 +219,6 @@ export {
   updatePost,
   deletePost,
   sharePost,
-  getUserPosts
+  getUserPosts,
+  getUserProfile
 }

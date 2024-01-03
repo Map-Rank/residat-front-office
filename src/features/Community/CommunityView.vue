@@ -47,6 +47,7 @@
               :postContent="post.content"
               :liked="post.liked"
               :userProfileImage="`${imageHost}${post.creator[0].avatar}`"
+              :id="`${post.creator[0].id}`"
               :like_count="post.like_count"
               :comment_count="post.comment_count"
               :postImages="post.images"
@@ -163,7 +164,6 @@ export default {
     },
 
     async fetchPosts() {
-      console.log(this.zoneName)
 
       try {
         this.topLoading = true;
@@ -182,6 +182,7 @@ export default {
           this.showPageRefresh = false;
         }
       }
+      console.log(this.posts)
     },
     async refreshPage() {
       this.topLoading = true;

@@ -8,6 +8,7 @@ import AuthView from '../features/Auth/AuthView.vue';
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue';
 import CreatePost from '../features/CreatePost/CreatePost.vue';
 import ShowPost from '@/components/common/ShowPost/index.vue'
+import ViewProfileUser from '../features/SocialProfile/ShowProfileUser.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -51,6 +52,12 @@ const router = createRouter({
       path: '/show-post/:id',
       name: 'show-post',
       component: ShowPost,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/view-profile-user/:id',
+      name: 'view-profile-user',
+      component: ViewProfileUser,
       meta: { requiresAuth: true }
     },
   ]

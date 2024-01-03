@@ -2,12 +2,13 @@
   <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
-      <UserPostInfo
-        :post-date="postDate"
-        :user-profile-image="userProfileImage"
-        :username="username"
-      />
-
+      
+        <UserPostInfo
+          :post-date="postDate"
+          :user-profile-image="userProfileImage"
+          :username="username"
+          :id="id"
+        />
       <div v-if="showMenu" class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
@@ -332,6 +333,7 @@ export default {
     postImages: Array,
     postId: Number,
     liked: Boolean,
+    id: Number,
     showMenu: {
       type: Boolean,
       default: false
