@@ -21,7 +21,6 @@
         <ErrorMessage class="text-danger-normal" name="email" />
       </div>
 
-
       <div class="relative w-full">
         <label>Password</label>
         <div class="flex items-center border border-gray-300 rounded overflow-hidden">
@@ -33,11 +32,7 @@
             class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
             placeholder="Password"
           ></vee-field>
-          <button
-            @click="togglePasswordVisibility"
-            type="button"
-            class="p-2 focus:outline-none"
-          >
+          <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none">
             <img
               v-show="!showPassword"
               src="assets/icons/password-open.svg"
@@ -110,8 +105,7 @@ export default {
 
   methods: {
     handleSuccess() {
-      console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = true      
+      this.authStore.isloggedIn = true
       this.$router.push({ name: 'community' })
     },
     togglePasswordVisibility() {
@@ -126,8 +120,8 @@ export default {
       }
     },
 
-    async login(values) {
-      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ',10000)
+    async login() {
+      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ', 10000)
 
       try {
         await loginUser(this.userData, this.authStore, this.handleSuccess, this.handleError)
@@ -135,8 +129,6 @@ export default {
         // console.log(error)
         return
       }
-
-      console.log(values)
     }
   }
 }

@@ -38,7 +38,6 @@ export default defineStore('auth', {
 
 
     setUser(userData) {
-      console.log(userData)
       this.user = userData;
       this.isloggedIn = true;
     },
