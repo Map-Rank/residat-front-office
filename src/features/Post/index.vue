@@ -154,28 +154,28 @@ export default {
       },
       iconLabels: [
         {
-          svgContent: 'assets\\icons\\heart-outline.svg',
-          svgContentHover: 'assets\\icons\\heart-fill.svg',
+          svgContent: '\\assets\\icons\\heart-outline.svg',
+          svgContentHover: '\\assets\\icons\\heart-fill.svg',
           labelText: 'Like',
           isActive: this.customLiked,
           right: true
         },
         {
-          svgContent: 'assets\\icons\\comment-outline.svg',
-          svgContentHover: 'assets\\icons\\comment-fill.svg',
+          svgContent: '\\assets\\icons\\comment-outline.svg',
+          svgContentHover: '\\assets\\icons\\comment-fill.svg',
           labelText: 'Comment',
           isActive: this.isCommenting,
           right: true
         },
         {
-          svgContent: 'assets\\icons\\share-fill.svg',
-          svgContentHover: 'assets\\icons\\share-fill.svg',
+          svgContent: '\\assets\\icons\\share-fill.svg',
+          svgContentHover: '\\assets\\icons\\share-fill.svg',
           labelText: 'Share',
           right: true
         },
         {
-          svgContent: 'assets\\icons\\archieved-outline.svg',
-          svgContentHover: 'assets\\icons\\archieved-fill.svg',
+          svgContent: '\\assets\\icons\\archieved-outline.svg',
+          svgContentHover: '\\assets\\icons\\archieved-fill.svg',
           labelText: 'Archieve',
           right: true
         }

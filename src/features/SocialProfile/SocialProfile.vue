@@ -40,7 +40,7 @@
                 :key="index"
                 :postId="post.id"
                 :username="`${userPost.first_name} ${userPost.last_name} `"
-                :postDate="post.created_at"
+                :postDate="post.humanize_date_creation"
                 :postContent="post.content"
                 :like_count="post.like_count"
                 :comment_count="post.comment_count"
