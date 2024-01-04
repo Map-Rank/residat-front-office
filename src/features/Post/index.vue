@@ -333,7 +333,7 @@ export default {
     postImages: Array,
     postId: Number,
     liked: Boolean,
-    id: Number,
+    id: String,
     showMenu: {
       type: Boolean,
       default: false

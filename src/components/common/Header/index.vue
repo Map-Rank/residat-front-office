@@ -44,7 +44,7 @@
           :labelText="item.labelText"
           :labelTextBottom="item.labelText"
           :iconDesktopSize="this.iconSize"
-          :isActive="isActive(item.routerName)"
+          :isActive="isActive(item.routerName) || false"
           :bottom="item.bottom"
           :routerName="item.routerName"
           :key="index"

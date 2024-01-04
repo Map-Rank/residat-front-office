@@ -168,8 +168,8 @@ export default {
 
       try {
         this.topLoading = true;
-        this.posts = await getPosts('0','10',this.authStore.user.token);
-        this.recentPosts = await getPosts('0','5',this.authStore.user.token)
+        this.posts = await getPosts(0,10,this.authStore.user.token);
+        this.recentPosts = await getPosts(0,5,this.authStore.user.token)
       } catch (error) {
         console.error("Failed to load posts:", error);
         this.showPageRefresh = true;
@@ -183,7 +183,6 @@ export default {
           this.showPageRefresh = false;
         }
       }
-      console.log(this.posts)
     },
     async refreshPage() {
       this.topLoading = true;
