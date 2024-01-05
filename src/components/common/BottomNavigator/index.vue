@@ -60,6 +60,7 @@ export default {
           svgContentHover: '\\assets\\icons\\chat-fill.svg',
           labelText: 'Profile',
           isActive: false,
+          routerName: 'chat-room'
         //   bottom: true
         },
       ]

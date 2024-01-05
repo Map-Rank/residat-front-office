@@ -1,7 +1,7 @@
 <template>
   <div class="">
     <div class="fixed z-10 inset-0 back overflow-y-auto" id="modal">
-      <div class="flex items-end min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
+      <div class="flex  min-h-screen pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0">
       <div
         :class="`box grid ${
           post && post.medias && post.medias.length === 0? 'grid-cols-auto' : 'md:grid-cols-2'
@@ -25,7 +25,7 @@
                 <UserInfoPostDetails :image-host="imageHost" :post="post" />
 
                 <button @click="dismiss()">
-                  <img src="@\assets\icons\dismiss.svg" alt="" />
+                  <img src="@\assets\icons\dismiss.svg" alt=""  class="h-5 w-5"/>
                 </button>
               </div>
             </div>
