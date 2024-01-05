@@ -1,7 +1,7 @@
-import { makeApiPostCall } from '@/api' 
+import { makeApiPostCall } from '@/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
-const registerUser = async (userData, authStore , onSuccess, onError) => {
+const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVerified) => {
   try {
     const formData = new FormData()
 
@@ -19,24 +19,32 @@ const registerUser = async (userData, authStore , onSuccess, onError) => {
     const user = response.data.data
     const token = response.data.data.token
 
-    console.log('register successfull !!!!')
+    if (!response.data.data.verified) {
+      onEmailNotVerified()
+      console.log('user not verified')
+      localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
 
-    authStore.setUser(user)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
-    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
-    onSuccess()
+    } else {
+  
+      console.log('register successfull !!!!')
+  
+      authStore.setUser(user)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
+      localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+      onSuccess()
+    }
+
 
 
     return response
   } catch (error) {
     onError(error.response.data.errors)
     throw error
-
   }
 }
 
-const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
+const loginUser = async (userCredentials, authStore, onSuccess, onError, onEmailNotVerified) => {
   try {
     const formData = new FormData()
 
@@ -45,20 +53,26 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
 
     const response = await makeApiPostCall(API_ENDPOINTS.login, formData)
 
-
-
     const user = response.data.data
     const token = response.data.data.token
 
-    localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken) //TODO remove this and but it in logout function later
 
-    authStore.setUser(user)
-    authStore.settoken(token)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
-    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    if (!response.data.data.verified) {
+      onEmailNotVerified()
+      console.log('user not verified')
+      localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
 
-    onSuccess()
+    } else {
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken) //TODO remove this and but it in logout function later
+
+      authStore.setUser(user)
+      authStore.settoken(token)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
+      localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+
+      onSuccess()
+    }
   } catch (error) {
     onError(error.response.data.errors)
     throw error

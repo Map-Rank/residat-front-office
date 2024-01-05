@@ -104,6 +104,11 @@ export default {
   },
 
   methods: {
+    handleEmailNotVerified() {
+      this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
+      this.$router.push({ name: 'email-verification' })
+    },
+
     handleSuccess() {
       this.authStore.isloggedIn = true
       this.$router.push({ name: 'community' })
@@ -124,7 +129,13 @@ export default {
       this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ', 10000)
 
       try {
-        await loginUser(this.userData, this.authStore, this.handleSuccess, this.handleError)
+        await loginUser(
+          this.userData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError,
+          this.handleEmailNotVerified
+        )
       } catch (error) {
         // console.log(error)
         return
