@@ -1,4 +1,3 @@
-// src/stores/auth.js
 import { defineStore } from 'pinia';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorageKeys';
 
@@ -31,7 +30,6 @@ export default defineStore('auth', {
         
       } catch (error) {
         console.error('Failed to parse user info:', error);
-        // Handle error, possibly resetting auth state
         this.resetAuthState();
       }
     },

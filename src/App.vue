@@ -12,6 +12,7 @@
     <bottom-navigation-app-app
       class="mobile-nav block md:hidden"
       :class="hiddenClass"
+      v-if="hideComponent"
     ></bottom-navigation-app-app>
 
     <!-- <footer-app class="mt-auto" :class="!hiddenClass"></footer-app> -->
@@ -25,6 +26,7 @@ import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
 import AlertForm from './components/common/AlertFrom/AlertForm.vue'
+import usePostStore from '@/features/Post/store/postStore';
 
 export default {
   name: 'App',
@@ -36,7 +38,8 @@ export default {
   },
 
   computed: {
-    ...mapState(useAuthStore, ['hiddenClass'])
+    ...mapState(useAuthStore, ['hiddenClass']),
+    ...mapState(usePostStore, ['hideComponent'])
   }
 }
 </script>
