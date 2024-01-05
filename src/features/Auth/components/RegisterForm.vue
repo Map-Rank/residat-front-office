@@ -275,9 +275,9 @@
 </template>
 
 <script>
-import { mapStores, mapWritableState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
+import useZoneStore from '@/stores/zoneStore.js'
 import { registerUser } from '../services/authService'
 import { useRouter } from 'vue-router'
 import { AlertStates } from '@/components'
@@ -290,9 +290,11 @@ export default {
 
   async created() {
     const sectorStore = useSectorStore()
+    const zoneSector = useZoneStore()
 
     try {
       this.sectors = sectorStore.getAllSectors
+      this.zones = zoneSector.getAllZones
     } catch (error) {
       console.error('Failed to load sector:', error)
     }
@@ -307,6 +309,7 @@ export default {
       authStore,
       alertStore,
       router,
+      zones: null,
       dropdownOptions: [
         { label: 'Option 1', value: 'option1' },
         { label: 'Option 2', value: 'option2' }
@@ -418,16 +421,19 @@ export default {
       )
 
       try {
-        await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError ,this.handleEmailNotVerified)
+        await registerUser(
+          this.formData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError,
+          this.handleEmailNotVerified
+        )
       } catch (error) {
         console.log(error)
       }
     }
   },
-  computed: {
-    ...mapStores(useAuthStore),
-    ...mapWritableState(useAuthStore, ['isloggedIn'])
-  }
+
 }
 </script>
 
