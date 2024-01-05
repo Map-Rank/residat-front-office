@@ -188,17 +188,17 @@
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Region</label>
-            <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+            <BaseDropdown  :options="zones" />
           </div>
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Division</label>
-            <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+            <BaseDropdown  :options="zones" />
           </div>
         </div>
 
         <div class="w-full">
           <label class="inline-block mb-2">Choose your Sub-division</label>
-          <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+          <BaseDropdown  :options="zones" />
         </div>
 
         <!-- Company -->
@@ -346,7 +346,7 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_1',
+      currentStep: 'step_2',
       reg_in_submission: false
     }
   },

@@ -10,7 +10,7 @@
           :key="index"
           :value="option.value"
         >
-          {{ option.label }}
+          {{ option.name }}
         </option>
       </select>
     </div>
