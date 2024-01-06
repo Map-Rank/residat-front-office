@@ -2,7 +2,7 @@
 
   <div>
     <div class="h-64 poster relative bg-cover bg-center bg-no-repeat bg-[url('https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0')] before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent">
-      <h2 class="text-white absolute bottom-2 left-2 md:left-100 md:bottom-5">WELCOME TO  YAOUNDE </h2>
+      <h2 class="text-white absolute bottom-2 left-2 md:left-100 md:bottom-5 uppercase">WELCOME TO  {{zoneName}} </h2>
     </div>
     
 
@@ -43,10 +43,11 @@
               @postFetch="fetchPosts"
               :postId="post.id"
               :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
-              :postDate="post.postDate"
+              :postDate="post.humanize_date_creation"
               :postContent="post.content"
               :liked="post.liked"
               :userProfileImage="`${imageHost}${post.creator[0].avatar}`"
+              :id="`${post.creator[0].id}`"
               :like_count="post.like_count"
               :comment_count="post.comment_count"
               :postImages="post.images"
@@ -77,15 +78,16 @@ import useSectorStore from "@/stores/sectorStore.js";
 import { URL_LINK } from "@/constants";
 import RefreshError from "@/components/common/Pages/RefreshError.vue";
 import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
+import useAuthStore from "@/stores/auth.js";
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: "Community",
 
   async created() {
+
     try {
       await this.fetchPosts();
-      // this.posts = await getPosts()
       this.topLoading = false;
     } catch (error) {
       console.error("Failed to load posts:", error);
@@ -100,8 +102,11 @@ export default {
 
   data() {
     const sectorStore = useSectorStore();
+    const authStore = useAuthStore();
 
     return {
+      zoneName: authStore.user.zone.name,
+      authStore,
       scrollLocked: false,
       topLoading: false,
       bottomLoading: false,
@@ -160,10 +165,11 @@ export default {
     },
 
     async fetchPosts() {
+
       try {
         this.topLoading = true;
-        this.posts = await getPosts();
-        this.recentPosts = await getPosts('0','5')
+        this.posts = await getPosts(0,10,this.authStore.user.token);
+        this.recentPosts = await getPosts(0,5,this.authStore.user.token)
       } catch (error) {
         console.error("Failed to load posts:", error);
         this.showPageRefresh = true;

@@ -1,14 +1,16 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import  useAuthStore  from '../stores/auth.js'; // Adjust this import path as necessary
+import { createRouter, createWebHistory } from 'vue-router'
+import useAuthStore from '../stores/auth.js' // Adjust this import path as necessary
 
-import CommunityView from '../features/Community/CommunityView.vue';
-import ChatRoomView from '../features/ChatRoom/ChatRommView.vue';
-import DashBoardView from '../features/DashBaord/DashBoardView.vue';
-import AuthView from '../features/Auth/AuthView.vue';
-import SocialProfile from '../features/SocialProfile/SocialProfile.vue';
-import CreatePost from '../features/CreatePost/CreatePost.vue';
+import CommunityView from '../features/Community/CommunityView.vue'
+import ChatRoomView from '../features/ChatRoom/ChatRommView.vue'
+import DashBoardView from '../features/DashBaord/DashBoardView.vue'
+import AuthView from '../features/Auth/AuthView.vue'
+import SocialProfile from '../features/SocialProfile/SocialProfile.vue'
+import CreatePost from '../features/CreatePost/CreatePost.vue'
 import ShowPost from '@/components/common/ShowPost/index.vue'
-
+import OTP from '@/features/Auth/components/OTP.vue'
+import ViewProfileUser from '../features/SocialProfile/ShowProfileUser.vue'
+import EmailVerification from '../features/Auth/components/EmailVerification.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -36,6 +38,16 @@ const router = createRouter({
       component: AuthView
     },
     {
+      path: '/otp',
+      name: 'opt',
+      component: OTP
+    },
+    {
+      path: '/email-verification',
+      name: 'email-verification',
+      component: EmailVerification
+    },
+    {
       path: '/chat-room',
       name: 'chat-room',
       component: ChatRoomView,
@@ -53,20 +65,28 @@ const router = createRouter({
       component: ShowPost,
       meta: { requiresAuth: true }
     },
+    {
+      path: '/view-profile-user/:id',
+      name: 'view-profile-user',
+      component: ViewProfileUser,
+      meta: { requiresAuth: true }
+    }
   ]
-});
+})
 
 // Navigation Guard
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
+  const authStore = useAuthStore()
 
-  if (to.matched.some(record => record.meta.requiresAuth) && authStore.user == null) {
-    next({ name: 'authentication' });
-  } else if (to.name === 'authentication' && authStore.user !=null) {
-    next({ name: 'community' }); // Redirect to community or another appropriate route
-  } else {
-    next();
+  if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
+    next({ name: 'authentication' })
+  }else if (to.name === 'authentication' && authStore.user != null) {
+    next({ name: 'community' }) // Redirect to community or another appropriate route
   }
-});
+  
+  else {
+    next()
+  }
+})
 
-export default router;
+export default router

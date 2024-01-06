@@ -7,7 +7,8 @@ export default defineStore('post', {
     postToShowDetails: null,
     postIdToShowDetail: null,
     postToEdit: null,
-    postToView: null
+    postToView: null,
+    hideComponent:true,
   }),
   getters: {},
   actions: {
@@ -15,6 +16,7 @@ export default defineStore('post', {
       if (this.showPostDetails) {
         this.showPostDetails = !this.showPostDetails
         this.postIdToShowDetail = null
+        this.hideComponent = true
       } else {
         this.showPostDetails = true
       }
@@ -40,6 +42,7 @@ export default defineStore('post', {
         this.setpostIdToShowDetails(id)
         this.setpostToShowDetails(post)
         this.togglePostDetails()
+        this.hideComponent = false
       } catch (error) {
         console.error('Error fetching post details:', error)
         // Handle errors here, like showing a notification to the user

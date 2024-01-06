@@ -15,7 +15,7 @@
         <div class="comment-text">{{ comment.text }}</div>
         <div class="text-sm caption-1">{{ comment.created_at }}</div>
       </div>
-
+<!-- 
       <div class="flex space-x-2 mt-2">
         <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
           Like
@@ -24,7 +24,7 @@
         <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
           Comment
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>

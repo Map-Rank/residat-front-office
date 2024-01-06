@@ -3,9 +3,9 @@
     <div class="bg-white p-6 flex justify-center">
       <LoadingIndicator v-if="isLoading" />
       <top-profile-info
-        v-if="!isLoading && userPost"
+        v-if="!isLoading && userProfile"
         :profile-image-url="''"
-        :profileName="`${userPost.first_name} ${userPost.last_name}`"
+        :profileName="`${userProfile.first_name} ${userProfile.last_name}`"
         :followersCount="0"
         :postsCount="posts.length"
         :isCurrentUser="true"
@@ -16,13 +16,13 @@
       <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4">
         <aside class="col-span-1 mb-2 sm:block">
           <about-user-info
-            v-if="!isLoading && userPost"
-            :username="`${userPost.first_name} ${userPost.last_name}`"
+            v-if="!isLoading && userProfile"
+            :username="`${userProfile.first_name} ${userProfile.last_name}`"
             :description="'Your description here'"
             :location="user.address"
-            :phone="userPost.phone"
-            :email="userPost.email"
-            :joinDate="formatDate(userPost.created_at)"
+            :phone="userProfile.phone"
+            :email="userProfile.email"
+            :joinDate="formatDate(userProfile.created_at)"
             :website="'your-website-url.com'"
           />
         </aside>
@@ -39,13 +39,13 @@
                 v-for="(post, index) in posts"
                 :key="index"
                 :postId="post.id"
-                :username="`${userPost.first_name} ${userPost.last_name} `"
+                :username="`${userProfile.first_name} ${userProfile.last_name} `"
                 :postDate="post.humanize_date_creation"
                 :postContent="post.content"
                 :like_count="post.like_count"
                 :comment_count="post.comment_count"
                 :postImages="post.images"
-                :showMenu="true"
+                :showMenu="false"
                 :post="post"
               />
             </div>
@@ -62,7 +62,9 @@
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
-import { getUserPosts } from '@/features/Post/services/postService.js'
+// import { getUserPosts } from '@/features/Post/services/postService.js'
+import { getUserProfile } from '@/features/Post/services/postService.js'
+
 // import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 
@@ -71,7 +73,7 @@ export default {
 
   async created() {
     try {
-      await this.fetchUserPost()
+      await this.fetchUserProfile()
     } catch (error) {
       console.error('Failed to load posts:', error)
     } finally {
@@ -84,8 +86,9 @@ export default {
     return {
       user: '',
       posts: [],
-      userPost: null,
-      isLoading: true
+      userProfile: null,
+      isLoading: true,
+      id: this.$route.params.id
     }
   },
 
@@ -101,10 +104,11 @@ export default {
       return new Date(date).toLocaleDateString()
     },
 
-    async fetchUserPost() {
+    async fetchUserProfile() {
+      console.log()
       this.isLoading = true
-      this.userPost = await getUserPosts()
-      this.posts = this.userPost.my_posts
+      this.userProfile = await getUserProfile(this.id)
+      this.posts = this.userProfile.my_posts
     }
   }
 }

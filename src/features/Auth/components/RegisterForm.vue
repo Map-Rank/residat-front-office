@@ -392,6 +392,11 @@ export default {
       this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
     },
 
+    handleEmailNotVerified() {
+      this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
+      this.$router.push({ name: 'email-verification' })
+    },
+
     handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser)
       this.authStore.isloggedIn = true
@@ -413,7 +418,7 @@ export default {
       )
 
       try {
-        await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError)
+        await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError ,this.handleEmailNotVerified)
       } catch (error) {
         console.log(error)
       }

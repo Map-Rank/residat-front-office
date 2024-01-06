@@ -1,11 +1,12 @@
-// src/stores/auth.js
 import { defineStore } from 'pinia';
 import { LOCAL_STORAGE_KEYS } from '../constants/localStorageKeys';
 
 export default defineStore('auth', {
   state: () => ({
     user: null,
-    isloggedIn: null
+    token:null,
+    isloggedIn: null,
+    isEmailVerified:null,
   }),
 
   getters: {
@@ -23,23 +24,28 @@ export default defineStore('auth', {
     initializeAuthState() {
       try {
         const userInfo = localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo);
-        if (userInfo) {
+        const userEmailVerification = localStorage.getItem(LOCAL_STORAGE_KEYS.userEmailVerification)
+          if (userInfo) {
           this.user = JSON.parse(userInfo);
           this.isLoggedIn = this.user? true : false;
+        }
+        else if (userEmailVerification){
+          this.isEmailVerified = false
         }
         
       } catch (error) {
         console.error('Failed to parse user info:', error);
-        // Handle error, possibly resetting auth state
         this.resetAuthState();
       }
     },
 
 
     setUser(userData) {
-      console.log(userData)
       this.user = userData;
       this.isloggedIn = true;
+    },
+    settoken(token) {
+      this.token = token;
     },
     
     logOut() {

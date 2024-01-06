@@ -1,7 +1,10 @@
 import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+// import useAuthStore from '@/stores/auth'
 
 const currentDate = new Date().toISOString().split('T')[0]
+// const authStore = useAuthStore()
+// const authToken = authStore.token
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const createPost = async (postData, onSuccess, onError) => {
@@ -86,7 +89,7 @@ const updatePost = async (postData, onSuccess, onError) => {
   }
 }
 
-const getPosts = async (page, size) => {
+const getPosts = async (page, size, token) => {
   let defaultSize = 10
   let defaultPage = 0
 
@@ -98,11 +101,13 @@ const getPosts = async (page, size) => {
     page: page.toString()
   })
 
+
   try {
     const response = await makeApiGetCall(
       `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      authToken
+      token ? token : authToken
     )
+
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -152,6 +157,17 @@ const getUserPosts = async () => {
     throw error
   }
 }
+
+const getUserProfile = async (id) => {
+  try {
+    const endpoint = `/profile/detail/${id}`; // Générez l'URL avec l'id
+    const response = await makeApiGetCall(endpoint, authToken);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
 
 const likePost = async (postId) => {
   try {
@@ -205,5 +221,6 @@ export {
   updatePost,
   deletePost,
   sharePost,
-  getUserPosts
+  getUserPosts,
+  getUserProfile
 }
