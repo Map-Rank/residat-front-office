@@ -519,7 +519,7 @@ export default {
 
     handleEmailNotVerified() {
       this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
-      this.$router.push({ name: 'email-verification' })
+      this.$router.push({ name: 'waiting-email-verification' })
     },
 
     handleSuccess() {

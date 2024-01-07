@@ -85,7 +85,6 @@ import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
 import PostSpecificInformation from '@/features/CreatePost/components/PostSpecificInformation.vue'
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
-import { formatDate } from '@/utils/formating';
 
 export default {
   name: 'CreatePost',
