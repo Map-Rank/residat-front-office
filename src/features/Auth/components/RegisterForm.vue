@@ -216,10 +216,7 @@
           <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
-          <BaseDropdown
-            v-if="!isLoading && !isSubdivisionLoading"
-            :options="sub_divisions"
-          />
+          <BaseDropdown v-if="!isLoading && !isSubdivisionLoading" :options="sub_divisions" />
         </div>
 
         <!-- Company -->
@@ -348,9 +345,30 @@ export default {
         division_id: '1',
         subDivision_id: '1'
       },
-      regions: [],
-      divisions: [],
-      sub_divisions: [],
+      regions: [
+        {
+          id: 0,
+          name: 'Choose a region',
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        }
+      ],
+      divisions: [
+        {
+          id: 0,
+          name: 'Choose a division',
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        }
+      ],
+      sub_divisions: [
+        {
+          id: 0,
+          name: 'Choose a sub-division',
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        }
+      ],
       isLoading: false,
       isDivisionLoading: false,
       isSubdivisionLoading: false,
@@ -403,31 +421,32 @@ export default {
   methods: {
     async getRegions() {
       try {
-        this.regions = await getZones(2, null)
+        // this.regions = await getZones(2, null)
+        this.regions = this.regions.concat(await getZones(2,null));
       } catch (error) {
         console.log(error)
       }
     },
-    
+
     async getDivisions(parent_id) {
       try {
         this.isDivisionLoading = true
         this.region_id = parent_id
-        console.log('this is '+this.region_id)
-        this.divisions = await getZones(null, parent_id)
+        // this.divisions = await getZones(null, parent_id)
+        this.divisions = this.divisions.concat(await getZones(null,parent_id));
       } catch (error) {
         console.log(error)
       } finally {
         this.isDivisionLoading = false
       }
     },
-    
+
     async getSub_divisions(parent_id) {
       this.isSubdivisionLoading = true
       this.division_id = parent_id
-      console.log('this is division'+this.division_id)
       try {
-        this.sub_divisions = await getZones(null, parent_id)
+        // this.sub_divisions = await getZones(null, parent_id)
+        this.sub_divisions = this.sub_divisions.concat(await getZones(null,parent_id));
       } catch (error) {
         console.log(error)
       } finally {
@@ -439,7 +458,15 @@ export default {
       return selectedOptionId
     },
     handleSelectedRegionIdChange(selectedOptionId) {
-      console.log('region id'+selectedOptionId)
+      console.log('region id' + selectedOptionId)
+      // this.zones.region_id = selectedOptionId
+    },
+    handleSelectedDivisionIdChange(selectedOptionId) {
+      console.log('region id' + selectedOptionId)
+      // this.zones.region_id = selectedOptionId
+    },
+    handleSelectedSubdivisionIdChange(selectedOptionId) {
+      console.log('region id' + selectedOptionId)
       // this.zones.region_id = selectedOptionId
     },
 

@@ -40,13 +40,6 @@ export default {
         console.error('No option is selected')
       }
     },
-    // emitSelectedOptionId() {
-    //   // Check if 'selectedOption' is not null before emitting the ID.
-    //   if (this.selectedOption) {
-    //     const selectedOptionId = this.selectedOption.id
-    //     this.$emit('selectedOptionId', selectedOptionId)
-    //   }
-    // }
   }
 }
 </script>
