@@ -6,7 +6,7 @@
       </h3>
     </div>
 
-    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" :update-zone-id="updateZoneId" />
+    <PostSpecificInformation :sectors="sectors" :updatesector-checked="updateSectorChecked" :update-zone-id="updateZoneId" />
 
     <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm />
@@ -83,7 +83,7 @@ import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
-import SectorDisplayForm from '@/features/CreatePost/components/SectorDisplayForm.vue'
+import PostSpecificInformation from '@/features/CreatePost/components/PostSpecificInformation.vue'
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 import { formatDate } from '@/utils/formating';
 
@@ -121,11 +121,12 @@ export default {
       isEditing: false,
       imagesToFromLocalPreview: [],
       imagesFromHostToPreview: [],
+      zoneId:'',
       formData: {
         content: '',
         images: [],
         videos: [],
-        zoneId:'',
+        zoneId:' ',
         sectorChecked: [],
 
         sectorId: []
@@ -135,7 +136,7 @@ export default {
   },
   components: {
     TopContentForm,
-    SectorDisplayForm,
+    PostSpecificInformation,
     BaseImagePicker,
     ImagePreviewGallery
   },
@@ -147,6 +148,10 @@ export default {
       this.imagesToFromLocalPreview.splice(index, 1)
     },
     async submitPost() {
+
+      this.formData.zoneId = this.zoneId;
+      // console.log(this.formatDate)
+
       if (this.formData.content == '') {
         return
       }
@@ -212,8 +217,9 @@ export default {
       }
     },
     updateZoneId(zoneId){
-      console.log('this is the selected soneId'+ zoneId)
-      formatDate.zoneId = zoneId
+      // console.log('this is the selected soneId'+ zoneId)
+      this.zoneId = zoneId
+      console.log(this.zoneId)
     }
   }
 }

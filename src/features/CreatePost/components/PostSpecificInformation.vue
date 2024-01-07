@@ -62,7 +62,7 @@ import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 
 
 export default {
-  name: 'SectorDisplayForm',
+  name: 'PostSpecificInformation',
 
   async created() {
     try {
