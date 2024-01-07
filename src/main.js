@@ -6,7 +6,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import useSectorStore from '@/stores/sectorStore.js'
 import useAuthStore from '@/stores/auth.js'
-import useZoneStore from '@/stores/zoneStore.js'
+// import useZoneStore from '@/stores/zoneStore.js'
 
 
 import App from './App.vue'
@@ -21,8 +21,8 @@ app.use(VeeValidatePlugin )
 const sectorStore = useSectorStore()
 sectorStore.initializeStore()
 
-const zoneStore = useZoneStore()
-zoneStore.initializeStore()
+// const zoneStore = useZoneStore()
+// zoneStore.initializeStore()
 
 const authStore = useAuthStore()
 authStore.initializeAuthState()

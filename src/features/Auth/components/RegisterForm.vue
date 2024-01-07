@@ -188,17 +188,30 @@
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Region</label>
-            <BaseDropdown  :options="zones" />
+            <div v-if="isLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown v-if="!isLoading" :options="regions" @functionIdParams="getDivisions" />
           </div>
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Division</label>
-            <BaseDropdown  :options="zones" />
+            <div v-if="isDivisionLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              v-if="!isLoading && !isDivisionLoading"
+              :options="divisions"
+              @functionIdParams="getSub_divisions"
+            />
           </div>
         </div>
 
         <div class="w-full">
           <label class="inline-block mb-2">Choose your Sub-division</label>
-          <BaseDropdown  :options="zones" />
+          <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
+            <LoadingIndicator />
+          </div>
+          <BaseDropdown v-if="!isLoading && !isSubdivisionLoading" :options="sub_divisions" />
         </div>
 
         <!-- Company -->
@@ -221,7 +234,10 @@
             <label class="inline-block mb-2">Sector</label>
             <span>Select your sector of interest</span>
           </div>
-          <div v-if="sectors" class="grid grid-cols-3 gap-7 content-between">
+          <div v-if="isLoading" class="flex h-full justify-center">
+            <LoadingIndicator />
+          </div>
+          <div v-if="sectors || !isLoading" class="grid grid-cols-3 gap-7 content-between">
             <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
               <vee-field
                 :name="sector.name"
@@ -284,6 +300,8 @@ import { AlertStates } from '@/components'
 import useAlertStore from '@/stores/alertStore'
 import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
+import { getZones } from '@/services/zoneService.js'
+import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 
 export default {
   name: 'RegisterForm',
@@ -293,10 +311,14 @@ export default {
     const zoneSector = useZoneStore()
 
     try {
+      this.isLoading = true
+      await this.getRegions()
       this.sectors = sectorStore.getAllSectors
       this.zones = zoneSector.getAllZones
     } catch (error) {
       console.error('Failed to load sector:', error)
+    } finally {
+      this.isLoading = false
     }
   },
 
@@ -309,7 +331,13 @@ export default {
       authStore,
       alertStore,
       router,
-      zones: null,
+      zones: [],
+      regions: [],
+      divisions: [],
+      sub_divisions: [],
+      isLoading: false,
+      isDivisionLoading: false,
+      isSubdivisionLoading: false,
       dropdownOptions: [
         { label: 'Option 1', value: 'option1' },
         { label: 'Option 2', value: 'option2' }
@@ -352,10 +380,42 @@ export default {
   },
   components: {
     AlertForm,
-    BaseDropdown
+    BaseDropdown,
+    LoadingIndicator
   },
 
   methods: {
+    async getRegions() {
+      try {
+        this.regions = await getZones(2, null)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async getDivisions(parent_id) {
+      try {
+        this.isDivisionLoading = true
+        this.divisions = await getZones(null, parent_id)
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isDivisionLoading = false
+      }
+    },
+    
+    async getSub_divisions(parent_id) {
+      this.isSubdivisionLoading = true
+      try {
+        this.sub_divisions = await getZones(null, parent_id)
+      } catch (error) {
+        console.log(error)
+      }finally{
+        
+        this.isSubdivisionLoading = false
+      }
+    },
+
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword
     },
@@ -432,8 +492,7 @@ export default {
         console.log(error)
       }
     }
-  },
-
+  }
 }
 </script>
 
