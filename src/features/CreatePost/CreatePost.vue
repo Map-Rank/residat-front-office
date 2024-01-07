@@ -6,7 +6,7 @@
       </h3>
     </div>
 
-    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" />
+    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" :update-zone-id="updateZoneId" />
 
     <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm />
@@ -85,6 +85,7 @@ import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
 import SectorDisplayForm from '@/features/CreatePost/components/SectorDisplayForm.vue'
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
+import { formatDate } from '@/utils/formating';
 
 export default {
   name: 'CreatePost',
@@ -124,7 +125,9 @@ export default {
         content: '',
         images: [],
         videos: [],
+        zoneId:'',
         sectorChecked: [],
+
         sectorId: []
       },
       sectors: []
@@ -207,6 +210,10 @@ export default {
       } else {
         this.formData.sectorChecked = this.formData.sectorChecked.filter((item) => item !== name)
       }
+    },
+    updateZoneId(zoneId){
+      console.log('this is the selected soneId'+ zoneId)
+      formatDate.zoneId = zoneId
     }
   }
 }
