@@ -9,9 +9,6 @@
         {{ option.name }}
       </option>
     </select>
-    <!-- <button @click="()=>{
-      console.log(selectedOption);
-    }">click</button> -->
   </div>
 </template>
 
@@ -26,18 +23,30 @@ export default {
   },
   data() {
     return {
-      selectedOption: this.options.length > 0 ? this.options[0] : null
+      selectedOption: this.options.length > 0 ? this.options[0] : null,
+      selectedOptionId: this.options.length > 0 ? this.options[0].id : null
     }
   },
   methods: {
     updateSelectedOption() {
+      this.selectedOptionId = this.selectedOption.id
+      // this.emitSelectedOptionId()
+
       if (this.selectedOption) {
         this.$emit('input', this.selectedOption)
-        this.$emit('functionIdParams' , this.selectedOption.id)
+        this.$emit('functionIdParams', this.selectedOption.id)
+        this.$emit('selectedOptionId', this.selectedOption.id)
       } else {
         console.error('No option is selected')
       }
-    }
+    },
+    // emitSelectedOptionId() {
+    //   // Check if 'selectedOption' is not null before emitting the ID.
+    //   if (this.selectedOption) {
+    //     const selectedOptionId = this.selectedOption.id
+    //     this.$emit('selectedOptionId', selectedOptionId)
+    //   }
+    // }
   }
 }
 </script>

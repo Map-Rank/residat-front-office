@@ -191,7 +191,12 @@
             <div v-if="isLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
-            <BaseDropdown v-if="!isLoading" :options="regions" @functionIdParams="getDivisions" />
+            <BaseDropdown
+              v-if="!isLoading"
+              :options="regions"
+              @selectedOptionId="handleSelectedRegionIdChange"
+              @functionIdParams="getDivisions"
+            />
           </div>
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Division</label>
@@ -211,7 +216,10 @@
           <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
-          <BaseDropdown v-if="!isLoading && !isSubdivisionLoading" :options="sub_divisions" />
+          <BaseDropdown
+            v-if="!isLoading && !isSubdivisionLoading"
+            :options="sub_divisions"
+          />
         </div>
 
         <!-- Company -->
@@ -331,7 +339,15 @@ export default {
       authStore,
       alertStore,
       router,
-      zones: [],
+      subDivision_id: '1',
+      region_id: '1',
+      division_id: '1',
+      Subdivision_id: '1',
+      zones: {
+        region_id: '6',
+        division_id: '1',
+        subDivision_id: '1'
+      },
       regions: [],
       divisions: [],
       sub_divisions: [],
@@ -392,10 +408,12 @@ export default {
         console.log(error)
       }
     },
-
+    
     async getDivisions(parent_id) {
       try {
         this.isDivisionLoading = true
+        this.region_id = parent_id
+        console.log('this is '+this.region_id)
         this.divisions = await getZones(null, parent_id)
       } catch (error) {
         console.log(error)
@@ -406,14 +424,23 @@ export default {
     
     async getSub_divisions(parent_id) {
       this.isSubdivisionLoading = true
+      this.division_id = parent_id
+      console.log('this is division'+this.division_id)
       try {
         this.sub_divisions = await getZones(null, parent_id)
       } catch (error) {
         console.log(error)
-      }finally{
-        
+      } finally {
         this.isSubdivisionLoading = false
       }
+    },
+
+    handleSelectedOptionIdChange(selectedOptionId) {
+      return selectedOptionId
+    },
+    handleSelectedRegionIdChange(selectedOptionId) {
+      console.log('region id'+selectedOptionId)
+      // this.zones.region_id = selectedOptionId
     },
 
     togglePasswordVisibility() {
