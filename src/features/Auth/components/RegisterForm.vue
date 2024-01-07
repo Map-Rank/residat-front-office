@@ -205,6 +205,7 @@
             </div>
             <BaseDropdown
               v-if="!isLoading && !isDivisionLoading"
+              @selectedOptionId="handleSelectedDivisionIdChange"
               :options="divisions"
               @functionIdParams="getSub_divisions"
             />
@@ -216,7 +217,11 @@
           <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
-          <BaseDropdown v-if="!isLoading && !isSubdivisionLoading" :options="sub_divisions" />
+          <BaseDropdown
+            @selectedOptionId="handleSelectedSubdivisionIdChange"
+            v-if="!isLoading && !isSubdivisionLoading"
+            :options="sub_divisions"
+          />
         </div>
 
         <!-- Company -->
@@ -401,6 +406,7 @@ export default {
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
         selectedSectors: [],
+        zone:'',
         tos: true
       },
       showPassword: false,
@@ -408,7 +414,7 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_2',
+      currentStep: 'step_1',
       reg_in_submission: false
     }
   },
@@ -422,7 +428,7 @@ export default {
     async getRegions() {
       try {
         // this.regions = await getZones(2, null)
-        this.regions = this.regions.concat(await getZones(2,null));
+        this.regions = this.regions.concat(await getZones(2, null))
       } catch (error) {
         console.log(error)
       }
@@ -431,9 +437,8 @@ export default {
     async getDivisions(parent_id) {
       try {
         this.isDivisionLoading = true
-        this.region_id = parent_id
         // this.divisions = await getZones(null, parent_id)
-        this.divisions = this.divisions.concat(await getZones(null,parent_id));
+        this.divisions = this.divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
       } finally {
@@ -443,10 +448,9 @@ export default {
 
     async getSub_divisions(parent_id) {
       this.isSubdivisionLoading = true
-      this.division_id = parent_id
       try {
         // this.sub_divisions = await getZones(null, parent_id)
-        this.sub_divisions = this.sub_divisions.concat(await getZones(null,parent_id));
+        this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
       } finally {
@@ -458,15 +462,19 @@ export default {
       return selectedOptionId
     },
     handleSelectedRegionIdChange(selectedOptionId) {
+      this.region_id = selectedOptionId
       console.log('region id' + selectedOptionId)
       // this.zones.region_id = selectedOptionId
     },
     handleSelectedDivisionIdChange(selectedOptionId) {
-      console.log('region id' + selectedOptionId)
+      this.division_id = selectedOptionId
+      console.log('division id' + selectedOptionId)
       // this.zones.region_id = selectedOptionId
     },
     handleSelectedSubdivisionIdChange(selectedOptionId) {
-      console.log('region id' + selectedOptionId)
+      console.log('sub id' + selectedOptionId)
+      this.subDivision_id = selectedOptionId
+      this.formData.zone = selectedOptionId
       // this.zones.region_id = selectedOptionId
     },
 
