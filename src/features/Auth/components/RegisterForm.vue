@@ -341,10 +341,10 @@ export default {
       authStore,
       alertStore,
       router,
-      subDivision_id: '1',
-      region_id: '1',
-      division_id: '1',
-      Subdivision_id: '1',
+      subDivision_id: '',
+      region_id: '',
+      division_id: '',
+      zone_id:'',
       zones: {
         region_id: '6',
         division_id: '1',
@@ -406,7 +406,7 @@ export default {
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
         selectedSectors: [],
-        zone:'',
+        zone: '',
         tos: true
       },
       showPassword: false,
@@ -438,6 +438,7 @@ export default {
       try {
         this.isDivisionLoading = true
         // this.divisions = await getZones(null, parent_id)
+        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
@@ -449,7 +450,7 @@ export default {
     async getSub_divisions(parent_id) {
       this.isSubdivisionLoading = true
       try {
-        // this.sub_divisions = await getZones(null, parent_id)
+        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
         this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
@@ -459,6 +460,7 @@ export default {
     },
 
     handleSelectedOptionIdChange(selectedOptionId) {
+      this.zone_id = selectedOptionId
       return selectedOptionId
     },
     handleSelectedRegionIdChange(selectedOptionId) {
@@ -537,6 +539,13 @@ export default {
     },
 
     async registerForm() {
+
+      if (this.subDivision_id == '') {
+        this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
+
+        return
+      }
+
       this.alertStore.setAlert(
         AlertStates.PROCESSING,
         'please wait we are creating your account...'
