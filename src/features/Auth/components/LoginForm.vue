@@ -35,13 +35,13 @@
           <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none">
             <img
               v-show="!showPassword"
-              src="assets/icons/password-open.svg"
+              src="\assets\icons\password-open.svg"
               alt="Show password"
               class="block w-6 h-6"
             />
             <img
               v-show="showPassword"
-              src="assets/icons/password-closed.svg"
+              src="\assets\icons\password-closed.svg"
               alt="Hide password"
               class="block w-6 h-6"
             />
