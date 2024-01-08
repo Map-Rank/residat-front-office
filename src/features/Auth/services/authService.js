@@ -13,7 +13,7 @@ const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVe
     formData.append('date_of_birth', userData.date_of_birth)
     formData.append('password', userData.password)
     formData.append('gender', userData.gender)
-    formData.append('zone_id', 1)
+    formData.append('zone_id', userData.zone)
 
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData)
     const user = response.data.data

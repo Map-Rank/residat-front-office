@@ -13,7 +13,7 @@ const createPost = async (postData, onSuccess, onError) => {
 
     formData.append('content', postData.content)
     formData.append('published_at', currentDate)
-    formData.append('zone_id', 1)
+    formData.append('zone_id', postData.zoneId)
 
     // Append media files
     postData.images.forEach((image, index) => {
@@ -40,6 +40,8 @@ const createPost = async (postData, onSuccess, onError) => {
     postData.sectorId.forEach((id, index) => {
       formData.append(`sectors[${index}]`, id)
     })
+
+    console.log(postData)
 
     const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
     if (onSuccess && typeof onSuccess === 'function') {

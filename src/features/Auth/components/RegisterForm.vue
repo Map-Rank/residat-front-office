@@ -116,13 +116,13 @@
               >
                 <img
                   v-show="!showPassword"
-                  src="assets/icons/password-open.svg"
+                  src="\assets\icons\password-open.svg"
                   alt="Show password"
                   class="block w-6 h-6"
                 />
                 <img
                   v-show="showPassword"
-                  src="assets/icons/password-closed.svg"
+                  src="\assets\icons\password-closed.svg"
                   alt="Hide password"
                   class="block w-6 h-6"
                 />
@@ -153,13 +153,13 @@
               >
                 <img
                   v-show="!showConfirmPassword"
-                  src="assets/icons/password-open.svg"
+                  src="\assets\icons\password-open.svg"
                   alt="Show password"
                   class="block w-6 h-6"
                 />
                 <img
                   v-show="showConfirmPassword"
-                  src="assets/icons/password-closed.svg"
+                  src="\assets\icons\password-closed.svg"
                   alt="Hide password"
                   class="block w-6 h-6"
                 />
@@ -188,17 +188,40 @@
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Region</label>
-            <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+            <div v-if="isLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              v-if="!isLoading"
+              :options="regions"
+              @selectedOptionId="handleSelectedRegionIdChange"
+              @functionIdParams="getDivisions"
+            />
           </div>
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Division</label>
-            <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+            <div v-if="isDivisionLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              v-if="!isLoading && !isDivisionLoading"
+              @selectedOptionId="handleSelectedDivisionIdChange"
+              :options="divisions"
+              @functionIdParams="getSub_divisions"
+            />
           </div>
         </div>
 
         <div class="w-full">
           <label class="inline-block mb-2">Choose your Sub-division</label>
-          <BaseDropdown v-model="selectedItem" :options="dropdownOptions" />
+          <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
+            <LoadingIndicator />
+          </div>
+          <BaseDropdown
+            @selectedOptionId="handleSelectedSubdivisionIdChange"
+            v-if="!isLoading && !isSubdivisionLoading"
+            :options="sub_divisions"
+          />
         </div>
 
         <!-- Company -->
@@ -221,7 +244,10 @@
             <label class="inline-block mb-2">Sector</label>
             <span>Select your sector of interest</span>
           </div>
-          <div v-if="sectors" class="grid grid-cols-3 gap-7 content-between">
+          <div v-if="isLoading" class="flex h-full justify-center">
+            <LoadingIndicator />
+          </div>
+          <div v-if="sectors || !isLoading" class="grid grid-cols-3 gap-7 content-between">
             <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
               <vee-field
                 :name="sector.name"
@@ -275,26 +301,34 @@
 </template>
 
 <script>
-import { mapStores, mapWritableState } from 'pinia'
 import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
+import useZoneStore from '@/stores/zoneStore.js'
 import { registerUser } from '../services/authService'
 import { useRouter } from 'vue-router'
 import { AlertStates } from '@/components'
 import useAlertStore from '@/stores/alertStore'
 import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
+import { getZones } from '@/services/zoneService.js'
+import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 
 export default {
   name: 'RegisterForm',
 
   async created() {
     const sectorStore = useSectorStore()
+    const zoneSector = useZoneStore()
 
     try {
+      this.isLoading = true
+      await this.getRegions()
       this.sectors = sectorStore.getAllSectors
+      this.zones = zoneSector.getAllZones
     } catch (error) {
       console.error('Failed to load sector:', error)
+    } finally {
+      this.isLoading = false
     }
   },
 
@@ -307,6 +341,42 @@ export default {
       authStore,
       alertStore,
       router,
+      subDivision_id: '1',
+      region_id: '1',
+      division_id: '1',
+      Subdivision_id: '1',
+      zones: {
+        region_id: '6',
+        division_id: '1',
+        subDivision_id: '1'
+      },
+      regions: [
+        {
+          id: 0,
+          name: 'Choose a region',
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        }
+      ],
+      divisions: [
+        {
+          id: 0,
+          name: 'Choose a division',
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        }
+      ],
+      sub_divisions: [
+        {
+          id: 0,
+          name: 'Choose a sub-division',
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        }
+      ],
+      isLoading: false,
+      isDivisionLoading: false,
+      isSubdivisionLoading: false,
       dropdownOptions: [
         { label: 'Option 1', value: 'option1' },
         { label: 'Option 2', value: 'option2' }
@@ -336,6 +406,7 @@ export default {
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
         selectedSectors: [],
+        zone:'',
         tos: true
       },
       showPassword: false,
@@ -349,10 +420,64 @@ export default {
   },
   components: {
     AlertForm,
-    BaseDropdown
+    BaseDropdown,
+    LoadingIndicator
   },
 
   methods: {
+    async getRegions() {
+      try {
+        // this.regions = await getZones(2, null)
+        this.regions = this.regions.concat(await getZones(2, null))
+      } catch (error) {
+        console.log(error)
+      }
+    },
+
+    async getDivisions(parent_id) {
+      try {
+        this.isDivisionLoading = true
+        // this.divisions = await getZones(null, parent_id)
+        this.divisions = this.divisions.concat(await getZones(null, parent_id))
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isDivisionLoading = false
+      }
+    },
+
+    async getSub_divisions(parent_id) {
+      this.isSubdivisionLoading = true
+      try {
+        // this.sub_divisions = await getZones(null, parent_id)
+        this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isSubdivisionLoading = false
+      }
+    },
+
+    handleSelectedOptionIdChange(selectedOptionId) {
+      return selectedOptionId
+    },
+    handleSelectedRegionIdChange(selectedOptionId) {
+      this.region_id = selectedOptionId
+      console.log('region id' + selectedOptionId)
+      // this.zones.region_id = selectedOptionId
+    },
+    handleSelectedDivisionIdChange(selectedOptionId) {
+      this.division_id = selectedOptionId
+      console.log('division id' + selectedOptionId)
+      // this.zones.region_id = selectedOptionId
+    },
+    handleSelectedSubdivisionIdChange(selectedOptionId) {
+      console.log('sub id' + selectedOptionId)
+      this.subDivision_id = selectedOptionId
+      this.formData.zone = selectedOptionId
+      // this.zones.region_id = selectedOptionId
+    },
+
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword
     },
@@ -394,7 +519,7 @@ export default {
 
     handleEmailNotVerified() {
       this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
-      this.$router.push({ name: 'email-verification' })
+      this.$router.push({ name: 'waiting-email-verification' })
     },
 
     handleSuccess() {
@@ -418,15 +543,17 @@ export default {
       )
 
       try {
-        await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError ,this.handleEmailNotVerified)
+        await registerUser(
+          this.formData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError,
+          this.handleEmailNotVerified
+        )
       } catch (error) {
         console.log(error)
       }
     }
-  },
-  computed: {
-    ...mapStores(useAuthStore),
-    ...mapWritableState(useAuthStore, ['isloggedIn'])
   }
 }
 </script>

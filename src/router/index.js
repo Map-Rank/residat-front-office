@@ -11,6 +11,7 @@ import ShowPost from '@/components/common/ShowPost/index.vue'
 import OTP from '@/features/Auth/components/OTP.vue'
 import ViewProfileUser from '../features/SocialProfile/ShowProfileUser.vue'
 import EmailVerification from '../features/Auth/components/EmailVerification.vue'
+import WaitingEmailVerification from '../features/Auth/components/WaitingEmailVerification.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -46,6 +47,11 @@ const router = createRouter({
       path: '/email-verification',
       name: 'email-verification',
       component: EmailVerification
+    },
+    {
+      path: '/waiting-email-verification',
+      name: 'waiting-email-verification',
+      component: WaitingEmailVerification
     },
     {
       path: '/chat-room',
