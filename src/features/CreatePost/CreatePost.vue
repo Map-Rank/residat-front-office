@@ -5,8 +5,15 @@
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
       </h3>
     </div>
+    <div>
+      <AlertForm></AlertForm>
+    </div>
 
-    <PostSpecificInformation :sectors="sectors" :updatesector-checked="updateSectorChecked" :update-zone-id="updateZoneId" />
+    <PostSpecificInformation
+      :sectors="sectors"
+      :updatesector-checked="updateSectorChecked"
+      :update-zone-id="updateZoneId"
+    />
 
     <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm />
@@ -85,6 +92,9 @@ import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
 import PostSpecificInformation from '@/features/CreatePost/components/PostSpecificInformation.vue'
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
+import AlertForm from '../../components/common/AlertFrom/AlertForm.vue'
+import { AlertStates } from '../../components/common/AlertFrom/AlertState'
+import useAlertStore from '@/stores/alertStore';
 
 export default {
   name: 'CreatePost',
@@ -109,23 +119,26 @@ export default {
   data() {
     const router = useRouter()
     const postStore = usePostStore()
+    const alertStore = useAlertStore()
+
 
     return {
       schema: {
         content: 'required'
       },
       router,
+      alertStore,
       postStore,
       isLoading: false,
       isEditing: false,
       imagesToFromLocalPreview: [],
       imagesFromHostToPreview: [],
-      zoneId:'',
+      zoneId: '',
       formData: {
         content: '',
         images: [],
         videos: [],
-        zoneId:' ',
+        zoneId: ' ',
         sectorChecked: [],
 
         sectorId: []
@@ -137,7 +150,8 @@ export default {
     TopContentForm,
     PostSpecificInformation,
     BaseImagePicker,
-    ImagePreviewGallery
+    ImagePreviewGallery,
+    AlertForm
   },
   methods: {
     handleError() {
@@ -147,11 +161,16 @@ export default {
       this.imagesToFromLocalPreview.splice(index, 1)
     },
     async submitPost() {
-
-      this.formData.zoneId = this.zoneId;
-      // console.log(this.formatDate)
+      this.formData.zoneId = this.zoneId
 
       if (this.formData.content == '') {
+        this.alertStore.setAlert(AlertStates.ERROR, 'Please input some content to your post')
+
+        return
+      }
+      if (this.zoneId == '') {
+        this.alertStore.setAlert(AlertStates.ERROR, 'As a premium user you need to specify a zone')
+
         return
       }
 
@@ -182,7 +201,6 @@ export default {
         return
       }
 
-      
       this.formData.images = []
       this.imagesToFromLocalPreview = []
 
@@ -196,8 +214,8 @@ export default {
           this.formData.videos.push(file)
         }
       })
-      
-      this.imagesFromHostToPreview=null
+
+      this.imagesFromHostToPreview = null
     },
 
     resetForm() {
@@ -215,7 +233,7 @@ export default {
         this.formData.sectorChecked = this.formData.sectorChecked.filter((item) => item !== name)
       }
     },
-    updateZoneId(zoneId){
+    updateZoneId(zoneId) {
       // console.log('this is the selected soneId'+ zoneId)
       this.zoneId = zoneId
       console.log(this.zoneId)

@@ -40,14 +40,13 @@
       </div>
       <div class="w-1/2">
         <label class="inline-block mb-2">Choose Your Division</label>
-        <div v-if="isDivisionLoading" class="flex h-full justify-center">
+        <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
         <BaseDropdown
-          v-if="!isLoading && !isDivisionLoading"
+          v-if="!isLoading && !isSubdivisionLoading"
           @selectedOptionId="updateZoneId"
-          :options="divisions"
-          @functionIdParams="getSub_divisions"
+          :options="sub_divisions"
         />
       </div>
     </div>
@@ -121,6 +120,8 @@ export default {
     async getDivisions(parent_id) {
       try {
         this.isDivisionLoading = true
+        //delete all element and allow the first only
+        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : [];
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
@@ -128,10 +129,11 @@ export default {
         this.isDivisionLoading = false
       }
     },
-
+    
     async getSub_divisions(parent_id) {
       this.isSubdivisionLoading = true
       try {
+        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : [];
         this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
