@@ -1,6 +1,6 @@
 <template>
-  <div class="flex flex-grow items-center">
-    <div class="search flex p-2 ml-5 rounded-lg">
+  <div class="flex flex-grow items-center justify-center">
+    <div class="search flex p-2 w-3/4  rounded-lg">
       <img src="../../assets/icons/Search.svg" alt="" />
       <input
         type="search"

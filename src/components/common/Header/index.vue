@@ -30,7 +30,7 @@
       class="flex-col md:flex-row md:flex item-center"
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15" />
 
       <!-- Search bar -->
       <SearchBar />
