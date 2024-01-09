@@ -10,12 +10,12 @@
      
       <div
         :class="{ 'scroll-lock': scrollLocked }"
-        class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10"
+        class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-7 gap-2"
       >
   
     
         <!-- Sidebar: Sectors and Topics -->
-        <aside class="col-span-1 hidden sm:block">
+        <aside class="col-span-1 hidden   sm:block">
           <sector-side
             :sectorArray="this.sectors"
             :updatesectorChecked="updateSectorChecked"
@@ -23,7 +23,7 @@
         </aside>
   
         <!-- Main Content Area: Posts -->
-        <main class="col-span-2 sm:px-4">
+        <main class="col-span-4 sm:px-4">
           <div v-if="topLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
@@ -60,7 +60,7 @@
           </div>
         </main>
   
-        <aside class="col-span-1 hidden sm:block">
+        <aside class="col-span-2 hidden sm:block">
           <recently-posted-side
           :recentPosts="recentPosts"></recently-posted-side>
         </aside>
