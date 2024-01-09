@@ -7,7 +7,8 @@ import { getZones } from '@/services/zoneService.js';
       </button>
       <input
         v-model="searchQuery"
-        @input="filterZones"
+        @input="filterZones()"
+        @keyup.enter="searchZone"
         class="border-2 w-full file ml-3  bg-transparent h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
         type="search"
         name="search"
@@ -21,6 +22,7 @@ import { getZones } from '@/services/zoneService.js';
           <li
           @click="()=>{
             this.searchQuery = zone.name
+            searchZone()
           }"
             v-for="zone in filteredZones"
             :key="zone.id"
@@ -45,8 +47,6 @@ export default {
     try {
       
       await this.getAllZones()
-      // await this.getAllZones()
-      // console.log(this.zones)
       
     } catch (error) {
       console.log(error)
@@ -57,29 +57,11 @@ export default {
     return {
       searchQuery: '',
       zones:[],
-      suggestions: [
-        'day & zimmermann · Company · Construction',
-        'day trader',
-        'day & ross · Company · Truck Transportation',
-        'day trader groups',
-        'dayforce · Product · Marketplace Platforms'
-        // ... more suggestions or fetch from API
-      ],
       filteredZones: []
     }
   },
   methods: {
-    filterSuggestions() {
-      if (!this.searchQuery) {
-        this.filteredZones = []
-        return
-      }
 
-      // Replace with API call if needed
-      this.filteredZones = this.suggestions.filter((suggestion) =>
-        suggestion.toLowerCase().includes(this.searchQuery.toLowerCase())
-      )
-    },
     async filterZones() {
 
       if (!this.searchQuery) {
@@ -91,6 +73,12 @@ export default {
       this.filteredZones = this.zones.filter((zone) =>
         zone.name.toLowerCase().includes(this.searchQuery.toLowerCase())
       )
+    },
+
+    searchZone(){
+      // this.searchQuery = ''
+      this.filteredZones = [];
+
     },
 
      async getAllZones() {
@@ -112,30 +100,4 @@ export default {
 }
 </style>
 
-<!-- <template>
-  <div class="flex flex-grow items-center justify-center">
-    <div class="search flex p-2 w-3/4  rounded-lg">
-      <img src="../../assets/icons/Search.svg" alt="" />
-      <input
-        type="search"
-        placeholder="Search "
-        class="flex-grow bg-transparent ml-3 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
-      />
-    </div>
-  </div>
-</template>
-<script>
-export default {
-  name: 'SearchBar'
-}
-</script>
-<style lang="scss" scoped>
-.search {
-  background-color: var(--primary-light, #e6e8ec);
-  border-color: #e6e8ec;
-}
 
-header {
-  background-color: var(--white-normal, #fff);
-}
-</style> -->
