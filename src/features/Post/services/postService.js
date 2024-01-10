@@ -149,6 +149,25 @@ const getPostsBySectors = async (sectorId) => {
     throw error
   }
 }
+const getPostsByZone = async (zoneId) => {
+  try {
+    let params = new URLSearchParams({
+      // size: size.toString(),
+      // page: page.toString(),
+      zoneId: JSON.stringify(zoneId)
+    })
+
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.getPosts}?zone_id=${zoneId.toString()}`,
+      authToken
+    )
+    console.log('got all post on this zone!!')
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
 
 const getUserPosts = async () => {
   try {
@@ -224,5 +243,6 @@ export {
   deletePost,
   sharePost,
   getUserPosts,
-  getUserProfile
+  getUserProfile,
+  getPostsByZone
 }

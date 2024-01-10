@@ -10,7 +10,7 @@
      
       <div
         :class="{ 'scroll-lock': scrollLocked }"
-        class="container mx-auto pt-3  grid-cols-1 sm:grid md:grid-cols-7  lg:grid-cols-9 gap-2"
+        class="container mx-auto pt-3  grid-cols-1 sm:grid md:grid-cols-8  lg:grid-cols-10 gap-2"
       >
   
     
@@ -23,7 +23,7 @@
         </aside>
   
         <!-- Main Content Area: Posts -->
-        <main class="col-span-4  sm:px-4">
+        <main class="col-span-5  sm:px-4">
           <div v-if="topLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
