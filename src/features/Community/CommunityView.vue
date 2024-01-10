@@ -6,16 +6,16 @@
     </div>
     
 
-    <div class="md:px-100 h-full">
+    <div class="md:px-20 lg:px-100 h-full">
      
       <div
         :class="{ 'scroll-lock': scrollLocked }"
-        class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-7 gap-2"
+        class="container mx-auto pt-3  grid-cols-1 sm:grid md:grid-cols-7  lg:grid-cols-9 gap-2"
       >
   
     
         <!-- Sidebar: Sectors and Topics -->
-        <aside class="col-span-1 hidden   sm:block">
+        <aside class="col-span-2 hidden   sm:block md:hidden lg:block">
           <sector-side
             :sectorArray="this.sectors"
             :updatesectorChecked="updateSectorChecked"
@@ -23,7 +23,7 @@
         </aside>
   
         <!-- Main Content Area: Posts -->
-        <main class="col-span-4 sm:px-4">
+        <main class="col-span-4  sm:px-4">
           <div v-if="topLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
@@ -60,7 +60,7 @@
           </div>
         </main>
   
-        <aside class="col-span-2 hidden sm:block">
+        <aside class="col-span-3 hidden sm:block">
           <recently-posted-side
           :recentPosts="recentPosts"></recently-posted-side>
         </aside>
