@@ -1,15 +1,15 @@
 import { getZones } from '@/services/zoneService.js';
 <template>
   <div class="flex flex-grow items-center justify-center">
-    <div class="relative mx-auto search flex p-2 w-3/4  rounded-lg">
-      <button type="submit" class="absolute left-2  mt-3 mr-5 ">
+    <div class="relative mx-auto search flex p-2 w-3/4 rounded-lg">
+      <button type="submit" class="absolute left-2 mt-3 mr-5">
         <img src="../../assets/icons/Search.svg" alt="" />
       </button>
       <input
         v-model="searchQuery"
         @input="filterZones()"
         @keyup.enter="searchZone"
-        class="border-2 w-full file ml-3  bg-transparent h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+        class="border-2 w-full file ml-3 bg-transparent h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
         type="search"
         name="search"
         placeholder="Search your location , user ..."
@@ -20,10 +20,12 @@ import { getZones } from '@/services/zoneService.js';
       >
         <ul class="overflow-y-auto text-gray-700">
           <li
-          @click="()=>{
-            this.searchQuery = zone.name
-            searchZone()
-          }"
+            @click="
+              () => {
+                this.searchQuery = zone.name
+                searchZone(zone.id)
+              }
+            "
             v-for="zone in filteredZones"
             :key="zone.id"
             class="px-5 py-2 hover:bg-gray-100 cursor-pointer"
@@ -37,33 +39,29 @@ import { getZones } from '@/services/zoneService.js';
 </template>
 
 <script>
-  import { getZones } from '@/services/zoneService.js'
+import { getZones } from '@/services/zoneService.js'
+import { useRouter } from 'vue-router'
 
 export default {
-
   name: 'SearchBar',
-  async created(){
-
+  async created() {
     try {
-      
       await this.getAllZones()
-      
     } catch (error) {
       console.log(error)
     }
-
   },
   data() {
+    const router = useRouter()
     return {
+      router,
       searchQuery: '',
-      zones:[],
+      zones: [],
       filteredZones: []
     }
   },
   methods: {
-
     async filterZones() {
-
       if (!this.searchQuery) {
         this.filteredZones = []
         return
@@ -75,19 +73,21 @@ export default {
       )
     },
 
-    searchZone(){
+    searchZone(id) {
       // this.searchQuery = ''
-      this.filteredZones = [];
+      this.filteredZones = []
+      this.$router.push({ name: 'search-result', params: { idType: 'zone', id: id } });
+
 
     },
 
-     async getAllZones() {
+    async getAllZones() {
       try {
         this.zones = await getZones()
       } catch (error) {
         console.log(error)
       }
-    },
+    }
   }
 }
 </script>
@@ -99,5 +99,3 @@ export default {
   border-color: #e6e8ec;
 }
 </style>
-
-

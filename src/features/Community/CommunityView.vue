@@ -79,6 +79,7 @@ import { URL_LINK } from "@/constants";
 import RefreshError from "@/components/common/Pages/RefreshError.vue";
 import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
 import useAuthStore from "@/stores/auth.js";
+import usePostStore from '@/features/Post/store/postStore';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -103,9 +104,11 @@ export default {
   data() {
     const sectorStore = useSectorStore();
     const authStore = useAuthStore();
+    const postStore = usePostStore();
 
     return {
       zoneName: authStore.user.zone.name,
+      postStore,
       authStore,
       scrollLocked: false,
       topLoading: false,

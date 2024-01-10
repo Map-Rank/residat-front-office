@@ -9,6 +9,7 @@ export default defineStore('post', {
     postToEdit: null,
     postToView: null,
     hideComponent:true,
+    postSearchMode:false,
   }),
   getters: {},
   actions: {
@@ -20,6 +21,9 @@ export default defineStore('post', {
       } else {
         this.showPostDetails = true
       }
+    },
+    tooglePostSearchMode(){
+      this.postSearchMode = !this.postSearchMode
     },
     setpostToShowDetails(post) {
       this.postToShowDetails = post
