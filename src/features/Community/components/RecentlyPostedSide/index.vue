@@ -2,8 +2,8 @@
   <div class="flex-col space-y-5">
     <section>
       <h2 class="title mb-5">Recently Posted</h2>
-      <ul>
-        <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0">
+      <ul class=" ">
+        <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0 bg-white px-5 py-3 rounded-lg">
           <div class="space-y-3">
             <div class="flex space-x-4 items-center">
               <avatar-placeholder

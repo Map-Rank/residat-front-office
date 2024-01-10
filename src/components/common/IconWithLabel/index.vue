@@ -33,7 +33,7 @@
       </span>
 
       <!-- Label on Bottom -->
-      <span :class="this.textCss" v-show="bottom">
+      <span :class="this.textCss" class="text-white" v-show="bottom">
         {{ labelTextBottom }}
       </span>
   </router-link>
@@ -110,7 +110,6 @@ export default {
 
 <style scoped>
 .label {
-  color: var(--gray-dark, #505050);
   text-align: center;
   font-family: Raleway;
   font-size: 10px;

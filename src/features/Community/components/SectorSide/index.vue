@@ -1,6 +1,6 @@
 <template>
-  <div class="bg-gray-200 rounded-lg">
-    <h2 class="title text-primary-normal font-bold mb-5">Categories</h2>
+  <div class=" bg-white  md:p-6 rounded-lg">
+    <h2 class="title  text-primary-normal font-bold mb-5">Categories</h2>
     <ul class="grid space-y-6">
       <li v-for="sector in sectorArray" :key="sector">
         <base-checkbox

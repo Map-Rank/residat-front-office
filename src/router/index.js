@@ -12,6 +12,8 @@ import OTP from '@/features/Auth/components/OTP.vue'
 import ViewProfileUser from '../features/SocialProfile/ShowProfileUser.vue'
 import EmailVerification from '../features/Auth/components/EmailVerification.vue'
 import WaitingEmailVerification from '../features/Auth/components/WaitingEmailVerification.vue'
+import SearchResult from '../features/Search/SearchResult.vue'
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -27,6 +29,23 @@ const router = createRouter({
       component: CreatePost,
       meta: { requiresAuth: true }
     },
+    {
+      path: '/search/result/:idType/:id',
+      name: 'search-result',
+      component: SearchResult,
+      props: true,
+      meta: { requiresAuth: true },
+      beforeEnter: (to, from, next) => {
+        const validTypes = ['zone', 'user', 'post']
+        if (validTypes.includes(to.params.idType)) {
+          next()
+        } else {
+          // Redirect to a default page or show an error if the idType is not valid
+          next({ name: 'default-route' })
+        }
+      }
+    },
+
     {
       path: '/community',
       name: 'community',
@@ -86,11 +105,9 @@ router.beforeEach((to, from, next) => {
 
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'authentication' })
-  }else if (to.name === 'authentication' && authStore.user != null) {
+  } else if (to.name === 'authentication' && authStore.user != null) {
     next({ name: 'community' }) // Redirect to community or another appropriate route
-  }
-  
-  else {
+  } else {
     next()
   }
 })

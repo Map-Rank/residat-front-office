@@ -1,14 +1,16 @@
 <template>
-  <div class="checkbox-container">
+  <div class="flex items-center"> <!-- .checkbox-container -->
     <input
       :name="list.name"
       type="checkbox"
       :id="list.name"
-      class="rounded text-primary-normal focus:ring-primary-light checkbox-input"
+      class="w-6 h-6 rounded text-primary-normal focus:ring-primary-light focus:ring form-checkbox" 
       v-model="checked"
       @change="updateCheckedItems"
     />
-    <label :for="list.name" class="checkbox-label">{{ list.name }}</label>
+    <label :for="list.name" class="ml-2.5 text-body-dark font-raleway text-base font-normal leading-6 transition-all checked:font-semibold" >
+      {{ list.name }}
+    </label>
   </div>
 </template>
 

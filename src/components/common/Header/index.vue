@@ -2,21 +2,22 @@
 <!-- eslint-disable-next-line vue/no-use-computed-property-like-method -->
 <!-- eslint-disable no-useless-escape -->
 <template>
-  <header class="py-4 md:px-100">
+  <header class="py-4 md:px-100 bg-primary-normal ">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15" />
 
       <div class="flex-grow items-center">
         <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
       </div>
 
       <icon-with-label
-        svgContentHover="\assets\icons\profile-outline.svg"
+        svgContentHover="\assets\icons\profile-fill.svg"
         svgContent="\assets\icons\profile-fill.svg"
         labelText="Profile"
         labelTextBottom="Profile"
         iconDesktopSize="this.iconSize"
+        :textCss="'text-white'"
         :isActive="true"
         :bottom="false"
         routerName="social-profile"
@@ -30,7 +31,7 @@
       class="flex-col md:flex-row md:flex item-center"
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15" />
 
       <!-- Search bar -->
       <SearchBar />
@@ -43,6 +44,7 @@
           :svgContent="item.svgContent"
           :labelText="item.labelText"
           :labelTextBottom="item.labelText"
+          :textCss="'text-white'"
           :iconDesktopSize="this.iconSize"
           :isActive="isActive(item.routerName) || false"
           :bottom="item.bottom"
@@ -163,7 +165,5 @@ export default {
   border-color: #e6e8ec;
 }
 
-header {
-  background-color: var(--white-normal, #fff);
-}
+
 </style>

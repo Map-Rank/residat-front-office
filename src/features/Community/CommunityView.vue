@@ -6,16 +6,16 @@
     </div>
     
 
-    <div class="md:px-100 h-full">
+    <div class="md:px-20 lg:px-100 h-full">
      
       <div
         :class="{ 'scroll-lock': scrollLocked }"
-        class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4 gap-10"
+        class="container mx-auto pt-3  grid-cols-1 sm:grid md:grid-cols-8  lg:grid-cols-10 gap-2"
       >
   
     
         <!-- Sidebar: Sectors and Topics -->
-        <aside class="col-span-1 hidden sm:block">
+        <aside class="col-span-2 hidden   sm:block md:hidden lg:block">
           <sector-side
             :sectorArray="this.sectors"
             :updatesectorChecked="updateSectorChecked"
@@ -23,7 +23,7 @@
         </aside>
   
         <!-- Main Content Area: Posts -->
-        <main class="col-span-2 sm:px-4">
+        <main class="col-span-5  sm:px-4">
           <div v-if="topLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
@@ -60,7 +60,7 @@
           </div>
         </main>
   
-        <aside class="col-span-1 hidden sm:block">
+        <aside class="col-span-3 hidden sm:block">
           <recently-posted-side
           :recentPosts="recentPosts"></recently-posted-side>
         </aside>
@@ -79,6 +79,7 @@ import { URL_LINK } from "@/constants";
 import RefreshError from "@/components/common/Pages/RefreshError.vue";
 import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
 import useAuthStore from "@/stores/auth.js";
+import usePostStore from '@/features/Post/store/postStore';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -103,9 +104,11 @@ export default {
   data() {
     const sectorStore = useSectorStore();
     const authStore = useAuthStore();
+    const postStore = usePostStore();
 
     return {
       zoneName: authStore.user.zone.name,
+      postStore,
       authStore,
       scrollLocked: false,
       topLoading: false,
