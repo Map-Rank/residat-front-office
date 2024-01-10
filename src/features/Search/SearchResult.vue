@@ -1,7 +1,7 @@
 <template>
   <div>
     <!-- Category Filter Buttons -->
-    <div class="flex justify-center space-x-2 mb-4 mt-5">
+    <!-- <div class="flex justify-center space-x-2 mb-4 mt-5">
       <button
         v-for="category in categories"
         :key="category"
@@ -13,24 +13,26 @@
       >
         {{ category }}
       </button>
-    </div>
+    </div> -->
 
     <div
       :class="{ 'scroll-lock': scrollLocked }"
       class="container mx-auto pt-3 grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
     >
       <!-- Main Content Area: Posts -->
-      <main class="col-span-5 sm:px-4">
+      <main class="col-start-2 col-span-5 md:col-start-2 lg:col-start-3 sm:px-4">
         <div v-if="topLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
 
         <div v-if="showPageRefresh">
-          <RefreshError
+          <!-- <RefreshError
             :imageUrl="'assets\\images\\Community\\loading.svg'"
             :errorMessage="errorMessage"
             @refreshPage="refreshPage()"
-          ></RefreshError>
+          ></RefreshError> -->
+
+          <NoSearchResult></NoSearchResult>
         </div>
 
         <div v-if="!topLoading" class="space-y-5">
@@ -58,16 +60,6 @@
       </main>
     </div>
 
-    <!-- Posts Container -->
-    <!-- <div class="space-y-4">
-      <div v-for="post in filteredPosts" :key="post.id" class="p-4 border rounded shadow-sm">
-        <div class="mb-2">
-          <div class="font-bold">{{ post.title }}</div>
-          <div class="text-sm">{{ post.content }}</div>
-        </div>
-        <div class="text-xs text-gray-600">Posted by {{ post.user }} on {{ post.date }}</div>
-      </div>
-    </div> -->
   </div>
 </template>
 
@@ -77,25 +69,36 @@ import PostComponent from '../Post/index.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { URL_LINK } from '@/constants'
 import { getPostsByZone } from '../Post/services/postService'
+import NoSearchResult from '@/components/common/Pages/NoSearchResult.vue'
 
 export default {
   name: 'SearchResult',
   async created() {
-
     try {
-      await this.fetchPosts();
-      this.topLoading = false;
+      await this.fetchPosts()
+      this.topLoading = false
     } catch (error) {
-      console.error("Failed to load posts:", error);
+      console.error('Failed to load posts:', error)
     }
   },
 
-  
+  watch: {
+    id: {
+      immediate: true,
+      handler(newId, oldId) {
+        if (newId !== oldId) {
+          this.fetchPosts();
+        }
+      }
+    }
+  },
+
   props: { idType: String, id: String },
   components: {
     LoadingIndicator,
     PostComponent,
-    RefreshError
+    RefreshError,
+    NoSearchResult
   },
   data() {
     return {
@@ -117,42 +120,12 @@ export default {
 
       categories: [
         'All',
-        'Posts',
-        'People',
+        'Location',
+        'User',
         'Companies',
-        'Jobs',
-        'Groups',
-        'Products',
-        'Services',
-        'Events',
-        'Courses',
-        'Schools'
+        'Categories',
       ],
       posts: [
-        {
-          id: 1,
-          title: 'Lorem Ipsum Dolor Sit Amet',
-          content:
-            'Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-          user: 'JohnDoe92',
-          date: 'April 5, 2023'
-        },
-        {
-          id: 2,
-          title: 'Sed Ut Perspiciatis',
-          content: 'Unde omnis iste natus error sit voluptatem accusantium doloremque laudantium.',
-          user: 'JaneSmith88',
-          date: 'April 6, 2023'
-        },
-        {
-          id: 3,
-          title: 'At Vero Eos Et Accusamus',
-          content:
-            'Et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti.',
-          user: 'EmmaJones33',
-          date: 'April 7, 2023'
-        }
-        // ... more posts
       ],
 
       filteredPosts: []
@@ -173,26 +146,25 @@ export default {
     },
 
     async fetchPosts() {
-
-try {
-  this.topLoading = true;
-  console.log('the zone id is '+this.id)
-  this.filteredPosts = await getPostsByZone(this.id);
-  this.recentPosts = await getPostsByZone(0,5,this.authStore.user.token)
-} catch (error) {
-  console.error("Failed to load posts:", error);
-  this.showPageRefresh = true;
-} finally {
-  this.topLoading = false;
-  if (this.posts.length == 0) {
-    this.showPageRefresh = true;
-    this.errorMessage =
-      "Could not get post refresh your page or check your connection";
-  } else {
-    this.showPageRefresh = false;
-  }
-}
-},
+      try {
+        this.topLoading = true
+        this.showPageRefresh = false
+        console.log('the zone id is ' + this.id)
+        this.filteredPosts = await getPostsByZone(this.id)
+        this.recentPosts = await getPostsByZone(0, 5, this.authStore.user.token)
+      } catch (error) {
+        console.error('Failed to load posts:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+        if (this.posts.length == 0) {
+          this.showPageRefresh = true
+          this.errorMessage = 'Could not get post refresh your page or check your connection'
+        } else {
+          this.showPageRefresh = false
+        }
+      }
+    }
   }
 }
 </script>

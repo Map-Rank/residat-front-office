@@ -74,12 +74,17 @@ export default {
     },
 
     searchZone(id) {
-      // this.searchQuery = ''
-      this.filteredZones = []
-      this.$router.push({ name: 'search-result', params: { idType: 'zone', id: id } });
-
-
+      this.filteredZones = [];
+    
+      const currentRoute = this.$router.currentRoute;
+      if (currentRoute.name === 'search-result') {
+        this.$router.replace({ name: 'search-result', params: { idType: 'zone', id: id } });
+      } else {
+        // Use push if we are on a different page
+        this.$router.push({ name: 'search-result', params: { idType: 'zone', id: id } });
+      }
     },
+    
 
     async getAllZones() {
       try {

@@ -151,11 +151,11 @@ const getPostsBySectors = async (sectorId) => {
 }
 const getPostsByZone = async (zoneId) => {
   try {
-    let params = new URLSearchParams({
-      // size: size.toString(),
-      // page: page.toString(),
-      zoneId: JSON.stringify(zoneId)
-    })
+    // let params = new URLSearchParams({
+    //   // size: size.toString(),
+    //   // page: page.toString(),
+    //   zoneId: JSON.stringify(zoneId)
+    // })
 
     const response = await makeApiGetCall(
       `${API_ENDPOINTS.getPosts}?zone_id=${zoneId.toString()}`,
