@@ -68,7 +68,7 @@ const router = createRouter({
       component: EmailVerification
     },
     {
-      path: '/waiting-email-verification',
+      path: '/verify-email/:id/:hash',
       name: 'waiting-email-verification',
       component: WaitingEmailVerification
     },
