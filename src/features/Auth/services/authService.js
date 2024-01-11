@@ -23,6 +23,7 @@ const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVe
       onEmailNotVerified()
       console.log('user not verified')
       localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
 
     } else {
   

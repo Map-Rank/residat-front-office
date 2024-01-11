@@ -12,7 +12,15 @@
 
         <div class="mb-4"></div>
         <div>
-          <p class="text-gray-600">Resend Verification link</p>
+          <p class="text-gray-600 mt-5">Don't receive email ?</p>
+          <button
+            type="submit"
+            class="w-full sm:w-1/2 bg-secondary-normal text-white py-2.5 my-2 rounded-full transition hover:bg-secondary-hover"
+            @click.prevent="reSend()"
+            :disabled="resetLink"
+          >
+          Resend Verification link
+        </button>
         </div>
       </div>
     </div>
@@ -20,13 +28,51 @@
 </template>
 
 <script>
+import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 export default {
   name: 'EmailVerification',
   data() {
-    return {}
+    return {
+      resetLink: false
+    }
   },
   components: {},
 
-  methods: {}
+  methods: {
+    reSend() {
+      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+      const base = import.meta.env.VITE_API_BASE_URL
+      // Make API request using VITE_API_BASE_URL
+      const url = `${base}email/resend-verification-notification`;
+      const options = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+           Authorization: `Bearer ${authToken}`
+        },
+      };
+
+      fetch(url, options)
+        .then((response) => {
+          console.log(response);
+          // Check response status
+          if (response.status === 200) {
+            // Verification successful
+            this.success();
+          } else {
+            // Verification failed
+            this.error = response.data;
+          }
+        })
+        .catch((error) => {
+          // Handle error
+          this.error = error;
+        })
+        .finally(() => {
+          // Enable button again
+          // this.$refs.verifyButton.disabled = false;
+        });
+    },
+  }
 }
 </script>
