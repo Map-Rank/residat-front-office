@@ -78,7 +78,6 @@ import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import useAuthStore from '@/stores/auth.js'
 import usePostStore from '@/features/Post/store/postStore'
-import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import useModalStore from '@/stores/modalStore.js'
 
 export default {
@@ -233,7 +232,6 @@ export default {
     SectorSide,
     RecentlyPostedSide,
     RefreshError,
-    ShareModal
   }
 }
 </script>
