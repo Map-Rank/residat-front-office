@@ -1,7 +1,7 @@
 import { getZones } from '@/services/zoneService.js';
 <template>
   <div class="flex flex-grow items-center justify-center">
-    <div class="relative mx-auto search flex p-2 w-3/4 rounded-lg">
+    <div class="relative mx-auto search flex px-2 w-3/4 rounded-lg">
       <!-- <button type="submit" class="absolute left-2 mt-3 mr-5"> -->
         <img src="../../assets/icons/Search.svg" alt="" />
       <!-- </button> -->
@@ -12,7 +12,7 @@ import { getZones } from '@/services/zoneService.js';
         class="border-2 w-full file  bg-transparent h-10 px-2 pr-16 rounded-lg text-sm focus:outline-none"
         type="search"
         name="search"
-        placeholder="Search your location , user ..."
+        placeholder="Search in your location"
       />
       <div
         class="absolute z-10 bg-white mt-10 rounded-lg shadow-lg w-full"

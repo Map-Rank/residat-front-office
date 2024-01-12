@@ -52,7 +52,7 @@
 
     <!-- Post Content -->
     <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
-      <p class="p3 content">{{ postContent }}</p>
+      <p class="p3 content font-medium">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
@@ -339,7 +339,7 @@ export default {
   font-family: Raleway;
   font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 550;
   line-height: 20px;
   /* 142.857% */
 }
