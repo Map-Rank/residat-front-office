@@ -1,6 +1,8 @@
 <template>
-  <div class=" bg-white  md:p-6 rounded-lg">
-    <h2 class="title  text-primary-normal font-bold mb-5">Categories</h2>
+  <div class="bg-white px-5 py-3 mb-4 rounded-lg">
+    <h2 class="title text-primary-normal font-bold">Categories</h2>
+  </div>
+  <div class="bg-white md:p-6 rounded-lg">
     <ul class="grid space-y-6">
       <li v-for="sector in sectorArray" :key="sector">
         <base-checkbox
@@ -14,7 +16,7 @@
 </template>
 
 <script>
-import BaseCheckbox from '../../../../components/base/BaseCheckbox.vue';
+import BaseCheckbox from '../../../../components/base/BaseCheckbox.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -32,7 +34,7 @@ export default {
     },
     updatesectorChecked: {}
   },
-  components:{
+  components: {
     BaseCheckbox
   }
 }
@@ -56,5 +58,4 @@ export default {
   font-weight: 500;
   line-height: 20px; /* 142.857% */
 }
-
 </style>

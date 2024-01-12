@@ -11,9 +11,9 @@
           <!-- Display post images  -->
           <div
             class="flex items-center justify-center mt-1"
-            v-if="post.medias && post.medias.length > 0"
+            v-if="post.images && post.images.length > 0"
           >
-            <ImageSlider class="w-full" :images="post.medias"></ImageSlider>
+            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
@@ -31,10 +31,10 @@
             </div>
 
             <!-- list of Comment  -->
-            <div class="overflow-auto">
+            <div class="overflow-auto ">
               <div v-if="!loading" class="space-y-2">
                 <div
-                  v-for="(comment, index) in post.post_comments"
+                  v-for="(comment, index) in post.comments"
                   :key="index"
                   class="flex items-start space-x-4"
                 >
@@ -48,24 +48,46 @@
             </div>
 
             <!-- comment interaction section -->
-            <div class="mt-auto space-y-4 w-full">
-              <div class="flex space-x-4">
-                <div class="flex justify-between mb-2 pb-2">
+            <div class=" space-y-2 w-full mr-3">
+              <div class="flex justify-between mr-3">
+                
+                
+                <div>
+                  <icon-with-label
+                  :svgContentHover="'\\assets\\icons\\heart-fill.svg'"
+                  :svgContent="'\\assets\\icons\\heart-outline.svg'"
+                  :labelTextRight="'Like'"
+                  :iconDesktopSize="'w-6 h-6'"
+                  :iconMobileSize="'w-5 h-5'"
+                  :isActive="post.liked"
+                  :right="true"
+                  @customFunction="likePost()"
+
+                  ></icon-with-label>
+                </div>
+                <div class="flex justify-between  pb-2">
                   <div class="flex items-center space-x-1">
-                    <img src="@\assets\icons\heart-fill.svg" alt="" />
-                    <span class="caption-c1-bold">{{ post.likes.length }}  likes</span>
-                    <img src="@\assets\icons\share-fill.svg" alt="" />
-                    <span class="ml-4 caption-c1-bold">{{ post.shares.length }} Shares</span>
+                    <img 
+                    
+                    src="@\assets\icons\heart-fill.svg" alt="" />
+                    <span class="caption-c1-bold">{{ post.like_count }}  likes</span>
+                    <img 
+                    
+                    
+                    src="@\assets\icons\share-fill.svg" alt="" />
+                    <span class="ml-4 caption-c1-bold">{{ post.share_count }} Shares</span>
                   </div>
                 </div>
               </div>
 
-              <div class="flex justify-between space-x-4">
+              </div>
+
+              <div class="flex justify-between space-x-4 mr-3">
                 <input
                   v-model="commentText"
                   type="text"
                   placeholder="Add a comments"
-                  class="w-full p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  class="w-full p-2 border border-2 bg-white border-secondary-normal rounded-lg focus:outline-none focus:border-secondary-hover"
                 />
 
                 <!-- Post button -->
@@ -75,7 +97,7 @@
                       commentPost();
                     }
                   "
-                  class="btn text-green-500 px-6 py-2 rounded-lg hover:bg-white focus:outline-none"
+                  class=" text-white  px-6 py-2 rounded-lg bg-secondary-normal hover:bg-secondary-hover focus:outline-none"
                 >
                   send
                 </button>
@@ -85,7 +107,6 @@
         </div>
       </div>
     </div>
-  </div>
 </template>
 
 <script>
@@ -97,6 +118,8 @@ import CommentInfoBox from "@/features/Post/components/PostDetails/components/Co
 import UserInfoPostDetails from "@/features/Post/components/PostDetails/components/UserInfoPostDetails.vue";
 import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
 import { commentPost ,getSpecificPost } from "@/features/Post/services/postService";
+import IconWithLabel from '@/components/common/IconWithLabel/index.vue'
+import { likePost } from "../../services/postService";
 
 export default {
   name: "PostDetails",
@@ -104,7 +127,6 @@ export default {
   async created() {
     const postStore = usePostStore();
 
-    // this.post = await getSpecificPost(postStore.postIdToShowDetail)
     this.postId = postStore.postIdToShowDetail
     this.post = postStore.postToShowDetails;
   },
@@ -113,6 +135,7 @@ export default {
     UserInfoPostDetails,
     CommentInfoBox,
     ImageSlider,
+    IconWithLabel
   },
   data() {
     return {
@@ -146,6 +169,33 @@ export default {
         this.commentText=''
         this.loading = false;
       }
+    },
+
+    async likePost(){
+
+      this.loading = true;
+      
+      try {
+        await likePost(this.postId)
+    this.post = await getSpecificPost(this.postId)
+      } catch (error) {
+        this.loading = false;
+      }
+      finally{
+        this.commentText=''
+        this.loading = false;
+      }
+
+      
+      // if (this.customLiked) {
+      //       this.customLiked = false
+      //       this.customPost.like_count--
+      //       console.log(this.customLiked)
+      //     } else {
+      //       this.customLiked = true
+      //       this.customPost.like_count++
+      //     }
+
     },
     dismiss() {
       this.togglePostDetails();

@@ -1,7 +1,10 @@
 <template>
   <div class="flex-col space-y-5">
     <section>
-      <h2 class="title mb-5">Recently Posted</h2>
+      <div class="bg-white px-5 py-3 mb-4 rounded-lg">
+
+        <h2 class="title ">Recently Posted</h2>
+      </div>
       <ul class=" ">
         <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0 bg-white px-5 py-3 rounded-lg">
           <div class="space-y-3">

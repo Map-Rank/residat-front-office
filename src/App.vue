@@ -1,21 +1,27 @@
 <template>
-  <div>
-    
-  </div>
+  <div></div>
   <div class="body flex flex-col min-h-screen">
-    <header-app :class="hiddenClass"></header-app>
+    <header-app :class="hiddenClass" class="fixed top-0 w-full z-10"></header-app>
 
-    <main class="flex-grow h-full">
+    <main class="flex-grow h-full py-20 md:pb-0">
       <router-view></router-view>
     </main>
 
     <bottom-navigation-app-app
-      class="mobile-nav block md:hidden"
+      class="mobile-nav block md:hidden mt-4"
       :class="hiddenClass"
       v-if="hideComponent"
     ></bottom-navigation-app-app>
 
     <!-- <footer-app class="mt-auto" :class="!hiddenClass"></footer-app> -->
+ 
+
+    <share-modal
+      :showModal="modalStore.showModal"
+      :postLink="modalStore.postLink"
+      :message="modalStore.message"
+      @close="modalStore.closeModal"
+    ></share-modal>
   </div>
 </template>
 
@@ -25,16 +31,24 @@ import useAuthStore from './stores/auth'
 import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
-import AlertForm from './components/common/AlertFrom/AlertForm.vue'
-import usePostStore from '@/features/Post/store/postStore';
+import usePostStore from '@/features/Post/store/postStore'
+import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
+import useModalStore from '@/stores/modalStore.js'
 
 export default {
   name: 'App',
+  data() {
+    const modalStore = useModalStore()
+
+    return {
+      modalStore
+    }
+  },
   components: {
     HeaderApp,
     FooterApp,
-    BottomNavigationAppApp,
-    AlertForm
+    ShareModal,
+    BottomNavigationAppApp
   },
 
   computed: {
@@ -57,9 +71,8 @@ export default {
   .mobile-nav {
     position: fixed;
     bottom: 0;
-    background-color: #fff;
-    width: 100%; 
-    z-index: 999; 
+    width: 100%;
+    z-index: 999;
   }
 }
 </style>

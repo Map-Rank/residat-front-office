@@ -1,6 +1,4 @@
-<!-- eslint-disable vue/no-use-computed-property-like-method -->
-<!-- eslint-disable-next-line vue/no-use-computed-property-like-method -->
-<!-- eslint-disable no-useless-escape -->
+
 <template>
   <header class="py-4 md:px-100 bg-primary-normal ">
     <!-- Mobile view: Hamburger icon -->

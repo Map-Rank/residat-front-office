@@ -1,6 +1,6 @@
 <!-- eslint-disable no-useless-escape -->
 <template>
-  <div class=" content py-4 px-2 ">
+  <div class="  py-4 px-2  bg-primary-normal ">
       <!-- Navigation Links -->
       <nav class="flex  md:flex-row items-center space-x-10 justify-between">
         <icon-with-label
@@ -83,7 +83,5 @@ export default {
 
 <style lang="scss" scoped>
 
-content {
-  background-color: var(--white-normal, #fff);
-}
+
 </style>
