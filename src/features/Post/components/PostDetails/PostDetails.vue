@@ -34,7 +34,7 @@
             <div class="overflow-auto ">
               <div v-if="!loading" class="space-y-2">
                 <div
-                  v-for="(comment, index) in post.post_comments"
+                  v-for="(comment, index) in post.comments"
                   :key="index"
                   class="flex items-start space-x-4"
                 >
@@ -59,7 +59,7 @@
                   :labelTextRight="'Like'"
                   :iconDesktopSize="'w-6 h-6'"
                   :iconMobileSize="'w-5 h-5'"
-                  :isActive="liked"
+                  :isActive="post.liked"
                   :right="true"
                   @customFunction="likePost()"
 
@@ -172,7 +172,21 @@ export default {
     },
 
     async likePost(){
-      await likePost(this.postId)
+
+      this.loading = true;
+      
+      try {
+        await likePost(this.postId)
+    this.post = await getSpecificPost(this.postId)
+      } catch (error) {
+        this.loading = false;
+      }
+      finally{
+        this.commentText=''
+        this.loading = false;
+      }
+
+      
       // if (this.customLiked) {
       //       this.customLiked = false
       //       this.customPost.like_count--
