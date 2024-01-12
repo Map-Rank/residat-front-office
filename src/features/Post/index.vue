@@ -2,13 +2,12 @@
   <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
-      
-        <UserPostInfo
-          :post-date="postDate"
-          :user-profile-image="userProfileImage"
-          :username="username"
-          :id="id"
-        />
+      <UserPostInfo
+        :post-date="postDate"
+        :user-profile-image="userProfileImage"
+        :username="username"
+        :id="id"
+      />
       <div v-if="showMenu" class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
@@ -89,10 +88,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <AvatarPlaceholderVue 
-        :username="username"
-    :size="20"
-    ></AvatarPlaceholderVue>
+        <AvatarPlaceholderVue :username="username" :size="20"></AvatarPlaceholderVue>
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -131,13 +127,18 @@ import InteractionPostStatistics from '@/features/Post/components/InteractionPos
 import { URL_LINK } from '@/constants/url.js'
 import AvatarPlaceholderVue from '../../components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
 
+import useModalStore from '@/stores/modalStore.js'
+
 export default {
   name: 'PostComponent',
   emits: ['postFetch', 'updatePost'],
   data() {
     const route = useRoute()
+    const modalStore = useModalStore()
+
     return {
       route,
+      modalStore,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       likeCount: this.like_count,
@@ -172,7 +173,7 @@ export default {
           svgContentHover: '\\assets\\icons\\share-fill.svg',
           labelText: 'Share',
           right: true
-        },
+        }
       ]
     }
   },
@@ -200,8 +201,12 @@ export default {
       }
     },
 
-    viewPost(){
+    viewPost() {
       this.$router.push({ name: 'show-post', params: { id: this.post.id } })
+    },
+
+    openShareModal() {
+      this.modalStore.openModal(`http://localhost:5174/show-post/${this.post.id}`)
     },
 
     editPost() {
@@ -230,11 +235,11 @@ export default {
           break
         case 2:
           await sharePost(this.postId)
+          this.openShareModal()
           // this.$emit('postFetch')
           break
         case 3:
-          console.log(this.post)
-          this.$emit('postFetch')
+          
           break
       }
     },
@@ -264,7 +269,6 @@ export default {
         this.$emit('handleFileChange', file)
       }
     },
-
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible

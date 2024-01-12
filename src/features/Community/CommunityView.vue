@@ -78,6 +78,8 @@ import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import useAuthStore from '@/stores/auth.js'
 import usePostStore from '@/features/Post/store/postStore'
+import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
+import useModalStore from '@/stores/modalStore.js'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -102,10 +104,12 @@ export default {
     const sectorStore = useSectorStore()
     const authStore = useAuthStore()
     const postStore = usePostStore()
+    const modalStore = useModalStore()
 
     return {
       zoneName: authStore.user.zone.name,
       postStore,
+      modalStore,
       authStore,
       scrollLocked: false,
       topLoading: false,
@@ -228,7 +232,8 @@ export default {
     PostComponent,
     SectorSide,
     RecentlyPostedSide,
-    RefreshError
+    RefreshError,
+    ShareModal
   }
 }
 </script>
