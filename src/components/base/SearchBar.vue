@@ -2,14 +2,14 @@ import { getZones } from '@/services/zoneService.js';
 <template>
   <div class="flex flex-grow items-center justify-center">
     <div class="relative mx-auto search flex p-2 w-3/4 rounded-lg">
-      <button type="submit" class="absolute left-2 mt-3 mr-5">
+      <!-- <button type="submit" class="absolute left-2 mt-3 mr-5"> -->
         <img src="../../assets/icons/Search.svg" alt="" />
-      </button>
+      <!-- </button> -->
       <input
         v-model="searchQuery"
         @input="filterZones()"
         @keyup.enter="searchZone"
-        class="border-2 w-full file ml-3 bg-transparent h-10 px-5 pr-16 rounded-lg text-sm focus:outline-none"
+        class="border-2 w-full file  bg-transparent h-10 px-2 pr-16 rounded-lg text-sm focus:outline-none"
         type="search"
         name="search"
         placeholder="Search your location , user ..."

@@ -173,12 +173,6 @@ export default {
           labelText: 'Share',
           right: true
         },
-        {
-          svgContent: '\\assets\\icons\\archieved-outline.svg',
-          svgContentHover: '\\assets\\icons\\archieved-fill.svg',
-          labelText: 'Archieve',
-          right: true
-        }
       ]
     }
   },
@@ -236,7 +230,7 @@ export default {
           break
         case 2:
           await sharePost(this.postId)
-          this.$emit('postFetch')
+          // this.$emit('postFetch')
           break
         case 3:
           console.log(this.post)
@@ -271,15 +265,6 @@ export default {
       }
     },
 
-    // showPostDetails() {
-    //   this.showDetails(this.post.id)
-    //   this.setpostIdToShowDetails(this.post.id);
-
-    //   this.togglePostDetails();
-    //   // this.setpostToShowDetails(this.post);
-    //   // console.log(this.post)
-    //   // console.log(this.post.id)
-    // },
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible

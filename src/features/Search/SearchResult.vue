@@ -97,7 +97,6 @@ export default {
   components: {
     LoadingIndicator,
     PostComponent,
-    RefreshError,
     NoSearchResult
   },
   data() {

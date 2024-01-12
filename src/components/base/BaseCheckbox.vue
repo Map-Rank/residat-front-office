@@ -59,4 +59,13 @@ line-height: 24px; /* 150% */
 .checkbox-input:checked + .checkbox-label {
   font-weight: 600;
 }
+
+label{
+  color: var(--body-dark, #1b1b1b);
+  font-family: Raleway;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
+}
 </style>
