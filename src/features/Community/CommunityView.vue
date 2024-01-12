@@ -3,21 +3,25 @@
   <div class="relative">
     <!-- Fixed image in the background -->
     <div
-      class="fixed top-0 left-0 w-full h-1/2 bg-cover bg-center z-0"
+      class="fixed hidden md:block top-0 left-0 w-full h-[50%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       style="background-image: url('https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0');"
-    ></div>
+    >
+    <h2 class="text-white absolute bottom-0 left-2 md:left-100 md:bottom-5 uppercase">
+      WELCOME TO {{ zoneName }}
+    </h2>
+  </div>
 
     <!-- Content that scrolls over the image -->
-    <div class="relative z-0">
-      <div class=" enableScroll"></div> <!-- This div is just to enable scrolling -->
+    <div class="relative z-10 ">
+      <div class=" hidden md:block enableScroll"></div> <!-- This div is just to enable scrolling -->
       <div class="bg-primary-light ">
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
         <div class="pt-1/2">
       
-          <div class=" content md:px-20 lg:px-100 h-full">
+          <div class=" content md:px-20 pt-5 lg:px-100 h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
-              class="container mx-auto pt-3 grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
+              class="container mx-auto  grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden sm:block md:hidden lg:block">
@@ -40,8 +44,11 @@
                     @refreshPage="refreshPage()"
                   ></RefreshError>
                 </div>
-      
-                <div v-if="!topLoading" class="space-y-5">
+                <post-input>
+
+                </post-input>
+
+                <div v-if="!topLoading" class="space-y-2">
                   <PostComponent
                     v-for="post in posts"
                     :key="post.id"
@@ -91,6 +98,7 @@ import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import useAuthStore from '@/stores/auth.js'
 import usePostStore from '@/features/Post/store/postStore'
 import useModalStore from '@/stores/modalStore.js'
+import PostInput from '@/components/common/PostInput/PostInput.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -244,6 +252,7 @@ export default {
     SectorSide,
     RecentlyPostedSide,
     RefreshError,
+    PostInput,
   }
 }
 </script>

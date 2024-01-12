@@ -1,0 +1,74 @@
+<template>
+  <div class="grid gap-8 items-center p-4 bg-white rounded-lg shadow-md mb-3">
+    <div class="flex">
+      <div class="mr-4">
+        <img src="\assets\images\smile.png" alt="Profile" class="w-10 h-10 rounded-full" />
+      </div>
+      <!-- Input Field -->
+      <input
+        type="text"
+        placeholder="What's on your mind?"
+        class="flex-grow px-4 py-2 border rounded-full focus:outline-none"
+      />
+    </div>
+    <!-- Action Buttons -->
+    <div class="flex space-x-2 justify-between">
+      <!-- Live Video -->
+
+      <ButtonUi
+        :label="'Post'"
+        color="bg-secondary-normal "
+        :isRoundedFull="true"
+        customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
+        textCss="font-medium text-white"
+        @clickButton="navigateCreatePost"
+        >
+      </ButtonUi>
+      <ButtonUi
+      :label="'Post with image'"
+      color="bg-secondary-normal "
+      :isRoundedFull="true"
+        customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
+        textCss="font-medium text-white"
+        @clickButton="navigateCreatePost"
+      >
+      </ButtonUi>
+      <ButtonUi
+        :label="'Create Event'"
+        color="bg-secondary-normal "
+        :isRoundedFull="true"
+        customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
+        textCss="font-medium text-white"
+        @clickButton="navigateCreatePost"
+      >
+      </ButtonUi>
+    </div>
+  </div>
+</template>
+<script>
+import ButtonUi from '../../base/ButtonUi.vue'
+import { useRoute } from 'vue-router'
+
+export default {
+  name: 'PostInput',
+
+  data() {
+    const route = useRoute()
+    return {
+      route
+    }
+  },
+
+  methods: {
+    navigateCreatePost(){
+      this.$router.push({ name: 'create-post' })
+    }
+  },
+  components: {
+    ButtonUi
+  }
+}
+</script>
+<style scoped>
+/* Additional custom styles if needed */
+</style>

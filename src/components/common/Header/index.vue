@@ -122,14 +122,14 @@ export default {
           bottom: true,
           routerName: 'social-profile'
         },
-        {
-          svgContent: '\\assets\\icons\\post-outline.svg',
-          svgContentHover: '\\assets\\icons\\post-fill.svg',
-          labelText: 'Post',
-          isActive: false,
-          bottom: true,
-          routerName: 'create-post'
-        }
+        // {
+        //   svgContent: '\\assets\\icons\\post-outline.svg',
+        //   svgContentHover: '\\assets\\icons\\post-fill.svg',
+        //   labelText: 'Post',
+        //   isActive: false,
+        //   bottom: true,
+        //   routerName: 'create-post'
+        // }
       ]
     }
   },

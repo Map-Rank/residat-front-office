@@ -90,7 +90,6 @@ span {
   font-family: Raleway;
   font-size: 14px;
   font-style: normal;
-  font-weight: 400;
   line-height: 20px; /* 171.429% */
   letter-spacing: 0.75px;
 }
