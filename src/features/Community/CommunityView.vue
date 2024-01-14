@@ -12,7 +12,7 @@
   </div>
 
     <!-- Content that scrolls over the image -->
-    <div class="relative z-10 ">
+    <div class="relative z-11 ">
       <div class=" hidden md:block enableScroll"></div> <!-- This div is just to enable scrolling -->
       <div class="bg-primary-light ">
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->

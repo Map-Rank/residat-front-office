@@ -87,6 +87,7 @@ export default {
       type: String
       // default: null
     },
+    textCss:String,
     labelTextTop: String,
     labelTextRight: String,
     labelTextBottom: String,
@@ -95,7 +96,6 @@ export default {
   data() {
     return {
       hover: false,
-      textCss: 'label'
     }
   },
 
