@@ -94,6 +94,18 @@ span {
   letter-spacing: 0.75px;
 }
 
+
+@media (max-width: 767px) {
+  span {
+    font-family: Raleway;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 20px; /* 171.429% */
+    letter-spacing: 0.75px;
+  }
+}
+
+
 @keyframes spin {
   to {
     transform: rotate(360deg);
