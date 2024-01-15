@@ -1,70 +1,89 @@
 <template>
-  <div>
+
+  <div class="relative">
+    <!-- Fixed image in the background -->
     <div
-      class="h-64 poster relative bg-cover bg-center bg-no-repeat bg-[url('https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0')] before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      class="fixed hidden md:block top-0 left-0 w-full h-[50%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      style="background-image: url('https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0');"
     >
-      <h2 class="text-white absolute bottom-2 left-2 md:left-100 md:bottom-5 uppercase">
-        WELCOME TO {{ zoneName }}
-      </h2>
-    </div>
+    <h2 class="text-white absolute bottom-0 left-2 md:left-100 md:bottom-5 uppercase">
+      WELCOME TO {{ zoneName }}
+    </h2>
+  </div>
 
-    <div class="md:px-20 lg:px-100 h-full">
-      <div
-        :class="{ 'scroll-lock': scrollLocked }"
-        class="container mx-auto pt-3 grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
-      >
-        <!-- Sidebar: Sectors and Topics -->
-        <aside class="col-span-2 hidden sm:block md:hidden lg:block">
-          <sector-side
-            :sectorArray="this.sectors"
-            :updatesectorChecked="updateSectorChecked"
-          ></sector-side>
-        </aside>
+    <!-- Content that scrolls over the image -->
+    <div class="relative z-11 ">
+      <div class=" hidden md:block enableScroll"></div> <!-- This div is just to enable scrolling -->
+      <div class="bg-primary-light ">
+        <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
+        <div class="pt-1/2">
+      
+          <div class=" content md:px-20 pt-5 lg:px-100 h-full">
+            <div
+              :class="{ 'scroll-lock': scrollLocked }"
+              class="container mx-auto  grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
+            >
+              <!-- Sidebar: Sectors and Topics -->
+              <aside class="col-span-2 hidden sm:block md:hidden lg:block">
+                <sector-side
+                  :sectorArray="this.sectors"
+                  :updatesectorChecked="updateSectorChecked"
+                ></sector-side>
+              </aside>
+      
+              <!-- Main Content Area: Posts -->
+              <main class="col-span-5 sm:px-4" ref="mainContent">
+                <div v-if="topLoading" class="flex h-full justify-center">
+                  <LoadingIndicator />
+                </div>
+      
+                <div v-if="showPageRefresh">
+                  <RefreshError
+                    :imageUrl="'assets\\images\\Community\\loading.svg'"
+                    :errorMessage="errorMessage"
+                    @refreshPage="refreshPage()"
+                  ></RefreshError>
+                </div>
+                <post-input>
 
-        <!-- Main Content Area: Posts -->
-        <main class="col-span-5 sm:px-4" ref="mainContent">
-          <div v-if="topLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
+                </post-input>
+
+                <div v-if="!topLoading" class="space-y-2">
+                  <PostComponent
+                    v-for="post in posts"
+                    :key="post.id"
+                    @postFetch="fetchPosts"
+                    :postId="post.id"
+                    :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
+                    :postDate="post.humanize_date_creation"
+                    :postContent="post.content"
+                    :liked="post.liked"
+                    :userProfileImage="`${imageHost}${post.creator[0].avatar}`"
+                    :id="`${post.creator[0].id}`"
+                    :like_count="post.like_count"
+                    :comment_count="post.comment_count"
+                    :postImages="post.images"
+                    :post="post"
+                  />
+                </div>
+      
+                <div v-if="bottomLoading" class="flex my-7 h-full justify-center">
+                  <LoadingIndicator />
+                </div>
+              </main>
+      
+              <aside class="col-span-3 hidden sm:block">
+                <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+              </aside>
+            </div>
           </div>
-
-          <div v-if="showPageRefresh">
-            <RefreshError
-              :imageUrl="'assets\\images\\Community\\loading.svg'"
-              :errorMessage="errorMessage"
-              @refreshPage="refreshPage()"
-            ></RefreshError>
-          </div>
-
-          <div v-if="!topLoading" class="space-y-5">
-            <PostComponent
-              v-for="post in posts"
-              :key="post.id"
-              @postFetch="fetchPosts"
-              :postId="post.id"
-              :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
-              :postDate="post.humanize_date_creation"
-              :postContent="post.content"
-              :liked="post.liked"
-              :userProfileImage="`${imageHost}${post.creator[0].avatar}`"
-              :id="`${post.creator[0].id}`"
-              :like_count="post.like_count"
-              :comment_count="post.comment_count"
-              :postImages="post.images"
-              :post="post"
-            />
-          </div>
-
-          <div v-if="bottomLoading" class="flex my-7 h-full justify-center">
-            <LoadingIndicator />
-          </div>
-        </main>
-
-        <aside class="col-span-3 hidden sm:block">
-          <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
-        </aside>
+        </div>
       </div>
     </div>
   </div>
+
+
+
 </template>
 
 <script>
@@ -79,6 +98,7 @@ import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import useAuthStore from '@/stores/auth.js'
 import usePostStore from '@/features/Post/store/postStore'
 import useModalStore from '@/stores/modalStore.js'
+import PostInput from '@/components/common/PostInput/PostInput.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -232,11 +252,16 @@ export default {
     SectorSide,
     RecentlyPostedSide,
     RefreshError,
+    PostInput,
   }
 }
 </script>
 
 <style scoped>
+
+.enableScroll{
+  height: 40vh;
+}
 .scroll-lock {
   overflow: hidden;
   height: 100%;

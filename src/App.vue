@@ -1,7 +1,7 @@
 <template>
   <div></div>
   <div class="body flex flex-col min-h-screen">
-    <header-app :class="hiddenClass" class="fixed top-0 w-full z-10"></header-app>
+    <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
 
     <main class="flex-grow h-full py-20 md:pb-0">
       <router-view></router-view>

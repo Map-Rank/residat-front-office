@@ -10,6 +10,7 @@ export default defineStore('post', {
     postToView: null,
     hideComponent:true,
     postSearchMode:false,
+    contentFromPostInput:'',
   }),
   getters: {},
   actions: {
@@ -21,6 +22,9 @@ export default defineStore('post', {
       } else {
         this.showPostDetails = true
       }
+    },
+    setContentFromPostInput(content){
+      this.contentFromPostInput = content
     },
     tooglePostSearchMode(){
       this.postSearchMode = !this.postSearchMode

@@ -24,6 +24,7 @@
             name="content"
             :rules="schema.content"
             as="textarea"
+            
             v-model="formData.content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2"
@@ -101,6 +102,7 @@ export default {
   async created() {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
+    this.formData.content = postStore.contentFromPostInput
 
     if (postStore.postToEdit) {
       this.isEditing = true

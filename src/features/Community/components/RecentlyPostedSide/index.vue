@@ -101,9 +101,9 @@ export default {
 
   /* Paragraphs/P3 */
   font-family: Raleway;
-  font-size: 14px;
+  font-size: 12px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 600;
   line-height: 20px; /* 142.857% */
 }
 </style>
