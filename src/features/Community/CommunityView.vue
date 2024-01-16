@@ -55,7 +55,7 @@
 
                 <div v-if="!topLoading" class="space-y-2">
                   <post-input v-if="!showPageRefresh"> </post-input>
-                  <PostComponent
+                  <!-- <PostComponent
                     v-for="post in posts"
                     :key="post.id"
                     @postFetch="fetchPosts"
@@ -70,11 +70,22 @@
                     :comment_count="post.comment_count"
                     :postImages="post.images"
                     :post="post"
-                  />
+                  /> -->
                 </div>
 
-                <div v-if="bottomLoading" class="flex my-7 h-full justify-center">
+                <div v-if="bottomLoading" class="flex my-7 h-full justify-center ite">
                   <LoadingIndicator />
+                </div>
+
+                <div class="flex flex-col justify-center items-center">
+                  <hr class="border-t-2 w-full border-gray-400 mb-4"/> 
+              
+                  <p class="text-center">All posts have been loaded based on your filter. Please reload to get the latest posts.</p> 
+              
+                  <!-- Reload Button -->
+                  <button @click="reloadPosts" class="w-1/2 border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal  hover:text-white font-bold py-2 px-4 rounded-full mt-4">
+                    Reload Posts
+                  </button> 
                 </div>
               </main>
 
@@ -219,6 +230,11 @@ export default {
           this.showPageRefresh = false
         }
       }
+    },
+
+    async reloadPosts() {
+      // call the method that fetches posts here, e.g., this.fetchPosts()
+      await this.fetchPosts();
     },
 
     async fetchPosts() {
