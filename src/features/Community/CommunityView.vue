@@ -18,10 +18,11 @@
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
         <div class="pt-1/2">
       
-          <div class=" content md:px-20 pt-5 lg:px-100 h-full">
+          <!-- <div class=" content  pt-5 lg:px-100 h-full"> -->
+          <div class=" md:px-100 justify-center  pt-5  h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
-              class="container mx-auto  grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
+              class="container w-full justify-between  grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden sm:block md:hidden lg:block">
@@ -29,6 +30,11 @@
                   :sectorArray="this.sectors"
                   :updatesectorChecked="updateSectorChecked"
                 ></sector-side>
+
+                <zone-post-filter>
+                  
+                </zone-post-filter>
+
               </aside>
       
               <!-- Main Content Area: Posts -->
@@ -44,11 +50,11 @@
                     @refreshPage="refreshPage()"
                   ></RefreshError>
                 </div>
-                <post-input>
-
-                </post-input>
-
+                
                 <div v-if="!topLoading" class="space-y-2">
+                  <post-input>
+  
+                  </post-input>
                   <PostComponent
                     v-for="post in posts"
                     :key="post.id"
@@ -72,7 +78,7 @@
                 </div>
               </main>
       
-              <aside class="col-span-3 hidden sm:block">
+              <aside class="col-span-3 justify-end hidden sm:block">
                 <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
               </aside>
             </div>
@@ -99,6 +105,7 @@ import useAuthStore from '@/stores/auth.js'
 import usePostStore from '@/features/Post/store/postStore'
 import useModalStore from '@/stores/modalStore.js'
 import PostInput from '@/components/common/PostInput/PostInput.vue'
+import ZonePostFilter from './components/ZonePostFilter/ZonePostFilter.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -253,6 +260,7 @@ export default {
     RecentlyPostedSide,
     RefreshError,
     PostInput,
+    ZonePostFilter,
   }
 }
 </script>

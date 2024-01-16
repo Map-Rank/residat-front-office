@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white px-5 py-3 mb-4 rounded-lg">
-    <h2 class="title text-primary-normal font-bold">Categories</h2>
+    <h2 class="title text-primary-normal font-bold">Select Categories</h2>
   </div>
   <div class="bg-white md:p-6 rounded-lg">
     <ul class="grid space-y-6">

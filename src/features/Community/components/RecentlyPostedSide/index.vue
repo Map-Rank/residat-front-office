@@ -7,7 +7,7 @@
       </div>
       <ul class=" ">
         <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0 bg-white px-5 py-3 rounded-lg">
-          <div class="space-y-3">
+          <div class="space-y-2">
             <div class="flex space-x-4 items-center">
               <avatar-placeholder
                 :username="`${post.creator[0].first_name} ${post.creator[0].last_name}`"
@@ -82,7 +82,7 @@ export default {
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 16px; /* 133.333% */
+  line-height: 6px; /* 133.333% */
 }
 .user-name {
   color: var(--body-dark, #1b1b1b);
@@ -92,7 +92,7 @@ export default {
   font-size: 15px;
   font-style: normal;
   font-weight: 700;
-  line-height: 20px; /* 133.333% */
+  line-height: 6px; /* 133.333% */
   letter-spacing: -0.225px;
 }
 
