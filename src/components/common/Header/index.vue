@@ -55,74 +55,78 @@
     <!-- Full menu for larger screens, hidden menu for mobile -->
     <div
       :class="{ flex: isMenuOpen, hidden: !isMenuOpen }"
-      class="flex-col md:flex-row md:flex item-center "
+      class=" w-full justify-between  grid-cols-1 sm:grid  lg:grid-cols-10 gap-2"
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15 col-span-2" />
 
       <!-- Search bar -->
-      <SearchBar />
+      <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center">
+        <SearchBar  />
+</div>
 
       <!-- Navigation Links -->
-      <nav class="flex flex-col md:flex-row items-center space-x-10">
-        <icon-with-label
-          v-for="(item, index) in navItems"
-          :svgContentHover="item.svgContentHover"
-          :svgContent="item.svgContent"
-          :labelText="item.labelText"
-          :labelTextBottom="item.labelText"
-          :textCss="'text-white'"
-          :iconDesktopSize="this.iconSize"
-          :isActive="isActive(item.routerName) || false"
-          :bottom="item.bottom"
-          :routerName="item.routerName"
-          :key="index"
-        ></icon-with-label>
+      <div class="col-span-3 grid justify-end">
 
-        <div class="menu relative">
+        <nav class="flex flex-col md:flex-row items-center space-x-10">
           <icon-with-label
-            svgContentHover="\assets\icons\profile-outline.svg"
-            svgContent="\assets\icons\profile-fill.svg"
-            labelText="Profile"
-            labelTextBottom="Profile"
+            v-for="(item, index) in navItems"
+            :svgContentHover="item.svgContentHover"
+            :svgContent="item.svgContent"
+            :labelText="item.labelText"
+            :labelTextBottom="item.labelText"
+            :textCss="'text-white'"
             :iconDesktopSize="this.iconSize"
-            :isActive="true"
-            :bottom="true"
-            @customFunction="toggleMenu"
+            :isActive="isActive(item.routerName) || false"
+            :bottom="item.bottom"
+            :routerName="item.routerName"
+            :key="index"
           ></icon-with-label>
-
-          <!-- Dropdown Menu -->
-          <div
-            v-show="isMenuVisible"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
-          >
-            <button-ui
-              :label="'Profile Page'"
-              :textCss="'text-left '"
-              :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(0)"
+  
+          <div class="menu relative">
+            <icon-with-label
+              svgContentHover="\assets\icons\profile-outline.svg"
+              svgContent="\assets\icons\profile-fill.svg"
+              labelText="Profile"
+              labelTextBottom="Profile"
+              :iconDesktopSize="this.iconSize"
+              :isActive="true"
+              :bottom="true"
+              @customFunction="toggleMenu"
+            ></icon-with-label>
+  
+            <!-- Dropdown Menu -->
+            <div
+              v-show="isMenuVisible"
+              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
-            </button-ui>
-
-            <button-ui
-              :label="'Create Post'"
-              :textCss="'text-left '"
-              :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(1)"
-            >
-            </button-ui>
-
-            <button-ui
-              :label="'Logout'"
-              :textCss="'text-left '"
-              :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(2)"
-            >
-            </button-ui>
+              <button-ui
+                :label="'Profile Page'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(0)"
+              >
+              </button-ui>
+  
+              <button-ui
+                :label="'Create Post'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(1)"
+              >
+              </button-ui>
+  
+              <button-ui
+                :label="'Logout'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(2)"
+              >
+              </button-ui>
+            </div>
           </div>
-        </div>
-      </nav>
-      <br />
+        </nav>
+      </div>
     </div>
   </header>
 </template>

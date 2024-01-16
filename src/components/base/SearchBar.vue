@@ -1,7 +1,6 @@
 import { getZones } from '@/services/zoneService.js';
 <template>
-  <div class="flex flex-grow items-center justify-center">
-    <div class="relative mx-auto search flex px-2 w-3/4 rounded-lg">
+    <div class="relative  search flex px-2 w-full rounded-lg">
       <!-- <button type="submit" class="absolute left-2 mt-3 mr-5"> -->
         <img src="../../assets/icons/Search.svg" alt="" />
       <!-- </button> -->
@@ -35,7 +34,6 @@ import { getZones } from '@/services/zoneService.js';
         </ul>
       </div>
     </div>
-  </div>
 </template>
 
 <script>

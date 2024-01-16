@@ -37,6 +37,39 @@
       </p>
     </div>
   </div>
+  <div
+    class="mt-3 p-4 bg-white rounded-xl  ring-1 ring-secondary-normal flex items-center space-x-4"
+  >
+    <div class="flex-shrink-0">
+      <!-- Event icon or image -->
+      <img
+        :src="eventImage"
+        alt="Event image"
+        class="h-16 w-16 rounded-full border-2 border-white"
+      />
+    </div>
+    <div class="text-black gap-3">
+      <div class="text-lg font-semibold">{{ title }}</div>
+      <p class="menu">
+        Organized by:
+        <span>
+          {{ organizer }}
+        </span>
+      </p>
+      <p class="menu">
+        Date:
+        <span>
+          {{ date }}
+        </span>
+      </p>
+      <p class="menu">
+        Location:
+        <span>
+          {{ location }}
+        </span>
+      </p>
+    </div>
+  </div>
 </template>
 
 <script>
