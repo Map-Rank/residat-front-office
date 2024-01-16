@@ -25,13 +25,8 @@
           <LoadingIndicator />
         </div>
 
-        <div v-if="showPageRefresh">
-          <!-- <RefreshError
-            :imageUrl="'assets\\images\\Community\\loading.svg'"
-            :errorMessage="errorMessage"
-            @refreshPage="refreshPage()"
-          ></RefreshError> -->
-
+        <div v-if="showPageRefresh  ">
+       
           <NoSearchResult></NoSearchResult>
         </div>
 
@@ -66,7 +61,6 @@
 <script>
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import PostComponent from '../Post/index.vue'
-import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { URL_LINK } from '@/constants'
 import { getPostsByZone } from '../Post/services/postService'
 import NoSearchResult from '@/components/common/Pages/NoSearchResult.vue'
@@ -156,7 +150,8 @@ export default {
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
-        if (this.posts.length == 0) {
+        console.log(this.posts.length)
+        if (this.filteredPosts.length == 0) {
           this.showPageRefresh = true
           this.errorMessage = 'Could not get post refresh your page or check your connection'
         } else {

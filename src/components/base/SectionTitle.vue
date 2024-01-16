@@ -1,0 +1,27 @@
+<template>
+  <div class="bg-secondary-normal px-5 py-3 mb-4 rounded-lg">
+
+    <h2 class="title ">{{title}}</h2>
+  </div>
+</template>
+<script>
+
+export default {
+  name: 'SectionTitle',
+  props:{
+    title:String
+  },
+}
+</script>
+<style scoped>
+.title {
+  color: white;
+  font-family: Raleway;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+
+</style>
