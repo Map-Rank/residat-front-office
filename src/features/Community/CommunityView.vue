@@ -49,13 +49,13 @@
                   <RefreshError
                     :imageUrl="'assets\\images\\Community\\loading.svg'"
                     :errorMessage="errorMessage"
-                    @refreshPage="refreshPage()"
+                    @refreshPage="reloadPosts()"
                   ></RefreshError>
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
                   <post-input v-if="!showPageRefresh"> </post-input>
-                  <!-- <PostComponent
+                  <PostComponent
                     v-for="post in posts"
                     :key="post.id"
                     @postFetch="fetchPosts"
@@ -70,22 +70,24 @@
                     :comment_count="post.comment_count"
                     :postImages="post.images"
                     :post="post"
-                  /> -->
+                  />
                 </div>
 
                 <div v-if="bottomLoading" class="flex my-7 h-full justify-center ite">
                   <LoadingIndicator />
                 </div>
+                <div v-if="filteringActive && !showPageRefresh">
 
-                <div class="flex flex-col justify-center items-center">
-                  <hr class="border-t-2 w-full border-gray-400 mb-4"/> 
-              
-                  <p class="text-center">All posts have been loaded based on your filter. Please reload to get the latest posts.</p> 
-              
-                  <!-- Reload Button -->
-                  <button @click="reloadPosts" class="w-1/2 border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal  hover:text-white font-bold py-2 px-4 rounded-full mt-4">
-                    Reload Posts
-                  </button> 
+                  <div  class="mt-3 flex flex-col justify-center items-center">
+                    <hr class="border-t-2 w-full border-gray-400 mb-4"/> 
+                
+                    <p class="text-center">All posts have been loaded based on your filter. Please reload to get the latest posts.</p> 
+                
+                    <!-- Reload Button -->
+                    <button @click="reloadPosts" class="w-1/2 border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal  hover:text-white font-bold py-2 px-4 rounded-full mt-4">
+                      Reload Posts
+                    </button> 
+                  </div>
                 </div>
               </main>
 
@@ -154,6 +156,7 @@ export default {
       zoneName: authStore.user.zone.name,
       postStore,
       modalStore,
+      filteringActive:false,
       authStore,
       scrollLocked: false,
       topLoading: false,
@@ -180,6 +183,8 @@ export default {
   methods: {
     updateSectorChecked({ list, checked }) {
       this.showPageRefresh = false
+      console.log(list.id)
+
       if (!list?.id) {
         console.error("Invalid 'list' object or missing 'id'")
         return
@@ -189,8 +194,31 @@ export default {
         ? [...this.sectorId, list.id]
         : this.sectorId.filter((id) => id !== list.id)
 
+        // this.filteringActive = true; 
+        console.log(this.sectorId)
       this.filterPostBySectors()
     },
+
+    async filterPostBySectors() {
+      try {
+        this.topLoading = true
+        this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null)
+      } catch (error) {
+        console.error('Failed to load posts:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+        this.filteringActive = true;
+        if (this.posts.length == 0) {
+          this.showPageRefresh = true
+          this.errorMessage =
+            'No post found under this sector , chose another sector or uncheck sector'
+        } else {
+          this.showPageRefresh = false
+        }
+      }
+    },
+
 
     async filterPostByZone(id){
       console.log(id)
@@ -203,6 +231,7 @@ export default {
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
+        this.filteringActive = true;  
         if (this.posts.length == 0) {
           this.showPageRefresh = true
           this.errorMessage =
@@ -213,27 +242,11 @@ export default {
       }
     },
 
-    async filterPostBySectors() {
-      try {
-        this.topLoading = true
-        this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null)
-      } catch (error) {
-        console.error('Failed to load posts:', error)
-        this.showPageRefresh = true
-      } finally {
-        this.topLoading = false
-        if (this.posts.length == 0) {
-          this.showPageRefresh = true
-          this.errorMessage =
-            'No post found under this sector , chose another sector or uncheck sector'
-        } else {
-          this.showPageRefresh = false
-        }
-      }
-    },
 
     async reloadPosts() {
-      // call the method that fetches posts here, e.g., this.fetchPosts()
+      this.topLoading = false;
+      this.filteringActive=false
+      this.showPageRefresh = false
       await this.fetchPosts();
     },
 
@@ -263,7 +276,8 @@ export default {
     },
 
     async loadMorePosts() {
-      if (this.loadingPosts || this.showPageRefresh) return
+      if (this.loadingPosts || this.showPageRefresh || this.filteringActive) return;
+
       this.loadingPosts = true
       this.bottomLoading = true
       this.scrollLocked = true
