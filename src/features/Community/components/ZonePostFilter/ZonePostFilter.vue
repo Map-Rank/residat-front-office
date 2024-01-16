@@ -11,7 +11,7 @@
         <BaseDropdown
           v-if="!isLoading"
           :options="regions"
-          @selectedOptionId="updateZoneId"
+          @selectedOptionId="returnZoneId"
           @functionIdParams="getDivisions"
         />
       </div>
@@ -22,7 +22,7 @@
         </div>
         <BaseDropdown
           v-if="!isLoading && !isDivisionLoading"
-          @selectedOptionId="updateZoneId"
+          @selectedOptionId="returnZoneId"
           :options="divisions"
           @functionIdParams="getSub_divisions"
         />
@@ -34,7 +34,7 @@
         </div>
         <BaseDropdown
           v-if="!isLoading && !isSubdivisionLoading"
-          @selectedOptionId="updateZoneId"
+          @selectedOptionId="returnZoneId"
           :options="sub_divisions"
         />
       </div>
@@ -72,7 +72,7 @@ export default {
       region_id: '1',
       sectionTitle: 'Select Region',
 
-      division_id: '1',
+      division_id: '',
       Subdivision_id: '1',
       isDivisionLoading: false,
       isSubdivisionLoading: false,
@@ -103,6 +103,10 @@ export default {
     }
   },
   methods: {
+    returnZoneId(id) {
+      this.filterPostFunctionWithId(id)
+    },
+
     async getRegions() {
       try {
         this.regions = this.regions.concat(await getZones(2, null))
@@ -137,11 +141,7 @@ export default {
     }
   },
   props: {
-    sectorArray: {
-      type: Array,
-      required: true
-    },
-    updatesectorChecked: {}
+    filterPostFunctionWithId: {}
   },
   components: {
     BaseDropdown,

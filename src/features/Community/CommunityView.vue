@@ -33,7 +33,9 @@
                 ></sector-side>
 
                 <div class="mt-3">
-                  <zone-post-filter> </zone-post-filter>
+                  <zone-post-filter
+                  :filterPostFunctionWithId="filterPostByZone"
+                  > </zone-post-filter>
                 </div>
               </aside>
 
@@ -52,7 +54,7 @@
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
-                  <post-input> </post-input>
+                  <post-input v-if="!showPageRefresh"> </post-input>
                   <PostComponent
                     v-for="post in posts"
                     :key="post.id"
@@ -100,7 +102,7 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
-import { getPosts, getPostsBySectors } from '@/features/Post/services/postService.js'
+import { getPosts, getPostsBySectors,getPostsByZone } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
@@ -147,6 +149,7 @@ export default {
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
       sectorId: [],
+      zoneId:0,
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
@@ -176,6 +179,27 @@ export default {
         : this.sectorId.filter((id) => id !== list.id)
 
       this.filterPostBySectors()
+    },
+
+    async filterPostByZone(id){
+      console.log(id)
+
+      try {
+        this.topLoading = true
+        this.posts = await getPostsByZone(id !=0 ? id : null)
+      } catch (error) {
+        console.error('Failed to load posts:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+        if (this.posts.length == 0) {
+          this.showPageRefresh = true
+          this.errorMessage =
+            'No post found under this location , chose another location '
+        } else {
+          this.showPageRefresh = false
+        }
+      }
     },
 
     async filterPostBySectors() {
