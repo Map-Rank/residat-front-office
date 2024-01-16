@@ -4,7 +4,7 @@
     <h2 class="title text-primary-normal font-bold">Select Location</h2>
   </div>
   <div class="bg-white md:p-6 rounded-lg">
-    <div class="grid  justify-between">
+    <div class="grid w-full ">
       <div class="w-full">
         <label class=" label inline-block mb-2">Choose Your Region</label>
         <div v-if="isLoading" class="flex h-full justify-center">

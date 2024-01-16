@@ -22,7 +22,7 @@
           <div class=" md:px-100 justify-center  pt-5  h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
-              class="container w-full justify-between  grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
+              class=" w-full justify-between  grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden sm:block md:hidden lg:block">
@@ -32,7 +32,7 @@
                 ></sector-side>
 
                 <zone-post-filter>
-                  
+
                 </zone-post-filter>
 
               </aside>
@@ -78,8 +78,16 @@
                 </div>
               </main>
       
-              <aside class="col-span-3 justify-end hidden sm:block">
+              <aside class="col-span-3  justify-end hidden sm:block">
                 <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+
+                <event-alert-box
+                title="Annual Farming Event"
+                organizer="Farm Hub"
+                date="August 12, 2024"
+                location="Bamenda"
+                eventImage="https://th.bing.com/th/id/R.5c554799a6a14ba031b54f234c18048f?rik=4M14f8pjbL2pEw&pid=ImgRaw&r=0"
+              />
               </aside>
             </div>
           </div>
@@ -106,6 +114,7 @@ import usePostStore from '@/features/Post/store/postStore'
 import useModalStore from '@/stores/modalStore.js'
 import PostInput from '@/components/common/PostInput/PostInput.vue'
 import ZonePostFilter from './components/ZonePostFilter/ZonePostFilter.vue'
+import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -261,6 +270,7 @@ export default {
     RefreshError,
     PostInput,
     ZonePostFilter,
+    EventAlertBox
   }
 }
 </script>
