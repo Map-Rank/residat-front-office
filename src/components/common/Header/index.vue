@@ -181,7 +181,23 @@ export default {
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
-        }
+        },
+        {
+          svgContent: '\\assets\\icons\\event-outline.svg',
+          svgContentHover: '\\assets\\icons\\event-fill.svg',
+          labelText: 'Event',
+          isActive: false,
+          bottom: true,
+          routerName: 'event'
+        },
+        {
+          svgContent: '\\assets\\icons\\report-outline.svg',
+          svgContentHover: '\\assets\\icons\\report-fill.svg',
+          labelText: 'Report',
+          isActive: false,
+          bottom: true,
+          routerName: 'report'
+        },
       ]
     }
   },

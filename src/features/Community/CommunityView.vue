@@ -93,6 +93,9 @@
 
               <aside class="col-span-3 justify-end hidden sm:block">
                 <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+                <div v-if="topLoading" class="flex h-full justify-center">
+                  <LoadingIndicator />
+                </div>
                 <div class="mt-3">
                   <event-alert-box
                     title="Annual Farming Event"

@@ -13,6 +13,8 @@ import ViewProfileUser from '../features/SocialProfile/ShowProfileUser.vue'
 import EmailVerification from '../features/Auth/components/EmailVerification.vue'
 import WaitingEmailVerification from '../features/Auth/components/WaitingEmailVerification.vue'
 import SearchResult from '../features/Search/SearchResult.vue'
+import EventView from '@/features/Event/EventView.vue'
+import ReportView from '@/features/Report/ReportView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -21,6 +23,18 @@ const router = createRouter({
       path: '/social-profile',
       name: 'social-profile',
       component: SocialProfile,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/event',
+      name: 'event',
+      component: EventView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/report',
+      name: 'report',
+      component: ReportView,
       meta: { requiresAuth: true }
     },
     {
