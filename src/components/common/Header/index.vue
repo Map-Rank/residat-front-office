@@ -177,7 +177,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
           svgContentHover: '\\assets\\icons\\chat-fill.svg',
-          labelText: 'Chat',
+          labelText: 'Chat Room',
           isActive: false,
           bottom: true,
           routerName: 'chat-room'

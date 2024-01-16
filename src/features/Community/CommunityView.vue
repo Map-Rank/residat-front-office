@@ -78,7 +78,7 @@
                 </div>
                 <div v-if="filteringActive && !showPageRefresh">
 
-                  <div  class="mt-3 flex flex-col justify-center items-center">
+                  <div  class="my-10 flex flex-col justify-center items-center">
                     <hr class="border-t-2 w-full border-gray-400 mb-4"/> 
                 
                     <p class="text-center">All posts have been loaded based on your filter. Please reload to get the latest posts.</p> 
