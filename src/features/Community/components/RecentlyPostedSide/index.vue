@@ -1,10 +1,7 @@
 <template>
   <div class="flex-col space-y-5">
     <section>
-      <div class="bg-white px-5 py-3 mb-4 rounded-lg">
-
-        <h2 class="title ">Recently Posted</h2>
-      </div>
+      <SectionTitle :title="sectionTitle" />
       <ul class=" ">
         <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0 bg-white px-5 py-3 rounded-lg">
           <div class="space-y-2">
@@ -29,17 +26,20 @@
 
 <script>
 import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
-import { formatDate , truncateText} from '@/utils/formating'
+import { formatDate, truncateText } from '@/utils/formating'
+import SectionTitle from '@/components/base/SectionTitle.vue'
 
 export default {
   name: 'RecentlyPosted',
   data() {
     return {
       formatDate,
-      truncateText
+      truncateText,
+      sectionTitle:'Recently Post'
     }
   },
   components: {
+    SectionTitle,
     AvatarPlaceholder
   },
   props: {
@@ -53,15 +53,6 @@ export default {
 </script>
 
 <style scoped>
-.title {
-  color: var(--primary-normal, #021d40);
-  font-family: Raleway;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px; /* 120% */
-  letter-spacing: -0.3px;
-}
 
 .button {
   display: flex;

@@ -1,11 +1,8 @@
 <template>
-    <div class="bg-white px-5 py-3 mb-4 mt-3 rounded-lg">
-
-        <h2 class="title ">Upcoming Event</h2>
-      </div>
+  <SectionTitle :title="sectionTitle" />
 
   <div
-    class="mt-3 p-4 bg-white rounded-xl  ring-1 ring-secondary-normal flex items-center space-x-4"
+    class="mt-3 p-4 bg-white rounded-xl ring-1 ring-secondary-normal flex items-center space-x-4"
   >
     <div class="flex-shrink-0">
       <!-- Event icon or image -->
@@ -38,7 +35,7 @@
     </div>
   </div>
   <div
-    class="mt-3 p-4 bg-white rounded-xl  ring-1 ring-secondary-normal flex items-center space-x-4"
+    class="mt-3 p-4 bg-white rounded-xl ring-1 ring-secondary-normal flex items-center space-x-4"
   >
     <div class="flex-shrink-0">
       <!-- Event icon or image -->
@@ -73,14 +70,24 @@
 </template>
 
 <script>
+import SectionTitle from '@/components/base/SectionTitle.vue'
+
 export default {
   name: 'EventAlertBox',
+  data() {
+    return {
+      sectionTitle: 'Upcoming Event'
+    }
+  },
   props: {
     title: String,
     organizer: String,
     date: String,
     location: String,
     eventImage: String
+  },
+  components: {
+    SectionTitle
   }
 }
 </script>
@@ -99,24 +106,24 @@ export default {
   line-height: 20px; /* 142.857% */
 }
 
-span{
-    color: var(--body-normal, #242424);
+span {
+  color: var(--body-normal, #242424);
 
-    /* Paragraphs/P3 */
-    font-family: Raleway;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    line-height: 20px; /* 142.857% */ 
+  /* Paragraphs/P3 */
+  font-family: Raleway;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 20px; /* 142.857% */
 }
 
 .title {
-    color: var(--primary-normal, #021d40);
-    font-family: Raleway;
-    font-size: 20px;
-    font-style: normal;
-    font-weight: 700;
-    line-height: 24px; /* 120% */
-    letter-spacing: -0.3px;
-  }
+  color: var(--primary-normal, #021d40);
+  font-family: Raleway;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
 </style>

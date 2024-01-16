@@ -1,12 +1,10 @@
 <template>
-  
-  <div class="bg-white px-5 py-3 mt-3 mb-4 rounded-lg">
-    <h2 class="title text-primary-normal font-bold">Select Location</h2>
-  </div>
+  <SectionTitle :title="sectionTitle" />
+
   <div class="bg-white md:p-6 rounded-lg">
-    <div class="grid w-full ">
+    <div class="grid w-full">
       <div class="w-full">
-        <label class=" label inline-block mb-2">Choose Your Region</label>
+        <label class="label inline-block mb-2">Choose Your Region</label>
         <div v-if="isLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -18,7 +16,7 @@
         />
       </div>
       <div class="w-full">
-        <label class=" label inline-block mb-2">Choose Your Division</label>
+        <label class="label inline-block mb-2">Choose Your Division</label>
         <div v-if="isDivisionLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -48,8 +46,7 @@
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-
-
+import SectionTitle from '@/components/base/SectionTitle.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -73,6 +70,7 @@ export default {
       isLoading: false,
 
       region_id: '1',
+      sectionTitle: 'Select Region',
 
       division_id: '1',
       Subdivision_id: '1',
@@ -117,7 +115,7 @@ export default {
       try {
         this.isDivisionLoading = true
         //delete all element and allow the first only
-        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : [];
+        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
@@ -125,20 +123,18 @@ export default {
         this.isDivisionLoading = false
       }
     },
-    
+
     async getSub_divisions(parent_id) {
       this.isSubdivisionLoading = true
       try {
-        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : [];
+        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
         this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
       } finally {
         this.isSubdivisionLoading = false
       }
-    },
-
-
+    }
   },
   props: {
     sectorArray: {
@@ -149,7 +145,8 @@ export default {
   },
   components: {
     BaseDropdown,
-    LoadingIndicator
+    LoadingIndicator,
+    SectionTitle
   }
 }
 </script>

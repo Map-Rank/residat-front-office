@@ -1,7 +1,7 @@
 <template>
-  <div class="bg-white px-5 py-3 mb-4 rounded-lg">
-    <h2 class="title text-primary-normal font-bold">Select Categories</h2>
-  </div>
+ <section-title
+ :title="sectionTitle"
+ ></section-title>
   <div class="bg-white md:p-6 rounded-lg">
     <ul class="grid space-y-6">
       <li v-for="sector in sectorArray" :key="sector">
@@ -17,6 +17,7 @@
 
 <script>
 import BaseCheckbox from '../../../../components/base/BaseCheckbox.vue'
+import SectionTitle from '../../../../components/base/SectionTitle.vue';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -24,6 +25,7 @@ export default {
   name: 'SectorSide',
   data() {
     return {
+      sectionTitle:'Select Categorie',
       sectors: this.sectorArray // initialize with your set of sectors
     }
   },
@@ -35,7 +37,8 @@ export default {
     updatesectorChecked: {}
   },
   components: {
-    BaseCheckbox
+    BaseCheckbox,
+    SectionTitle
   }
 }
 </script>
