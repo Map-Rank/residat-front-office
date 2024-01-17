@@ -87,7 +87,7 @@ export default {
 }
 
 span {
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   line-height: 20px; /* 171.429% */
@@ -97,7 +97,7 @@ span {
 
 @media (max-width: 767px) {
   span {
-    font-family: Raleway;
+    font-family: Roboto;
     font-size: 12px;
     font-style: normal;
     line-height: 20px; /* 171.429% */

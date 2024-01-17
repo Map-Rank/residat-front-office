@@ -107,7 +107,7 @@ export default {
 span {
   color: var(--gray-darker, #252525);
   text-align: center;
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 700;
@@ -118,7 +118,7 @@ p {
   color: var(--gray-dark, #505050);
 
   /* Paragraphs/P2 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 400;

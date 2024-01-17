@@ -115,7 +115,7 @@ span{
 }
 .label {
   text-align: center;
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -132,7 +132,7 @@ span{
   color: var(--primary-normal, #021d40);
   text-align: center;
 
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;

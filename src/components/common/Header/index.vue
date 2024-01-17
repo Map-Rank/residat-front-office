@@ -159,20 +159,20 @@ export default {
       iconSize: 'w-7 h-7',
       navItems: [
         {
-          svgContent: '\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-          labelText: 'Dashboard',
-          isActive: false,
-          bottom: true,
-          routerName: 'dashbaord'
-        },
-        {
           svgContent: '\\assets\\icons\\community-outline.svg',
           svgContentHover: '\\assets\\icons\\community-fill.svg',
           labelText: 'Community',
           isActive: false,
           bottom: true,
           routerName: 'community'
+        },
+        {
+          svgContent: '\\assets\\icons\\dashboard-outline.svg',
+          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+          labelText: 'Dashboard',
+          isActive: false,
+          bottom: true,
+          routerName: 'dashbaord'
         },
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
@@ -190,14 +190,14 @@ export default {
           bottom: true,
           routerName: 'event'
         },
-        {
-          svgContent: '\\assets\\icons\\report-outline.svg',
-          svgContentHover: '\\assets\\icons\\report-fill.svg',
-          labelText: 'Report',
-          isActive: false,
-          bottom: true,
-          routerName: 'report'
-        },
+        // {
+        //   svgContent: '\\assets\\icons\\report-outline.svg',
+        //   svgContentHover: '\\assets\\icons\\report-fill.svg',
+        //   labelText: 'Report',
+        //   isActive: false,
+        //   bottom: true,
+        //   routerName: 'report'
+        // },
       ]
     }
   },

@@ -27,15 +27,15 @@
             >
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden sm:block md:hidden lg:block">
-                <sector-side
-                  :sectorArray="this.sectors"
-                  :updatesectorChecked="updateSectorChecked"
-                ></sector-side>
-
+                <zone-post-filter
+                :filterPostFunctionWithId="filterPostByZone"
+                > </zone-post-filter>
+                
                 <div class="mt-3">
-                  <zone-post-filter
-                  :filterPostFunctionWithId="filterPostByZone"
-                  > </zone-post-filter>
+                  <sector-side
+                    :sectorArray="this.sectors"
+                    :updatesectorChecked="updateSectorChecked"
+                  ></sector-side>
                 </div>
               </aside>
 
@@ -92,18 +92,18 @@
               </main>
 
               <aside class="col-span-3 justify-end hidden sm:block">
-                <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
-                <div v-if="topLoading" class="flex h-full justify-center">
-                  <LoadingIndicator />
-                </div>
+                <event-alert-box
+                  title="Annual Farming Event"
+                  organizer="Farm Hub"
+                  date="August 12, 2024"
+                  location="Bamenda"
+                  eventImage="https://th.bing.com/th/id/R.5c554799a6a14ba031b54f234c18048f?rik=4M14f8pjbL2pEw&pid=ImgRaw&r=0"
+                />
                 <div class="mt-3">
-                  <event-alert-box
-                    title="Annual Farming Event"
-                    organizer="Farm Hub"
-                    date="August 12, 2024"
-                    location="Bamenda"
-                    eventImage="https://th.bing.com/th/id/R.5c554799a6a14ba031b54f234c18048f?rik=4M14f8pjbL2pEw&pid=ImgRaw&r=0"
-                  />
+                  <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+                  <div v-if="topLoading" class="flex h-full justify-center">
+                    <LoadingIndicator />
+                  </div>
                 </div>
               </aside>
             </div>

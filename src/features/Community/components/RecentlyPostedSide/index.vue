@@ -69,7 +69,7 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Captions/C1 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -79,7 +79,7 @@ export default {
   color: var(--body-dark, #1b1b1b);
 
   /* Desktop/H5 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 15px;
   font-style: normal;
   font-weight: 700;
@@ -91,7 +91,7 @@ export default {
   color: var(--body-normal, #242424);
 
   /* Paragraphs/P3 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: medium;
   font-weight: 600;

@@ -45,7 +45,7 @@ export default {
 
 <style scoped>
 .title {
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -55,7 +55,7 @@ export default {
 
 .label {
   color: var(--body-dark, #1b1b1b);
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;

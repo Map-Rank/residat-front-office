@@ -16,7 +16,7 @@ export default {
 <style scoped>
 .title {
   color: white;
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
