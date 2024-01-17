@@ -1,4 +1,4 @@
-<template>
+5q<template>
   <SectionTitle :title="sectionTitle" />
 
   <div class="bg-white md:p-6 rounded-lg">
@@ -28,7 +28,7 @@
         />
       </div>
       <div class="w-full">
-        <label class="label inline-block mb-2">Choose Your Division</label>
+        <label class="label inline-block mb-2">Choose Your Sub-division</label>
         <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
