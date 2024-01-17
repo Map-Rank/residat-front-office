@@ -67,7 +67,7 @@ p {
   color: var(--gray-dark, #505050);
 
   /* Captions/C2 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -78,7 +78,7 @@ span {
   text-align: center;
 
   /* Paragraphs/P3-Bold */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;

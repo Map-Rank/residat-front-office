@@ -336,7 +336,7 @@ export default {
 <style scoped>
 .content {
   color: var(--body-normal, #242424);
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 550;
@@ -356,7 +356,7 @@ export default {
     color: var(--primary-normal, #021d40);
 
     /* Desktop/H6-SemiBold */
-    font-family: Raleway;
+    font-family: Roboto;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;

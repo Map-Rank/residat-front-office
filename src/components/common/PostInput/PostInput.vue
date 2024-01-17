@@ -13,7 +13,7 @@
       />
     </div>
     <!-- Action Buttons -->
-    <div class="flex space-x-2 justify-between">
+    <div class="flex space-x-2 md:space-x-14 justify-between">
       <!-- Live Video -->
 
       <ButtonUi
@@ -21,11 +21,11 @@
         color="bg-secondary-normal "
         :isRoundedFull="true"
         customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
-        textCss="font-medium text-white"
+        textCss="font-medium text-white "
         @clickButton="navigateCreatePost"
         >
       </ButtonUi>
-      <ButtonUi
+      <!-- <ButtonUi
       :label="'Post with image'"
       color="bg-secondary-normal "
       :isRoundedFull="true"
@@ -33,7 +33,7 @@
         textCss="font-medium text-white"
         @clickButton="navigateCreatePost"
       >
-      </ButtonUi>
+      </ButtonUi> -->
       <ButtonUi
         :label="'Create Event'"
         color="bg-secondary-normal "

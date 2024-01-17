@@ -59,7 +59,7 @@ footer {
 .text {
   color: var(--white-normal, #fff);
 
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;

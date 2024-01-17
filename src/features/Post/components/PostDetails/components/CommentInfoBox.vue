@@ -50,7 +50,7 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Buttons/B2-Bold */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -64,7 +64,7 @@ export default {
   color: #000;
 
   /* Paragraphs/P3-Bold */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -75,7 +75,7 @@ export default {
   color: #000;
 
   /* Paragraphs/P4 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -86,7 +86,7 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Captions/C1 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

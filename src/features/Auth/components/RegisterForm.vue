@@ -583,7 +583,7 @@ span {
   color: var(--gray-dark, #505050);
 
   /* Captions/C1 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

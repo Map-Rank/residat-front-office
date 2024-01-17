@@ -99,7 +99,7 @@ export default {
   margin-top: 2px;
 
   /* Paragraphs/P3 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: medium;
   font-weight: 600;
@@ -110,7 +110,7 @@ span {
   color: var(--body-normal, #242424);
 
   /* Paragraphs/P3 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
@@ -119,7 +119,7 @@ span {
 
 .title {
   color: var(--primary-normal, #021d40);
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
