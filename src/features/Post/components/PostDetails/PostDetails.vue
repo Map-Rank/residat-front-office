@@ -20,13 +20,13 @@
 
           <div class="info grid grid-rows-custom pl-5 py-3">
             <!-- user informations -->
-            <div class="mt-5 relative pb-4 mr-5 items-start">
+            <div class=" relative pb-4 mr-5 items-start">
+              <button @click="dismiss()  " class="flex justify-end w-full">
+                <img src="@\assets\icons\dismiss.svg" alt=""  class=""/>
+              </button>
               <div class="flex items-start justify-between border-b-2">
                 <UserInfoPostDetails :image-host="imageHost" :post="post" />
 
-                <button @click="dismiss()">
-                  <img src="@\assets\icons\dismiss.svg" alt=""  class="h-5 w-5"/>
-                </button>
               </div>
             </div>
 
