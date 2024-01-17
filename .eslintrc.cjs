@@ -8,6 +8,19 @@ module.exports = {
     'eslint:recommended',
     '@vue/eslint-config-prettier/skip-formatting'
   ],
+  overrides:[
+    {
+      files:['src/**/__tests__/*.spec.js'],
+      globals:{
+        test:'readonly',
+        describe:'readonly',
+        expect:'readonly',
+        vi:'readonly',
+        beforeEach:'readonly',
+        it:'readonly'
+      }
+    }
+  ],
   parserOptions: {
     ecmaVersion: 'latest'
   }
