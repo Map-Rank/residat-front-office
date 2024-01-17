@@ -1,5 +1,5 @@
 <template>
-  <header class="py-4 md:px-100 bg-primary-normal ">
+  <header class="py-4 md:px-100 bg-white ">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
       <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15" />
@@ -58,7 +58,7 @@
       class=" hidden sm:hidden md:flex w-full justify-between   "
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15 " />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 " />
 
       <!-- Search bar -->
       <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center w-full">
@@ -75,7 +75,7 @@
             :svgContent="item.svgContent"
             :labelText="item.labelText"
             :labelTextBottom="item.labelText"
-            :textCss="'text-white'"
+            :textCss="'text-primary-normal'"
             :iconDesktopSize="this.iconSize"
             :isActive="isActive(item.routerName) || false"
             :bottom="item.bottom"
