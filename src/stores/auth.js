@@ -54,6 +54,7 @@ export default defineStore('auth', {
       this.isloggedIn = false;
       localStorage.removeItem(LOCAL_STORAGE_KEYS.userInfo)
       localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken); 
+      localStorage.removeItem(LOCAL_STORAGE_KEYS.sector); 
       console.log('Logout Successful!!!!')
     },
   },

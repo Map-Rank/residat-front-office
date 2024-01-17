@@ -1,6 +1,6 @@
 import { getZones } from '@/services/zoneService.js';
 <template>
-    <div class="relative  search flex px-2 w-full rounded-lg">
+    <div class="relative  search flex px-2 w-2/3 rounded-lg">
       <!-- <button type="submit" class="absolute left-2 mt-3 mr-5"> -->
         <img src="../../assets/icons/Search.svg" alt="" />
       <!-- </button> -->

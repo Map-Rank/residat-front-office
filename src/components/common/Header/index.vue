@@ -54,14 +54,14 @@
 
     <!-- Full menu for larger screens, hidden menu for mobile -->
     <div
-      :class="{ flex: isMenuOpen, hidden: !isMenuOpen }"
-      class=" w-full justify-between  grid-cols-1 sm:grid  lg:grid-cols-10 gap-2"
+      :class="{   }"
+      class=" hidden sm:hidden md:flex w-full justify-between   "
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15 col-span-2" />
+      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15 " />
 
       <!-- Search bar -->
-      <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center">
+      <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center w-full">
         <SearchBar  />
 </div>
 
