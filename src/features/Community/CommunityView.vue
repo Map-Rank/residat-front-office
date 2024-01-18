@@ -269,6 +269,7 @@ export default {
       console.log(id)
 
       this.zoneId = id
+      this.filteringActive = true
 
       try {
         this.topLoading = true
@@ -326,25 +327,57 @@ export default {
       window.location.reload()
     },
 
-    async loadMorePosts() {
-      if (this.loadingPosts || this.showPageRefresh || this.filteringActive) return
+    // async loadMorePosts() {
+    //   if (this.loadingPosts || this.showPageRefresh || this.filteringActive) return
 
-      this.loadingPosts = true
+    //   this.loadingPosts = true
+    //   this.bottomLoading = true
+    //   this.scrollLocked = true
+
+    //   try {
+    //     let nextPosts = await getPosts(this.page, this.size)
+    //     this.posts.push(...nextPosts)
+    //   } catch (error) {
+    //     console.error('Failed to load more posts:', error)
+    //   } finally {
+    //     this.loadingPosts = false
+    //     this.bottomLoading = false
+    //     this.scrollLocked = false
+    //   }
+    // },
+
+
+    async loadMorePosts() {
+      if (this.loadingPosts || this.showPageRefresh) return
+      let nextPagePosts = []
+
+
+            this.loadingPosts = true
       this.bottomLoading = true
       this.scrollLocked = true
-
       try {
-        let nextPosts = await getPosts(this.page, this.size)
-        this.posts.push(...nextPosts)
+        if(this.filteringActive) {
+          const nextPage = this.page + 1
+          const size = 20
+          nextPagePosts = await getPostsByZone(this.zoneId !== 0 ? this.zoneId : null, size,nextPage)
+        } else {
+          nextPagePosts = await getPosts(this.page, this.size )
+        }
+
+        if(nextPagePosts.length === 0) {
+          this.bottomLoading = false  // no more pages to load
+          return
+        }
+
+        this.posts.push(...nextPagePosts)
+        this.page++
+        
       } catch (error) {
         console.error('Failed to load more posts:', error)
       } finally {
         this.loadingPosts = false
-        this.bottomLoading = false
-        this.scrollLocked = false
       }
     },
-
     handleScroll() {
       const mainContent = this.$refs.mainContent
       const { scrollTop, scrollHeight, clientHeight } = mainContent
@@ -358,7 +391,6 @@ export default {
         if (this.debounceTimer) clearTimeout(this.debounceTimer)
 
         this.debounceTimer = setTimeout(() => {
-          this.page++
           this.loadMorePosts()
         }, 500)
       }
