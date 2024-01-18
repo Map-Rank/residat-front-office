@@ -149,16 +149,19 @@ const getPostsBySectors = async (sectorId) => {
     throw error
   }
 }
-const getPostsByZone = async (zoneId) => {
+const getPostsByZone = async (zoneId,size,page) => {
+
+  let defaultSize = 20
+  let defaultPage = 0
+
+  size = size || defaultSize
+  page = page || defaultPage
+
   try {
-    // let params = new URLSearchParams({
-    //   // size: size.toString(),
-    //   // page: page.toString(),
-    //   zoneId: JSON.stringify(zoneId)
-    // })
+   
     let params = new URLSearchParams({
-      // size: size.toString(),
-      // page: page.toString(),
+      size: size.toString(),
+      page: page.toString(),
       zone_id: JSON.stringify(zoneId)
     })
 
@@ -166,10 +169,7 @@ const getPostsByZone = async (zoneId) => {
       `${API_ENDPOINTS.getPosts}?${params.toString()}`,
       authToken
     )
-    // const response = await makeApiGetCall(
-    //   `${API_ENDPOINTS.getPosts}?zone_id=${zoneId.toString()}`,
-    //   authToken
-    // )
+
     console.log('got all post on this zone!!')
     return response.data.data
   } catch (error) {
@@ -190,7 +190,7 @@ const getUserPosts = async () => {
 
 const getUserProfile = async (id) => {
   try {
-    const endpoint = `/profile/detail/${id}`; // Générez l'URL avec l'id
+    const endpoint = `/profile/detail/${id}`; 
     const response = await makeApiGetCall(endpoint, authToken);
     return response.data.data;
   } catch (error) {

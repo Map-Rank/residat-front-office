@@ -28,10 +28,11 @@
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden sm:block md:hidden lg:block">
                 <zone-post-filter
-                :filterPostFunctionWithId="filterPostByZone"
-                :updateZoneName = "updateZoneName"
-                > </zone-post-filter>
-                
+                  :filterPostFunctionWithId="filterPostByZone"
+                  :updateZoneName="updateZoneName"
+                >
+                </zone-post-filter>
+
                 <div class="mt-3">
                   <sector-side
                     :sectorArray="this.sectors"
@@ -56,6 +57,22 @@
 
                 <div v-if="!topLoading" class="space-y-2">
                   <post-input v-if="!showPageRefresh"> </post-input>
+
+                  <div v-if="hasNewPosts" class="">
+                    <div class="my-10 flex flex-col justify-center items-center">
+                      <p class="text-center">Load new post.</p>
+
+                      <button
+                        @click="fetchPosts"
+                        class="border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal hover:text-white font-bold py-2 px-4 rounded-full mt-4"
+                      >
+                        Reload Posts
+                      </button>
+                    </div>
+                  </div>
+
+
+
                   <PostComponent
                     v-for="post in posts"
                     :key="post.id"
@@ -78,16 +95,21 @@
                   <LoadingIndicator />
                 </div>
                 <div v-if="filteringActive && !showPageRefresh">
+                  <div class="my-10 flex flex-col justify-center items-center">
+                    <hr class="border-t-2 w-full border-gray-400 mb-4" />
 
-                  <div  class="my-10 flex flex-col justify-center items-center">
-                    <hr class="border-t-2 w-full border-gray-400 mb-4"/> 
-                
-                    <p class="text-center">All posts have been loaded based on your filter. Please reload to get the latest posts.</p> 
-                
+                    <p class="text-center">
+                      All posts have been loaded based on your filter. Please reload to get the
+                      latest posts.
+                    </p>
+
                     <!-- Reload Button -->
-                    <button @click="reloadPosts" class="w-1/2 border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal  hover:text-white font-bold py-2 px-4 rounded-full mt-4">
+                    <button
+                      @click="reloadPosts"
+                      class="w-1/2 border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal hover:text-white font-bold py-2 px-4 rounded-full mt-4"
+                    >
                       Reload Posts
-                    </button> 
+                    </button>
                   </div>
                 </div>
               </main>
@@ -119,7 +141,11 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
-import { getPosts, getPostsBySectors,getPostsByZone } from '@/features/Post/services/postService.js'
+import {
+  getPosts,
+  getPostsBySectors,
+  getPostsByZone
+} from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
@@ -160,14 +186,15 @@ export default {
       zoneName: authStore.user.zone.name,
       postStore,
       modalStore,
-      filteringActive:false,
+      hasNewPosts: false,
+      filteringActive: false,
       authStore,
       scrollLocked: false,
       topLoading: false,
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
       sectorId: [],
-      zoneId:0,
+      zoneId: 0,
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
@@ -198,11 +225,22 @@ export default {
         ? [...this.sectorId, list.id]
         : this.sectorId.filter((id) => id !== list.id)
 
-        console.log(this.sectorId)
+      console.log(this.sectorId)
       this.filterPostBySectors()
     },
 
-    updateZoneName(zoneName){
+    async checkNewPosts() {
+      try {
+        const latestPosts = await getPosts(0, 10, this.authStore.user.token)
+        this.hasNewPosts = latestPosts.some(
+          (post) => !this.posts.find((existingPost) => existingPost.id === post.id)
+        )
+      } catch (error) {
+        console.error('Failed to check new posts:', error)
+      }
+    },
+
+    updateZoneName(zoneName) {
       this.zoneName = zoneName
       console.log(zoneName)
     },
@@ -216,7 +254,7 @@ export default {
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
-        this.filteringActive = true;
+        this.filteringActive = true
         if (this.posts.length == 0) {
           this.showPageRefresh = true
           this.errorMessage =
@@ -227,39 +265,39 @@ export default {
       }
     },
 
-
-    async filterPostByZone(id){
+    async filterPostByZone(id) {
       console.log(id)
 
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id !=0 ? id : null)
+        this.posts = await getPostsByZone(id != 0 ? id : null)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
-        this.filteringActive = true;  
+        this.filteringActive = true
         if (this.posts.length == 0) {
           this.showPageRefresh = true
-          this.errorMessage =
-            'No post found under this location , chose another location '
+          this.errorMessage = 'No post found under this location , chose another location '
         } else {
           this.showPageRefresh = false
         }
       }
     },
 
-
     async reloadPosts() {
-      this.topLoading = false;
-      this.filteringActive=false
+      this.topLoading = false
+      this.filteringActive = false
       this.showPageRefresh = false
       this.zoneName = this.authStore.user.zone.name
-      await this.fetchPosts();
+      await this.fetchPosts()
     },
 
     async fetchPosts() {
+
+      this.hasNewPosts = false
+
       try {
         this.topLoading = true
         this.posts = await getPosts(0, 10, this.authStore.user.token)
@@ -277,6 +315,8 @@ export default {
         }
       }
     },
+
+    
     async refreshPage() {
       this.topLoading = true
       this.showPageRefresh = false
@@ -285,7 +325,7 @@ export default {
     },
 
     async loadMorePosts() {
-      if (this.loadingPosts || this.showPageRefresh || this.filteringActive) return;
+      if (this.loadingPosts || this.showPageRefresh || this.filteringActive) return
 
       this.loadingPosts = true
       this.bottomLoading = true
@@ -309,6 +349,7 @@ export default {
 
       if (scrollTop === 0) {
         // Top of page
+        this.checkNewPosts()
       }
 
       if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loadingPosts) {
