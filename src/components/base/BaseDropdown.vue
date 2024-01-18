@@ -24,18 +24,21 @@ export default {
   data() {
     return {
       selectedOption: this.options.length > 0 ? this.options[0] : null,
-      selectedOptionId: this.options.length > 0 ? this.options[0].id : null
+      selectedOptionId: this.options.length > 0 ? this.options[0].id : null,
+      selectedOptionName: this.options.length > 0 ? this.options[0].name : null
     }
   },
   methods: {
     updateSelectedOption() {
       this.selectedOptionId = this.selectedOption.id
+      this.selectedOptionName = this.selectedOption.name
       // this.emitSelectedOptionId()
 
       if (this.selectedOption) {
         this.$emit('input', this.selectedOption)
         this.$emit('functionIdParams', this.selectedOption.id)
         this.$emit('selectedOptionId', this.selectedOption.id)
+        this.$emit('selectedOptionName', this.selectedOptionName)
       } else {
         console.error('No option is selected')
       }

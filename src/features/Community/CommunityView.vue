@@ -29,6 +29,7 @@
               <aside class="col-span-2 hidden sm:block md:hidden lg:block">
                 <zone-post-filter
                 :filterPostFunctionWithId="filterPostByZone"
+                :updateZoneName = "updateZoneName"
                 > </zone-post-filter>
                 
                 <div class="mt-3">
@@ -202,6 +203,11 @@ export default {
       this.filterPostBySectors()
     },
 
+    updateZoneName(zoneName){
+      this.zoneName = zoneName
+      console.log(zoneName)
+    },
+
     async filterPostBySectors() {
       try {
         this.topLoading = true
@@ -250,6 +256,7 @@ export default {
       this.topLoading = false;
       this.filteringActive=false
       this.showPageRefresh = false
+      this.zoneName = this.authStore.user.zone.name
       await this.fetchPosts();
     },
 

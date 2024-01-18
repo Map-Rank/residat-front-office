@@ -13,28 +13,32 @@
           :options="regions"
           @selectedOptionId="returnZoneId"
           @functionIdParams="getDivisions"
-        />
-      </div>
-      <div class="w-full">
-        <label class="label inline-block mb-2">Choose Your Division</label>
-        <div v-if="isDivisionLoading" class="flex h-full justify-center">
-          <LoadingIndicator />
+          @selectedOptionName="returnZoneName"
+          
+          />
         </div>
-        <BaseDropdown
+        <div class="w-full">
+          <label class="label inline-block mb-2">Choose Your Division</label>
+          <div v-if="isDivisionLoading" class="flex h-full justify-center">
+            <LoadingIndicator />
+          </div>
+          <BaseDropdown
           v-if="!isLoading && !isDivisionLoading"
           @selectedOptionId="returnZoneId"
           :options="divisions"
+          @selectedOptionName="returnZoneName"
           @functionIdParams="getSub_divisions"
-        />
-      </div>
-      <div class="w-full">
-        <label class="label inline-block mb-2">Choose Your Sub-division</label>
-        <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
-          <LoadingIndicator />
+          />
         </div>
-        <BaseDropdown
+        <div class="w-full">
+          <label class="label inline-block mb-2">Choose Your Sub-division</label>
+          <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
+            <LoadingIndicator />
+          </div>
+          <BaseDropdown
           v-if="!isLoading && !isSubdivisionLoading"
           @selectedOptionId="returnZoneId"
+          @selectedOptionName="returnZoneName"
           :options="sub_divisions"
         />
       </div>
@@ -107,6 +111,11 @@ export default {
       this.filterPostFunctionWithId(id)
     },
 
+
+    returnZoneName(name){
+this.updateZoneName(name)
+    },
+
     async getRegions() {
       try {
         this.regions = this.regions.concat(await getZones(2, null))
@@ -141,7 +150,8 @@ export default {
     }
   },
   props: {
-    filterPostFunctionWithId: {}
+    filterPostFunctionWithId: {},
+    updateZoneName:{}
   },
   components: {
     BaseDropdown,
