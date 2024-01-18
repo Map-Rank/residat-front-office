@@ -268,9 +268,11 @@ export default {
     async filterPostByZone(id) {
       console.log(id)
 
+      this.zoneId = id
+
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id != 0 ? id : null)
+        this.posts = await getPostsByZone(id != 0 ? id : null,30)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -316,7 +318,7 @@ export default {
       }
     },
 
-    
+
     async refreshPage() {
       this.topLoading = true
       this.showPageRefresh = false
