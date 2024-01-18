@@ -198,7 +198,6 @@ export default {
         ? [...this.sectorId, list.id]
         : this.sectorId.filter((id) => id !== list.id)
 
-        // this.filteringActive = true; 
         console.log(this.sectorId)
       this.filterPostBySectors()
     },

@@ -156,11 +156,20 @@ const getPostsByZone = async (zoneId) => {
     //   // page: page.toString(),
     //   zoneId: JSON.stringify(zoneId)
     // })
+    let params = new URLSearchParams({
+      // size: size.toString(),
+      // page: page.toString(),
+      zone_id: JSON.stringify(zoneId)
+    })
 
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?zone_id=${zoneId.toString()}`,
+      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
       authToken
     )
+    // const response = await makeApiGetCall(
+    //   `${API_ENDPOINTS.getPosts}?zone_id=${zoneId.toString()}`,
+    //   authToken
+    // )
     console.log('got all post on this zone!!')
     return response.data.data
   } catch (error) {
