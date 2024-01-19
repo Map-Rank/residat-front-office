@@ -28,9 +28,11 @@
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden sm:block md:hidden lg:block">
                 <zone-post-filter
-                :filterPostFunctionWithId="filterPostByZone"
-                > </zone-post-filter>
-                
+                  :filterPostFunctionWithId="filterPostByZone"
+                  :updateZoneName="updateZoneName"
+                >
+                </zone-post-filter>
+
                 <div class="mt-3">
                   <sector-side
                     :sectorArray="this.sectors"
@@ -45,7 +47,7 @@
                   <LoadingIndicator />
                 </div>
 
-                <div v-if="showPageRefresh">
+                <div v-if="showPageRefresh && !filteringActive">
                   <RefreshError
                     :imageUrl="'assets\\images\\Community\\loading.svg'"
                     :errorMessage="errorMessage"
@@ -55,6 +57,20 @@
 
                 <div v-if="!topLoading" class="space-y-2">
                   <post-input v-if="!showPageRefresh"> </post-input>
+
+                  <div v-if="hasNewPosts" class="">
+                    <div class="my-10 flex flex-col justify-center items-center">
+                      <p class="text-center">Load new post.</p>
+
+                      <button
+                        @click="fetchPosts"
+                        class="border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal hover:text-white font-bold py-2 px-4 rounded-full mt-4"
+                      >
+                        Reload Posts
+                      </button>
+                    </div>
+                  </div>
+
                   <PostComponent
                     v-for="post in posts"
                     :key="post.id"
@@ -76,17 +92,22 @@
                 <div v-if="bottomLoading" class="flex my-7 h-full justify-center ite">
                   <LoadingIndicator />
                 </div>
-                <div v-if="filteringActive && !showPageRefresh">
+                <div v-if="filteringActive && !showPageRefresh && hasFetchAllPost">
+                  <div class="my-10 flex flex-col justify-center items-center">
+                    <hr class="border-t-2 w-full border-gray-400 mb-4" />
 
-                  <div  class="my-10 flex flex-col justify-center items-center">
-                    <hr class="border-t-2 w-full border-gray-400 mb-4"/> 
-                
-                    <p class="text-center">All posts have been loaded based on your filter. Please reload to get the latest posts.</p> 
-                
+                    <p class="text-center">
+                      All posts have been loaded based on your filter. Please reload to get the
+                      latest posts.
+                    </p>
+
                     <!-- Reload Button -->
-                    <button @click="reloadPosts" class="w-1/2 border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal  hover:text-white font-bold py-2 px-4 rounded-full mt-4">
+                    <button
+                      @click="reloadPosts"
+                      class="w-1/2 border-2 border-secondary-normal hover:bg-secondary-normal text-secondary-normal hover:text-white font-bold py-2 px-4 rounded-full mt-4"
+                    >
                       Reload Posts
-                    </button> 
+                    </button>
                   </div>
                 </div>
               </main>
@@ -118,7 +139,11 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
-import { getPosts, getPostsBySectors,getPostsByZone } from '@/features/Post/services/postService.js'
+import {
+  getPosts,
+  getPostsBySectors,
+  getPostsByZone
+} from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
@@ -159,14 +184,17 @@ export default {
       zoneName: authStore.user.zone.name,
       postStore,
       modalStore,
-      filteringActive:false,
+      hasNewPosts: false,
+      hasFetchAllPost:false,
+      filteringActive: false,
       authStore,
       scrollLocked: false,
+      postScrollLocked: false,
       topLoading: false,
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
       sectorId: [],
-      zoneId:0,
+      zoneId: 0,
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
@@ -197,9 +225,27 @@ export default {
         ? [...this.sectorId, list.id]
         : this.sectorId.filter((id) => id !== list.id)
 
-        // this.filteringActive = true; 
-        console.log(this.sectorId)
+      console.log(this.sectorId)
       this.filterPostBySectors()
+    },
+
+    async checkNewPosts() {
+      if(this.filteringActive){
+        return
+      }
+      try {
+        const latestPosts = await getPosts(0, 10, this.authStore.user.token)
+        this.hasNewPosts = latestPosts.some(
+          (post) => !this.posts.find((existingPost) => existingPost.id === post.id)
+        )
+      } catch (error) {
+        console.error('Failed to check new posts:', error)
+      }
+    },
+
+    updateZoneName(zoneName) {
+      this.page=0
+      this.zoneName = zoneName
     },
 
     async filterPostBySectors() {
@@ -211,7 +257,7 @@ export default {
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
-        this.filteringActive = true;
+        this.filteringActive = true
         if (this.posts.length == 0) {
           this.showPageRefresh = true
           this.errorMessage =
@@ -222,38 +268,45 @@ export default {
       }
     },
 
-
-    async filterPostByZone(id){
+    async filterPostByZone(id) {
       console.log(id)
+
+      this.zoneId = id
+      this.filteringActive = true
+      this.hasFetchAllPost = false
+
 
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id !=0 ? id : null)
+        this.posts = await getPostsByZone(id != 0 ? id : null, 30)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
-        this.filteringActive = true;  
+        this.filteringActive = true
         if (this.posts.length == 0) {
           this.showPageRefresh = true
-          this.errorMessage =
-            'No post found under this location , chose another location '
+          this.errorMessage = 'No post found under this location , chose another location '
         } else {
           this.showPageRefresh = false
         }
       }
     },
 
-
     async reloadPosts() {
-      this.topLoading = false;
-      this.filteringActive=false
+      this.page = 0
+      this.topLoading = false
+      this.filteringActive = false
       this.showPageRefresh = false
-      await this.fetchPosts();
+      this.hasFetchAllPost = false
+      this.zoneName = this.authStore.user.zone.name
+      await this.fetchPosts()
     },
 
     async fetchPosts() {
+      this.hasNewPosts = false
+
       try {
         this.topLoading = true
         this.posts = await getPosts(0, 10, this.authStore.user.token)
@@ -271,47 +324,81 @@ export default {
         }
       }
     },
-    async refreshPage() {
-      this.topLoading = true
-      this.showPageRefresh = false
-      await this.fetchPosts()
-      window.location.reload()
-    },
+
+
 
     async loadMorePosts() {
-      if (this.loadingPosts || this.showPageRefresh || this.filteringActive) return;
+      if (this.loadingPosts || this.showPageRefresh) return
+      let nextPagePosts = []
 
       this.loadingPosts = true
       this.bottomLoading = true
-      this.scrollLocked = true
-
+      this.postScrollLocked = true
       try {
-        let nextPosts = await getPosts(this.page, this.size)
-        this.posts.push(...nextPosts)
+        if (this.filteringActive) {
+          const nextPage = this.page + 1
+          const size = 20
+          nextPagePosts = await getPostsByZone(
+            this.zoneId !== 0 ? this.zoneId : null,
+            size,
+            nextPage
+          )
+        } else {
+          const nextPage = this.page + 1
+          nextPagePosts = await getPosts(nextPage, this.size)
+        }
+
+        if (nextPagePosts.length === 0) {
+          this.bottomLoading = false // no more pages to load
+          this.hasFetchAllPost = true 
+          return
+        }
+
+        this.posts.push(...nextPagePosts)
+        this.page++
       } catch (error) {
         console.error('Failed to load more posts:', error)
       } finally {
+        this.postScrollLocked = false
         this.loadingPosts = false
         this.bottomLoading = false
-        this.scrollLocked = false
       }
     },
+    // handleScroll() {
+    //   const mainContent = this.$refs.mainContent
+    //   const { scrollTop, scrollHeight, clientHeight } = mainContent
+
+    //   if (scrollTop === 0) {
+    //     // Top of page
+    //     this.checkNewPosts()
+    //   }
+
+    //   if (scrollTop + clientHeight >= scrollHeight - 10 && !this.loadingPosts) {
+    //     if (this.debounceTimer) clearTimeout(this.debounceTimer)
+
+    //     this.loadMorePosts()
+    //     // this.debounceTimer = setTimeout(() => {
+    //     // }, 500)
+    //   }
+    // }
 
     handleScroll() {
       const mainContent = this.$refs.mainContent
       const { scrollTop, scrollHeight, clientHeight } = mainContent
 
-      if (scrollTop === 0) {
-        // Top of page
+      if(this.hasFetchAllPost){
+        return
       }
 
-      if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loadingPosts) {
-        if (this.debounceTimer) clearTimeout(this.debounceTimer)
+      // Check for new posts when scrolled to the top.
+      if (scrollTop === 0) {
+        this.checkNewPosts()
+      }
 
-        this.debounceTimer = setTimeout(() => {
-          this.page++
-          this.loadMorePosts()
-        }, 500)
+      // When close to the bottom, attempt to load more posts.
+      const nearBottom = scrollHeight - scrollTop <= clientHeight + 50 // Adjust threshold as necessary.
+      if (nearBottom && !this.loadingPosts) {
+        this.loadMorePosts()
       }
     }
   },
@@ -343,7 +430,7 @@ export default {
 }
 
 main {
-  height: calc(100vh);
+  height: calc(1000px);
   overflow-y: auto;
 }
 

@@ -206,7 +206,7 @@ export default {
     },
 
     openShareModal() {
-      this.modalStore.openModal(`http://localhost:5174/show-post/${this.post.id}`)
+      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
     },
 
     editPost() {

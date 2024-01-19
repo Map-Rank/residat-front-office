@@ -14,9 +14,9 @@
         {{ category }}
       </button>
     </div> -->
-
+    
     <div
-      :class="{ 'scroll-lock': scrollLocked }"
+    :class="{ 'scroll-lock': scrollLocked }"
       class="container mx-auto pt-3 grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
     >
       <!-- Main Content Area: Posts -->
@@ -24,11 +24,15 @@
         <div v-if="topLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
-
+        
         <div v-if="showPageRefresh  ">
-       
+          
           <NoSearchResult></NoSearchResult>
         </div>
+        <section-title
+        title="Your Search Result"
+        css="flex justify-center item-center"
+        ></section-title>
 
         <div v-if="!topLoading" class="space-y-5">
           <PostComponent
@@ -64,6 +68,7 @@ import PostComponent from '../Post/index.vue'
 import { URL_LINK } from '@/constants'
 import { getPostsByZone } from '../Post/services/postService'
 import NoSearchResult from '@/components/common/Pages/NoSearchResult.vue'
+import SectionTitle from '../../components/base/SectionTitle.vue'
 
 export default {
   name: 'SearchResult',
@@ -91,7 +96,8 @@ export default {
   components: {
     LoadingIndicator,
     PostComponent,
-    NoSearchResult
+    NoSearchResult,
+    SectionTitle
   },
   data() {
     return {
