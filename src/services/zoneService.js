@@ -31,6 +31,7 @@ import {  API_ENDPOINTS } from '@/constants/index.js'
         `${API_ENDPOINTS.zone}?${params.toString()}`
       )
   
+      console.log(response)
       return response.data.data;
     } catch (error) {
       console.error('Error fetching zones:', error);
