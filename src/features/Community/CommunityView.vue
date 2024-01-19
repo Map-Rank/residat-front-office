@@ -47,7 +47,7 @@
                   <LoadingIndicator />
                 </div>
 
-                <div v-if="showPageRefresh">
+                <div v-if="showPageRefresh && !filteringActive">
                   <RefreshError
                     :imageUrl="'assets\\images\\Community\\loading.svg'"
                     :errorMessage="errorMessage"
@@ -71,8 +71,6 @@
                     </div>
                   </div>
 
-
-
                   <PostComponent
                     v-for="post in posts"
                     :key="post.id"
@@ -94,7 +92,7 @@
                 <div v-if="bottomLoading" class="flex my-7 h-full justify-center ite">
                   <LoadingIndicator />
                 </div>
-                <div v-if="filteringActive && !showPageRefresh">
+                <div v-if="filteringActive && !showPageRefresh && hasFetchAllPost">
                   <div class="my-10 flex flex-col justify-center items-center">
                     <hr class="border-t-2 w-full border-gray-400 mb-4" />
 
@@ -187,9 +185,11 @@ export default {
       postStore,
       modalStore,
       hasNewPosts: false,
+      hasFetchAllPost:false,
       filteringActive: false,
       authStore,
       scrollLocked: false,
+      postScrollLocked: false,
       topLoading: false,
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
@@ -230,6 +230,9 @@ export default {
     },
 
     async checkNewPosts() {
+      if(this.filteringActive){
+        return
+      }
       try {
         const latestPosts = await getPosts(0, 10, this.authStore.user.token)
         this.hasNewPosts = latestPosts.some(
@@ -241,8 +244,8 @@ export default {
     },
 
     updateZoneName(zoneName) {
+      this.page=0
       this.zoneName = zoneName
-      console.log(zoneName)
     },
 
     async filterPostBySectors() {
@@ -270,10 +273,12 @@ export default {
 
       this.zoneId = id
       this.filteringActive = true
+      this.hasFetchAllPost = false
+
 
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id != 0 ? id : null,30)
+        this.posts = await getPostsByZone(id != 0 ? id : null, 30)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -290,15 +295,16 @@ export default {
     },
 
     async reloadPosts() {
+      this.page = 0
       this.topLoading = false
       this.filteringActive = false
       this.showPageRefresh = false
+      this.hasFetchAllPost = false
       this.zoneName = this.authStore.user.zone.name
       await this.fetchPosts()
     },
 
     async fetchPosts() {
-
       this.hasNewPosts = false
 
       try {
@@ -320,79 +326,79 @@ export default {
     },
 
 
-    async refreshPage() {
-      this.topLoading = true
-      this.showPageRefresh = false
-      await this.fetchPosts()
-      window.location.reload()
-    },
-
-    // async loadMorePosts() {
-    //   if (this.loadingPosts || this.showPageRefresh || this.filteringActive) return
-
-    //   this.loadingPosts = true
-    //   this.bottomLoading = true
-    //   this.scrollLocked = true
-
-    //   try {
-    //     let nextPosts = await getPosts(this.page, this.size)
-    //     this.posts.push(...nextPosts)
-    //   } catch (error) {
-    //     console.error('Failed to load more posts:', error)
-    //   } finally {
-    //     this.loadingPosts = false
-    //     this.bottomLoading = false
-    //     this.scrollLocked = false
-    //   }
-    // },
-
 
     async loadMorePosts() {
       if (this.loadingPosts || this.showPageRefresh) return
       let nextPagePosts = []
 
-
-            this.loadingPosts = true
+      this.loadingPosts = true
       this.bottomLoading = true
-      this.scrollLocked = true
+      this.postScrollLocked = true
       try {
-        if(this.filteringActive) {
+        if (this.filteringActive) {
           const nextPage = this.page + 1
           const size = 20
-          nextPagePosts = await getPostsByZone(this.zoneId !== 0 ? this.zoneId : null, size,nextPage)
+          nextPagePosts = await getPostsByZone(
+            this.zoneId !== 0 ? this.zoneId : null,
+            size,
+            nextPage
+          )
         } else {
-          nextPagePosts = await getPosts(this.page, this.size )
+          const nextPage = this.page + 1
+          nextPagePosts = await getPosts(nextPage, this.size)
         }
 
-        if(nextPagePosts.length === 0) {
-          this.bottomLoading = false  // no more pages to load
+        if (nextPagePosts.length === 0) {
+          this.bottomLoading = false // no more pages to load
+          this.hasFetchAllPost = true 
           return
         }
 
         this.posts.push(...nextPagePosts)
         this.page++
-        
       } catch (error) {
         console.error('Failed to load more posts:', error)
       } finally {
+        this.postScrollLocked = false
         this.loadingPosts = false
+        this.bottomLoading = false
       }
     },
+    // handleScroll() {
+    //   const mainContent = this.$refs.mainContent
+    //   const { scrollTop, scrollHeight, clientHeight } = mainContent
+
+    //   if (scrollTop === 0) {
+    //     // Top of page
+    //     this.checkNewPosts()
+    //   }
+
+    //   if (scrollTop + clientHeight >= scrollHeight - 10 && !this.loadingPosts) {
+    //     if (this.debounceTimer) clearTimeout(this.debounceTimer)
+
+    //     this.loadMorePosts()
+    //     // this.debounceTimer = setTimeout(() => {
+    //     // }, 500)
+    //   }
+    // }
+
     handleScroll() {
       const mainContent = this.$refs.mainContent
       const { scrollTop, scrollHeight, clientHeight } = mainContent
 
+      if(this.hasFetchAllPost){
+        return
+      }
+
+      // Check for new posts when scrolled to the top.
       if (scrollTop === 0) {
-        // Top of page
         this.checkNewPosts()
       }
 
-      if (scrollTop + clientHeight >= scrollHeight - 50 && !this.loadingPosts) {
-        if (this.debounceTimer) clearTimeout(this.debounceTimer)
-
-        this.debounceTimer = setTimeout(() => {
-          this.loadMorePosts()
-        }, 500)
+      // When close to the bottom, attempt to load more posts.
+      const nearBottom = scrollHeight - scrollTop <= clientHeight + 50 // Adjust threshold as necessary.
+      if (nearBottom && !this.loadingPosts) {
+        this.loadMorePosts()
       }
     }
   },
@@ -424,7 +430,7 @@ export default {
 }
 
 main {
-  height: calc(100vh);
+  height: calc(1000px);
   overflow-y: auto;
 }
 

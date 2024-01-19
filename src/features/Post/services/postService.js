@@ -170,7 +170,6 @@ const getPostsByZone = async (zoneId,size,page) => {
       authToken
     )
 
-    console.log('got all post on this zone!!')
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
