@@ -58,7 +58,7 @@
       class=" hidden sm:hidden md:flex w-full justify-between   "
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 " />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 "  />
 
       <!-- Search bar -->
       <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center w-full">

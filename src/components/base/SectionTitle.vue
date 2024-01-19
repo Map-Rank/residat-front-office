@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-secondary-normal px-5 py-3 mb-4 rounded-lg">
+  <div class="bg-secondary-normal px-5 py-3 mb-4 rounded-lg" :class="css">
 
     <h2 class="title ">{{title}}</h2>
   </div>
@@ -9,7 +9,8 @@
 export default {
   name: 'SectionTitle',
   props:{
-    title:String
+    title:String,
+    css:String
   },
 }
 </script>
