@@ -1,13 +1,20 @@
   <template>
-    <div class="user-profile flex items-center space-x-2">
-      <!-- <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" /> -->
-      <avatar-placeholder
-      :username="username"
-      :size="20"
-    />
+    <div class="flex justify-between w-full">
+
+      <div class="user-profile flex items-center space-x-2">
+        <!-- <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" /> -->
+        <avatar-placeholder
+        :username="username"
+        :size="20"
+      />
+        <div>
+            <h5 class="font-bold cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
+          <span class="caption-c1">{{ postDate }}</span>
+        </div>
+      </div>
+
       <div>
-          <h5 class="font-bold cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
-        <span class="caption-c1">{{ postDate }}</span>
+        <span class="p-1 px-2 rounded-full bg-primary-normal text-white items-center" > {{ zoneName }}</span>
       </div>
     </div>
   </template>
@@ -22,6 +29,10 @@
       postDate: {},
       userProfileImage: {},
       username: {},
+      zoneName:{
+        type:String,
+        default:'Zone Name'
+      },
       id:{},
     },
     methods: {
