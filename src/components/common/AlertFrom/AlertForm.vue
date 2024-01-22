@@ -15,7 +15,8 @@ import useAlertStore from '@/stores/alertStore'
 import { AlertStates } from './AlertState';
 
 export default {
-  setup() {
+  name:"AlertForm",
+  data() {
     const store = useAlertStore();
     return { store };
   },

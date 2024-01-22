@@ -15,7 +15,6 @@ describe('SearchBar', () => {
   })
 
   it('correctly filters zones based on searchQuery', async () => {
-    // Set up the zones data in the component
     wrapper.vm.zones = [
       {
         id: 1,
@@ -37,10 +36,8 @@ describe('SearchBar', () => {
       }
     ]
 
-    // Set the searchQuery to trigger filtering
-    wrapper.vm.searchQuery = 'Zone' // Update the searchQuery as needed
+    wrapper.vm.searchQuery = 'Zone'
 
-    // Wait for the component to update
     await wrapper.vm.$nextTick()
 
     // Assert the filteredZones
