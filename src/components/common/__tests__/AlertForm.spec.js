@@ -1,47 +1,50 @@
-import { it, expect, describe } from 'vitest';
-import AlertForm from '../../../components/common/AlertFrom/AlertForm.vue'
-import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach } from 'vitest'
+// import useAlertStore from '@/stores/alertStore'
+import { AlertStates } from '../AlertFrom/AlertState'
+import { mount } from '@vue/test-utils'
+import Alert from '@/components/common/AlertFrom/AlertForm.vue'
 
-// Mocking the store
-const mockStore = {
-  show: true,
-  message: 'Sample Message',
-  variant: 'info',
-};
+vi.mock('@/stores/alertStore', () => {
+  return {
+    default: vi.fn(() => ({
+      state: vi.ref({
+        show: false,
+        message: '',
+        variant: AlertStates.INFO,
+      }),
+    })),
+  };
+});
 
-describe('AlertForm', () => {
-  it('renders the component with the provided message and variant', async () => {
-    // Create a wrapper for the component with mocked store
-    const wrapper = mount(AlertForm, {
+describe('Alert', () => {
+  let wrapper;
+  let mockStore;
+
+  beforeEach(() => {
+    const useAlertStore = vi.importMock('@/stores/alertStore').default;
+
+    mockStore = useAlertStore();
+
+    wrapper = mount(Alert, {
       global: {
-        provide: {
-          useAlertStore: () => mockStore,
+        mocks: {
+          $store: mockStore,
         },
       },
     });
-
-    // Find the alert element and assert its text content and class
-    const alertElement = wrapper.find('.text-white');
-
-    expect(alertElement.exists()).toBeTruthy();
-    expect(alertElement.text()).toBe('Sample Message');
-    expect(alertElement.classes()).toContain('bg-blue-500'); // Adjust the class based on the variant
   });
 
-  it('renders the component with the default variant when no variant is provided', async () => {
-    // Create a wrapper for the component with mocked store and without specifying a variant prop
-    const wrapper = mount(AlertForm, {
-      global: {
-        provide: {
-          useAlertStore: () => mockStore,
-        },
-      },
-    });
-
-    // Find the alert element and assert its class with the default variant
-    const alertElement = wrapper.find('.text-white');
-
-    expect(alertElement.exists()).toBeTruthy();
-    expect(alertElement.classes()).toContain('bg-gray-500'); // Adjust this based on your default variant
+  it('does not render when store.show is false', () => {
+    expect(wrapper.find('.alert').exists()).toBe(false);
   });
+
+  it('renders when store.show is true', async () => {
+    mockStore.state.show = true;
+    mockStore.state.message = 'Test Message';
+    await wrapper.vm.$nextTick(); // Wait for Vue to update the DOM
+    expect(wrapper.find('.alert').exists()).toBe(true);
+    expect(wrapper.text()).toContain('Test Message');
+  });
+
+
 });
