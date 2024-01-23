@@ -1,49 +1,48 @@
-import { it, expect, describe } from 'vitest';
-import { mount } from '@vue/test-utils';
-import BaseImagePicker from '@/components/base/BaseImagePicker.vue';
+import { describe, it, expect, beforeEach } from 'vitest'
+import { mount } from '@vue/test-utils'
+import BaseImagePicker from '@/components/base/BaseImagePicker.vue'
 
 describe('BaseImagePicker', () => {
-  it('receives props correctly', () => {
-    const accept = 'image/png';
-    const iconImg = 'path/to/icon.png';
-    const type = 'file';
-    const label = 'Upload Image';
+  let wrapper
 
-    const wrapper = mount(BaseImagePicker, {
+  beforeEach(() => {
+    wrapper = mount(BaseImagePicker, {
       props: {
-        accept,
-        iconImg,
-        type,
-        label,
-      },
-    });
+        label: 'Upload Image',
+        iconImg: 'path/to/icon.png',
+        type: 'file'
+      }
+    })
+  })
 
-    expect(wrapper.props('accept')).toBe(accept);
-    expect(wrapper.props('iconImg')).toBe(iconImg);
-    expect(wrapper.props('type')).toBe(type);
-    expect(wrapper.props('label')).toBe(label);
-  });
+  it('renders correctly with props', () => {
+    expect(wrapper.text()).toContain('Upload Image')
 
-  it('emits handleFileChange event on file selection', async () => {
-    const type = 'file'; // Set the type prop value
+    // Assert that the image src is correctly bound
+    const img = wrapper.find('img')
+    expect(img.exists()).toBeTruthy()
+    expect(img.attributes('src')).toBe('path/to/icon.png')
+  })
 
-    const wrapper = mount(BaseImagePicker, {
-      props: {
-        type, // Pass the type prop to the component
-      },
-    });
+  it('accepts only image files by default', () => {
+    const input = wrapper.find('input[type="file"]')
+    expect(input.attributes('accept')).toBe('image/*')
+  })
 
-    const fileInput = wrapper.find('input[type="file"]');
+  it('emits handleFileChange with the selected files when changed', async () => {
+    // Create a mock file list
+    const files = [new File([], 'test.jpg')]
+    const input = wrapper.find('input[type="file"]')
 
-    const file = new File(['test'], 'test.png', { type: 'image/png' });
-    const fileInputEvent = { target: { files: [file] } };
+    Object.defineProperty(input.element, 'files', {
+      value: files,
+      writable: true
+    })
 
-    await fileInput.trigger('change', fileInputEvent);
+    await input.trigger('change')
 
-    // Wait for Vue to update the component
-    await wrapper.vm.$nextTick();
-
-    expect(wrapper.emitted('handleFileChange')).toBeTruthy();
-    expect(wrapper.emitted('handleFileChange')[0]).toEqual([fileInputEvent.target.files]);
-  });
-});
+    const emittedEvents = wrapper.emitted('handleFileChange')
+    expect(emittedEvents).toBeTruthy()
+    expect(emittedEvents[0]).toEqual([files])
+  })
+})
