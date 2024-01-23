@@ -9,17 +9,25 @@
       />
         <div>
             <h5 class="font-bold cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
-          <span class="caption-c1">{{ postDate }}</span>
+            <div class="flex items-center ">
+
+              <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}  
+                </h5>
+              <img src="/assets/icons/location.svg" class="h-6" alt="" srcset="">
+              <span class="caption-c1">{{ postDate }}</span>
+            </div>
+          
         </div>
       </div>
 
-      <div>
-        <span class="p-1 px-2 rounded-full bg-primary-normal text-white items-center" > {{ zoneName }}</span>
-      </div>
+      <!-- <div>
+        <span :style="{ backgroundColor: getColor(zoneName) }" class="p-1 px-2 rounded-full text-white items-center">{{ zoneName }}</span>      </div> -->
     </div>
   </template>
   <script>
   import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
+  import randomColor from 'randomcolor';
+
   export default {
     name: 'UserPostInfo',
     components:{
@@ -39,10 +47,22 @@
       viewProfileUser() {
         this.$router.push({ name: 'view-profile-user', params: { id: this.id } })
       },
+      getColor(zoneName) {
+      // Generate a random color based on the zoneName
+      const seed = zoneName.toLowerCase().replace(/\s/g, ''); // Convert the zoneName to lowercase and remove whitespace
+      return randomColor({ seed });
+    },
+
+
     }
   }
   </script>
   <style scoped>
+
+  .zoneName{
+    font-size: 13px;
+    color: gray;
+  }
 
   @media only screen and (max-width: 480px) {
 

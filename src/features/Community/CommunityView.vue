@@ -83,7 +83,7 @@
                     :like_count="post.like_count"
                     :comment_count="post.comment_count"
                     :postImages="post.images"
-                    :zone-name="'Yaounde'"
+                    :zone-name="post.zone.name"
                     :post="post"
                   />
                 </div>
