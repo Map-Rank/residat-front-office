@@ -3,9 +3,7 @@
     <!-- Fixed image in the background -->
     <div
       class="fixed hidden md:block top-0 left-0 w-full h-[50%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
-      style="
-        background-image: url('https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0');
-      "
+      :style="computedBannerImage"
     >
       <h2 class="text-white absolute bottom-0 left-2 md:left-100 md:bottom-5 uppercase">
         WELCOME TO {{ zoneName }}
@@ -85,6 +83,7 @@
                     :like_count="post.like_count"
                     :comment_count="post.comment_count"
                     :postImages="post.images"
+                    :zone-name="post.zone.name"
                     :post="post"
                   />
                 </div>
@@ -184,6 +183,7 @@ export default {
       zoneName: authStore.user.zone.name,
       postStore,
       modalStore,
+      bannerUrlImage:'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
       hasNewPosts: false,
       hasFetchAllPost:false,
       filteringActive: false,
@@ -210,6 +210,14 @@ export default {
       recentPosts: []
     }
   },
+  computed: {
+  computedBannerImage() {
+    return {
+      'background-image': `url('${this.bannerUrlImage}')`
+    };
+  }
+}
+,
 
   methods: {
     updateSectorChecked({ list, checked }) {

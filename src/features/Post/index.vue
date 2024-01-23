@@ -6,6 +6,7 @@
         :post-date="postDate"
         :user-profile-image="userProfileImage"
         :username="username"
+        :zoneName="zoneName"
         :id="id"
       />
       <div v-if="showMenu" class="menu relative">
@@ -323,6 +324,7 @@ export default {
     postId: Number,
     liked: Boolean,
     id: String,
+    zoneName:String,
     showMenu: {
       type: Boolean,
       default: false
