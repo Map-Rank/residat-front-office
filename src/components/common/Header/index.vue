@@ -2,7 +2,7 @@
   <header class="py-4 md:px-100 bg-white ">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
-      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
 
       <div class="flex-grow items-center">
         <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />

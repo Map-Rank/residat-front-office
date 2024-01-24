@@ -1,6 +1,6 @@
 <!-- eslint-disable no-useless-escape -->
 <template>
-  <div class="  py-4 px-2  bg-primary-normal ">
+  <div class="  py-4 px-2  bg-white ">
       <!-- Navigation Links -->
       <nav class="flex  md:flex-row items-center space-x-10 justify-between">
         <icon-with-label
@@ -33,13 +33,6 @@ export default {
       iconSize: 'w-7 h-7',
       navItems: [
         {
-          svgContent: '\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-          labelText: 'Dashboard',
-          isActive: false,
-          routerName: 'dashbaord'
-        },
-        {
           svgContent: '\\assets\\icons\\community-outline.svg',
           svgContentHover: '\\assets\\icons\\community-fill.svg',
           labelText: 'Community',
@@ -48,12 +41,26 @@ export default {
           routerName: 'community'
         },
         {
+          svgContent: '\\assets\\icons\\dashboard-outline.svg',
+          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+          labelText: 'Dashboard',
+          isActive: false,
+          routerName: 'dashbaord'
+        },
+        {
           svgContent: '\\assets\\icons\\add-circle-outline.svg',
           svgContentHover: '\\assets\\icons\\add-circle-outline.svg',
           labelText: 'Make Post',
           isActive: false,
         //   bottom: true,
           routerName: 'create-post'
+        },
+        {
+          svgContent: '\\assets\\icons\\event-outline.svg',
+          svgContentHover: '\\assets\\icons\\event-fill.svg',
+          labelText: 'Event',
+          isActive: false,
+          routerName: 'event'
         },
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
