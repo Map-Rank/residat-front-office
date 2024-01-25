@@ -9,7 +9,7 @@
         <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
           <p class="truncate">{{ postLink }}</p>
           <button
-            class="bg-secondary-normal hover:bg-secondary-hover text-white px-2 py-1 rounded "
+            class="copy-link-button bg-secondary-normal hover:bg-secondary-hover text-white px-2 py-1 rounded "
             @click="copyToClipboard"
           >
             Copy Link
@@ -36,7 +36,7 @@
           <!-- Add more social media icons here -->
         </div>
   
-        <button class="mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700" @click="closeModal">
+        <button class=" close-modal-button mt-4 px-4 py-2 bg-red-500 text-white rounded hover:bg-red-700" @click="closeModal">
           Close
         </button>
       </div>
