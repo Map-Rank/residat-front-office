@@ -25,15 +25,6 @@
         @clickButton="navigateCreatePost"
         >
       </ButtonUi>
-      <!-- <ButtonUi
-      :label="'Post with image'"
-      color="bg-secondary-normal "
-      :isRoundedFull="true"
-        customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
-        textCss="font-medium text-white"
-        @clickButton="navigateCreatePost"
-      >
-      </ButtonUi> -->
       <ButtonUi
         :label="'Create Event'"
         color="bg-secondary-normal "
