@@ -20,7 +20,7 @@
 
       <!-- Right Side -->
       <div class="flex flex-col md:flex-row items-center sm:mt-5">
-        <img src="@\assets\images\Logos\logo-medium-white.svg" alt="" />
+        <img src="\assets\images\Logos\logo-medium-white.svg" alt="" />
       </div>
     </div>
   </footer>
