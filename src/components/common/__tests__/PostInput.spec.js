@@ -8,11 +8,7 @@ vi.mock('vue-router', () => ({
   useRouter: vi.fn(() => ({ push: vi.fn() }))
 }));
 
-// vi.mock('@/features/Post/store/postStore', () => ({
-//   usePostStore: vi.fn(() => ({
-//     setContentFromPostInput: vi.fn()
-//   }))
-// }));
+
 vi.mock('@/features/Post/store/postStore', () => ({
     default:vi.fn(()=>({
       state:{

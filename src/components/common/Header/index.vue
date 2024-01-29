@@ -10,6 +10,7 @@
 
       <div class="menu relative">
         <icon-with-label
+        class="dropdown"
           svgContentHover="\assets\icons\profile-outline.svg"
           svgContent="\assets\icons\profile-fill.svg"
           labelText="Profile"
@@ -70,6 +71,7 @@
 
         <nav class="flex flex-col md:flex-row items-center space-x-10">
           <icon-with-label
+          class=""
             v-for="(item, index) in navItems"
             :svgContentHover="item.svgContentHover"
             :svgContent="item.svgContent"
@@ -85,6 +87,7 @@
   
           <div class="menu relative">
             <icon-with-label
+            class="dropdown"
               svgContentHover="\assets\icons\profile-outline.svg"
               svgContent="\assets\icons\profile-fill.svg"
               labelText="Profile"
@@ -98,7 +101,7 @@
             <!-- Dropdown Menu -->
             <div
               v-show="isMenuVisible"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+              class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
               <button-ui
                 :label="'Profile Page'"
@@ -190,14 +193,6 @@ export default {
           bottom: true,
           routerName: 'event'
         },
-        // {
-        //   svgContent: '\\assets\\icons\\report-outline.svg',
-        //   svgContentHover: '\\assets\\icons\\report-fill.svg',
-        //   labelText: 'Report',
-        //   isActive: false,
-        //   bottom: true,
-        //   routerName: 'report'
-        // },
       ]
     }
   },
