@@ -79,6 +79,7 @@ describe('HeaderApp Component', () => {
     await wrapper.vm.menuMethods(1); // Simulate clicking 'Create Post'
     expect(router.push).toHaveBeenCalledWith({ name: 'create-post' });
 
+    // TODO correst this test 
     // // Ensure logout action calls auth store logout method and navigates
     // await wrapper.vm.menuMethods(2); // Simulate clicking 'Logout'
     // await flushPromises();
