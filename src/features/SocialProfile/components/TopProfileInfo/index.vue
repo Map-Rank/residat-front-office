@@ -29,33 +29,11 @@
         <span>{{ postsCount }}</span> Articles/Posts
       </p>
     </div>
-
-    <!-- Action Buttons -->
-    <div v-if="false" class="flex space-x-2">
-      <button-ui
-        label="Edit Profile"
-        leftIcon="src/assets/icons/edit.svg"
-        color="bg-primary-normal"
-        isRoundedMd="true"
-        textCss="text-white-normal font-bold"
-        @clickButton="editProfile"
-      />
-
-      <button-ui
-        label="Create Post"
-        leftIcon="src/assets/icons/add-circle-white.svg"
-        color="bg-primary-normal"
-        isRoundedMd="true"
-        textCss="text-white-normal font-bold"
-        @clickButton="createPost"
-      />
-    </div>
   </div>
 </template>
 
 <script>
-import ButtonUi from "@/components/base/ButtonUi.vue";
-import AvatarPlaceholder from "../../../../components/common/AvatarPlaceholder/AvatarPlaceholder.vue";
+import AvatarPlaceholder from "@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue";
 import { formatHostImageUrl } from '@/utils/formating';
 
 export default {
@@ -66,7 +44,6 @@ export default {
     }
   },
   components: {
-    ButtonUi,
     AvatarPlaceholder,
   },
   props: {
