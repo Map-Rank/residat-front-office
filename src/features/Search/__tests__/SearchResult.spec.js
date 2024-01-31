@@ -84,6 +84,7 @@ vi.mock('@/features/Post/services/postService', () => ({
 
 describe('SearchResult Component', () => {
   let wrapper
+  let fetchPosts
 
   beforeEach(() => {
     wrapper = mount(SearchResult, {
@@ -98,11 +99,12 @@ describe('SearchResult Component', () => {
         PostComponent
       }
     })
+
+    fetchPosts = vi.spyOn(SearchResult.methods, 'fetchPosts')
+    wrapper.vm.$options.created.call(wrapper.vm)
   })
 
   it('fetch post', async () => {
-    const fetchPosts = vi.spyOn(SearchResult.methods, 'fetchPosts')
-
     const wrapper = mount(SearchResult, {
       props: {
         id: '2'
