@@ -61,11 +61,11 @@
               @click.prevent="submitPost"
               :class="
                 this.isLoading
-                  ? 'bg-gray-400 cursor-wait'
+                  ? 'bg-gray-400 cursor-wait '
                   : 'bg-secondary-normal hover:bg-secondary-hover'
               "
               :disabled="this.isLoading"
-              class="block w-full text-white py-1.5 rounded-full transition"
+              class=" submit block w-full text-white py-1.5 rounded-full transition"
             >
               {{
                 !isEditing

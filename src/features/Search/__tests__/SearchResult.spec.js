@@ -103,6 +103,7 @@ describe('SearchResult Component', () => {
     fetchPosts = vi.spyOn(SearchResult.methods, 'fetchPosts')
     wrapper.vm.$options.created.call(wrapper.vm)
   })
+  
 
   it('fetch post', async () => {
     const wrapper = mount(SearchResult, {
