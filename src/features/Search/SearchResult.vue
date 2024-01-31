@@ -5,7 +5,6 @@
     :class="{ 'scroll-lock': scrollLocked }"
       class="container mx-auto pt-3 grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
     >
-      <!-- Main Content Area: Posts -->
       <main class="col-start-2 col-span-5 md:col-start-2 lg:col-start-3 sm:px-4">
         <div v-if="topLoading" class="flex h-full justify-center">
           <LoadingIndicator />
