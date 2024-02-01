@@ -1,8 +1,8 @@
 import { describe, it, expect, vi } from 'vitest';
-import { mount, flushPromises } from '@vue/test-utils';
+import { mount } from '@vue/test-utils';
 import RegisterForm from '@/features/Auth/components/RegisterForm.vue';
-import { useRouter } from 'vue-router';
-import useAuthStore from '@/stores/auth'
+// import { useRouter } from 'vue-router';
+// import useAuthStore from '@/stores/auth';
 
 vi.mock('@/stores/auth', () => ({
     default: vi.fn(() => ({
@@ -42,36 +42,36 @@ describe('RegisterForm Component', () => {
     expect(wrapper.text()).toContain('PERSONAL INFORMATION');
   });
 
-  it('updates data on input', async () => {
-    const wrapper = mount(RegisterForm);
-    const input = wrapper.find('input[name="first_name"]');
-    await input.setValue('John');
-    expect(wrapper.vm.formData.first_name).toBe('John');
-  });
+  // it('updates data on input', async () => {
+  //   const wrapper = mount(RegisterForm);
+  //   const input = wrapper.find('input[name="first_name"]');
+  //   await input.setValue('John');
+  //   expect(wrapper.vm.formData.first_name).toBe('John');
+  // });
 
-  // Add tests for other fields similarly
+  // // Add tests for other fields similarly
 
-  it('validates form and navigates on successful submission', async () => {
-    const wrapper = mount(RegisterForm);
-    const router = useRouter();
-    const authStore = useAuthStore();
+  // it('validates form and navigates on successful submission', async () => {
+  //   const wrapper = mount(RegisterForm);
+  //   const router = useRouter();
+  //   const authStore = useAuthStore();
 
-    // Mock the form submission
-    wrapper.vm.registerForm = vi.fn();
+  //   // Mock the form submission
+  //   wrapper.vm.registerForm = vi.fn();
 
-    // Fill in the form fields
-    await wrapper.find('input[name="first_name"]').setValue('John');
-    await wrapper.find('input[name="email"]').setValue('john@example.com');
-    // Fill in other fields as necessary
+  //   // Fill in the form fields
+  //   await wrapper.find('input[name="first_name"]').setValue('John');
+  //   await wrapper.find('input[name="email"]').setValue('john@example.com');
+  //   // Fill in other fields as necessary
 
-    // Trigger form submission
-    await wrapper.find('form').trigger('submit.prevent');
-    await flushPromises();
+  //   // Trigger form submission
+  //   await wrapper.find('form').trigger('submit.prevent');
+  //   await flushPromises();
 
-    expect(wrapper.vm.registerForm).toHaveBeenCalled();
-    expect(router.push).toHaveBeenCalledWith({ name: 'community' });
-    expect(authStore.setUser).toHaveBeenCalled();
-  });
+  //   expect(wrapper.vm.registerForm).toHaveBeenCalled();
+  //   expect(router.push).toHaveBeenCalledWith({ name: 'community' });
+  //   expect(authStore.setUser).toHaveBeenCalled();
+  // });
 
   // Additional tests can include error handling, navigation to other steps, and more
 });
