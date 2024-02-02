@@ -71,9 +71,16 @@ npm run build
 ```sh
 npm run test:unit
 ```
-### Run Tests Couverage [Vitest](https://vitest.dev/)
+### Tests Couverage [Vitest](https://vitest.dev/)
+
+#### Run Tests Couverage [Vitest](https://vitest.dev/)
 ```sh
 npm run test:coverage --coverage.enabled=true
+```
+
+#### Preview Tests Couverage [Vitest](https://vitest.dev/)
+```sh
+npx vite preview --outDir html
 ```
 
 ### Lint with [ESLint](https://eslint.org/)
