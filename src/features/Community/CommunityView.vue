@@ -113,6 +113,7 @@
 
               <aside class="col-span-3 justify-end hidden sm:block">
                 <event-alert-box
+                sectionTitle="Upcoming Event"
                   title="Annual Farming Event"
                   organizer="Farm Hub"
                   date="August 12, 2024"

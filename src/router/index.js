@@ -114,7 +114,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'authentication' })
   } else if (to.name === 'authentication' && authStore.user != null) {
-    next({ name: 'community' }) // Redirect to community or another appropriate route
+    next({ name: 'dashbaord' }) 
   } else {
     next()
   }
