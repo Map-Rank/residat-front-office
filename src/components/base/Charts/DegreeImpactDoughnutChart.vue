@@ -1,7 +1,13 @@
 <template>
-  <div class="w-full p-5 bg-white rounded-lg">
-    <canvas :id="canvasId"></canvas>
-  </div>
+
+    <div class="flex flex-col space-y-4 items-center justify-center ">
+        <div class="w-full h-[300px] p-5 flex align-middle justify-center items-center bg-white rounded-lg">
+            <canvas :id="canvasId"></canvas>
+          </div>
+    
+        <span class="barTitle"> {{label}}</span>
+      </div>
+ 
 </template>
 
 <script>
@@ -22,6 +28,7 @@ export default {
       type: String,
       required: true
     },
+    label:String,
     percentage: {
       type: Number,
       required: true,
@@ -98,7 +105,7 @@ methods: {
                 size: 14,
                 color: 'black'
               },
-              boxWidth: 20
+            //   boxWidth: 20
             }
           }
         }
@@ -113,3 +120,17 @@ methods: {
   }
 }
 </script>
+
+<style scoped>
+.barTitle {
+  color: #000;
+
+  /* Desktop/H4-Bold */
+  font-family: Roboto;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+</style>

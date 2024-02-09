@@ -1,6 +1,6 @@
 <template>
   <div class="bg-primary-light px-100">
-    <div class="w-full px-100 justify-between grid-cols-1 sm:grid md:grid-cols-8 gap-2">
+    <div class="w-full  justify-between grid-cols-1 sm:grid md:grid-cols-8 gap-2">
       <div class="col-span-6"></div>
       <div class="h-2/3 col-span-2 pt-8">
         <div class="mb-6">
@@ -13,13 +13,16 @@
 
     <div class="h-full grid grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
-        <DegreeImpactDoughnutChart canvasId="impactChart" :percentage="10"></DegreeImpactDoughnutChart>
+        <DegreeImpactDoughnutChart 
+        label="Degree of Impact"
+        canvasId="impactChart" :percentage="10"></DegreeImpactDoughnutChart>
       </div>
       <div class="col-span-1">
         <BaseBarChart
           :canvas-id="'climateVulnerabilityIndex'"
           :data="climateVulnerabilityIndex"
           label="Climate Vulnerability Index"
+          :barThickness="60"
           >
         </BaseBarChart>
       </div>
@@ -27,8 +30,9 @@
         <BaseBarChart
         :canvas-id="'climateRiskThreats'"
         :data="climateRiskThreats"
-        label="Climate Vulnerability Index"
+        label="Climate Risk Threats"
         :isHorizontal="true"
+        :barSpacing="30"
         >
         </BaseBarChart>
       </div>
@@ -42,7 +46,6 @@
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 // import SectionTitle from '@/components/base/SectionTitle.vue'
 import KeyActors from '@/components/common/KeyActors/KeyActor.vue'
-import Chart from 'chart.js/auto'
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
 import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
 
@@ -53,15 +56,6 @@ export default {
   },
   data() {
     return {
-      data: [
-        { year: 2010, count: 10 },
-        { year: 2011, count: 20 },
-        { year: 2012, count: 15 },
-        { year: 2013, count: 25 },
-        { year: 2014, count: 22 },
-        { year: 2015, count: 30 },
-        { year: 2016, count: 28 }
-      ],
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
