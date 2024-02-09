@@ -13,7 +13,7 @@
 
     <div class="h-full grid grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
-        <DegreeImpactDoughnutChart canvasId="impactChart" :percentages="[25, 0, 0, 0]"></DegreeImpactDoughnutChart>
+        <DegreeImpactDoughnutChart canvasId="impactChart" :percentage="10"></DegreeImpactDoughnutChart>
       </div>
       <div class="col-span-1">
         <BaseBarChart

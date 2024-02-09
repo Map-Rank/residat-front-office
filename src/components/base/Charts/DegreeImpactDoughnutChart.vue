@@ -1,6 +1,6 @@
 <template>
   <div class="w-full p-5 bg-white rounded-lg">
-    <canvas  :id="canvasId"></canvas>
+    <canvas :id="canvasId"></canvas>
   </div>
 </template>
 
@@ -9,30 +9,61 @@ import Chart from 'chart.js/auto'
 
 export default {
   name: 'DegreeImpactDoughnutChart',
+  data() {
+    return {
+      mildPercentage: 0,
+      strongPercentage: 0,
+      severePercentage: 0,
+      verySeverePercentage: 0
+    }
+  },
   props: {
     canvasId: {
       type: String,
       required: true
     },
-    percentages: {
-      type: Array,
+    percentage: {
+      type: Number,
       required: true,
       validator: function (value) {
-        // This validator function ensures that the percentages array has exactly four elements.
-        return value.length === 4
+        // The percentage must be between 0 and 100.
+        return value >= 0 && value <= 100
       }
     }
   },
-  mounted() {
+  computed: {
+      
+      
+},
+
+mounted() {
+    this.setLabelPercentage()
     this.renderDoughnutChart()
-  },
-  methods: {
+},
+methods: {
+      setLabelPercentage() {
+        if (this.percentage <= 25) {
+          this.mildPercentage = this.percentage
+        } else if (this.percentage <= 50) {
+            this.strongPercentage = this.percentage
+        } else if (this.percentage <= 75) {
+            this.severePercentage = this.percentage
+        } else {
+          this.verySeverePercentage = this.percentage
+        }
+      },
     renderDoughnutChart() {
       const chartData = {
         labels: ['Mild', 'Strong', 'Severe', 'Very Severe'],
         datasets: [
           {
-            data: [...this.percentages, 100 - this.percentages.reduce((a, b) => a + b, 0)],
+            data: [
+              this.mildPercentage,
+              this.strongPercentage,
+              this.severePercentage,
+              this.verySeverePercentage,
+              100 - this.percentage
+            ],
             backgroundColor: [
               '#41B9D4', // Mild
               '#7AA64E', // Strong
@@ -53,8 +84,7 @@ export default {
 
       const chartOptions = {
         cutout: '60%',
-        rotation: Math.PI,
-        // circumference: Math.PI,
+        radius:'70%',
         responsive: true,
         maintainAspectRatio: false,
         plugins: {
@@ -65,11 +95,10 @@ export default {
               usePointStyle: true,
               padding: 20,
               font: {
-                family: 'Roboto', // Set the font family
-                size: 18, // Set the font size
-                color: 'black' // Set the font color
+                size: 14,
+                color: 'black'
               },
-              boxWidth: 20 // Adjust the size of the colored box in the legend
+              boxWidth: 20
             }
           }
         }
