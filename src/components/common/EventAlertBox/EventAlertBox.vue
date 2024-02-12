@@ -76,7 +76,7 @@ export default {
   name: 'EventAlertBox',
   data() {
     return {
-      sectionTitle: 'Upcoming Event'
+      // sectionTitle: 'Upcoming Event'
     }
   },
   props: {
@@ -84,7 +84,8 @@ export default {
     organizer: String,
     date: String,
     location: String,
-    eventImage: String
+    eventImage: String,
+    sectionTitle:String,
   },
   components: {
     SectionTitle

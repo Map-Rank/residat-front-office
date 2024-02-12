@@ -2,7 +2,7 @@
   <header class="py-4 md:px-100 bg-white ">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
-      <img src="@\assets\images\Logos\logo-small-white.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
 
       <div class="flex-grow items-center">
         <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
@@ -10,6 +10,7 @@
 
       <div class="menu relative">
         <icon-with-label
+        class="dropdown"
           svgContentHover="\assets\icons\profile-outline.svg"
           svgContent="\assets\icons\profile-fill.svg"
           labelText="Profile"
@@ -70,6 +71,7 @@
 
         <nav class="flex flex-col md:flex-row items-center space-x-10">
           <icon-with-label
+          class=""
             v-for="(item, index) in navItems"
             :svgContentHover="item.svgContentHover"
             :svgContent="item.svgContent"
@@ -85,6 +87,7 @@
   
           <div class="menu relative">
             <icon-with-label
+            class="dropdown"
               svgContentHover="\assets\icons\profile-outline.svg"
               svgContent="\assets\icons\profile-fill.svg"
               labelText="Profile"
@@ -98,7 +101,7 @@
             <!-- Dropdown Menu -->
             <div
               v-show="isMenuVisible"
-              class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+              class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
               <button-ui
                 :label="'Profile Page'"
@@ -190,14 +193,6 @@ export default {
           bottom: true,
           routerName: 'event'
         },
-        // {
-        //   svgContent: '\\assets\\icons\\report-outline.svg',
-        //   svgContentHover: '\\assets\\icons\\report-fill.svg',
-        //   labelText: 'Report',
-        //   isActive: false,
-        //   bottom: true,
-        //   routerName: 'report'
-        // },
       ]
     }
   },

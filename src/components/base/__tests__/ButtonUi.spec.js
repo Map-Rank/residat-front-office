@@ -11,7 +11,7 @@ describe('ButtonUi.vue Test', () => {
       },
     });
 
-    // Assert that the button has the correct label
+    // Check  correct label
     expect(wrapper.find('span').text()).toBe(label);
 
     // Assert that the click event is emitted when button is clicked

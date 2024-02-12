@@ -51,26 +51,25 @@ export default {
            Authorization: `Bearer ${authToken}`
         },
       };
+      this.resetLink = true
 
       fetch(url, options)
         .then((response) => {
           console.log(response);
-          // Check response status
           if (response.status === 200) {
-            // Verification successful
             this.success();
           } else {
-            // Verification failed
             this.error = response.data;
           }
         })
         .catch((error) => {
+          this.resetLink = false
+
           // Handle error
           this.error = error;
         })
         .finally(() => {
-          // Enable button again
-          // this.$refs.verifyButton.disabled = false;
+          this.resetLink = false
         });
     },
   }

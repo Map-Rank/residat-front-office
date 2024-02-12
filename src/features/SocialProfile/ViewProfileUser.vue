@@ -62,14 +62,11 @@
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
-// import { getUserPosts } from '@/features/Post/services/postService.js'
 import { getUserProfile } from '@/features/Post/services/postService.js'
-
-// import { LOCAL_STORAGE_KEYS } from '../../constants/localStorageKeys'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 
 export default {
-  name: 'SocialProfile',
+  name: 'ViewProfileUser',
 
   async created() {
     try {

@@ -32,6 +32,7 @@
 <script>
 import ButtonUi from "@/components/base/ButtonUi.vue";
 export default {
+  name:'SocialButton',
   components: {
     ButtonUi,
   },

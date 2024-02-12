@@ -6,6 +6,15 @@ export default mergeConfig(
   viteConfig,
   defineConfig({
     test: {
+      coverage: {
+        reportsDirectory: 'html/ui',
+        // include: ['**/*.{ts,tsx}'],
+        // exclude: ['src/test/**/*.{ts,tsx}'],
+        reporter: ['text', ['html', { subdir: 'coverage' }]],
+        provider: 'v8'
+      },
+      reporters: ['default', 'html'],
+      css: true,
       environment: 'jsdom',
       exclude: [...configDefaults.exclude, 'e2e/*'],
       root: fileURLToPath(new URL('./', import.meta.url))
