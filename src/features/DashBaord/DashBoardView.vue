@@ -1,21 +1,30 @@
 <template>
-  <div class="bg-primary-light px-100">
-    <div class="w-full  justify-between grid-cols-1 sm:grid md:grid-cols-8 gap-2">
-      <div class="col-span-6"></div>
-      <div class="h-2/3 col-span-2 pt-8">
+  <div class="bg-primary-light px-100 pt-10">
+    <div class="grid grid-cols-1 md:grid-cols-8 gap-2">
+      <div class="col-span-6">
+        <inline-svg
+        title="Cameroon Map"
+        fill-opacity="1"
+        :color="'#fff'"
+        fill="black"
+        :src="'../../../public/assets/svgs/cameroon_svg.svg'"
+      />
+      </div>
+      <div class="col-span-2">
         <div class="mb-6">
           <BaseDropdown :options="hazard" />
         </div>
-
         <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" />
       </div>
     </div>
-
-    <div class="h-full grid grid-cols-3 py-10 space-x-3">
+  
+    <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
         <DegreeImpactDoughnutChart 
-        label="Degree of Impact"
-        canvasId="impactChart" :percentage="10"></DegreeImpactDoughnutChart>
+          label="Degree of Impact"
+          canvasId="impactChart"
+          :percentage="20"
+        ></DegreeImpactDoughnutChart>
       </div>
       <div class="col-span-1">
         <BaseBarChart
@@ -23,39 +32,35 @@
           :data="climateVulnerabilityIndex"
           label="Climate Vulnerability Index"
           :barThickness="60"
-          >
-        </BaseBarChart>
+        ></BaseBarChart>
       </div>
       <div class="col-span-1">
         <BaseBarChart
-        :canvas-id="'climateRiskThreats'"
-        :data="climateRiskThreats"
-        label="Climate Risk Threats"
-        :isHorizontal="true"
-        :barSpacing="30"
-        >
-        </BaseBarChart>
+          :canvas-id="'climateRiskThreats'"
+          :data="climateRiskThreats"
+          label="Climate Risk Threats"
+          :isHorizontal="true"
+          :barSpacing="30"
+        ></BaseBarChart>
       </div>
     </div>
-
-    <div></div>
   </div>
+  
 </template>
 
 <script>
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
-// import SectionTitle from '@/components/base/SectionTitle.vue'
 import KeyActors from '@/components/common/KeyActors/KeyActor.vue'
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
 import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
+import InlineSvg from 'vue-inline-svg'
 
 export default {
   name: 'DashBoardView',
-  mounted() {
-   
-  },
+  mounted() {},
   data() {
     return {
+      mapSvgPath: 'public/assets/svgs/cameroon_svg.svg',
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -77,6 +82,7 @@ export default {
       },
 
       hazard: [
+        { id: 0, name: 'Chose Environmental Hazard' },
         { id: 1, name: 'Floods' },
         { id: 2, name: 'Drought' }
       ],
@@ -109,9 +115,8 @@ export default {
     KeyActors,
     BaseBarChart,
     DegreeImpactDoughnutChart,
+    InlineSvg
   },
-  methods: {
-
-  }
+  methods: {}
 }
 </script>
