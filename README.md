@@ -16,11 +16,12 @@
 2. [Motivation](#motivation-)
 3. [Features](#features-)
 4. [Project Structure](#project-structure-)
+4. [Project Setup](#project-structure-)
+9. [API Integration](#api-integration-)
 5. [Services](#services-)
 6. [State Management](#state-management-)
 7. [Components](#components-)
 8. [Routing and Navigation](#routing-and-navigation-)
-9. [API Integration](#api-integration-)
 10. [Testing](#testing-)
 11. [Build and Deployment](#build-and-deployment-)
 12. [Local Development](#local-development-)
@@ -107,6 +108,49 @@ Residat offers a powerful suite of features designed to provide stakeholders wit
     └─ vitest.config.js      # Vitest configuration
 
 ```
+
+## Project Setup
+
+```sh
+npm install
+```
+
+### Compile and Hot-Reload for Development
+
+```sh
+npm run dev
+```
+
+### Compile and Minify for Production
+
+```sh
+npm run build
+```
+
+### Run Unit Tests with [Vitest](https://vitest.dev/)
+
+```sh
+npm run test:unit
+```
+### Tests Couverage [Vitest](https://vitest.dev/)
+
+#### Run Tests Couverage [Vitest](https://vitest.dev/)
+```sh
+npm run test:coverage --coverage.enabled=true
+```
+
+#### Preview Tests Couverage [Vitest](https://vitest.dev/)
+```sh
+npx vite preview --outDir html
+```
+
+### Lint with [ESLint](https://eslint.org/)
+
+```sh
+npm run lint
+```
+
+
 
 ## API Integration 🤝
 
@@ -330,13 +374,6 @@ This documentation provides an overview of how state management is handled withi
 
 // Approach to testing, including frameworks and libraries.
 
-## Build and Deployment 🚀
-
-// Steps for building and deploying the application.
-
-## Local Development 🛠️
-
-// Setting up the development environment.
 
 ## Contributing 🤲
 
