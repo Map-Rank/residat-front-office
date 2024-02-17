@@ -8,12 +8,17 @@
 ![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen)
 
 
-> RESIDAT will be a digital platform for sharing place-based information on climate risks from drone data and citizen science reports .This platform shall have four main components Visualization of place-based climate risks,information through dashboards ,Hosting of published reports by community stakeholders ,Chatroom for community climate realities ,Sending out mobile notifications by local and regional climate authoritative bodies.
+RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
+- Visualization of place-based climate risks
+- information through dashboards 
+- Hosting of published reports by community stakeholders 
+- Chatroom for community climate realities
+- Sending out mobile notifications by local and regional climate authoritative bodies.
 
 
 ## Table of Contents 📚
 1. [Introduction](#introduction-)
-2. [Motivation](#motivation-)
+2. [Context](#motivation-)
 3. [Features](#features-)
 4. [Project Structure](#project-structure-)
 4. [Project Setup](#project-structure-)
@@ -34,7 +39,7 @@
 
 ## Introduction 🌟
 
-Residat is a digital platform designed to enhance community resilience by providing access to climate risk information in Cameroon. It leverages drone data and citizen science reports to visualize climate risks through interactive GIS dashboards. The platform offers a suite of features including:
+Residat is a digital platform designed to enhance community resilience by providing access to climate risk information in Cameroon. It leverages spatial data and citizen science reports to visualize climate risks through interactive GIS dashboards. The platform offers a suite of features including:
 
 - Visualization Dashboards: Interactive maps and graphs for understanding local climate risks and stakeholder activities.
 - Community Intelligence: A repository for stakeholders to publish, manage, and interact with climate adaptation reports.
@@ -42,7 +47,7 @@ Residat is a digital platform designed to enhance community resilience by provid
 
 Residat serves as a critical tool for local and regional climate authoritative bodies to send out mobile notifications and engage communities in proactive climate risk management.
 
-## Motivation 💡
+## Context 💡
 
 Residat was born from the necessity to mitigate climate risks for communities in Cameroon. It targets the heart of climate vulnerability by providing critical, actionable data through GIS visualizations and real-time reports. The platform's goal is to empower communities and authorities to make informed decisions, enabling proactive and collaborative efforts towards climate resilience. In the face of increasing climate challenges, Residat stands as a beacon of innovation and solidarity.
 
@@ -60,7 +65,7 @@ Residat offers a powerful suite of features designed to provide stakeholders wit
 
 - Citizen Science Contributions: Encouraging local community members to contribute data and reports, Residat amplifies the reach and accuracy of climate risk information through citizen science.
 
-- Data-Driven Insights: By analyzing drone data and user-contributed reports, Residat provides actionable insights that support climate risk management and decision-making processes.
+- Data-Driven Insights: By analyzing spatial data and user-contributed reports, Residat provides actionable insights that support climate risk management and decision-making processes.
 
 - Stakeholder Engagement Tools: Features designed to enhance collaboration among various actors, including local authorities, NGOs, businesses, and academia, to drive collective action in climate adaptation.
 
@@ -361,9 +366,249 @@ export default defineStore('sector', { /* State, getters, and actions */ });
 
 This documentation provides an overview of how state management is handled within Residat, highlighting the use of Pinia stores to manage different aspects of the application's state efficiently. If there are specific details or additional stores you would like to include, please let me know!
 
+
+
 ## Components 🧩
 
-// Documentation for each Vue component including usage and examples.
+In Residat, components are the building blocks of the application's user interface. We use Vue.js components to encapsulate and manage the behavior of different parts of the user interface. This section documents the base components that are frequently used throughout the application.
+
+### Base Components
+
+Base components are designed to be reusable and serve as the foundation for the user interface. Here's a look at some of the base components in Residat:
+
+#### BaseCheckbox
+
+`BaseCheckbox` is a customizable checkbox component that can be used in forms across the application.
+
+- **Props**:
+  - `list`: An object that contains the checkbox properties like name and value.
+- **Data**:
+  - `checked`: A boolean to track whether the checkbox is checked.
+- **Methods**:
+  - `updateCheckedItems`: Emits a custom event with the checkbox state.
+- **Usage**:
+
+```vue
+<BaseCheckbox
+  :list="{ name: 'Example', value: 'example' }"
+  @change="handleCheckboxChange"
+/>
+```
+
+#### ButtonUi
+
+`ButtonUi` is a flexible button component with customizable styles and icons.
+
+- **Props**:
+  - `label`: The text to be displayed on the button.
+  - `leftIcon`: The icon displayed on the left side of the button.
+  - `rightIcon`: The icon displayed on the right side of the button.
+  - `type`: The type attribute of the button element.
+  - `...`: Additional styling and behavior props.
+- **Methods**:
+  - `handleClick`: Handles click events and emits a custom event if the button is not disabled or loading.
+- **Usage**:
+
+```vue
+<ButtonUi
+  label="Click Me"
+  :leftIcon="leftIconPath"
+  :rightIcon="rightIconPath"
+  @clickButton="handleButtonClick"
+/>
+```
+
+#### SearchBar
+
+`SearchBar` is a search input component that allows users to search through zones by name.
+
+- **Data**:
+  - `searchQuery`: The model for the search input.
+  - `zones`: The list of all zones.
+  - `filteredZones`: The list of zones filtered by the search query.
+- **Methods**:
+  - `filterZones`: Filters the `zones` list based on the search query.
+  - `searchZone`: Navigates to the search result page with the selected zone.
+  - `getAllZones`: Fetches all zones from the backend on component creation.
+- **Usage**:
+
+```vue
+<SearchBar />
+```
+Based on the component examples provided, here's a brief technical documentation section for the base components that you can add to your `README.md` file:
+
+#### TitleSubtitle
+
+Displays a title and a subtitle or message.
+
+- **Props**:
+  - `label`: The title text.
+  - `message`: The message or subtitle text.
+- **Example Usage**:
+
+```vue
+<TitleSubtitle label="Primary Title" message="Supporting message goes here." />
+```
+
+#### BaseDropdown
+
+A dropdown component that allows users to select from a list of options.
+
+- **Props**:
+  - `options`: An array of objects representing the dropdown options.
+- **Data**:
+  - `selectedOption`: The currently selected option.
+- **Methods**:
+  - `updateSelectedOption`: Updates the selected option and emits selection events.
+- **Example Usage**:
+
+```vue
+<BaseDropdown :options="[{ name: 'Option1', id: 1 }, { name: 'Option2', id: 2 }]" />
+```
+
+
+#### BaseImagePicker
+
+An image file input component styled as a button.
+
+- **Props**:
+  - `accept`: File types that the input accepts.
+  - `iconImg`: (Optional) Icon to display on the button.
+  - `label`: Text to display on the button.
+- **Methods**:
+  - `handleFileChange`: Emits the selected files when changed.
+- **Example Usage**:
+
+```vue
+<BaseImagePicker label="Upload Image" @handleFileChange="handleFiles" />
+```
+
+---
+
+To document the common components based on the provided Vue component examples, let's create succinct descriptions that include their purposes and highlight key properties and events.
+
+
+
+### Common Components 
+
+#### ShowPost
+
+A component for displaying detailed post information, including media, comments, and interactions.
+
+- **Props**:
+  - `id` (post ID for fetching details).
+- **Methods**:
+  - `commentPost`: commenting on a post.
+- **Example Usage**:
+
+```vue
+<ShowPost :id="postId" />
+```
+
+
+#### ShareModal
+
+A modal for sharing a post's link to various social media platforms with copy-to-clipboard functionality.
+
+- **Props**:
+  - `showModal` (controls visibility).
+  - `postLink` (URL of the post)
+  - `message` (share message)
+- **Methods**:
+  - `close`: close the modal when emited.
+- **Example Usage**:
+
+```vue
+<ShareModal :showModal="isShown" :postLink="postUrl" :message="message" />
+```
+
+#### PostInput
+
+An input component for creating a new post or event with quick action buttons.
+
+- **Methods**:
+  - `navigateCreatePost`:  Emits content to the parent when the post is ready to be created.
+- **Example Usage**:
+
+```vue
+<PostInput />
+```
+
+#### IconWithLabel
+
+A versatile component for displaying an icon with optional top, bottom, left, or right labels.
+
+- **Props**:
+  - `svgContent` 
+  - `svgContent`
+  - `svgContentHover`
+  - `labelTextTop`
+  - `labelTextTop`
+  - `labelTextRight`
+  - `labelTextLeft`
+  - `isActive`
+  - `iconDesktopSize`
+  - `iconMobileSize`
+
+- **Methods**:
+  - `clickIcon`: clickIcon t emmit and event 
+  - `customFunction`
+- **Example Usage**:
+
+```vue
+<IconWithLabel svgContent="/path/to/icon.svg" labelTextBottom="Label" />
+```
+
+
+#### EventAlertBox
+
+Displays upcoming event alerts with details like title, date, location, and organizer.
+
+- **Props**:
+  - `title` 
+  - `organizer`
+  - `date`
+  - `location`
+  - `eventImage`
+  - `sectionTitle`
+
+- **Example Usage**:
+
+```vue
+<EventAlertBox title="Event Title" organizer="Organizer Name" />
+```
+
+#### BottomNavigationApp
+
+Provides bottom navigation functionality, typically for mobile views.
+
+- **Props**:
+  - `navItems` (for navigation).
+- **Methods**:
+  - `isActive`: To check if the navigation item corresponds to the current route.
+- **Example Usage**:
+
+```vue
+<BottomNavigationApp />
+```
+
+#### AlertForm
+
+Shows alert messages with different levels of severity determined by the type of alert state.
+
+- **Props**:
+  - `store` to access the store.
+  - `useAlertStore` to manage alert messages.
+- **Methods**:
+  - `isActive`: To check if the navigation item corresponds to the current route.
+- **Example Usage**:
+
+```vue
+<AlertForm />
+```
+
+---
+
 
 ## Routing and Navigation 🚏
 
