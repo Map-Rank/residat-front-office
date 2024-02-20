@@ -4,7 +4,7 @@
   <div
     v-for="(actor, index) in actors"
     :key="index"
-    class="mt-3 p-2 bg-white rounded-xl ring-1 ring-secondary-normal flex items-center space-x-4"
+    class="mt-3 p-1 bg-white rounded-xl l flex items-center space-x-4"
   >
     <div class="flex-shrink-0">
       <img

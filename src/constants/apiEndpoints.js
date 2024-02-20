@@ -1,18 +1,17 @@
 // Constants related to API endpoints
 export const API_ENDPOINTS = {
-    login: '/login',
-    register: '/register',
-    createPost: '/create',
-    getPosts: '/posts',
-    showSpecificPost: '/show',
-    getUserPosts: '/profile',
-    likePost: '/like',
-    commentPost: '/comment',
-    updatePost: '/update',
-    sector: '/sector',
-    deletePost: '/delete',
-    sharePost: '/share',
-    zone: '/zone',
-    // other endpoints...
-  };
-  
+  login: '/login',
+  register: '/register',
+  createPost: '/create',
+  getPosts: '/post',
+  showSpecificPost: '/show',
+  getUserPosts: '/profile',
+  likePost: 'post/like',
+  commentPost: 'post/comment',
+  updatePost: 'post/update',
+  sector: '/sector',
+  deletePost: 'post/delete',
+  sharePost: 'post/share',
+  zone: '/zone',
+  // other endpoints...
+};
