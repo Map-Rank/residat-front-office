@@ -1,19 +1,24 @@
-<h1 align="center">Welcome to residat-front-platform 👋</h1>
+<h1 style="display: flex; justify-content: space-between; align-items: center;">Welcome to residat-front-platform <img src="public/assets/images/Logos/logo-small.svg" alt="Image Description" height="70"></h1>
+
+
 
 [![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)](#)
 [![License: agpl](https://img.shields.io/badge/License-agpl-yellow.svg)](#)
 
 ![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-63%25-brightgreen)
 ![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen)
 
 
-RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
+ RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
 - Visualization of place-based climate risks
 - information through dashboards 
 - Hosting of published reports by community stakeholders 
 - Chatroom for community climate realities
 - Sending out mobile notifications by local and regional climate authoritative bodies.
+
+<img src="public\assets\images\Documentation\communityView.png"> </img>
+
 
 
 ## Table of Contents 📚
@@ -22,12 +27,12 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 3. [Features](#features-)
 4. [Project Structure](#project-structure-)
 4. [Project Setup](#project-structure-)
+10. [Testing](#testing-)
 9. [API Integration](#api-integration-)
 5. [Services](#services-)
 6. [State Management](#state-management-)
 7. [Components](#components-)
 8. [Routing and Navigation](#routing-and-navigation-)
-10. [Testing](#testing-)
 11. [Build and Deployment](#build-and-deployment-)
 12. [Local Development](#local-development-)
 13. [Contributing](#contributing-)
@@ -39,23 +44,23 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 
 ## Introduction 🌟
 
-Residat is a digital platform designed to enhance community resilience by providing access to climate risk information in Cameroon. It leverages spatial data and citizen science reports to visualize climate risks through interactive GIS dashboards. The platform offers a suite of features including:
+ <a href="https://dev.residat.com/community">RESIDAT</a> is a digital platform designed to enhance community resilience by providing access to climate risk information in Cameroon. It leverages spatial data and citizen science reports to visualize climate risks through interactive GIS dashboards. The platform offers a suite of features including:
 
 - Visualization Dashboards: Interactive maps and graphs for understanding local climate risks and stakeholder activities.
 - Community Intelligence: A repository for stakeholders to publish, manage, and interact with climate adaptation reports.
 - Community Chat Rooms: Spaces for real-time discussion and exchange of climate-related information and services.
 
-Residat serves as a critical tool for local and regional climate authoritative bodies to send out mobile notifications and engage communities in proactive climate risk management.
+ <a href="https://dev.residat.com/community">RESIDAT</a> serves as a critical tool for local and regional climate authoritative bodies to send out mobile notifications and engage communities in proactive climate risk management.
 
 ## Context 💡
 
-Residat was born from the necessity to mitigate climate risks for communities in Cameroon. It targets the heart of climate vulnerability by providing critical, actionable data through GIS visualizations and real-time reports. The platform's goal is to empower communities and authorities to make informed decisions, enabling proactive and collaborative efforts towards climate resilience. In the face of increasing climate challenges, Residat stands as a beacon of innovation and solidarity.
+ <a href="https://dev.residat.com/community">RESIDAT</a> was born from the necessity to mitigate climate risks for communities in Cameroon. It targets the heart of climate vulnerability by providing critical, actionable data through GIS visualizations and real-time reports. The platform's goal is to empower communities and authorities to make informed decisions, enabling proactive and collaborative efforts towards climate resilience. In the face of increasing climate challenges,  <a href="https://dev.residat.com/community">RESIDAT</a> stands as a beacon of innovation and solidarity.
 
 ## Features ✨
 
-Residat offers a powerful suite of features designed to provide stakeholders with comprehensive climate risk data and facilitate community engagement in climate resilience:
+ <a href="https://dev.residat.com/community">RESIDAT</a> offers a powerful suite of features designed to provide stakeholders with comprehensive climate risk data and facilitate community engagement in climate resilience:
 
-- Interactive GIS Dashboards: Leveraging cutting-edge GIS technology, Residat provides dynamic maps and graphs that allow users to visualize and interact with climate risk data specific to their local communities.
+- Interactive GIS Dashboards: Leveraging cutting-edge GIS technology,  <a href="https://dev.residat.com/community">RESIDAT</a> provides dynamic maps and graphs that allow users to visualize and interact with climate risk data specific to their local communities.
 
 - Community Intelligence Reports: A dedicated space for stakeholders to publish, manage, and interact with reports on climate adaptation efforts. These reports provide valuable insights into local initiatives and challenges.
 
@@ -63,16 +68,16 @@ Residat offers a powerful suite of features designed to provide stakeholders wit
 
 - Mobile Notifications: Integration with mobile platforms ensures that stakeholders receive timely updates and warnings about climate hazards, enabling swift and informed responses to emerging risks.
 
-- Citizen Science Contributions: Encouraging local community members to contribute data and reports, Residat amplifies the reach and accuracy of climate risk information through citizen science.
+- Citizen Science Contributions: Encouraging local community members to contribute data and reports,  <a href="https://dev.residat.com/community">RESIDAT</a> amplifies the reach and accuracy of climate risk information through citizen science.
 
-- Data-Driven Insights: By analyzing spatial data and user-contributed reports, Residat provides actionable insights that support climate risk management and decision-making processes.
+- Data-Driven Insights: By analyzing spatial data and user-contributed reports,  <a href="https://dev.residat.com/community">RESIDAT</a> provides actionable insights that support climate risk management and decision-making processes.
 
 - Stakeholder Engagement Tools: Features designed to enhance collaboration among various actors, including local authorities, NGOs, businesses, and academia, to drive collective action in climate adaptation.
 
 ## Project Structure 🏗️
 
 ```sh
-    Residat-Front-Office/
+     <a href="https://dev.residat.com/community">RESIDAT</a>-Front-Office/
     ├─ .vscode/              # Editor configuration files
     ├─ dist/                 # Compiled files ready for deployment
     ├─ node_modules/         # npm packages
@@ -157,9 +162,58 @@ npm run lint
 
 
 
+## Testing 🧪
+
+Testing is a crucial aspect of the development process, ensuring that the code is robust and behaves as expected. In the Residat project, we employ Vitest for our testing framework, providing an efficient and feature-rich environment for both unit and integration testing. Below is a summary of the current test coverage and details about the testing setup and examples.
+
+### Test Coverage Summary
+
+<img src="public\assets\images\Documentation\couverageView.jpeg"></img>
+
+The test coverage report provides valuable insight into the robustness of our test suite. Here's a brief overview:
+
+- **Overall Coverage**: Approximately 58.67% of statements and 69.58% of branches are covered by tests.
+- **Components**: Some components like `EventAlertBox` and `IconWithLabel` have 100% statement coverage, which is excellent. However, other areas like the `src/assets` and `src/plugins` have 0% coverage, indicating potential areas for improvement.
+- **Features**: The `SocialProfile` feature has substantial testing with over 96% coverage in some parts, but the `Report` feature has no tests yet.
+- **Services and Stores**: The services have about 33% coverage, while the stores are at 26.31%, suggesting that state management testing could be enhanced.
+
+### Test Configuration
+
+Our `vitest.config.js` is set up to generate coverage reports in the 'html/ui' directory and uses V8 as the coverage provider. We have excluded end-to-end test files (`e2e/*`) from our test paths to focus on unit and integration testing. CSS modules are included in the testing environment, which is set to 'jsdom', mimicking a browser environment.
+
+### Testing Scripts
+
+In `package.json`, we've defined scripts to facilitate different testing actions:
+
+- `test:unit`: Runs unit tests in a simulated browser environment.
+- `test:coverage`: Generates a coverage report to assess how much of the codebase the tests cover.
+
+### Test Implementations
+
+We have several test cases implemented, such as:
+
+- **BaseCheckbox**: Tests to ensure it accepts props, binds the checked value to `v-model`, and emits the correct payload on changes.
+- **BottomNavigationApp**: Verifies rendering of `IconWithLabel` components and the active navigation item identification.
+- **SocialProfile**: Mocks service calls and ensures the user profile is fetched and rendered components like `TopProfileInfo` and `AboutUserInfo`.
+
+### Actionable Steps
+
+Based on the test coverage report, we recommend the following:
+
+- **Increase Coverage**: Write tests for components and features with low or no coverage, particularly focusing on critical paths in the application.
+- **Refine Tests**: Review existing tests to cover more edge cases and ensure they are not just passing but effectively validating the logic.
+- **Continuous Integration**: Integrate the test suite into a CI/CD pipeline to ensure tests are run with every commit or pull request, maintaining code quality throughout the development lifecycle.
+
+Testing is an ongoing process that evolves with the project. Ensuring that the test coverage remains high and reflects the critical functionalities of the application is essential for maintaining a stable and reliable platform.
+
+
+
+
+
+
 ## API Integration 🤝
 
-Residat leverages Axios for seamless interaction with backend services, encapsulated within a structured approach to handle different types of API requests. The core functionality revolves around three custom functions designed to streamline the process of making API calls:
+ <a href="https://dev.residat.com/community">RESIDAT</a> leverages Axios for seamless interaction with backend services, encapsulated within a structured approach to handle different types of API requests. The core functionality revolves around three custom functions designed to streamline the process of making API calls:
 
 ### Configuring Axios
 
@@ -228,19 +282,19 @@ const deletePost = async (postId) => {
 ```
 
 ### Conclusion
-Through these tailored functions, Residat ensures secure, efficient, and clear API interactions, supporting the platform's functionality from content management to user engagement.
+Through these tailored functions,  <a href="https://dev.residat.com/community">RESIDAT</a> ensures secure, efficient, and clear API interactions, supporting the platform's functionality from content management to user engagement.
 
 
 
 ## Services 📡
 
-Based on the service examples you've provided, the "Services" section of your README can highlight the structure and functionality of your service layer within the Residat project. This section will explain how services are organized, their roles, and how they interact with the API to perform various operations like fetching zones, creating posts, managing user profiles, and more.
+Based on the service examples you've provided, the "Services" section of your README can highlight the structure and functionality of your service layer within the  <a href="https://dev.residat.com/community">RESIDAT</a> project. This section will explain how services are organized, their roles, and how they interact with the API to perform various operations like fetching zones, creating posts, managing user profiles, and more.
 
 ---
 
 ## Services 📡
 
-In Residat, services are crucial for abstracting the logic required to communicate with the backend API. They encapsulate the Axios API calls, providing a clean and reusable interface for the rest of the application to interact with the backend. Here's an overview of how services are structured and utilized:
+In  <a href="https://dev.residat.com/community">RESIDAT</a>, services are crucial for abstracting the logic required to communicate with the backend API. They encapsulate the Axios API calls, providing a clean and reusable interface for the rest of the application to interact with the backend. Here's an overview of how services are structured and utilized:
 
 ### Structure
 
@@ -297,9 +351,9 @@ Services are designed to handle errors gracefully, either logging them for devel
 
 ---
 
-This section provides a comprehensive view of how services function within Residat, highlighting their importance in the application architecture. If you have specific aspects of the services you'd like to dive deeper into or any other parts of the project documentation you want to explore next, please let me know!
+This section provides a comprehensive view of how services function within  <a href="https://dev.residat.com/community">RESIDAT</a>, highlighting their importance in the application architecture. If you have specific aspects of the services you'd like to dive deeper into or any other parts of the project documentation you want to explore next, please let me know!
 
-Based on the state management code snippets you've provided, we can document how state management is implemented in the Residat project using Pinia. This will cover the structure and functionality of different stores, including `alert`, `auth`, and `sector` stores, and how they are used to manage application state.
+Based on the state management code snippets you've provided, we can document how state management is implemented in the  <a href="https://dev.residat.com/community">RESIDAT</a> project using Pinia. This will cover the structure and functionality of different stores, including `alert`, `auth`, and `sector` stores, and how they are used to manage application state.
 
 ---
 
@@ -307,7 +361,7 @@ Based on the state management code snippets you've provided, we can document how
 
 ## State Management with Pinia 🔄
 
-Residat utilizes Pinia, a state management library for Vue.js, to manage and centralize application state efficiently. Pinia offers a more flexible and straightforward approach to managing state compared to Vuex, making it an excellent choice for Vue 3 applications. Below, we detail the implementation and usage of several key stores within Residat.
+ <a href="https://dev.residat.com/community">RESIDAT</a> utilizes Pinia, a state management library for Vue.js, to manage and centralize application state efficiently. Pinia offers a more flexible and straightforward approach to managing state compared to Vuex, making it an excellent choice for Vue 3 applications. Below, we detail the implementation and usage of several key stores within  <a href="https://dev.residat.com/community">RESIDAT</a>.
 
 ### Alert Store
 
@@ -364,17 +418,17 @@ export default defineStore('sector', { /* State, getters, and actions */ });
 
 ---
 
-This documentation provides an overview of how state management is handled within Residat, highlighting the use of Pinia stores to manage different aspects of the application's state efficiently. If there are specific details or additional stores you would like to include, please let me know!
+This documentation provides an overview of how state management is handled within  <a href="https://dev.residat.com/community">RESIDAT</a>, highlighting the use of Pinia stores to manage different aspects of the application's state efficiently. If there are specific details or additional stores you would like to include, please let me know!
 
 
 
 ## Components 🧩
 
-In Residat, components are the building blocks of the application's user interface. We use Vue.js components to encapsulate and manage the behavior of different parts of the user interface. This section documents the base components that are frequently used throughout the application.
+In  <a href="https://dev.residat.com/community">RESIDAT</a>, components are the building blocks of the application's user interface. We use Vue.js components to encapsulate and manage the behavior of different parts of the user interface. This section documents the base components that are frequently used throughout the application.
 
 ### Base Components
 
-Base components are designed to be reusable and serve as the foundation for the user interface. Here's a look at some of the base components in Residat:
+Base components are designed to be reusable and serve as the foundation for the user interface. Here's a look at some of the base components in  <a href="https://dev.residat.com/community">RESIDAT</a>:
 
 #### BaseCheckbox
 
@@ -614,10 +668,6 @@ Shows alert messages with different levels of severity determined by the type of
 
 // Details on Vue Router setup and navigation structure.
 
-
-## Testing 🧪
-
-// Approach to testing, including frameworks and libraries.
 
 
 ## Contributing 🤲
