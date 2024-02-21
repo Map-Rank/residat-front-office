@@ -8,8 +8,6 @@ export default mergeConfig(
     test: {
       coverage: {
         reportsDirectory: 'html/ui',
-        // include: ['**/*.{ts,tsx}'],
-        // exclude: ['src/test/**/*.{ts,tsx}'],
         reporter: ['text', ['html', { subdir: 'coverage' }]],
         provider: 'v8'
       },
