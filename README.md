@@ -168,7 +168,7 @@ Testing is a crucial aspect of the development process, ensuring that the code i
 
 ### Test Coverage Summary
 
-<img src="public\assets\images\Documentation\couverageView.jpeg"></img>
+<!-- <img src="public\assets\images\Documentation\couverageView.jpeg"></img> -->
 
 The test coverage report provides valuable insight into the robustness of our test suite. Here's a brief overview:
 
@@ -198,13 +198,14 @@ We have several test cases implemented, such as:
 
 ### Actionable Steps
 
-Based on the test coverage report, we recommend the following:
+Based on the test coverage report, we will take the following steps:
 
-- **Increase Coverage**: Write tests for components and features with low or no coverage, particularly focusing on critical paths in the application.
-- **Refine Tests**: Review existing tests to cover more edge cases and ensure they are not just passing but effectively validating the logic.
-- **Continuous Integration**: Integrate the test suite into a CI/CD pipeline to ensure tests are run with every commit or pull request, maintaining code quality throughout the development lifecycle.
+- **Increase Test Coverage**: We will write tests for components and features with low or no coverage, focusing particularly on critical paths in the application.
+- **Refine Existing Tests**: We will review our current tests to cover more edge cases and ensure they effectively validate the logic, not just pass.
+- **Implement Continuous Integration**: We will integrate the test suite into a CI/CD pipeline to run tests with every commit or pull request, maintaining code quality throughout the development lifecycle.
 
-Testing is an ongoing process that evolves with the project. Ensuring that the test coverage remains high and reflects the critical functionalities of the application is essential for maintaining a stable and reliable platform.
+Testing is an ongoing process that evolves with our project. It's essential to maintain high test coverage that reflects the critical functionalities of our application for a stable and reliable platform.
+
 
 
 
