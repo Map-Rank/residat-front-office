@@ -168,7 +168,7 @@ Testing is a crucial aspect of the development process, ensuring that the code i
 
 ### Test Coverage Summary
 
-<img src="public\assets\images\Documentation\couverageView.jpeg"></img>
+<!-- <img src="public\assets\images\Documentation\couverageView.jpeg"></img> -->
 
 The test coverage report provides valuable insight into the robustness of our test suite. Here's a brief overview:
 
