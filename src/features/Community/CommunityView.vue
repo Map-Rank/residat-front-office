@@ -373,23 +373,7 @@ export default {
         this.bottomLoading = false
       }
     },
-    // handleScroll() {
-    //   const mainContent = this.$refs.mainContent
-    //   const { scrollTop, scrollHeight, clientHeight } = mainContent
-
-    //   if (scrollTop === 0) {
-    //     // Top of page
-    //     this.checkNewPosts()
-    //   }
-
-    //   if (scrollTop + clientHeight >= scrollHeight - 10 && !this.loadingPosts) {
-    //     if (this.debounceTimer) clearTimeout(this.debounceTimer)
-
-    //     this.loadMorePosts()
-    //     // this.debounceTimer = setTimeout(() => {
-    //     // }, 500)
-    //   }
-    // }
+ 
 
     handleScroll() {
       const mainContent = this.$refs.mainContent
