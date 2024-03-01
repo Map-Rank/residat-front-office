@@ -33,7 +33,7 @@
       </span>
 
       <!-- Label on Bottom -->
-      <span :class="this.textCss" v-show="bottom">
+      <span :class="this.textCss" class="text-primary-normal " v-show="bottom">
         {{ labelTextBottom }}
       </span>
   </router-link>
@@ -87,6 +87,7 @@ export default {
       type: String
       // default: null
     },
+    textCss:String,
     labelTextTop: String,
     labelTextRight: String,
     labelTextBottom: String,
@@ -95,7 +96,6 @@ export default {
   data() {
     return {
       hover: false,
-      textCss: 'label'
     }
   },
 
@@ -109,10 +109,13 @@ export default {
 </script>
 
 <style scoped>
+
+span{
+  text-wrap: nowrap;
+}
 .label {
-  color: var(--gray-dark, #505050);
   text-align: center;
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -129,7 +132,7 @@ export default {
   color: var(--primary-normal, #021d40);
   text-align: center;
 
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 10px;
   font-style: normal;
   font-weight: 600;

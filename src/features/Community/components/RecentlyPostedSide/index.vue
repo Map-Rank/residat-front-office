@@ -1,49 +1,58 @@
 <template>
   <div class="flex-col space-y-5">
     <section>
-      <h2 class="title mb-5">Recently Posted</h2>
-      <ul>
-        <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0">
-          <div class="space-y-3">
+      <SectionTitle :title="sectionTitle" />
+      <ul class=" ">
+        <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0 bg-white px-5 py-3 rounded-lg">
+          <div class="space-y-2">
             <div class="flex space-x-4 items-center">
-              <img class="h-8 w-8 rounded-xl" :src="post.logoImg" alt="" loading="lazy" />
-              <span class="user-name">{{ post.author }}</span>
+              <avatar-placeholder
+                :username="`${post.creator[0].first_name} ${post.creator[0].last_name}`"
+                :size="20"
+              />
+              <span class="user-name user-name">{{
+                `${post.creator[0].first_name} ${post.creator[0].last_name}`
+              }}</span>
             </div>
 
-            <h5 class="post-title">{{ post.title }}</h5>
-            <p class="caption-C1">{{ post.postedDate }}</p>
+            <h5 class="post-title hover:cursor-pointer">{{ truncateText(post.content ,70 )  }}</h5>
+            <p class="caption-C1">{{ formatDate(post.published_at) }}</p>
           </div>
         </li>
       </ul>
     </section>
-
-
   </div>
 </template>
 
 <script>
+import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
+import { formatDate, truncateText } from '@/utils/formating'
+import SectionTitle from '@/components/base/SectionTitle.vue'
+
 export default {
   name: 'RecentlyPosted',
+  data() {
+    return {
+      formatDate,
+      truncateText,
+      sectionTitle:'Recently Post'
+    }
+  },
+  components: {
+    SectionTitle,
+    AvatarPlaceholder
+  },
   props: {
     recentPosts: {
       type: Array,
       required: true
     }
+    // username:String
   }
 }
 </script>
 
-
 <style scoped>
-.title {
-  color: var(--primary-normal, #021d40);
-  font-family: Raleway;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px; /* 120% */
-  letter-spacing: -0.3px;
-}
 
 .button {
   display: flex;
@@ -60,32 +69,32 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Captions/C1 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
-  line-height: 16px; /* 133.333% */
+  line-height: 6px; /* 133.333% */
 }
-.post-title {
+.user-name {
   color: var(--body-dark, #1b1b1b);
 
   /* Desktop/H5 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 15px;
   font-style: normal;
   font-weight: 700;
-  line-height: 20px; /* 133.333% */
+  line-height: 6px; /* 133.333% */
   letter-spacing: -0.225px;
 }
 
-.user-name {
+.post-title {
   color: var(--body-normal, #242424);
 
   /* Paragraphs/P3 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
+  font-style: medium;
+  font-weight: 600;
   line-height: 20px; /* 142.857% */
 }
 </style>

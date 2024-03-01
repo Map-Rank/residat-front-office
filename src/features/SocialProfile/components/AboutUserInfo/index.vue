@@ -8,7 +8,7 @@
       <template v-if="location">
         <div class="flex items-center">
           <img src="@/assets/icons/location.svg" alt="Location" />
-          <span>{{ location }}</span>
+          <span>From {{ location }}</span>
         </div>
       </template>
       <template v-if="phone">
@@ -29,12 +29,6 @@
           <span>{{ joinDate }}</span>
         </div>
       </template>
-      <!-- <template v-if="website">
-        <div class="flex items-center">
-          <img src="@/assets/icons/link.svg" alt="Website" />
-          <span>{{ website }}</span>
-        </div>
-      </template> -->
     </div>
   </div>
 </template>
@@ -67,7 +61,7 @@ p {
   color: var(--gray-dark, #505050);
 
   /* Captions/C2 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 10px;
   font-style: normal;
   font-weight: 400;
@@ -78,7 +72,7 @@ span {
   text-align: center;
 
   /* Paragraphs/P3-Bold */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;

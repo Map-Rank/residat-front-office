@@ -2,7 +2,7 @@
   <button
   :type="type"
     :class="[
-      'flex items-center  gap-2 px-2 py-2 transition ',
+      'flex items-center  gap-2 px-2 py-2 transition secon ',
       'disabled:opacity-50 disabled:cursor-not-allowed ',
       isRoundedFull ? 'rounded-full' : '',
       isRoundedMd ? 'rounded-lg' : '',
@@ -87,13 +87,24 @@ export default {
 }
 
 span {
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 400;
   line-height: 20px; /* 171.429% */
   letter-spacing: 0.75px;
 }
+
+
+@media (max-width: 767px) {
+  span {
+    font-family: Roboto;
+    font-size: 12px;
+    font-style: normal;
+    line-height: 20px; /* 171.429% */
+    letter-spacing: 0.75px;
+  }
+}
+
 
 @keyframes spin {
   to {

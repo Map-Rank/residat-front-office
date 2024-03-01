@@ -5,6 +5,8 @@ export const LOCAL_STORAGE_KEYS = {
     userInfo: 'userInfo',
     isloggedIn: 'isloggedIn',
     sector: 'sector',
+    zone: 'zone',
+    userEmailVerification: 'userEmailVerification',
     // other keys...
 
   };

@@ -1,14 +1,16 @@
 <template>
-  <div class="checkbox-container">
+  <div class="flex items-center"> <!-- .checkbox-container -->
     <input
       :name="list.name"
       type="checkbox"
       :id="list.name"
-      class="rounded text-primary-normal focus:ring-primary-light checkbox-input"
+      class="w-6 h-6 rounded text-primary-normal focus:ring-primary-light focus:ring form-checkbox" 
       v-model="checked"
       @change="updateCheckedItems"
     />
-    <label :for="list.name" class="checkbox-label">{{ list.name }}</label>
+    <label :for="list.name" class="ml-2.5 text-body-dark font-Roboto text-base font-normal leading-6 transition-all checked:font-semibold" >
+      {{ list.name }}
+    </label>
   </div>
 </template>
 
@@ -47,7 +49,7 @@ export default {
   color: var(--body-dark, #1B1B1B);
 
 /* Paragraphs/P2 */
-font-family: Raleway;
+font-family: Roboto;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -56,5 +58,14 @@ line-height: 24px; /* 150% */
 
 .checkbox-input:checked + .checkbox-label {
   font-weight: 600;
+}
+
+label{
+  color: var(--body-dark, #1b1b1b);
+  font-family: Roboto;
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: 20px; /* 142.857% */
 }
 </style>

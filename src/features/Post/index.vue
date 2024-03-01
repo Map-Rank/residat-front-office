@@ -6,8 +6,9 @@
         :post-date="postDate"
         :user-profile-image="userProfileImage"
         :username="username"
+        :zoneName="zoneName"
+        :id="id"
       />
-
       <div v-if="showMenu" class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
@@ -38,13 +39,21 @@
             @clickButton="deletePost()"
           >
           </button-ui>
+
+          <button-ui
+            :label="'View'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="viewPost()"
+          >
+          </button-ui>
         </div>
       </div>
     </header>
 
     <!-- Post Content -->
     <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
-      <p class="p3 content">{{ postContent }}</p>
+      <p class="p3 content font-medium">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
@@ -80,7 +89,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex items-center mt-3">
-        <img class="h-9 w-9" :src="userProfileImage" alt="" />
+        <AvatarPlaceholderVue :username="username" :size="20"></AvatarPlaceholderVue>
         <div class="border w-full flex p-2 ml-5 rounded-lg">
           <input
             v-model="commentData.text"
@@ -117,14 +126,20 @@ import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
 import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
+import AvatarPlaceholderVue from '../../components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
+
+import useModalStore from '@/stores/modalStore.js'
 
 export default {
   name: 'PostComponent',
   emits: ['postFetch', 'updatePost'],
   data() {
     const route = useRoute()
+    const modalStore = useModalStore()
+
     return {
       route,
+      modalStore,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       likeCount: this.like_count,
@@ -141,29 +156,23 @@ export default {
       },
       iconLabels: [
         {
-          svgContent: 'src\\assets\\icons\\heart-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\heart-fill.svg',
+          svgContent: '\\assets\\icons\\heart-outline.svg',
+          svgContentHover: '\\assets\\icons\\heart-fill.svg',
           labelText: 'Like',
           isActive: this.customLiked,
           right: true
         },
         {
-          svgContent: 'src\\assets\\icons\\comment-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\comment-fill.svg',
+          svgContent: '\\assets\\icons\\comment-outline.svg',
+          svgContentHover: '\\assets\\icons\\comment-fill.svg',
           labelText: 'Comment',
           isActive: this.isCommenting,
           right: true
         },
         {
-          svgContent: 'src\\assets\\icons\\share-fill.svg',
-          svgContentHover: 'src\\assets\\icons\\share-fill.svg',
+          svgContent: '\\assets\\icons\\share-fill.svg',
+          svgContentHover: '\\assets\\icons\\share-fill.svg',
           labelText: 'Share',
-          right: true
-        },
-        {
-          svgContent: 'src\\assets\\icons\\archieved-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\archieved-fill.svg',
-          labelText: 'Archieve',
           right: true
         }
       ]
@@ -192,6 +201,15 @@ export default {
         console.log('Post deletion cancelled by user')
       }
     },
+
+    viewPost() {
+      this.$router.push({ name: 'show-post', params: { id: this.post.id } })
+    },
+
+    openShareModal() {
+      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
+    },
+
     editPost() {
       console.log('edit post ')
       this.setpostToEdit(this.post)
@@ -218,11 +236,11 @@ export default {
           break
         case 2:
           await sharePost(this.postId)
-          this.$emit('postFetch')
+          this.openShareModal()
+          // this.$emit('postFetch')
           break
         case 3:
-          console.log(this.post)
-          this.$emit('postFetch')
+          
           break
       }
     },
@@ -252,16 +270,6 @@ export default {
         this.$emit('handleFileChange', file)
       }
     },
-
-    // showPostDetails() {
-    //   this.showDetails(this.post.id)
-    //   this.setpostIdToShowDetails(this.post.id);
-
-    //   this.togglePostDetails();
-    //   // this.setpostToShowDetails(this.post);
-    //   // console.log(this.post)
-    //   // console.log(this.post.id)
-    // },
 
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
@@ -293,8 +301,8 @@ export default {
     IconWithLabel,
     PostDetails,
     ButtonUi,
-    ImagePostGallery
-    // BaseImagePickerVue
+    ImagePostGallery,
+    AvatarPlaceholderVue
   },
   computed: {
     ...mapWritableState(usePostStore, ['showPostDetails']),
@@ -315,6 +323,8 @@ export default {
     postImages: Array,
     postId: Number,
     liked: Boolean,
+    id: String,
+    zoneName:String,
     showMenu: {
       type: Boolean,
       default: false
@@ -328,10 +338,10 @@ export default {
 <style scoped>
 .content {
   color: var(--body-normal, #242424);
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 400;
+  font-weight: 550;
   line-height: 20px;
   /* 142.857% */
 }
@@ -348,7 +358,7 @@ export default {
     color: var(--primary-normal, #021d40);
 
     /* Desktop/H6-SemiBold */
-    font-family: Raleway;
+    font-family: Roboto;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;

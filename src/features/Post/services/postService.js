@@ -1,7 +1,10 @@
 import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+// import useAuthStore from '@/stores/auth'
 
 const currentDate = new Date().toISOString().split('T')[0]
+// const authStore = useAuthStore()
+// const authToken = authStore.token
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const createPost = async (postData, onSuccess, onError) => {
@@ -10,7 +13,7 @@ const createPost = async (postData, onSuccess, onError) => {
 
     formData.append('content', postData.content)
     formData.append('published_at', currentDate)
-    formData.append('zone_id', 1)
+    formData.append('zone_id', postData.zoneId)
 
     // Append media files
     postData.images.forEach((image, index) => {
@@ -37,6 +40,8 @@ const createPost = async (postData, onSuccess, onError) => {
     postData.sectorId.forEach((id, index) => {
       formData.append(`sectors[${index}]`, id)
     })
+
+    console.log(postData)
 
     const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
     if (onSuccess && typeof onSuccess === 'function') {
@@ -86,7 +91,7 @@ const updatePost = async (postData, onSuccess, onError) => {
   }
 }
 
-const getPosts = async (page, size) => {
+const getPosts = async (page, size, token) => {
   let defaultSize = 10
   let defaultPage = 0
 
@@ -98,11 +103,13 @@ const getPosts = async (page, size) => {
     page: page.toString()
   })
 
+
   try {
     const response = await makeApiGetCall(
       `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      authToken
+      token ? token : authToken
     )
+
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -142,6 +149,33 @@ const getPostsBySectors = async (sectorId) => {
     throw error
   }
 }
+const getPostsByZone = async (zoneId,size,page) => {
+
+  let defaultSize = 20
+  let defaultPage = 0
+
+  size = size || defaultSize
+  page = page || defaultPage
+
+  try {
+   
+    let params = new URLSearchParams({
+      size: size.toString(),
+      page: page.toString(),
+      zone_id: JSON.stringify(zoneId)
+    })
+
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
+      authToken
+    )
+
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
 
 const getUserPosts = async () => {
   try {
@@ -152,6 +186,17 @@ const getUserPosts = async () => {
     throw error
   }
 }
+
+const getUserProfile = async (id) => {
+  try {
+    const endpoint = `/profile/detail/${id}`; 
+    const response = await makeApiGetCall(endpoint, authToken);
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
 
 const likePost = async (postId) => {
   try {
@@ -205,5 +250,7 @@ export {
   updatePost,
   deletePost,
   sharePost,
-  getUserPosts
+  getUserPosts,
+  getUserProfile,
+  getPostsByZone
 }

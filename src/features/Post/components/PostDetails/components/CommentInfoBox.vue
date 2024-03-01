@@ -1,9 +1,13 @@
 <template>
-  <img
+  <avatar-placeholder
+  :username="`${comment.user.first_name} ${comment.user.second_name}`"
+></avatar-placeholder>
+<!-- immage that will be gotten from host -->
+  <!-- <img
     class="w-10 h-10 rounded-full"
     :src="`${imageHost}${comment.user.avatar}`"
     alt="User profile"
-  />
+  /> -->
   <div>
     <div>
       <div>
@@ -11,7 +15,7 @@
         <div class="comment-text">{{ comment.text }}</div>
         <div class="text-sm caption-1">{{ comment.created_at }}</div>
       </div>
-
+<!-- 
       <div class="flex space-x-2 mt-2">
         <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
           Like
@@ -20,13 +24,20 @@
         <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
           Comment
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 </template>
 <script>
+import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
+
 export default {
   name: 'CommentInfoBox',
+  components:{
+    AvatarPlaceholder
+
+  }
+  ,
   props: {
     comment: {},
     imageHost: {}
@@ -39,7 +50,7 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Buttons/B2-Bold */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 700;
@@ -53,7 +64,7 @@ export default {
   color: #000;
 
   /* Paragraphs/P3-Bold */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
@@ -64,7 +75,7 @@ export default {
   color: #000;
 
   /* Paragraphs/P4 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -75,7 +86,7 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Captions/C1 */
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;

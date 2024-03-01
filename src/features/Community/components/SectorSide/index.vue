@@ -1,6 +1,8 @@
 <template>
-  <div class="bg-gray-200 rounded-lg">
-    <h2 class="title text-primary-normal font-bold mb-5">Sectors</h2>
+ <section-title
+ :title="sectionTitle"
+ ></section-title>
+  <div class="bg-white md:p-6 rounded-lg">
     <ul class="grid space-y-6">
       <li v-for="sector in sectorArray" :key="sector">
         <base-checkbox
@@ -14,7 +16,8 @@
 </template>
 
 <script>
-import BaseCheckbox from '../../../../components/base/BaseCheckbox.vue';
+import BaseCheckbox from '../../../../components/base/BaseCheckbox.vue'
+import SectionTitle from '../../../../components/base/SectionTitle.vue';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -22,6 +25,7 @@ export default {
   name: 'SectorSide',
   data() {
     return {
+      sectionTitle:'Select Categorie',
       sectors: this.sectorArray // initialize with your set of sectors
     }
   },
@@ -32,15 +36,16 @@ export default {
     },
     updatesectorChecked: {}
   },
-  components:{
-    BaseCheckbox
+  components: {
+    BaseCheckbox,
+    SectionTitle
   }
 }
 </script>
 
 <style scoped>
 .title {
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;
@@ -50,11 +55,10 @@ export default {
 
 .label {
   color: var(--body-dark, #1b1b1b);
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */
 }
-
 </style>

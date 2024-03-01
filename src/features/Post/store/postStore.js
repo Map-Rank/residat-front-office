@@ -6,7 +6,11 @@ export default defineStore('post', {
     showPostDetails: false,
     postToShowDetails: null,
     postIdToShowDetail: null,
-    postToEdit: null
+    postToEdit: null,
+    postToView: null,
+    hideComponent:true,
+    postSearchMode:false,
+    contentFromPostInput:'',
   }),
   getters: {},
   actions: {
@@ -14,9 +18,16 @@ export default defineStore('post', {
       if (this.showPostDetails) {
         this.showPostDetails = !this.showPostDetails
         this.postIdToShowDetail = null
+        this.hideComponent = true
       } else {
         this.showPostDetails = true
       }
+    },
+    setContentFromPostInput(content){
+      this.contentFromPostInput = content
+    },
+    tooglePostSearchMode(){
+      this.postSearchMode = !this.postSearchMode
     },
     setpostToShowDetails(post) {
       this.postToShowDetails = post
@@ -28,6 +39,10 @@ export default defineStore('post', {
       this.postToEdit = post
       console.log(this.postToEdit)
     },
+    showPostDetail(post) {
+      this.postToView = post
+      console.log(this.postToView)
+    },
     async showDetails(id) {
       try {
         // const post = await someAsyncFunctionToFetchPostById(id);
@@ -35,6 +50,7 @@ export default defineStore('post', {
         this.setpostIdToShowDetails(id)
         this.setpostToShowDetails(post)
         this.togglePostDetails()
+        this.hideComponent = false
       } catch (error) {
         console.error('Error fetching post details:', error)
         // Handle errors here, like showing a notification to the user

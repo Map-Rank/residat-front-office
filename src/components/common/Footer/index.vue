@@ -20,7 +20,7 @@
 
       <!-- Right Side -->
       <div class="flex flex-col md:flex-row items-center sm:mt-5">
-        <img src="@\assets\images\Logos\logo-medium-white.svg" alt="" />
+        <img src="\assets\images\Logos\logo-medium-white.svg" alt="" />
       </div>
     </div>
   </footer>
@@ -37,9 +37,9 @@ export default {
     return {
       links: ['Privacy', 'Terms', 'Contact', 'About'],
       imgSrcs: [
-        'src\\assets\\icons\\facebook.svg',
-        'src\\assets\\icons\\insta.svg',
-        'src\\assets\\icons\\linkedin.svg'
+        'assets\\icons\\insta.svg',
+        'assets\\icons\\linkedin.svg',
+        'assets\\icons\\facebook.svg',
       ]
     }
   },
@@ -59,7 +59,7 @@ footer {
 .text {
   color: var(--white-normal, #fff);
 
-  font-family: Raleway;
+  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 500;

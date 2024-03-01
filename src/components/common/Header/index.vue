@@ -1,6 +1,5 @@
-<!-- eslint-disable no-useless-escape -->
 <template>
-  <header class="py-4 md:px-100">
+  <header class="py-4 md:px-100 bg-white ">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
@@ -9,58 +8,128 @@
         <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
       </div>
 
-      <icon-with-label
-        svgContentHover="src\assets\icons\profile-outline.svg"
-        svgContent="src\\assets\\icons\\profile-fill.svg"
-        labelText="Profile"
-        labelTextBottom="Profile"
-        iconDesktopSize="this.iconSize"
-        :isActive="true"
-        :bottom="false"
-        routerName="social-profile"
-        @clickIcon="clickIcon(index)"
-      ></icon-with-label>
+      <div class="menu relative">
+        <icon-with-label
+        class="dropdown"
+          svgContentHover="\assets\icons\profile-outline.svg"
+          svgContent="\assets\icons\profile-fill.svg"
+          labelText="Profile"
+          labelTextBottom="Profile"
+          :iconDesktopSize="this.iconSize"
+          :isActive="true"
+          :bottom="true"
+          @customFunction="toggleMenu"
+        ></icon-with-label>
+
+        <!-- Dropdown Menu -->
+        <div
+          v-show="isMenuVisible"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+        >
+          <button-ui
+            :label="'Profile Page'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(0)"
+          >
+          </button-ui>
+
+          <button-ui
+            :label="'Create Post'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(1)"
+          >
+          </button-ui>
+
+          <button-ui
+            :label="'Logout'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(2)"
+          >
+          </button-ui>
+        </div>
+      </div>
     </div>
 
     <!-- Full menu for larger screens, hidden menu for mobile -->
     <div
-      :class="{ flex: isMenuOpen, hidden: !isMenuOpen }"
-      class="flex-col md:flex-row md:flex item-center"
+      :class="{   }"
+      class=" hidden sm:hidden md:flex w-full justify-between   "
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 "  />
 
       <!-- Search bar -->
-      <SearchBar />
+      <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center w-full">
+        <SearchBar  />
+</div>
 
       <!-- Navigation Links -->
-      <nav class="flex flex-col md:flex-row items-center space-x-10">
-        <icon-with-label
-          v-for="(item, index) in navItems"
-          :svgContentHover="item.svgContentHover"
-          :svgContent="item.svgContent"
-          :labelText="item.labelText"
-          :labelTextBottom="item.labelText"
-          :iconDesktopSize="this.iconSize"
-          :isActive="item.isActive"
-          :bottom="item.bottom"
-          :routerName="item.routerName"
-          @clickIcon="clickIcon(index)"
-          :key="index"
-        ></icon-with-label>
+      <div class="col-span-3 grid justify-end">
 
-        <icon-with-label
-          svgContentHover="src\assets\icons\logout.svg"
-          svgContent="src\\assets\\icons\\logout.svg"
-          labelText="Logout"
-          labelTextBottom="Logout"
-          iconDesktopSize="this.iconSize"
-          :isActive="true"
-          :bottom="true"
-          @customFunction="logout"
-        ></icon-with-label>
-      </nav>
-      <br />
+        <nav class="flex flex-col md:flex-row items-center space-x-10">
+          <icon-with-label
+          class=""
+            v-for="(item, index) in navItems"
+            :svgContentHover="item.svgContentHover"
+            :svgContent="item.svgContent"
+            :labelText="item.labelText"
+            :labelTextBottom="item.labelText"
+            :textCss="'text-primary-normal'"
+            :iconDesktopSize="this.iconSize"
+            :isActive="isActive(item.routerName) || false"
+            :bottom="item.bottom"
+            :routerName="item.routerName"
+            :key="index"
+          ></icon-with-label>
+  
+          <div class="menu relative">
+            <icon-with-label
+            class="dropdown"
+              svgContentHover="\assets\icons\profile-outline.svg"
+              svgContent="\assets\icons\profile-fill.svg"
+              labelText="Profile"
+              labelTextBottom="Profile"
+              :iconDesktopSize="this.iconSize"
+              :isActive="true"
+              :bottom="true"
+              @customFunction="toggleMenu"
+            ></icon-with-label>
+  
+            <!-- Dropdown Menu -->
+            <div
+              v-show="isMenuVisible"
+              class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+            >
+              <button-ui
+                :label="'Profile Page'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(0)"
+              >
+              </button-ui>
+  
+              <button-ui
+                :label="'Create Post'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(1)"
+              >
+              </button-ui>
+  
+              <button-ui
+                :label="'Logout'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(2)"
+              >
+              </button-ui>
+            </div>
+          </div>
+        </nav>
+      </div>
     </div>
   </header>
 </template>
@@ -70,12 +139,14 @@ import IconWithLabel from '../IconWithLabel/index.vue'
 import useAuthStore from '../../../stores/auth'
 import { useRouter } from 'vue-router'
 import SearchBar from '@/components/base/SearchBar.vue'
+import ButtonUi from '@/components/base/ButtonUi.vue'
 
 export default {
   name: 'HeaderApp',
   components: {
     SearchBar,
-    IconWithLabel
+    IconWithLabel,
+    ButtonUi
   },
   data() {
     const authStore = useAuthStore()
@@ -84,88 +155,88 @@ export default {
     return {
       authStore,
       router,
+      isMenuVisible: false,
+      // isMenuOpen : ref(false),
+      isActiveRoute: '',
       isMenuOpen: false,
       iconSize: 'w-7 h-7',
       navItems: [
         {
-          svgContent: 'src\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\dashboard-fill.svg',
-          labelText: 'Dashboard',
-          isActive: false,
-          bottom: true,
-          routerName: 'dashbaord'
-        },
-        {
-          svgContent: 'src\\assets\\icons\\community-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\community-fill.svg',
+          svgContent: '\\assets\\icons\\community-outline.svg',
+          svgContentHover: '\\assets\\icons\\community-fill.svg',
           labelText: 'Community',
           isActive: false,
           bottom: true,
           routerName: 'community'
         },
         {
-          svgContent: 'src\\assets\\icons\\chat-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\chat-fill.svg',
-          labelText: 'Chat',
+          svgContent: '\\assets\\icons\\dashboard-outline.svg',
+          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+          labelText: 'Dashboard',
+          isActive: false,
+          bottom: true,
+          routerName: 'dashbaord'
+        },
+        {
+          svgContent: '\\assets\\icons\\chat-outline.svg',
+          svgContentHover: '\\assets\\icons\\chat-fill.svg',
+          labelText: 'Chat Room',
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
         },
         {
-          svgContent: 'src\\assets\\icons\\profile-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\profile-fill.svg',
-          labelText: 'Profile',
+          svgContent: '\\assets\\icons\\event-outline.svg',
+          svgContentHover: '\\assets\\icons\\event-fill.svg',
+          labelText: 'Event',
           isActive: false,
           bottom: true,
-          routerName: 'social-profile'
+          routerName: 'event'
         },
-        {
-          svgContent: 'src\\assets\\icons\\post-outline.svg',
-          svgContentHover: 'src\\assets\\icons\\post-fill.svg',
-          labelText: 'Post',
-          isActive: false,
-          bottom: true,
-          routerName: 'create-post'
-        },
-        // {
-        //   svgContent: 'src\\assets\\icons\\subscribe-outline.svg',
-        //   svgContentHover: 'src\\assets\\icons\\subscribe-fill.svg',
-        //   labelText: 'Subscribe',
-        //   isActive: false,
-        //   bottom: true
-        // }
       ]
     }
   },
 
   methods: {
-    //This is the method that permit us to change an icon-with-label to active and is called by the child component
-    clickIcon(index) {
-      this.navItems = this.navItems.map((item, i) => {
-        if (i == index) {
-          return { ...item, isActive: !item.isActive }
-        }
-
-        return { ...item, isActive: false }
-      })
+    isActive(routerName) {
+      if (this.$route.name === routerName) {
+        return true
+      } else {
+        return false
+      }
     },
 
+    toggleMenu() {
+      this.isMenuVisible = !this.isMenuVisible
+    },
+
+    menuMethods(index) {
+      console.log('click')
+      switch (index) {
+        case 0:
+          this.$router.push({ name: 'social-profile' })
+          this.toggleMenu()
+          break
+        case 1:
+          this.$router.push({ name: 'create-post' })
+          this.toggleMenu()
+          break
+        case 2:
+          this.logout()
+          break
+      }
+    },
 
     logout() {
-      this.authStore.logOut();
-      this.$router.push({ name: 'authentication' }).catch(err => {
+      this.authStore.logOut()
+      this.$router.push({ name: 'authentication' }).catch((err) => {
         // Ignore the Vue Router error regarding navigating to the page we are currently on.
         if (err.name !== 'NavigationDuplicated') {
-          console.error(err);
+          console.error(err)
         }
-      });
-      // setTimeout(() => {
-      //   window.location.reload();
-      // }, 100); // Adjust the timeout duration as needed. //TODO remove this when possible
+      })
     }
-    
-  },
-
+  }
 }
 </script>
 
@@ -173,9 +244,5 @@ export default {
 .search {
   background-color: var(--primary-light, #e6e8ec);
   border-color: #e6e8ec;
-}
-
-header {
-  background-color: var(--white-normal, #fff);
 }
 </style>

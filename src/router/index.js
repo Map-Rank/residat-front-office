@@ -1,12 +1,19 @@
-import { createRouter, createWebHistory } from 'vue-router';
-import  useAuthStore  from '../stores/auth.js'; // Adjust this import path as necessary
+import { createRouter, createWebHistory } from 'vue-router'
+import useAuthStore from '../stores/auth.js' // Adjust this import path as necessary
 
-import CommunityView from '../features/Community/CommunityView.vue';
-import ChatRoomView from '../features/ChatRoom/ChatRommView.vue';
-import DashBoardView from '../features/DashBaord/DashBoardView.vue';
-import AuthView from '../features/Auth/AuthView.vue';
-import SocialProfile from '../features/SocialProfile/SocialProfile.vue';
-import CreatePost from '../features/CreatePost/CreatePost.vue';
+import CommunityView from '../features/Community/CommunityView.vue'
+import ChatRoomView from '../features/ChatRoom/ChatRoomView.vue'
+import DashBoardView from '../features/DashBaord/DashBoardView.vue'
+import AuthView from '../features/Auth/AuthView.vue'
+import SocialProfile from '../features/SocialProfile/SocialProfile.vue'
+import CreatePost from '../features/CreatePost/CreatePost.vue'
+import ShowPost from '@/components/common/ShowPost/index.vue'
+import OTP from '@/features/Auth/components/OTP.vue'
+import ViewProfileUser from '../features/SocialProfile/ViewProfileUser.vue'
+import EmailVerification from '../features/Auth/components/EmailVerification.vue'
+import SearchResult from '../features/Search/SearchResult.vue'
+import EventView from '@/features/Event/EventView.vue'
+import ReportView from '@/features/Report/ReportView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,19 +22,48 @@ const router = createRouter({
       path: '/social-profile',
       name: 'social-profile',
       component: SocialProfile,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/event',
+      name: 'event',
+      component: EventView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/report',
+      name: 'report',
+      component: ReportView,
+      meta: { requiresAuth: true }
     },
     {
       path: '/create-post',
       name: 'create-post',
       component: CreatePost,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
+    {
+      path: '/search/result/:idType/:id',
+      name: 'search-result',
+      component: SearchResult,
+      props: true,
+      meta: { requiresAuth: true },
+      beforeEnter: (to, from, next) => {
+        const validTypes = ['zone', 'user', 'post']
+        if (validTypes.includes(to.params.idType)) {
+          next()
+        } else {
+          // Redirect to a default page or show an error if the idType is not valid
+          next({ name: 'default-route' })
+        }
+      }
+    },
+
     {
       path: '/community',
       name: 'community',
       component: CommunityView,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
     {
       path: '/',
@@ -35,31 +71,53 @@ const router = createRouter({
       component: AuthView
     },
     {
+      path: '/otp',
+      name: 'opt',
+      component: OTP
+    },
+    {
+      path: '/email-verification',
+      name: 'email-verification',
+      component: EmailVerification
+    },
+    {
       path: '/chat-room',
       name: 'chat-room',
       component: ChatRoomView,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
     {
-      path: '/dashbaord', // Corrected the spelling of 'dashboard'
+      path: '/dashbaord',
       name: 'dashbaord',
       component: DashBoardView,
-      meta: { requiresAuth: true } // Protected route
+      meta: { requiresAuth: true }
     },
+    {
+      path: '/show-post/:id',
+      name: 'show-post',
+      component: ShowPost,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/view-profile-user/:id',
+      name: 'view-profile-user',
+      component: ViewProfileUser,
+      meta: { requiresAuth: true }
+    }
   ]
-});
+})
 
 // Navigation Guard
 router.beforeEach((to, from, next) => {
-  const authStore = useAuthStore();
+  const authStore = useAuthStore()
 
-  if (to.matched.some(record => record.meta.requiresAuth) && authStore.user == null) {
-    next({ name: 'authentication' });
-  } else if (to.name === 'authentication' && authStore.user !=null) {
-    next({ name: 'community' }); // Redirect to community or another appropriate route
+  if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
+    next({ name: 'authentication' })
+  } else if (to.name === 'authentication' && authStore.user != null) {
+    next({ name: 'dashbaord' }) 
   } else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
+export default router

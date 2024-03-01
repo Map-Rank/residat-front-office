@@ -5,8 +5,15 @@
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
       </h3>
     </div>
+    <div>
+      <AlertForm></AlertForm>
+    </div>
 
-    <SectorDisplayForm :sectors="sectors" :updatesector-checked="updateSectorChecked" />
+    <PostSpecificInformation
+      :sectors="sectors"
+      :updatesector-checked="updateSectorChecked"
+      :update-zone-id="updateZoneId"
+    />
 
     <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm />
@@ -17,6 +24,7 @@
             name="content"
             :rules="schema.content"
             as="textarea"
+            
             v-model="formData.content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2"
@@ -37,7 +45,7 @@
           <label class="block mb-2">Attach images (optional):</label>
           <div class="flex space-x-4">
             <base-image-picker
-              :iconImg="'src\\assets\\icons\\colored\\image-icon.svg'"
+              :iconImg="'assets\\icons\\colored\\image-icon.svg'"
               :type="'file'"
               :label="'Add Image'"
               @handleFileChange="handleImageUpload"
@@ -53,11 +61,11 @@
               @click.prevent="submitPost"
               :class="
                 this.isLoading
-                  ? 'bg-gray-400 cursor-wait'
+                  ? 'bg-gray-400 cursor-wait '
                   : 'bg-secondary-normal hover:bg-secondary-hover'
               "
               :disabled="this.isLoading"
-              class="block w-full text-white py-1.5 rounded-full transition"
+              class=" submit block w-full text-white py-1.5 rounded-full transition"
             >
               {{
                 !isEditing
@@ -83,14 +91,18 @@ import { useRouter } from 'vue-router'
 import useSectorStore from '@/stores/sectorStore.js'
 import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
-import SectorDisplayForm from '@/features/CreatePost/components/SectorDisplayForm.vue'
+import PostSpecificInformation from '@/features/CreatePost/components/PostSpecificInformation.vue'
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
+import AlertForm from '../../components/common/AlertFrom/AlertForm.vue'
+import { AlertStates } from '../../components/common/AlertFrom/AlertState'
+import useAlertStore from '@/stores/alertStore';
 
 export default {
   name: 'CreatePost',
   async created() {
     const sectorStore = useSectorStore()
     const postStore = usePostStore()
+    this.formData.content = postStore.contentFromPostInput
 
     if (postStore.postToEdit) {
       this.isEditing = true
@@ -109,22 +121,28 @@ export default {
   data() {
     const router = useRouter()
     const postStore = usePostStore()
+    const alertStore = useAlertStore()
+
 
     return {
       schema: {
         content: 'required'
       },
       router,
+      alertStore,
       postStore,
       isLoading: false,
       isEditing: false,
       imagesToFromLocalPreview: [],
       imagesFromHostToPreview: [],
+      zoneId: '',
       formData: {
         content: '',
         images: [],
         videos: [],
+        zoneId: ' ',
         sectorChecked: [],
+
         sectorId: []
       },
       sectors: []
@@ -132,9 +150,10 @@ export default {
   },
   components: {
     TopContentForm,
-    SectorDisplayForm,
+    PostSpecificInformation,
     BaseImagePicker,
-    ImagePreviewGallery
+    ImagePreviewGallery,
+    AlertForm
   },
   methods: {
     handleError() {
@@ -144,7 +163,16 @@ export default {
       this.imagesToFromLocalPreview.splice(index, 1)
     },
     async submitPost() {
+      this.formData.zoneId = this.zoneId
+
       if (this.formData.content == '') {
+        this.alertStore.setAlert(AlertStates.ERROR, 'Please input some content to your post')
+
+        return
+      }
+      if (this.zoneId == '') {
+        this.alertStore.setAlert(AlertStates.ERROR, 'As a premium user you need to specify a zone')
+
         return
       }
 
@@ -175,7 +203,6 @@ export default {
         return
       }
 
-      
       this.formData.images = []
       this.imagesToFromLocalPreview = []
 
@@ -189,8 +216,8 @@ export default {
           this.formData.videos.push(file)
         }
       })
-      
-      this.imagesFromHostToPreview=null
+
+      this.imagesFromHostToPreview = null
     },
 
     resetForm() {
@@ -207,6 +234,11 @@ export default {
       } else {
         this.formData.sectorChecked = this.formData.sectorChecked.filter((item) => item !== name)
       }
+    },
+    updateZoneId(zoneId) {
+      // console.log('this is the selected soneId'+ zoneId)
+      this.zoneId = zoneId
+      console.log(this.zoneId)
     }
   }
 }
