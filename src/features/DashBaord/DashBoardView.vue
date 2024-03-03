@@ -1,16 +1,7 @@
 <template>
   <div class="bg-primary-light px-100 pt-10">
     <div class="grid grid-cols-1 md:grid-cols-8 gap-2">
-      <!-- <div class="col-span-6">
-        <inline-svg
-        title="Cameroon Map"
-        fill-opacity="1"
-        :color="'#fff'"
-        fill="black"
-        :src="mapSvgPath"
-      />
-      <img src="public/assets/images/svg/MAGA.png" alt="" srcset="">
-      </div> -->
+ 
 
       <div class="col-span-6">
         <div v-if="isSVG">
