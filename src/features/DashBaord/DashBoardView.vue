@@ -1,9 +1,15 @@
 <template>
   <div class="bg-primary-light px-100 pt-10">
     <div class="grid grid-cols-1 md:grid-cols-8 gap-2">
- 
+      <div class="col-span-1">
 
-      <div class="col-span-6">
+        <div v-for="(key, index) in vectorKeys" :key="index">
+          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
+              :style="{ backgroundColor: key.color }">@{{ key.id }}</span>
+      </div>
+      </div>
+    
+      <div class="col-span-5">
         <div v-if="isSVG">
           <inline-svg
             title="Cameroon Map"
@@ -25,10 +31,10 @@
         <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" />
       </div>
     </div>
-  
+
     <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
-        <DegreeImpactDoughnutChart 
+        <DegreeImpactDoughnutChart
           label="Degree of Impact"
           canvasId="impactChart"
           :percentage="20"
@@ -53,7 +59,6 @@
       </div>
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -68,7 +73,7 @@ export default {
   mounted() {},
   data() {
     return {
-      mapSvgPath: 'public/assets/images/svg/MAGA.png',
+    
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -114,13 +119,52 @@ export default {
           name: 'Government'
         }
         // Add more events as needed
-      ]
+      ],
+      mapSvgPath: 'public\\assets\\svgs\\far-north.svg',
+      vectorKeys: [],
+    }
+  },
+
+  methods: {
+    processSVGFile(event) {
+      this.vectorKeys.splice(0, this.vectorKeys.length)
+
+      const file = event.target.files[0]
+      if (!file) {
+        this.imageFile = null
+        return
+      }
+
+      this.isSvg = file.type === 'image/svg+xml'
+      this.imageFile = URL.createObjectURL(file)
+      const reader = new FileReader()
+      reader.onload = (e) => {
+        const parser = new DOMParser()
+        const svgDoc = parser.parseFromString(e.target.result, 'image/svg+xml')
+        const paths = svgDoc.querySelectorAll('path')
+
+        const extractedData = Array.from(paths).map((path) => ({
+          id: path.getAttribute('data-id'),
+          value: this.extractColor(path.getAttribute('style')),
+          type: this.isSvg ? 'color' : 'image',
+          name: path.getAttribute('data-name'),
+          color: this.extractColor(path.getAttribute('style'))
+        }))
+
+        this.vectorKeys.push(...extractedData)
+      }
+      reader.readAsText(file)
+    },
+
+    extractColor(styleString) {
+      const match = styleString.match(/fill: (\\#[0-9a-fA-F]{6})/)
+      return match ? match[1] : 'DefaultColor' // Return a default color or null if no match
     }
   },
 
   computed: {
     isSVG() {
-      return this.mapSvgPath.endsWith('.svg');
+      return this.mapSvgPath.endsWith('.svg')
     }
   },
   components: {
@@ -131,6 +175,6 @@ export default {
     DegreeImpactDoughnutChart,
     InlineSvg
   },
-  methods: {}
+
 }
 </script>
