@@ -1,25 +1,27 @@
 <template>
-  <div class="bg-primary-light px-100 pt-10">
-    <div class="grid grid-cols-1 md:grid-cols-8 gap-2">
-      <!-- <div class="col-span-6">
-        <inline-svg
-        title="Cameroon Map"
-        fill-opacity="1"
-        :color="'#fff'"
-        fill="black"
-        :src="mapSvgPath"
-      />
-      <img src="public/assets/images/svg/MAGA.png" alt="" srcset="">
-      </div> -->
+  <div class="bg-primary-light px-4 md:px-100 pt-10 w-full">
+    <div class=" flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
+      <div class="col-span-1">
 
-      <div class="col-span-6">
-        <div v-if="isSVG">
+
+      <div class="flex flex-wrap  gap-2 p-4">
+        <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-2">
+          <span class="block w-4 h-4 rounded-full" :style="{ backgroundColor: key.color }"></span>
+          <span class="text-sm font-semibold" :class="{'text-gray-700': !key.color, 'text-primary-normal': key.color}" >{{ key.name }}</span>
+        </div>
+      </div>
+      </div>
+    
+      <div class="flex md:col-span-5">
+        <div v-if="isSVG" class="w-full">
           <inline-svg
             title="Cameroon Map"
             fill-opacity="1"
             :color="'#fff'"
             fill="black"
             :src="mapSvgPath"
+            width="" 
+            
           />
         </div>
         <div v-else>
@@ -27,17 +29,20 @@
         </div>
       </div>
 
-      <div class="col-span-2">
+      <div class=" md:col-span-2 w-full">
         <div class="mb-6">
           <BaseDropdown :options="hazard" />
         </div>
-        <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" />
+        <div class="hidden md:block">
+
+          <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" />
+        </div>
       </div>
     </div>
-  
+
     <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
-        <DegreeImpactDoughnutChart 
+        <DegreeImpactDoughnutChart
           label="Degree of Impact"
           canvasId="impactChart"
           :percentage="20"
@@ -62,7 +67,6 @@
       </div>
     </div>
   </div>
-  
 </template>
 
 <script>
@@ -74,11 +78,14 @@ import InlineSvg from 'vue-inline-svg'
 
 export default {
   name: 'DashBoardView',
-  mounted() {},
+  mounted() {
+    this.extractSVGKeys()
+  },
   data() {
     return {
-      mapSvgPath: 'public/assets/images/svg/MAGA.png',
-
+    
+      mapSvgPath: 'public\\assets\\svgs\\far-north.svg',
+      vectorKeys: [],
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
         { name: 'Agriculture', percentage: 50 },
@@ -123,13 +130,48 @@ export default {
           name: 'Government'
         }
         // Add more events as needed
-      ]
+      ],
+     
     }
   },
 
+ methods: {
+   async extractSVGKeys() {
+     this.vectorKeys.splice(0, this.vectorKeys.length)
+ 
+     const response = await fetch(this.mapSvgPath)
+     const svgText = await response.text()
+ 
+     const parser = new DOMParser()
+     const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
+     const paths = svgDoc.querySelectorAll('path')
+ 
+     const extractedData = Array.from(paths).map((path) => ({
+       id: path.getAttribute('data-id'),
+       value: this.extractColor(path.getAttribute('style')),
+       type: this.isSvg ? 'color' : 'image',
+       name: path.getAttribute('data-name'),
+       color: this.extractColor(path.getAttribute('style'))
+     }))
+ 
+     this.vectorKeys.push(...extractedData)
+     console.log(this.vectorKeys)
+   },
+ 
+ extractColor(styleString) {
+   if (styleString) {
+     const match = styleString.match(/fill: (#[0-9a-fA-F]{6})/)
+     return match ? match[1] : 'DefaultColor'
+   }
+   return 'DefaultColor';
+ }
+ 
+ }
+,
+
   computed: {
     isSVG() {
-      return this.mapSvgPath.endsWith('.svg');
+      return this.mapSvgPath.endsWith('.svg')
     }
   },
   components: {
@@ -140,6 +182,6 @@ export default {
     DegreeImpactDoughnutChart,
     InlineSvg
   },
-  methods: {}
+
 }
 </script>

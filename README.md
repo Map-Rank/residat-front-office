@@ -77,7 +77,6 @@
 ## Project Structure 🏗️
 
 ```sh
-     <a href="https://dev.residat.com/community">RESIDAT</a>-Front-Office/
     ├─ .vscode/              # Editor configuration files
     ├─ dist/                 # Compiled files ready for deployment
     ├─ node_modules/         # npm packages
@@ -286,12 +285,6 @@ const deletePost = async (postId) => {
 Through these tailored functions,  <a href="https://dev.residat.com/community">RESIDAT</a> ensures secure, efficient, and clear API interactions, supporting the platform's functionality from content management to user engagement.
 
 
-
-## Services 📡
-
-Based on the service examples you've provided, the "Services" section of your README can highlight the structure and functionality of your service layer within the  <a href="https://dev.residat.com/community">RESIDAT</a> project. This section will explain how services are organized, their roles, and how they interact with the API to perform various operations like fetching zones, creating posts, managing user profiles, and more.
-
----
 
 ## Services 📡
 
@@ -663,17 +656,56 @@ Shows alert messages with different levels of severity determined by the type of
 ```
 
 ---
+## Contributing to RESIDAT
+
+### RESIDAT Contributor Code of Conduct
+
+As contributors and maintainers of the RESIDAT project, we pledge to foster an open and welcoming environment for everyone. We are committed to making participation in our project and our community a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, sex characteristics, gender identity and expression, level of experience, education, socio-economic status, nationality, personal appearance, race, religion, or sexual identity and orientation.
+
+#### Our Principles
+- **Collaborative Ethos**: We create an inclusive space for diverse backgrounds and experiences, fostering a unique vision and product that resonates with the RESIDAT platform users.
+  
+- **Harmony through Dialogue**: We promote progress through open discussions, encouraging all community members to share ideas and engage respectfully to achieve consensus and resolve issues.
+  
+- **Team Spirit**: Recognizing that we each represent a piece of the RESIDAT puzzle, we value your skills and ask that you respect and value the contributions of others.
+
+#### Our Pledge
+We accommodate and uphold diversity in all forms, ensuring that participation in our project and community is a harassment-free experience for everyone.
+
+#### Behavior Standards
+Positive environment-contributing behaviors include:
+- Kind and considerate communication.
+- Respect and acknowledgment of our diverse audience and community members.
+- Refraining from insults, bigotry, and offensive language.
+- Exercising empathy and understanding towards others.
+
+Unacceptable behaviors include:
+- Any form of harassment, either public or private.
+- Abusive comments, trolling, and offensive rhetoric.
+- Religious, political, and cultural attacks.
+- Posting or sharing inappropriate content.
+- Disclosing private information without consent.
+- Any other behaviors considered inappropriate in a professional setting.
+
+#### Our Responsibilities
+The RESIDAT designated team is responsible for enforcing community standards and may take appropriate action against unacceptable behavior.
+
+#### Scope
+This Code of Conduct applies both within project spaces and public spaces when individuals represent the project or community.
+
+#### Enforcement
+Instances of unacceptable behavior can be reported to the designated team at support@mapnrank.com with a detailed description and any relevant evidence. All complaints will be reviewed, investigated, and result in a response deemed necessary and appropriate to the circumstances.
+
+#### Violations
+Violations of this Code of Conduct may result in expulsion from the community or other repercussions as deemed appropriate by the project maintainers.
+
+By contributing to RESIDAT, you agree to abide by these principles and behaviors to ensure our community remains welcoming, inspiring, and constructive for all.
 
 
 ## Routing and Navigation 🚏
 
 // Details on Vue Router setup and navigation structure.
 
-
-
-## Contributing 🤲
-
-// Guidelines for contributing to the project.
 
 ## FAQs ❓
 
