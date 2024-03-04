@@ -84,7 +84,8 @@ export default {
   data() {
     return {
     
-
+      mapSvgPath: 'public\\assets\\svgs\\far-north.svg',
+      vectorKeys: [],
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
         { name: 'Agriculture', percentage: 50 },
@@ -130,8 +131,7 @@ export default {
         }
         // Add more events as needed
       ],
-      mapSvgPath: 'public\\assets\\svgs\\far-north.svg',
-      vectorKeys: [],
+     
     }
   },
 
@@ -158,10 +158,14 @@ export default {
      console.log(this.vectorKeys)
    },
  
-   extractColor(styleString) {
+ extractColor(styleString) {
+   if (styleString) {
      const match = styleString.match(/fill: (#[0-9a-fA-F]{6})/)
      return match ? match[1] : 'DefaultColor'
    }
+   return 'DefaultColor';
+ }
+ 
  }
 ,
 
