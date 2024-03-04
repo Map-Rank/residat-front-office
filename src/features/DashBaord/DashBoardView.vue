@@ -1,14 +1,10 @@
 <template>
-  <div class="bg-primary-light px-100 pt-10">
-    <div class="grid grid-cols-1 md:grid-cols-8 gap-2">
+  <div class="bg-primary-light px-4 md:px-100 pt-10 w-full">
+    <div class=" flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div class="col-span-1">
-<!-- 
-        <div v-for="(key, index) in vectorKeys" :key="index">
-          <span class="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"
-              :style="{ backgroundColor: key.color }">{{ key.name }}</span>
-      </div> -->
 
-      <div class="flex flex-wrap gap-2 p-4">
+
+      <div class="flex flex-wrap  gap-2 p-4">
         <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-2">
           <span class="block w-4 h-4 rounded-full" :style="{ backgroundColor: key.color }"></span>
           <span class="text-sm font-semibold" :class="{'text-gray-700': !key.color, 'text-primary-normal': key.color}" >{{ key.name }}</span>
@@ -16,14 +12,16 @@
       </div>
       </div>
     
-      <div class="col-span-5">
-        <div v-if="isSVG">
+      <div class="flex md:col-span-5">
+        <div v-if="isSVG" class="w-full">
           <inline-svg
             title="Cameroon Map"
             fill-opacity="1"
             :color="'#fff'"
             fill="black"
             :src="mapSvgPath"
+            width="" 
+            
           />
         </div>
         <div v-else>
@@ -31,11 +29,14 @@
         </div>
       </div>
 
-      <div class="col-span-2">
+      <div class=" md:col-span-2 w-full">
         <div class="mb-6">
           <BaseDropdown :options="hazard" />
         </div>
-        <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" />
+        <div class="hidden md:block">
+
+          <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" />
+        </div>
       </div>
     </div>
 
