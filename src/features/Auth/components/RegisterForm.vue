@@ -557,7 +557,7 @@ export default {
           this.authStore,
           this.handleSuccess,
           this.handleError,
-          this.handleSuccess
+          this.handleEmailNotVerified
         )
       } catch (error) {
         console.log(error)

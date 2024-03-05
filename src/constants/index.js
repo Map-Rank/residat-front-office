@@ -1,5 +1,5 @@
 export * from './localStorageKeys';
-export * from '../api/apiEndpoints';
+export * from './apiEndpoints';
 export * from './url';
 // Export other constants as needed
 

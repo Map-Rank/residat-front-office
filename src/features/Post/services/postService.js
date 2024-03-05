@@ -1,9 +1,10 @@
-import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
+import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 // import useAuthStore from '@/stores/auth'
 
 const currentDate = new Date().toISOString().split('T')[0]
-
+// const authStore = useAuthStore()
+// const authToken = authStore.token
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const createPost = async (postData, onSuccess, onError) => {
