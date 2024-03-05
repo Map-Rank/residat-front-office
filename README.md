@@ -702,18 +702,12 @@ Violations of this Code of Conduct may result in expulsion from the community or
 By contributing to RESIDAT, you agree to abide by these principles and behaviors to ensure our community remains welcoming, inspiring, and constructive for all.
 
 
-## Routing and Navigation 🚏
-
-// Details on Vue Router setup and navigation structure.
 
 
 ## FAQs ❓
 
 // Answers to frequently asked questions.
 
-## Code of Conduct 📜
-
-// The expectations for community conduct.
 
 ## License ⚖️
 

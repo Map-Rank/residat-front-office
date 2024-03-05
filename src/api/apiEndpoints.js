@@ -2,16 +2,15 @@
 export const API_ENDPOINTS = {
   login: '/login',
   register: '/register',
-  createPost: '/create',
+  createPost: '/post',
   getPosts: '/post',
-  showSpecificPost: '/show',
+  showSpecificPost: '/post',
   getUserPosts: '/profile',
   likePost: 'post/like',
   commentPost: 'post/comment',
   updatePost: 'post/update',
   sector: '/sector',
-  deletePost: 'post/delete',
-  sharePost: 'post/share',
+  deletePost: '/post',
+  sharePost: '/post/share',
   zone: '/zone',
-  // other endpoints...
 };
