@@ -10,7 +10,7 @@ export const API_ENDPOINTS = {
   commentPost: 'post/comment',
   updatePost: 'post/update',
   sector: '/sector',
-  deletePost: 'post/delete',
-  sharePost: 'post/share',
+  deletePost: '/post',
+  sharePost: '/post/share',
   zone: '/zone',
 };
