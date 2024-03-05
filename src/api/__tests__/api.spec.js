@@ -62,12 +62,9 @@ describe('API Service', () => {
   it('makes a DELETE call successfully', async () => {
     const endpoint = 'post/123';
     const authToken = '206|f31ccRuu2LfnvTOPa7xQMQVpfnPUCXUxTEOpuRtdb5ca3c32';
-    // const mockResponse = { success: true };
 
     const response = await makeApiDeleteCall(endpoint, authToken);
 
-    // Verify DELETE request was sent with the correct headers
     expect(response.status).toBe(200);
-    // expect(response.data).toEqual(mockResponse);
   });
 });
