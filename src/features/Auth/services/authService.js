@@ -1,7 +1,7 @@
-import { makeApiPostCall } from '@/api/api'
+import { makeApiPostCall } from '@/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
-const registerUser = async (userData, authStore, onSuccess, onError) => {
+const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVerified) => {
   try {
     const formData = new FormData()
 
@@ -19,14 +19,13 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     const user = response.data.data
     const token = response.data.data.token
 
-    //Email verification have been suspended for the moment 🚀 TODO 
-    // if (!response.data.data.verified) {
-    //   onEmailNotVerified()
-    //   console.log('user not verified')
-    //   localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
-    //   localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    if (!response.data.data.verified) {
+      onEmailNotVerified()
+      console.log('user not verified')
+      localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
+      localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
 
-    // } else {
+    } else {
   
       console.log('register successfull !!!!')
   
@@ -35,7 +34,7 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
       onSuccess()
-    // }
+    }
 
 
 
