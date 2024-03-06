@@ -40,9 +40,9 @@
       </div>
     </div>
 
-    <div >
+    <!-- <div >
       <WaterStressChart></WaterStressChart>
-    </div>
+    </div> -->
 
     <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
@@ -126,7 +126,7 @@ export default {
           title: 'Wealth Health Organization',
           logoUrl:
             'https://logos-world.net/wp-content/uploads/2021/03/World-Health-Organization-WHO-Symbol.png',
-          name: 'Wealth Health Organization'
+          name: 'World Health Organization'
         },
         {
           title: 'Event 3',

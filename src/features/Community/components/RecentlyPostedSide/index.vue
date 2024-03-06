@@ -35,7 +35,7 @@ export default {
     return {
       formatDate,
       truncateText,
-      sectionTitle:'Recently Post'
+      sectionTitle:'Recently Posted'
     }
   },
   components: {

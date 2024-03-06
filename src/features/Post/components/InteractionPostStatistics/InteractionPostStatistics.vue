@@ -1,10 +1,14 @@
 <template>
   <div class="flex justify-between border-b mb-2 pb-2">
     <div class="flex items-center space-x-1">
-      <img src="@\assets\icons\heart-fill.svg" alt="" />
+      <img src="@\assets\icons\heart-fill-green.svg" alt="" />
       <span class="caption-c1-bold">{{ like_count }} and other likes</span>
     </div>
-    <span class="ml-4 caption-c1-bold">{{ comment_count }} Comments</span>
+    <span class="ml-4 caption-c1-bold">
+      <span >{{ comment_count }}</span>
+       
+      
+      Comments</span>
   </div>
 </template>
 <script>
