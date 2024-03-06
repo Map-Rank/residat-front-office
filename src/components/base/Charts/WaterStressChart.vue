@@ -1,6 +1,7 @@
 <template>
-  <div class="w-1/2 h-[400px] p-3 flex align-middle justify-start items-start bg-white rounded-lg">
-    <canvas ref="waterStressChart"></canvas>
+  <div class="md:w-[600px] md:h-[300px] p-3 flex align-middle justify-center items-center bg-white rounded-lg">
+   <canvas ref="waterStressChart" style="width: 100%;"></canvas>
+   
   </div>
 </template>
 
@@ -60,7 +61,7 @@ export default {
             title: {
               display: false,
               text: 'Percentage'
-            }
+            },
           },
           x: {
             type: 'time',
@@ -116,7 +117,7 @@ export default {
                   position: 'start',
                   fontStyle: 'bold',
                   font: {
-                    size: 14,
+                    size: 12,
                     family: 'Helvetica, Arial, sans-serif'
                   }
                 }
@@ -133,7 +134,7 @@ export default {
                   position: 'start',
                   fontStyle: 'bold',
                   font: {
-                    size: 14,
+                    size: 12,
                     family: 'Helvetica, Arial, sans-serif'
                   }
                 }
@@ -150,7 +151,7 @@ export default {
                   position: 'start',
                   fontStyle: 'bold',
                   font: {
-                    size: 14,
+                    size: 12,
                     family: 'Helvetica, Arial, sans-serif'
                   }
                 }
@@ -167,7 +168,7 @@ export default {
                   position: 'start',
                   fontStyle: 'bold',
                   font: {
-                    size: 14,
+                    size: 12,
                     family: 'Helvetica, Arial, sans-serif'
                   }
                 }
@@ -184,7 +185,7 @@ export default {
                   position: 'start',
                   fontStyle: 'bold',
                   font: {
-                    size: 14,
+                    size: 12,
                     family: 'Helvetica, Arial, sans-serif'
                   }
                 }
@@ -202,7 +203,7 @@ export default {
                   position: 'start',
                   fontStyle: 'bold',
                   font: {
-                    size: 14,
+                    size: 12,
                     family: 'Helvetica, Arial, sans-serif'
                   }
                 }

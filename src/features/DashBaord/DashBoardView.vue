@@ -1,9 +1,27 @@
 <template>
   <div class="bg-primary-light px-4 md:px-100 pt-10 w-full">
+    <div class=" h-10 z-1 relative">
+      <div class="md:w-[600px]">
+
+        <button-ui
+        :label="'Show water Stress'"
+        :color="'text-white'"
+        :textCss="'text-white font-bold text-center'"
+        :customCss="'bg-secondary-normal flex justify-center'"
+        @clickButton="toggleWaterStressGraphVisibility() "
+        >
+          
+        </button-ui>
+      </div>
+
+      <div :class="{ 'hidden': isWaterStressGraphHidden } ">
+        <WaterStressChart></WaterStressChart>
+      </div>
+    </div>
     <div class=" flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
+
+
       <div class="col-span-1">
-
-
       <div class="flex flex-wrap  gap-2 p-4">
         <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-2">
           <span class="block w-4 h-4 rounded-full" :style="{ backgroundColor: key.color }"></span>
@@ -40,9 +58,7 @@
       </div>
     </div>
 
-    <div >
-      <WaterStressChart></WaterStressChart>
-    </div>
+  
 
     <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
@@ -57,7 +73,6 @@
           :canvas-id="'climateVulnerabilityIndex'"
           :data="climateVulnerabilityIndex"
           label="Climate Vulnerability Index"
-          :barThickness="60"
         ></BaseBarChart>
       </div>
       <div class="col-span-1">
@@ -80,6 +95,7 @@ import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
 import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
 import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
+import ButtonUi from '@/components/base/ButtonUi.vue'
 export default {
   name: 'DashBoardView',
   mounted() {
@@ -91,6 +107,7 @@ export default {
       mapSvgPath: 'public\\assets\\svgs\\far-north.svg',
       vectorKeys: [],
       isSubDivisionGraph:false,
+      isWaterStressGraphHidden:true,
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
         { name: 'Agriculture', percentage: 50 },
@@ -141,6 +158,9 @@ export default {
   },
 
  methods: {
+  toggleWaterStressGraphVisibility() {
+      this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden;
+    },
    async extractSVGKeys() {
      this.vectorKeys.splice(0, this.vectorKeys.length)
  
@@ -186,7 +206,8 @@ export default {
     BaseBarChart,
     DegreeImpactDoughnutChart,
     InlineSvg,
-    WaterStressChart
+    WaterStressChart,
+    ButtonUi
   },
 
 }
