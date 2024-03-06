@@ -1,12 +1,13 @@
 <template>
-  <div>
-    <canvas ref="waterStressChart"></canvas>>
+  <div class="w-1/2 h-[500px] p-3 flex align-middle justify-center items-center bg-white rounded-lg">
+    <canvas ref="waterStressChart"></canvas>
   </div>
 </template>
 
 <script>
 import { Chart,  } from 'chart.js'
 import 'chartjs-adapter-date-fns';
+import 'chartjs-plugin-annotation';
 
 export default {
   name: 'WaterStressChart',
@@ -28,7 +29,6 @@ return{
     data: Array // Assuming data is passed as an array of { x: time, y: stressLevel }
   },
   mounted() {
-    // Chart.register(...registerables)
     this.renderChart()
   
   },
@@ -62,7 +62,7 @@ return{
           annotations: {
             tooMuchWater: {
               type: 'line',
-              yMin: 100,
+              yMin: 75,
               yMax: 100,
               borderColor: 'red',
               borderWidth: 2,
@@ -74,8 +74,8 @@ return{
             },
             tooLittleWater: {
               type: 'line',
-              yMin: 10,
-              yMax: 10,
+              yMin: 0,
+              yMax: 50,
               borderColor: 'red',
               borderWidth: 2,
               label: {

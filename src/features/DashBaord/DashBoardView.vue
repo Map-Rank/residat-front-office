@@ -40,9 +40,9 @@
       </div>
     </div>
 
-    <div >
+    <!-- <div >
       <WaterStressChart></WaterStressChart>
-    </div>
+    </div> -->
 
     <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">

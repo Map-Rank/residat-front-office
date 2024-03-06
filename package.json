@@ -17,6 +17,7 @@
     "axios": "^1.6.2",
     "chart.js": "^4.4.1",
     "chartjs-adapter-date-fns": "^3.0.0",
+    "chartjs-plugin-annotation": "^3.0.1",
     "date-fns": "^3.3.1",
     "pinia": "^2.1.7",
     "postcss": "^8.4.31",
