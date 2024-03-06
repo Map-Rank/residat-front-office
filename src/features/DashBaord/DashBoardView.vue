@@ -40,6 +40,10 @@
       </div>
     </div>
 
+    <!-- <div >
+      <WaterStressChart></WaterStressChart>
+    </div> -->
+
     <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
@@ -75,7 +79,7 @@ import KeyActors from '@/components/common/KeyActors/KeyActor.vue'
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
 import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
 import InlineSvg from 'vue-inline-svg'
-
+import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 export default {
   name: 'DashBoardView',
   mounted() {
@@ -86,6 +90,7 @@ export default {
     
       mapSvgPath: 'public\\assets\\svgs\\far-north.svg',
       vectorKeys: [],
+      isSubDivisionGraph:false,
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
         { name: 'Agriculture', percentage: 50 },
@@ -180,7 +185,8 @@ export default {
     KeyActors,
     BaseBarChart,
     DegreeImpactDoughnutChart,
-    InlineSvg
+    InlineSvg,
+    WaterStressChart
   },
 
 }
