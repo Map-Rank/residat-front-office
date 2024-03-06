@@ -33,7 +33,7 @@ export default {
 
     generateChartData(today) {
       const startDate = subDays(today, 3); // 3 days before today
-      const endDate = addDays(today, 3); // 3 days after today
+      const endDate = addDays(today, 2); // 3 days after today
       const chartData = [];
 
       for (let d = startDate; d <= endDate; d = addDays(d, 1)) {
