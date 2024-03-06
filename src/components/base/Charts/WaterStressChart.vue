@@ -16,15 +16,8 @@ export default {
   data() {
     const today = new Date();
     return {
-      chartData: [
-        { Date: new Date('2024-03-01'), WaterStressLevel: 20 },
-        { Date: new Date('2024-03-02'), WaterStressLevel: 35 },
-        { Date: new Date('2024-03-03'), WaterStressLevel: 50 },
-        { Date: new Date('2024-03-04'), WaterStressLevel: 75 },
-        { Date: new Date('2024-03-05'), WaterStressLevel: 65 },
-        { Date: new Date('2024-03-06'), WaterStressLevel: 40 },
-        { Date: new Date('2024-03-07'), WaterStressLevel: 25 }
-      ]
+      today,
+      chartData: this.generateChartData(today),
     }
   },
   props: {
@@ -51,7 +44,13 @@ export default {
 
       return chartData;
     },
+
+    getRandomWaterLevel() {
+      return Math.floor(Math.random() * 101);
+    },
     renderChart() {
+      const todayFormatted = format(this.today, 'yyyy-MM-dd');
+
       const options = {
         scales: {
           y: {
@@ -77,6 +76,19 @@ export default {
         plugins: {
           annotation: {
             annotations: {
+              todayLine: {
+                type: 'line',
+                xMin: todayFormatted,
+                xMax: todayFormatted,
+                borderColor: 'blue',
+                borderWidth: 2,
+                borderDash: [5, 5], // Array representing the length of dashes and gaps
+                label: {
+                  content: 'Today',
+                  enabled: true,
+                  position: 'top',
+                }
+              },
               line70: {
                 type: 'line',
                 yMin: 70,
