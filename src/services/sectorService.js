@@ -1,4 +1,4 @@
-import { makeApiGetCall } from '@/api' // Import the makeApiPostCall function
+import { makeApiGetCall } from '@/api/api' // Import the makeApiPostCall function
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 

@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api'
+import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 // import useAuthStore from '@/stores/auth'
 

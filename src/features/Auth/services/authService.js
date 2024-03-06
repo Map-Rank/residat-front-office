@@ -1,4 +1,4 @@
-import { makeApiPostCall } from '@/api'
+import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVerified) => {

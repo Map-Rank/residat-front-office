@@ -4,7 +4,7 @@ export const API_ENDPOINTS = {
   register: '/register',
   createPost: '/create',
   getPosts: '/post',
-  showSpecificPost: '/show',
+  showSpecificPost: '/post',
   getUserPosts: '/profile',
   likePost: 'post/like',
   commentPost: 'post/comment',
