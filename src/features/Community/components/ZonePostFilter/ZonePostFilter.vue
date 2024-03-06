@@ -74,7 +74,7 @@ export default {
       isLoading: false,
 
       region_id: '1',
-      sectionTitle: 'Select Region',
+      sectionTitle: 'Select Location',
 
       division_id: '',
       Subdivision_id: '1',

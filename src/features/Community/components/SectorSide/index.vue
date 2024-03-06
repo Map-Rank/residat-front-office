@@ -25,7 +25,7 @@ export default {
   name: 'SectorSide',
   data() {
     return {
-      sectionTitle:'Select Categorie',
+      sectionTitle:'Select Sector',
       sectors: this.sectorArray // initialize with your set of sectors
     }
   },

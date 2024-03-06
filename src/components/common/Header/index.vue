@@ -192,9 +192,9 @@ export default {
           routerName: 'chat-room'
         },
         {
-          svgContent: '\\assets\\icons\\event-outline.svg',
-          svgContentHover: '\\assets\\icons\\event-fill.svg',
-          labelText: 'Event',
+          svgContent: '\\assets\\icons\\notification-outline.svg',
+          svgContentHover: '\\assets\\icons\\notification-fill.svg',
+          labelText: 'Notification',
           isActive: false,
           bottom: true,
           routerName: 'event'

@@ -1,5 +1,5 @@
 <template>
-  <div class="w-1/2 h-[500px] p-3 flex align-middle justify-center items-center bg-white rounded-lg">
+  <div class="w-1/2 h-[500px] p-3 flex align-middle justify-start items-start bg-white rounded-lg">
     <canvas ref="waterStressChart"></canvas>
   </div>
 </template>
@@ -66,13 +66,14 @@ return{
         type: 'box',
         yMin: 0,
         yMax: 10,
-        backgroundColor: 'rgba(156, 199, 250, 0.5)',
-        borderColor: 'rgba(156, 199, 250, 1)',
-        borderWidth: 1,
+      backgroundColor: 'rgba(205, 133, 63, 0.1)', // Light Brown RGB Value
+      
+        // borderColor: 'rgba(255, 0, 0, 1)', 
+        // borderWidth: 2,
         label: {
-          content: 'Very Low',
+          content: 'To little Water',
           display: true,
-          position: 'center',
+          position: 'start',
           fontStyle: 'bold',
           font: {
             size: 14,
@@ -80,17 +81,17 @@ return{
           }
         }
       },
-      box10to25: {
+      box10to30: {
         type: 'box',
         yMin: 10,
-        yMax: 25,
-        backgroundColor: 'rgba(100, 181, 246, 0.8)',
-        borderColor: 'rgba(100, 181, 246, 1)',
-        borderWidth: 1,
+        yMax: 30,
+        backgroundColor: 'rgba(205, 133, 63, 0.2)', // Light Brown RGB Value
+        // borderColor: 'rgba(100, 181, 246, 1)',
+        // borderWidth: 1,
         label: {
-          content: 'Low',
+          content: 'Low Water',
           display: true,
-          position: 'center',
+          position: 'start',
           fontStyle: 'bold',
           font: {
             size: 14,
@@ -98,17 +99,17 @@ return{
           }
         }
       },
-      box25to50: {
+      box30to50: {
         type: 'box',
-        yMin: 25,
+        yMin: 30,
         yMax: 50,
-        backgroundColor: 'rgba(66, 165, 245, 0.8)',
-        borderColor: 'rgba(66, 165, 245, 1)',
-        borderWidth: 1,
+        backgroundColor: 'rgba(205, 133, 63, 0.4)', // Light Brown RGB Value
+// borderColor: 'rgba(0, 128, 0, 1)', // Green RGB Value
+        // borderWidth: 3,
         label: {
-          content: 'Moderate',
+          content: 'Normal',
           display: true,
-          position: 'center',
+          position: 'start',
           fontStyle: 'bold',
           font: {
             size: 14,
@@ -116,17 +117,17 @@ return{
           }
         }
       },
-      box50to75: {
+      box50to70: {
         type: 'box',
         yMin: 50,
-        yMax: 75,
-        backgroundColor: 'rgba(33, 150, 243, 0.8)',
-        borderColor: 'rgba(33, 150, 243, 1)',
-        borderWidth: 1,
+        yMax: 70,
+        backgroundColor: 'rgba(66, 165, 245, 0.4)',
+        // borderColor: 'rgba(66, 165, 245, 1)',
+        // borderWidth: 1,
         label: {
-          content: 'High',
+          content: 'Normal',
           display: true,
-          position: 'center',
+          position: 'start',
           fontStyle: 'bold',
           font: {
             size: 14,
@@ -134,17 +135,36 @@ return{
           }
         }
       },
-      box75to100: {
+      box70to90: {
         type: 'box',
-        yMin: 75,
-        yMax: 100,
-        backgroundColor: 'rgba(25, 118, 210, 0.8)',
-        borderColor: 'rgba(25, 118, 210, 1)',
+        yMin: 70,
+        yMax: 90,
+        backgroundColor: 'rgba(33, 150, 243, 0.5)',
+        // borderColor: 'rgba(33, 150, 243, 1)',
         borderWidth: 1,
         label: {
-          content: 'Very High',
+          content: 'High Water',
           display: true,
-          position: 'center',
+          position: 'start',
+          fontStyle: 'bold',
+          font: {
+            size: 14,
+            family: 'Helvetica, Arial, sans-serif'
+          }
+        }
+      },
+      box90to100: {
+        type: 'box',
+        yMin: 90,
+        yMax: 100,
+        backgroundColor: 'rgba(25, 118, 210, 0.6)',
+        // borderColor: 'rgba(255, 0, 0, 1)', 
+        
+        borderWidth: 2,
+        label: {
+          content: 'To much Water',
+          display: true,
+          position: 'start',
           fontStyle: 'bold',
           font: {
             size: 14,

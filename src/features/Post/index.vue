@@ -62,7 +62,7 @@
     </image-post-gallery>
 
     <!-- Post Interaction Area -->
-    <footer class="p-5">
+    <footer class="px-5 pt-2">
       <!-- upper section  -->
       <InteractionPostStatistics
         :comment_count="customPost.comment_count"
