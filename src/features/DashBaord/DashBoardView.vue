@@ -104,10 +104,11 @@ export default {
   data() {
     return {
     
-      mapSvgPath: 'public\\assets\\svgs\\far-north.svg',
+      mapSvgPath: '\\assets\\svgs\\far-north.svg',
       vectorKeys: [],
       isSubDivisionGraph:false,
       isWaterStressGraphHidden:true,
+      
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
         { name: 'Agriculture', percentage: 50 },

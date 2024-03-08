@@ -13,5 +13,4 @@ export const API_ENDPOINTS = {
   deletePost: 'post/delete',
   sharePost: 'post/share',
   zone: '/zone',
-  // other endpoints...
 };
