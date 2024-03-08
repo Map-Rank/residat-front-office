@@ -1,7 +1,10 @@
 <template>
   <SectionTitle :title="sectionTitle" />
 
-  <div v-for="item in [1, 2]" :key="item" class="mt-3 p-4 bg-white rounded-xl flex items-center space-x-4">
+  <div class="h-[280px] grid align-middle items-start">
+<div>
+
+  <div v-for="item in [1, 2]" :key="item" class="mb-2  p-3 bg-white rounded-xl flex items-center space-x-4">
     <div class="flex-shrink-0">
       <img
         :src="eventImage"
@@ -24,6 +27,8 @@
         <span>{{ location }}</span>
       </p>
     </div>
+  </div>
+</div>
   </div>
 </template>
 

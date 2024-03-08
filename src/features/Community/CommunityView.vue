@@ -24,7 +24,7 @@
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
-              <aside class="col-span-2  hidden sm:block md:hidden lg:block">
+              <aside class="col-span-2  hidden sm:block md:hidden lg:block ">
                 <zone-post-filter
                   :filterPostFunctionWithId="filterPostByZone"
                   :updateZoneName="updateZoneName"
