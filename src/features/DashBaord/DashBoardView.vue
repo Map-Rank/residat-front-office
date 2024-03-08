@@ -174,15 +174,17 @@ export default {
  
      const extractedData = Array.from(paths).map((path) => ({
        id: path.getAttribute('data-id'),
-       value: this.extractColor(path.getAttribute('style')),
+       value: this.extractColor(path.getAttribute('style') || path.getAttribute('fill')),
        type: this.isSvg ? 'color' : 'image',
        name: path.getAttribute('data-name'),
-       color: this.extractColor(path.getAttribute('style'))
+       color: path.getAttribute('fill')  || this.extractColor(path.getAttribute('style'))
+
      }))
  
      this.vectorKeys.push(...extractedData)
      console.log(this.vectorKeys)
-   },
+   }
+  ,
  
  extractColor(styleString) {
    if (styleString) {
@@ -191,6 +193,9 @@ export default {
    }
    return 'DefaultColor';
  }
+
+
+
  
  }
 ,
