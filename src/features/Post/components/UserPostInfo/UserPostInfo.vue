@@ -11,10 +11,11 @@
             <h5 class="font-bold cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
             <div class="flex items-center ">
 
-              <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}  
-                </h5>
               <img src="/assets/icons/location.svg" class="h-6" alt="" srcset="">
-              <span class="caption-c1">{{ postDate }}</span>
+            <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}</h5>
+            <p style="font-weight: 700; margin: 0 5px;"> • </p>
+            <span class="caption-c1">{{ postDate }}</span>
+            
             </div>
           
         </div>

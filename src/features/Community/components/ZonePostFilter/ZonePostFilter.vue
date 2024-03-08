@@ -1,7 +1,8 @@
 5q<template>
   <SectionTitle :title="sectionTitle" />
 
-  <div class="bg-white md:p-6 rounded-lg">
+  <!-- <div class="bg-white md:p-6 rounded-lg h-[250px] grid align-middle items-center" > -->
+  <div class="bg-white md:p-6 rounded-lg h-[250px] grid align-middle items-center" >
     <div class="grid w-full">
       <div class="w-full">
         <label class="label inline-block mb-2">Choose Your Region</label>
