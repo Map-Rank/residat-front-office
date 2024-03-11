@@ -1,7 +1,7 @@
 <template>
   <SectionTitle :title="sectionTitle" />
 
-    <div class="h-[280px] grid align-middle items-start">
+    <div class=" h-[250px] grid align-middle items-start">
       
       <div class="bg-white md:p-6 rounded-lg  " >
         <div class="grid w-full">

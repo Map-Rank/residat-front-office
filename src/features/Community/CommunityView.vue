@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- Fixed image in the background -->
     <div
-      class="fixed hidden md:block top-0 left-0 w-full h-[50%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      class="fixed hidden md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
       <h2 class="text-white absolute bottom-0 left-2 md:left-100 md:bottom-5 uppercase">
@@ -410,7 +410,7 @@ export default {
 
 <style scoped>
 .enableScroll {
-  height: 40vh;
+  height: 20vh;
 }
 .scroll-lock {
   overflow: hidden;
