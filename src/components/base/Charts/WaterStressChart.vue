@@ -112,7 +112,7 @@ export default {
 
                 borderWidth: 0,
                 label: {
-                  content: 'To little Water',
+                  content: 'Too little Water',
                   display: true,
                   position: 'start',
                   fontStyle: 'bold',
@@ -198,7 +198,7 @@ export default {
 
                 borderWidth: 0,
                 label: {
-                  content: 'To much Water',
+                  content: 'Too much Water',
                   display: true,
                   position: 'start',
                   fontStyle: 'bold',

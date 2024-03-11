@@ -3,16 +3,6 @@ import {  API_ENDPOINTS } from '@/constants/index.js'
 
 
 
-// const getZones = async () => {
-//     try {
-//       const response = await makeApiGetCall(API_ENDPOINTS.zone)
-//       return response.data.data
-//     } catch (error) {
-//       console.error('Error fetching all Zones:', error)
-//       throw error
-//     }
-//   }
-
   const getZones = async (level_id, parent_id) => {
     let params = new URLSearchParams();
   
@@ -31,7 +21,6 @@ import {  API_ENDPOINTS } from '@/constants/index.js'
         `${API_ENDPOINTS.zone}?${params.toString()}`
       )
   
-      console.log(response)
       return response.data.data;
     } catch (error) {
       console.error('Error fetching zones:', error);
