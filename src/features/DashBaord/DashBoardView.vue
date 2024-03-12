@@ -1,21 +1,27 @@
 <template>
   <div class="bg-primary-light px-4 md:px-100 pt-1 w-full">
-    <div class=" h-10 z-1 relative">
-      <div class="md:w-[500px]">
-
-        <button-ui
-        :label="'Water Stress'"
-        :color="'text-white'"
-        :textCss="'text-white font-bold text-center'"
-        :customCss="'bg-secondary-normal flex justify-center'"
-        @clickButton="toggleWaterStressGraphVisibility() "
-        >
-          
-        </button-ui>
+    <div class=" grid space-y-4 md:space-y-0 md:flex md:space-x-4 md:mb-4 row-auto md:h-10 z-1 relative">
+      <div class="">
+        <div class="md:w-[500px]">
+  
+          <button-ui
+          :label="'Water Stress'"
+          :color="'text-white'"
+          :textCss="'text-white font-bold text-center'"
+          :customCss="'bg-secondary-normal flex justify-center'"
+          @clickButton="toggleWaterStressGraphVisibility() "
+          >
+            
+          </button-ui>
+        </div>
+  
+        <div :class="{ 'hidden': isWaterStressGraphHidden } ">
+          <WaterStressChart></WaterStressChart>
+        </div>
       </div>
+      <div class="md:w-1/3">
 
-      <div :class="{ 'hidden': isWaterStressGraphHidden } ">
-        <WaterStressChart></WaterStressChart>
+        <BaseDropdown :options="hazard" />
       </div>
     </div>
     <div class=" flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
@@ -49,7 +55,6 @@
 
       <div class=" md:col-span-2 w-full">
         <div class="mb-6">
-          <BaseDropdown :options="hazard" />
         </div>
         <div class="hidden md:block">
 
