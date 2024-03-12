@@ -55,7 +55,7 @@ export default {
       const fontStyle11 = {
   display: true,
   position: 'start',
-  fontStyle: 'bold',
+  fontStyle: 'regular',
   font: {
     size: 11,
     family: 'Helvetica, Arial, sans-serif'

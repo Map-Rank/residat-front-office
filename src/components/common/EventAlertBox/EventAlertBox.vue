@@ -1,7 +1,7 @@
 <template>
   <SectionTitle :title="sectionTitle" />
 
-  <div class=" grid align-middle items-start">
+  <!-- <div class=" grid align-middle items-start"> -->
     
 <div class=" h-[250px] grid space-y-2">
 
@@ -30,7 +30,7 @@
     </div>
   </div>
 </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>
