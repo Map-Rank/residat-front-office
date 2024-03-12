@@ -1,5 +1,5 @@
 <template>
-  <header class="py-4 md:px-100 bg-white ">
+  <header class="py-1 md:px-100 bg-white ">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
      

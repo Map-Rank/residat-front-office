@@ -1,10 +1,10 @@
 <template>
-  <div class="bg-primary-light px-4 md:px-100 pt-10 w-full">
+  <div class="bg-primary-light px-4 md:px-100 pt-1 w-full">
     <div class=" h-10 z-1 relative">
-      <div class="md:w-[600px]">
+      <div class="md:w-[500px]">
 
         <button-ui
-        :label="'Show water Stress'"
+        :label="'Water Stress'"
         :color="'text-white'"
         :textCss="'text-white font-bold text-center'"
         :customCss="'bg-secondary-normal flex justify-center'"

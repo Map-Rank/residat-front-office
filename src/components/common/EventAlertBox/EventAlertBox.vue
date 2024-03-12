@@ -1,10 +1,11 @@
 <template>
   <SectionTitle :title="sectionTitle" />
 
-  <div class="h-[280px] grid align-middle items-start">
-<div>
+  <!-- <div class=" grid align-middle items-start"> -->
+    
+<div class=" h-[250px] grid space-y-2">
 
-  <div v-for="item in [1, 2]" :key="item" class="mb-2  p-3 bg-white rounded-xl flex items-center space-x-4">
+  <div v-for="item in [1, 2]" :key="item" class="  p-3 bg-white rounded-xl flex items-center space-x-4">
     <div class="flex-shrink-0">
       <img
         :src="eventImage"
@@ -29,7 +30,7 @@
     </div>
   </div>
 </div>
-  </div>
+  <!-- </div> -->
 </template>
 
 <script>

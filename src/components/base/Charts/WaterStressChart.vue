@@ -1,5 +1,5 @@
 <template>
-  <div class="md:w-[600px] md:h-[300px] p-3 flex align-middle justify-center items-center bg-white rounded-lg">
+  <div class="md:w-[500px] md:h-[300px] p-3 flex align-middle justify-center items-center bg-white rounded-lg">
    <canvas ref="waterStressChart" style="width: 100%;"></canvas>
    
   </div>
@@ -32,8 +32,8 @@ export default {
   methods: {
 
     generateChartData(today) {
-      const startDate = subDays(today, 3); // 3 days before today
-      const endDate = addDays(today, 3); // 3 days after today
+      const startDate = subDays(today, 3);
+      const endDate = addDays(today, 2); 
       const chartData = [];
 
       for (let d = startDate; d <= endDate; d = addDays(d, 1)) {
@@ -52,12 +52,26 @@ export default {
     renderChart() {
       const todayFormatted = format(this.today, 'yyyy-MM-dd');
 
+      const fontStyle11 = {
+  display: true,
+  position: 'start',
+  fontStyle: 'regular',
+  font: {
+    size: 11,
+    family: 'Helvetica, Arial, sans-serif'
+  }
+};
+
       const options = {
         scales: {
           y: {
             beginAtZero: false,
             max: 100,
             min: 0,
+            ticks: {
+        display: false, // Set this to false to hide the y-axis values
+      },
+
             title: {
               display: false,
               text: 'Percentage'
@@ -83,24 +97,36 @@ export default {
                 xMax: todayFormatted,
                 borderColor: 'blue',
                 borderWidth: 2,
-                borderDash: [5, 5], // Array representing the length of dashes and gaps
+                borderDash: [5, 5], 
                 label: {
                   content: 'Today',
                   enabled: true,
                   position: 'top',
                 }
               },
-              line70: {
+              line90: {
                 type: 'line',
-                yMin: 70,
-                yMax: 70,
+                yMin: 90,
+                yMax: 90,
+                borderColor: 'rgba(255, 0, 0, 1)',
+                borderWidth: 3,
+                label: {
+                  content: 'Today',
+                  enabled: true,
+                  position: 'end ',
+                }
+              },
+              line10: {
+                type: 'line',
+                yMin: 10,
+                yMax: 10,
                 borderColor: 'rgba(255, 0, 0, 1)',
                 borderWidth: 3
               },
-              line30: {
+              line50: {
                 type: 'line',
-                yMin: 30,
-                yMax: 30,
+                yMin: 50,
+                yMax: 50,
                 borderColor: 'rgba(0, 128, 0, 1)',
                 borderWidth: 3
               },
@@ -108,52 +134,34 @@ export default {
                 type: 'box',
                 yMin: 0,
                 yMax: 10,
-                backgroundColor: 'rgba(205, 133, 63, 0.1)',
+                backgroundColor: 'rgba(205, 133, 63, 0.5)',
 
                 borderWidth: 0,
                 label: {
                   content: 'Too little Water',
-                  display: true,
-                  position: 'start',
-                  fontStyle: 'bold',
-                  font: {
-                    size: 12,
-                    family: 'Helvetica, Arial, sans-serif'
-                  }
+                  ...fontStyle11
                 }
               },
               box10to30: {
                 type: 'box',
                 yMin: 10,
                 yMax: 30,
-                backgroundColor: 'rgba(205, 133, 63, 0.2)', 
+                backgroundColor: 'rgba(205, 133, 63, 0.3)', 
                 borderWidth: 0,
                 label: {
                   content: 'Low Water',
-                  display: true,
-                  position: 'start',
-                  fontStyle: 'bold',
-                  font: {
-                    size: 12,
-                    family: 'Helvetica, Arial, sans-serif'
-                  }
+                  ...fontStyle11
                 }
               },
               box30to50: {
                 type: 'box',
                 yMin: 30,
                 yMax: 50,
-                backgroundColor: 'rgba(205, 133, 63, 0.4)',
+                backgroundColor: 'rgba(205, 133, 63, 0.2)',
                 borderWidth: 0,
                 label: {
                   content: 'Normal',
-                  display: true,
-                  position: 'start',
-                  fontStyle: 'bold',
-                  font: {
-                    size: 12,
-                    family: 'Helvetica, Arial, sans-serif'
-                  }
+                  ...fontStyle11
                 }
               },
               box50to70: {
@@ -164,13 +172,7 @@ export default {
                 borderWidth: 0,
                 label: {
                   content: 'Normal',
-                  display: true,
-                  position: 'start',
-                  fontStyle: 'bold',
-                  font: {
-                    size: 12,
-                    family: 'Helvetica, Arial, sans-serif'
-                  }
+                  ...fontStyle11
                 }
               },
               box70to90: {
@@ -181,13 +183,7 @@ export default {
                 borderWidth: 0,
                 label: {
                   content: 'High Water',
-                  display: true,
-                  position: 'start',
-                  fontStyle: 'bold',
-                  font: {
-                    size: 12,
-                    family: 'Helvetica, Arial, sans-serif'
-                  }
+                  ...fontStyle11
                 }
               },
               box90to100: {
@@ -199,13 +195,7 @@ export default {
                 borderWidth: 0,
                 label: {
                   content: 'Too much Water',
-                  display: true,
-                  position: 'start',
-                  fontStyle: 'bold',
-                  font: {
-                    size: 12,
-                    family: 'Helvetica, Arial, sans-serif'
-                  }
+                  ...fontStyle11
                 }
               }
             }
@@ -220,7 +210,8 @@ export default {
             label: 'Water Stress Level',
             data: this.chartData.map((d) => ({ x: d.Date, y: d.WaterStressLevel })),
             fill: false,
-            borderColor: '#FF0000',
+            borderColor: 'rgb(0, 0, 0)',
+            borderWidth:2,
             tension: 0.7
           }
         ]
