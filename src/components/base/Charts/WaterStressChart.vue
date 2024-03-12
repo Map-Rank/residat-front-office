@@ -1,7 +1,8 @@
 <template>
-  <div class="md:w-[500px] md:h-[300px] p-3 flex align-middle justify-center items-center bg-white rounded-lg">
-   <canvas ref="waterStressChart" style="width: 100%;"></canvas>
-   
+  <div
+    class="md:w-[500px] md:h-[300px] p-3 flex align-middle justify-center items-center bg-white rounded-lg"
+  >
+    <canvas ref="waterStressChart" style="width: 100%"></canvas>
   </div>
 </template>
 
@@ -10,19 +11,19 @@ import { Chart } from 'chart.js'
 import 'chartjs-adapter-date-fns'
 import 'chartjs-plugin-annotation'
 import ChartDataLabels from 'chartjs-plugin-annotation'
-import { format, subDays, addDays } from 'date-fns';
+import { format, subDays, addDays } from 'date-fns'
 
 export default {
   name: 'WaterStressChart',
   data() {
-    const today = new Date();
+    const today = new Date()
     return {
       today,
-      chartData: this.generateChartData(today),
+      chartData: this.generateChartData(today)
     }
   },
   props: {
-    data: Array 
+    data: Array
   },
   mounted() {
     Chart.register(ChartDataLabels)
@@ -30,37 +31,48 @@ export default {
   },
 
   methods: {
-
     generateChartData(today) {
-      const startDate = subDays(today, 3);
-      const endDate = addDays(today, 2); 
-      const chartData = [];
+      const startDate = subDays(today, 3)
+      const endDate = addDays(today, 2)
+      const chartData = []
 
       for (let d = startDate; d <= endDate; d = addDays(d, 1)) {
         chartData.push({
           Date: d,
-          WaterStressLevel: this.getRandomWaterLevel(), // Implement this method to get water level
-        });
+          WaterStressLevel: this.getRandomWaterLevel() // Implement this method to get water level
+        })
       }
 
-      return chartData;
+      return chartData
     },
 
     getRandomWaterLevel() {
-      return Math.floor(Math.random() * 101);
+      return Math.floor(Math.random() * 101)
     },
     renderChart() {
-      const todayFormatted = format(this.today, 'yyyy-MM-dd');
+      const todayFormatted = format(this.today, 'yyyy-MM-dd')
 
       const fontStyle11 = {
-  display: true,
-  position: 'start',
-  fontStyle: 'regular',
-  font: {
-    size: 11,
-    family: 'Helvetica, Arial, sans-serif'
-  }
-};
+        display: true,
+        position: 'start',
+        fontStyle: 'regular',
+        font: {
+          size: 11,
+          family: 'Helvetica, Arial, sans-serif'
+        }
+      }
+      const fontStyleLine = {
+        display: true,
+        position: 'end',
+        borderWidth: 0,
+        backgroundColor: '#ff0000',
+        color: '#fff',
+        fontStyle: 'bold',
+        font: {
+          size: 12,
+          family: 'Helvetica, Arial, sans-serif'
+        }
+      }
 
       const options = {
         scales: {
@@ -69,13 +81,13 @@ export default {
             max: 100,
             min: 0,
             ticks: {
-        display: false, // Set this to false to hide the y-axis values
-      },
+              display: false // Set this to false to hide the y-axis values
+            },
 
             title: {
               display: false,
               text: 'Percentage'
-            },
+            }
           },
           x: {
             type: 'time',
@@ -91,19 +103,6 @@ export default {
         plugins: {
           annotation: {
             annotations: {
-              todayLine: {
-                type: 'line',
-                xMin: todayFormatted,
-                xMax: todayFormatted,
-                borderColor: 'blue',
-                borderWidth: 2,
-                borderDash: [5, 5], 
-                label: {
-                  content: 'Today',
-                  enabled: true,
-                  position: 'top',
-                }
-              },
               line90: {
                 type: 'line',
                 yMin: 90,
@@ -111,9 +110,8 @@ export default {
                 borderColor: 'rgba(255, 0, 0, 1)',
                 borderWidth: 3,
                 label: {
-                  content: 'Today',
-                  enabled: true,
-                  position: 'end ',
+                  content: 'flood risk',
+                  ...fontStyleLine
                 }
               },
               line10: {
@@ -121,7 +119,24 @@ export default {
                 yMin: 10,
                 yMax: 10,
                 borderColor: 'rgba(255, 0, 0, 1)',
-                borderWidth: 3
+                borderWidth: 3,
+                label: {
+                  content: 'drought risk',
+                  ...fontStyleLine
+                }
+              },
+              todayLine: {
+                type: 'line',
+                xMin: todayFormatted,
+                xMax: todayFormatted,
+                borderColor: 'blue',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                label: {
+                  content: 'Today',
+                  enabled: true,
+                  position: 'top'
+                }
               },
               line50: {
                 type: 'line',
@@ -146,7 +161,7 @@ export default {
                 type: 'box',
                 yMin: 10,
                 yMax: 30,
-                backgroundColor: 'rgba(205, 133, 63, 0.3)', 
+                backgroundColor: 'rgba(205, 133, 63, 0.3)',
                 borderWidth: 0,
                 label: {
                   content: 'Low Water',
@@ -211,7 +226,7 @@ export default {
             data: this.chartData.map((d) => ({ x: d.Date, y: d.WaterStressLevel })),
             fill: false,
             borderColor: 'rgb(0, 0, 0)',
-            borderWidth:2,
+            borderWidth: 2,
             tension: 0.7
           }
         ]

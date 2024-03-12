@@ -2,7 +2,7 @@
  <section-title
  :title="sectionTitle"
  ></section-title>
-  <div class="bg-white md:p-6 rounded-lg">
+  <div class=" bg-white md:p-6 rounded-lg">
     <ul class="grid space-y-6">
       <li v-for="sector in sectorArray" :key="sector">
         <base-checkbox
