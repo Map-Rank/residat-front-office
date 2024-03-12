@@ -14,23 +14,21 @@ export default {
   name: 'KeyActors',
   data() {
     return {
-      currentIndex: 0, // Current index in the actors array
-      interval: null, // Store the interval ID for clearing later
+      currentIndex: 0, 
+      interval: null, 
     };
   },
   props: {
     actors: Array,
     sectionTitle: String,
-    showAll: Boolean, // Add showAll prop
+    showAll: Boolean, 
   },
   computed: {
     displayedActors() {
-      // Show all actors if showAll is true, otherwise show a subset
       return this.showAll ? this.actors : this.actors.slice(this.currentIndex, this.currentIndex + 3);
     },
   },
   watch: {
-    // Watch for changes in showAll and adjust the displayed actors accordingly
     showAll(newVal) {
       if (newVal) {
         clearInterval(this.interval);
@@ -40,24 +38,20 @@ export default {
     },
   },
   mounted() {
-    // Start the rotation only if showAll is false
     if (!this.showAll) {
       this.startRotation();
     }
   },
   unmounted() {
-    clearInterval(this.interval); // Clear the interval when the component is unmounted
+    clearInterval(this.interval); 
   },
   methods: {
     startRotation() {
-      // Use a method to start the rotation of actors
       this.interval = setInterval(this.rotateActors, 3000);
     },
     rotateActors() {
-      // Increment the current index and wrap it if necessary
       this.currentIndex = (this.currentIndex + 1) % this.actors.length;
 
-      // Reset to the beginning if we reach the end
       if (this.currentIndex > this.actors.length - 3) {
         this.currentIndex = 0;
       }
