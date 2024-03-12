@@ -1,6 +1,6 @@
 <template>
   <div
-    class="md:w-[500px] md:h-[300px] p-3 flex align-middle justify-center items-center bg-white rounded-lg"
+    class="md:w-auto md:h-[300px] p-3 flex align-middle justify-center items-center bg-white rounded-lg"
   >
     <canvas ref="waterStressChart" style="width: 100%"></canvas>
   </div>
@@ -81,7 +81,7 @@ export default {
             max: 100,
             min: 0,
             ticks: {
-              display: false // Set this to false to hide the y-axis values
+              display: false
             },
 
             title: {
@@ -109,6 +109,7 @@ export default {
                 yMax: 90,
                 borderColor: 'rgba(255, 0, 0, 1)',
                 borderWidth: 3,
+                borderDash: [5, 5],
                 label: {
                   content: 'flood risk',
                   ...fontStyleLine
@@ -116,6 +117,7 @@ export default {
               },
               line10: {
                 type: 'line',
+                borderDash: [5, 5],
                 yMin: 10,
                 yMax: 10,
                 borderColor: 'rgba(255, 0, 0, 1)',
