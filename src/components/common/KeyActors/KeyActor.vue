@@ -1,16 +1,7 @@
 <template>
-
-  <div
-    v-for="(actor, index) in actors"
-    :key="index"
-    class="mt-3 p-1 bg-white rounded-xl l flex items-center space-x-4"
-  >
+  <div v-for="(actor, index) in displayedActors" :key="actor.id" class="mt-3 p-1 bg-white rounded-xl flex items-center space-x-4">
     <div class="flex-shrink-0">
-      <img
-        :src="actor.logoUrl"
-        alt="Event image"
-        class="h-16 w-16 rounded-full border-2 border-white"
-      />
+      <img :src="actor.logoUrl" alt="Event image" class="h-16 w-16 rounded-full border-2 border-white" />
     </div>
     <div class="text-black gap-3">
       <div class="text-lg font-semibold">{{ actor.name }}</div>
@@ -19,19 +10,60 @@
 </template>
 
 <script>
-
 export default {
   name: 'KeyActors',
   data() {
     return {
-    }
+      currentIndex: 0, // Current index in the actors array
+      interval: null, // Store the interval ID for clearing later
+    };
   },
   props: {
     actors: Array,
     sectionTitle: String,
+    showAll: Boolean, // Add showAll prop
   },
+  computed: {
+    displayedActors() {
+      // Show all actors if showAll is true, otherwise show a subset
+      return this.showAll ? this.actors : this.actors.slice(this.currentIndex, this.currentIndex + 3);
+    },
+  },
+  watch: {
+    // Watch for changes in showAll and adjust the displayed actors accordingly
+    showAll(newVal) {
+      if (newVal) {
+        clearInterval(this.interval);
+      } else {
+        this.startRotation();
+      }
+    },
+  },
+  mounted() {
+    // Start the rotation only if showAll is false
+    if (!this.showAll) {
+      this.startRotation();
+    }
+  },
+  unmounted() {
+    clearInterval(this.interval); // Clear the interval when the component is unmounted
+  },
+  methods: {
+    startRotation() {
+      // Use a method to start the rotation of actors
+      this.interval = setInterval(this.rotateActors, 3000);
+    },
+    rotateActors() {
+      // Increment the current index and wrap it if necessary
+      this.currentIndex = (this.currentIndex + 1) % this.actors.length;
 
-}
+      // Reset to the beginning if we reach the end
+      if (this.currentIndex > this.actors.length - 3) {
+        this.currentIndex = 0;
+      }
+    },
+  },
+};
 </script>
 
 <style scoped>

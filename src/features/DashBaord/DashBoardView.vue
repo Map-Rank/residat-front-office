@@ -32,13 +32,13 @@
                 :color="'text-white'"
                 :textCss="'text-white font-bold text-center'"
                 :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-                @clickButton="toggleKeyActorsVisibility()"
+                @clickButton="toggleShowAllActors()"
               >
               </button-ui>
             </div>
 
             <div :class="{ hidden: isKeyActorsHidden }">
-              <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" />
+              <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" :showAll="showAllActors" />
             </div>
           </div>
         </div>
@@ -123,6 +123,7 @@ export default {
       isSubDivisionGraph: false,
       isWaterStressGraphHidden: true,
       isKeyActorsHidden: false,
+      showAllActors:false,
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -166,7 +167,19 @@ export default {
           logoUrl:
             'https://th.bing.com/th/id/R.16993675fe4104ffd838eaf642447350?rik=z4n%2fwfldXMhA1g&pid=ImgRaw&r=0',
           name: 'Government'
-        }
+        },
+        {
+          title: 'Event 3',
+          logoUrl:
+            'https://th.bing.com/th/id/OIP.5k9XKswGsc5diwfswIWqiQHaHa?rs=1&pid=ImgDetMain',
+          name: 'Health Aid International Organization'
+        },
+        {
+          title: 'Event 3',
+          logoUrl:
+            'https://logos-download.com/wp-content/uploads/2018/09/Economic_Cooperation_Organization_Logo.png',
+          name: 'Economic Cooperation Organization'
+        },
       ]
     }
   },
@@ -177,6 +190,9 @@ export default {
     },
     toggleKeyActorsVisibility() {
       this.isKeyActorsHidden = !this.isKeyActorsHidden
+    },
+    toggleShowAllActors() {
+      this.showAllActors = !this.showAllActors
     },
     async extractSVGKeys() {
       this.vectorKeys.splice(0, this.vectorKeys.length)
