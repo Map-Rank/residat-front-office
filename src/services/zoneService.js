@@ -27,7 +27,22 @@ import {  API_ENDPOINTS } from '@/constants/index.js'
       throw error;
     }
   }
+
+  const getSpecificZones = async (id) => {
+
+    try {
+      const response = await makeApiGetCall(
+        `${API_ENDPOINTS.zone}/${id}`
+      )
+  
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching zones:', error);
+      throw error;
+    }
+  }
+
   
 
 
-  export {getZones}
+  export {getZones,getSpecificZones}

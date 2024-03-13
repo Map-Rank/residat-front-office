@@ -16,7 +16,7 @@
             :options="regions"
             @selectedOptionId="returnZoneId"
             @functionIdParams="getDivisions"
-            @selectedOptionName="returnZoneName"
+            @input="returnZone"
             
             />
           </div>
@@ -29,7 +29,7 @@
             v-if="!isLoading && !isDivisionLoading"
             @selectedOptionId="returnZoneId"
             :options="divisions"
-            @selectedOptionName="returnZoneName"
+            @input="returnZone"
             @functionIdParams="getSub_divisions"
             />
           </div>
@@ -41,7 +41,7 @@
             <BaseDropdown
             v-if="!isLoading && !isSubdivisionLoading"
             @selectedOptionId="returnZoneId"
-            @selectedOptionName="returnZoneName"
+            @input="returnZone"
             :options="sub_divisions"
           />
         </div>
@@ -116,9 +116,8 @@ export default {
       this.filterPostFunctionWithId(id)
     },
 
-
-    returnZoneName(name){
-this.updateZoneName(name)
+    returnZone(zone){
+this.updateZone(zone)
     },
 
     async getRegions() {
@@ -156,7 +155,7 @@ this.updateZoneName(name)
   },
   props: {
     filterPostFunctionWithId: {},
-    updateZoneName:{}
+    updateZone:{}
   },
   components: {
     BaseDropdown,

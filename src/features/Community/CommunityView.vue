@@ -27,7 +27,7 @@
               <aside class="col-span-2  hidden sm:block md:hidden lg:block ">
                 <zone-post-filter
                   :filterPostFunctionWithId="filterPostByZone"
-                  :updateZoneName="updateZoneName"
+                  :updateZone="updateZone"
                 >
                 </zone-post-filter>
 
@@ -184,7 +184,7 @@ export default {
       zoneName: authStore.user.zone.name,
       postStore,
       modalStore,
-      bannerUrlImage:'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
+      bannerUrlImage:authStore.user.zone.banner || 'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
       hasNewPosts: false,
       hasFetchAllPost:false,
       filteringActive: false,
@@ -252,9 +252,10 @@ export default {
       }
     },
 
-    updateZoneName(zoneName) {
+    updateZone(zone) {
       this.page=0
-      this.zoneName = zoneName
+      this.zoneName = zone.name
+      this.bannerUrlImage= zone.banner
     },
 
     async filterPostBySectors() {

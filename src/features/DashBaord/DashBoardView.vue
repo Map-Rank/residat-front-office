@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <div class="flex md:col-span-7">
+      <div class="flex md:col-span-5">
         <div v-if="isSVG" class="w-full">
           <inline-svg
             title="Cameroon Map"
@@ -111,15 +111,19 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
+import { getSpecificZones } from '../../services/zoneService'
+
 export default {
   name: 'DashBoardView',
   mounted() {
     this.extractSVGKeys()
+    this.getZone()
   },
   data() {
     return {
       mapSvgPath: '\\assets\\svgs\\far-north.svg',
       vectorKeys: [],
+      zone:null,
       isSubDivisionGraph: false,
       isWaterStressGraphHidden: true,
       isKeyActorsHidden: false,
@@ -185,6 +189,12 @@ export default {
   },
 
   methods: {
+
+    async getZone(){
+      this.zone= await getSpecificZones(4)
+      console.log(this.zone)
+
+    },
     toggleWaterStressGraphVisibility() {
       this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
     },
@@ -229,7 +239,6 @@ export default {
     }
   },
   components: {
-    // UnderConstruction,
     BaseDropdown,
     KeyActors,
     BaseBarChart,
