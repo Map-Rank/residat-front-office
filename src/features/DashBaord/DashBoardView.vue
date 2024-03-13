@@ -58,7 +58,20 @@
         </div>
       </div>
 
-      <div class="flex md:col-span-5">
+      <div class="flex h-[500px] md:col-span-5">
+          <div >
+            <img :src="mapSvgPath" alt="" />
+          </div>
+
+          <inline-svg
+            title="Cameroon Map"
+            fill-opacity="1"
+            :color="'#fff'"
+            fill="black"
+            :src="mapSvgPath"
+            width=""
+          /> 
+
         <div v-if="isSVG" class="w-full">
           <inline-svg
             title="Cameroon Map"
@@ -115,13 +128,15 @@ import { getSpecificZones } from '../../services/zoneService'
 
 export default {
   name: 'DashBoardView',
-  mounted() {
+ mounted()  {
     this.extractSVGKeys()
-    this.getZone()
+   this.getZone()
   },
   data() {
     return {
-      mapSvgPath: '\\assets\\svgs\\far-north.svg',
+      // mapSvgPath: '\\assets\\svgs\\far-north.svg',
+      mapSvgPath: 'https://backoffice-dev.residat.com/storage/media/zone/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
+      // mapSvgPath: null,
       vectorKeys: [],
       zone:null,
       isSubDivisionGraph: false,
@@ -192,7 +207,9 @@ export default {
 
     async getZone(){
       this.zone= await getSpecificZones(4)
-      console.log(this.zone)
+      this.mapSvgPath= this.zone.vector.path
+      this.vectorKeys = this.zone.vector.keys
+      // console.log(this.zone)
 
     },
     toggleWaterStressGraphVisibility() {
@@ -223,7 +240,6 @@ export default {
       }))
 
       this.vectorKeys.push(...extractedData)
-      console.log(this.vectorKeys)
     },
     extractColor(styleString) {
       if (styleString) {
