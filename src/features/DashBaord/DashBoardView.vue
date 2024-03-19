@@ -1,5 +1,5 @@
 <template>
-  <div class="bg-primary-light px-4 md:px-100 pt-1 w-full">
+  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full">
     <div
       class="grid space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
@@ -58,7 +58,7 @@
         </div>
       </div>
 
-      <div class="flex h-[500px] md:col-span-5">
+      <div class="flex md:col-span-5">
           <div >
             <img :src="mapSvgPath" alt="" />
           </div>
@@ -135,7 +135,7 @@ export default {
   data() {
     return {
       // mapSvgPath: '\\assets\\svgs\\far-north.svg',
-      mapSvgPath: 'https://backoffice-dev.residat.com/storage/media/zone/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
+      mapSvgPath: 'https://backoffice-dev.residat.com/media/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
       // mapSvgPath: null,
       vectorKeys: [],
       zone:null,
@@ -207,7 +207,7 @@ export default {
 
     async getZone(){
       this.zone= await getSpecificZones(4)
-      this.mapSvgPath= this.zone.vector.path
+      // this.mapSvgPath= this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
       // console.log(this.zone)
 
