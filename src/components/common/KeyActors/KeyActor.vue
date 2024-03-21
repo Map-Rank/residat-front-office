@@ -47,7 +47,7 @@ export default {
   },
   methods: {
     startRotation() {
-      this.interval = setInterval(this.rotateActors, 3000);
+      this.interval = setInterval(this.rotateActors, 5000);
     },
     rotateActors() {
       this.currentIndex = (this.currentIndex + 1) % this.actors.length;

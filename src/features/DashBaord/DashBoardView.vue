@@ -1,9 +1,9 @@
 <template>
-  <div class="bg-primary-light px-4 md:px-100 pt-1 w-full">
+  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full">
     <div
       class="grid space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
-      <div class="md:w-1/3">
+      <div class="md:w-2/4">
         <div class="">
           <button-ui
             :label="'Water Stress'"
@@ -19,7 +19,7 @@
           <WaterStressChart></WaterStressChart>
         </div>
       </div>
-      <div class="md:w-1/3">
+      <div class="md:w-1/4">
         <BaseDropdown :options="hazard" />
       </div>
 
@@ -46,7 +46,7 @@
     </div>
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div class="col-span-1">
-        <div class="flex flex-wrap gap-2 p-4">
+        <div class="gap-2 p-4">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-2">
             <span class="block w-4 h-4 rounded-full" :style="{ backgroundColor: key.color }"></span>
             <span
@@ -58,8 +58,8 @@
         </div>
       </div>
 
-      <div class="flex h-[500px] md:col-span-5">
-          <div >
+      <div class="flex md:col-span-5">
+          <!-- <div >
             <img :src="mapSvgPath" alt="" />
           </div>
 
@@ -70,7 +70,7 @@
             fill="black"
             :src="mapSvgPath"
             width=""
-          /> 
+          />  -->
 
         <div v-if="isSVG" class="w-full">
           <inline-svg
@@ -130,12 +130,12 @@ export default {
   name: 'DashBoardView',
  mounted()  {
     this.extractSVGKeys()
-   this.getZone()
+  //  this.getZone()
   },
   data() {
     return {
-      // mapSvgPath: '\\assets\\svgs\\far-north.svg',
-      mapSvgPath: 'https://backoffice-dev.residat.com/storage/media/zone/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
+      mapSvgPath: '\\assets\\svgs\\far-north.svg',
+      // mapSvgPath: 'https://backoffice-dev.residat.com/media/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
       // mapSvgPath: null,
       vectorKeys: [],
       zone:null,
@@ -207,7 +207,7 @@ export default {
 
     async getZone(){
       this.zone= await getSpecificZones(4)
-      this.mapSvgPath= this.zone.vector.path
+      // this.mapSvgPath= this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
       // console.log(this.zone)
 
