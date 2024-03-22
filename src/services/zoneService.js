@@ -1,17 +1,7 @@
-import { makeApiGetCall } from '@/api' // Import the makeApiPostCall function
+import { makeApiGetCall } from '@/api/api' // Import the makeApiPostCall function
 import {  API_ENDPOINTS } from '@/constants/index.js'
 
 
-
-// const getZones = async () => {
-//     try {
-//       const response = await makeApiGetCall(API_ENDPOINTS.zone)
-//       return response.data.data
-//     } catch (error) {
-//       console.error('Error fetching all Zones:', error)
-//       throw error
-//     }
-//   }
 
   const getZones = async (level_id, parent_id) => {
     let params = new URLSearchParams();
@@ -31,14 +21,28 @@ import {  API_ENDPOINTS } from '@/constants/index.js'
         `${API_ENDPOINTS.zone}?${params.toString()}`
       )
   
-      console.log(response)
       return response.data.data;
     } catch (error) {
       console.error('Error fetching zones:', error);
       throw error;
     }
   }
+
+  const getSpecificZones = async (id) => {
+
+    try {
+      const response = await makeApiGetCall(
+        `${API_ENDPOINTS.zone}/${id}`
+      )
+  
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching zones:', error);
+      throw error;
+    }
+  }
+
   
 
 
-  export {getZones}
+  export {getZones,getSpecificZones}

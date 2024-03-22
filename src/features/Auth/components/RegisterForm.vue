@@ -185,6 +185,20 @@
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
         <h3 class="text-center">SPECIFIC INFORMATION</h3>
 
+       <div class="mb-6">
+         <label class="inline-block mb-2">Profile Picture</label>
+         <input type="file" @change="onFileChange" accept="image/*" class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"/>
+         <ErrorMessage class="text-danger-normal" name="avatar" />
+       
+         <div v-if="formData.avatar" class="mt-4 grid  justify-center">
+           <p class="mb-2">Preview Picture:</p>
+           <div class="w-24 h-24 rounded-full overflow-hidden">
+             <img :src="imageUrl" alt="Profile Picture Preview" class="w-full rounded-full h-full object-cover" />
+           </div>
+         </div>
+       </div>
+       
+
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
             <label class="inline-block mb-2">Choose Your Region</label>
@@ -405,6 +419,7 @@ export default {
         country: '',
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
+        avatar:'',
         selectedSectors: [],
         zone: '',
         tos: true
@@ -424,10 +439,28 @@ export default {
     LoadingIndicator
   },
 
+  computed: {
+    imageUrl() {
+      if (this.formData.avatar) {
+        return URL.createObjectURL(this.formData.avatar);
+      } else {
+        return null;
+      }
+    }
+  },
+
   methods: {
+    onFileChange(e) {
+    const file = e.target.files[0];
+    if (file) {
+      this.formData.avatar = file;
+      console.log(this.formData.avatar)
+    } else {
+      this.formData.avatar = null;
+    }
+  },
     async getRegions() {
       try {
-        // this.regions = await getZones(2, null)
         this.regions = this.regions.concat(await getZones(2, null))
       } catch (error) {
         console.log(error)
@@ -437,7 +470,6 @@ export default {
     async getDivisions(parent_id) {
       try {
         this.isDivisionLoading = true
-        // this.divisions = await getZones(null, parent_id)
         this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
       } catch (error) {
@@ -465,19 +497,13 @@ export default {
     },
     handleSelectedRegionIdChange(selectedOptionId) {
       this.region_id = selectedOptionId
-      console.log('region id' + selectedOptionId)
-      // this.zones.region_id = selectedOptionId
     },
     handleSelectedDivisionIdChange(selectedOptionId) {
       this.division_id = selectedOptionId
-      console.log('division id' + selectedOptionId)
-      // this.zones.region_id = selectedOptionId
     },
     handleSelectedSubdivisionIdChange(selectedOptionId) {
-      console.log('sub id' + selectedOptionId)
       this.subDivision_id = selectedOptionId
       this.formData.zone = selectedOptionId
-      // this.zones.region_id = selectedOptionId
     },
 
     togglePasswordVisibility() {

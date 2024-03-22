@@ -1,8 +1,11 @@
 <template>
-  <header class="py-4 md:px-100 bg-white ">
+  <header class="py-1 md:px-100 bg-white ">
     <!-- Mobile view: Hamburger icon -->
-    <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+    <div class="flex justify-between items-center space-x-6 py-1 p-4 md:hidden">
+     
+
+        <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+        
 
       <div class="flex-grow items-center">
         <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
@@ -59,7 +62,53 @@
       class=" hidden sm:hidden md:flex w-full justify-between   "
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 "  />
+      <div class="flex flex-col md:flex-row items-center space-x-10">
+
+        <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 "  />
+        <div class="menu relative">
+          <icon-with-label
+          class="dropdown"
+            svgContentHover="\assets\images\Community\profile.png"
+            svgContent="\assets\icons\profile-fill.svg"
+            labelText="Profile"
+            labelTextBottom="Profile"
+            :iconDesktopSize="this.iconSize"
+            :isActive="true"
+            :bottom="true"
+            @customFunction="toggleMenu"
+          ></icon-with-label>
+
+          <!-- Dropdown Menu -->
+          <div
+            v-show="isMenuVisible"
+            class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+          >
+            <button-ui
+              :label="'Profile Page'"
+              :textCss="'text-left '"
+              :customCss="'items-left justify-start hover:bg-gray-100'"
+              @clickButton="menuMethods(0)"
+            >
+            </button-ui>
+
+            <button-ui
+              :label="'Create Post'"
+              :textCss="'text-left '"
+              :customCss="'items-left justify-start hover:bg-gray-100'"
+              @clickButton="menuMethods(1)"
+            >
+            </button-ui>
+
+            <button-ui
+              :label="'Logout'"
+              :textCss="'text-left '"
+              :customCss="'items-left justify-start hover:bg-gray-100'"
+              @clickButton="menuMethods(2)"
+            >
+            </button-ui>
+          </div>
+        </div>
+      </div>
 
       <!-- Search bar -->
       <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center w-full">
@@ -84,50 +133,7 @@
             :routerName="item.routerName"
             :key="index"
           ></icon-with-label>
-  
-          <div class="menu relative">
-            <icon-with-label
-            class="dropdown"
-              svgContentHover="\assets\icons\profile-outline.svg"
-              svgContent="\assets\icons\profile-fill.svg"
-              labelText="Profile"
-              labelTextBottom="Profile"
-              :iconDesktopSize="this.iconSize"
-              :isActive="true"
-              :bottom="true"
-              @customFunction="toggleMenu"
-            ></icon-with-label>
-  
-            <!-- Dropdown Menu -->
-            <div
-              v-show="isMenuVisible"
-              class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
-            >
-              <button-ui
-                :label="'Profile Page'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(0)"
-              >
-              </button-ui>
-  
-              <button-ui
-                :label="'Create Post'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(1)"
-              >
-              </button-ui>
-  
-              <button-ui
-                :label="'Logout'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(2)"
-              >
-              </button-ui>
-            </div>
-          </div>
+
         </nav>
       </div>
     </div>
@@ -186,9 +192,9 @@ export default {
           routerName: 'chat-room'
         },
         {
-          svgContent: '\\assets\\icons\\event-outline.svg',
-          svgContentHover: '\\assets\\icons\\event-fill.svg',
-          labelText: 'Event',
+          svgContent: '\\assets\\icons\\notification-outline.svg',
+          svgContentHover: '\\assets\\icons\\notification-fill.svg',
+          labelText: 'Notification',
           isActive: false,
           bottom: true,
           routerName: 'event'

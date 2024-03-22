@@ -3,20 +3,23 @@
     <section>
       <SectionTitle :title="sectionTitle" />
       <ul class=" ">
-        <li v-for="(post, index) in recentPosts" :key="index" class="mb-4 last:mb-0 bg-white px-5 py-3 rounded-lg">
+        <li v-for="(post, index) in recentPosts" :key="index" class="mb-2 last:mb-0 bg-white px-5 py-3 rounded-lg">
           <div class="space-y-2">
             <div class="flex space-x-4 items-center">
               <avatar-placeholder
                 :username="`${post.creator[0].first_name} ${post.creator[0].last_name}`"
                 :size="20"
               />
-              <span class="user-name user-name">{{
-                `${post.creator[0].first_name} ${post.creator[0].last_name}`
-              }}</span>
+              <div>
+
+                <span class="user-name user-name">{{
+                  `${post.creator[0].first_name} ${post.creator[0].last_name}`
+                }}</span>
+                <p class="caption-C1">{{ formatDate(post.published_at) }}</p>
+              </div>
             </div>
 
             <h5 class="post-title hover:cursor-pointer">{{ truncateText(post.content ,70 )  }}</h5>
-            <p class="caption-C1">{{ formatDate(post.published_at) }}</p>
           </div>
         </li>
       </ul>
@@ -35,7 +38,7 @@ export default {
     return {
       formatDate,
       truncateText,
-      sectionTitle:'Recently Post'
+      sectionTitle:'Recently Posted'
     }
   },
   components: {

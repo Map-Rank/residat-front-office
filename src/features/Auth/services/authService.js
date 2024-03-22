@@ -1,9 +1,10 @@
-import { makeApiPostCall } from '@/api'
+import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVerified) => {
   try {
     const formData = new FormData()
+    console.log(userData)
 
     // Append user data to formData
     formData.append('first_name', userData.first_name)
@@ -14,18 +15,20 @@ const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVe
     formData.append('password', userData.password)
     formData.append('gender', userData.gender)
     formData.append('zone_id', userData.zone)
+    formData.append('avatar', userData.avatar)
 
-    const response = await makeApiPostCall(API_ENDPOINTS.register, formData)
+
+    const response = await makeApiPostCall(API_ENDPOINTS.register, formData,null,true)
     const user = response.data.data
     const token = response.data.data.token
 
-    if (!response.data.data.verified) {
-      onEmailNotVerified()
-      console.log('user not verified')
-      localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
-      localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    // if (!response.data.data.verified) {
+    //   onEmailNotVerified()
+    //   console.log('user not verified')
+    //   localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
+    //   localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
 
-    } else {
+    // } else {
   
       console.log('register successfull !!!!')
   
@@ -34,7 +37,7 @@ const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVe
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
       onSuccess()
-    }
+    // }
 
 
 

@@ -1,9 +1,10 @@
 <template>
   <div class="grid gap-8 items-center p-4 mt-3 mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
     <div class="flex">
-      <div class="mr-4">
-        <img src="\assets\images\smile.png" alt="Profile" class="w-10 h-10 rounded-full" />
-      </div>
+     <div class="mr-4">
+       <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 rounded-full" />
+     </div>
+     
       <!-- Input Field -->
       <input
         type="text"
@@ -52,6 +53,13 @@ export default {
       route,
       postStore,
       content:'',
+    }
+  },
+
+  props: {
+    profilePictureUrl: {
+      type: String,
+      default: '\\assets\\images\\smile.png' 
     }
   },
 
