@@ -22,14 +22,14 @@
 
 
 ## Table of Contents 📚
-1. [Introduction](#introduction-)
-2. [Context](#motivation-)
-3. [Features](#features-)
-4. [Project Structure](#project-structure-)
-4. [Project Setup](#project-structure-)
-10. [Testing](#testing-)
-9. [API Integration](#api-integration-)
-5. [Services](#services-)
+1. [Introduction](#introduction-🌟)
+2. [Context](#context-💡-)
+3. [Features](#features-✨)
+4. [Project Structure](#project-structure-🏗️)
+4. [Project Setup](#project-setup)
+10. [Testing](#testing-🧪)
+9. [API Integration](#api-integration-🤝)
+5. [Services](#services-📡)
 6. [State Management](#state-management-)
 7. [Components](#components-)
 8. [Routing and Navigation](#routing-and-navigation-)
@@ -55,6 +55,19 @@
 ## Context 💡
 
  <a href="https://dev.residat.com/community">RESIDAT</a> was born from the necessity to mitigate climate risks for communities in Cameroon. It targets the heart of climate vulnerability by providing critical, actionable data through GIS visualizations and real-time reports. The platform's goal is to empower communities and authorities to make informed decisions, enabling proactive and collaborative efforts towards climate resilience. In the face of increasing climate challenges,  <a href="https://dev.residat.com/community">RESIDAT</a> stands as a beacon of innovation and solidarity.
+
+### Vision Statement
+"Residat envisions a resilient Cameroon where every community has the knowledge and tools to adapt to climate variability. Our vision is to become a leading platform in climate risk assessment and adaptation strategies, contributing to sustainable development and disaster risk reduction through innovative geospatial technologies."
+
+### Mission Statement
+"Our mission is to empower vulnerable communities in Cameroon by providing them with accurate, accessible, and actionable geospatial data on climate hazards. Through the integration of GIS, drone technology, and big data analytics, Residat aims to facilitate informed decision-making and proactive environmental management."
+
+### Community Statement
+"Residat is dedicated to fostering a collaborative environment where scientists, local authorities, developers, and community members come together to combat climate risks. We encourage the sharing of insights, the development of local solutions, and the creation of a united front against the adverse effects of climate change."
+
+### Licensing Strategy
+"To maximize impact and encourage innovation, Residat will operate under an MIT License, promoting open-source collaboration. This approach will allow for the free use, modification, and distribution of our resources, ensuring they remain accessible for adaptation to other regions facing similar climate challenges."
+
 
 ## Features ✨
 
@@ -204,9 +217,6 @@ Based on the test coverage report, we will take the following steps:
 - **Implement Continuous Integration**: We will integrate the test suite into a CI/CD pipeline to run tests with every commit or pull request, maintaining code quality throughout the development lifecycle.
 
 Testing is an ongoing process that evolves with our project. It's essential to maintain high test coverage that reflects the critical functionalities of our application for a stable and reliable platform.
-
-
-
 
 
 
@@ -498,61 +508,8 @@ Displays a title and a subtitle or message.
 <TitleSubtitle label="Primary Title" message="Supporting message goes here." />
 ```
 
-#### BaseDropdown
-
-A dropdown component that allows users to select from a list of options.
-
-- **Props**:
-  - `options`: An array of objects representing the dropdown options.
-- **Data**:
-  - `selectedOption`: The currently selected option.
-- **Methods**:
-  - `updateSelectedOption`: Updates the selected option and emits selection events.
-- **Example Usage**:
-
-```vue
-<BaseDropdown :options="[{ name: 'Option1', id: 1 }, { name: 'Option2', id: 2 }]" />
-```
-
-
-#### BaseImagePicker
-
-An image file input component styled as a button.
-
-- **Props**:
-  - `accept`: File types that the input accepts.
-  - `iconImg`: (Optional) Icon to display on the button.
-  - `label`: Text to display on the button.
-- **Methods**:
-  - `handleFileChange`: Emits the selected files when changed.
-- **Example Usage**:
-
-```vue
-<BaseImagePicker label="Upload Image" @handleFileChange="handleFiles" />
-```
-
----
-
-To document the common components based on the provided Vue component examples, let's create succinct descriptions that include their purposes and highlight key properties and events.
-
-
 
 ### Common Components 
-
-#### ShowPost
-
-A component for displaying detailed post information, including media, comments, and interactions.
-
-- **Props**:
-  - `id` (post ID for fetching details).
-- **Methods**:
-  - `commentPost`: commenting on a post.
-- **Example Usage**:
-
-```vue
-<ShowPost :id="postId" />
-```
-
 
 #### ShareModal
 
@@ -582,81 +539,7 @@ An input component for creating a new post or event with quick action buttons.
 <PostInput />
 ```
 
-#### IconWithLabel
-
-A versatile component for displaying an icon with optional top, bottom, left, or right labels.
-
-- **Props**:
-  - `svgContent` 
-  - `svgContent`
-  - `svgContentHover`
-  - `labelTextTop`
-  - `labelTextTop`
-  - `labelTextRight`
-  - `labelTextLeft`
-  - `isActive`
-  - `iconDesktopSize`
-  - `iconMobileSize`
-
-- **Methods**:
-  - `clickIcon`: clickIcon t emmit and event 
-  - `customFunction`
-- **Example Usage**:
-
-```vue
-<IconWithLabel svgContent="/path/to/icon.svg" labelTextBottom="Label" />
-```
-
-
-#### EventAlertBox
-
-Displays upcoming event alerts with details like title, date, location, and organizer.
-
-- **Props**:
-  - `title` 
-  - `organizer`
-  - `date`
-  - `location`
-  - `eventImage`
-  - `sectionTitle`
-
-- **Example Usage**:
-
-```vue
-<EventAlertBox title="Event Title" organizer="Organizer Name" />
-```
-
-#### BottomNavigationApp
-
-Provides bottom navigation functionality, typically for mobile views.
-
-- **Props**:
-  - `navItems` (for navigation).
-- **Methods**:
-  - `isActive`: To check if the navigation item corresponds to the current route.
-- **Example Usage**:
-
-```vue
-<BottomNavigationApp />
-```
-
-#### AlertForm
-
-Shows alert messages with different levels of severity determined by the type of alert state.
-
-- **Props**:
-  - `store` to access the store.
-  - `useAlertStore` to manage alert messages.
-- **Methods**:
-  - `isActive`: To check if the navigation item corresponds to the current route.
-- **Example Usage**:
-
-```vue
-<AlertForm />
-```
-
----
-## Contributing to RESIDAT
+## Code of Conduct 📜
 
 ### RESIDAT Contributor Code of Conduct
 
@@ -702,18 +585,11 @@ Violations of this Code of Conduct may result in expulsion from the community or
 By contributing to RESIDAT, you agree to abide by these principles and behaviors to ensure our community remains welcoming, inspiring, and constructive for all.
 
 
-## Routing and Navigation 🚏
-
-// Details on Vue Router setup and navigation structure.
-
 
 ## FAQs ❓
 
 // Answers to frequently asked questions.
 
-## Code of Conduct 📜
-
-// The expectations for community conduct.
 
 ## License ⚖️
 
