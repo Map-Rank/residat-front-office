@@ -46,19 +46,19 @@
     </div>
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div class="col-span-1">
-        <div class="gap-2 p-4">
-          <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-2">
-            <span class="block w-4 h-4 rounded-full" :style="{ backgroundColor: key.color }"></span>
+        <div class="gap-3 p-4">
+          <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
+            <span class="block w-4 h-4 " :style="{ backgroundColor: key.value }"></span>
             <span
               class="text-sm font-semibold"
-              :class="{ 'text-gray-700': !key.color, 'text-primary-normal': key.color }"
+              :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
               >{{ key.name }}</span
             >
           </div>
         </div>
       </div>
+<div class="flex md:col-span-5 h-[70vh]">
 
-      <div class="flex md:col-span-5">
 
         <div v-if="isSVG" class="w-full">
           <inline-svg
@@ -68,6 +68,7 @@
             fill="black"
             :src="mapSvgPath"
             width=""
+            height=""
           />
         </div>
         <div v-else>
@@ -122,8 +123,6 @@ export default {
   },
   data() {
     return {
-      // mapSvgPath: '\\assets\\svgs\\far-north.svg',
-      // mapSvgPath: 'https://backoffice-dev.residat.com/media/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
       mapSvgPath: null,
       vectorKeys: [],
       zone:null,
@@ -194,7 +193,7 @@ export default {
   methods: {
 
     async getZone(){
-      this.zone= await getSpecificZones(4)
+      this.zone= await getSpecificZones(17)
       this.mapSvgPath= this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
       // console.log(this.zone)
