@@ -59,18 +59,6 @@
       </div>
 
       <div class="flex md:col-span-5">
-          <!-- <div >
-            <img :src="mapSvgPath" alt="" />
-          </div>
-
-          <inline-svg
-            title="Cameroon Map"
-            fill-opacity="1"
-            :color="'#fff'"
-            fill="black"
-            :src="mapSvgPath"
-            width=""
-          />  -->
 
         <div v-if="isSVG" class="w-full">
           <inline-svg
@@ -130,13 +118,13 @@ export default {
   name: 'DashBoardView',
  mounted()  {
     this.extractSVGKeys()
-  //  this.getZone()
+   this.getZone()
   },
   data() {
     return {
-      mapSvgPath: '\\assets\\svgs\\far-north.svg',
+      // mapSvgPath: '\\assets\\svgs\\far-north.svg',
       // mapSvgPath: 'https://backoffice-dev.residat.com/media/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
-      // mapSvgPath: null,
+      mapSvgPath: null,
       vectorKeys: [],
       zone:null,
       isSubDivisionGraph: false,
@@ -207,7 +195,7 @@ export default {
 
     async getZone(){
       this.zone= await getSpecificZones(4)
-      // this.mapSvgPath= this.zone.vector.path
+      this.mapSvgPath= this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
       // console.log(this.zone)
 
@@ -250,9 +238,10 @@ export default {
     }
   },
   computed: {
-    isSVG() {
-      return this.mapSvgPath.endsWith('.svg')
-    }
+   isSVG() {
+     return this.mapSvgPath && this.mapSvgPath.endsWith('.svg');
+   }
+   
   },
   components: {
     BaseDropdown,
