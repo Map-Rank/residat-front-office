@@ -1,49 +1,54 @@
-5q<template>
+<template>
   <SectionTitle :title="sectionTitle" />
+<div>
 
-  <div class="bg-white md:p-6 rounded-lg">
-    <div class="grid w-full">
-      <div class="w-full">
-        <label class="label inline-block mb-2">Choose Your Region</label>
-        <div v-if="isLoading" class="flex h-full justify-center">
-          <LoadingIndicator />
-        </div>
-        <BaseDropdown
-          v-if="!isLoading"
-          :options="regions"
-          @selectedOptionId="returnZoneId"
-          @functionIdParams="getDivisions"
-          @selectedOptionName="returnZoneName"
-          
-          />
-        </div>
+  <div class=" grid align-middle items-start">
+    
+    <div class=" h-[250px] bg-white md:p-6 rounded-lg  " >
+      <div class="grid w-full">
         <div class="w-full">
-          <label class="label inline-block mb-2">Choose Your Division</label>
-          <div v-if="isDivisionLoading" class="flex h-full justify-center">
+          <label class="label inline-block mb-2">Choose Your Region</label>
+          <div v-if="isLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
           <BaseDropdown
-          v-if="!isLoading && !isDivisionLoading"
-          @selectedOptionId="returnZoneId"
-          :options="divisions"
-          @selectedOptionName="returnZoneName"
-          @functionIdParams="getSub_divisions"
+            v-if="!isLoading"
+            :options="regions"
+            @selectedOptionId="returnZoneId"
+            @functionIdParams="getDivisions"
+            @input="returnZone"
+            
+            />
+          </div>
+          <div class="w-full">
+            <label class="label inline-block mb-2">Choose Your Division</label>
+            <div v-if="isDivisionLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+            v-if="!isLoading && !isDivisionLoading"
+            @selectedOptionId="returnZoneId"
+            :options="divisions"
+            @input="returnZone"
+            @functionIdParams="getSub_divisions"
+            />
+          </div>
+          <div class="w-full">
+            <label class="label inline-block mb-2">Choose Your Sub-division</label>
+            <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+            v-if="!isLoading && !isSubdivisionLoading"
+            @selectedOptionId="returnZoneId"
+            @input="returnZone"
+            :options="sub_divisions"
           />
         </div>
-        <div class="w-full">
-          <label class="label inline-block mb-2">Choose Your Sub-division</label>
-          <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
-          </div>
-          <BaseDropdown
-          v-if="!isLoading && !isSubdivisionLoading"
-          @selectedOptionId="returnZoneId"
-          @selectedOptionName="returnZoneName"
-          :options="sub_divisions"
-        />
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script>
@@ -111,9 +116,8 @@ export default {
       this.filterPostFunctionWithId(id)
     },
 
-
-    returnZoneName(name){
-this.updateZoneName(name)
+    returnZone(zone){
+this.updateZone(zone)
     },
 
     async getRegions() {
@@ -151,7 +155,7 @@ this.updateZoneName(name)
   },
   props: {
     filterPostFunctionWithId: {},
-    updateZoneName:{}
+    updateZone:{}
   },
   components: {
     BaseDropdown,

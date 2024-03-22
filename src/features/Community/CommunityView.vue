@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- Fixed image in the background -->
     <div
-      class="fixed hidden md:block top-0 left-0 w-full h-[50%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      class="fixed hidden md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
       <h2 class="text-white absolute bottom-0 left-2 md:left-100 md:bottom-5 uppercase">
@@ -24,10 +24,10 @@
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
-              <aside class="col-span-2 hidden sm:block md:hidden lg:block">
+              <aside class="col-span-2  hidden sm:block md:hidden lg:block ">
                 <zone-post-filter
                   :filterPostFunctionWithId="filterPostByZone"
-                  :updateZoneName="updateZoneName"
+                  :updateZone="updateZone"
                 >
                 </zone-post-filter>
 
@@ -54,7 +54,7 @@
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
-                  <post-input v-if="!showPageRefresh"> </post-input>
+                  <post-input v-if="!showPageRefresh" profilePictureUrl="\assets\icons\profile-fill.svg"> </post-input>
 
                   <div v-if="hasNewPosts" class="">
                     <div class="my-10 flex flex-col justify-center items-center">
@@ -182,9 +182,10 @@ export default {
 
     return {
       zoneName: authStore.user.zone.name,
+      profilePictureUrl:authStore.user.avatar,
       postStore,
       modalStore,
-      bannerUrlImage:'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
+      bannerUrlImage:authStore.user.zone.banner || 'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
       hasNewPosts: false,
       hasFetchAllPost:false,
       filteringActive: false,
@@ -252,9 +253,10 @@ export default {
       }
     },
 
-    updateZoneName(zoneName) {
+    updateZone(zone) {
       this.page=0
-      this.zoneName = zoneName
+      this.zoneName = zone.name
+      this.bannerUrlImage= zone.banner
     },
 
     async filterPostBySectors() {
@@ -410,7 +412,7 @@ export default {
 
 <style scoped>
 .enableScroll {
-  height: 40vh;
+  height: 20vh;
 }
 .scroll-lock {
   overflow: hidden;
