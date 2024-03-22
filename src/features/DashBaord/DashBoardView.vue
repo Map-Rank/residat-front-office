@@ -123,8 +123,6 @@ export default {
   },
   data() {
     return {
-      // mapSvgPath: '\\assets\\svgs\\far-north.svg',
-      // mapSvgPath: 'https://backoffice-dev.residat.com/media/NUxpVudKyygJBNUzsqlgGdIlod8KytNPrt09hqBH.svg',
       mapSvgPath: null,
       vectorKeys: [],
       zone:null,
