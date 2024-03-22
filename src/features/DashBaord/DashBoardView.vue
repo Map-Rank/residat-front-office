@@ -6,7 +6,7 @@
       <div class="md:w-2/4">
         <div class="">
           <button-ui
-            :label="'Water Stress'"
+            :label="'Water Risk'"
             :color="'text-white'"
             :textCss="'text-white font-bold text-center'"
             :customCss="'bg-secondary-normal flex justify-center rounded-lg'"

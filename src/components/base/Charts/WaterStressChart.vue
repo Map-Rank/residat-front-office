@@ -224,7 +224,7 @@ export default {
         labels: this.chartData.map((d) => d.Date),
         datasets: [
           {
-            label: 'Water Stress Level',
+            label: 'Water Risk Level',
             data: this.chartData.map((d) => ({ x: d.Date, y: d.WaterStressLevel })),
             fill: false,
             borderColor: 'rgb(0, 0, 0)',
