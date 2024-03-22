@@ -238,9 +238,10 @@ export default {
     }
   },
   computed: {
-    isSVG() {
-      return this.mapSvgPath.endsWith('.svg')
-    }
+   isSVG() {
+     return this.mapSvgPath && this.mapSvgPath.endsWith('.svg');
+   }
+   
   },
   components: {
     BaseDropdown,
