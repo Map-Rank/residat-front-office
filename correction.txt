@@ -1,0 +1,16 @@
+- update titlesection size 16 , to semi bold /
+- upper p section location 12px /
+- dropdown label 14px , make a same px ib dropdown i.e text and arrow /
+-make comment plural when needed /
+- if the is no like on let it be "be thee first to like "/
+- make a post text regular not bold , usernaame semibold , /
+-align icon of town with username/
+-number of comment and number of shares /
+-annaul event to semibold , and 18px and make images at top /
+
+
+Functionalities
+-if i select a sector under a location it should only display there 
+-make commect clickable
+-test upload of video
+-fix the search bar

@@ -53,7 +53,7 @@
 
     <!-- Post Content -->
     <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
-      <p class="p3 content font-medium">{{ postContent }}</p>
+      <p class="p3 content ">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
@@ -67,6 +67,7 @@
       <InteractionPostStatistics
         :comment_count="customPost.comment_count"
         :like_count="like_count"
+        :share_count="customPost.share_count"
       />
 
       <!-- lower section  -->
@@ -341,7 +342,7 @@ export default {
   font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 550;
+  font-weight: 400px;
   line-height: 20px;
   /* 142.857% */
 }

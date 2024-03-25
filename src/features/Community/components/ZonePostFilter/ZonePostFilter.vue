@@ -4,8 +4,8 @@
 
   <div class=" grid align-middle items-start">
     
-    <div class=" h-[250px] bg-white md:p-6 rounded-lg  " >
-      <div class="grid w-full">
+    <div class=" h-[250px] bg-white md:p-3 rounded-lg  " >
+      <div class="grid w-full space-y-2">
         <div class="w-full">
           <label class="label inline-block mb-2">Choose Your Region</label>
           <div v-if="isLoading" class="flex h-full justify-center">

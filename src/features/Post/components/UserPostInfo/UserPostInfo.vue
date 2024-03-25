@@ -8,10 +8,10 @@
         :size="20"
       />
         <div>
-            <h5 class="font-bold cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
+            <h5 class="font-[600] cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
             <div class="flex items-center ">
 
-              <img src="/assets/icons/location.svg" class="h-6" alt="" srcset="">
+              <img src="assets\icons\location.png" class="h-4 mr-1" alt="" srcset="">
             <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}</h5>
             <p style="font-weight: 700; margin: 0 5px;"> • </p>
             <span class="caption-c1">{{ postDate }}</span>

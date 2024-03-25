@@ -1,12 +1,11 @@
 <template>
   <SectionTitle :title="sectionTitle" />
 
-  <!-- <div class=" grid align-middle items-start"> -->
     
-<div class=" h-[250px] grid space-y-2">
+<div class=" h-[250px] grid  space-y-2">
 
-  <div v-for="item in [1, 2]" :key="item" class="  p-3 bg-white rounded-xl flex items-center space-x-4">
-    <div class="flex-shrink-0">
+  <div v-for="item in [1, 2]" :key="item" class=" items-start p-3 bg-white rounded-xl flex items-center space-x-4">
+    <div class="flex-shrink-0 justify-start flex">
       <img
         :src="eventImage"
         alt="Event image"
@@ -55,8 +54,8 @@ export default {
 <style scoped>
 .title {
   color: var(--primary-normal, #021d40);
-  font-size: 20px;
-  font-weight: 700;
+  font-size: 18px;
+  font-weight: 600;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }
