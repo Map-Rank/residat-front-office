@@ -68,6 +68,7 @@
         :comment_count="customPost.comment_count"
         :like_count="like_count"
         :share_count="customPost.share_count"
+        @showPostDetails="showDetails(this.post.id)"
       />
 
       <!-- lower section  -->

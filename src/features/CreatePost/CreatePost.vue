@@ -9,13 +9,7 @@
       <AlertForm></AlertForm>
     </div>
 
-    <PostSpecificInformation
-      :sectors="sectors"
-      :updatesector-checked="updateSectorChecked"
-      :update-zone-id="updateZoneId"
-    />
-
-    <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
+    <div class="mx-auto mb-4 h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm />
       <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
         <ErrorMessage class="text-danger-normal" name="content" />
@@ -81,6 +75,12 @@
         </div>
       </vee-form>
     </div>
+    <PostSpecificInformation
+      :sectors="sectors"
+      :updatesector-checked="updateSectorChecked"
+      :update-zone-id="updateZoneId"
+    />
+
   </div>
 </template>
 

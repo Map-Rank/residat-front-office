@@ -6,8 +6,13 @@
       <span v-else class="caption-c1-bold">Be the first to like</span>
     </div>
 
-    <span v-if="comment_count < 1" class="caption-c1-bold">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</span>
-    <span v-else class="caption-c1-bold">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</span>
+    <span 
+    @click="showPostDetails"
+  
+    v-if="comment_count < 1" class="caption-c1-bold cursor-pointer ">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</span>
+    <span 
+    @click="showPostDetails"
+    v-else class="caption-c1-bold cursor-pointer">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</span>
   
   </div>
 </template>
@@ -18,6 +23,13 @@ export default {
     comment_count: {},
     like_count: {},
     share_count:{},
+
+  },
+  methods:{
+    showPostDetails() {
+      this.$emit('showPostDetails')
+      console.log('ddfdf')
+    },
   }
 }
 </script>

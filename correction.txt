@@ -8,6 +8,25 @@
 -number of comment and number of shares /
 -annaul event to semibold , and 18px and make images at top /
 
+1) Adjusting the select sector Panel to match with selected location.
+
+2) Hyperlinking the "comment" text to give user access to comments. /
+
+3) Enabling video and multiple picture upload on post by user. 
+
+4) Enabling creation of event post and hyperlinking event tab. 
+
+5) Enabling profile picture upload. /
+
+6) Adjust landing page for post creation. Make it smaller and reverse order i.e start with post description and picture upload before sector and location selection. /
+
+7) Include all the banner pictures for the subdivisions, divisions and regions. /
+
+8) Enable the "search icon" to fetch locations or sectors.
+
+9) Work on the fonts.
+
+
 
 Functionalities
 -if i select a sector under a location it should only display there 

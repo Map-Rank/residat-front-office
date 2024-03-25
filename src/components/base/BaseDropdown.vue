@@ -3,7 +3,7 @@
     <select
       v-model="selectedOption"
       @change="updateSelectedOption"
-      class="w-full  px-1 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 hover:border-gray-400 focus:outline-none focus:border-primary-normal"
+      class="w-full  px- py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 hover:border-gray-400 focus:outline-none focus:border-primary-normal"
     >
       <option  v-for="(option, index) in options" :key="index" :value="option">
         <span class="text-sm">
