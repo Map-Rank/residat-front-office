@@ -141,7 +141,6 @@ export default {
         this.showPageRefresh = false
         console.log('the zone id is ' + this.id)
         this.filteredPosts = await getPostsByZone(this.id)
-        this.recentPosts = await getPostsByZone(0, 5, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true

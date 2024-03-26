@@ -166,7 +166,7 @@ const getPostsByZone = async (zoneId,size,page,sectorId) => {
       zone_id: zoneId,
     })
 
-    if (sectorId.length > 0) {
+    if (sectorId && sectorId.length > 0) {
       params.append('sectors', JSON.stringify(sectorId));
     }
 
