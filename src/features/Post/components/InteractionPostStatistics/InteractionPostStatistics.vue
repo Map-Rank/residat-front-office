@@ -2,17 +2,17 @@
   <div class="flex justify-between border-b mb-2 pb-2">
     <div class="flex items-center space-x-1">
       <img src="@\assets\icons\heart-fill-green.svg" alt="" />
-      <span v-if="like_count > 0" class="caption-c1-bold">{{ like_count }} and other likes</span>
-      <span v-else class="caption-c1-bold">Be the first to like</span>
+      <p v-if="like_count > 0" class="caption-c1-bold">{{ like_count }} and other likes</p>
+      <p v-else class="caption-c1-bold">Be the first to like</p>
     </div>
 
-    <span 
+    <p 
     @click="showPostDetails"
   
-    v-if="comment_count < 1" class="caption-c1-bold cursor-pointer ">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</span>
-    <span 
+    v-if="comment_count < 1" class="caption-c1-bold cursor-pointer ">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</p>
+    <p 
     @click="showPostDetails"
-    v-else class="caption-c1-bold cursor-pointer">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</span>
+    v-else class="caption-c1-bold cursor-pointer">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</p>
   
   </div>
 </template>
@@ -36,8 +36,11 @@ export default {
 <style scoped>
 
 .caption-c1-bold {
-  font-weight: 600;
+  font-weight: 400;
+  font-size: 12px;
 }
+
+
 
 @media only screen and (max-width: 480px) {
 
@@ -45,7 +48,6 @@ export default {
     color: var(--primary-normal, #021d40);
 
     /* Desktop/H6-SemiBold */
-    font-family: Roboto;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;

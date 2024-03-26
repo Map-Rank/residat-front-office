@@ -340,7 +340,6 @@ export default {
 <style scoped>
 .content {
   color: var(--body-normal, #242424);
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 400px;
@@ -350,17 +349,12 @@ export default {
 
 @media only screen and (max-width: 480px) {
   .content {
-    /* Add your mobile styles here. For example: */
     font-size: 10px;
     line-height: 16px;
-    /* Adjust line height for smaller text */
   }
 
   h5 {
     color: var(--primary-normal, #021d40);
-
-    /* Desktop/H6-SemiBold */
-    font-family: Roboto;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;

@@ -29,7 +29,7 @@
 // this are all the font declaration for the Roboto 
 @font-face {
   font-family: 'Roboto';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
+  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
@@ -281,13 +281,24 @@ h4 {
 }
 
 h5 {
-  font-family: $font-family-AvertaDemo;
+  // font-family: $font-family-AvertaDemo;
   font-size: $h5-font-size;
   font-weight: $h5-font-weight;
   line-height: $h5-line-height;
   letter-spacing: $h5-letter-spacing;
 }
+p {
+  font-family: $font-family-AvertaDemo;
+}
 
+label {
+  font-family: $font-family-AvertaDemo;
+}
+
+span {
+  font-family: $font-family-AvertaDemo;
+
+}
 .paragraphs-p1 {
   font-family: $font-family-segoe-ui;
   font-size: $p1-font-size;

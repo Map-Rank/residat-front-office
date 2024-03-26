@@ -63,7 +63,6 @@ export default {
 .menu {
   color: var(--body-normal, #242424);
   margin-top: 2px;
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 600;

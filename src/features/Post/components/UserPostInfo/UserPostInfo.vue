@@ -14,7 +14,7 @@
               <img src="assets\icons\location.png" class="h-4 mr-1" alt="" srcset="">
             <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}</h5>
             <p style="font-weight: 700; margin: 0 5px;"> • </p>
-            <span class="caption-c1">{{ postDate }}</span>
+            <span class="">{{ postDate }}</span>
             
             </div>
           
@@ -69,9 +69,6 @@
 
     h5 {
       color: var(--primary-normal, #021d40);
-
-      /* Desktop/H6-SemiBold */
-      font-family: Roboto;
       font-size: 12px;
       font-style: normal;
       font-weight: 600;

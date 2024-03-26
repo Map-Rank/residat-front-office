@@ -1,7 +1,7 @@
 <template>
   <div class="bg-secondary-normal px-5 py-3 mb-4 rounded-lg" :class="css">
 
-    <h2 class="title ">{{title}}</h2>
+    <p class="title ">{{title}}</p>
   </div>
 </template>
 <script>
@@ -17,7 +17,6 @@ export default {
 <style scoped>
 .title {
   color: white;
-  font-family: Roboto;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
