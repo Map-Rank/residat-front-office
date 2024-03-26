@@ -24,7 +24,7 @@
 
 8) Enable the "search icon" to fetch locations or sectors.
 
-9) Work on the fonts.
+9) Work on the fonts./
 
 
 

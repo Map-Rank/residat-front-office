@@ -4,7 +4,7 @@
     
 <div class=" h-[250px] grid  space-y-2">
 
-  <div v-for="item in [1, 2]" :key="item" class="  p-3 bg-white rounded-xl flex items-center space-x-4">
+  <div v-for="item in [1, 2]" :key="item" class="  p-3 bg-white rounded-xl flex items-start space-x-4">
     <div class="flex-shrink-0 justify-start flex">
       <img
         :src="eventImage"

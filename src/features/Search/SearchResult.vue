@@ -14,10 +14,14 @@
           
           <NoSearchResult></NoSearchResult>
         </div>
-        <section-title
-        title="Your Search Result"
-        css="flex justify-center item-center"
-        ></section-title>
+        <div v-if="!showPageRefresh && !topLoading" >
+
+          <section-title
+          
+          title="Your Search Result"
+          css="flex justify-center item-center"
+          ></section-title>
+        </div>
 
         <div v-if="!topLoading" class="space-y-5">
           <PostComponent
@@ -130,6 +134,8 @@ export default {
     },
 
     async fetchPosts() {
+
+      
       try {
         this.topLoading = true
         this.showPageRefresh = false

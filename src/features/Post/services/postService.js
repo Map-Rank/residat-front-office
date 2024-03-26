@@ -127,18 +127,22 @@ const getSpecificPost = async (id) => {
   }
 }
 
-const getPostsBySectors = async (sectorId) => {
+const getPostsBySectors = async (sectorId , zone_id) => {
+
+
+
   try {
     let params = new URLSearchParams({
       // size: size.toString(),
       // page: page.toString(),
+      zone_id: zone_id,
       sectors: JSON.stringify(sectorId)
     })
-
+    
     const response = await makeApiGetCall(
       `${API_ENDPOINTS.getPosts}?${params.toString()}`,
       authToken
-    )
+      )
     console.log('post filtered!!')
     return response.data.data
   } catch (error) {
@@ -146,21 +150,25 @@ const getPostsBySectors = async (sectorId) => {
     throw error
   }
 }
-const getPostsByZone = async (zoneId,size,page) => {
+const getPostsByZone = async (zoneId,size,page,sectorId) => {
 
   let defaultSize = 20
   let defaultPage = 0
-
+  
   size = size || defaultSize
   page = page || defaultPage
-
+  
   try {
-   
+    
     let params = new URLSearchParams({
       size: size.toString(),
       page: page.toString(),
-      zone_id: JSON.stringify(zoneId)
+      zone_id: zoneId,
     })
+
+    if (sectorId.length > 0) {
+      params.append('sectors', JSON.stringify(sectorId));
+    }
 
     const response = await makeApiGetCall(
       `${API_ENDPOINTS.getPosts}?${params.toString()}`,
