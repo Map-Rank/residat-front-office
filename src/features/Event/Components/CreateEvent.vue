@@ -25,20 +25,48 @@
             />
             <ErrorMessage class="text-danger-normal" name="event_title" />
           </div>
+     <div class="mb-6">
+       <p class="inline-block mb-4">Event Description</p>
+       <vee-field
+         name="event_description"
+         v-model="formData.event_description"
+         :rules="schema.event_description"
+         as="textarea"
+         class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+         placeholder="Enter Event Description"
+       ></vee-field>
+       <ErrorMessage class="text-danger-normal" name="event_description" />
+     </div>
+     
   
-          <div class="mb-6">
-            <p class="inline-block mb-2">Event Date</p>
-            <vee-field
-              name="event_date"
-              v-model="formData.date_of_birth"
-              :rules="schema.event_date"
-              as="input"
-              type="date"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              placeholder="Select date of event"
-            />
-            <ErrorMessage class="text-danger-normal" name="event_date" />
-          </div>
+        <div class="mb-6">
+          <p class="inline-block mb-2">Event Starting Date</p>
+          <vee-field
+            name="event_start_date"
+            v-model="formData.event_start_date"
+            :rules="schema.event_start_date"
+            as="input"
+            type="date"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            placeholder="Select starting date of event"
+          />
+          <ErrorMessage class="text-danger-normal" name="event_start_date" />
+        </div>
+        
+        <div class="mb-6">
+          <p class="inline-block mb-2">Event End Date</p>
+          <vee-field
+            name="event_end_date"
+            v-model="formData.event_end_date"
+            :rules="schema.event_end_date"
+            as="input"
+            type="date"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            placeholder="Select end date of event"
+          />
+          <ErrorMessage class="text-danger-normal" name="event_end_date" />
+        </div>
+        
   
           <!-- Company -->
           <div class="mb-6">
@@ -246,14 +274,17 @@ export default {
       ],
       schema: {
         event_title: "required|min:3|max:50",
-        event_date: "required",
+        event_description: "required|min:3|max:250",
+        event_end_date: "required",
+        event_start_date: "required",
         organiser_name: "min:3|max:50",
         location: "required|min:3|max:50",
       },
       formData: {
         event_title: "",
-
-        event_date: "2023-12-06T13:10:59",
+        event_description:'',
+        event_start_date: "2023-12-06T13:10:59",
+        event_end_date: "2023-12-06T13:10:59",
         avatar: "",
         selectedSectors: [],
         zone: "",
@@ -369,6 +400,9 @@ export default {
 
         const fieldsToValidate = [
         "event_title",
+        "event_description",
+        "event_end_date",
+        "event_start_date"
       ];
 
       try {
