@@ -1,21 +1,19 @@
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
-    <create-event-form v-if="showForm"></create-event-form>
-  </div>
+    <UnderConstruction></UnderConstruction>
+</div>
 </template>
 
 <script>
-import CreateEventForm from '@/features/Event/Components/CreateEventForm.vue'
+import UnderConstruction from '@/components/common/Pages/UnderConstruction.vue'
 
 export default {
-  name: "EventView",
-  components: {
-    CreateEventForm
-  },
-  data() {
-    return {
-      showForm: true  
+
+    name: "EventView",
+    components:{
+        UnderConstruction,
     }
-  }
 }
 </script>
+
+

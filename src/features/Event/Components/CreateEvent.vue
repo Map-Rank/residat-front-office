@@ -1,163 +1,166 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
-  <div class="flex-col bg-white my-5 rounded-lg w-1/2 p-10 ">
-    <div>
-      <AlertForm></AlertForm>
-    </div>
 
-    <vee-form ref="form" :validation-schema="schema" @submit="createEvent">
-      <div class="flex-col space-y-6">
-        <h3 class="text-center">CREATE AN EVENT</h3>
-
-        <!-- First Name -->
-        <div class="mb-6">
-          <p class="inline-block mb-4">Event Title</p>
-          <vee-field
-            name="event_title"
-            v-model="formData.event_title"
-            :rules="schema.event_title"
-            as="input"
-            type="text"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Enter Event Title"
-          />
-          <ErrorMessage class="text-danger-normal" name="event_title" />
-        </div>
-
-        <div class="mb-6">
-          <p class="inline-block mb-2">Event Date</p>
-          <vee-field
-            name="event_date"
-            v-model="formData.date_of_birth"
-            :rules="schema.event_date"
-            as="input"
-            type="date"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Select date of event"
-          />
-          <ErrorMessage class="text-danger-normal" name="event_date" />
-        </div>
-
-        <!-- Company -->
-        <div class="mb-6">
-          <p class="inline-block mb-2">Organiser Name</p>
-          <vee-field
-            name="organiser_name"
-            :rules="schema.organiser_name"
-            v-model="formData.organiser_name"
-            as="input"
-            type="text"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Enter Company Name"
-          />
-          <ErrorMessage class="text-danger-normal" name="organiser_name" />
-        </div>
-
-        <div class="mb-6">
-          <p class="inline-block mb-2">Event Banner</p>
-          <input
-            type="file"
-            @change="onFileChange"
-            accept="image/*"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          />
-          <ErrorMessage class="text-danger-normal" name="avatar" />
-
-          <div v-if="formData.avatar" class="mt-4 grid justify-center">
-            <p class="mb-2">Event Banner Preview :</p>
-            <div class="w-24 h-24 rounded-full overflow-hidden">
-              <img
-                :src="imageUrl"
-                alt="Profile Picture Preview"
-                class="w-full  h-full object-cover"
+  <div class="flex items-center justify-center min-h-screen bg-gray-100">
+    <div class="flex-col bg-white my-5 rounded-lg md:w-1/2 p-10 mx-4 ">
+      <div>
+        <AlertForm></AlertForm>
+      </div>
+  
+      <vee-form ref="form" :validation-schema="schema" @submit="createEvent">
+        <div class="flex-col space-y-6">
+          <h3 class="text-center">CREATE AN EVENT</h3>
+  
+          <!-- First Name -->
+          <div class="mb-6">
+            <p class="inline-block mb-4">Event Title</p>
+            <vee-field
+              name="event_title"
+              v-model="formData.event_title"
+              :rules="schema.event_title"
+              as="input"
+              type="text"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              placeholder="Enter Event Title"
+            />
+            <ErrorMessage class="text-danger-normal" name="event_title" />
+          </div>
+  
+          <div class="mb-6">
+            <p class="inline-block mb-2">Event Date</p>
+            <vee-field
+              name="event_date"
+              v-model="formData.date_of_birth"
+              :rules="schema.event_date"
+              as="input"
+              type="date"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              placeholder="Select date of event"
+            />
+            <ErrorMessage class="text-danger-normal" name="event_date" />
+          </div>
+  
+          <!-- Company -->
+          <div class="mb-6">
+            <p class="inline-block mb-2">Organiser Name</p>
+            <vee-field
+              name="organiser_name"
+              :rules="schema.organiser_name"
+              v-model="formData.organiser_name"
+              as="input"
+              type="text"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              placeholder="Enter Company Name"
+            />
+            <ErrorMessage class="text-danger-normal" name="organiser_name" />
+          </div>
+  
+          <div class="mb-6">
+            <p class="inline-block mb-2">Event Banner</p>
+            <input
+              type="file"
+              @change="onFileChange"
+              accept="image/*"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            />
+            <ErrorMessage class="text-danger-normal" name="avatar" />
+  
+            <div v-if="formData.avatar" class="mt-4 grid justify-center">
+              <p class="mb-2">Event Banner Preview :</p>
+              <div class="w-24 h-24 rounded-full overflow-hidden">
+                <img
+                  :src="imageUrl"
+                  alt="Profile Picture Preview"
+                  class="w-full  h-full object-cover"
+                />
+              </div>
+            </div>
+          </div>
+  
+          <div class="flex flex-row space-x-4 justify-between">
+            <div class="w-1/2">
+              <p class="inline-block mb-2">Choose Your Region</p>
+              <div v-if="isLoading" class="flex h-full justify-center">
+                <LoadingIndicator />
+              </div>
+              <BaseDropdown
+                v-if="!isLoading"
+                :options="regions"
+                @selectedOptionId="handleSelectedRegionIdChange"
+                @functionIdParams="getDivisions"
+              />
+            </div>
+            <div class="w-1/2">
+              <p class="inline-block mb-2">Choose Your Division</p>
+              <div v-if="isDivisionLoading" class="flex h-full justify-center">
+                <LoadingIndicator />
+              </div>
+              <BaseDropdown
+                v-if="!isLoading && !isDivisionLoading"
+                @selectedOptionId="handleSelectedDivisionIdChange"
+                :options="divisions"
+                @functionIdParams="getSub_divisions"
               />
             </div>
           </div>
-        </div>
-
-        <div class="flex flex-row space-x-4 justify-between">
-          <div class="w-1/2">
-            <p class="inline-block mb-2">Choose Your Region</p>
+  
+          <div class="w-full">
+            <p class="inline-block mb-2">Choose your Sub-division</p>
+            <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              @selectedOptionId="handleSelectedSubdivisionIdChange"
+              v-if="!isLoading && !isSubdivisionLoading"
+              :options="sub_divisions"
+            />
+          </div>
+  
+          <div class="mb-4">
+            <div class="grid mb-5">
+              <p class="inline-block mb-2">Sector</p>
+              <span>Select your sector of interest</span>
+            </div>
             <div v-if="isLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
-            <BaseDropdown
-              v-if="!isLoading"
-              :options="regions"
-              @selectedOptionId="handleSelectedRegionIdChange"
-              @functionIdParams="getDivisions"
-            />
-          </div>
-          <div class="w-1/2">
-            <p class="inline-block mb-2">Choose Your Division</p>
-            <div v-if="isDivisionLoading" class="flex h-full justify-center">
-              <LoadingIndicator />
+            <div
+              v-if="sectors || !isLoading"
+              class="grid grid-cols-2 md:grid-cols-3 gap-3 content-between"
+            >
+              <div v-for="(sector, index) in sectors" :key="index" class="flex ">
+                <vee-field
+                  :name="sector.name"
+                  type="checkbox"
+                  v-model="formData.selectedSectors"
+                  :id="sector.name"
+                  class="rounded text-primary-normal focus:ring-primary-light"
+                />
+                <p :for="sector.name" class="ml-2 block text-sm text-body-dark">
+                  {{ sector.name }}
+                </p>
+              </div>
             </div>
-            <BaseDropdown
-              v-if="!isLoading && !isDivisionLoading"
-              @selectedOptionId="handleSelectedDivisionIdChange"
-              :options="divisions"
-              @functionIdParams="getSub_divisions"
-            />
           </div>
-        </div>
-
-        <div class="w-full">
-          <p class="inline-block mb-2">Choose your Sub-division</p>
-          <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
-          </div>
-          <BaseDropdown
-            @selectedOptionId="handleSelectedSubdivisionIdChange"
-            v-if="!isLoading && !isSubdivisionLoading"
-            :options="sub_divisions"
-          />
-        </div>
-
-        <div class="mb-4">
-          <div class="grid mb-5">
-            <p class="inline-block mb-2">Sector</p>
-            <span>Select your sector of interest</span>
-          </div>
-          <div v-if="isLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
-          </div>
+  
+  
+  
           <div
-            v-if="sectors || !isLoading"
-            class="grid grid-cols-3 gap-3 content-between"
+            class="flex flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4"
           >
-            <div v-for="(sector, index) in sectors" :key="index" class="flex ">
-              <vee-field
-                :name="sector.name"
-                type="checkbox"
-                v-model="formData.selectedSectors"
-                :id="sector.name"
-                class="rounded text-primary-normal focus:ring-primary-light"
-              />
-              <p :for="sector.name" class="ml-2 block text-sm text-body-dark">
-                {{ sector.name }}
-              </p>
-            </div>
+  
+            <button
+              type="Create Event"
+              @click="createEvent()"
+              class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+              :disable="reg_in_submission"
+            >
+              Create Event
+            </button>
           </div>
         </div>
-
-
-
-        <div
-          class="flex flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4"
-        >
-
-          <button
-            type="Create Event"
-            @click="createEvent()"
-            class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-            :disable="reg_in_submission"
-          >
-            Create Event
-          </button>
-        </div>
-      </div>
-    </vee-form>
+      </vee-form>
+    </div>
   </div>
 </template>
 
@@ -174,7 +177,7 @@ import { getZones } from "@/services/zoneService.js";
 import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
 
 export default {
-  name: "CreateEventForm",
+  name: "CreateEvent",
 
   async created() {
     const sectorStore = useSectorStore();

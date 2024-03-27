@@ -14,6 +14,7 @@ import EmailVerification from '../features/Auth/components/EmailVerification.vue
 import SearchResult from '../features/Search/SearchResult.vue'
 import EventView from '@/features/Event/EventView.vue'
 import ReportView from '@/features/Report/ReportView.vue'
+import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +29,12 @@ const router = createRouter({
       path: '/event',
       name: 'event',
       component: EventView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/create-event',
+      name: 'create-event',
+      component: CreateEvent,
       meta: { requiresAuth: true }
     },
     {
