@@ -22,7 +22,7 @@
 
 7) Include all the banner pictures for the subdivisions, divisions and regions. /
 
-8) Enable the "search icon" to fetch locations or sectors.
+8) Enable the "search icon" to fetch locations or sectors. /
 
 9) Work on the fonts./
 

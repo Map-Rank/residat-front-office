@@ -1,5 +1,5 @@
 <template>
-  <SectionTitle :title="sectionTitle" />
+  <SectionTitle :title="sectionTitle " :isLink="true" linkTo="event"/>
 
     
 <div class=" h-[250px] grid  space-y-2">
