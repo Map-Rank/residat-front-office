@@ -257,12 +257,13 @@ export default {
       this.page=0
       this.zoneName = zone.name
       this.bannerUrlImage= zone.banner
+      this.zoneId = zone.id
     },
 
     async filterPostBySectors() {
       try {
         this.topLoading = true
-        this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null)
+        this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null ,this.zoneId )
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -289,7 +290,7 @@ export default {
 
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id != 0 ? id : null, 30)
+        this.posts = await getPostsByZone(id != 0 ? id : null, 30,null , this.sectorId)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true

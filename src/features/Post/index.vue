@@ -53,7 +53,7 @@
 
     <!-- Post Content -->
     <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
-      <p class="p3 content font-medium">{{ postContent }}</p>
+      <p class="p3 content ">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
@@ -67,6 +67,8 @@
       <InteractionPostStatistics
         :comment_count="customPost.comment_count"
         :like_count="like_count"
+        :share_count="customPost.share_count"
+        @showPostDetails="showDetails(this.post.id)"
       />
 
       <!-- lower section  -->
@@ -338,27 +340,21 @@ export default {
 <style scoped>
 .content {
   color: var(--body-normal, #242424);
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 550;
+  font-weight: 400px;
   line-height: 20px;
   /* 142.857% */
 }
 
 @media only screen and (max-width: 480px) {
   .content {
-    /* Add your mobile styles here. For example: */
     font-size: 10px;
     line-height: 16px;
-    /* Adjust line height for smaller text */
   }
 
   h5 {
     color: var(--primary-normal, #021d40);
-
-    /* Desktop/H6-SemiBold */
-    font-family: Roboto;
     font-size: 12px;
     font-style: normal;
     font-weight: 600;

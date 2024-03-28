@@ -14,10 +14,14 @@
           
           <NoSearchResult></NoSearchResult>
         </div>
-        <section-title
-        title="Your Search Result"
-        css="flex justify-center item-center"
-        ></section-title>
+        <div v-if="!showPageRefresh && !topLoading" >
+
+          <section-title
+          
+          title="Your Search Result"
+          css="flex justify-center item-center"
+          ></section-title>
+        </div>
 
         <div v-if="!topLoading" class="space-y-5">
           <PostComponent
@@ -130,12 +134,13 @@ export default {
     },
 
     async fetchPosts() {
+
+      
       try {
         this.topLoading = true
         this.showPageRefresh = false
         console.log('the zone id is ' + this.id)
         this.filteredPosts = await getPostsByZone(this.id)
-        this.recentPosts = await getPostsByZone(0, 5, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true

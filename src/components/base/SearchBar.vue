@@ -8,7 +8,7 @@ import { getZones } from '@/services/zoneService.js';
         v-model="searchQuery"
         @input="filterZones()"
         @keyup.enter="searchZone"
-        class="border-2 w-full file  bg-transparent h-10 px-2 pr-16 rounded-lg text-sm focus:outline-none"
+        class="w-full file  bg-transparent h-10 px-2 pr-16 rounded-lg text-sm focus:outline-none"
         type="search"
         name="search"
         placeholder="Search in your location"

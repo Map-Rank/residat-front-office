@@ -48,7 +48,7 @@
       <div class="col-span-1">
         <div class="gap-3 p-4">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
-            <span class="block w-4 h-4 " :style="{ backgroundColor: key.value }"></span>
+            <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
             <span
               class="text-sm font-semibold"
               :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
@@ -57,9 +57,7 @@
           </div>
         </div>
       </div>
-<div class="flex md:col-span-5 h-[70vh]">
-
-
+      <div class="flex md:col-span-5 h-[70vh]">
         <div v-if="isSVG" class="w-full">
           <inline-svg
             title="Cameroon Map"
@@ -67,6 +65,8 @@
             :color="'#fff'"
             fill="black"
             :src="mapSvgPath"
+            :transformSource="transform"
+            @click="handleStateClick"
             width=""
             height=""
           />
@@ -117,19 +117,19 @@ import { getSpecificZones } from '../../services/zoneService'
 
 export default {
   name: 'DashBoardView',
- mounted()  {
+  mounted() {
     this.extractSVGKeys()
-   this.getZone()
+    this.getZone()
   },
   data() {
     return {
       mapSvgPath: null,
       vectorKeys: [],
-      zone:null,
+      zone: null,
       isSubDivisionGraph: false,
       isWaterStressGraphHidden: true,
       isKeyActorsHidden: false,
-      showAllActors:false,
+      showAllActors: false,
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -176,8 +176,7 @@ export default {
         },
         {
           title: 'Event 3',
-          logoUrl:
-            'https://th.bing.com/th/id/OIP.5k9XKswGsc5diwfswIWqiQHaHa?rs=1&pid=ImgDetMain',
+          logoUrl: 'https://th.bing.com/th/id/OIP.5k9XKswGsc5diwfswIWqiQHaHa?rs=1&pid=ImgDetMain',
           name: 'Health Aid International Organization'
         },
         {
@@ -185,20 +184,35 @@ export default {
           logoUrl:
             'https://logos-download.com/wp-content/uploads/2018/09/Economic_Cooperation_Organization_Logo.png',
           name: 'Economic Cooperation Organization'
-        },
+        }
       ]
     }
   },
 
   methods: {
-
-    async getZone(){
-      this.zone= await getSpecificZones(17)
-      this.mapSvgPath= this.zone.vector.path
+    async getZone() {
+      this.zone = await getSpecificZones(4)
+      this.mapSvgPath = this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
       // console.log(this.zone)
-
     },
+
+    transform(svg) {
+      let point = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
+      point.setAttributeNS(null, 'cx', '20')
+      point.setAttributeNS(null, 'cy', '20')
+      point.setAttributeNS(null, 'r', '10')
+      point.setAttributeNS(null, 'fill', 'red')
+      svg.appendChild(point)
+      return svg
+    },
+
+    handleStateClick: function (e) {
+      if (e.target.tagName === 'path') {
+        console.log(e.target.tagName)
+      }
+    },
+
     toggleWaterStressGraphVisibility() {
       this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
     },
@@ -237,10 +251,9 @@ export default {
     }
   },
   computed: {
-   isSVG() {
-     return this.mapSvgPath && this.mapSvgPath.endsWith('.svg');
-   }
-   
+    isSVG() {
+      return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
+    }
   },
   components: {
     BaseDropdown,
