@@ -11,7 +11,7 @@
             <h5 class="font-[575] cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
             <div class="flex items-center ">
 
-              <img src="assets\icons\location.png" class="h-4 mr-1" alt="" srcset="">
+              <img src="\assets\icons\location.png" class="h-4 mr-1" alt="" srcset="">
             <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}</h5>
             <p style="font-weight: 400; margin: 0 5px;"> • </p>
             <span class="">{{ postDate }}</span>
