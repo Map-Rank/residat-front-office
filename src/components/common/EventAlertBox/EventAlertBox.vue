@@ -1,5 +1,5 @@
 <template>
-  <SectionTitle :title="sectionTitle " :isLink="true" linkTo="community"/>
+  <SectionTitle :title="sectionTitle " :isLink="true" linkTo="event"/>
   <!-- <SectionTitle :title="sectionTitle " :isLink="true" /> -->
 
     
