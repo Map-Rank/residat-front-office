@@ -1,4 +1,4 @@
-import { makeApiPostCall } from '@/api/api'
+import { makeApiPostCall ,makeApiGetCall} from '@/api/api'
 import { API_ENDPOINTS } from '@/constants/index.js'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
@@ -13,7 +13,7 @@ const createEvent = async (eventData, authStore, onSuccess, onError) => {
     // Append user data to formData
     formData.append('title', eventData.title)
     formData.append('description', eventData.description)
-    formData.append('location', eventData.description)
+    formData.append('location', eventData.location)
     formData.append('organized_by', eventData.organized_by)
     formData.append('date_debut', eventData.date_debut)
     formData.append('published_at', eventData.date_debut)
@@ -35,4 +35,30 @@ const createEvent = async (eventData, authStore, onSuccess, onError) => {
   }
 }
 
-export { createEvent }
+const getEvents = async (page, size, token) => {
+  let defaultSize = 10
+  let defaultPage = 0
+
+  size = size || defaultSize
+  page = page || defaultPage
+
+  let params = new URLSearchParams({
+    size: size.toString(),
+    page: page.toString()
+  })
+
+
+  try {
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.getEvents}?${params.toString()}`,
+      token ? token : authToken
+    )
+
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
+export { createEvent ,getEvents}

@@ -14,4 +14,5 @@ export const API_ENDPOINTS = {
   sharePost: 'post/share',
   zone: '/zone',
   event: '/events',
+  getEvents: '/events',
 };
