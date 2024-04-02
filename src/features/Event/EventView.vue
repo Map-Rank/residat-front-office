@@ -15,80 +15,7 @@
           ></RefreshError>
         </div>
         <div v-if="!topLoading">
-          <div
-            v-for="event in events"
-            :key="event.id"
-            class="mb-4 p-4 bg-white rounded cursor-pointer"
-          >
-            <router-link to="/event" class="grid sm:flex mb-2">
-              <img
-                :src="formatHostImageUrl(event.image)"
-                class="rounded-[50%] h-[100px] mr-4"
-                alt="event image"
-              />
-              <div class="w-full">
-                <div class="flex justify-between ">
-                  <h2 class="text-xl text-start font-semibold">{{ event.title }}</h2>
-
-                  <div v-if="showMenu" class="menu relative">
-                    <button @click="toggleMenu" class="p-2 flex">
-                      <!-- Three dots icon -->
-                      <svg class="w-6 h-6" fill="true" stroke="currentColor" viewBox="0 0 24 24">
-                        <path
-                          d="M5 12a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4z"
-                        />
-                      </svg>
-                    </button>
-
-                    <!-- Dropdown Menu -->
-                    <div
-                      v-show="isMenuVisible"
-                      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
-                    >
-                      <button-ui
-                        :label="'Edit'"
-                        :textCss="'text-left '"
-                        :customCss="'items-left justify-start hover:bg-gray-100'"
-                        @clickButton="editPost()"
-                      >
-                      </button-ui>
-
-                      <button-ui
-                        :label="'Delete'"
-                        :textCss="'text-left '"
-                        :customCss="'items-left justify-start hover:bg-gray-100'"
-                        @clickButton="deletePost()"
-                      >
-                      </button-ui>
-
-                      <button-ui
-                        :label="'View'"
-                        :textCss="'text-left '"
-                        :customCss="'items-left justify-start hover:bg-gray-100'"
-                        @clickButton="viewPost()"
-                      >
-                      </button-ui>
-                    </div>
-                  </div>
-                </div>
-
-                <div>
-                  <div class="flex items-center">
-                    <img src="\assets\icons\location.png" class="h-4 mr-1" alt="" srcset="" />
-                    <h5 class="zoneName">{{ event.location }},</h5>
-                    <p style="font-weight: 400; margin: 0 1px"></p>
-                    <span class="">Date : {{ event.published_at }}</span>
-                  </div>
-                </div>
-                <p class="text-gray-700 text-start">{{ event.description }}</p>
-              </div>
-            </router-link>
-            <div class="flex justify-end">
-              <router-link to="/event" class="text-blue-600 hover:underline text-sm text-end"
-                >Read More</router-link
-              >
-            </div>
-          </div>
+          <EventBox v-for="event in events" :key="event.id" :event="event" :show-menu="showMenu" />
         </div>
       </div>
 
@@ -117,6 +44,8 @@ import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import useAuthStore from '@/stores/auth.js'
 import { formatHostImageUrl } from '@/utils/formating'
 import ButtonUi from '../../components/base/ButtonUi.vue'
+import EventBox from './Components/EventBox.vue'
+
 
 export default {
   name: 'EventView',
@@ -132,7 +61,8 @@ export default {
   components: {
     LoadingIndicator,
     RefreshError,
-    ButtonUi
+    ButtonUi,
+    EventBox
   },
   data() {
     const authStore = useAuthStore()
