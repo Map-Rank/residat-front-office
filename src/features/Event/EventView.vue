@@ -14,32 +14,77 @@
             @refreshPage="reloadEvents()"
           ></RefreshError>
         </div>
-        <div v-if="!topLoading" >
-
+        <div v-if="!topLoading">
           <div
             v-for="event in events"
             :key="event.id"
-            class="mb-4 p-4 bg-white rounded  cursor-pointer"
+            class="mb-4 p-4 bg-white rounded cursor-pointer"
           >
-            <router-link to="/event-page" class="grid sm:flex mb-2">
-              <img :src="formatHostImageUrl(event.image)" class=" rounded-[50%] h-[100px]  mr-4" alt="event image" />
-              <div>
-                <h2 class="text-xl text-start font-semibold">{{ event.title }}</h2>
+            <router-link to="/event" class="grid sm:flex mb-2">
+              <img
+                :src="formatHostImageUrl(event.image)"
+                class="rounded-[50%] h-[100px] mr-4"
+                alt="event image"
+              />
+              <div class="w-full">
+                <div class="flex justify-between ">
+                  <h2 class="text-xl text-start font-semibold">{{ event.title }}</h2>
+
+                  <div v-if="showMenu" class="menu relative">
+                    <button @click="toggleMenu" class="p-2 flex">
+                      <!-- Three dots icon -->
+                      <svg class="w-6 h-6" fill="true" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          d="M5 12a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4zm7 0a2 2 0 110-4 2 2 0 010 4z"
+                        />
+                      </svg>
+                    </button>
+
+                    <!-- Dropdown Menu -->
+                    <div
+                      v-show="isMenuVisible"
+                      class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50"
+                    >
+                      <button-ui
+                        :label="'Edit'"
+                        :textCss="'text-left '"
+                        :customCss="'items-left justify-start hover:bg-gray-100'"
+                        @clickButton="editPost()"
+                      >
+                      </button-ui>
+
+                      <button-ui
+                        :label="'Delete'"
+                        :textCss="'text-left '"
+                        :customCss="'items-left justify-start hover:bg-gray-100'"
+                        @clickButton="deletePost()"
+                      >
+                      </button-ui>
+
+                      <button-ui
+                        :label="'View'"
+                        :textCss="'text-left '"
+                        :customCss="'items-left justify-start hover:bg-gray-100'"
+                        @clickButton="viewPost()"
+                      >
+                      </button-ui>
+                    </div>
+                  </div>
+                </div>
+
                 <div>
-                  <div class="flex items-center ">
-      
-                    <img src="\assets\icons\location.png" class="h-4 mr-1 " alt="" srcset="">
-                  <h5 class="zoneName" >{{ event.location }}, </h5>
-                  <p style="font-weight: 400; margin: 0 1px;"></p>
-                  <span class="">Date : {{ event.published_at }}</span>
-                  
+                  <div class="flex items-center">
+                    <img src="\assets\icons\location.png" class="h-4 mr-1" alt="" srcset="" />
+                    <h5 class="zoneName">{{ event.location }},</h5>
+                    <p style="font-weight: 400; margin: 0 1px"></p>
+                    <span class="">Date : {{ event.published_at }}</span>
                   </div>
-                  </div>
+                </div>
                 <p class="text-gray-700 text-start">{{ event.description }}</p>
               </div>
             </router-link>
             <div class="flex justify-end">
-              <router-link to="/event-page" class="text-blue-600 hover:underline text-sm text-end"
+              <router-link to="/event" class="text-blue-600 hover:underline text-sm text-end"
                 >Read More</router-link
               >
             </div>
@@ -66,13 +111,12 @@
 </template>
 
 <script>
-
-
-import {getEvents} from '../../services/eventService'
+import { getEvents } from '../../services/eventService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
-import useAuthStore from '@/stores/auth.js';
-import { formatHostImageUrl } from '@/utils/formating';
+import useAuthStore from '@/stores/auth.js'
+import { formatHostImageUrl } from '@/utils/formating'
+import ButtonUi from '../../components/base/ButtonUi.vue'
 
 export default {
   name: 'EventView',
@@ -85,9 +129,10 @@ export default {
       console.error('Failed to load posts:', error)
     }
   },
-  components:{
+  components: {
     LoadingIndicator,
-    RefreshError
+    RefreshError,
+    ButtonUi
   },
   data() {
     const authStore = useAuthStore()
@@ -97,24 +142,9 @@ export default {
       topLoading: false,
       showPageRefresh: false,
       errorMessage: 'Sorry no event found',
-      events: [
-        // {
-        //   id: 1,
-        //   title: 'Minister of Finance',
-        //   description:
-        //     'Responsible for formulating and implementing the financial and economic policies of the country. The Minister of Finance oversees the budget, taxation, public debt, and monetary policy. They work on strategies to promote economic growth, maintain fiscal stability, and ensure sustainable development.',
-        //   location: 'Yaounde',
-        //   organized_by: 'asdas',
-        //   user_id: 1,
-        //   published_at: '2024-04-01 13:51:21',
-        //   image: 'https://th.bing.com/th/id/R.5c554799a6a14ba031b54f234c18048f?rik=4M14f8pjbL2pEw&pid=ImgRaw&r=0',
-        //   is_valid: 0,
-        //   created_at: '2024-04-01T12:51:21.000000Z',
-        //   updated_at: '2024-04-01T12:51:21.000000Z'
-        // },
-
-  
-      ],
+      showMenu: true,
+      isMenuVisible:false,
+      events: [],
       popularPosts: [
         {
           id: 1,
@@ -155,7 +185,6 @@ export default {
     },
 
     async reloadEvents() {
-
       this.topLoading = false
 
       this.showPageRefresh = false
@@ -163,12 +192,42 @@ export default {
       // this.zoneName = this.authStore.user.zone.name
       await this.fetchPosts()
     },
+
+    toggleMenu() {
+      this.isMenuVisible = !this.isMenuVisible
+      console.log(this.isMenuVisible)
+    },
+
+    editPost() {
+      console.log('edit post ')
+      // this.setpostToEdit(this.post)
+      // this.$router.push({ name: 'create-post' })
+    },
+
+    async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
+      if (window.confirm(alertMessage)) {
+        console.log('Deleting post', this.postId)
+        // try {
+        //   await deletePost(this.postId)
+        //   window.location.reload()
+        // } catch (error) {
+        //   console.error('Error deleting post:', error)
+        // }
+      } else {
+        console.log('Post deletion cancelled by user')
+      }
+    },
+
+    viewPost() {
+      // this.$router.push({ name: 'show-post', params: { id: this.post.id } })
+    },
+
   }
 }
 </script>
 
 <style>
-.zoneName{
+.zoneName {
   font-size: 13px;
   color: gray;
   font-weight: 400;
