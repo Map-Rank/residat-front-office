@@ -1,4 +1,4 @@
-import { makeApiPostCall ,makeApiGetCall} from '@/api/api'
+import { makeApiPostCall ,makeApiDeleteCall, makeApiGetCall} from '@/api/api'
 import { API_ENDPOINTS } from '@/constants/index.js'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
@@ -61,4 +61,14 @@ const getEvents = async (page, size, token) => {
   }
 }
 
-export { createEvent ,getEvents}
+
+const deleteEvent = async (eventId) => {
+  try {
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.event}/${eventId}`, authToken)
+    console.log('delete event sucess 1!!!  ' + response.data)
+  } catch (error) {
+    console.error('Error deleting event:', error)
+    throw error
+  }
+}
+export { createEvent ,getEvents,deleteEvent}

@@ -23,10 +23,10 @@
             <div v-show="isMenuVisible" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-50">
               <button-ui :label="'Edit'" :textCss="'text-left '" :customCss="'items-left justify-start hover:bg-gray-100'" @clickButton="editPost()">
               </button-ui>
-              <button-ui :label="'Delete'" :textCss="'text-left '" :customCss="'items-left justify-start hover:bg-gray-100'" @clickButton="deletePost()">
+              <button-ui :label="'Delete'" :textCss="'text-left '" :customCss="'items-left justify-start hover:bg-gray-100'" @clickButton="deleteEvent()">
               </button-ui>
-              <button-ui :label="'View'" :textCss="'text-left '" :customCss="'items-left justify-start hover:bg-gray-100'" @clickButton="viewPost()">
-              </button-ui>
+              <!-- <button-ui :label="'View'" :textCss="'text-left '" :customCss="'items-left justify-start hover:bg-gray-100'" @clickButton="viewPost()">
+              </button-ui> -->
             </div>
           </div>
         </div>
@@ -53,6 +53,7 @@
 
 import ButtonUi from '../../../components/base/ButtonUi.vue';
 import { formatHostImageUrl } from '@/utils/formating';
+import {deleteEvent} from '../../../services/eventService'
 export default {
     name:'EventBox',
   props: {
@@ -75,8 +76,18 @@ export default {
     editPost() {
       // Handle edit post functionality
     },
-    deletePost() {
-      // Handle delete post functionality
+    async deleteEvent(alertMessage = 'Are you sure you want to delete this post?') {
+      if (window.confirm(alertMessage)) {
+        console.log('Deleting post', this.event.id)
+        try {
+          await deleteEvent(this.event.id)
+          window.location.reload()
+        } catch (error) {
+          console.error('Error deleting post:', error)
+        }
+      } else {
+        console.log('Post deletion cancelled by user')
+      }
     },
     viewPost() {
       // Handle view post functionality

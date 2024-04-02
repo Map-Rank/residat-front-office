@@ -61,7 +61,6 @@ export default {
   components: {
     LoadingIndicator,
     RefreshError,
-    ButtonUi,
     EventBox
   },
   data() {
