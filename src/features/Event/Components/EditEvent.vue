@@ -6,7 +6,7 @@
           <AlertForm></AlertForm>
         </div>
   
-        <vee-form ref="form" :validation-schema="schema" @submit="createEvent">
+        <vee-form ref="form" :validation-schema="schema" @submit="updateEvent">
           <div class="flex-col space-y-6">
             <h3 class="text-center">CREATE AN EVENT</h3>
   
@@ -189,11 +189,11 @@
             >
               <button
                 type="Create Event"
-                @click="createEvent()"
+                @click="updateEvent()"
                 class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
                 :disabled="isCreatingEvent"
               >
-                Create Event
+                Edit Event
               </button>
             </div>
           </div>
@@ -213,8 +213,7 @@
   import BaseDropdown from '@/components/base/BaseDropdown.vue'
   import { getZones } from '@/services/zoneService.js'
   import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-  import {createEvent} from '@/services/eventService.js'
-import {getSpecificEvent} from '@/services/eventService.js'  
+import {getSpecificEvent,UpdateEvent} from '@/services/eventService.js'  
 
   export default {
     name: 'EditEvent',
@@ -437,7 +436,7 @@ import {getSpecificEvent} from '@/services/eventService.js'
         this.isCreatingEvent = false;
       },
   
-      async createEvent() {
+      async updateEvent() {
         this.isCreatingEvent = true;
         const fieldsToValidate = ['title', 'description', 'date_fin', 'date_debut']
   
@@ -460,10 +459,10 @@ import {getSpecificEvent} from '@/services/eventService.js'
   
             this.alertStore.setAlert(
               AlertStates.PROCESSING,
-              'please wait we are creating your account...'
+              'please wait we are Updating your event...'
             )
   
-            let response = await createEvent(this.formData,this.authStore, this.handleSuccess, this.handleError)
+            let response = await UpdateEvent(this.id,this.formData,this.authStore, this.handleSuccess, this.handleError)
   
             console.log(response)
   

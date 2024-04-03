@@ -3,7 +3,7 @@
     <!-- Event details -->
     <router-link to="/event" class="grid sm:flex mb-2">
       <!-- Event image -->
-      <img :src="formatHostImageUrl(event.image)" class="rounded-[50%] h-[100px] mr-4" alt="event image" />
+      <img :src="event.image" class="rounded-[50%] h-[100px] mr-4" alt="event image" />
       <!-- Event information -->
       <div class="w-full">
         <div class="flex justify-between ">
