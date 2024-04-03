@@ -1,7 +1,12 @@
 <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 width="100%" viewBox="0 0 2301 2583" enable-background="new 0 0 2301 2583" xml:space="preserve">
 
-<path data-name="Messondo" style="fill: {#DC71DE}" fill="#DC71DE" opacity="1.000000" stroke="none" 
+<path 
+data-name="Messondo" 
+style="fill: {#DC71DE}" 
+fill="#DC71DE" 
+opacity="1.000000" 
+stroke="none" 
 	d="
 M160.507965,2214.415283 
 	C160.390030,2212.131348 160.272110,2209.847168 160.824890,2206.174316 
@@ -170,7 +175,8 @@ M160.507965,2214.415283
 	C173.463196,2226.896729 171.204895,2221.400391 163.700409,2217.921631 
 	C162.378525,2217.308594 161.559326,2215.611572 160.507965,2214.415283 
 z"/>
-<path data-name="Makak" style="fill: {#58F4CE}" fill="#58F4CE" opacity="1.000000" stroke="none" 
+<path 
+data-name="Makak" style="fill: {#58F4CE}" fill="#58F4CE" opacity="1.000000" stroke="none" 
 	d="
 M2304.000000,2160.000000 
 	C2304.000000,2162.778076 2304.000000,2165.555908 2303.440430,2169.549805 

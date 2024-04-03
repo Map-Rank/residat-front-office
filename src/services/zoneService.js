@@ -1,7 +1,7 @@
 import { makeApiGetCall } from '@/api/api' // Import the makeApiPostCall function
-import {  API_ENDPOINTS } from '@/constants/index.js'
+import {  API_ENDPOINTS,LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
-
+const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
   const getZones = async (level_id, parent_id) => {
     let params = new URLSearchParams();
@@ -42,7 +42,31 @@ import {  API_ENDPOINTS } from '@/constants/index.js'
     }
   }
 
+  const getSpecificMapZones = async (parent_id, name, size ,level_id, token) => {
+
+  
+    let params = new URLSearchParams({
+      name: name.toString(),
+      parent_id: parent_id.toString(),
+      size: size.toString(),
+      // level_id: level_id.toString(),
+    })
+  
+  
+    try {
+      const response = await makeApiGetCall(
+        `${API_ENDPOINTS.zone}?${params.toString()}`,
+        token ? token : authToken
+      )
+  
+      return response.data.data
+    } catch (error) {
+      console.error('Error fetching posts:', error)
+      throw error
+    }
+  }
+
   
 
 
-  export {getZones,getSpecificZones}
+  export {getZones,getSpecificZones,getSpecificMapZones}
