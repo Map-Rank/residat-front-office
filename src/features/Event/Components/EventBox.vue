@@ -54,8 +54,10 @@
 import ButtonUi from '../../../components/base/ButtonUi.vue';
 import { formatHostImageUrl } from '@/utils/formating';
 import {deleteEvent} from '../../../services/eventService'
+import UseEventStore from '@/stores/eventStore.js'
 export default {
-    name:'EventBox',
+
+  name:'EventBox',
   props: {
     event: Object,
     showMenu: Boolean
@@ -64,7 +66,9 @@ export default {
     ButtonUi
   },
   data() {
+    const eventStore = UseEventStore()
     return {
+      eventStore,
       isMenuVisible: false,
       formatHostImageUrl
     };
@@ -74,6 +78,7 @@ export default {
       this.isMenuVisible = !this.isMenuVisible;
     },
     editPost() {
+      this.$router.push({ name: 'edit-event', params: { id: this.event.id } })
       // Handle edit post functionality
     },
     async deleteEvent(alertMessage = 'Are you sure you want to delete this post?') {
@@ -90,7 +95,6 @@ export default {
       }
     },
     viewPost() {
-      // Handle view post functionality
     }
   }
 };

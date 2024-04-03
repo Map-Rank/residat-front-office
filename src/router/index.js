@@ -15,6 +15,7 @@ import SearchResult from '../features/Search/SearchResult.vue'
 import EventView from '@/features/Event/EventView.vue'
 import ReportView from '@/features/Report/ReportView.vue'
 import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
+import EditEvent from '@/features/Event/Components/EditEvent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -103,6 +104,12 @@ const router = createRouter({
       path: '/show-post/:id',
       name: 'show-post',
       component: ShowPost,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/edit-event/:id',
+      name: 'edit-event',
+      component: EditEvent,
       meta: { requiresAuth: true }
     },
     {

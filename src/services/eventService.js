@@ -62,6 +62,19 @@ const getEvents = async (page, size, token) => {
 }
 
 
+const getSpecificEvent = async (id) => {
+  try {
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.event}/${id.toString()}`,
+      authToken
+    )
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching event:', error)
+    throw error
+  }
+}
+
 const deleteEvent = async (eventId) => {
   try {
     const response = await makeApiDeleteCall(`${API_ENDPOINTS.event}/${eventId}`, authToken)
@@ -71,4 +84,4 @@ const deleteEvent = async (eventId) => {
     throw error
   }
 }
-export { createEvent ,getEvents,deleteEvent}
+export { createEvent ,getEvents,deleteEvent,getSpecificEvent}
