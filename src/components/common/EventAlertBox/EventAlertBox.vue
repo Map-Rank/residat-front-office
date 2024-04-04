@@ -1,36 +1,27 @@
 <template>
-  <SectionTitle :title="sectionTitle " :isLink="true" linkTo="event"/>
-  <!-- <SectionTitle :title="sectionTitle " :isLink="true" /> -->
-
-    
-<div class=" h-[250px] grid  space-y-2">
-
-  <div v-for="item in [1, 2]" :key="item" class="  p-3 bg-white rounded-xl flex items-start space-x-4">
-    <div class="flex-shrink-0 justify-start flex">
-      <img
-        :src="eventImage"
-        alt="Event image"
-        class="h-16 w-16 rounded-full border-2 border-white"
-      />
-    </div>
-    <div class="text-black gap-3">
-      <div class="text-lg font-semibold title">{{ title }}</div>
-      <p class="menu">
-        Organized by:
-        <span>{{ organizer }}</span>
-      </p>
-      <p class="menu">
-        Date:
-        <span>{{ date }}</span>
-      </p>
-      <p class="menu">
-        Location:
-        <span>{{ location }}</span>
-      </p>
+  <SectionTitle :title="sectionTitle" :isLink="true" linkTo="event" />
+  <div class="h-[250px] grid space-y-2">
+    <div v-for="event in events" :key="event" class="p-3 bg-white rounded-xl flex items-start space-x-4">
+      <div class="flex-shrink-0 justify-start flex">
+        <img :src="event.image" alt="Event image" class="h-16 w-16 rounded-full border-2 border-white" />
+      </div>
+      <div class="text-black gap-3">
+        <div class="text-lg font-semibold title">{{ event.title }}</div>
+        <p class="menu">
+          Organized by:
+          <span>{{ event.organized_by }}</span>
+        </p>
+        <p class="menu">
+          Date:
+          <span>{{ event.published_at }}</span>
+        </p>
+        <p class="menu">
+          Location:
+          <span>{{ event.location }}</span>
+        </p>
+      </div>
     </div>
   </div>
-</div>
-  <!-- </div> -->
 </template>
 
 <script>
@@ -39,17 +30,16 @@ import SectionTitle from '@/components/base/SectionTitle.vue'
 export default {
   name: 'EventAlertBox',
   props: {
-    title: String,
-    organizer: String,
-    date: String,
-    location: String,
-    eventImage: String,
+    events: {
+      type: Object,
+      required: true,
+    },
     sectionTitle: String,
   },
   components: {
-    SectionTitle
-  }
-}
+    SectionTitle,
+  },
+};
 </script>
 
 <style scoped>
@@ -78,5 +68,4 @@ span {
   font-weight: 400;
   line-height: 20px; /* 142.857% */
 }
-
 </style>

@@ -27,7 +27,7 @@
         <!-- Dropdown Menu -->
         <div
           v-show="isMenuVisible"
-          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+          class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
         <button-ui
         :label="'Profile Page'"
@@ -88,8 +88,9 @@
 
           <!-- Dropdown Menu -->
           <div
+          ref="menu"
             v-show="isMenuVisible"
-            class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+            class=" absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
           >
             <button-ui
               :label="'Profile Page'"
@@ -170,6 +171,14 @@ export default {
     IconWithLabel,
     ButtonUi
   },
+
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside);
+  },
+
+  unmounted() {
+    document.removeEventListener('click', this.handleClickOutside);
+  },
   data() {
     const authStore = useAuthStore()
     const router = useRouter()
@@ -229,8 +238,21 @@ export default {
     },
 
     toggleMenu() {
+      console.log('click');
+      console.log(this.isMenuVisible);
       this.isMenuVisible = !this.isMenuVisible
+      console.log(this.isMenuVisible);
     },
+
+    // handleClickOutside(event) {
+    //   if (this.$refs.menu && !this.$refs.menu.contains(event.target)) {
+    //     this.isMenuVisible = false;
+    //   }
+    // },
+
+
+
+
 
     menuMethods(index) {
       console.log('click')

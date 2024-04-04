@@ -112,14 +112,14 @@
               </main>
 
               <aside class="col-span-3 justify-end hidden sm:block">
+                <div v-if="isloadingEvent" class="flex h-full justify-center">
+                  <LoadingIndicator />
+                </div>
                 <event-alert-box
                 sectionTitle="Upcoming Event"
-                  title="Annual Farming Event"
-                  organizer="Farm Hub"
-                  date="August 12, 2024"
-                  location="Bamenda"
-                  eventImage="https://th.bing.com/th/id/R.5c554799a6a14ba031b54f234c18048f?rik=4M14f8pjbL2pEw&pid=ImgRaw&r=0"
+                 :events="events"
                 />
+
                 <div class="mt-3">
                   <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
                   <div v-if="topLoading" class="flex h-full justify-center">
@@ -139,6 +139,7 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
+import { getEvents } from '../../services/eventService'
 import {
   getPosts,
   getPostsBySectors,
@@ -161,7 +162,8 @@ export default {
 
   async created() {
     try {
-      await this.fetchPosts()
+      await this.fetchResources()
+     
       this.topLoading = false
     } catch (error) {
       console.error('Failed to load posts:', error)
@@ -192,6 +194,7 @@ export default {
       authStore,
       scrollLocked: false,
       postScrollLocked: false,
+      isloadingEvent: false,
       topLoading: false,
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
@@ -200,7 +203,7 @@ export default {
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
-
+events:[],
       posts: [],
       allPosts: [],
       showPageRefresh: false,
@@ -316,11 +319,20 @@ export default {
       await this.fetchPosts()
     },
 
+    async fetchResources() {
+      this.topLoading = true
+      this.isloadingEvent = true
+
+      await this.fetchPosts()
+      await this.fetchEvent()
+
+
+    },
+
     async fetchPosts() {
       this.hasNewPosts = false
 
       try {
-        this.topLoading = true
         this.posts = await getPosts(0, 10, this.authStore.user.token)
         this.recentPosts = await getPosts(0, 3, this.authStore.user.token)
       } catch (error) {
@@ -334,6 +346,18 @@ export default {
         } else {
           this.showPageRefresh = false
         }
+      }
+    },
+
+    async fetchEvent() {
+      try {
+        this.events = await getEvents(0, 10, this.authStore.user.token)
+        console.log(this.events);
+      } catch (error) {
+        console.error('Failed to load events:', error)
+      }finally{
+
+        this.isloadingEvent = false
       }
     },
 
