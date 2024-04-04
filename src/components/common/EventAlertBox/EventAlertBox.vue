@@ -1,9 +1,17 @@
 <template>
   <SectionTitle :title="sectionTitle" :isLink="true" linkTo="event" />
   <div class="h-[250px] grid space-y-2">
-    <div v-for="event in events" :key="event" class="p-3 bg-white rounded-xl flex items-start space-x-4">
+    <div
+    v-for="(event) in displayedEvents" 
+      :key="event"
+      class="p-3 bg-white rounded-xl flex items-start space-x-4"
+    >
       <div class="flex-shrink-0 justify-start flex">
-        <img :src="event.image" alt="Event image" class="h-16 w-16 rounded-full border-2 border-white" />
+        <img
+          :src="event.image"
+          alt="Event image"
+          class="h-16 w-16 rounded-full border-2 border-white"
+        />
       </div>
       <div class="text-black gap-3">
         <div class="text-lg font-semibold title">{{ event.title }}</div>
@@ -29,17 +37,53 @@ import SectionTitle from '@/components/base/SectionTitle.vue'
 
 export default {
   name: 'EventAlertBox',
+  mounted() {
+    this.startRotation()
+  },
+
+  data() {
+    return {
+      currentIndex: 0,
+      interval: null
+    }
+  },
   props: {
     events: {
-      type: Object,
-      required: true,
+      type: Array,
+      required: true
     },
-    sectionTitle: String,
+    sectionTitle: String
   },
   components: {
-    SectionTitle,
+    SectionTitle
   },
-};
+
+  computed: {
+    // displayedEvents() {
+    //   return this.events.slice(this.currentIndex, this.currentIndex + 2)
+    // }
+
+    displayedEvents() {
+      const endIndex = this.currentIndex + 2;
+      return this.events.slice(
+        this.currentIndex,
+        endIndex > this.events.length ? this.events.length : endIndex
+      );
+    },
+  },
+  methods: {
+    startRotation() {
+      this.interval = setInterval(this.rotateActors, 5000);
+    },
+    rotateActors() {
+      this.currentIndex = (this.currentIndex + 1) % this.events.length;
+
+      if (this.currentIndex > this.events.length - 2) {
+        this.currentIndex = 0;
+      }
+    },
+  },
+}
 </script>
 
 <style scoped>
