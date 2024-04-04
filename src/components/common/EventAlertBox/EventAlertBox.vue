@@ -2,7 +2,7 @@
   <SectionTitle :title="sectionTitle" :isLink="true" linkTo="event" />
   <div class="h-[250px] grid space-y-2">
     <div
-    v-for="(event) in displayedEvents" 
+      v-for="event in displayedEvents"
       :key="event"
       class="p-3 bg-white rounded-xl flex items-start space-x-4"
     >
@@ -39,6 +39,8 @@ export default {
   name: 'EventAlertBox',
   mounted() {
     this.startRotation()
+    this.startRotation()
+    // this.displayedEvents()
   },
 
   data() {
@@ -58,18 +60,12 @@ export default {
     SectionTitle
   },
 
-  computed: {
-    // displayedEvents() {
-    //   return this.events.slice(this.currentIndex, this.currentIndex + 2)
-    // }
 
+  computed: {
     displayedEvents() {
-      const endIndex = this.currentIndex + 2;
-      return this.events.slice(
-        this.currentIndex,
-        endIndex > this.events.length ? this.events.length : endIndex
-      );
-    },
+      return this.events.slice(this.currentIndex, this.currentIndex + 2)
+    }
+
   },
   methods: {
     startRotation() {
