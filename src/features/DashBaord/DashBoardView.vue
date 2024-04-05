@@ -60,7 +60,7 @@
       <div class="flex md:col-span-5 h-[70vh]">
         <div v-if="isSVG" class="w-full">
           <inline-svg
-            :title=hoverMapText
+            :title="hoverMapText"
             fill-opacity="1"
             :color="'#fff'"
             fill="black"
@@ -113,7 +113,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones ,getSpecificMapZones} from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 
 export default {
   name: 'DashBoardView',
@@ -125,11 +125,11 @@ export default {
     return {
       mapSvgPath: null,
       vectorKeys: [],
-      hoverMapText:'Map',
+      hoverMapText: 'Map',
       zone: null,
-      parentId:null,
-      selectedZone:null,
-      defaultMapSize:1,
+      parentId: null,
+      selectedZone: null,
+      defaultMapSize: 1,
       isSubDivisionGraph: false,
       isWaterStressGraphHidden: true,
       isKeyActorsHidden: false,
@@ -195,10 +195,30 @@ export default {
 
   methods: {
     async getZone() {
-      this.zone = await getSpecificZones(4)
+      this.zone = await getSpecificZones(1)
       this.parentId = this.zone.id
       this.mapSvgPath = this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
+    },
+    handleStateClick: async function (e) {
+      if (e.target.tagName === 'path') {
+        if (e.target.dataset.name) {
+          this.selectedZone = e.target.dataset
+          this.hoverMapText = this.selectedZone.name
+          console.log(this.selectedZone)
+          let newZone = await getSpecificMapZones(
+            this.parentId,
+            this.selectedZone.name,
+            this.defaultMapSize
+          )
+          console.log(newZone[0])
+
+          this.zone = newZone[0]
+          this.parentId = this.zone.id
+          this.mapSvgPath = this.zone.vector.path
+          this.vectorKeys = this.zone.vector.keys
+        }
+      }
     },
 
     transform(svg) {
@@ -209,17 +229,6 @@ export default {
       point.setAttributeNS(null, 'fill', 'red')
       svg.appendChild(point)
       return svg
-    },
-
-    handleStateClick: function (e) {
-      if (e.target.tagName === 'path') {
-        if (e.target.dataset.name) {
-          this.selectedZone = e.target.dataset
-          this.hoverMapText = this.selectedZone.name
-          console.log(this.selectedZone)
-          getSpecificMapZones(this.parentId , this.selectedZone.name,this.defaultMapSize )
-        }
-      }
     },
 
     toggleWaterStressGraphVisibility() {

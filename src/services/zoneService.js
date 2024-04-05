@@ -34,7 +34,7 @@ const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
       const response = await makeApiGetCall(
         `${API_ENDPOINTS.zone}/${id}`
       )
-  
+      
       return response.data.data;
     } catch (error) {
       console.error('Error fetching zones:', error);
@@ -44,21 +44,24 @@ const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
   const getSpecificMapZones = async (parent_id, name, size ,level_id, token) => {
 
-  
+    let defaulWithVector = 1
     let params = new URLSearchParams({
       name: name.toString(),
       parent_id: parent_id.toString(),
       size: size.toString(),
+      with_vector: defaulWithVector.toString(),
+      // with_vector: defaulWithVector,
       // level_id: level_id.toString(),
     })
-  
-  
+    
+    
     try {
       const response = await makeApiGetCall(
         `${API_ENDPOINTS.zone}?${params.toString()}`,
         token ? token : authToken
-      )
-  
+        )
+        
+        // console.log(response.data);
       return response.data.data
     } catch (error) {
       console.error('Error fetching posts:', error)
