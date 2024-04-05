@@ -162,8 +162,13 @@ export default {
 
   async created() {
     try {
-      await this.fetchResources()
-     
+      const zoneId = this.$route.params.zoneId;
+      
+      if(zoneId){
+        this.posts = await getPostsByZone(zoneId);
+      }else{
+        await this.fetchResources()
+      }
       this.topLoading = false
     } catch (error) {
       console.error('Failed to load posts:', error)
@@ -286,14 +291,15 @@ events:[],
     async filterPostByZone(id) {
       console.log(id)
 
-      this.zoneId = id
+      this.zoneId = id || 1;
       this.filteringActive = true
       this.hasFetchAllPost = false
 
 
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id != 0 ? id : null, 30,null , this.sectorId)
+        this.posts = await getPostsByZone(id != 1 ? id : null, 30,null , this.sectorId)
+        this.$router.push(`/community/${id}`);
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true

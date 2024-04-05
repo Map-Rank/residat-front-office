@@ -135,7 +135,7 @@ const getPostsBySectors = async (sectorId , zone_id) => {
     let params = new URLSearchParams({
       // size: size.toString(),
       // page: page.toString(),
-      zone_id: zone_id,
+      zone_id: zone_id || 1,
       sectors: JSON.stringify(sectorId)
     })
     

@@ -74,6 +74,13 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/community/:zoneId',
+      name: 'communitySearch',
+      component: CommunityView,
+      meta: { requiresAuth: true },
+      props: true
+    },
+    {
       path: '/',
       name: 'authentication',
       component: AuthView
