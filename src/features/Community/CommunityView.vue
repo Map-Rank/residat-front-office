@@ -141,9 +141,7 @@ import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 import { getEvents } from '../../services/eventService'
 import {
-  getPosts,
-  getPostsBySectors,
-  getPostsByZone
+  getPosts,getFilterPosts
 } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
@@ -165,7 +163,7 @@ export default {
       const zoneId = this.$route.params.zoneId;
       
       if(zoneId){
-        this.posts = await getPostsByZone(zoneId);
+        this.posts = await getFilterPosts(zoneId);
       }else{
         await this.fetchResources()
       }
@@ -204,7 +202,7 @@ export default {
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
       sectorId: [],
-      zoneId: 0,
+      zoneId: 1,
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
@@ -271,7 +269,7 @@ events:[],
     async filterPostBySectors() {
       try {
         this.topLoading = true
-        this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null ,this.zoneId )
+        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -298,7 +296,7 @@ events:[],
 
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id != 1 ? id : null, 30,null , this.sectorId)
+        this.posts = await getFilterPosts(id != 1 ? id : null, 30,null , this.sectorId)
         this.$router.push(`/community/${id}`);
       } catch (error) {
         console.error('Failed to load posts:', error)
@@ -379,7 +377,7 @@ events:[],
         if (this.filteringActive) {
           const nextPage = this.page + 1
           const size = 20
-          nextPagePosts = await getPostsByZone(
+          nextPagePosts = await getFilterPosts(
             this.zoneId !== 0 ? this.zoneId : null,
             size,
             nextPage

@@ -4,10 +4,10 @@ import SearchResult from '@/features/Search/SearchResult.vue'
 import PostComponent from '@/features/Post/index.vue'
 import NoSearchResult from '@/components/common/Pages/NoSearchResult.vue'
 import SectionTitle from '@/components/base/SectionTitle.vue'
-import { getPostsByZone } from '@/features/Post/services/postService.js'
+import { getFilterPosts } from '@/features/Post/services/postService.js'
 
 vi.mock('@/features/Post/services/postService', () => ({
-  getPostsByZone: vi.fn(() =>
+  getFilterPosts: vi.fn(() =>
     Promise.resolve([
       {
         id: 1882,
@@ -127,7 +127,7 @@ describe('SearchResult Component', () => {
   })
 
   it('renders NoSearchResult when no posts are found', async () => {
-    getPostsByZone.mockResolvedValueOnce([])
+    getFilterPosts.mockResolvedValueOnce([])
     await wrapper.vm.fetchPosts()
     expect(wrapper.findComponent(NoSearchResult).exists()).toBe(true)
   })

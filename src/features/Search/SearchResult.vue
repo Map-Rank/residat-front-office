@@ -55,7 +55,7 @@
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import PostComponent from '../Post/index.vue'
 import { URL_LINK } from '@/constants'
-import { getPostsByZone } from '../Post/services/postService'
+import { getFilterPosts } from '../Post/services/postService'
 import NoSearchResult from '@/components/common/Pages/NoSearchResult.vue'
 import SectionTitle from '../../components/base/SectionTitle.vue'
 
@@ -140,7 +140,7 @@ export default {
         this.topLoading = true
         this.showPageRefresh = false
         console.log('the zone id is ' + this.id)
-        this.filteredPosts = await getPostsByZone(this.id)
+        this.filteredPosts = await getFilterPosts(this.id)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
