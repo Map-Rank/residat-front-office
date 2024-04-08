@@ -24,7 +24,7 @@
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
-              <aside class="col-span-2  hidden sm:block md:hidden lg:block ">
+              <aside class="col-span-2 hidden sm:block md:hidden lg:block">
                 <zone-post-filter
                   :filterPostFunctionWithId="filterPostByZone"
                   :updateZone="updateZone"
@@ -54,7 +54,11 @@
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
-                  <post-input v-if="!showPageRefresh" profilePictureUrl="\assets\icons\profile-fill.svg"> </post-input>
+                  <post-input
+                    v-if="!showPageRefresh"
+                    profilePictureUrl="\assets\icons\profile-fill.svg"
+                  >
+                  </post-input>
 
                   <div v-if="hasNewPosts" class="">
                     <div class="my-10 flex flex-col justify-center items-center">
@@ -116,11 +120,12 @@
                   <LoadingIndicator />
                 </div>
                 <event-alert-box
-                sectionTitle="Upcoming Event"
-                 :events="events"
+                  v-if="shouldDisplayEventAlert"
+                  sectionTitle="Upcoming Event"
+                  :events="events"
                 />
 
-                <div class="mt-3">
+                <div >
                   <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
@@ -160,6 +165,9 @@ export default {
 
   async created() {
     try {
+      await this.fetchResources()
+
+
       const zoneId = this.$route.params.zoneId;
       
       if(zoneId){
@@ -187,12 +195,14 @@ export default {
 
     return {
       zoneName: authStore.user.zone.name,
-      profilePictureUrl:authStore.user.avatar,
+      profilePictureUrl: authStore.user.avatar,
       postStore,
       modalStore,
-      bannerUrlImage:authStore.user.zone.banner || 'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
+      bannerUrlImage:
+        authStore.user.zone.banner ||
+        'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
       hasNewPosts: false,
-      hasFetchAllPost:false,
+      hasFetchAllPost: false,
       filteringActive: false,
       authStore,
       scrollLocked: false,
@@ -206,7 +216,7 @@ export default {
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
-events:[],
+      events: [],
       posts: [],
       allPosts: [],
       showPageRefresh: false,
@@ -219,13 +229,15 @@ events:[],
     }
   },
   computed: {
-  computedBannerImage() {
-    return {
-      'background-image': `url('${this.bannerUrlImage}')`
-    };
-  }
-}
-,
+    computedBannerImage() {
+      return {
+        'background-image': `url('${this.bannerUrlImage}')`
+      }
+    },
+    shouldDisplayEventAlert() {
+      return this.events.length > 2
+    }
+  },
 
   methods: {
     updateSectorChecked({ list, checked }) {
@@ -246,7 +258,7 @@ events:[],
     },
 
     async checkNewPosts() {
-      if(this.filteringActive){
+      if (this.filteringActive) {
         return
       }
       try {
@@ -260,16 +272,18 @@ events:[],
     },
 
     updateZone(zone) {
-      this.page=0
+      this.page = 0
       this.zoneName = zone.name
-      this.bannerUrlImage= zone.banner
+      this.bannerUrlImage = zone.banner
       this.zoneId = zone.id
     },
 
     async filterPostBySectors() {
       try {
         this.topLoading = true
+
         this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
+
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -293,11 +307,12 @@ events:[],
       this.filteringActive = true
       this.hasFetchAllPost = false
 
-
       try {
         this.topLoading = true
+
         this.posts = await getFilterPosts(id != 1 ? id : null, 30,null , this.sectorId)
         this.$router.push(`/community/${id}`);
+
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -329,8 +344,6 @@ events:[],
 
       await this.fetchPosts()
       await this.fetchEvent()
-
-
     },
 
     async fetchPosts() {
@@ -358,13 +371,10 @@ events:[],
         this.events = await getEvents(0, 10, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load events:', error)
-      }finally{
-
+      } finally {
         this.isloadingEvent = false
       }
     },
-
-
 
     async loadMorePosts() {
       if (this.loadingPosts || this.showPageRefresh) return
@@ -389,7 +399,7 @@ events:[],
 
         if (nextPagePosts.length === 0) {
           this.bottomLoading = false // no more pages to load
-          this.hasFetchAllPost = true 
+          this.hasFetchAllPost = true
           return
         }
 
@@ -403,13 +413,12 @@ events:[],
         this.bottomLoading = false
       }
     },
- 
 
     handleScroll() {
       const mainContent = this.$refs.mainContent
       const { scrollTop, scrollHeight, clientHeight } = mainContent
 
-      if(this.hasFetchAllPost){
+      if (this.hasFetchAllPost) {
         return
       }
 

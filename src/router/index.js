@@ -101,12 +101,20 @@ const router = createRouter({
       component: ChatRoomView,
       meta: { requiresAuth: true }
     },
+
     {
-      path: '/dashbaord',
+      path: '/dashbaord/:zoneId?/:parentId?/:zoneName?/:mapSize?',
       name: 'dashbaord',
       component: DashBoardView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        zoneId: route.params.zoneId || 1,
+        parentId: route.params.parentId,
+        zoneName: route.params.zoneName,
+        mapSize: route.params.mapSize
+      })
     },
+
     {
       path: '/show-post/:id',
       name: 'show-post',
