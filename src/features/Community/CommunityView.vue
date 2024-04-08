@@ -146,9 +146,7 @@ import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 import { getEvents } from '../../services/eventService'
 import {
-  getPosts,
-  getPostsBySectors,
-  getPostsByZone
+  getPosts,getFilterPosts
 } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
@@ -169,6 +167,14 @@ export default {
     try {
       await this.fetchResources()
 
+
+      const zoneId = this.$route.params.zoneId;
+      
+      if(zoneId){
+        this.posts = await getFilterPosts(zoneId);
+      }else{
+        await this.fetchResources()
+      }
       this.topLoading = false
     } catch (error) {
       console.error('Failed to load posts:', error)
@@ -206,7 +212,7 @@ export default {
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
       sectorId: [],
-      zoneId: 0,
+      zoneId: 1,
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
@@ -275,10 +281,9 @@ export default {
     async filterPostBySectors() {
       try {
         this.topLoading = true
-        this.posts = await getPostsBySectors(
-          this.sectorId.length ? this.sectorId : null,
-          this.zoneId
-        )
+
+        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
+
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -298,13 +303,16 @@ export default {
     async filterPostByZone(id) {
       console.log(id)
 
-      this.zoneId = id
+      this.zoneId = id || 1;
       this.filteringActive = true
       this.hasFetchAllPost = false
 
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id != 0 ? id : null, 30, null, this.sectorId)
+
+        this.posts = await getFilterPosts(id != 1 ? id : null, 30,null , this.sectorId)
+        this.$router.push(`/community/${id}`);
+
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -379,7 +387,7 @@ export default {
         if (this.filteringActive) {
           const nextPage = this.page + 1
           const size = 20
-          nextPagePosts = await getPostsByZone(
+          nextPagePosts = await getFilterPosts(
             this.zoneId !== 0 ? this.zoneId : null,
             size,
             nextPage
