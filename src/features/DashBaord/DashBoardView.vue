@@ -58,7 +58,22 @@
         </div>
       </div>
       <div class="flex md:col-span-5 h-[70vh]">
-        <div v-if="isSVG" class="w-full">
+        <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
+          <LoadingIndicator />
+        </div>
+
+        <div v-if="isErrorLoadMap && !isLoadingMap" class="flex h-full w-full justify-center items-center">
+          <!-- <LoadingIndicator /> -->
+
+          <RefreshError
+            :imageUrl="errorImage"
+            :errorMessage="errorMessage"
+            @refreshPage="reloadMap()"
+            :hideButton="true"
+          ></RefreshError>
+        </div>
+
+        <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <inline-svg
             :title="hoverMapText"
             fill-opacity="1"
@@ -113,6 +128,8 @@ import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
+import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
+import RefreshError from '@/components/common/Pages/RefreshError.vue'
 
 export default {
   name: 'DashBoardView',
@@ -121,36 +138,38 @@ export default {
   },
 
   watch: {
-    '$route': {
+    $route: {
       immediate: true,
       async handler() {
-
-
-    if (this.zoneId === 1) {
-      this.zone = await getSpecificZones(this.zoneId)
-      // this.parentId = this.zone.id
-      this.presentMapId = this.zone.id
-      this.mapSvgPath = this.zone.vector.path
-      this.vectorKeys = this.zone.vector.keys
-    } else {
-      const zones = await getSpecificMapZones(
-        this.parentId,
-        this.zoneName,
-        this.mapSize
-      )
-
-      console.log(zones);
-
-      if (zones.length > 0) {
-        this.zone = zones[0]; // Again, ensure you're working with the actual zone object
-        this.presentMapId = this.zone.id
-          this.mapSvgPath = this.zone.vector.path;
-          this.vectorKeys = this.zone.vector.keys;
-        }else{
+        if (this.zoneId === 1) {
+          this.isLoadingMap = true
+          this.isErrorLoadMap = false
+          this.zone = await getSpecificZones(this.zoneId)
+          // this.parentId = this.zone.id
+          this.presentMapId = this.zone.id
+          this.mapSvgPath = this.zone.vector.path
+          this.vectorKeys = this.zone.vector.keys
+          this.isLoadingMap = false
+        } else {
+          this.isLoadingMap = true
+          this.isErrorLoadMap = false
           
+          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
+          
+          console.log(zones)
+          
+          if (zones.length > 0) {
+            this.zone = zones[0] // Again, ensure you're working with the actual zone object
+            this.presentMapId = this.zone.id
+            this.mapSvgPath = this.zone.vector.path
+            this.vectorKeys = this.zone.vector.keys
+            this.isLoadingMap = false
+          } else {
+            this.isLoadingMap = false
+            this.isErrorLoadMap = true
+            this.vectorKeys =[0]
+          }
         }
-
-    }
       }
     }
   },
@@ -161,15 +180,16 @@ export default {
       vectorKeys: [],
       hoverMapText: 'Map',
       zone: null,
-      // zoneId :this.$route.params.zoneId,
-      // parentId: null,
-      presentMapId:1,
+      presentMapId: 1,
+      errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
       defaultMapSize: 1,
       isSubDivisionGraph: false,
       isWaterStressGraphHidden: true,
       isKeyActorsHidden: false,
       showAllActors: false,
+      isLoadingMap: false,
+      isErrorLoadMap: false,
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -252,32 +272,12 @@ export default {
               mapSize: this.defaultMapSize
             }
           })
-
-          // this.$router.push({
-          //   name: 'dashbaord',
-          //   params: {
-          //     zoneId: 0
-          //   },
-          //   query: {
-          //     parentId: this.zoneId,
-          //     zoneName: this.selectedZone.name,
-          //     mapSize: this.defaultMapSize
-          //   }
-          // })
-
-          // let newZone = await getSpecificMapZones(
-          //   this.parentId,
-          //   this.selectedZone.name,
-          //   this.defaultMapSize
-          // )
-          // console.log(newZone[0])
-
-          // this.zone = newZone[0]
-          // // this.parentId = this.zone.id
-          // this.mapSvgPath = this.zone.vector.path
-          // this.vectorKeys = this.zone.vector.keys
         }
       }
+    },
+
+    reloadMap(){
+
     },
 
     toggleWaterStressGraphVisibility() {
@@ -320,6 +320,9 @@ export default {
   computed: {
     isSVG() {
       return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
+    },
+    errorMessage() {
+      return ` ${this.zoneName} map not yet available`
     }
   },
   components: {
@@ -329,7 +332,9 @@ export default {
     DegreeImpactDoughnutChart,
     InlineSvg,
     WaterStressChart,
-    ButtonUi
+    ButtonUi,
+    LoadingIndicator,
+    RefreshError
   }
 }
 </script>
