@@ -310,7 +310,7 @@ export default {
       try {
         this.topLoading = true
 
-        this.posts = await getFilterPosts(id != 1 ? id : null, 30,null , this.sectorId)
+        this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId,null,null , )
         this.$router.push(`/community/${id}`);
 
       } catch (error) {
