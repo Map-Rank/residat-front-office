@@ -137,42 +137,39 @@ export default {
     this.extractSVGKeys()
   },
 
-  watch: {
-    $route: {
-      immediate: true,
-      async handler() {
-        if (this.zoneId === 1) {
-          this.isLoadingMap = true
-          this.isErrorLoadMap = false
-          this.zone = await getSpecificZones(this.zoneId)
-          // this.parentId = this.zone.id
+watch: {
+  $route: {
+    immediate: true,
+    async handler() {
+      this.isLoadingMap = true
+      this.isErrorLoadMap = false
+
+      if (this.zoneId === 1) {
+        this.zone = await getSpecificZones(this.zoneId)
+        this.presentMapId = this.zone.id
+        this.mapSvgPath = this.zone.vector.path
+        this.vectorKeys = this.zone.vector.keys
+      } else {
+        const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
+
+        console.log(zones)
+
+        if (zones.length > 0) {
+          this.zone = zones[0] 
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
-          this.isLoadingMap = false
         } else {
-          this.isLoadingMap = true
-          this.isErrorLoadMap = false
-          
-          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
-          
-          console.log(zones)
-          
-          if (zones.length > 0) {
-            this.zone = zones[0] // Again, ensure you're working with the actual zone object
-            this.presentMapId = this.zone.id
-            this.mapSvgPath = this.zone.vector.path
-            this.vectorKeys = this.zone.vector.keys
-            this.isLoadingMap = false
-          } else {
-            this.isLoadingMap = false
-            this.isErrorLoadMap = true
-            this.vectorKeys =[0]
-          }
+          this.isErrorLoadMap = true
+          this.vectorKeys = [0]
         }
       }
+
+      this.isLoadingMap = false
     }
-  },
+  }
+},
+
   props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
   data() {
     return {
@@ -250,12 +247,7 @@ export default {
   },
 
   methods: {
-    async getZone() {
-      this.zone = await getSpecificZones(this.zoneId)
-      // this.parentId = this.zone.id
-      this.mapSvgPath = this.zone.vector.path
-      this.vectorKeys = this.zone.vector.keys
-    },
+
     handleStateClick: async function (e) {
       if (e.target.tagName === 'path') {
         if (e.target.dataset.name) {
