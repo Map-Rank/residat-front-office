@@ -116,11 +116,45 @@ import { getSpecificZones, getSpecificMapZones } from '../../services/zoneServic
 
 export default {
   name: 'DashBoardView',
-  mounted() {
+  async mounted() {
     this.extractSVGKeys()
-    this.getZone()
   },
-  props: ['zoneId'],
+
+  watch: {
+    '$route': {
+      immediate: true,
+      async handler() {
+
+
+    if (this.zoneId === 1) {
+      this.zone = await getSpecificZones(this.zoneId)
+      // this.parentId = this.zone.id
+      this.presentMapId = this.zone.id
+      this.mapSvgPath = this.zone.vector.path
+      this.vectorKeys = this.zone.vector.keys
+    } else {
+      const zones = await getSpecificMapZones(
+        this.parentId,
+        this.zoneName,
+        this.mapSize
+      )
+
+      console.log(zones);
+
+      if (zones.length > 0) {
+        this.zone = zones[0]; // Again, ensure you're working with the actual zone object
+        this.presentMapId = this.zone.id
+          this.mapSvgPath = this.zone.vector.path;
+          this.vectorKeys = this.zone.vector.keys;
+        }else{
+          
+        }
+
+    }
+      }
+    }
+  },
+  props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
   data() {
     return {
       mapSvgPath: null,
@@ -128,7 +162,8 @@ export default {
       hoverMapText: 'Map',
       zone: null,
       // zoneId :this.$route.params.zoneId,
-      parentId: null,
+      // parentId: null,
+      presentMapId:1,
       selectedZone: null,
       defaultMapSize: 1,
       isSubDivisionGraph: false,
@@ -197,7 +232,7 @@ export default {
   methods: {
     async getZone() {
       this.zone = await getSpecificZones(this.zoneId)
-      this.parentId = this.zone.id
+      // this.parentId = this.zone.id
       this.mapSvgPath = this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
     },
@@ -206,22 +241,44 @@ export default {
         if (e.target.dataset.name) {
           this.selectedZone = e.target.dataset
           this.hoverMapText = this.selectedZone.name
-          console.log(this.selectedZone)
-          let newZone = await getSpecificMapZones(
-            this.parentId,
-            this.selectedZone.name,
-            this.defaultMapSize
-          )
-          console.log(newZone[0])
 
-          this.zone = newZone[0]
-          this.parentId = this.zone.id
-          this.mapSvgPath = this.zone.vector.path
-          this.vectorKeys = this.zone.vector.keys
+          console.log(this.selectedZone)
+          this.$router.push({
+            name: 'dashbaord',
+            params: {
+              zoneId: 0,
+              parentId: this.presentMapId,
+              zoneName: this.selectedZone.name,
+              mapSize: this.defaultMapSize
+            }
+          })
+
+          // this.$router.push({
+          //   name: 'dashbaord',
+          //   params: {
+          //     zoneId: 0
+          //   },
+          //   query: {
+          //     parentId: this.zoneId,
+          //     zoneName: this.selectedZone.name,
+          //     mapSize: this.defaultMapSize
+          //   }
+          // })
+
+          // let newZone = await getSpecificMapZones(
+          //   this.parentId,
+          //   this.selectedZone.name,
+          //   this.defaultMapSize
+          // )
+          // console.log(newZone[0])
+
+          // this.zone = newZone[0]
+          // // this.parentId = this.zone.id
+          // this.mapSvgPath = this.zone.vector.path
+          // this.vectorKeys = this.zone.vector.keys
         }
       }
     },
-
 
     toggleWaterStressGraphVisibility() {
       this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
