@@ -94,12 +94,20 @@ const router = createRouter({
       component: ChatRoomView,
       meta: { requiresAuth: true }
     },
+    // {
+    //   path: '/dashbaord',
+    //   name: 'dashbaord',
+    //   component: DashBoardView,
+    //   meta: { requiresAuth: true }
+    // },
     {
-      path: '/dashbaord',
+      path: '/dashbaord/:zoneId?',
       name: 'dashbaord',
       component: DashBoardView,
-      meta: { requiresAuth: true }
-    },
+      meta: { requiresAuth: true },
+      props: (route) => ({ zoneId: route.params.zoneId || 1 })
+    }
+    ,
     {
       path: '/show-post/:id',
       name: 'show-post',

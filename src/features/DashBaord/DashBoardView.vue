@@ -65,7 +65,6 @@
             :color="'#fff'"
             fill="black"
             :src="mapSvgPath"
-            :transformSource="transform"
             @click="handleStateClick"
             width=""
             height=""
@@ -121,12 +120,14 @@ export default {
     this.extractSVGKeys()
     this.getZone()
   },
+  props: ['zoneId'],
   data() {
     return {
       mapSvgPath: null,
       vectorKeys: [],
       hoverMapText: 'Map',
       zone: null,
+      // zoneId :this.$route.params.zoneId,
       parentId: null,
       selectedZone: null,
       defaultMapSize: 1,
@@ -195,7 +196,7 @@ export default {
 
   methods: {
     async getZone() {
-      this.zone = await getSpecificZones(1)
+      this.zone = await getSpecificZones(this.zoneId)
       this.parentId = this.zone.id
       this.mapSvgPath = this.zone.vector.path
       this.vectorKeys = this.zone.vector.keys
@@ -221,15 +222,6 @@ export default {
       }
     },
 
-    transform(svg) {
-      let point = document.createElementNS('http://www.w3.org/2000/svg', 'circle')
-      point.setAttributeNS(null, 'cx', '20')
-      point.setAttributeNS(null, 'cy', '20')
-      point.setAttributeNS(null, 'r', '10')
-      point.setAttributeNS(null, 'fill', 'red')
-      svg.appendChild(point)
-      return svg
-    },
 
     toggleWaterStressGraphVisibility() {
       this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
