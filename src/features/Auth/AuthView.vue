@@ -5,7 +5,7 @@
         class="flex items-center justify-center min-h-screen pt-4 pb-20 text-center sm:block sm:p-0"
       >
         <div
-          class="inline-block mx-2 md:py-9 sm:px-6 md:px-20 align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform w-full transition-all sm:my-8 sm:align-middle md:w-3/5"
+          class="inline-block mx-2 md:py-9 sm:px-6 md:px-5 md:w-4/5 lg:px-20  lg:w-3/5   align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform w-full transition-all sm:my-8 sm:align-middle "
         >
           <div class="grid gap-3 py-4 text-left px-6">
             <div class="flex justify-between items-center pb-4">
