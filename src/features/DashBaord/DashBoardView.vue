@@ -1,9 +1,9 @@
 <template>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full">
     <div
-      class="grid space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
+      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
-      <div class="md:w-2/4">
+      <div class="lg:w-2/4 md:w-3/4">
         <div class="">
           <button-ui
             :label="'Water Risk'"
@@ -15,15 +15,15 @@
           </button-ui>
         </div>
 
-        <div :class="{ hidden: isWaterStressGraphHidden }">
+        <div :class="{ hidden: isWaterStressGraphHidden } ">
           <WaterStressChart></WaterStressChart>
         </div>
       </div>
-      <div class="md:w-1/4">
+      <div class="lg:w-1/4">
         <BaseDropdown :options="hazard" />
       </div>
 
-      <div class="md:w-1/3">
+      <div class="lg:w-1/3   hidden lg:block">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -37,7 +37,7 @@
               </button-ui>
             </div>
 
-            <div :class="{ hidden: isKeyActorsHidden }">
+            <div :class="{ hidden: isKeyActorsHidden } "  class="hidden sm:block ">
               <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" :showAll="showAllActors" />
             </div>
           </div>
@@ -45,8 +45,11 @@
       </div>
     </div>
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
-      <div class="col-span-1">
-        <div class="gap-3 p-4">
+      <div class="col-span-1 md:col-span-2 lg:col-span-1">
+        <div>
+          
+        </div>
+        <div class="mt-2 sm:mt-0">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
             <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
             <span
@@ -57,7 +60,7 @@
           </div>
         </div>
       </div>
-      <div class="flex md:col-span-5 h-[70vh]">
+      <div class="flex md:col-span-6 lg:col-span-5 h-[70vh]">
         <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
           <LoadingIndicator />
         </div>
@@ -91,7 +94,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-3 py-10 space-x-3">
+    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3">
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
           label="Degree of Impact"
