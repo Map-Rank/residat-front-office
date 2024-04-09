@@ -2,10 +2,10 @@
   <div class="relative">
     <!-- Fixed image in the background -->
     <div
-      class="fixed hidden md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      class="fixed hidden md:block top-0 left-0 w-full md:h-[20%] lg:h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
-      <h2 class="text-white absolute bottom-0 left-2 md:left-100 md:bottom-5 uppercase">
+      <h2 class="text-white absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase">
         WELCOME TO {{ zoneName }}
       </h2>
     </div>
@@ -18,7 +18,7 @@
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
         <div class="pt-1/2">
           <!-- <div class=" content  pt-5 lg:px-100 h-full"> -->
-          <div class="md:px-100 justify-center pt-5 h-full">
+          <div class="md:px-8  lg:px-100 justify-center pt-5 h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
@@ -40,7 +40,7 @@
               </aside>
 
               <!-- Main Content Area: Posts -->
-              <main class="col-span-5 sm:px-4" ref="mainContent">
+              <main class="col-span-5 lg:px-4 md:px-0" ref="mainContent">
                 <div v-if="topLoading" class="flex h-full justify-center">
                   <LoadingIndicator />
                 </div>
@@ -130,6 +130,15 @@
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
                   </div>
+                  <div class="hidden md:block lg:hidden mt-3">
+
+                    <zone-post-filter
+                    :filterPostFunctionWithId="filterPostByZone"
+                    :updateZone="updateZone"
+                  >
+                  </zone-post-filter>
+                  </div>
+
                 </div>
               </aside>
             </div>
@@ -455,6 +464,13 @@ export default {
 .enableScroll {
   height: 20vh;
 }
+
+@media (max-width: 768px) {
+  .enableScroll {
+    height: 10vh; /* Adjust the scrollable area for smaller screens */
+  }
+}
+
 .scroll-lock {
   overflow: hidden;
   height: 100%;
