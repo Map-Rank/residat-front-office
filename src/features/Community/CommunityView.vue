@@ -169,9 +169,13 @@ export default {
 
 
       const zoneId = this.$route.params.zoneId;
+      const sectorIdString  = this.$route.params.sectorId;
+
+      // Convert sectorId from string to array (handle potential missing sectorId)
+      const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : [];
       
       if(zoneId){
-        this.posts = await getFilterPosts(zoneId);
+        this.posts = await getFilterPosts(zoneId, sectorIdArray);
       }else{
         await this.fetchResources()
       }
@@ -281,9 +285,9 @@ export default {
     async filterPostBySectors() {
       try {
         this.topLoading = true
-
+        let id = this.$route.params.zoneId;
         this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
-
+        this.$router.push(`/community/${id}/${this.sectorId}`);
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -310,7 +314,7 @@ export default {
       try {
         this.topLoading = true
 
-        this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId,null,null , )
+        this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId, null, null)
         this.$router.push(`/community/${id}`);
 
       } catch (error) {
