@@ -4,10 +4,10 @@
 
   <div class=" grid align-middle items-start">
     
-    <div class=" h-[250px] bg-white md:p-6 rounded-lg  " >
-      <div class="grid w-full">
+    <div class=" h-[250px] bg-white md:p-3 rounded-lg  " >
+      <div class="grid w-full space-y-2">
         <div class="w-full">
-          <label class="label inline-block mb-2">Choose Your Region</label>
+          <p class="label inline-block mb-2">Choose Your Region</p>
           <div v-if="isLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
@@ -21,7 +21,7 @@
             />
           </div>
           <div class="w-full">
-            <label class="label inline-block mb-2">Choose Your Division</label>
+            <p class="label inline-block mb-2">Choose Your Division</p>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -34,7 +34,7 @@
             />
           </div>
           <div class="w-full">
-            <label class="label inline-block mb-2">Choose Your Sub-division</label>
+            <p class="label inline-block mb-2">Choose Your Sub-division</p>
             <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -166,21 +166,16 @@ this.updateZone(zone)
 </script>
 
 <style scoped>
-.title {
-  font-family: Roboto;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px; /* 120% */
-  letter-spacing: -0.3px;
-}
+
+
+
 
 .label {
   color: var(--body-dark, #1b1b1b);
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
 }
 </style>

@@ -5,7 +5,7 @@
             <canvas :id="canvasId"></canvas>
           </div>
     
-        <span class="barTitle"> {{label}}</span>
+        <p class="barTitle"> {{label}}</p>
       </div>
  
 </template>
@@ -126,7 +126,6 @@ methods: {
   color: #000;
 
   /* Desktop/H4-Bold */
-  font-family: Roboto;
   font-size: 20px;
   font-style: normal;
   font-weight: 700;

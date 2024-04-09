@@ -7,14 +7,14 @@
     @click.prevent="handleClick()"
   >
       <!-- Label on Top -->
-      <span :class="this.textCss" v-show="top">
+      <p :class="this.textCss" v-show="top">
         {{ labelTextTop }}
-      </span>
+      </p>
 
       <!-- Label on left -->
-      <span :class="this.textCss" v-show="left">
+      <p :class="this.textCss" v-show="left">
         {{ labelTextRight }}
-      </span>
+      </p>
       <!-- Image -->
 
       <img
@@ -28,14 +28,14 @@
       />
 
       <!-- Label on Right -->
-      <span :class="this.textCss" v-show="right">
+      <p :class="this.textCss" v-show="right">
         {{ labelTextRight }}
-      </span>
+      </p>
 
       <!-- Label on Bottom -->
-      <span :class="this.textCss" class="text-primary-normal " v-show="bottom">
+      <p :class="this.textCss" class="text-primary-normal " v-show="bottom">
         {{ labelTextBottom }}
-      </span>
+      </p>
   </router-link>
 </template>
 
@@ -110,20 +110,11 @@ export default {
 
 <style scoped>
 
-span{
+p{
   text-wrap: nowrap;
+  font-size: 12px;
 }
-.label {
-  text-align: center;
-  font-family: Roboto;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 160% */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+
 
 .icon-with-label:hover {
   cursor: pointer;

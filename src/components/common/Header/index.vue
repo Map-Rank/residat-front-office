@@ -27,31 +27,39 @@
         <!-- Dropdown Menu -->
         <div
           v-show="isMenuVisible"
-          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+          class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
-          <button-ui
-            :label="'Profile Page'"
-            :textCss="'text-left '"
-            :customCss="'items-left justify-start hover:bg-gray-100'"
-            @clickButton="menuMethods(0)"
-          >
-          </button-ui>
+        <button-ui
+        :label="'Profile Page'"
+        :textCss="'text-left '"
+        :customCss="'items-left justify-start hover:bg-gray-100'"
+        @clickButton="menuMethods(0)"
+      >
+      </button-ui>
 
-          <button-ui
-            :label="'Create Post'"
-            :textCss="'text-left '"
-            :customCss="'items-left justify-start hover:bg-gray-100'"
-            @clickButton="menuMethods(1)"
-          >
-          </button-ui>
+      <button-ui
+        :label="'Create Post'"
+        :textCss="'text-left '"
+        :customCss="'items-left justify-start hover:bg-gray-100'"
+        @clickButton="menuMethods(1)"
+      >
 
-          <button-ui
-            :label="'Logout'"
-            :textCss="'text-left '"
-            :customCss="'items-left justify-start hover:bg-gray-100'"
-            @clickButton="menuMethods(2)"
-          >
-          </button-ui>
+      </button-ui>
+      <button-ui
+        :label="'Create Event'"
+        :textCss="'text-left '"
+        :customCss="'items-left justify-start hover:bg-gray-100'"
+        @clickButton="menuMethods(2)"
+      >
+      </button-ui>
+
+      <button-ui
+        :label="'Logout'"
+        :textCss="'text-left '"
+        :customCss="'items-left justify-start hover:bg-gray-100'"
+        @clickButton="menuMethods(3)"
+      >
+      </button-ui>
         </div>
       </div>
     </div>
@@ -80,8 +88,9 @@
 
           <!-- Dropdown Menu -->
           <div
+          ref="menu"
             v-show="isMenuVisible"
-            class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+            class=" absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
           >
             <button-ui
               :label="'Profile Page'"
@@ -97,13 +106,21 @@
               :customCss="'items-left justify-start hover:bg-gray-100'"
               @clickButton="menuMethods(1)"
             >
+
+            </button-ui>
+            <button-ui
+              :label="'Create Event'"
+              :textCss="'text-left '"
+              :customCss="'items-left justify-start hover:bg-gray-100'"
+              @clickButton="menuMethods(2)"
+            >
             </button-ui>
 
             <button-ui
               :label="'Logout'"
               :textCss="'text-left '"
               :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(2)"
+              @clickButton="menuMethods(3)"
             >
             </button-ui>
           </div>
@@ -153,6 +170,14 @@ export default {
     SearchBar,
     IconWithLabel,
     ButtonUi
+  },
+
+  mounted() {
+    document.addEventListener('click', this.handleClickOutside);
+  },
+
+  unmounted() {
+    document.removeEventListener('click', this.handleClickOutside);
   },
   data() {
     const authStore = useAuthStore()
@@ -213,8 +238,21 @@ export default {
     },
 
     toggleMenu() {
+      console.log('click');
+      console.log(this.isMenuVisible);
       this.isMenuVisible = !this.isMenuVisible
+      console.log(this.isMenuVisible);
     },
+
+    // handleClickOutside(event) {
+    //   if (this.$refs.menu && !this.$refs.menu.contains(event.target)) {
+    //     this.isMenuVisible = false;
+    //   }
+    // },
+
+
+
+
 
     menuMethods(index) {
       console.log('click')
@@ -228,6 +266,11 @@ export default {
           this.toggleMenu()
           break
         case 2:
+          this.$router.push({ name: 'create-event' })
+          this.toggleMenu()
+          break
+          case 3:
+          this.toggleMenu()
           this.logout()
           break
       }

@@ -14,6 +14,8 @@ import EmailVerification from '../features/Auth/components/EmailVerification.vue
 import SearchResult from '../features/Search/SearchResult.vue'
 import EventView from '@/features/Event/EventView.vue'
 import ReportView from '@/features/Report/ReportView.vue'
+import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
+import EditEvent from '@/features/Event/Components/EditEvent.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +30,12 @@ const router = createRouter({
       path: '/event',
       name: 'event',
       component: EventView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/create-event',
+      name: 'create-event',
+      component: CreateEvent,
       meta: { requiresAuth: true }
     },
     {
@@ -66,6 +74,13 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/community/:zoneId?/:sectorId?',
+      name: 'communitySearch',
+      component: CommunityView,
+      meta: { requiresAuth: true },
+      props: true
+    },
+    {
       path: '/',
       name: 'authentication',
       component: AuthView
@@ -86,16 +101,30 @@ const router = createRouter({
       component: ChatRoomView,
       meta: { requiresAuth: true }
     },
+
     {
-      path: '/dashbaord',
+      path: '/dashbaord/:zoneId?/:parentId?/:zoneName?/:mapSize?',
       name: 'dashbaord',
       component: DashBoardView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        zoneId: route.params.zoneId || 1,
+        parentId: route.params.parentId,
+        zoneName: route.params.zoneName,
+        mapSize: route.params.mapSize
+      })
     },
+
     {
       path: '/show-post/:id',
       name: 'show-post',
       component: ShowPost,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/edit-event/:id',
+      name: 'edit-event',
+      component: EditEvent,
       meta: { requiresAuth: true }
     },
     {

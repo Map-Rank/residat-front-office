@@ -14,10 +14,14 @@
           
           <NoSearchResult></NoSearchResult>
         </div>
-        <section-title
-        title="Your Search Result"
-        css="flex justify-center item-center"
-        ></section-title>
+        <div v-if="!showPageRefresh && !topLoading" >
+
+          <section-title
+          
+          title="Your Search Result"
+          css="flex justify-center item-center"
+          ></section-title>
+        </div>
 
         <div v-if="!topLoading" class="space-y-5">
           <PostComponent
@@ -51,7 +55,7 @@
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import PostComponent from '../Post/index.vue'
 import { URL_LINK } from '@/constants'
-import { getPostsByZone } from '../Post/services/postService'
+import { getFilterPosts } from '../Post/services/postService'
 import NoSearchResult from '@/components/common/Pages/NoSearchResult.vue'
 import SectionTitle from '../../components/base/SectionTitle.vue'
 
@@ -130,12 +134,13 @@ export default {
     },
 
     async fetchPosts() {
+
+      
       try {
         this.topLoading = true
         this.showPageRefresh = false
         console.log('the zone id is ' + this.id)
-        this.filteredPosts = await getPostsByZone(this.id)
-        this.recentPosts = await getPostsByZone(0, 5, this.authStore.user.token)
+        this.filteredPosts = await getFilterPosts(this.id)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true

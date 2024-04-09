@@ -8,7 +8,7 @@
       v-model="checked"
       @change="updateCheckedItems"
     />
-    <label :for="list.name" class="ml-2.5 text-body-dark font-Roboto text-base font-normal leading-6 transition-all checked:font-semibold" >
+    <label :for="list.name" class="ml-2.5 text-body-dark cursor-pointer  text-base font-normal leading-6 transition-all" >
       {{ list.name }}
     </label>
   </div>
@@ -49,7 +49,6 @@ export default {
   color: var(--body-dark, #1B1B1B);
 
 /* Paragraphs/P2 */
-font-family: Roboto;
 font-size: 16px;
 font-style: normal;
 font-weight: 400;
@@ -62,8 +61,8 @@ line-height: 24px; /* 150% */
 
 label{
   color: var(--body-dark, #1b1b1b);
-  font-family: Roboto;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: AvertaDemo;
   font-style: normal;
   font-weight: 500;
   line-height: 20px; /* 142.857% */

@@ -127,18 +127,10 @@ const getSpecificPost = async (id) => {
   }
 }
 
-const getPostsBySectors = async (sectorId) => {
-  try {
-    let params = new URLSearchParams({
-      // size: size.toString(),
-      // page: page.toString(),
-      sectors: JSON.stringify(sectorId)
-    })
 
-    const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      authToken
-    )
+const filterPost = async (params) => {
+  try {
+    const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, authToken)
     console.log('post filtered!!')
     return response.data.data
   } catch (error) {
@@ -146,32 +138,25 @@ const getPostsBySectors = async (sectorId) => {
     throw error
   }
 }
-const getPostsByZone = async (zoneId,size,page) => {
 
+const getFilterPosts = async (zoneId, sectorId, size, page) => {
   let defaultSize = 20
   let defaultPage = 0
 
   size = size || defaultSize
   page = page || defaultPage
 
-  try {
-   
-    let params = new URLSearchParams({
-      size: size.toString(),
-      page: page.toString(),
-      zone_id: JSON.stringify(zoneId)
-    })
+  let params = new URLSearchParams({
+    size: size.toString(),
+    page: page.toString(),
+    zone_id: zoneId,
+  })
 
-    const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      authToken
-    )
-
-    return response.data.data
-  } catch (error) {
-    console.error('Error fetching posts:', error)
-    throw error
+  if (sectorId && sectorId.length > 0) {
+    params.append('sectors', JSON.stringify(sectorId));
   }
+
+  return await filterPost(params)
 }
 
 const getUserPosts = async () => {
@@ -241,7 +226,6 @@ export {
   createPost,
   getPosts,
   getSpecificPost,
-  getPostsBySectors,
   likePost,
   commentPost,
   updatePost,
@@ -249,5 +233,5 @@ export {
   sharePost,
   getUserPosts,
   getUserProfile,
-  getPostsByZone
+  getFilterPosts
 }

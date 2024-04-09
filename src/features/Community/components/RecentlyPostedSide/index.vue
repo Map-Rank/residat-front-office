@@ -12,9 +12,9 @@
               />
               <div>
 
-                <span class="user-name user-name">{{
+                <p class="user-name mb-3">{{
                   `${post.creator[0].first_name} ${post.creator[0].last_name}`
-                }}</span>
+                }}</p>
                 <p class="caption-C1">{{ formatDate(post.published_at) }}</p>
               </div>
             </div>
@@ -72,7 +72,6 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Captions/C1 */
-  font-family: Roboto;
   font-size: 12px;
   font-style: normal;
   font-weight: 400;
@@ -82,7 +81,6 @@ export default {
   color: var(--body-dark, #1b1b1b);
 
   /* Desktop/H5 */
-  font-family: Roboto;
   font-size: 15px;
   font-style: normal;
   font-weight: 700;
@@ -94,10 +92,9 @@ export default {
   color: var(--body-normal, #242424);
 
   /* Paragraphs/P3 */
-  font-family: Roboto;
   font-size: 14px;
   font-style: medium;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 20px; /* 142.857% */
 }
 </style>

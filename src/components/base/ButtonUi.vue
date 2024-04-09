@@ -16,11 +16,11 @@
     @click.prevent="handleClick()"
   >
     <img v-if="leftIcon" :src="leftIcon" alt="Left icon" class="w-6 h-6" />
-    <span :class="[textCss, colorObject]">
+    <p :class="[textCss, colorObject]">
       {{ label }}
-    </span>
+    </p>
     <img v-if="rightIcon" :src="rightIcon" alt="Right icon" class="w-5 h-5" />
-    <span v-if="loading" class="loader"></span>
+    <p v-if="loading" class="loader"></p>
   </button>
 </template>
 
@@ -86,8 +86,7 @@ export default {
   animation: spin 1s linear infinite;
 }
 
-span {
-  font-family: Roboto;
+p {
   font-size: 14px;
   font-style: normal;
   line-height: 20px; /* 171.429% */
@@ -96,8 +95,7 @@ span {
 
 
 @media (max-width: 767px) {
-  span {
-    font-family: Roboto;
+  p {
     font-size: 12px;
     font-style: normal;
     line-height: 20px; /* 171.429% */

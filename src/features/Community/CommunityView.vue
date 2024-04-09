@@ -24,7 +24,7 @@
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
-              <aside class="col-span-2  hidden sm:block md:hidden lg:block ">
+              <aside class="col-span-2 hidden sm:block md:hidden lg:block">
                 <zone-post-filter
                   :filterPostFunctionWithId="filterPostByZone"
                   :updateZone="updateZone"
@@ -54,7 +54,11 @@
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
-                  <post-input v-if="!showPageRefresh" profilePictureUrl="\assets\icons\profile-fill.svg"> </post-input>
+                  <post-input
+                    v-if="!showPageRefresh"
+                    profilePictureUrl="\assets\icons\profile-fill.svg"
+                  >
+                  </post-input>
 
                   <div v-if="hasNewPosts" class="">
                     <div class="my-10 flex flex-col justify-center items-center">
@@ -112,15 +116,16 @@
               </main>
 
               <aside class="col-span-3 justify-end hidden sm:block">
+                <div v-if="isloadingEvent" class="flex h-full justify-center">
+                  <LoadingIndicator />
+                </div>
                 <event-alert-box
-                sectionTitle="Upcoming Event"
-                  title="Annual Farming Event"
-                  organizer="Farm Hub"
-                  date="August 12, 2024"
-                  location="Bamenda"
-                  eventImage="https://th.bing.com/th/id/R.5c554799a6a14ba031b54f234c18048f?rik=4M14f8pjbL2pEw&pid=ImgRaw&r=0"
+                  v-if="shouldDisplayEventAlert"
+                  sectionTitle="Upcoming Event"
+                  :events="events"
                 />
-                <div class="mt-3">
+
+                <div >
                   <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
@@ -139,10 +144,9 @@
 import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
+import { getEvents } from '../../services/eventService'
 import {
-  getPosts,
-  getPostsBySectors,
-  getPostsByZone
+  getPosts,getFilterPosts
 } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
@@ -161,7 +165,20 @@ export default {
 
   async created() {
     try {
-      await this.fetchPosts()
+      await this.fetchResources()
+
+
+      const zoneId = this.$route.params.zoneId;
+      const sectorIdString  = this.$route.params.sectorId;
+
+      // Convert sectorId from string to array (handle potential missing sectorId)
+      const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : [];
+      
+      if(zoneId){
+        this.posts = await getFilterPosts(zoneId, sectorIdArray);
+      }else{
+        await this.fetchResources()
+      }
       this.topLoading = false
     } catch (error) {
       console.error('Failed to load posts:', error)
@@ -182,25 +199,28 @@ export default {
 
     return {
       zoneName: authStore.user.zone.name,
-      profilePictureUrl:authStore.user.avatar,
+      profilePictureUrl: authStore.user.avatar,
       postStore,
       modalStore,
-      bannerUrlImage:authStore.user.zone.banner || 'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
+      bannerUrlImage:
+        authStore.user.zone.banner ||
+        'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
       hasNewPosts: false,
-      hasFetchAllPost:false,
+      hasFetchAllPost: false,
       filteringActive: false,
       authStore,
       scrollLocked: false,
       postScrollLocked: false,
+      isloadingEvent: false,
       topLoading: false,
       bottomLoading: false,
       sectors: sectorStore.getAllSectors,
       sectorId: [],
-      zoneId: 0,
+      zoneId: 1,
       loadingPosts: false,
       debounceTimer: null,
       errorMessage: 'Sorry no post found',
-
+      events: [],
       posts: [],
       allPosts: [],
       showPageRefresh: false,
@@ -213,13 +233,15 @@ export default {
     }
   },
   computed: {
-  computedBannerImage() {
-    return {
-      'background-image': `url('${this.bannerUrlImage}')`
-    };
-  }
-}
-,
+    computedBannerImage() {
+      return {
+        'background-image': `url('${this.bannerUrlImage}')`
+      }
+    },
+    shouldDisplayEventAlert() {
+      return this.events.length > 2
+    }
+  },
 
   methods: {
     updateSectorChecked({ list, checked }) {
@@ -240,7 +262,7 @@ export default {
     },
 
     async checkNewPosts() {
-      if(this.filteringActive){
+      if (this.filteringActive) {
         return
       }
       try {
@@ -254,15 +276,18 @@ export default {
     },
 
     updateZone(zone) {
-      this.page=0
+      this.page = 0
       this.zoneName = zone.name
-      this.bannerUrlImage= zone.banner
+      this.bannerUrlImage = zone.banner
+      this.zoneId = zone.id
     },
 
     async filterPostBySectors() {
       try {
         this.topLoading = true
-        this.posts = await getPostsBySectors(this.sectorId.length ? this.sectorId : null)
+        let id = this.$route.params.zoneId;
+        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
+        this.$router.push(`/community/${id}/${this.sectorId}`);
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -282,14 +307,16 @@ export default {
     async filterPostByZone(id) {
       console.log(id)
 
-      this.zoneId = id
+      this.zoneId = id || 1;
       this.filteringActive = true
       this.hasFetchAllPost = false
 
-
       try {
         this.topLoading = true
-        this.posts = await getPostsByZone(id != 0 ? id : null, 30)
+
+        this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId, null, null)
+        this.$router.push(`/community/${id}`);
+
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -315,11 +342,18 @@ export default {
       await this.fetchPosts()
     },
 
+    async fetchResources() {
+      this.topLoading = true
+      this.isloadingEvent = true
+
+      await this.fetchPosts()
+      await this.fetchEvent()
+    },
+
     async fetchPosts() {
       this.hasNewPosts = false
 
       try {
-        this.topLoading = true
         this.posts = await getPosts(0, 10, this.authStore.user.token)
         this.recentPosts = await getPosts(0, 3, this.authStore.user.token)
       } catch (error) {
@@ -336,7 +370,15 @@ export default {
       }
     },
 
-
+    async fetchEvent() {
+      try {
+        this.events = await getEvents(0, 10, this.authStore.user.token)
+      } catch (error) {
+        console.error('Failed to load events:', error)
+      } finally {
+        this.isloadingEvent = false
+      }
+    },
 
     async loadMorePosts() {
       if (this.loadingPosts || this.showPageRefresh) return
@@ -349,7 +391,7 @@ export default {
         if (this.filteringActive) {
           const nextPage = this.page + 1
           const size = 20
-          nextPagePosts = await getPostsByZone(
+          nextPagePosts = await getFilterPosts(
             this.zoneId !== 0 ? this.zoneId : null,
             size,
             nextPage
@@ -361,7 +403,7 @@ export default {
 
         if (nextPagePosts.length === 0) {
           this.bottomLoading = false // no more pages to load
-          this.hasFetchAllPost = true 
+          this.hasFetchAllPost = true
           return
         }
 
@@ -375,13 +417,12 @@ export default {
         this.bottomLoading = false
       }
     },
- 
 
     handleScroll() {
       const mainContent = this.$refs.mainContent
       const { scrollTop, scrollHeight, clientHeight } = mainContent
 
-      if(this.hasFetchAllPost){
+      if (this.hasFetchAllPost) {
         return
       }
 

@@ -48,7 +48,7 @@
       <div class="col-span-1">
         <div class="gap-3 p-4">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
-            <span class="block w-4 h-4 " :style="{ backgroundColor: key.value }"></span>
+            <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
             <span
               class="text-sm font-semibold"
               :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
@@ -57,16 +57,30 @@
           </div>
         </div>
       </div>
-<div class="flex md:col-span-5 h-[70vh]">
+      <div class="flex md:col-span-5 h-[70vh]">
+        <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
+          <LoadingIndicator />
+        </div>
 
+        <div v-if="isErrorLoadMap && !isLoadingMap" class="flex h-full w-full justify-center items-center">
+          <!-- <LoadingIndicator /> -->
 
-        <div v-if="isSVG" class="w-full">
+          <RefreshError
+            :imageUrl="errorImage"
+            :errorMessage="errorMessage"
+            @refreshPage="reloadMap()"
+            :hideButton="true"
+          ></RefreshError>
+        </div>
+
+        <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <inline-svg
-            title="Cameroon Map"
+            :title="hoverMapText"
             fill-opacity="1"
             :color="'#fff'"
             fill="black"
             :src="mapSvgPath"
+            @click="handleStateClick"
             width=""
             height=""
           />
@@ -113,23 +127,66 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
+import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
+import RefreshError from '@/components/common/Pages/RefreshError.vue'
 
 export default {
   name: 'DashBoardView',
- mounted()  {
+  async mounted() {
     this.extractSVGKeys()
-   this.getZone()
   },
+
+watch: {
+  $route: {
+    immediate: true,
+    async handler() {
+      this.isLoadingMap = true
+      this.isErrorLoadMap = false
+
+      if (this.zoneId === 1) {
+        this.zone = await getSpecificZones(this.zoneId)
+        this.presentMapId = this.zone.id
+        this.mapSvgPath = this.zone.vector.path
+        this.vectorKeys = this.zone.vector.keys
+      } else {
+        const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
+
+        console.log(zones)
+
+        if (zones.length > 0) {
+          this.zone = zones[0] 
+          this.presentMapId = this.zone.id
+          this.mapSvgPath = this.zone.vector.path
+          this.vectorKeys = this.zone.vector.keys
+        } else {
+          this.isErrorLoadMap = true
+          this.vectorKeys = [0]
+        }
+      }
+
+      this.isLoadingMap = false
+    }
+  }
+},
+
+  props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
   data() {
     return {
       mapSvgPath: null,
       vectorKeys: [],
-      zone:null,
+      hoverMapText: 'Map',
+      zone: null,
+      presentMapId: 1,
+      errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
+      selectedZone: null,
+      defaultMapSize: 1,
       isSubDivisionGraph: false,
       isWaterStressGraphHidden: true,
       isKeyActorsHidden: false,
-      showAllActors:false,
+      showAllActors: false,
+      isLoadingMap: false,
+      isErrorLoadMap: false,
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -176,8 +233,7 @@ export default {
         },
         {
           title: 'Event 3',
-          logoUrl:
-            'https://th.bing.com/th/id/OIP.5k9XKswGsc5diwfswIWqiQHaHa?rs=1&pid=ImgDetMain',
+          logoUrl: 'https://th.bing.com/th/id/OIP.5k9XKswGsc5diwfswIWqiQHaHa?rs=1&pid=ImgDetMain',
           name: 'Health Aid International Organization'
         },
         {
@@ -185,20 +241,37 @@ export default {
           logoUrl:
             'https://logos-download.com/wp-content/uploads/2018/09/Economic_Cooperation_Organization_Logo.png',
           name: 'Economic Cooperation Organization'
-        },
+        }
       ]
     }
   },
 
   methods: {
 
-    async getZone(){
-      this.zone= await getSpecificZones(17)
-      this.mapSvgPath= this.zone.vector.path
-      this.vectorKeys = this.zone.vector.keys
-      // console.log(this.zone)
+    handleStateClick: async function (e) {
+      if (e.target.tagName === 'path') {
+        if (e.target.dataset.name) {
+          this.selectedZone = e.target.dataset
+          this.hoverMapText = this.selectedZone.name
+
+          console.log(this.selectedZone)
+          this.$router.push({
+            name: 'dashbaord',
+            params: {
+              zoneId: 0,
+              parentId: this.presentMapId,
+              zoneName: this.selectedZone.name,
+              mapSize: this.defaultMapSize
+            }
+          })
+        }
+      }
+    },
+
+    reloadMap(){
 
     },
+
     toggleWaterStressGraphVisibility() {
       this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
     },
@@ -237,10 +310,12 @@ export default {
     }
   },
   computed: {
-   isSVG() {
-     return this.mapSvgPath && this.mapSvgPath.endsWith('.svg');
-   }
-   
+    isSVG() {
+      return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
+    },
+    errorMessage() {
+      return ` ${this.zoneName} map not yet available`
+    }
   },
   components: {
     BaseDropdown,
@@ -249,7 +324,9 @@ export default {
     DegreeImpactDoughnutChart,
     InlineSvg,
     WaterStressChart,
-    ButtonUi
+    ButtonUi,
+    LoadingIndicator,
+    RefreshError
   }
 }
 </script>
