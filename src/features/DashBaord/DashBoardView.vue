@@ -333,3 +333,15 @@ watch: {
   }
 }
 </script>
+
+
+<style scoped>
+span {
+  font-size: 14px;
+  font-family: 'AvertaDemo';
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+</style>
