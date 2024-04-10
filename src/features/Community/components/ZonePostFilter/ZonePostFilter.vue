@@ -5,9 +5,9 @@
   <div class=" grid align-middle items-start">
     
     <div class=" h-[250px] bg-white md:p-3 rounded-lg  " >
-      <div class="grid w-full space-y-2">
+      <div class="grid w-full space-y-1">
         <div class="w-full">
-          <p class="label inline-block mb-2">Choose Your Region</p>
+          <p class="label inline-block mb-1">Choose Your Region</p>
           <div v-if="isLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
@@ -21,7 +21,7 @@
             />
           </div>
           <div class="w-full">
-            <p class="label inline-block mb-2">Choose Your Division</p>
+            <p class="label inline-block mb-1">Choose Your Division</p>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -34,7 +34,7 @@
             />
           </div>
           <div class="w-full">
-            <p class="label inline-block mb-2">Choose Your Sub-division</p>
+            <p class="label inline-block mb-1">Choose Your Sub-division</p>
             <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>

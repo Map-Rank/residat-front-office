@@ -5,7 +5,7 @@
       class="fixed hidden md:block top-0 left-0 w-full md:h-[20%] lg:h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
-      <h2 class="text-white absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase">
+      <h2 class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase">
         WELCOME TO {{ zoneName }}
       </h2>
     </div>
