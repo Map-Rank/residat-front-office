@@ -33,10 +33,31 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/dashbaord/:zoneId?/:parentId?/:zoneName?/:mapSize?',
+      name: 'dashbaord',
+      component: DashBoardView,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        zoneId: route.params.zoneId || 1,
+        parentId: route.params.parentId,
+        zoneName: route.params.zoneName,
+        mapSize: route.params.mapSize
+      })
+    },
+    {
       path: '/create-event',
       name: 'create-event',
       component: CreateEvent,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/edit-post/:postId',
+      name: 'edit-post',
+      component: CreatePost,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        postId: route.params.postId || null,
+      })
     },
     {
       path: '/report',
@@ -102,18 +123,6 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
 
-    {
-      path: '/dashbaord/:zoneId?/:parentId?/:zoneName?/:mapSize?',
-      name: 'dashbaord',
-      component: DashBoardView,
-      meta: { requiresAuth: true },
-      props: (route) => ({
-        zoneId: route.params.zoneId || 1,
-        parentId: route.params.parentId,
-        zoneName: route.params.zoneName,
-        mapSize: route.params.mapSize
-      })
-    },
 
     {
       path: '/show-post/:id',

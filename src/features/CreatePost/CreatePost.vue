@@ -10,9 +10,7 @@
     </div>
 
     <div class="mx-auto mb-4 h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
-      <TopContentForm
-      :userProfileImage="userProfileImage"
-      />
+      <TopContentForm :userProfileImage="userProfileImage" />
       <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
         <ErrorMessage class="text-danger-normal" name="content" />
         <div class="flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2">
@@ -20,7 +18,6 @@
             name="content"
             :rules="schema.content"
             as="textarea"
-            
             v-model="formData.content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2"
@@ -49,13 +46,10 @@
             </base-image-picker>
           </div>
         </div>
-
-  
       </vee-form>
     </div>
 
-    <div class="mx-auto mb-4 p-6 h-3/4  space-y-4 bg-white rounded-lg shadow">
-
+    <div class="mx-auto mb-4 p-6 h-3/4 space-y-4 bg-white rounded-lg shadow">
       <PostSpecificInformation
         :sectors="sectors"
         :updatesector-checked="updateSectorChecked"
@@ -72,7 +66,7 @@
                 : 'bg-secondary-normal hover:bg-secondary-hover'
             "
             :disabled="this.isLoading"
-            class=" submit block w-full text-white py-1.5 rounded-full transition"
+            class="submit block w-full text-white py-1.5 rounded-full transition"
           >
             {{
               !isEditing
@@ -87,8 +81,6 @@
         </div>
       </div>
     </div>
-
-
   </div>
 </template>
 
@@ -103,36 +95,40 @@ import PostSpecificInformation from '@/features/CreatePost/components/PostSpecif
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 import AlertForm from '../../components/common/AlertFrom/AlertForm.vue'
 import { AlertStates } from '../../components/common/AlertFrom/AlertState'
-import useAlertStore from '@/stores/alertStore';
-import useAuthStore from '@/stores/auth.js';
-
+import useAlertStore from '@/stores/alertStore'
+import useAuthStore from '@/stores/auth.js'
+import { getSpecificPost } from '@/features/Post/services/postService'
 export default {
   name: 'CreatePost',
-  async created() {
-    const sectorStore = useSectorStore()
-    const postStore = usePostStore()
-    this.formData.content = postStore.contentFromPostInput
 
-    if (postStore.postToEdit) {
-      this.isEditing = true
-      this.formData = postStore.postToEdit
-      // this.imagesToFromLocalPreview = postStore.postToEdit.images
-      this.imagesFromHostToPreview = postStore.postToEdit.images
-    }
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        if (this.postId != null) {
+          this.isEditing = true
 
-    try {
-      this.sectors = sectorStore.getAllSectors
-    } catch (error) {
-      console.error('Failed to load sector:', error)
+          this.post = await getSpecificPost(this.postId)
+          this.formData.content = this.post.content
+          this.imagesFromHostToPreview = this.post.images
+        }
+
+        const sectorStore = useSectorStore()
+
+        try {
+          this.sectors = sectorStore.getAllSectors
+        } catch (error) {
+          console.error('Failed to load sector:', error)
+        }
+      }
     }
   },
-
+  props: ['postId'],
   data() {
     const router = useRouter()
     const postStore = usePostStore()
     const alertStore = useAlertStore()
     const authStore = useAuthStore()
-
 
     return {
       schema: {

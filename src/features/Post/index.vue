@@ -214,8 +214,15 @@ export default {
 
     editPost() {
       console.log('edit post ')
-      this.setpostToEdit(this.post)
-      this.$router.push({ name: 'create-post' })
+      // this.setpostToEdit(this.post)
+      // this.$router.push({ name: 'edit-post' })
+
+      this.$router.push({
+            name: 'edit-post',
+            params: {
+              postId: this.post.id,
+            }
+          })
     },
 
     async customFunction(index) {

@@ -117,7 +117,7 @@ const getPosts = async (page, size, token) => {
 const getSpecificPost = async (id) => {
   try {
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.showSpecificPost}/${id.toString()}`,
+      `${API_ENDPOINTS.post}/${id}`,
       authToken
     )
     return response.data.data
