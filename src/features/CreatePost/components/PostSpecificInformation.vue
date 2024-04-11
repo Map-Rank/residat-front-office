@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
+  <div class="mb-4 mx-auto  bg-white rounded-lg ">
     <TitleSubtitle label="Select Zone" message="Select the zone you will like this post to reach" />
     <div class="flex flex-row space-x-4 mb-5 justify-between">
       <div class="w-1/2">
@@ -148,3 +148,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+label {
+  font-size: 14px;
+  font-family: 'AvertaDemo';
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+</style>

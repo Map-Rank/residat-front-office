@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-6">
+  <div class="container m-auto w-full lg:w-1/2 p-2 sm:p-6">
     <div class="flex justify-center mb-9">
       <h3 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
@@ -48,38 +48,44 @@
           </div>
         </div>
 
-        <div class="flex justify-center mt-5">
-          <div class="flex w-full sm:w-1/2">
-            <button
-              type="submit"
-              @click.prevent="submitPost"
-              :class="
-                this.isLoading
-                  ? 'bg-gray-400 cursor-wait '
-                  : 'bg-secondary-normal hover:bg-secondary-hover'
-              "
-              :disabled="this.isLoading"
-              class=" submit block w-full text-white py-1.5 rounded-full transition"
-            >
-              {{
-                !isEditing
-                  ? this.isLoading
-                    ? 'Creating...'
-                    : 'Create Post'
-                  : this.isLoading
-                    ? 'Updating Post...'
-                    : 'Update Post'
-              }}
-            </button>
-          </div>
-        </div>
+  
       </vee-form>
     </div>
-    <PostSpecificInformation
-      :sectors="sectors"
-      :updatesector-checked="updateSectorChecked"
-      :update-zone-id="updateZoneId"
-    />
+
+    <div class="mx-auto mb-4 p-6 h-3/4  space-y-4 bg-white rounded-lg shadow">
+
+      <PostSpecificInformation
+        :sectors="sectors"
+        :updatesector-checked="updateSectorChecked"
+        :update-zone-id="updateZoneId"
+      />
+      <div class="flex justify-center mt-5">
+        <div class="flex w-full sm:w-1/2">
+          <button
+            type="submit"
+            @click.prevent="submitPost"
+            :class="
+              this.isLoading
+                ? 'bg-gray-400 cursor-wait '
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+            "
+            :disabled="this.isLoading"
+            class=" submit block w-full text-white py-1.5 rounded-full transition"
+          >
+            {{
+              !isEditing
+                ? this.isLoading
+                  ? 'Creating...'
+                  : 'Create Post'
+                : this.isLoading
+                  ? 'Updating Post...'
+                  : 'Update Post'
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
+
 
   </div>
 </template>
@@ -243,3 +249,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+label {
+  font-size: 14px;
+  font-family: 'AvertaDemo';
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+</style>
