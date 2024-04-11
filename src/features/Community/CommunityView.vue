@@ -53,6 +53,57 @@
                   ></RefreshError>
                 </div>
 
+                <div class="  sm:hidden mb-2 p-1">
+                  <div class="md:block">
+                    <div class="">
+                      <div class="flex space-x-1">
+
+                        <div class="w-2/5 ">
+                          <button-ui
+                          leftIcon="/assets/images/filter.png"
+                            :label="'Filter by Location'"
+                            :color="' bg-white text-primary'"
+                            
+                            :textCss="'text-black font-bold text-center'"
+                            :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+                            @clickButton="toogleShowMobileFilterZonePost()"
+                          >
+                          </button-ui>
+                        </div>
+
+                        <div class="w-2/5 ">
+                          <button-ui
+                          leftIcon="/assets/images/filter.png"
+                            :label="'Filter by Sector'"
+                            :color="' bg-white text-primary'"
+                            
+                            :textCss="'text-black font-bold text-center'"
+                            :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+                            @clickButton="toogleShowMobileFilterSectorPost()"
+                          >
+                          </button-ui>
+                        </div>
+                      </div>
+          
+                      <div :class="{ hidden: showMobileFilterZonePost } "  class=" sm:hidden mt-2 ">                      
+                        <zone-post-filter
+                        :filterPostFunctionWithId="filterPostByZone"
+                        :updateZone="updateZone"
+                      >
+                      </zone-post-filter>
+                      </div>
+                      <div :class="{ hidden: showMobileFilterSectorPost } "  class=" sm:hidden mt-2 ">                      
+                        <sector-side
+                        :sectorArray="this.sectors"
+                        :updatesectorChecked="updateSectorChecked"
+                      ></sector-side>
+                      </div>
+                    </div>
+
+                    
+                  </div>
+                </div>
+
                 <div v-if="!topLoading" class="space-y-2">
                   <post-input
                     v-if="!showPageRefresh"
@@ -167,6 +218,7 @@ import useModalStore from '@/stores/modalStore.js'
 import PostInput from '@/components/common/PostInput/PostInput.vue'
 import ZonePostFilter from './components/ZonePostFilter/ZonePostFilter.vue'
 import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
+import ButtonUi from '../../components/base/ButtonUi.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -209,6 +261,8 @@ export default {
     return {
       zoneName: authStore.user.zone.name,
       profilePictureUrl: authStore.user.avatar,
+      showMobileFilterZonePost: true,
+      showMobileFilterSectorPost: true,
       postStore,
       modalStore,
       userProfileImage: authStore.user.avatar,
@@ -254,6 +308,19 @@ export default {
   },
 
   methods: {
+    toogleShowMobileFilterZonePost() {
+      if(this.showMobileFilterSectorPost == false){
+        this.showMobileFilterSectorPost =true
+      }
+      this.showMobileFilterZonePost = !this.showMobileFilterZonePost
+    },
+
+    toogleShowMobileFilterSectorPost() {
+      if(this.showMobileFilterZonePost== false){
+        this.showMobileFilterZonePost = true
+      }
+      this.showMobileFilterSectorPost = !this.showMobileFilterSectorPost
+    },
     updateSectorChecked({ list, checked }) {
       this.showPageRefresh = false
       console.log(list.id)
@@ -456,7 +523,8 @@ export default {
     RefreshError,
     PostInput,
     ZonePostFilter,
-    EventAlertBox
+    EventAlertBox,
+    ButtonUi
   }
 }
 </script>

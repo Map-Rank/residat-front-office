@@ -6,7 +6,6 @@ export default defineStore('post', {
     showPostDetails: false,
     postToShowDetails: null,
     postIdToShowDetail: null,
-    postToEdit: null,
     postToView: null,
     hideComponent:true,
     postSearchMode:false,
@@ -35,10 +34,7 @@ export default defineStore('post', {
     setpostIdToShowDetails(id) {
       this.postIdToShowDetail = id
     },
-    setpostToEdit(post) {
-      this.postToEdit = post
-      console.log(this.postToEdit)
-    },
+
     showPostDetail(post) {
       this.postToView = post
       console.log(this.postToView)
