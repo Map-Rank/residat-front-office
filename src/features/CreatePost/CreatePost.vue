@@ -1,16 +1,18 @@
 <template>
   <div class="container m-auto w-full lg:w-1/2 p-2 sm:p-6">
     <div class="flex justify-center mb-9">
-      <h3 class="uppercase font-semibold">
+      <h2 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
-      </h3>
+      </h2>
     </div>
     <div>
       <AlertForm></AlertForm>
     </div>
 
     <div class="mx-auto mb-4 h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
-      <TopContentForm />
+      <TopContentForm
+      :userProfileImage="userProfileImage"
+      />
       <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
         <ErrorMessage class="text-danger-normal" name="content" />
         <div class="flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2">
@@ -102,6 +104,7 @@ import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 import AlertForm from '../../components/common/AlertFrom/AlertForm.vue'
 import { AlertStates } from '../../components/common/AlertFrom/AlertState'
 import useAlertStore from '@/stores/alertStore';
+import useAuthStore from '@/stores/auth.js';
 
 export default {
   name: 'CreatePost',
@@ -128,6 +131,7 @@ export default {
     const router = useRouter()
     const postStore = usePostStore()
     const alertStore = useAlertStore()
+    const authStore = useAuthStore()
 
 
     return {
@@ -135,6 +139,8 @@ export default {
         content: 'required'
       },
       router,
+      authStore,
+      userProfileImage: authStore.user.avatar,
       alertStore,
       postStore,
       isLoading: false,

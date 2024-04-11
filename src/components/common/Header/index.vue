@@ -71,10 +71,10 @@
           <div class="menu relative">
             <icon-with-label
               class="dropdown"
-              svgContentHover="\assets\images\Community\profile.png"
-              svgContent="\assets\icons\profile-fill.svg"
+              :svgContent="authStore.user.avatar"
+              :svgContentHover="authStore.user.avatar"
               labelText="Profile"
-              labelTextBottom="Profile"
+              :labelTextBottom="authStore.user.first_name"
               :iconDesktopSize="this.iconSize"
               :isActive="true"
               :bottom="true"
@@ -168,8 +168,10 @@ export default {
     ButtonUi
   },
 
-  mounted() {
+  created() {
+    const authStore = useAuthStore()
     document.addEventListener('click', this.handleClickOutside)
+    console.log(authStore.user.avatar);
   },
 
   unmounted() {

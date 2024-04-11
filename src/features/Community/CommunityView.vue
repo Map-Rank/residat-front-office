@@ -56,7 +56,7 @@
                 <div v-if="!topLoading" class="space-y-2">
                   <post-input
                     v-if="!showPageRefresh"
-                    profilePictureUrl="\assets\icons\profile-fill.svg"
+                    :profilePictureUrl="userProfileImage"
                   >
                   </post-input>
 
@@ -211,6 +211,7 @@ export default {
       profilePictureUrl: authStore.user.avatar,
       postStore,
       modalStore,
+      userProfileImage: authStore.user.avatar,
       bannerUrlImage:
         authStore.user.zone.banner ||
         'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
