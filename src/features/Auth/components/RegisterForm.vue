@@ -261,7 +261,7 @@
           <div v-if="isLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
-          <div v-if="sectors || !isLoading" class="grid grid-cols-3 gap-7 content-between">
+          <div v-if="sectors || !isLoading" class="grid grid-cols-2 sm:grid-cols-3 gap-7  content-between">
             <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
               <vee-field
                 :name="sector.name"
@@ -429,7 +429,7 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_1',
+      currentStep: 'step_2',
       reg_in_submission: false
     }
   },

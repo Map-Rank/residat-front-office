@@ -1,5 +1,5 @@
 <template>
-  <div class="grid gap-8 items-center p-4  mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
+  <div class="grid gap-8 items-center p-4  sm:mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
     <div class="flex">
      <div class="mr-4">
        <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 rounded-full" />
@@ -14,7 +14,7 @@
       />
     </div>
     <!-- Action Buttons -->
-    <div class="flex space-x-2 md:space-x-14 justify-between">
+    <div class="flex mdspace-x-2 md:space-x-6 lg:space-x-14 justify-between">
       <!-- Live Video -->
 
       <ButtonUi

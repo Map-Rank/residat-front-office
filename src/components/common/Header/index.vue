@@ -1,11 +1,8 @@
 <template>
-  <header class="py-1 md:px-100 bg-white ">
+  <header class="py-1 md:px-8  lg:px-100 bg-white">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-1 p-4 md:hidden">
-     
-
-        <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
-        
+      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
 
       <div class="flex-grow items-center">
         <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
@@ -13,7 +10,7 @@
 
       <div class="menu relative">
         <icon-with-label
-        class="dropdown"
+          class="dropdown"
           svgContentHover="\assets\icons\profile-outline.svg"
           svgContent="\assets\icons\profile-fill.svg"
           labelText="Profile"
@@ -27,117 +24,117 @@
         <!-- Dropdown Menu -->
         <div
           v-show="isMenuVisible"
-          class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+          class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
-        <button-ui
-        :label="'Profile Page'"
-        :textCss="'text-left '"
-        :customCss="'items-left justify-start hover:bg-gray-100'"
-        @clickButton="menuMethods(0)"
-      >
-      </button-ui>
+          <button-ui
+            :label="'Profile Page'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(0)"
+          >
+          </button-ui>
 
-      <button-ui
-        :label="'Create Post'"
-        :textCss="'text-left '"
-        :customCss="'items-left justify-start hover:bg-gray-100'"
-        @clickButton="menuMethods(1)"
-      >
+          <button-ui
+            :label="'Create Post'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(1)"
+          >
+          </button-ui>
+          <button-ui
+            :label="'Create Event'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(2)"
+          >
+          </button-ui>
 
-      </button-ui>
-      <button-ui
-        :label="'Create Event'"
-        :textCss="'text-left '"
-        :customCss="'items-left justify-start hover:bg-gray-100'"
-        @clickButton="menuMethods(2)"
-      >
-      </button-ui>
-
-      <button-ui
-        :label="'Logout'"
-        :textCss="'text-left '"
-        :customCss="'items-left justify-start hover:bg-gray-100'"
-        @clickButton="menuMethods(3)"
-      >
-      </button-ui>
+          <button-ui
+            :label="'Logout'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(3)"
+          >
+          </button-ui>
         </div>
       </div>
     </div>
 
     <!-- Full menu for larger screens, hidden menu for mobile -->
-    <div
-      :class="{   }"
-      class=" hidden sm:hidden md:flex w-full justify-between   "
-    >
+    <div :class="{}" class="hidden sm:hidden md:grid md:grid-cols-12 gap-x-4 w-full justify-between">
       <!-- Logo -->
-      <div class="flex flex-col md:flex-row items-center space-x-10">
+      <div class="col-span-3">
 
-        <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 "  />
-        <div class="menu relative">
-          <icon-with-label
-          class="dropdown"
-            svgContentHover="\assets\images\Community\profile.png"
-            svgContent="\assets\icons\profile-fill.svg"
-            labelText="Profile"
-            labelTextBottom="Profile"
-            :iconDesktopSize="this.iconSize"
-            :isActive="true"
-            :bottom="true"
-            @customFunction="toggleMenu"
-          ></icon-with-label>
+        <div class="flex flex-col md:flex-row items-center md:space-x-5">
+          <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="" />
 
-          <!-- Dropdown Menu -->
-          <div
-          ref="menu"
-            v-show="isMenuVisible"
-            class=" absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
-          >
-            <button-ui
-              :label="'Profile Page'"
-              :textCss="'text-left '"
-              :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(0)"
+          <div class="menu relative">
+            <icon-with-label
+              class="dropdown"
+              svgContentHover="\assets\images\Community\profile.png"
+              svgContent="\assets\icons\profile-fill.svg"
+              labelText="Profile"
+              labelTextBottom="Profile"
+              :iconDesktopSize="this.iconSize"
+              :isActive="true"
+              :bottom="true"
+              @customFunction="toggleMenu"
+            ></icon-with-label>
+  
+            <!-- Dropdown Menu -->
+            <div
+              ref="menu"
+              v-show="isMenuVisible"
+              class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
-            </button-ui>
-
-            <button-ui
-              :label="'Create Post'"
-              :textCss="'text-left '"
-              :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(1)"
-            >
-
-            </button-ui>
-            <button-ui
-              :label="'Create Event'"
-              :textCss="'text-left '"
-              :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(2)"
-            >
-            </button-ui>
-
-            <button-ui
-              :label="'Logout'"
-              :textCss="'text-left '"
-              :customCss="'items-left justify-start hover:bg-gray-100'"
-              @clickButton="menuMethods(3)"
-            >
-            </button-ui>
+              <button-ui
+                :label="'Profile Page'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(0)"
+              >
+              </button-ui>
+  
+              <button-ui
+                :label="'Create Post'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(1)"
+              >
+              </button-ui>
+              <button-ui
+                :label="'Create Event'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(2)"
+              >
+              </button-ui>
+  
+              <button-ui
+                :label="'Logout'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(3)"
+              >
+              </button-ui>
+            </div>
           </div>
         </div>
       </div>
 
       <!-- Search bar -->
-      <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center w-full">
-        <SearchBar  />
-</div>
+      <div class=" grid col-span-4  ">
+        <div class=" w-[80%] grid items-center " >
+          <SearchBar />
+        </div>
+
+      </div>
 
       <!-- Navigation Links -->
-      <div class="col-span-3 grid justify-end">
-
-        <nav class="flex flex-col md:flex-row items-center space-x-10">
+      <div class=" col-span-5   justify-self-end">
+        <nav class="flex flex-col md:flex-row items-center space-x-10 md:space-x-5">
           <icon-with-label
-          class=""
+            class=""
             v-for="(item, index) in navItems"
             :svgContentHover="item.svgContentHover"
             :svgContent="item.svgContent"
@@ -150,7 +147,6 @@
             :routerName="item.routerName"
             :key="index"
           ></icon-with-label>
-
         </nav>
       </div>
     </div>
@@ -173,11 +169,11 @@ export default {
   },
 
   mounted() {
-    document.addEventListener('click', this.handleClickOutside);
+    document.addEventListener('click', this.handleClickOutside)
   },
 
   unmounted() {
-    document.removeEventListener('click', this.handleClickOutside);
+    document.removeEventListener('click', this.handleClickOutside)
   },
   data() {
     const authStore = useAuthStore()
@@ -223,7 +219,7 @@ export default {
           isActive: false,
           bottom: true,
           routerName: 'event'
-        },
+        }
       ]
     }
   },
@@ -238,10 +234,10 @@ export default {
     },
 
     toggleMenu() {
-      console.log('click');
-      console.log(this.isMenuVisible);
+      console.log('click')
+      console.log(this.isMenuVisible)
       this.isMenuVisible = !this.isMenuVisible
-      console.log(this.isMenuVisible);
+      console.log(this.isMenuVisible)
     },
 
     // handleClickOutside(event) {
@@ -249,10 +245,6 @@ export default {
     //     this.isMenuVisible = false;
     //   }
     // },
-
-
-
-
 
     menuMethods(index) {
       console.log('click')
@@ -269,7 +261,7 @@ export default {
           this.$router.push({ name: 'create-event' })
           this.toggleMenu()
           break
-          case 3:
+        case 3:
           this.toggleMenu()
           this.logout()
           break

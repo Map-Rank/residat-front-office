@@ -4,7 +4,7 @@
     <router-link v-if="isLink" :to="linkTo">
       <a class="title hover:underline ">{{ title }}</a>
     </router-link>
-    <p v-else class="title">{{ title }}</p>
+    <p v-else class="title font-bold">{{ title }}</p>
   </div>
 </template>
 <script>

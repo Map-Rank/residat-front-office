@@ -1,5 +1,5 @@
 <template>
-  <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
+  <article class="bg-white rounded-lg overflow-hidden py-3 sm:mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
       <UserPostInfo
