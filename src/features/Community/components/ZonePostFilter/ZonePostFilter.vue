@@ -4,7 +4,7 @@
 
   <div class=" grid align-middle items-start">
     
-    <div class=" h-[250px] bg-white md:p-3 rounded-lg  " >
+    <div class=" h-[250px] bg-white p-2 md:p-3 rounded-lg  " >
       <div class="grid w-full space-y-1">
         <div class="w-full">
           <p class="label inline-block mb-1">Choose Your Region</p>

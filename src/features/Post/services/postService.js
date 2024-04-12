@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
+import { makeApiPostCall, makeApiGetCall, makeApiPutCall,makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const currentDate = new Date().toISOString().split('T')[0]
@@ -62,18 +62,18 @@ const updatePost = async (postData, onSuccess, onError) => {
 
     formData.append('content', postData.content)
     formData.append('published_at', currentDate)
-    formData.append('zone_id', '1')
+    formData.append('zone_id', postData.zoneId)
     formData.append('_method', 'PUT')
 
     console.log('form data:', formData)
     console.log('post id' + postData.id)
 
     const response = await makeApiPostCall(
-      API_ENDPOINTS.updatePost,
+      `${API_ENDPOINTS.post}/${postData.id}`,
       formData,
       authToken,
       true,
-      postData.id
+
     )
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)
@@ -117,7 +117,7 @@ const getPosts = async (page, size, token) => {
 const getSpecificPost = async (id) => {
   try {
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.showSpecificPost}/${id.toString()}`,
+      `${API_ENDPOINTS.post}/${id}`,
       authToken
     )
     return response.data.data

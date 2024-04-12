@@ -1,16 +1,16 @@
 <template>
-  <div class="container mx-auto p-6">
+  <div class="container m-auto w-full lg:w-1/2 p-2 sm:p-6">
     <div class="flex justify-center mb-9">
-      <h3 class="uppercase font-semibold">
+      <h2 class="uppercase font-semibold">
         {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
-      </h3>
+      </h2>
     </div>
     <div>
       <AlertForm></AlertForm>
     </div>
 
     <div class="mx-auto mb-4 h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
-      <TopContentForm />
+      <TopContentForm :userProfileImage="userProfileImage" />
       <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
         <ErrorMessage class="text-danger-normal" name="content" />
         <div class="flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2">
@@ -18,7 +18,6 @@
             name="content"
             :rules="schema.content"
             as="textarea"
-            
             v-model="formData.content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2"
@@ -47,40 +46,41 @@
             </base-image-picker>
           </div>
         </div>
-
-        <div class="flex justify-center mt-5">
-          <div class="flex w-full sm:w-1/2">
-            <button
-              type="submit"
-              @click.prevent="submitPost"
-              :class="
-                this.isLoading
-                  ? 'bg-gray-400 cursor-wait '
-                  : 'bg-secondary-normal hover:bg-secondary-hover'
-              "
-              :disabled="this.isLoading"
-              class=" submit block w-full text-white py-1.5 rounded-full transition"
-            >
-              {{
-                !isEditing
-                  ? this.isLoading
-                    ? 'Creating...'
-                    : 'Create Post'
-                  : this.isLoading
-                    ? 'Updating Post...'
-                    : 'Update Post'
-              }}
-            </button>
-          </div>
-        </div>
       </vee-form>
     </div>
-    <PostSpecificInformation
-      :sectors="sectors"
-      :updatesector-checked="updateSectorChecked"
-      :update-zone-id="updateZoneId"
-    />
 
+    <div class="mx-auto mb-4 p-6 h-3/4 space-y-4 bg-white rounded-lg shadow">
+      <PostSpecificInformation
+        :sectors="sectors"
+        :updatesector-checked="updateSectorChecked"
+        :update-zone-id="updateZoneId"
+      />
+      <div class="flex justify-center mt-5">
+        <div class="flex w-full sm:w-1/2">
+          <button
+            type="submit"
+            @click.prevent="submitPost"
+            :class="
+              this.isLoading
+                ? 'bg-gray-400 cursor-wait '
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+            "
+            :disabled="this.isLoading"
+            class="submit block w-full text-white py-1.5 rounded-full transition"
+          >
+            {{
+              !isEditing
+                ? this.isLoading
+                  ? 'Creating...'
+                  : 'Create Post'
+                : this.isLoading
+                  ? 'Updating Post...'
+                  : 'Update Post'
+            }}
+          </button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -95,40 +95,48 @@ import PostSpecificInformation from '@/features/CreatePost/components/PostSpecif
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 import AlertForm from '../../components/common/AlertFrom/AlertForm.vue'
 import { AlertStates } from '../../components/common/AlertFrom/AlertState'
-import useAlertStore from '@/stores/alertStore';
-
+import useAlertStore from '@/stores/alertStore'
+import useAuthStore from '@/stores/auth.js'
+import { getSpecificPost } from '@/features/Post/services/postService'
 export default {
   name: 'CreatePost',
-  async created() {
-    const sectorStore = useSectorStore()
-    const postStore = usePostStore()
-    this.formData.content = postStore.contentFromPostInput
 
-    if (postStore.postToEdit) {
-      this.isEditing = true
-      this.formData = postStore.postToEdit
-      // this.imagesToFromLocalPreview = postStore.postToEdit.images
-      this.imagesFromHostToPreview = postStore.postToEdit.images
-    }
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        if (this.postId != null) {
+          this.isEditing = true
 
-    try {
-      this.sectors = sectorStore.getAllSectors
-    } catch (error) {
-      console.error('Failed to load sector:', error)
+          this.post = await getSpecificPost(this.postId)
+          this.formData.content = this.post.content
+          this.imagesFromHostToPreview = this.post.images
+        }
+
+        const sectorStore = useSectorStore()
+
+        try {
+          this.sectors = sectorStore.getAllSectors
+        } catch (error) {
+          console.error('Failed to load sector:', error)
+        }
+      }
     }
   },
-
+  props: ['postId'],
   data() {
     const router = useRouter()
     const postStore = usePostStore()
     const alertStore = useAlertStore()
-
+    const authStore = useAuthStore()
 
     return {
       schema: {
         content: 'required'
       },
       router,
+      authStore,
+      userProfileImage: authStore.user.avatar,
       alertStore,
       postStore,
       isLoading: false,
@@ -243,3 +251,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+label {
+  font-size: 14px;
+  font-family: 'AvertaDemo';
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+</style>

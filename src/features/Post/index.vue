@@ -53,7 +53,7 @@
 
     <!-- Post Content -->
     <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
-      <p class="p3 content ">{{ postContent }}</p>
+      <p class=" content ">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
@@ -214,8 +214,15 @@ export default {
 
     editPost() {
       console.log('edit post ')
-      this.setpostToEdit(this.post)
-      this.$router.push({ name: 'create-post' })
+      // this.setpostToEdit(this.post)
+      // this.$router.push({ name: 'edit-post' })
+
+      this.$router.push({
+            name: 'edit-post',
+            params: {
+              postId: this.post.id,
+            }
+          })
     },
 
     async customFunction(index) {
@@ -349,7 +356,7 @@ export default {
 
 @media only screen and (max-width: 480px) {
   .content {
-    font-size: 10px;
+    font-size: 12px;
     line-height: 16px;
   }
 

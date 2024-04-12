@@ -1,7 +1,7 @@
 import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
-const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVerified) => {
+const registerUser = async (userData, authStore, onSuccess, onError) => {
   try {
     const formData = new FormData()
     console.log(userData)
@@ -21,15 +21,6 @@ const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVe
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData,null,true)
     const user = response.data.data
     const token = response.data.data.token
-
-    // if (!response.data.data.verified) {
-    //   onEmailNotVerified()
-    //   console.log('user not verified')
-    //   localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
-    //   localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
-
-    // } else {
-  
       console.log('register successfull !!!!')
   
       authStore.setUser(user)
@@ -48,7 +39,7 @@ const registerUser = async (userData, authStore, onSuccess, onError,onEmailNotVe
   }
 }
 
-const loginUser = async (userCredentials, authStore, onSuccess, onError, onEmailNotVerified) => {
+const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
   try {
     const formData = new FormData()
 
@@ -60,23 +51,19 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError, onEmail
     const user = response.data.data
     const token = response.data.data.token
 
-
-    if (!response.data.data.verified) {
-      onEmailNotVerified()
-      console.log('user not verified')
-      localStorage.setItem(LOCAL_STORAGE_KEYS.userEmailVerification, response.data.data.verified)
-
-    } else {
+    if (response.data) {
+      
       localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken) //TODO remove this and but it in logout function later
-
+  
       authStore.setUser(user)
       authStore.settoken(token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
-
+  
       onSuccess()
     }
+
   } catch (error) {
     onError(error.response.data.errors)
     throw error
