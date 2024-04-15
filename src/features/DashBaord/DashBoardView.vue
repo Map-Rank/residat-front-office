@@ -1,26 +1,33 @@
 <template>
-  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full">
+  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
-      <div class="lg:w-2/4 md:w-3/4">
-        <div class="">
-          <button-ui
-            :label="'Water Risk'"
-            :color="'text-white'"
-            :textCss="'text-white font-bold text-center'"
-            :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-            @clickButton="toggleWaterStressGraphVisibility()"
-          >
-          </button-ui>
-        </div>
+      <div class="lg:w-2/4 md:w-3/4"  >
 
-        <div :class="{ hidden: isWaterStressGraphHidden } ">
-          <WaterStressChart></WaterStressChart>
+        <div :class="{ hidden: !displayStatistics }">
+          <div class="" >
+            <button-ui
+              :label="'Water Risk'"
+              :color="'text-white'"
+              :textCss="'text-white font-bold text-center'"
+              :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+              @clickButton="toggleWaterStressGraphVisibility()"
+            >
+            </button-ui>
+          </div>
+  
+          <div :class="{ hidden: isWaterStressGraphHidden } ">
+            <WaterStressChart></WaterStressChart>
+          </div>
         </div>
       </div>
-      <div class="lg:w-1/4">
-        <BaseDropdown :options="hazard" />
+
+
+      <div class="lg:w-1/4"   >
+        <div :class="{ hidden: !displayStatistics }">
+          <BaseDropdown :options="hazard" />
+        </div>
       </div>
 
       <div class="lg:w-1/3   hidden lg:block">
@@ -94,7 +101,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3">
+    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3" :class="{ hidden: !displayStatistics }">
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
           label="Degree of Impact"
@@ -146,6 +153,8 @@ watch: {
       this.isLoadingMap = true
       this.isErrorLoadMap = false
 
+      console.log(this.zoneId);
+
       if (this.zoneId === 1) {
         this.zone = await getSpecificZones(this.zoneId)
         this.presentMapId = this.zone.id
@@ -154,9 +163,15 @@ watch: {
       } else {
         const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
 
+        
         console.log(zones)
-
+        
         if (zones.length > 0) {
+          
+          if(this.zone.id > 69){
+            this.displayStatistics = true
+          }
+
           this.zone = zones[0] 
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
@@ -189,6 +204,7 @@ watch: {
       showAllActors: false,
       isLoadingMap: false,
       isErrorLoadMap: false,
+      displayStatistics:false,
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -260,7 +276,7 @@ watch: {
           this.$router.push({
             name: 'dashbaord',
             params: {
-              zoneId: 0,
+              zoneId: this.zoneId,
               parentId: this.presentMapId,
               zoneName: this.selectedZone.name,
               mapSize: this.defaultMapSize
