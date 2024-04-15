@@ -11,8 +11,8 @@
         alt="User profile"
       /> -->
       <div class="flex-1">
-        <h5 class="font-bold">{{ post.creator[0].first_name }}</h5>
-        <div class="text-sm text-gray-600">{{ post.humanize_date_creation }}</div>
+        <h5 class="">{{ post.creator[0].first_name }}</h5>
+        <div class="date">{{ post.humanize_date_creation }}</div>
       </div>
     </div>
     <p class=" pb-3">{{ post.content }}</p>
@@ -32,6 +32,20 @@ export default {
 }
 </script>
 <style scoped>
+
+h5 {
+  color: var(--primary-normal, #021d40);
+  font-size: 14px;
+  font-style: normal;
+  font-weight: 600;
+}
+
+.date{
+  font-size: 13px;
+  color: gray;
+  font-weight: 400;
+  font-family: 'Poppins'
+}
 
 @media only screen and (max-width: 600px) {
 }

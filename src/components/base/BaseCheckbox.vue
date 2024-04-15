@@ -44,16 +44,7 @@ export default {
   height: 24px;
 }
 
-.checkbox-label {
-  margin-left: 10px;
-  color: var(--body-dark, #1B1B1B);
 
-/* Paragraphs/P2 */
-font-size: 16px;
-font-style: normal;
-font-weight: 400;
-line-height: 24px; /* 150% */
-}
 
 .checkbox-input:checked + .checkbox-label {
   font-weight: 600;
@@ -61,10 +52,10 @@ line-height: 24px; /* 150% */
 
 label{
   color: var(--body-dark, #1b1b1b);
-  font-size: 16px;
-  font-family: AvertaDemo;
+  font-size: 15px;
+  font-family: 'Poppins';
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px; /* 142.857% */
 }
 </style>

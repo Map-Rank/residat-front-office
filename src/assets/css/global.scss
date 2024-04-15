@@ -112,14 +112,14 @@
 @font-face {
   font-family: 'Poppins';
   src: url('../fonts/Poppin/Poppins-SemiBold.ttf') format('truetype');
-  font-weight: 500;
+  font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Poppins';
   src: url('../fonts/Poppin/Poppins-RegularItalic.ttf') format('truetype');
-  font-weight: 500;
+  font-weight: 600;
   font-style: italic;
 }
 
@@ -132,15 +132,15 @@
 
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppin/Poppins-SemiBold.ttf') format('truetype');
-  font-weight: 600;
+  src: url('../fonts/Poppin/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
   font-style: normal;
 }
 
 @font-face {
   font-family: 'Poppins';
-  src: url('../fonts/Poppin/Poppins-SemiBoldItalic.ttf') format('truetype');
-  font-weight: 600;
+  src: url('../fonts/Poppin/Poppins-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
   font-style: italic;
 }
 
@@ -160,12 +160,12 @@ $h1-line-height: 44px;
 
 
 $h2-font-size: 36px;
-$h2-font-weight: 700;
+$h2-font-weight: 600;
 $h2-line-height: 36px;
 $h2-letter-spacing: -0.72px;
 
 $h3-font-size: 24px;
-$h3-font-weight: 700;
+$h3-font-weight: 500;
 $h3-line-height: 32px;
 $h3-letter-spacing: -0.42px;
 
@@ -175,7 +175,7 @@ $h4-line-height: 24px;
 $h4-letter-spacing: -0.3px;
 
 $h5-font-size: 15px;
-$h5-font-weight: 700;
+$h5-font-weight: 300;
 $h5-line-height: 20px;
 $h5-letter-spacing: -0.225px;
 
@@ -212,6 +212,11 @@ $b2-font-weight: 400;
 $b2-bold-font-weight: 700;
 $b2-line-height: 20px;
 
+// label
+$label-font-size: 16px;
+$label-font-weight: 400;
+$label-bold-font-weight: 700;
+$label-line-height: 24px;
 // Captions
 $c1-font-size: 12px;
 $c1-font-weight: 400;
@@ -264,10 +269,15 @@ h5 {
 }
 p {
   font-family: $font-family-Poppin;
+  font-weight: $p3-font-weight;
+  font-size: $p3-font-size;
 }
 
 label {
   font-family: $font-family-Poppin;
+  font-size: $label-font-size;
+  font-weight: $label-font-weight;
+  line-height: $label-line-height;
 }
 
 span {

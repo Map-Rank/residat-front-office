@@ -254,7 +254,7 @@ export default {
 <style scoped>
 label {
   font-size: 14px;
-  font-family: 'AvertaDemo';
+  font-family: 'Poppins';
   font-style: normal;
   font-weight: 600;
   line-height: 24px; /* 120% */

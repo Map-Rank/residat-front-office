@@ -349,20 +349,19 @@ export default {
   color: var(--body-normal, #242424);
   font-size: 14px;
   font-style: normal;
-  font-weight: 400px;
+  font-weight: 400;
   line-height: 20px;
-  /* 142.857% */
 }
 
 @media only screen and (max-width: 480px) {
   .content {
-    font-size: 12px;
+    font-size: 14px;
     line-height: 16px;
   }
 
   h5 {
     color: var(--primary-normal, #021d40);
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 600;
     line-height: 16px;

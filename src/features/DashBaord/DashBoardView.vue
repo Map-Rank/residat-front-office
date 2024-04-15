@@ -318,7 +318,7 @@ watch: {
 <style scoped>
 span {
   font-size: 14px;
-  font-family: 'AvertaDemo';
+  font-family: 'PoppinsDemo';
   font-style: normal;
   font-weight: 600;
   line-height: 24px; /* 120% */
