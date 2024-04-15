@@ -318,9 +318,9 @@ watch: {
 <style scoped>
 span {
   font-size: 14px;
-  font-family: 'PoppinsDemo';
+  font-family: 'Poppins';
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }
