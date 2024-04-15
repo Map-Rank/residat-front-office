@@ -137,7 +137,6 @@ import RefreshError from '@/components/common/Pages/RefreshError.vue'
 export default {
   name: 'DashBoardView',
   async mounted() {
-    this.extractSVGKeys()
   },
 
 watch: {
@@ -284,26 +283,7 @@ watch: {
     toggleShowAllActors() {
       this.showAllActors = !this.showAllActors
     },
-    async extractSVGKeys() {
-      this.vectorKeys.splice(0, this.vectorKeys.length)
 
-      const response = await fetch(this.mapSvgPath)
-      const svgText = await response.text()
-
-      const parser = new DOMParser()
-      const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
-      const paths = svgDoc.querySelectorAll('path')
-
-      const extractedData = Array.from(paths).map((path) => ({
-        id: path.getAttribute('data-id'),
-        value: this.extractColor(path.getAttribute('style') || path.getAttribute('fill')),
-        type: this.isSvg ? 'color' : 'image',
-        name: path.getAttribute('data-name'),
-        color: path.getAttribute('fill') || this.extractColor(path.getAttribute('style'))
-      }))
-
-      this.vectorKeys.push(...extractedData)
-    },
     extractColor(styleString) {
       if (styleString) {
         const match = styleString.match(/fill: (#[0-9a-fA-F]{6})/)
