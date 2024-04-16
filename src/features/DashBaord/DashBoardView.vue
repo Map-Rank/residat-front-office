@@ -114,14 +114,15 @@
       </div>
       <div class="col-span-1">
         <BaseBarChart
-          :canvas-id="'climateVulnerabilityIndex'"
-          :data="climateVulnerabilityIndex"
-          label="Climate Vulnerability Index"
-          @clickItem="displayChartItemModalStats"
+        :canvas-id="'climateVulnerabilityIndex'"
+        :data="climateVulnerabilityIndex"
+        label="Climate Vulnerability Index"
+        @clickItem="displayChartItemModalStats"
         ></BaseBarChart>
       </div>
       <div class="col-span-1">
         <BaseBarChart
+        @clickItem="displayChartItemModalStats"
           :canvas-id="'climateRiskThreats'"
           :data="climateRiskThreats"
           label="Climate Risk Threats"
@@ -161,6 +162,7 @@ import social from '@/components/vulnerabilities/social.vue'
 import foodSecurity from '@/components/vulnerabilities/foodSecurity.vue'
 import migration from '@/components/vulnerabilities/migration.vue'
 import waterStress from '@/components/vulnerabilities/waterStress.vue'
+import {ChartItemData} from '@/constants/chartData.js'
 
 export default {
   name: 'DashBoardView',
@@ -253,18 +255,18 @@ export default {
       },
 
       climateVulnerabilityIndex: [
-        { name: 'Health', percentage: 100 },
-        { name: 'Agriculture', percentage: 50 },
-        { name: 'Infrastructure', percentage: 25 },
+        { name: ChartItemData.health , percentage: 100 },
+        { name: ChartItemData.agriculture , percentage: 50 },
+        { name: ChartItemData.infrastructure, percentage: 25 },
         // { name: 'Business', percentage: 75 },
-        { name: 'Social', percentage: 20 }
+        { name: ChartItemData.social, percentage: 20 }
       ],
       climateRiskThreats: [
-        { name: 'food security', percentage: 100 },
-        { name: 'water stress', percentage: 50 },
-        { name: 'epidemics', percentage: 25 },
-        { name: 'Business', percentage: 75 },
-        { name: 'migration', percentage: 20 }
+        { name: ChartItemData.foodSecurity, percentage: 100 },
+        { name: ChartItemData.waterStress, percentage: 50 },
+        { name: ChartItemData.epidemics, percentage: 25 },
+        { name: ChartItemData.business, percentage: 75 },
+        { name: ChartItemData.migration, percentage: 20 }
       ],
 
       horizintalChartOption: {
@@ -314,6 +316,8 @@ export default {
     displayChartItemModalStats(label) {
       console.log(label)
       console.log('hello i just click')
+      console.log(ChartItemData.health)
+
 
         // Reset all modal visibility states
   Object.keys(this.modalStates).forEach(key => {
@@ -321,26 +325,26 @@ export default {
   });
 
   // Activate the modal related to the clicked label
-  switch (label.toLowerCase()) {
-    case 'health':
+  switch (label) {
+    case ChartItemData.health:
       this.modalStates.healthVisible = true;
       break;
-    case 'agriculture':
+    case ChartItemData.agriculture:
       this.modalStates.agricultureVisible = true;
       break;
-    case 'infrastructure':
+    case ChartItemData.infrastructure:
       this.modalStates.infrastructureVisible = true;
       break;
-    case 'social':
+    case ChartItemData.social:
       this.modalStates.socialVisible = true;
       break;
-    case 'food security':
+    case ChartItemData.foodSecurity:
       this.modalStates.foodSecurityVisible = true;
       break;
-    case 'migration':
+    case ChartItemData.migration:
       this.modalStates.migrationVisible = true;
       break;
-    case 'water stress':
+    case ChartItemData.waterStress:
       this.modalStates.waterStressVisible = true;
       break;
     default:

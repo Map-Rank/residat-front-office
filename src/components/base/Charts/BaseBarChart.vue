@@ -87,10 +87,10 @@ export default {
 
         },
         plugins: {
-          tooltip: {
-            // Tooltip will only receive click events
-            events: ['click']
-          }
+          // tooltip: {
+          //   // Tooltip will only receive click events
+          //   events: ['click']
+          // }
         },
         indexAxis: this.isHorizontal ? 'y' : 'x',
         scales: {
