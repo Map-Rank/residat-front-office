@@ -101,6 +101,8 @@
       </div>
     </div>
 
+  
+
     <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3" :class="{ hidden: !displayStatistics }">
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
@@ -140,10 +142,24 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
+// import agricultural from '../../components/vulnerabilities/agricultural.vue'
 
 export default {
   name: 'DashBoardView',
   async mounted() {
+  },
+
+  components: {
+    BaseDropdown,
+    KeyActors,
+    BaseBarChart,
+    DegreeImpactDoughnutChart,
+    InlineSvg,
+    WaterStressChart,
+    ButtonUi,
+    LoadingIndicator,
+    RefreshError,
+    // agricultural
   },
 
 watch: {
@@ -204,7 +220,7 @@ watch: {
       showAllActors: false,
       isLoadingMap: false,
       isErrorLoadMap: false,
-      displayStatistics:false,
+      displayStatistics:true,
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -316,17 +332,7 @@ watch: {
       return ` ${this.zoneName} map not yet available`
     }
   },
-  components: {
-    BaseDropdown,
-    KeyActors,
-    BaseBarChart,
-    DegreeImpactDoughnutChart,
-    InlineSvg,
-    WaterStressChart,
-    ButtonUi,
-    LoadingIndicator,
-    RefreshError
-  }
+
 }
 </script>
 
