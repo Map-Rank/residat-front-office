@@ -3,10 +3,9 @@
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
-      <div class="lg:w-2/4 md:w-3/4"  >
-
+      <div class="lg:w-2/4 md:w-3/4">
         <div :class="{ hidden: !displayStatistics }">
-          <div class="" >
+          <div class="">
             <button-ui
               :label="'Water Risk'"
               :color="'text-white'"
@@ -16,21 +15,20 @@
             >
             </button-ui>
           </div>
-  
-          <div :class="{ hidden: isWaterStressGraphHidden } ">
+
+          <div :class="{ hidden: isWaterStressGraphHidden }">
             <WaterStressChart></WaterStressChart>
           </div>
         </div>
       </div>
 
-
-      <div class="lg:w-1/4"   >
+      <div class="lg:w-1/4">
         <div :class="{ hidden: !displayStatistics }">
           <BaseDropdown :options="hazard" />
         </div>
       </div>
 
-      <div class="lg:w-1/3   hidden lg:block">
+      <div class="lg:w-1/3 hidden lg:block">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -44,18 +42,17 @@
               </button-ui>
             </div>
 
-            <div :class="{ hidden: isKeyActorsHidden } "  class="hidden sm:block ">
+            <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
               <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" :showAll="showAllActors" />
             </div>
           </div>
         </div>
+        <!-- <health></health> -->
       </div>
     </div>
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div class="col-span-1 md:col-span-2 lg:col-span-1">
-        <div>
-          
-        </div>
+        <div></div>
         <div class="mt-2 sm:mt-0">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
             <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
@@ -72,7 +69,10 @@
           <LoadingIndicator />
         </div>
 
-        <div v-if="isErrorLoadMap && !isLoadingMap" class="flex h-full w-full justify-center items-center">
+        <div
+          v-if="isErrorLoadMap && !isLoadingMap"
+          class="flex h-full w-full justify-center items-center"
+        >
           <!-- <LoadingIndicator /> -->
 
           <RefreshError
@@ -101,7 +101,10 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3" :class="{ hidden: !displayStatistics }">
+    <div
+      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3"
+      :class="{ hidden: !displayStatistics }"
+    >
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
           label="Degree of Impact"
@@ -111,13 +114,15 @@
       </div>
       <div class="col-span-1">
         <BaseBarChart
-          :canvas-id="'climateVulnerabilityIndex'"
-          :data="climateVulnerabilityIndex"
-          label="Climate Vulnerability Index"
+        :canvas-id="'climateVulnerabilityIndex'"
+        :data="climateVulnerabilityIndex"
+        label="Climate Vulnerability Index"
+        @clickItem="displayChartItemModalStats"
         ></BaseBarChart>
       </div>
       <div class="col-span-1">
         <BaseBarChart
+        @clickItem="displayChartItemModalStats"
           :canvas-id="'climateRiskThreats'"
           :data="climateRiskThreats"
           label="Climate Risk Threats"
@@ -125,6 +130,16 @@
           :barSpacing="30"
         ></BaseBarChart>
       </div>
+    </div>
+
+    <div class="mx-auto">
+      <health v-if="modalStates.healthVisible"></health>
+      <agricultural v-if="modalStates.agricultureVisible"></agricultural>
+      <infrastructure v-if="modalStates.infrastructureVisible"></infrastructure>
+      <social v-if="modalStates.socialVisible"></social>
+      <food-security v-if="modalStates.foodSecurityVisible"></food-security>
+      <migration v-if="modalStates.migrationVisible"></migration>
+      <water-stress v-if="modalStates.waterStressVisible"></water-stress>
     </div>
   </div>
 </template>
@@ -140,52 +155,76 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
+import health from '@/components/vulnerabilities/health.vue'
+import agricultural from '@/components/vulnerabilities/agricultural.vue'
+import infrastructure from '@/components/vulnerabilities/infrastructure.vue'
+import social from '@/components/vulnerabilities/social.vue'
+import foodSecurity from '@/components/vulnerabilities/foodSecurity.vue'
+import migration from '@/components/vulnerabilities/migration.vue'
+import waterStress from '@/components/vulnerabilities/waterStress.vue'
+import {ChartItemData} from '@/constants/chartData.js'
 
 export default {
   name: 'DashBoardView',
-  async mounted() {
+  async mounted() {},
+
+  components: {
+    BaseDropdown,
+    KeyActors,
+    BaseBarChart,
+    DegreeImpactDoughnutChart,
+    InlineSvg,
+    WaterStressChart,
+    ButtonUi,
+    LoadingIndicator,
+    RefreshError,
+    health,
+    agricultural,
+    infrastructure,
+    social,
+    foodSecurity,
+    migration,
+    waterStress
   },
 
-watch: {
-  $route: {
-    immediate: true,
-    async handler() {
-      this.isLoadingMap = true
-      this.isErrorLoadMap = false
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        this.isLoadingMap = true
+        this.isErrorLoadMap = false
 
-      console.log(this.zoneId);
+        // console.log(this.zoneId);
 
-      if (this.zoneId === 1) {
-        this.zone = await getSpecificZones(this.zoneId)
-        this.presentMapId = this.zone.id
-        this.mapSvgPath = this.zone.vector.path
-        this.vectorKeys = this.zone.vector.keys
-      } else {
-        const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
-
-        
-        console.log(zones)
-        
-        if (zones.length > 0) {
-          
-          if(this.zone.id > 69){
-            this.displayStatistics = true
-          }
-
-          this.zone = zones[0] 
+        if (this.zoneId === 1) {
+          this.zone = await getSpecificZones(this.zoneId)
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          this.isErrorLoadMap = true
-          this.vectorKeys = [0]
-        }
-      }
+          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
 
-      this.isLoadingMap = false
+          console.log(zones)
+
+          if (zones.length > 0) {
+            if (this.zone.id > 69) {
+              this.displayStatistics = true
+            }
+
+            this.zone = zones[0]
+            this.presentMapId = this.zone.id
+            this.mapSvgPath = this.zone.vector.path
+            this.vectorKeys = this.zone.vector.keys
+          } else {
+            this.isErrorLoadMap = true
+            this.vectorKeys = [0]
+          }
+        }
+
+        this.isLoadingMap = false
+      }
     }
-  }
-},
+  },
 
   props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
   data() {
@@ -204,21 +243,30 @@ watch: {
       showAllActors: false,
       isLoadingMap: false,
       isErrorLoadMap: false,
-      displayStatistics:false,
+      displayStatistics: true,
+      modalStates: {
+        healthVisible: false,
+        agricultureVisible: false,
+        infrastructureVisible: false,
+        socialVisible: false,
+        foodSecurityVisible: false,
+        migrationVisible: false,
+        waterStressVisible: false
+      },
 
       climateVulnerabilityIndex: [
-        { name: 'Health', percentage: 100 },
-        { name: 'Agriculture', percentage: 50 },
-        { name: 'Infrastructure', percentage: 25 },
-        { name: 'Business', percentage: 75 },
-        { name: 'Social', percentage: 20 }
+        { name: ChartItemData.health , percentage: 100 },
+        { name: ChartItemData.agriculture , percentage: 50 },
+        { name: ChartItemData.infrastructure, percentage: 25 },
+        // { name: 'Business', percentage: 75 },
+        { name: ChartItemData.social, percentage: 20 }
       ],
       climateRiskThreats: [
-        { name: 'food security', percentage: 100 },
-        { name: 'water stress', percentage: 50 },
-        { name: 'epidemics', percentage: 25 },
-        { name: 'Business', percentage: 75 },
-        { name: 'migration', percentage: 20 }
+        { name: ChartItemData.foodSecurity, percentage: 100 },
+        { name: ChartItemData.waterStress, percentage: 50 },
+        { name: ChartItemData.epidemics, percentage: 25 },
+        { name: ChartItemData.business, percentage: 75 },
+        { name: ChartItemData.migration, percentage: 20 }
       ],
 
       horizintalChartOption: {
@@ -265,6 +313,45 @@ watch: {
   },
 
   methods: {
+    displayChartItemModalStats(label) {
+      console.log(label)
+      console.log('hello i just click')
+      console.log(ChartItemData.health)
+
+
+        // Reset all modal visibility states
+  Object.keys(this.modalStates).forEach(key => {
+    this.modalStates[key] = false;
+  });
+
+  // Activate the modal related to the clicked label
+  switch (label) {
+    case ChartItemData.health:
+      this.modalStates.healthVisible = true;
+      break;
+    case ChartItemData.agriculture:
+      this.modalStates.agricultureVisible = true;
+      break;
+    case ChartItemData.infrastructure:
+      this.modalStates.infrastructureVisible = true;
+      break;
+    case ChartItemData.social:
+      this.modalStates.socialVisible = true;
+      break;
+    case ChartItemData.foodSecurity:
+      this.modalStates.foodSecurityVisible = true;
+      break;
+    case ChartItemData.migration:
+      this.modalStates.migrationVisible = true;
+      break;
+    case ChartItemData.waterStress:
+      this.modalStates.waterStressVisible = true;
+      break;
+    default:
+      console.log('No matching label found');
+      break;
+  }
+    },
 
     handleStateClick: async function (e) {
       if (e.target.tagName === 'path') {
@@ -286,9 +373,7 @@ watch: {
       }
     },
 
-    reloadMap(){
-
-    },
+    reloadMap() {},
 
     toggleWaterStressGraphVisibility() {
       this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
@@ -315,21 +400,9 @@ watch: {
     errorMessage() {
       return ` ${this.zoneName} map not yet available`
     }
-  },
-  components: {
-    BaseDropdown,
-    KeyActors,
-    BaseBarChart,
-    DegreeImpactDoughnutChart,
-    InlineSvg,
-    WaterStressChart,
-    ButtonUi,
-    LoadingIndicator,
-    RefreshError
   }
 }
 </script>
-
 
 <style scoped>
 span {
