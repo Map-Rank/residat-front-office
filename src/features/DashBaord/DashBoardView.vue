@@ -49,6 +49,8 @@
             </div>
           </div>
         </div>
+        <!-- <health></health> -->
+
       </div>
     </div>
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
@@ -116,6 +118,7 @@
           :canvas-id="'climateVulnerabilityIndex'"
           :data="climateVulnerabilityIndex"
           label="Climate Vulnerability Index"
+          @clickItem="LoadChartItemStatistic()"
         ></BaseBarChart>
       </div>
       <div class="col-span-1">
@@ -127,6 +130,10 @@
           :barSpacing="30"
         ></BaseBarChart>
       </div>
+    </div>
+
+    <div class="w-1/2 mx-auto">
+      <health></health>
     </div>
   </div>
 </template>
@@ -142,7 +149,7 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
-// import agricultural from '../../components/vulnerabilities/agricultural.vue'
+import health from '@/components/vulnerabilities/health.vue'
 
 export default {
   name: 'DashBoardView',
@@ -159,7 +166,7 @@ export default {
     ButtonUi,
     LoadingIndicator,
     RefreshError,
-    // agricultural
+    health
   },
 
 watch: {
@@ -281,6 +288,10 @@ watch: {
   },
 
   methods: {
+
+    LoadChartItemStatistic (){
+      console.log('hello i just click')
+    },
 
     handleStateClick: async function (e) {
       if (e.target.tagName === 'path') {

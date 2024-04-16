@@ -16,6 +16,7 @@ import EventView from '@/features/Event/EventView.vue'
 import ReportView from '@/features/Report/ReportView.vue'
 import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
 import EditEvent from '@/features/Event/Components/EditEvent.vue'
+import VulnerabilitiesForms from '@/components/common/Pages/VulnerabilitiesForms.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -24,6 +25,12 @@ const router = createRouter({
       path: '/social-profile',
       name: 'social-profile',
       component: SocialProfile,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/vulnerabilities',
+      name: 'vulnerabilities',
+      component: VulnerabilitiesForms,
       meta: { requiresAuth: true }
     },
     {

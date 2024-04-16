@@ -1,13 +1,13 @@
 // BarChartComponent.vue
 <template>
-  <div class="flex flex-col space-y-4 items-center justify-center ">
+  <div class="flex flex-col space-y-4 items-center justify-center">
     <div
       class="w-full h-[300px] p-5 flex align-middle justify-center items-center bg-white rounded-lg"
     >
       <canvas :id="canvasId"></canvas>
     </div>
 
-    <p class="barTitle"> {{label}}</p>
+    <p class="barTitle">{{ label }}</p>
   </div>
 </template>
 
@@ -73,6 +73,25 @@ export default {
 
       const options = {
         ...chartOptions,
+        events: ['click'],
+
+        onClick: (e, activeEls) => {
+          let datasetIndex = activeEls[0].datasetIndex
+          let dataIndex = activeEls[0].index
+          let datasetLabel = e.chart.data.datasets[datasetIndex].label
+          let value = e.chart.data.datasets[datasetIndex].data[dataIndex]
+          let label = e.chart.data.labels[dataIndex]
+          console.log('In click', datasetLabel, label, value)
+          this.$emit('clickItem')
+
+          
+        },
+        plugins: {
+          tooltip: {
+            // Tooltip will only receive click events
+            events: ['click']
+          }
+        },
         indexAxis: this.isHorizontal ? 'y' : 'x',
         scales: {
           x: {
@@ -106,7 +125,6 @@ export default {
 </script>
 
 <style scoped>
-
 .barTitle {
   font-size: 18px;
   font-style: normal;
