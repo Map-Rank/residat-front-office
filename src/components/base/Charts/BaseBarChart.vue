@@ -82,9 +82,9 @@ export default {
           let value = e.chart.data.datasets[datasetIndex].data[dataIndex]
           let label = e.chart.data.labels[dataIndex]
           console.log('In click', datasetLabel, label, value)
-          this.$emit('clickItem')
+          this.$emit('clickItem', label)
 
-          
+
         },
         plugins: {
           tooltip: {

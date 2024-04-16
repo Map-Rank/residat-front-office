@@ -3,10 +3,9 @@
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
-      <div class="lg:w-2/4 md:w-3/4"  >
-
+      <div class="lg:w-2/4 md:w-3/4">
         <div :class="{ hidden: !displayStatistics }">
-          <div class="" >
+          <div class="">
             <button-ui
               :label="'Water Risk'"
               :color="'text-white'"
@@ -16,21 +15,20 @@
             >
             </button-ui>
           </div>
-  
-          <div :class="{ hidden: isWaterStressGraphHidden } ">
+
+          <div :class="{ hidden: isWaterStressGraphHidden }">
             <WaterStressChart></WaterStressChart>
           </div>
         </div>
       </div>
 
-
-      <div class="lg:w-1/4"   >
+      <div class="lg:w-1/4">
         <div :class="{ hidden: !displayStatistics }">
           <BaseDropdown :options="hazard" />
         </div>
       </div>
 
-      <div class="lg:w-1/3   hidden lg:block">
+      <div class="lg:w-1/3 hidden lg:block">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -44,20 +42,17 @@
               </button-ui>
             </div>
 
-            <div :class="{ hidden: isKeyActorsHidden } "  class="hidden sm:block ">
+            <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
               <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" :showAll="showAllActors" />
             </div>
           </div>
         </div>
         <!-- <health></health> -->
-
       </div>
     </div>
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div class="col-span-1 md:col-span-2 lg:col-span-1">
-        <div>
-          
-        </div>
+        <div></div>
         <div class="mt-2 sm:mt-0">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
             <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
@@ -74,7 +69,10 @@
           <LoadingIndicator />
         </div>
 
-        <div v-if="isErrorLoadMap && !isLoadingMap" class="flex h-full w-full justify-center items-center">
+        <div
+          v-if="isErrorLoadMap && !isLoadingMap"
+          class="flex h-full w-full justify-center items-center"
+        >
           <!-- <LoadingIndicator /> -->
 
           <RefreshError
@@ -103,9 +101,10 @@
       </div>
     </div>
 
-  
-
-    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3" :class="{ hidden: !displayStatistics }">
+    <div
+      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3"
+      :class="{ hidden: !displayStatistics }"
+    >
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
           label="Degree of Impact"
@@ -118,7 +117,7 @@
           :canvas-id="'climateVulnerabilityIndex'"
           :data="climateVulnerabilityIndex"
           label="Climate Vulnerability Index"
-          @clickItem="LoadChartItemStatistic()"
+          @clickItem="displayChartItemModalStats"
         ></BaseBarChart>
       </div>
       <div class="col-span-1">
@@ -132,8 +131,14 @@
       </div>
     </div>
 
-    <div class="w-1/2 mx-auto">
-      <health></health>
+    <div class="mx-auto">
+      <health v-if="modalStates.healthVisible"></health>
+      <agricultural v-if="modalStates.agricultureVisible"></agricultural>
+      <infrastructure v-if="modalStates.infrastructureVisible"></infrastructure>
+      <social v-if="modalStates.socialVisible"></social>
+      <food-security v-if="modalStates.foodSecurityVisible"></food-security>
+      <migration v-if="modalStates.migrationVisible"></migration>
+      <water-stress v-if="modalStates.waterStressVisible"></water-stress>
     </div>
   </div>
 </template>
@@ -150,11 +155,16 @@ import { getSpecificZones, getSpecificMapZones } from '../../services/zoneServic
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import health from '@/components/vulnerabilities/health.vue'
+import agricultural from '@/components/vulnerabilities/agricultural.vue'
+import infrastructure from '@/components/vulnerabilities/infrastructure.vue'
+import social from '@/components/vulnerabilities/social.vue'
+import foodSecurity from '@/components/vulnerabilities/foodSecurity.vue'
+import migration from '@/components/vulnerabilities/migration.vue'
+import waterStress from '@/components/vulnerabilities/waterStress.vue'
 
 export default {
   name: 'DashBoardView',
-  async mounted() {
-  },
+  async mounted() {},
 
   components: {
     BaseDropdown,
@@ -166,49 +176,53 @@ export default {
     ButtonUi,
     LoadingIndicator,
     RefreshError,
-    health
+    health,
+    agricultural,
+    infrastructure,
+    social,
+    foodSecurity,
+    migration,
+    waterStress
   },
 
-watch: {
-  $route: {
-    immediate: true,
-    async handler() {
-      this.isLoadingMap = true
-      this.isErrorLoadMap = false
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        this.isLoadingMap = true
+        this.isErrorLoadMap = false
 
-      console.log(this.zoneId);
+        // console.log(this.zoneId);
 
-      if (this.zoneId === 1) {
-        this.zone = await getSpecificZones(this.zoneId)
-        this.presentMapId = this.zone.id
-        this.mapSvgPath = this.zone.vector.path
-        this.vectorKeys = this.zone.vector.keys
-      } else {
-        const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
-
-        
-        console.log(zones)
-        
-        if (zones.length > 0) {
-          
-          if(this.zone.id > 69){
-            this.displayStatistics = true
-          }
-
-          this.zone = zones[0] 
+        if (this.zoneId === 1) {
+          this.zone = await getSpecificZones(this.zoneId)
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          this.isErrorLoadMap = true
-          this.vectorKeys = [0]
-        }
-      }
+          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
 
-      this.isLoadingMap = false
+          console.log(zones)
+
+          if (zones.length > 0) {
+            if (this.zone.id > 69) {
+              this.displayStatistics = true
+            }
+
+            this.zone = zones[0]
+            this.presentMapId = this.zone.id
+            this.mapSvgPath = this.zone.vector.path
+            this.vectorKeys = this.zone.vector.keys
+          } else {
+            this.isErrorLoadMap = true
+            this.vectorKeys = [0]
+          }
+        }
+
+        this.isLoadingMap = false
+      }
     }
-  }
-},
+  },
 
   props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
   data() {
@@ -227,13 +241,22 @@ watch: {
       showAllActors: false,
       isLoadingMap: false,
       isErrorLoadMap: false,
-      displayStatistics:true,
+      displayStatistics: true,
+      modalStates: {
+        healthVisible: false,
+        agricultureVisible: false,
+        infrastructureVisible: false,
+        socialVisible: false,
+        foodSecurityVisible: false,
+        migrationVisible: false,
+        waterStressVisible: false
+      },
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
         { name: 'Agriculture', percentage: 50 },
         { name: 'Infrastructure', percentage: 25 },
-        { name: 'Business', percentage: 75 },
+        // { name: 'Business', percentage: 75 },
         { name: 'Social', percentage: 20 }
       ],
       climateRiskThreats: [
@@ -288,9 +311,42 @@ watch: {
   },
 
   methods: {
-
-    LoadChartItemStatistic (){
+    displayChartItemModalStats(label) {
+      console.log(label)
       console.log('hello i just click')
+
+        // Reset all modal visibility states
+  Object.keys(this.modalStates).forEach(key => {
+    this.modalStates[key] = false;
+  });
+
+  // Activate the modal related to the clicked label
+  switch (label.toLowerCase()) {
+    case 'health':
+      this.modalStates.healthVisible = true;
+      break;
+    case 'agriculture':
+      this.modalStates.agricultureVisible = true;
+      break;
+    case 'infrastructure':
+      this.modalStates.infrastructureVisible = true;
+      break;
+    case 'social':
+      this.modalStates.socialVisible = true;
+      break;
+    case 'food security':
+      this.modalStates.foodSecurityVisible = true;
+      break;
+    case 'migration':
+      this.modalStates.migrationVisible = true;
+      break;
+    case 'water stress':
+      this.modalStates.waterStressVisible = true;
+      break;
+    default:
+      console.log('No matching label found');
+      break;
+  }
     },
 
     handleStateClick: async function (e) {
@@ -313,9 +369,7 @@ watch: {
       }
     },
 
-    reloadMap(){
-
-    },
+    reloadMap() {},
 
     toggleWaterStressGraphVisibility() {
       this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
@@ -342,11 +396,9 @@ watch: {
     errorMessage() {
       return ` ${this.zoneName} map not yet available`
     }
-  },
-
+  }
 }
 </script>
-
 
 <style scoped>
 span {
