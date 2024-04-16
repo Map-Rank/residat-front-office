@@ -72,7 +72,7 @@ export default {
   color: var(--gray-normal, #6b6b6b);
 
   /* Captions/C1 */
-  font-size: 12px;
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 6px; /* 133.333% */
@@ -81,20 +81,16 @@ export default {
   color: var(--body-dark, #1b1b1b);
 
   /* Desktop/H5 */
-  font-size: 15px;
+  font-size: 14px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 6px; /* 133.333% */
   letter-spacing: -0.225px;
 }
 
 .post-title {
-  color: var(--body-normal, #242424);
-
-  /* Paragraphs/P3 */
   font-size: 14px;
-  font-style: medium;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px; /* 142.857% */
 }
 </style>

@@ -108,12 +108,9 @@ export default {
 <style scoped>
 
 .barTitle {
-  color: #000;
-
-  /* Desktop/H4-Bold */
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }

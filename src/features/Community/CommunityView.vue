@@ -56,28 +56,28 @@
                 <div class="  sm:hidden mb-2 p-1">
                   <div class="md:block">
                     <div class="">
-                      <div class="flex space-x-1">
+                      <div class="flex space-x-1 w-full ">
 
-                        <div class="w-2/5 ">
+                        <div class=" w-full">
                           <button-ui
                           leftIcon="/assets/images/filter.png"
                             :label="'Filter by Location'"
                             :color="' bg-white text-primary'"
                             
-                            :textCss="'text-black font-bold text-center'"
+                            :textCss="'text-black  text-center'"
                             :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
                             @clickButton="toogleShowMobileFilterZonePost()"
                           >
                           </button-ui>
                         </div>
 
-                        <div class="w-2/5 ">
+                        <div class="w-full">
                           <button-ui
                           leftIcon="/assets/images/filter.png"
                             :label="'Filter by Sector'"
                             :color="' bg-white text-primary'"
                             
-                            :textCss="'text-black font-bold text-center'"
+                            :textCss="'text-black  text-center'"
                             :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
                             @clickButton="toogleShowMobileFilterSectorPost()"
                           >

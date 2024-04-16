@@ -28,155 +28,130 @@
 
 // this are all the font declaration for the Roboto 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-Black.ttf') format('truetype');
   font-weight: 900;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-BlackItalic.ttf') format('truetype');
   font-weight: 900;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-Bold.ttf') format('truetype');
   font-weight: 700;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-BoldItalic.ttf') format('truetype');
   font-weight: 700;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otff') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-ExtraBold.ttff') format('truetype');
   font-weight: 800;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-ExtraBoldItalic.ttf') format('truetype');
   font-weight: 800;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-Thin.ttf') format('truetype');
   font-weight: 200;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-ThinItalic.ttf') format('truetype');
   font-weight: 200;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-RegularItalic.ttf') format('truetype');
   font-weight: 400;
   font-style: italic;
 }
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-Regular.ttf') format('truetype');
+  font-weight: 400;
+}
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-Thin.ttf') format('truetype');
   font-weight: 300;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-ThinItalic.ttf') format('truetype');
   font-weight: 300;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
-  font-weight: 500;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
-  font-weight: 400;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-SemiBold.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-RegularItalic.ttf') format('truetype');
   font-weight: 600;
   font-style: italic;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
-  font-weight: 100;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
-  font-weight: 100;
-  font-style: italic;
-}
-
-@font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-Regular.otf') format('truetype');
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-Regular.ttf') format('truetype');
   font-weight: 400;
   font-style: normal;
 }
 
 @font-face {
-  font-family: 'AvertaDemo';
-  src: url('../fonts/AvertaDemo/AvertaDemoPE-ExtraboldItalic.otf') format('truetype');
-  font-weight: 400;
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('../fonts/Poppin/Poppins-MediumItalic.ttf') format('truetype');
+  font-weight: 500;
   font-style: italic;
 }
+
 
 
 
 
 
 // Fonts
-$font-family-Roboto: 'Roboto', sans-serif;
-$font-family-AvertaDemo: 'AvertaDemo', sans-serif;
-$font-family-segoe-ui: 'Segoe UI', sans-serif;
-$font-family-inter: 'Inter', sans-serif;
-$font-family-roboto-flex: 'Roboto Flex', sans-serif;
+$font-family-Poppin: 'Poppins', 'sans';
+
 
 // Headings
 $h1-font-size: 48px;
@@ -185,12 +160,12 @@ $h1-line-height: 44px;
 
 
 $h2-font-size: 36px;
-$h2-font-weight: 700;
+$h2-font-weight: 600;
 $h2-line-height: 36px;
 $h2-letter-spacing: -0.72px;
 
 $h3-font-size: 24px;
-$h3-font-weight: 700;
+$h3-font-weight: 500;
 $h3-line-height: 32px;
 $h3-letter-spacing: -0.42px;
 
@@ -200,7 +175,7 @@ $h4-line-height: 24px;
 $h4-letter-spacing: -0.3px;
 
 $h5-font-size: 15px;
-$h5-font-weight: 700;
+$h5-font-weight: 300;
 $h5-line-height: 20px;
 $h5-letter-spacing: -0.225px;
 
@@ -237,6 +212,11 @@ $b2-font-weight: 400;
 $b2-bold-font-weight: 700;
 $b2-line-height: 20px;
 
+// label
+$label-font-size: 16px;
+$label-font-weight: 400;
+$label-bold-font-weight: 700;
+$label-line-height: 24px;
 // Captions
 $c1-font-size: 12px;
 $c1-font-weight: 400;
@@ -251,21 +231,21 @@ $c2-line-height: 16px;
 // Typography Classes
 
 h1 {
-  font-family: $font-family-AvertaDemo;
+  font-family: $font-family-Poppin;
   font-size: $h1-font-size;
   font-weight: $h1-font-weight;
   line-height: $h1-line-height;
 }
 
 h2 {
-  font-family: $font-family-AvertaDemo;
+  font-family: $font-family-Poppin;
   font-size: $h2-font-size;
   font-weight: $h2-font-weight;
   line-height: $h2-line-height;
   letter-spacing: $h2-letter-spacing;
 }
 h3 {
-  font-family: $font-family-AvertaDemo;
+  font-family: $font-family-Poppin;
   font-size: $h3-font-size;
   font-weight: $h3-font-weight;
   line-height: $h3-line-height;
@@ -273,7 +253,7 @@ h3 {
 }
 
 h4 {
-  font-family: $font-family-AvertaDemo;
+  font-family: $font-family-Poppin;
   font-size: $h4-font-size;
   font-weight: $h4-font-weight;
   line-height: $h4-line-height;
@@ -281,133 +261,28 @@ h4 {
 }
 
 h5 {
-  // font-family: $font-family-AvertaDemo;
+  // font-family: $font-family-Poppin;
   font-size: $h5-font-size;
   font-weight: $h5-font-weight;
   line-height: $h5-line-height;
   letter-spacing: $h5-letter-spacing;
 }
 p {
-  font-family: $font-family-AvertaDemo;
+  font-family: $font-family-Poppin;
+  font-weight: $p3-font-weight;
+  font-size: $p3-font-size;
 }
 
 label {
-  font-family: $font-family-AvertaDemo;
+  font-family: $font-family-Poppin;
+  font-size: $label-font-size;
+  font-weight: $label-font-weight;
+  line-height: $label-line-height;
 }
 
 span {
-  font-family: $font-family-AvertaDemo;
+  font-family: $font-family-Poppin;
 
 }
-.paragraphs-p1 {
-  font-family: $font-family-segoe-ui;
-  font-size: $p1-font-size;
-  font-weight: $p1-font-weight;
-  line-height: $p1-line-height;
-}
+// 
 
-.paragraphs-p1-bold {
-  font-family: $font-family-segoe-ui;
-  font-size: $p1-font-size;
-  font-weight: $p1-bold-font-weight;
-  line-height: $p1-line-height;
-}
-
-.paragraphs-p2 {
-  font-family: $font-family-inter;
-  font-size: $p2-font-size;
-  font-weight: $p2-font-weight;
-  line-height: $p2-line-height;
-}
-
-.paragraphs-p2-bold {
-  font-family: $font-family-AvertaDemo;
-  font-size: $p2-font-size;
-  font-weight: $p2-bold-font-weight;
-  line-height: $p2-line-height;
-}
-
-.paragraphs-p3 {
-  font-family: $font-family-segoe-ui;
-  font-size: $p3-font-size;
-  font-weight: $p3-font-weight;
-  line-height: $p3-line-height;
-}
-
-.paragraphs-p3-bold {
-  font-family: $font-family-AvertaDemo;
-  font-size: $p3-font-size;
-  font-weight: $p3-bold-font-weight;
-  line-height: $p3-line-height;
-}
-
-.paragraphs-p4 {
-  font-family: $font-family-segoe-ui;
-  font-size: $p4-font-size;
-  font-weight: $p4-font-weight;
-  line-height: $p4-line-height;
-}
-
-.paragraphs-p4-bold {
-  font-family: $font-family-segoe-ui;
-  font-size: $p4-font-size;
-  font-weight: $p4-bold-font-weight;
-  line-height: $p4-line-height;
-  text-transform: $p4-text-transform;
-}
-
-.buttons-b1 {
-  font-family: $font-family-AvertaDemo;
-  font-size: $b1-font-size;
-  font-weight: $b1-font-weight;
-  line-height: $b1-line-height;
-}
-
-.buttons-b1-bold {
-  font-family: $font-family-AvertaDemo;
-  font-size: $b1-font-size;
-  font-weight: $b1-bold-font-weight;
-  line-height: $b1-line-height;
-}
-
-.buttons-b2 {
-  font-family: $font-family-AvertaDemo;
-  font-size: $b2-font-size;
-  font-weight: $b2-font-weight;
-  line-height: $b2-line-height;
-}
-
-.buttons-b2-bold {
-  font-family: $font-family-AvertaDemo;
-  font-size: $b2-font-size;
-  font-weight: $b2-bold-font-weight;
-  line-height: $b2-line-height;
-}
-
-.captions-c1 {
-  font-family: $font-family-AvertaDemo;
-  font-size: $c1-font-size;
-  font-weight: $c1-font-weight;
-  line-height: $c1-line-height;
-}
-
-.captions-c1-bold {
-  font-family: $font-family-AvertaDemo;
-  font-size: $c1-font-size;
-  font-weight: $c1-bold-font-weight;
-  line-height: $c1-line-height;
-}
-
-.captions-c2 {
-  font-family: $font-family-AvertaDemo;
-  font-size: $c2-font-size;
-  font-weight: $c2-font-weight;
-  line-height: $c2-line-height;
-}
-
-.captions-c2-bold {
-  font-family: $font-family-AvertaDemo;
-  font-size: $c2-font-size;
-  font-weight: $c2-bold-font-weight;
-  line-height: $c2-line-height;
-}

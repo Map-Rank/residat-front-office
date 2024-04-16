@@ -1,26 +1,33 @@
 <template>
-  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full">
+  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
-      <div class="lg:w-2/4 md:w-3/4">
-        <div class="">
-          <button-ui
-            :label="'Water Risk'"
-            :color="'text-white'"
-            :textCss="'text-white font-bold text-center'"
-            :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-            @clickButton="toggleWaterStressGraphVisibility()"
-          >
-          </button-ui>
-        </div>
+      <div class="lg:w-2/4 md:w-3/4"  >
 
-        <div :class="{ hidden: isWaterStressGraphHidden } ">
-          <WaterStressChart></WaterStressChart>
+        <div :class="{ hidden: !displayStatistics }">
+          <div class="" >
+            <button-ui
+              :label="'Water Risk'"
+              :color="'text-white'"
+              :textCss="'text-white font-bold text-center'"
+              :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+              @clickButton="toggleWaterStressGraphVisibility()"
+            >
+            </button-ui>
+          </div>
+  
+          <div :class="{ hidden: isWaterStressGraphHidden } ">
+            <WaterStressChart></WaterStressChart>
+          </div>
         </div>
       </div>
-      <div class="lg:w-1/4">
-        <BaseDropdown :options="hazard" />
+
+
+      <div class="lg:w-1/4"   >
+        <div :class="{ hidden: !displayStatistics }">
+          <BaseDropdown :options="hazard" />
+        </div>
       </div>
 
       <div class="lg:w-1/3   hidden lg:block">
@@ -94,7 +101,7 @@
       </div>
     </div>
 
-    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3">
+    <div class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3" :class="{ hidden: !displayStatistics }">
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
           label="Degree of Impact"
@@ -137,7 +144,6 @@ import RefreshError from '@/components/common/Pages/RefreshError.vue'
 export default {
   name: 'DashBoardView',
   async mounted() {
-    this.extractSVGKeys()
   },
 
 watch: {
@@ -147,6 +153,8 @@ watch: {
       this.isLoadingMap = true
       this.isErrorLoadMap = false
 
+      console.log(this.zoneId);
+
       if (this.zoneId === 1) {
         this.zone = await getSpecificZones(this.zoneId)
         this.presentMapId = this.zone.id
@@ -155,9 +163,15 @@ watch: {
       } else {
         const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
 
+        
         console.log(zones)
-
+        
         if (zones.length > 0) {
+          
+          if(this.zone.id > 69){
+            this.displayStatistics = true
+          }
+
           this.zone = zones[0] 
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
@@ -190,6 +204,7 @@ watch: {
       showAllActors: false,
       isLoadingMap: false,
       isErrorLoadMap: false,
+      displayStatistics:false,
 
       climateVulnerabilityIndex: [
         { name: 'Health', percentage: 100 },
@@ -261,7 +276,7 @@ watch: {
           this.$router.push({
             name: 'dashbaord',
             params: {
-              zoneId: 0,
+              zoneId: this.zoneId,
               parentId: this.presentMapId,
               zoneName: this.selectedZone.name,
               mapSize: this.defaultMapSize
@@ -284,26 +299,7 @@ watch: {
     toggleShowAllActors() {
       this.showAllActors = !this.showAllActors
     },
-    async extractSVGKeys() {
-      this.vectorKeys.splice(0, this.vectorKeys.length)
 
-      const response = await fetch(this.mapSvgPath)
-      const svgText = await response.text()
-
-      const parser = new DOMParser()
-      const svgDoc = parser.parseFromString(svgText, 'image/svg+xml')
-      const paths = svgDoc.querySelectorAll('path')
-
-      const extractedData = Array.from(paths).map((path) => ({
-        id: path.getAttribute('data-id'),
-        value: this.extractColor(path.getAttribute('style') || path.getAttribute('fill')),
-        type: this.isSvg ? 'color' : 'image',
-        name: path.getAttribute('data-name'),
-        color: path.getAttribute('fill') || this.extractColor(path.getAttribute('style'))
-      }))
-
-      this.vectorKeys.push(...extractedData)
-    },
     extractColor(styleString) {
       if (styleString) {
         const match = styleString.match(/fill: (#[0-9a-fA-F]{6})/)
@@ -338,9 +334,9 @@ watch: {
 <style scoped>
 span {
   font-size: 14px;
-  font-family: 'AvertaDemo';
+  font-family: 'Poppins';
   font-style: normal;
-  font-weight: 600;
+  font-weight: 500;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }

@@ -169,9 +169,7 @@ export default {
   },
 
   created() {
-    const authStore = useAuthStore()
     document.addEventListener('click', this.handleClickOutside)
-    console.log(authStore.user.avatar);
   },
 
   unmounted() {
@@ -236,10 +234,7 @@ export default {
     },
 
     toggleMenu() {
-      console.log('click')
-      console.log(this.isMenuVisible)
       this.isMenuVisible = !this.isMenuVisible
-      console.log(this.isMenuVisible)
     },
 
     // handleClickOutside(event) {
