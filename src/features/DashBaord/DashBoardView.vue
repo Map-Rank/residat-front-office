@@ -132,8 +132,13 @@
       </div>
     </div>
 
+    <Modal
+      v-show="isModalVisible"
+      @close="closeModal"
+    />
+
     <div class="mx-auto">
-      <health v-if="modalStates.healthVisible"></health>
+      <Health  v-if="modalStates.healthVisible"></Health >
       <agricultural v-if="modalStates.agricultureVisible"></agricultural>
       <infrastructure v-if="modalStates.infrastructureVisible"></infrastructure>
       <social v-if="modalStates.socialVisible"></social>
@@ -155,7 +160,7 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
-import health from '@/components/vulnerabilities/health.vue'
+import Health  from '@/components/vulnerabilities/health.vue'
 import agricultural from '@/components/vulnerabilities/agricultural.vue'
 import infrastructure from '@/components/vulnerabilities/infrastructure.vue'
 import social from '@/components/vulnerabilities/social.vue'
@@ -163,6 +168,7 @@ import foodSecurity from '@/components/vulnerabilities/foodSecurity.vue'
 import migration from '@/components/vulnerabilities/migration.vue'
 import waterStress from '@/components/vulnerabilities/waterStress.vue'
 import {ChartItemData} from '@/constants/chartData.js'
+import Modal from '@/components/common/Modal/Modal.vue'
 
 export default {
   name: 'DashBoardView',
@@ -178,14 +184,19 @@ export default {
     ButtonUi,
     LoadingIndicator,
     RefreshError,
-    health,
+    Health ,
     agricultural,
     infrastructure,
     social,
     foodSecurity,
     migration,
-    waterStress
+    waterStress,
+    Modal
+
   },
+  created() {
+  console.log(Health); // Should log the component object
+},
 
   watch: {
     $route: {
@@ -232,6 +243,7 @@ export default {
       mapSvgPath: null,
       vectorKeys: [],
       hoverMapText: 'Map',
+      isModalVisible: false,
       zone: null,
       presentMapId: 1,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
@@ -313,6 +325,14 @@ export default {
   },
 
   methods: {
+
+    showModal() {
+        this.isModalVisible = true;
+      },
+      closeModal() {
+        this.isModalVisible = false;
+      },
+
     displayChartItemModalStats(label) {
       console.log(label)
       console.log('hello i just click')
@@ -325,6 +345,7 @@ export default {
   });
 
   // Activate the modal related to the clicked label
+  this.showModal()
   switch (label) {
     case ChartItemData.health:
       this.modalStates.healthVisible = true;

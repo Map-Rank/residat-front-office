@@ -56,7 +56,7 @@ export default {
 </script>
 
 <template>
-  <div class="w-1/2 mx-auto border-2 border-gray-500 rounded p-2">
+  <div class="w-full mx-auto border-2 border-gray-500 rounded p-2">
     <p class="text-center"><b>Current level</b></p>
     <div class="h-1/2 border-2 border-gray-500 rounded p-2">
       <canvas ref="canvas"></canvas>
