@@ -169,9 +169,7 @@ export default {
   },
 
   created() {
-    const authStore = useAuthStore()
 
-    console.log(authStore.user.avatar);
     document.addEventListener('click', this.handleClickOutside)
   },
 
