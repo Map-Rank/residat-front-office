@@ -114,15 +114,15 @@
       </div>
       <div class="col-span-1">
         <BaseBarChart
-        :canvas-id="'climateVulnerabilityIndex'"
-        :data="climateVulnerabilityIndex"
-        label="Climate Vulnerability Index"
-        @clickItem="displayChartItemModalStats"
+          :canvas-id="'climateVulnerabilityIndex'"
+          :data="climateVulnerabilityIndex"
+          label="Climate Vulnerability Index"
+          @clickItem="displayChartItemModalStats"
         ></BaseBarChart>
       </div>
       <div class="col-span-1">
         <BaseBarChart
-        @clickItem="displayChartItemModalStats"
+          @clickItem="displayChartItemModalStats"
           :canvas-id="'climateRiskThreats'"
           :data="climateRiskThreats"
           label="Climate Risk Threats"
@@ -132,20 +132,7 @@
       </div>
     </div>
 
-    <Modal
-      v-show="isModalVisible"
-      @close="closeModal"
-    />
-
-    <div class="mx-auto">
-      <Health  v-if="modalStates.healthVisible"></Health >
-      <agricultural v-if="modalStates.agricultureVisible"></agricultural>
-      <infrastructure v-if="modalStates.infrastructureVisible"></infrastructure>
-      <social v-if="modalStates.socialVisible"></social>
-      <food-security v-if="modalStates.foodSecurityVisible"></food-security>
-      <migration v-if="modalStates.migrationVisible"></migration>
-      <water-stress v-if="modalStates.waterStressVisible"></water-stress>
-    </div>
+    <Modal v-show="isModalVisible" :label="graphLabel" @close="closeModal" />
   </div>
 </template>
 
@@ -160,19 +147,12 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
-import Health  from '@/components/vulnerabilities/health.vue'
-import agricultural from '@/components/vulnerabilities/agricultural.vue'
-import infrastructure from '@/components/vulnerabilities/infrastructure.vue'
-import social from '@/components/vulnerabilities/social.vue'
-import foodSecurity from '@/components/vulnerabilities/foodSecurity.vue'
-import migration from '@/components/vulnerabilities/migration.vue'
-import waterStress from '@/components/vulnerabilities/waterStress.vue'
-import {ChartItemData} from '@/constants/chartData.js'
+
+import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
 
 export default {
   name: 'DashBoardView',
-  async mounted() {},
 
   components: {
     BaseDropdown,
@@ -184,19 +164,8 @@ export default {
     ButtonUi,
     LoadingIndicator,
     RefreshError,
-    Health ,
-    agricultural,
-    infrastructure,
-    social,
-    foodSecurity,
-    migration,
-    waterStress,
     Modal
-
   },
-  created() {
-  console.log(Health); // Should log the component object
-},
 
   watch: {
     $route: {
@@ -241,9 +210,11 @@ export default {
   data() {
     return {
       mapSvgPath: null,
+      child_component: 'equipment',
       vectorKeys: [],
       hoverMapText: 'Map',
       isModalVisible: false,
+      graphLabel: '',
       zone: null,
       presentMapId: 1,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
@@ -267,8 +238,8 @@ export default {
       },
 
       climateVulnerabilityIndex: [
-        { name: ChartItemData.health , percentage: 100 },
-        { name: ChartItemData.agriculture , percentage: 50 },
+        { name: ChartItemData.health, percentage: 100 },
+        { name: ChartItemData.agriculture, percentage: 50 },
         { name: ChartItemData.infrastructure, percentage: 25 },
         // { name: 'Business', percentage: 75 },
         { name: ChartItemData.social, percentage: 20 }
@@ -325,53 +296,16 @@ export default {
   },
 
   methods: {
-
     showModal() {
-        this.isModalVisible = true;
-      },
-      closeModal() {
-        this.isModalVisible = false;
-      },
+      this.isModalVisible = true
+    },
+    closeModal() {
+      this.isModalVisible = false
+    },
 
     displayChartItemModalStats(label) {
-      console.log(label)
-      console.log('hello i just click')
-      console.log(ChartItemData.health)
-
-
-        // Reset all modal visibility states
-  Object.keys(this.modalStates).forEach(key => {
-    this.modalStates[key] = false;
-  });
-
-  // Activate the modal related to the clicked label
-  this.showModal()
-  switch (label) {
-    case ChartItemData.health:
-      this.modalStates.healthVisible = true;
-      break;
-    case ChartItemData.agriculture:
-      this.modalStates.agricultureVisible = true;
-      break;
-    case ChartItemData.infrastructure:
-      this.modalStates.infrastructureVisible = true;
-      break;
-    case ChartItemData.social:
-      this.modalStates.socialVisible = true;
-      break;
-    case ChartItemData.foodSecurity:
-      this.modalStates.foodSecurityVisible = true;
-      break;
-    case ChartItemData.migration:
-      this.modalStates.migrationVisible = true;
-      break;
-    case ChartItemData.waterStress:
-      this.modalStates.waterStressVisible = true;
-      break;
-    default:
-      console.log('No matching label found');
-      break;
-  }
+      this.graphLabel = label
+      this.showModal()
     },
 
     handleStateClick: async function (e) {
