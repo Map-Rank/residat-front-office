@@ -71,10 +71,10 @@
           <div class="menu relative">
             <icon-with-label
               class="dropdown"
-              :svgContent="authStore.user.avatar"
-              :svgContentHover="authStore.user.avatar"
+              :svgContent="authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'"
+              :svgContentHover="authStore.user ? this.userProfileImage :'assets\\images\\Community\\profile.png'"
               labelText="Profile"
-              :labelTextBottom="authStore.user.first_name"
+              :labelTextBottom="authStore.user ?authStore.user.first_name :null"
               :iconDesktopSize="this.iconSize"
               :isActive="true"
               :bottom="true"
@@ -169,6 +169,9 @@ export default {
   },
 
   created() {
+    const authStore = useAuthStore()
+
+    console.log(authStore.user.avatar);
     document.addEventListener('click', this.handleClickOutside)
   },
 
@@ -185,6 +188,7 @@ export default {
       isMenuVisible: false,
       // isMenuOpen : ref(false),
       isActiveRoute: '',
+      userProfileImage:authStore.user.avatar,
       isMenuOpen: false,
       iconSize: 'w-7 h-7',
       navItems: [
