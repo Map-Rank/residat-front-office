@@ -72,7 +72,7 @@
           </div>
         </div>
       </div>
-      <div class="flex md:col-span-6 lg:col-span-5 h-[70vh]">
+      <div class="flex md:col-span-6 lg:col-span-5 min-h-[70vh]">
         <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
           <LoadingIndicator />
         </div>
@@ -92,42 +92,44 @@
         </div>
 
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
-          <inline-svg
-            :title="hoverMapText"
-            fill-opacity="1"
-            :color="'#fff'"
-            fill="black"
-            :src="mapSvgPath"
-            @click="handleStateClick"
-            width=""
-            height=""
-          />
+
+          <div class="h-[70vh]">
+
+            <inline-svg
+              :title="hoverMapText"
+              fill-opacity="1"
+              :color="'#fff'"
+              fill="black"
+              :src="mapSvgPath"
+              @click="handleStateClick"
+              width=""
+              height=""
+            />
+          </div>
+          <div class=" h-[150px] rounded-lg">
+            <div class="hidden lg:flex justify-between p-4 space-x-3">
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 1" class="w-full h-[120px] object-cover" />
+              </div>
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 2" class="w-full h-[120px] object-cover" />
+              </div>
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 3" class="w-full h-[120px] object-cover" />
+              </div>
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 4" class="w-full h-[120px] object-cover" />
+              </div>
+            </div>
+          </div>
         </div>
         <div v-else>
           <img :src="mapSvgPath" alt="" />
         </div>
       </div>
-    </div>
 
 
-
-<div class="bg-white h-[150px] rounded-lg">
-  <div class="hidden lg:flex justify-between p-4">
-    <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-      <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 1" class="w-full h-[120px] object-cover" />
     </div>
-    <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-      <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 2" class="w-full h-[120px] object-cover" />
-    </div>
-    <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-      <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 3" class="w-full h-[120px] object-cover" />
-    </div>
-    <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-      <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 4" class="w-full h-[120px] object-cover" />
-    </div>
-  </div>
-</div>
-
 
 
     <div
