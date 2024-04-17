@@ -1,6 +1,6 @@
 <template>
   <SectionTitle :title="sectionTitle" :isLink="true" linkTo="event" />
-  <div class="h-[250px] grid space-y-2">
+  <div class=" grid space-y-2">
     <div
       v-for="event in displayedEvents"
       :key="event"
@@ -14,10 +14,10 @@
         />
       </div>
       <div class="text-black gap-3">
-        <div class="text-lg font-semibold title">{{ event.title }}</div>
+        <div class="text-lg font-semibold title">{{  truncateText(event.title ,25 )  }}</div>
         <p class="menu">
           Organized by:
-          <span>{{ event.organized_by }}</span>
+          <span>{{   truncateText(event.organized_by  ,25 ) }}</span>
         </p>
         <p class="menu">
           Date:
@@ -34,6 +34,7 @@
 
 <script>
 import SectionTitle from '@/components/base/SectionTitle.vue'
+import { truncateText } from '@/utils/formating'
 
 export default {
   name: 'EventAlertBox',
@@ -46,7 +47,8 @@ export default {
   data() {
     return {
       currentIndex: 0,
-      interval: null
+      interval: null,
+      truncateText
     }
   },
   props: {
@@ -102,8 +104,8 @@ export default {
 
 span {
   color: var(--body-normal, #242424);
-  font-family: Roboto;
-  font-size: 14px;
+  font-family: 'Poppins';
+  font-size: 13px;
   font-style: normal;
   font-weight: 400;
   line-height: 20px; /* 142.857% */

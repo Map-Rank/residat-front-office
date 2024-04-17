@@ -1,5 +1,13 @@
 <template>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
+    <div class=" bg-white-normal h-10">
+      <div class="h-full  bg-white flex  items-center px-4 space-x-4" >
+        <img  src="\assets\icons\back-arrow.png"  @click="goBack"  class="h-8" alt=""  />
+        <p>Previous Map</p>
+      </div>
+
+    </div>
+
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
     >
@@ -64,7 +72,7 @@
           </div>
         </div>
       </div>
-      <div class="flex md:col-span-6 lg:col-span-5 h-[70vh]">
+      <div class="flex md:col-span-6 lg:col-span-5 min-h-[70vh]">
         <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
           <LoadingIndicator />
         </div>
@@ -84,25 +92,48 @@
         </div>
 
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
-          <inline-svg
-            :title="hoverMapText"
-            fill-opacity="1"
-            :color="'#fff'"
-            fill="black"
-            :src="mapSvgPath"
-            @click="handleStateClick"
-            width=""
-            height=""
-          />
+
+          <div class="h-[70vh]">
+
+            <inline-svg
+              :title="hoverMapText"
+              fill-opacity="1"
+              :color="'#fff'"
+              fill="black"
+              :src="mapSvgPath"
+              @click="handleStateClick"
+              width=""
+              height=""
+            />
+          </div>
+          <div class=" h-[150px] rounded-lg">
+            <div class="hidden lg:flex justify-between p-4 space-x-3">
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 1" class="w-full h-[120px] object-cover" />
+              </div>
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 2" class="w-full h-[120px] object-cover" />
+              </div>
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 3" class="w-full h-[120px] object-cover" />
+              </div>
+              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
+                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 4" class="w-full h-[120px] object-cover" />
+              </div>
+            </div>
+          </div>
         </div>
         <div v-else>
           <img :src="mapSvgPath" alt="" />
         </div>
       </div>
+
+
     </div>
 
+
     <div
-      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 space-y-2 space-x-3"
+      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10  md:space-x-3"
       :class="{ hidden: !displayStatistics }"
     >
       <div class="col-span-1">
@@ -326,6 +357,11 @@ export default {
           })
         }
       }
+    },
+
+    goBack() {
+      // Use router.go(-1) to navigate back
+      this.$router.go(-1);
     },
 
     reloadMap() {},
