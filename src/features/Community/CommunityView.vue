@@ -170,14 +170,23 @@
                 <div v-if="isloadingEvent" class="flex h-full justify-center">
                   <LoadingIndicator />
                 </div>
-                <event-alert-box
-                  v-if="shouldDisplayEventAlert"
-                  sectionTitle="Upcoming Event"
-                  :events="events"
-                />
+
+                <div class="hidden  lg:block">
+
+                  <event-alert-box
+                    v-if="shouldDisplayEventAlert"
+                    sectionTitle="Upcoming Event"
+                    :events="events"
+                  />
+                </div>
 
                 <div >
-                  <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+                  <div class="mt-3 ">
+
+                    <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+                  </div>
+
+
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
                   </div>
@@ -226,9 +235,6 @@ export default {
 
   async created() {
     try {
-      await this.fetchResources()
-
-
       const zoneId = this.$route.params.zoneId;
       const sectorIdString  = this.$route.params.sectorId;
 
