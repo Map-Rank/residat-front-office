@@ -96,7 +96,7 @@ export default {
   <transition name="modal-fade">
     <div v-if="show" class="modal-backdrop">
       <div
-        class="modal p-4 rounded-lg"
+        class="modal p-4 rounded-lg max-h-70"
         role="dialog"
         aria-labelledby="modalTitle"
         aria-describedby="modalDescription"
@@ -105,7 +105,7 @@ export default {
           <button type="button" class="btn-close" @click="close" aria-label="Close modal">x</button>
         </header>
 
-        <div class="grid">
+        <div class="grid max-h-70">
           <Health v-if="modalStates.healthVisible"></Health>
           <agricultural v-if="modalStates.agricultureVisible"></agricultural>
           <infrastructure v-if="modalStates.infrastructureVisible"></infrastructure>
@@ -139,6 +139,7 @@ export default {
   overflow-x: auto;
   display: flex;
   flex-direction: column;
+  max-height: 70%;
 }
 
 .modal-header {
