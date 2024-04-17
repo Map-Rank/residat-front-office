@@ -21,17 +21,13 @@
 
       <!-- Sidebar widgets -->
       <div>
-        <!-- Popular events -->
         <div class="mb-4 p-4 bg-white rounded shadow">
-          <h3 class="font-semibold mb-2">POPULAR EVENT</h3>
-          <!-- Dynamic list of events -->
+          <h3 class="font-semibold text-xl mb-2">POPULAR EVENT</h3>
           <div v-for="post in popularPosts" :key="post.id" class="mb-2">
             <h4 class="text-sm font-semibold">{{ post.title }}</h4>
             <p class="text-gray-600 text-xs">{{ post.excerpt }}</p>
           </div>
         </div>
-
-        <!-- Other widgets here -->
       </div>
     </div>
   </div>
