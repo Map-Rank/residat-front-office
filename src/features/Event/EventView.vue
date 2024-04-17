@@ -43,7 +43,6 @@ import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import useAuthStore from '@/stores/auth.js'
 import { formatHostImageUrl } from '@/utils/formating'
-import ButtonUi from '../../components/base/ButtonUi.vue'
 import EventBox from './Components/EventBox.vue'
 
 
@@ -71,7 +70,7 @@ export default {
       topLoading: false,
       showPageRefresh: false,
       errorMessage: 'Sorry no event found',
-      showMenu: true,
+      showMenu: false,
       isMenuVisible:false,
       events: [],
       popularPosts: [
