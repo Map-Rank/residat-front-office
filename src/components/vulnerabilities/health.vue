@@ -5,7 +5,7 @@ export default {
 </script>
 
 <template>
-  <div class="w-1/2 mx-auto">
+  <div class="w-full mx-auto">
     <div>
       <p class="text-center">
         <b>

@@ -47,7 +47,7 @@ export default {
 </script>
 
 <template>
-  <div class="w-1/2 mx-auto border-2 border-gray-500 rounded p-2">
+  <div class="w-full mx-auto border-2 border-gray-500 rounded p-2">
     <canvas ref="canvas"/>
     <input class="w-full border-gray-900 h-16 p-2 rounded-md" type="text" placeholder="Your text here">
     <a href="#">

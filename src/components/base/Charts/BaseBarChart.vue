@@ -74,24 +74,31 @@ export default {
       const options = {
         ...chartOptions,
         events: ['click'],
-
+        plugins: {
+        tooltip: {
+          // Disable the tooltip from being sticky after click
+          mode: 'index',
+          intersect: false,
+          enabled: false
+        }
+      },
         onClick: (e, activeEls) => {
           let datasetIndex = activeEls[0].datasetIndex
           let dataIndex = activeEls[0].index
           let datasetLabel = e.chart.data.datasets[datasetIndex].label
           let value = e.chart.data.datasets[datasetIndex].data[dataIndex]
           let label = e.chart.data.labels[dataIndex]
-          console.log('In click', datasetLabel, label, value)
+          // console.log('In click', datasetLabel, label, value)
+
+          // Hide the tooltip manually after click
+          e.chart.tooltip.setActiveElements([], null); // Pass an empty array to clear active elements
+          e.chart.update();
+
           this.$emit('clickItem', label)
 
 
         },
-        plugins: {
-          // tooltip: {
-          //   // Tooltip will only receive click events
-          //   events: ['click']
-          // }
-        },
+
         indexAxis: this.isHorizontal ? 'y' : 'x',
         scales: {
           x: {
