@@ -40,7 +40,7 @@
     </div>
 
     <TitleSubtitle label="Sectors" message="Select your the sectors of interest for this post" />
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-7 content-between">
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 content-between">
       <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
         <base-checkbox
           :key="sector.name"

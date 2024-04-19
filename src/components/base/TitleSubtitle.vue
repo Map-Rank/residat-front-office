@@ -34,7 +34,7 @@ span {
   font-size: 14px;
 
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }
