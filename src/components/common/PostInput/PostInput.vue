@@ -32,7 +32,7 @@
         :isRoundedFull="true"
         customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
         textCss="font-medium text-white"
-        @clickButton="navigateCreatePost"
+        @clickButton="navigateCreateEvent"
       >
       </ButtonUi>
     </div>
@@ -65,10 +65,12 @@ export default {
 
   methods: {
     navigateCreatePost(){
-      // console.log(this.content)
       this.postStore.setContentFromPostInput(this.content)
       this.$router.push({ name: 'create-post' })
-    }
+    },
+    navigateCreateEvent(){
+      this.$router.push({ name: 'create-event' })
+    },
   },
   components: {
     ButtonUi

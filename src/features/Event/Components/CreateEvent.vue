@@ -8,7 +8,7 @@
 
       <vee-form ref="form" :validation-schema="schema" @submit="createEvent">
         <div class="flex-col space-y-6">
-          <h3 class="text-center">CREATE AN EVENT</h3>
+          <h2 class="text-center">CREATE AN EVENT</h2>
 
           <!-- First Name -->
           <div class="mb-6">

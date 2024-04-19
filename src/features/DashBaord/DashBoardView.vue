@@ -55,7 +55,6 @@
             </div>
           </div>
         </div>
-        <!-- <health></health> -->
       </div>
     </div>
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
@@ -81,8 +80,6 @@
           v-if="isErrorLoadMap && !isLoadingMap"
           class="flex h-full w-full justify-center items-center"
         >
-          <!-- <LoadingIndicator /> -->
-
           <RefreshError
             :imageUrl="errorImage"
             :errorMessage="errorMessage"
@@ -247,7 +244,7 @@ export default {
       isModalVisible: false,
       graphLabel: '',
       zone: null,
-      presentMapId: 1,
+      presentMapId: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
       defaultMapSize: 1,
@@ -339,6 +336,13 @@ export default {
       this.showModal()
     },
 
+    goBack() {
+
+      if(this.zoneId == 0){
+        this.$router.go(-1);
+      }
+    },
+
     handleStateClick: async function (e) {
       if (e.target.tagName === 'path') {
         if (e.target.dataset.name) {
@@ -349,7 +353,7 @@ export default {
           this.$router.push({
             name: 'dashbaord',
             params: {
-              zoneId: this.zoneId,
+              zoneId: 0,
               parentId: this.presentMapId,
               zoneName: this.selectedZone.name,
               mapSize: this.defaultMapSize
@@ -359,10 +363,7 @@ export default {
       }
     },
 
-    goBack() {
-      // Use router.go(-1) to navigate back
-      this.$router.go(-1);
-    },
+ 
 
     reloadMap() {},
 

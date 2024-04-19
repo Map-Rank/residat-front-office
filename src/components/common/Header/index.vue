@@ -1,5 +1,5 @@
 <template>
-  <header class="py-1 md:px-8  lg:px-100 bg-white">
+  <header class="py-1 md:px-8 lg:px-100 bg-white">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-6 py-1 p-4 md:hidden">
       <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
@@ -61,26 +61,32 @@
     </div>
 
     <!-- Full menu for larger screens, hidden menu for mobile -->
-    <div :class="{}" class="hidden sm:hidden md:grid md:grid-cols-12 gap-x-4 w-full justify-between">
+    <div
+      :class="{}"
+      class="hidden sm:hidden md:grid md:grid-cols-12 gap-x-4 w-full justify-between"
+    >
       <!-- Logo -->
       <div class="col-span-3">
-
         <div class="flex flex-col md:flex-row items-center md:space-x-5">
           <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="" />
 
           <div class="menu relative">
             <icon-with-label
               class="dropdown"
-              :svgContent="authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'"
-              :svgContentHover="authStore.user ? this.userProfileImage :'assets\\images\\Community\\profile.png'"
+              :svgContent="
+                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+              "
+              :svgContentHover="
+                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+              "
               labelText="Profile"
-              :labelTextBottom="authStore.user ?authStore.user.first_name :null"
+              :labelTextBottom="authStore.user ? authStore.user.first_name : null"
               :iconDesktopSize="this.iconSize"
               :isActive="true"
               :bottom="true"
               @customFunction="toggleMenu"
             ></icon-with-label>
-  
+
             <!-- Dropdown Menu -->
             <div
               ref="menu"
@@ -94,7 +100,7 @@
                 @clickButton="menuMethods(0)"
               >
               </button-ui>
-  
+
               <button-ui
                 :label="'Create Post'"
                 :textCss="'text-left '"
@@ -109,7 +115,7 @@
                 @clickButton="menuMethods(2)"
               >
               </button-ui>
-  
+
               <button-ui
                 :label="'Logout'"
                 :textCss="'text-left '"
@@ -123,15 +129,14 @@
       </div>
 
       <!-- Search bar -->
-      <div class=" grid col-span-4  ">
-        <div class=" w-[80%] grid items-center " >
+      <div class="grid col-span-4">
+        <div class="w-[80%] grid items-center">
           <SearchBar />
         </div>
-
       </div>
 
       <!-- Navigation Links -->
-      <div class=" col-span-5   justify-self-end">
+      <div class="col-span-5 justify-self-end">
         <nav class="flex flex-col md:flex-row items-center space-x-10 md:space-x-5">
           <icon-with-label
             class=""
@@ -169,7 +174,6 @@ export default {
   },
 
   created() {
-
     document.addEventListener('click', this.handleClickOutside)
   },
 
@@ -184,9 +188,8 @@ export default {
       authStore,
       router,
       isMenuVisible: false,
-      // isMenuOpen : ref(false),
       isActiveRoute: '',
-      userProfileImage:authStore.user.avatar,
+      userProfileImage: authStore && authStore.user ? authStore.user.avatar : '',
       isMenuOpen: false,
       iconSize: 'w-7 h-7',
       navItems: [
@@ -238,12 +241,6 @@ export default {
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
     },
-
-    // handleClickOutside(event) {
-    //   if (this.$refs.menu && !this.$refs.menu.contains(event.target)) {
-    //     this.isMenuVisible = false;
-    //   }
-    // },
 
     menuMethods(index) {
       console.log('click')

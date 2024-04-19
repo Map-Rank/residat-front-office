@@ -2,7 +2,7 @@
   <div class="flex justify-between border-b mb-2 pb-2">
     <div class="flex items-center space-x-1">
       <img src="@\assets\icons\heart-fill-green.svg" alt="" />
-      <p v-if="like_count > 0" class="caption-c1-bold">{{ like_count }} and other likes</p>
+      <p v-if="like_count > 0" class="caption-c1-bold">{{ like_count }}  likes</p>
       <p v-else class="caption-c1-bold">Be the first to like</p>
     </div>
 

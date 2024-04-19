@@ -52,7 +52,7 @@ export default {
 
 label{
   color: var(--body-dark, #1b1b1b);
-  font-size: 15px;
+  font-size: 16px;
   font-family: 'Poppins';
   font-style: normal;
   font-weight: 400;

@@ -43,3 +43,15 @@ export default {
 };
 </script>
 
+
+<style scoped>
+span {
+  font-size: 14px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.3px;
+}
+</style>
+
