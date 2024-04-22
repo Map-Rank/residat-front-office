@@ -75,11 +75,15 @@ export default {
       immediate: true,
       handler(newId, oldId) {
         if (newId !== oldId) {
+          console.log(this.query);
           this.fetchPosts();
         }
       }
     }
+    
   },
+
+  
 
   props: ['zoneId','query'],
   components: {

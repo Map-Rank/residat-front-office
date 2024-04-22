@@ -59,7 +59,7 @@ const router = createRouter({
       meta: { requiresAuth: true },
       props: (route) => ({
         zoneId: route.params.zoneId ,
-        query:route.params.zoneId ,
+        query:route.params.query ,
       })
     },
     {
