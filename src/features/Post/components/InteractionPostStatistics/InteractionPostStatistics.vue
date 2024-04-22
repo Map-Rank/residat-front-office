@@ -2,8 +2,10 @@
   <div class="flex justify-between border-b mb-2 pb-2">
     <div class="flex items-center space-x-1">
       <img src="@\assets\icons\heart-fill-green.svg" alt="" />
-      <p v-if="like_count > 0" class="caption-c1-bold">{{ like_count }}  likes</p>
-      <p v-else class="caption-c1-bold">Be the first to like</p>
+      <!-- <p v-if="like_count == 1" class="caption-c1-bold">{{ like_count }}  like</p>
+      <p v-if="like_count > 1" class="caption-c1-bold">{{ like_count }}  likes</p>
+      <p v-else class="caption-c1-bold">Be the first to like</p> -->
+      <p class="caption-c1-bold">{{ likeCountText }}</p>
     </div>
 
     <p 
@@ -25,6 +27,19 @@ export default {
     share_count:{},
 
   },
+
+  computed: {
+    likeCountText() {
+      if (this.like_count === 1) {
+        return `${this.like_count} like`;
+      } else if (this.like_count > 1) {
+        return `${this.like_count} likes`;
+      } else {
+        return 'Be the first to like';
+      }
+    }
+  },
+
   methods:{
     showPostDetails() {
       this.$emit('showPostDetails')

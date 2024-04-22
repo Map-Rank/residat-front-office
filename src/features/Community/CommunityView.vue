@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- Fixed image in the background -->
     <div
-      class="fixed hidden md:block top-0 left-0 w-full md:h-[20%] lg:h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      class="fixed hidden md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
       <h2 class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase">
@@ -12,7 +12,7 @@
 
     <!-- Content that scrolls over the image -->
     <div class="relative z-11">
-      <div class="hidden md:block enableScroll"></div>
+      <div class="hidden md:block enableScroll md:h-[20vh]"></div>
       <!-- This div is just to enable scrolling -->
       <div class="bg-primary-light mt-3">
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
@@ -540,11 +540,7 @@ export default {
   height: 20vh;
 }
 
-@media (max-width: 768px) {
-  .enableScroll {
-    height: 10vh; /* Adjust the scrollable area for smaller screens */
-  }
-}
+
 
 .scroll-lock {
   overflow: hidden;
