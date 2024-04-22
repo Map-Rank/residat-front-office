@@ -18,7 +18,7 @@
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
         <div class="pt-1/2">
           <!-- <div class=" content  pt-5 lg:px-100 h-full"> -->
-          <div class="md:px-8  lg:px-100 justify-center pt-5 h-full">
+          <div class="md:px-8  lg:px-100 justify-center  h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
@@ -56,7 +56,7 @@
                 <div class="  sm:hidden mb-2 p-1">
                   <div class="md:block">
                     <div class="">
-                      <div class="flex space-x-1 w-full ">
+                      <div class="flex space-x-2 w-full ">
 
                         <div class=" w-full">
                           <button-ui

@@ -367,4 +367,11 @@ export default {
     line-height: 16px;
   }
 }
+
+@media only screen and (max-width: 375px) {
+  .content {
+    font-size: 12px;
+    line-height: 16px;
+  }
+}
 </style>
