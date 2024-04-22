@@ -186,16 +186,6 @@ export default {
         this.loading = false;
       }
 
-      
-      // if (this.customLiked) {
-      //       this.customLiked = false
-      //       this.customPost.like_count--
-      //       console.log(this.customLiked)
-      //     } else {
-      //       this.customLiked = true
-      //       this.customPost.like_count++
-      //     }
-
     },
     dismiss() {
       this.togglePostDetails();
@@ -217,7 +207,7 @@ export default {
 
 <style scoped>
 .back {
-  background: rgba(13, 13, 13, 0.3);
+  background: rgba(13, 13, 13, 0.155);
 }
 
 .grid-rows-custom {

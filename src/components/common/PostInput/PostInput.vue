@@ -14,7 +14,7 @@
       />
     </div>
     <!-- Action Buttons -->
-    <div class="flex mdspace-x-2 md:space-x-6 lg:space-x-14 justify-between">
+    <div class="flex space-x-2 md:space-x-6 lg:space-x-14 justify-between">
       <!-- Live Video -->
 
       <ButtonUi

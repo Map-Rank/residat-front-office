@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="h-full">
     <div class="bg-white p-6 flex justify-center">
       <LoadingIndicator v-if="isLoading" />
