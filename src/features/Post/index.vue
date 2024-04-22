@@ -90,21 +90,20 @@
       </div>
 
       <!-- comment section -->
-      <div v-if="showCommentBox" class="flex items-center mt-3">
+      <div v-if="showCommentBox" class="flex space-x-3 items-center mt-3 overflow-hidden">
         <AvatarPlaceholderVue :username="username" :size="20"></AvatarPlaceholderVue>
-        <div class="border w-full flex p-2 ml-5 rounded-lg">
+        <div class="border  p-2  rounded-lg">
           <input
             v-model="commentData.text"
             type="search"
             placeholder="Search "
-            class="flex-grow bg-transparent ml-3 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
+            class="flex bg-transparent w-3/4 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
           />
-          <input type="file" class="hidden" @change="handleFileChange" />
-          <img src="@\assets\icons\image-fill.svg" alt="" />
+       
         </div>
         <button
           @click.prevent="commentPost(this.commentData)"
-          class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
+          class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
         </button>
