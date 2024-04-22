@@ -23,7 +23,7 @@
             <ul class="flex flex-wrap mb-4 border-2 border-secondary-normal">
               <li class="flex-auto text-center border-secondary-normal">
                 <button-ui
-                  label="Sign Up"
+                  label="LogIn"
                   customCss="flex justify-center"
                   :colorObject="
                     tab === 'login'
