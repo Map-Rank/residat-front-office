@@ -52,6 +52,17 @@ const router = createRouter({
       })
     },
     {
+      path: '/search/result/:zoneId/:query?',
+      name: 'search-result',
+      component: SearchResult,
+      // props: true,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        zoneId: route.params.zoneId ,
+        query:route.params.zoneId ,
+      })
+    },
+    {
       path: '/create-event',
       name: 'create-event',
       component: CreateEvent,
@@ -77,22 +88,6 @@ const router = createRouter({
       name: 'create-post',
       component: CreatePost,
       meta: { requiresAuth: true }
-    },
-    {
-      path: '/search/result/:idType/:id',
-      name: 'search-result',
-      component: SearchResult,
-      props: true,
-      meta: { requiresAuth: true },
-      beforeEnter: (to, from, next) => {
-        const validTypes = ['zone', 'user', 'post']
-        if (validTypes.includes(to.params.idType)) {
-          next()
-        } else {
-          // Redirect to a default page or show an error if the idType is not valid
-          next({ name: 'default-route' })
-        }
-      }
     },
 
     {

@@ -7,7 +7,8 @@ import { getZones } from '@/services/zoneService.js';
       <input
         v-model="searchQuery"
         @input="filterZones()"
-        @keyup.enter="searchZone"
+        @keyup.enter="onEnter($event)"
+        @mouseover="getAllZones()"
         class="w-full file  bg-transparent h-10 px-2  rounded-lg text-sm focus:outline-none"
         type="search"
         name="search"
@@ -42,13 +43,7 @@ import { useRouter } from 'vue-router'
 
 export default {
   name: 'SearchBar',
-  async created() {
-    try {
-      await this.getAllZones()
-    } catch (error) {
-      console.log(error)
-    }
-  },
+
   data() {
     const router = useRouter()
     return {
@@ -71,16 +66,27 @@ export default {
       )
     },
 
-    searchZone(id) {
+    searchZone(zoneId) {
       this.filteredZones = [];
     
       const currentRoute = this.$router.currentRoute;
       if (currentRoute.name === 'search-result') {
-        this.$router.replace({ name: 'search-result', params: { idType: 'zone', id: id } });
+        this.$router.replace({ name: 'search-result', params: { zoneId: zoneId } });
       } else {
         // Use push if we are on a different page
-        this.$router.push({ name: 'search-result', params: { idType: 'zone', id: id } });
+        this.$router.push({ name: 'search-result', params: { zoneId: zoneId }  });
       }
+    },
+    onEnter() {
+      const enteredValue = this.searchQuery.toLowerCase(); 
+      const foundZone = this.filteredZones.find(zone => zone.name.toLowerCase() === enteredValue);
+    if (foundZone) {
+      const zoneId = foundZone.id;
+      this.searchZone(zoneId)
+
+    } else {
+      console.log('No matching zone found');
+    }
     },
     
 
