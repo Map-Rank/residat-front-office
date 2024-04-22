@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- Fixed image in the background -->
     <div
-      class="fixed hidden md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      class="fixed hidden mb-3 md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
       <h2 class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase">
@@ -14,17 +14,17 @@
     <div class="relative z-11">
       <div class="hidden md:block enableScroll md:h-[20vh]"></div>
       <!-- This div is just to enable scrolling -->
-      <div class="bg-primary-light mt-3">
+      <div class="bg-primary-light md:pt-4">
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
         <div class="pt-1/2">
           <!-- <div class=" content  pt-5 lg:px-100 h-full"> -->
-          <div class="md:px-8  lg:px-100 justify-center  h-full">
+          <div class="lg:md:px-100  md:md:px-[50px]  lg:px- justify-center  h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
-              <aside class="col-span-2 hidden sm:block md:hidden lg:block">
+              <aside class="col-span-2 hidden   lg:block">
                 <zone-post-filter
                   :filterPostFunctionWithId="filterPostByZone"
                   :updateZone="updateZone"
@@ -181,7 +181,7 @@
                 </div>
 
                 <div >
-                  <div class="mt-3 ">
+                  <div class="lg:mt-3">
 
                     <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
                   </div>
