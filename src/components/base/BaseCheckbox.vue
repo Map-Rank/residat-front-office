@@ -25,9 +25,39 @@ export default {
       checked: false,
     };
   },
+  created() {
+    // Retrieve sectorIds from URL (if any)
+    const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
+
+    if (urlSectorIds.length == 0) {
+      localStorage.removeItem('sectorId')
+    }
+
+    if(urlSectorIds.length > 0){
+      const storedSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
+      const isChecked = storedSectorIds.includes(this.list.id);
+      this.checked = isChecked;
+    }
+
+    
+  },
   methods: {
     updateCheckedItems() {
       this.$emit('change', { list: this.list, checked: this.checked });
+
+      // Retrieve existing sectorIds from local storage (if any)
+      let storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];
+
+      if (this.checked) {
+        if (!storedSectorIds.includes(this.list.id)) {
+          storedSectorIds.push(this.list.id);
+        }
+      } else {
+        storedSectorIds = storedSectorIds.filter(id => id !== this.list.id);
+      }
+
+      // Save the updated sectorIds array to local storage
+      localStorage.setItem('sectorId', JSON.stringify(storedSectorIds));
     },
   },
 };
