@@ -29,17 +29,25 @@ export default {
     // Retrieve sectorIds from URL (if any)
     const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
 
-    if (urlSectorIds.length == 0) {
+    if(urlSectorIds.length == 0){
       localStorage.removeItem('sectorId')
     }
+    
 
-    if(urlSectorIds.length > 0){
-      const storedSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
-      const isChecked = storedSectorIds.includes(this.list.id);
-      this.checked = isChecked;
+    // Retrieve sectorIds from local storage (if any)
+    const storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];
+
+    // Combine sectorIds from both sources (URL and local storage)
+    let initialSectorIds = [];
+    if (urlSectorIds.length > 0) {
+      initialSectorIds = urlSectorIds; // Use URL sector IDs if available
+    } else if (storedSectorIds.length > 0) {
+      initialSectorIds = storedSectorIds; // Use stored sector IDs if no URL IDs
     }
 
-    
+    // Check initial checkbox state based on the combined sectorIds
+    const isChecked = initialSectorIds.includes(this.list.id);
+    this.checked = isChecked;
   },
   methods: {
     updateCheckedItems() {

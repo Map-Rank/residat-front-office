@@ -259,6 +259,29 @@ export default {
     } catch (error) {
       console.error('Failed to load posts:', error)
     }
+
+    // Retrieve sectorIds from URL (if any)
+    const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
+
+    if(urlSectorIds.length == 0){
+      localStorage.removeItem('sectorId')
+    }
+    
+
+    // Retrieve sectorIds from local storage (if any)
+    const storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];
+
+    // Combine sectorIds from both sources (URL and local storage)
+    let initialSectorIds = [];
+    if (urlSectorIds.length > 0) {
+      initialSectorIds = urlSectorIds; // Use URL sector IDs if available
+    } else if (storedSectorIds.length > 0) {
+      initialSectorIds = storedSectorIds; // Use stored sector IDs if no URL IDs
+    }
+
+    // Check initial checkbox state based on the combined sectorIds
+    const isChecked = initialSectorIds.includes(this.list.id);
+    this.checked = isChecked;
   },
   mounted() {
     this.$refs.mainContent.addEventListener('scroll', this.handleScroll)
@@ -347,8 +370,14 @@ export default {
         return
       }
 
+      const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
+
+      if(urlSectorIds.length == 0){
+        localStorage.removeItem('sectorId')
+      }
+
       this.sectorId = checked
-        ? [...this.sectorId, list.id]
+        ? [...urlSectorIds, list.id]
         : this.sectorId.filter((id) => id !== list.id);
 
       // console.log(this.sectorId)
