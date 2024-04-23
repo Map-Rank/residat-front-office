@@ -3,7 +3,7 @@
     <section>
       <SectionTitle :title="sectionTitle" />
       <ul class=" ">
-        <li v-for="(post, index) in recentPosts" :key="index" class="mb-2 last:mb-0 bg-white px-5 py-3 rounded-lg">
+        <li v-for="(post, index) in limitedPosts" :key="index" class="mb-2 last:mb-0 bg-white px-5 py-3 rounded-lg">
           <div class="space-y-2">
             <div class="flex space-x-4 items-center">
               <avatar-placeholder
@@ -41,6 +41,11 @@ export default {
       sectionTitle:'Recently Posted'
     }
   },
+  computed: {
+    limitedPosts() {
+      return this.recentPosts.slice(0, this.maxPosts);
+    }
+  },
   components: {
     SectionTitle,
     AvatarPlaceholder
@@ -49,7 +54,12 @@ export default {
     recentPosts: {
       type: Array,
       required: true
+    },
+    maxPosts: {
+      type: Number,
+      default: 3 // Set a default value or remove this line if no default is needed
     }
+
     // username:String
   }
 }

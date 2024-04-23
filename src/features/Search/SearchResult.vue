@@ -71,17 +71,21 @@ export default {
   },
 
   watch: {
-    id: {
+    zoneId: {
       immediate: true,
       handler(newId, oldId) {
         if (newId !== oldId) {
+          console.log(this.query);
           this.fetchPosts();
         }
       }
     }
+    
   },
 
-  props: { idType: String, id: String },
+  
+
+  props: ['zoneId','query'],
   components: {
     LoadingIndicator,
     PostComponent,
@@ -139,8 +143,8 @@ export default {
       try {
         this.topLoading = true
         this.showPageRefresh = false
-        console.log('the zone id is ' + this.id)
-        this.filteredPosts = await getFilterPosts(this.id)
+        console.log('the zone id is ' + this.zoneId)
+        this.filteredPosts = await getFilterPosts(this.zoneId)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true

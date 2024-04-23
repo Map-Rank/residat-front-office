@@ -1,25 +1,29 @@
 <template>
   <header class="py-1 md:px-8 lg:px-100 bg-white">
     <!-- Mobile view: Hamburger icon -->
-    <div class="flex justify-between items-center space-x-6 py-1 p-4 md:hidden">
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+    <div class="flex justify-between items-center space-x-2 sm:space-x-6 py-1 p-4 md:hidden">
+      <app-logo></app-logo>
 
-      <div class="flex-grow items-center">
+      <div class=" items-center ">
         <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
       </div>
 
       <div class="menu relative">
         <icon-with-label
-          class="dropdown"
-          svgContentHover="\assets\icons\profile-outline.svg"
-          svgContent="\assets\icons\profile-fill.svg"
-          labelText="Profile"
-          labelTextBottom="Profile"
-          :iconDesktopSize="this.iconSize"
-          :isActive="true"
-          :bottom="true"
-          @customFunction="toggleMenu"
-        ></icon-with-label>
+        class="dropdown"
+        :svgContent="
+          authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+        "
+        :svgContentHover="
+          authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+        "
+        labelText="Profile"
+        :labelTextBottom="authStore.user ? authStore.user.first_name : null"
+        :iconDesktopSize="this.iconSize"
+        :isActive="true"
+        :bottom="true"
+        @customFunction="toggleMenu"
+      ></icon-with-label>
 
         <!-- Dropdown Menu -->
         <div
@@ -164,13 +168,15 @@ import useAuthStore from '../../../stores/auth'
 import { useRouter } from 'vue-router'
 import SearchBar from '@/components/base/SearchBar.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
+import AppLogo from '@/components/base/AppLogo.vue'
 
 export default {
   name: 'HeaderApp',
   components: {
     SearchBar,
     IconWithLabel,
-    ButtonUi
+    ButtonUi,
+    AppLogo
   },
 
   created() {

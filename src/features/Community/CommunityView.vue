@@ -2,7 +2,7 @@
   <div class="relative">
     <!-- Fixed image in the background -->
     <div
-      class="fixed hidden md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
+      class="fixed hidden mb-3 md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
       <h2 class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase">
@@ -14,17 +14,17 @@
     <div class="relative z-11">
       <div class="hidden md:block enableScroll md:h-[20vh]"></div>
       <!-- This div is just to enable scrolling -->
-      <div class="bg-primary-light mt-3">
+      <div class="bg-primary-light md:pt-4">
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
         <div class="pt-1/2">
           <!-- <div class=" content  pt-5 lg:px-100 h-full"> -->
-          <div class="md:px-8  lg:px-100 justify-center pt-5 h-full">
+          <div class="lg:md:px-100  md:md:px-[50px]  lg:px- justify-center  h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
-              <aside class="col-span-2 hidden sm:block md:hidden lg:block">
+              <aside class="col-span-2 hidden   lg:block">
                 <zone-post-filter
                   :filterPostFunctionWithId="filterPostByZone"
                   :updateZone="updateZone"
@@ -57,7 +57,7 @@
                 <div class="  sm:hidden mb-2 p-1">
                   <div class="md:block">
                     <div class="">
-                      <div class="flex space-x-1 w-full ">
+                      <div class="flex space-x-2 w-full ">
 
                         <div class=" w-full">
                           <button-ui
@@ -182,22 +182,30 @@
                 </div>
 
                 <div >
-                  <div class="mt-3 ">
+                  <div class="hidden lg:mt-3 lg:block">
+                    <recently-posted-side :recentPosts="recentPosts"  :maxPosts="3" ></recently-posted-side>
+                  </div>
 
-                    <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+                  <div class=" block lg:hidden">
+                    <recently-posted-side :recentPosts="recentPosts"  :maxPosts="2" ></recently-posted-side>
                   </div>
 
 
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
                   </div>
-                  <div class="hidden md:block lg:hidden mt-3">
+                  <div class=" hidden md:grid md:space-y-3 lg:hidden mt-3">
 
                     <zone-post-filter
                     :filterPostFunctionWithId="filterPostByZone"
                     :updateZone="updateZone"
-                  >
-                  </zone-post-filter>
+                  ></zone-post-filter>
+
+                  <sector-side
+                  :sectorArray="this.sectors"
+                  :updatesectorChecked="updateSectorChecked"
+                ></sector-side>
+
                   </div>
 
                 </div>
@@ -300,7 +308,7 @@ export default {
       page: 0,
 
       imageHost: URL_LINK.imageHostLink,
-      recentPosts: []
+      recentPosts: [],
     }
   },
   computed: {
@@ -311,7 +319,9 @@ export default {
     },
     shouldDisplayEventAlert() {
       return this.events.length > 2
-    }
+    },
+
+  
   },
 
   methods: {
@@ -446,7 +456,7 @@ export default {
 
       try {
         this.posts = await getPosts(0, 10, this.authStore.user.token)
-        this.recentPosts = await getPosts(0, 3, this.authStore.user.token)
+        this.recentPosts = await getPosts(0, 10, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
