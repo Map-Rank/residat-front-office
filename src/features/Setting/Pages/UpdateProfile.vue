@@ -1,18 +1,18 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
     <div class=" w-full   bg-primary-light">
-      <div class="flex-col bg-white my-5 rounded-lg  p-10 mx-4">
+      <div class="flex-col bg-white  md:my-5 rounded-lg  p-5 md:p-10 mx-1 md:mx-4">
         <div>
           <AlertForm></AlertForm>
         </div>
   
-        <vee-form ref="form" :validation-schema="schema" @submit="createEvent">
-            <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
+        <vee-form ref="form" :validation-schema="schema">
+            <div class="flex-col space-y-6" >
                 <div class="flex-col space-y-6">
-                  <h2 class="text-center">PERSONAL INFORMATION</h2>
+                  <h2 class="text-center text-xl md:text-3xl lg:text-4xl ">PERSONAL INFORMATION</h2>
 
                   <div class="mb-6">
-                    <label class="inline-block mb-2">Profile Picture</label>
+                    <label class="inline-block mb-2 text">Profile Picture</label>
                     <input type="file" @change="onFileChange" accept="image/*" class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"/>
                     <ErrorMessage class="text-danger-normal" name="avatar" />
                   
@@ -97,7 +97,7 @@
                     </select>
                   </div>
         
-                  <TitleSubtitle label="Select Zone" message="Select the zone you will like this post to reach" />
+                  <TitleSubtitle label="Location" message="You can change your location" />
 
 
                   <div class="flex flex-row space-x-4 justify-between">
@@ -158,7 +158,6 @@
   
   <script>
   import useAuthStore from '@/stores/auth'
-  import useSectorStore from '@/stores/sectorStore.js'
   import useZoneStore from '@/stores/zoneStore.js'
   import { useRouter } from 'vue-router'
   import { AlertStates } from '@/components'
@@ -167,20 +166,19 @@
   import BaseDropdown from '@/components/base/BaseDropdown.vue'
   import { getZones } from '@/services/zoneService.js'
   import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-  import {createEvent} from '@/services/eventService.js'
   import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
   
   export default {
   name: 'UpdateProfile',
 
   async created() {
-    const sectorStore = useSectorStore()
     const zoneSector = useZoneStore()
+    const authStore = useAuthStore()
 
+    this.formData = authStore.user
     try {
       this.isLoading = true
       await this.getRegions()
-      this.sectors = sectorStore.getAllSectors
       this.zones = zoneSector.getAllZones
     } catch (error) {
       console.error('Failed to load sector:', error)
@@ -267,12 +265,7 @@
         zone: '',
         tos: true
       },
-      showPassword: false,
-      showConfirmPassword: false,
       sectors: [],
-      step_1: 'step_1',
-      step_2: 'step_2',
-      currentStep: 'step_1',
       reg_in_submission: false
     }
   },
@@ -286,7 +279,7 @@
   computed: {
     imageUrl() {
       if (this.formData.avatar) {
-        return URL.createObjectURL(this.formData.avatar);
+        return this.formData.avatar;
       } else {
         return null;
       }
@@ -385,14 +378,9 @@
       }
     },
 
-    previousStep() {
-      this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
-    },
+ 
 
-    handleEmailNotVerified() {
-      this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
-      this.$router.push({ name: 'email-verification' })
-    },
+  
 
     handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser)
@@ -410,28 +398,27 @@
 
     async registerForm() {
 
-      if (this.subDivision_id == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
+      // if (this.subDivision_id == '') {
+      //   this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
 
-        return
-      }
+      //   return
+      // }
 
-      this.alertStore.setAlert(
-        AlertStates.PROCESSING,
-        'please wait we are creating your account...'
-      )
+      // this.alertStore.setAlert(
+      //   AlertStates.PROCESSING,
+      //   'please wait we are creating your account...'
+      // )
 
-      try {
-        await registerUser(
-          this.formData,
-          this.authStore,
-          this.handleSuccess,
-          this.handleError,
-          this.handleEmailNotVerified
-        )
-      } catch (error) {
-        console.log(error)
-      }
+      // try {
+      //   await registerUser(
+      //     this.formData,
+      //     this.authStore,
+      //     this.handleSuccess,
+      //     this.handleError,
+      //   )
+      // } catch (error) {
+      //   console.log(error)
+      // }
     }
   }
 }
@@ -439,7 +426,6 @@
 
 <style>
 label {
-  font-size: 14px;
   font-style: normal;
   font-weight: 600;
   line-height: 24px; /* 120% */
