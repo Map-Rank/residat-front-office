@@ -108,7 +108,11 @@ const router = createRouter({
       name: 'communitySearch',
       component: CommunityView,
       meta: { requiresAuth: true },
-      props: true
+      props: (route) => ({
+        zoneId: route.params.zoneId || null,
+        sectorId: route.params.sectorId || null ,
+
+      })
     },
     {
       path: '/',

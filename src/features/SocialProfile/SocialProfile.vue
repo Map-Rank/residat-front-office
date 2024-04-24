@@ -47,6 +47,7 @@
                 :postImages="post.images"
                 :showMenu="true"
                 :post="post"
+                :zone-name="post.zone ? post.zone.name : 'zone name' "
               />
             </div>
           </div>
