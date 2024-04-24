@@ -70,12 +70,12 @@ import IconwithLabel from '@/components/common/IconWithLabel/index.vue'
     return {
       iconSize: 'w-[30px] h-[30px]',
       profileItems: [
-        { name: 'Name, location and enterprise', route: '/name-location' },
-        { name: 'Center of interest', route: '/center-interest' }
+        { name: 'Name, location and enterprise', route: 'community' },
+        { name: 'Center of interest', route: 'community' }
       ],
       generalItems: [
-        { name: 'Language', route: '/language' },
-        { name: 'Close Account', route: '/close-account' }
+        { name: 'Language', route: 'community' },
+        { name: 'Close Account', route: 'community' }
       ],
       navItems: [
         {
