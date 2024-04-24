@@ -19,12 +19,13 @@
             :iconDesktopSize="this.iconSize"
             :isActive="isActive(item.routerName) || false"
             :right="item.right"
+            :routerName="item.routerName"
             :key="index"
           ></IconwithLabel>
         </div>
       </div>
     </div>
-    <div class="flex-1 overflow-auto">
+    <div class="flex-1 overflow-auto md:px-5 py-10 lg:px-[100px]">
       <router-view></router-view>
     </div>
   </div>
