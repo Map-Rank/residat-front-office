@@ -17,6 +17,7 @@ import ReportView from '@/features/Report/ReportView.vue'
 import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
 import EditEvent from '@/features/Event/Components/EditEvent.vue'
 import VulnerabilitiesForms from '@/components/common/Pages/VulnerabilitiesForms.vue'
+import SettingView from '@/features/Setting/SettingView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +38,12 @@ const router = createRouter({
       path: '/event',
       name: 'event',
       component: EventView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: SettingView,
       meta: { requiresAuth: true }
     },
     {

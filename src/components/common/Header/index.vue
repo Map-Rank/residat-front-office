@@ -52,12 +52,19 @@
             @clickButton="menuMethods(2)"
           >
           </button-ui>
+          <button-ui
+            :label="'Settings & Privacy'"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(3)"
+          >
+          </button-ui>
 
           <button-ui
             :label="'Logout'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
-            @clickButton="menuMethods(3)"
+            @clickButton="menuMethods(4)"
           >
           </button-ui>
         </div>
@@ -119,12 +126,19 @@
                 @clickButton="menuMethods(2)"
               >
               </button-ui>
+              <button-ui
+                :label="'Settings & Privacy'"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(3)"
+              >
+              </button-ui>
 
               <button-ui
                 :label="'Logout'"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(3)"
+                @clickButton="menuMethods(4)"
               >
               </button-ui>
             </div>
@@ -263,7 +277,11 @@ export default {
           this.$router.push({ name: 'create-event' })
           this.toggleMenu()
           break
-        case 3:
+          case 3:
+          this.$router.push({ name: 'setting' })
+          this.toggleMenu()
+          break
+        case 4:
           this.toggleMenu()
           this.logout()
           break

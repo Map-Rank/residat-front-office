@@ -181,22 +181,30 @@
                 </div>
 
                 <div >
-                  <div class="lg:mt-3">
+                  <div class="hidden lg:mt-3 lg:block">
+                    <recently-posted-side :recentPosts="recentPosts"  :maxPosts="3" ></recently-posted-side>
+                  </div>
 
-                    <recently-posted-side :recentPosts="recentPosts"></recently-posted-side>
+                  <div class=" block lg:hidden">
+                    <recently-posted-side :recentPosts="recentPosts"  :maxPosts="2" ></recently-posted-side>
                   </div>
 
 
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
                   </div>
-                  <div class="hidden md:block lg:hidden mt-3">
+                  <div class=" hidden md:grid md:space-y-3 lg:hidden mt-3">
 
                     <zone-post-filter
                     :filterPostFunctionWithId="filterPostByZone"
                     :updateZone="updateZone"
-                  >
-                  </zone-post-filter>
+                  ></zone-post-filter>
+
+                  <sector-side
+                  :sectorArray="this.sectors"
+                  :updatesectorChecked="updateSectorChecked"
+                ></sector-side>
+
                   </div>
 
                 </div>
@@ -299,7 +307,7 @@ export default {
       page: 0,
 
       imageHost: URL_LINK.imageHostLink,
-      recentPosts: []
+      recentPosts: [],
     }
   },
   computed: {
@@ -310,7 +318,9 @@ export default {
     },
     shouldDisplayEventAlert() {
       return this.events.length > 2
-    }
+    },
+
+  
   },
 
   methods: {
@@ -438,7 +448,7 @@ export default {
 
       try {
         this.posts = await getPosts(0, 10, this.authStore.user.token)
-        this.recentPosts = await getPosts(0, 3, this.authStore.user.token)
+        this.recentPosts = await getPosts(0, 10, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
