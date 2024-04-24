@@ -1,10 +1,11 @@
 <template>
     <div
-      class="p-4 border-b border-gray-300 last:border-b-0 cursor-pointer hover:bg-gray-100"
+      class=" flex justify-between p-5 border-b border-gray-300 last:border-b-0 cursor-pointer "
       @click="navigateTo(route)"
     >
-      {{ title }}
-      <span class="float-right">→</span>
+    <p class="text-sm sm:text-base md:text-xl " >{{ title }}</p>
+      
+      <span class="text-2xl font-bold">→</span>
     </div>
   </template>
   
@@ -17,8 +18,7 @@
     },
     methods: {
       navigateTo(route) {
-        // Logic to navigate to the specified route
-        // this.$router.push({ name: route });
+        this.$router.push({ name: route });
         console.log('Navigating to:', route);
       }
     }

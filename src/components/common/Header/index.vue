@@ -84,6 +84,7 @@
           <div class="menu relative">
             <icon-with-label
               class="dropdown"
+              :textCss="'text-primary-normal text-xs'"
               :svgContent="
                 authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
               "
@@ -163,7 +164,7 @@
             :svgContent="item.svgContent"
             :labelText="item.labelText"
             :labelTextBottom="item.labelText"
-            :textCss="'text-primary-normal'"
+            :textCss="'text-primary-normal text-xs'"
             :iconDesktopSize="this.iconSize"
             :isActive="isActive(item.routerName) || false"
             :bottom="item.bottom"
