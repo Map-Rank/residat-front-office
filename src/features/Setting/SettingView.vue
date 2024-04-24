@@ -1,7 +1,7 @@
 <template>
     <div class="flex h-screen bg-primary-light">
       <!-- Sidebar -->
-      <div class="w-2/8 bg-white hidden sm:block">
+      <div class="w-2/8 bg-white hidden md:block">
         <div class="flex flex-col h-full">
           <div class="flex p-5 space-x-4 items-center " >
             <img src="\assets\images\Community\profile.png" class="h-[40px]" />
@@ -35,7 +35,7 @@
               :items="profileItems"
             ></settings-section>
             <settings-section
-              title="General Presences"
+              title="General Prefences"
               :items="generalItems"
             ></settings-section>
           </div>
