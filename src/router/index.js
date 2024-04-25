@@ -17,6 +17,9 @@ import ReportView from '@/features/Report/ReportView.vue'
 import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
 import EditEvent from '@/features/Event/Components/EditEvent.vue'
 import VulnerabilitiesForms from '@/components/common/Pages/VulnerabilitiesForms.vue'
+import SettingView from '@/features/Setting/SettingView.vue'
+import AccountPreferences from '@/features/Setting/Pages/AccountPreferences.vue'
+import UpdateProfile from '@/features/Setting/Pages/UpdateProfile.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -37,6 +40,26 @@ const router = createRouter({
       path: '/event',
       name: 'event',
       component: EventView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/setting',
+      name: 'setting',
+      component: SettingView,
+      redirect: '/account-preferences', 
+      children: [
+        {
+          path: '/account-preferences', // Accessible at /settings/profile
+          name: 'account-preferences',
+          component: AccountPreferences,
+        },
+        {
+          path: '/account-preferences/update-profile', // Accessible at /settings/profile
+          name: 'update-profile',
+          component: UpdateProfile,
+        },
+
+      ],
       meta: { requiresAuth: true }
     },
     {

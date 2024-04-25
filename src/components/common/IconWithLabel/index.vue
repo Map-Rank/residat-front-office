@@ -1,7 +1,7 @@
 <template>
-  <router-link :to="{ name: routerName }" 
+  <router-link :to="{ name: routerName  }" 
     class="icon-with-label relative"
-    :class="top || bottom ? 'grid place-items-center' : 'flex items-center'"
+    :class="[top || bottom ? 'grid place-items-center' : 'flex items-center' , customCss]"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click.prevent="handleClick()"
@@ -13,7 +13,7 @@
 
       <!-- Label on left -->
       <p :class="this.textCss" v-show="left">
-        {{ labelTextRight }}
+        {{ labelTextLeft }}
       </p>
       <!-- Image -->
 
@@ -91,7 +91,8 @@ export default {
     labelTextTop: String,
     labelTextRight: String,
     labelTextBottom: String,
-    labelTextLeft: String
+    labelTextLeft: String,
+    customCss:String,
   },
   data() {
     return {
@@ -110,10 +111,7 @@ export default {
 
 <style scoped>
 
-p{
-  text-wrap: nowrap;
-  font-size: 12px;
-}
+
 
 
 .icon-with-label:hover {
