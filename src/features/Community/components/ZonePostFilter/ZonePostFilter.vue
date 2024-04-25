@@ -12,6 +12,7 @@
             <LoadingIndicator />
           </div>
           <BaseDropdown
+            v-model="region_id"
             v-if="!isLoading"
             :options="regions"
             @selectedOptionId="returnZoneId"
@@ -26,6 +27,7 @@
               <LoadingIndicator />
             </div>
             <BaseDropdown
+            v-model="division_id"
             v-if="!isLoading && !isDivisionLoading"
             @selectedOptionId="returnZoneId"
             :options="divisions"
@@ -39,6 +41,7 @@
               <LoadingIndicator />
             </div>
             <BaseDropdown
+            v-model="Subdivision_id"
             v-if="!isLoading && !isSubdivisionLoading"
             @selectedOptionId="returnZoneId"
             @input="returnZone"
@@ -72,17 +75,19 @@ export default {
     } finally {
       this.isLoading = false
     }
+
+    this.loadSelectionFromLocalStorage();
   },
 
   data() {
     return {
       isLoading: false,
 
-      region_id: '1',
+      region_id: '',
       sectionTitle: 'Select Location',
 
       division_id: '',
-      Subdivision_id: '1',
+      Subdivision_id: '',
       isDivisionLoading: false,
       isSubdivisionLoading: false,
       regions: [
@@ -117,7 +122,9 @@ export default {
     },
 
     returnZone(zone){
-this.updateZone(zone)
+      this.updateZone(zone);
+      localStorage.setItem('selectedSubdivision', zone.id);
+      // this.saveSelectionToLocalStorage();
     },
 
     async getRegions() {
@@ -129,6 +136,7 @@ this.updateZone(zone)
     },
 
     async getDivisions(parent_id) {
+      localStorage.setItem('selectedRegion', parent_id);
       try {
         this.isDivisionLoading = true
         //delete all element and allow the first only
@@ -142,6 +150,7 @@ this.updateZone(zone)
     },
 
     async getSub_divisions(parent_id) {
+      localStorage.setItem('selectedDivision', parent_id);
       this.isSubdivisionLoading = true
       try {
         this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
@@ -151,7 +160,21 @@ this.updateZone(zone)
       } finally {
         this.isSubdivisionLoading = false
       }
-    }
+    },
+
+    loadSelectionFromLocalStorage() {
+      var selectedRegion = localStorage.getItem('selectedRegion');
+      var selectedDivision = localStorage.getItem('selectedDivision');
+      var selectedSubdivision = localStorage.getItem('selectedSubdivision');
+
+      if (selectedRegion) this.region_id = selectedRegion;
+      if (selectedDivision) this.division_id = selectedDivision;
+      if (selectedSubdivision) this.Subdivision_id = selectedSubdivision;
+
+      console.log(this.region_id);
+      console.log(this.division_id);
+      console.log(this.Subdivision_id);
+    },
   },
   props: {
     filterPostFunctionWithId: {},

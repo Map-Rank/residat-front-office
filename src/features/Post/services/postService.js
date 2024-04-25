@@ -131,7 +131,7 @@ const getSpecificPost = async (id) => {
 const filterPost = async (params) => {
   try {
     const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, authToken)
-    console.log('post filtered!!')
+    // console.log('post filtered!!')
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
