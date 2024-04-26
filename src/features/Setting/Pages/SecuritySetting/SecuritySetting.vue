@@ -37,7 +37,7 @@ import SettingsSection from '@/features/Setting/components/SettingsSection.vue'
       iconSize: 'w-[30px] h-[30px]',
       profileItems: [
         { name: 'Password Management', route: 'update-password' },
-        { name: 'Center of interest', route: 'security-setting' }
+        { name: 'Phone Number', route: 'security-setting' }
       ],
 
 

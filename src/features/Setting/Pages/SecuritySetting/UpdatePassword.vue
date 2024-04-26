@@ -16,10 +16,10 @@
               <label>Current Password</label>
               <div class="flex items-center border border-gray-300 rounded overflow-hidden">
                 <vee-field
-                  name="current_password"
-                  v-model="formData.current_password"
+                  name="old_password"
+                  v-model="formData.old_password"
                   :type="showCurrentPassword ? 'text' : 'password'"
-                  id="password"
+                  id="old_password"
                   class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
                   placeholder="Current Password"
                 ></vee-field>
@@ -44,7 +44,7 @@
               </div>
 
               <!-- Error Message -->
-              <ErrorMessage class="text-red-500 text-sm mt-1" name="current_password" />
+              <ErrorMessage class="text-red-500 text-sm mt-1" name="old_password" />
             </div>
 
             <!-- Password -->
@@ -88,11 +88,11 @@
               <label>Confirm Password</label>
               <div class="flex items-center border border-gray-300 rounded overflow-hidden">
                 <vee-field
-                  name="confirm_password"
-                  v-model="formData.confirm_password"
+                  name="password_confirmation"
+                  v-model="formData.password_confirmation"
                   :type="showConfirmPassword ? 'text' : 'password'"
-                  :rules="schema.confirm_password"
-                  id="confirm_password"
+                  :rules="schema.password_confirmation"
+                  id="password_confirmation"
                   class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
                   placeholder="Confirm Password"
                 ></vee-field>
@@ -116,7 +116,7 @@
                 </button>
               </div>
 
-              <ErrorMessage class="text-danger-normal" name="confirm_password" />
+              <ErrorMessage class="text-danger-normal" name="password_confirmation" />
             </div>
 
             <div class="sm:px-">
@@ -162,14 +162,14 @@ export default {
       isSubdivisionLoading: false,
 
       schema: {
-        current_password: 'required|min:6',
+        old_password: 'required|min:6',
         password: 'required|min:6',
-        confirm_password: 'required|passwords_mismatch:@password'
+        password_confirmation: 'required|passwords_mismatch:@password'
       },
       formData: {
-        current_password: '',
+        old_password: '',
         password: '',
-        confirm_password: ''
+        password_confirmation: ''
       },
       showCurrentPassword: false,
       showPassword: false,
@@ -202,7 +202,7 @@ export default {
       this.showConfirmPassword = !this.showConfirmPassword
     },
     async updatePassword() {
-      const fieldsToValidate = ['password', 'confirm_password', 'current_password']
+      const fieldsToValidate = ['password', 'password_confirmation', 'old_password']
 
       try {
         const validationResults = await Promise.all(
@@ -211,7 +211,8 @@ export default {
         const allFieldsValid = validationResults.every((result) => result.valid)
 
         if (allFieldsValid) {
-          this.submitForm()
+          await this.submitForm()
+          
         }
       } catch (error) {
         console.error('Validation error:', error)
@@ -220,7 +221,8 @@ export default {
 
     handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser)
-      this.$router.push({ name: 'account-preferences' })
+      this.$router.push({ name: 'security-setting' })
+      this.resetForm()
     },
 
     handleError(errors) {
@@ -242,6 +244,12 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+
+    resetForm() {
+      this.formData.old_password = ''
+      this.formData.password = ''
+      this.formData.password_confirmation = ''
     }
   }
 }

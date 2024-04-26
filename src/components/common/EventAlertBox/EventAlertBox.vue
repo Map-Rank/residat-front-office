@@ -14,7 +14,7 @@
         />
       </div>
       <div class="text-black gap-3">
-        <div class="text-lg font-semibold title">{{  truncateText(event.title ,25 )  }}</div>
+        <div class="menu font-semibold title">{{  truncateText(event.title ,25 )  }}</div>
         <p class="menu">
           Organized by:
           <span>{{   truncateText(event.organized_by  ,25 ) }}</span>

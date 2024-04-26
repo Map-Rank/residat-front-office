@@ -117,19 +117,18 @@ const logOut = async (authStore) => {
 
 const UpdatePassword = async (userData, onSuccess, onError) => {
   try {
-    const formData = new FormData()
-    console.log('==============> this is the token' + userData.token)
-
-    // Append user data to formData
-    formData.append('old_password', userData.old_password)
-    formData.append('password', userData.password)
-    formData.append('password_confirmation ', userData.password_confirmation)
-    formData.append('_method', 'PUT')
+  const formData = {
+    old_password: userData.old_password,
+    password: userData.password,
+    password_confirmation: userData.password_confirmation,
+    _method: 'PUT'
+  };
+  
 
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.UpdatePassword}`,
       formData,
-      userData.token,
+      authToken,
       true
     )
     console.log('============>  updated password !!!!')
