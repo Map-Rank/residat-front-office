@@ -263,6 +263,7 @@
         avatar:'',
         selectedSectors: [],
         zone: '',
+        isImageFromLocal:false,
         tos: true
       },
       sectors: [],
@@ -278,16 +279,16 @@
 
   computed: {
     imageUrl() {
-      if (this.formData.avatar) {
-        return this.formData.avatar;
-      } else {
-        return null;
+      if(this.isImageFromLocal){
+        return  URL.createObjectURL(this.formData.avatar);
+      }else{
+        return  this.formData.avatar;
       }
-    }
   },
-
+  },
   methods: {
     onFileChange(e) {
+      this.isImageFromLocal = true
     const file = e.target.files[0];
     if (file) {
       this.formData.avatar = file;
