@@ -67,7 +67,7 @@ export default {
           labelText: 'Sign In & Security',
           isActive: false,
           right: true,
-          routerName: 'dashbaord'
+          routerName: 'security-setting'
         }
       ]
     }

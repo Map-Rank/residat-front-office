@@ -1,11 +1,10 @@
 <template>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-    <div class=" bg-white-normal h-10">
-      <div class="h-full  bg-white flex  items-center px-4 space-x-4" >
-        <img  src="\assets\icons\back-arrow.png"  @click="goBack"  class="h-8" alt=""  />
+    <div class="bg-white-normal h-10">
+      <div class="h-full bg-white flex items-center px-4 space-x-4">
+        <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
         <p>Previous Map</p>
       </div>
-
     </div>
 
     <div
@@ -32,7 +31,7 @@
 
       <div class="lg:w-1/4">
         <div :class="{ hidden: !displayStatistics }">
-          <BaseDropdown :options="hazard" />
+          <BaseDropdown @selectedOptionId="updateHazardId" :options="hazard" />
         </div>
       </div>
 
@@ -89,9 +88,7 @@
         </div>
 
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
-
           <div class="h-[70vh]">
-
             <inline-svg
               :title="hoverMapText"
               fill-opacity="1"
@@ -103,19 +100,35 @@
               height=""
             />
           </div>
-          <div class=" h-[150px] rounded-lg">
+          <div class="h-[150px] rounded-lg">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 1" class="w-full h-[120px] object-cover" />
+                <img
+                  src="\assets\images\DashBoard\3d-map.jpg"
+                  alt="Image 1"
+                  class="w-full h-[120px] object-cover"
+                />
               </div>
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 2" class="w-full h-[120px] object-cover" />
+                <img
+                  src="\assets\images\DashBoard\3d-map.jpg"
+                  alt="Image 2"
+                  class="w-full h-[120px] object-cover"
+                />
               </div>
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 3" class="w-full h-[120px] object-cover" />
+                <img
+                  src="\assets\images\DashBoard\3d-map.jpg"
+                  alt="Image 3"
+                  class="w-full h-[120px] object-cover"
+                />
               </div>
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img src="\assets\images\DashBoard\3d-map.jpg" alt="Image 4" class="w-full h-[120px] object-cover" />
+                <img
+                  src="\assets\images\DashBoard\3d-map.jpg"
+                  alt="Image 4"
+                  class="w-full h-[120px] object-cover"
+                />
               </div>
             </div>
           </div>
@@ -124,13 +137,10 @@
           <img :src="mapSvgPath" alt="" />
         </div>
       </div>
-
-
     </div>
 
-
     <div
-      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10  md:space-x-3"
+      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 md:space-x-3"
       :class="{ hidden: !displayStatistics }"
     >
       <div class="col-span-1">
@@ -217,6 +227,8 @@ export default {
           if (zones.length > 0) {
             if (this.zone.id > 69) {
               this.displayStatistics = true
+              this.inSubDivision = true
+
             }
 
             this.zone = zones[0]
@@ -231,6 +243,20 @@ export default {
 
         this.isLoadingMap = false
       }
+    },
+    hazardId:{
+      immediate: true,
+    handler(newVal, oldVal) {
+
+      if(this.inSubDivision){
+        const zones = this.getReport(this.hazardId,this.zoneId)
+
+        this.zone = zones[0]
+            this.presentMapId = this.zone.id
+            this.mapSvgPath = this.zone.vector.path
+            this.vectorKeys = this.zone.vector.keys
+      }
+    }
     }
   },
 
@@ -255,6 +281,8 @@ export default {
       isLoadingMap: false,
       isErrorLoadMap: false,
       displayStatistics: true,
+      hazardId: '',
+      inSubDivision:false,
       modalStates: {
         healthVisible: false,
         agricultureVisible: false,
@@ -287,7 +315,8 @@ export default {
       hazard: [
         { id: 0, name: 'Chose Environmental Hazard' },
         { id: 1, name: 'Floods' },
-        { id: 2, name: 'Drought' }
+        { id: 2, name: 'Drought' },
+        { id: 3, name: 'Water Stress' }
       ],
       actors: [
         {
@@ -324,6 +353,14 @@ export default {
   },
 
   methods: {
+    getReport(type, zoneId) {
+
+    },
+
+    updateHazardId(hazardId) {
+      this.hazardId = hazardId
+    },
+
     showModal() {
       this.isModalVisible = true
     },
@@ -337,9 +374,8 @@ export default {
     },
 
     goBack() {
-
-      if(this.zoneId == 0){
-        this.$router.go(-1);
+      if (this.zoneId == 0) {
+        this.$router.go(-1)
       }
     },
 
@@ -362,8 +398,6 @@ export default {
         }
       }
     },
-
- 
 
     reloadMap() {},
 

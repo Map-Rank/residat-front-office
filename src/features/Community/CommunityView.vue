@@ -243,6 +243,10 @@ export default {
   name: 'Community',
 
   async created() {
+    const authStore = useAuthStore()
+    console.log(authStore.user.zone);
+
+
     try {
       const zoneId = this.$route.params.zoneId;
       const sectorIdString  = this.$route.params.sectorId;
