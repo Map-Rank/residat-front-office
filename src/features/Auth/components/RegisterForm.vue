@@ -402,7 +402,7 @@ export default {
         phone: 'required|min:3|max:12',
         email: 'required|email',
         password: 'required|min:6',
-        dob: 'required',
+        dob: 'required|dobNotBelowTenYears',
         confirm_password: 'required|passwords_mismatch:@password',
         tos: 'required|tos',
         company_name: 'min:3|max:50',
