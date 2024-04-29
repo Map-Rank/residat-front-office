@@ -46,6 +46,7 @@
                   <sector-side
                     :sectorArray="this.sectors"
                     :updatesectorChecked="updateSectorChecked"
+                    :sectorId="sectorId"
                   ></sector-side>
                 </div>
               </aside>
@@ -273,6 +274,29 @@ export default {
     } catch (error) {
       console.error('Failed to load posts:', error)
     }
+
+    // Retrieve sectorIds from URL (if any)
+    const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
+
+    if(urlSectorIds.length == 0){
+      localStorage.removeItem('sectorId')
+    }
+    
+
+    // Retrieve sectorIds from local storage (if any)
+    const storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];
+
+    // Combine sectorIds from both sources (URL and local storage)
+    let initialSectorIds = [];
+    if (urlSectorIds.length > 0) {
+      initialSectorIds = urlSectorIds; // Use URL sector IDs if available
+    } else if (storedSectorIds.length > 0) {
+      initialSectorIds = storedSectorIds; // Use stored sector IDs if no URL IDs
+    }
+
+    // Check initial checkbox state based on the combined sectorIds
+    const isChecked = initialSectorIds.includes(this.list.id);
+    this.checked = isChecked;
   },
 
   watch: {
@@ -491,11 +515,17 @@ export default {
         return
       }
 
-      this.sectorId = checked
-        ? [...this.sectorId, list.id]
-        : this.sectorId.filter((id) => id !== list.id)
+      const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
 
-      console.log(this.sectorId)
+      if(urlSectorIds.length == 0){
+        localStorage.removeItem('sectorId')
+      }
+
+      this.sectorId = checked
+        ? [...urlSectorIds, list.id]
+        : this.sectorId.filter((id) => id !== list.id);
+
+      // console.log(this.sectorId)
       this.filterPostBySectors()
     },
 
@@ -523,9 +553,9 @@ export default {
     async filterPostBySectors() {
       try {
         this.topLoading = true
-        let id = this.$route.params.zoneId
-        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null)
-        this.$router.push(`/community/${id}/${this.sectorId}`)
+        let id = this.$route.params.zoneId;
+        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
+        this.$router.push(`/community/${id}/${this.sectorId}`);
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -553,7 +583,8 @@ export default {
         this.topLoading = true
 
         this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId, null, null)
-        this.$router.push(`/community/${id}`)
+        this.$router.push(`/community/${id}`);
+
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -617,7 +648,7 @@ export default {
       }
     },
 
-    async loadMorePosts() {
+    async loadMorePosts(zoneId, sectorId) {
       if (this.loadingPosts || this.showPageRefresh) return
       let nextPagePosts = []
 
@@ -628,11 +659,7 @@ export default {
         if (this.filteringActive) {
           const nextPage = this.page + 1
           const size = 20
-          nextPagePosts = await getFilterPosts(
-            this.zoneId !== 0 ? this.zoneId : null,
-            size,
-            nextPage
-          )
+          nextPagePosts = await getFilterPosts(zoneId, sectorId, size, nextPage);
         } else {
           const nextPage = this.page + 1
           nextPagePosts = await getPosts(nextPage, this.size)
@@ -671,7 +698,11 @@ export default {
       // When close to the bottom, attempt to load more posts.
       const nearBottom = scrollHeight - scrollTop <= clientHeight + 50 // Adjust threshold as necessary.
       if (nearBottom && !this.loadingPosts) {
-        this.loadMorePosts()
+        console.log(this.zoneId)
+        console.log(this.$route.params.sectorId)
+        const nextPage = this.page + 1
+          const size = 20
+        this.loadMorePosts(this.zoneId, this.$route.params.sectorId, size, nextPage); // Assuming sectorId is in route params
       }
     }
   },
