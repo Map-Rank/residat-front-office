@@ -347,6 +347,7 @@ export default {
           this.default_divisions = this.default_divisions.concat( division)
           this.default_regions = [this.default_regions[0]]
           this.default_regions = this.default_regions.concat( region)
+          this.zoneName = currentZone.name
           this.componentKey++
           
           this.isZoneFilterLoading = false
@@ -368,6 +369,7 @@ export default {
           this.default_divisions = division
           this.default_regions = [this.default_regions[0]]
           this.default_regions = this.default_regions.concat( region)
+          this.zoneName = currentZone.name
           this.componentKey++
           this.isZoneFilterLoading = false
         }
@@ -380,6 +382,7 @@ export default {
           region = [currentZone, ...rest]
           console.log('Region updated:', region)
           this.default_regions = region
+          this.zoneName = currentZone.name
           this.componentKey++
           this.isZoneFilterLoading = false
 
