@@ -5,7 +5,9 @@
       class="fixed hidden mb-3 md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"
       :style="computedBannerImage"
     >
-      <h2 class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase">
+      <h2
+        class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase"
+      >
         WELCOME TO {{ zoneName }}
       </h2>
     </div>
@@ -18,14 +20,23 @@
         <!-- Content starts here, pt-1/2 gives padding from top equals to 50% of the viewport height -->
         <div class="pt-1/2">
           <!-- <div class=" content  pt-5 lg:px-100 h-full"> -->
-          <div class="lg:md:px-100  md:md:px-[50px]  lg:px- justify-center  h-full">
+          <div class="lg:md:px-100 md:md:px-[50px] lg:px- justify-center h-full">
             <div
               :class="{ 'scroll-lock': scrollLocked }"
               class="w-full justify-between grid-cols-1 sm:grid md:grid-cols-8 lg:grid-cols-10 gap-2"
             >
               <!-- Sidebar: Sectors and Topics -->
-              <aside class="col-span-2 hidden   lg:block">
+              <aside class="col-span-2 hidden lg:block">
+                <div v-if="isZoneFilterLoading" class="flex justify-center">
+                  <LoadingIndicator />
+                </div>
+
                 <zone-post-filter
+                  v-if="!isZoneFilterLoading"
+                  :key="componentKey"
+                  :props_regions="default_regions"
+                  :props_divisions="default_divisions"
+                  :props_sub_divisions="default_sub_divisions"
                   :filterPostFunctionWithId="filterPostByZone"
                   :updateZone="updateZone"
                 >
@@ -54,17 +65,15 @@
                   ></RefreshError>
                 </div>
 
-                <div class="  sm:hidden mb-2 p-1">
+                <div class="sm:hidden mb-2 p-1">
                   <div class="md:block">
                     <div class="">
-                      <div class="flex space-x-2 w-full ">
-
-                        <div class=" w-full">
+                      <div class="flex space-x-2 w-full">
+                        <div class="w-full">
                           <button-ui
-                          leftIcon="/assets/images/filter.png"
+                            leftIcon="/assets/images/filter.png"
                             :label="'Filter by Location'"
                             :color="' bg-white text-primary'"
-                            
                             :textCss="'text-black  text-center'"
                             :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
                             @clickButton="toogleShowMobileFilterZonePost()"
@@ -74,10 +83,9 @@
 
                         <div class="w-full">
                           <button-ui
-                          leftIcon="/assets/images/filter.png"
+                            leftIcon="/assets/images/filter.png"
                             :label="'Filter by Sector'"
                             :color="' bg-white text-primary'"
-                            
                             :textCss="'text-black  text-center'"
                             :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
                             @clickButton="toogleShowMobileFilterSectorPost()"
@@ -85,31 +93,30 @@
                           </button-ui>
                         </div>
                       </div>
-          
-                      <div :class="{ hidden: showMobileFilterZonePost } "  class=" sm:hidden mt-2 ">                      
+
+                      <div :class="{ hidden: showMobileFilterZonePost }" class="sm:hidden mt-2">
                         <zone-post-filter
-                        :filterPostFunctionWithId="filterPostByZone"
-                        :updateZone="updateZone"
-                      >
-                      </zone-post-filter>
+                          :key="componentKey"
+                          :props_regions="default_regions"
+                          :props_divisions="default_divisions"
+                          :props_sub_divisions="default_sub_divisions"
+                          :filterPostFunctionWithId="filterPostByZone"
+                          :updateZone="updateZone"
+                        >
+                        </zone-post-filter>
                       </div>
-                      <div :class="{ hidden: showMobileFilterSectorPost } "  class=" sm:hidden mt-2 ">                      
+                      <div :class="{ hidden: showMobileFilterSectorPost }" class="sm:hidden mt-2">
                         <sector-side
-                        :sectorArray="this.sectors"
-                        :updatesectorChecked="updateSectorChecked"
-                      ></sector-side>
+                          :sectorArray="this.sectors"
+                          :updatesectorChecked="updateSectorChecked"
+                        ></sector-side>
                       </div>
                     </div>
-
-                    
                   </div>
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
-                  <post-input
-                    v-if="!showPageRefresh"
-                    :profilePictureUrl="userProfileImage"
-                  >
+                  <post-input v-if="!showPageRefresh" :profilePictureUrl="userProfileImage">
                   </post-input>
 
                   <div v-if="hasNewPosts" class="">
@@ -139,7 +146,7 @@
                     :like_count="post.like_count"
                     :comment_count="post.comment_count"
                     :postImages="post.images"
-                    :zone-name="post.zone ? post.zone.name : 'zone name' "
+                    :zone-name="post.zone ? post.zone.name : 'zone name'"
                     :post="post"
                   />
                 </div>
@@ -172,8 +179,7 @@
                   <LoadingIndicator />
                 </div>
 
-                <div class="hidden  lg:block">
-
+                <div class="hidden lg:block">
                   <event-alert-box
                     v-if="shouldDisplayEventAlert"
                     sectionTitle="Upcoming Event"
@@ -181,33 +187,39 @@
                   />
                 </div>
 
-                <div >
+                <div>
                   <div class="hidden lg:mt-3 lg:block">
-                    <recently-posted-side :recentPosts="recentPosts"  :maxPosts="3" ></recently-posted-side>
+                    <recently-posted-side
+                      :recentPosts="recentPosts"
+                      :maxPosts="3"
+                    ></recently-posted-side>
                   </div>
 
-                  <div class=" block lg:hidden">
-                    <recently-posted-side :recentPosts="recentPosts"  :maxPosts="2" ></recently-posted-side>
+                  <div class="block lg:hidden">
+                    <recently-posted-side
+                      :recentPosts="recentPosts"
+                      :maxPosts="2"
+                    ></recently-posted-side>
                   </div>
-
 
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
                   </div>
-                  <div class=" hidden md:grid md:space-y-3 lg:hidden mt-3">
-
+                  <div class="hidden md:grid md:space-y-3 lg:hidden mt-3">
                     <zone-post-filter
-                    :filterPostFunctionWithId="filterPostByZone"
-                    :updateZone="updateZone"
-                  ></zone-post-filter>
+                      :key="componentKey"
+                      :props_regions="default_regions"
+                      :props_divisions="default_divisions"
+                      :props_sub_divisions="default_sub_divisions"
+                      :filterPostFunctionWithId="filterPostByZone"
+                      :updateZone="updateZone"
+                    ></zone-post-filter>
 
-                  <sector-side
-                  :sectorArray="this.sectors"
-                  :updatesectorChecked="updateSectorChecked"
-                ></sector-side>
-
+                    <sector-side
+                      :sectorArray="this.sectors"
+                      :updatesectorChecked="updateSectorChecked"
+                    ></sector-side>
                   </div>
-
                 </div>
               </aside>
             </div>
@@ -223,9 +235,7 @@ import PostComponent from '../Post/index.vue'
 import SectorSide from './components/SectorSide/index.vue'
 import RecentlyPostedSide from './components/RecentlyPostedSide/index.vue'
 import { getEvents } from '../../services/eventService'
-import {
-  getPosts,getFilterPosts
-} from '@/features/Post/services/postService.js'
+import { getPosts, getFilterPosts } from '@/features/Post/services/postService.js'
 import useSectorStore from '@/stores/sectorStore.js'
 import { URL_LINK } from '@/constants'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
@@ -237,26 +247,27 @@ import PostInput from '@/components/common/PostInput/PostInput.vue'
 import ZonePostFilter from './components/ZonePostFilter/ZonePostFilter.vue'
 import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
 import ButtonUi from '../../components/base/ButtonUi.vue'
+import { getSpecificZones, getZones } from '@/services/zoneService'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Community',
 
   async created() {
-    const authStore = useAuthStore()
-    console.log(authStore.user.zone);
-
-
+    
     try {
-      const zoneId = this.$route.params.zoneId;
-      const sectorIdString  = this.$route.params.sectorId;
-
-      // Convert sectorId from string to array (handle potential missing sectorId)
-      const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : [];
+      const zoneId = this.$route.params.zoneId
+      const sectorIdString = this.$route.params.sectorId
       
-      if(zoneId){
-        this.posts = await getFilterPosts(zoneId, sectorIdArray);
-      }else{
+      // Convert sectorId from string to array (handle potential missing sectorId)
+      const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : []
+      
+      if (zoneId) {
+        this.isZoneFilterLoading = true
+        this.posts = await getFilterPosts(zoneId, sectorIdArray)
+        this.paramZone = await getSpecificZones(zoneId)
+        this.isZoneFilterLoading = true
+      } else {
         await this.fetchResources()
       }
       this.topLoading = false
@@ -287,6 +298,99 @@ export default {
     const isChecked = initialSectorIds.includes(this.list.id);
     this.checked = isChecked;
   },
+
+  watch: {
+    async paramZone(newValue) {
+      if (newValue) {
+        let region = null
+        let division = null
+        let sub_division = null
+        this.isZoneFilterLoading = true
+        ;(this.default_regions = [
+          {
+            id: 0,
+            name: 'Choose a region'
+          }
+        ]),
+          (this.default_divisions = [
+            {
+              id: 0,
+              name: 'Choose a division'
+            }
+          ]),
+          (this.default_sub_divisions = [
+            {
+              id: 0,
+              name: 'Choose a sub-division'
+            }
+          ])
+
+        if (newValue.level_id == 4) {
+          const rest = await getZones(null, newValue.parent_id)
+          const currentZone = {
+            id: newValue.id,
+            name: newValue.name
+          }
+          sub_division = [currentZone, ...rest]
+          console.log('Subdivisions updated:', sub_division)
+
+          const spec_division = await getSpecificZones(newValue.parent_id)
+          division = await getZones(null, spec_division.parent_id)
+          console.log('Divisions updated:', division)
+
+          const spec_region = await getSpecificZones(spec_division.parent_id)
+          region = await getZones(null, spec_region.parent_id)
+          console.log('region updated:', region)
+
+          this.default_sub_divisions = sub_division
+          this.default_divisions = [this.default_divisions[0]]
+          this.default_divisions = this.default_divisions.concat( division)
+          this.default_regions = [this.default_regions[0]]
+          this.default_regions = this.default_regions.concat( region)
+          this.zoneName = currentZone.name
+          this.componentKey++
+          
+          this.isZoneFilterLoading = false
+        }
+
+        if (newValue.level_id == 3) {
+          const rest = await getZones(null, newValue.parent_id)
+          const currentZone = {
+            id: newValue.id,
+            name: newValue.name
+          }
+          division = [currentZone, ...rest]
+          console.log('Divisions updated:', division)
+          
+          const spec_region = await getSpecificZones(newValue.parent_id)
+          region = await getZones(null, spec_region.parent_id)
+          console.log('region updated:', region)
+
+          this.default_divisions = division
+          this.default_regions = [this.default_regions[0]]
+          this.default_regions = this.default_regions.concat( region)
+          this.zoneName = currentZone.name
+          this.componentKey++
+          this.isZoneFilterLoading = false
+        }
+        if (newValue.level_id == 2) {
+          const rest = await getZones(null, newValue.parent_id)
+          const currentZone = {
+            id: newValue.id,
+            name: newValue.name
+          }
+          region = [currentZone, ...rest]
+          console.log('Region updated:', region)
+          this.default_regions = region
+          this.zoneName = currentZone.name
+          this.componentKey++
+          this.isZoneFilterLoading = false
+
+
+        }
+      }
+    }
+  },
   mounted() {
     this.$refs.mainContent.addEventListener('scroll', this.handleScroll)
   },
@@ -302,6 +406,8 @@ export default {
 
     return {
       zoneName: authStore.user.zone.name,
+      paramZone: {},
+      isZoneFilterLoading: false,
       profilePictureUrl: authStore.user.avatar,
       showMobileFilterZonePost: true,
       showMobileFilterSectorPost: true,
@@ -330,12 +436,31 @@ export default {
       posts: [],
       allPosts: [],
       showPageRefresh: false,
+      componentKey: 0,
 
       size: 20,
       page: 0,
 
       imageHost: URL_LINK.imageHostLink,
       recentPosts: [],
+      default_regions: [
+        {
+          id: 0,
+          name: 'Choose a region'
+        }
+      ],
+      default_divisions: [
+        {
+          id: 0,
+          name: 'Choose a division'
+        }
+      ],
+      default_sub_divisions: [
+        {
+          id: 0,
+          name: 'Choose a sub-division'
+        }
+      ]
     }
   },
   computed: {
@@ -346,21 +471,40 @@ export default {
     },
     shouldDisplayEventAlert() {
       return this.events.length > 2
-    },
-
-  
+    }
   },
 
   methods: {
+    async updateSubDivisions(zone) {
+      let rest = await getZones(null, zone.parent_id)
+      let currentZone = {
+        id: zone.id,
+        name: zone.name
+      }
+      this.default_sub_divisions = [currentZone, ...rest]
+      this.componentKey++
+      console.log('Subdivisions updated:', this.default_sub_divisions)
+    },
+    async updateDivisions(zone) {
+      let rest = await getZones(null, zone.parent_id)
+      let currentZone = {
+        id: zone.id,
+        name: zone.name
+      }
+      this.default_divisions = [currentZone, ...rest]
+      this.componentKey++
+      console.log('Divisions updated:', this.default_divisions)
+    },
+
     toogleShowMobileFilterZonePost() {
-      if(this.showMobileFilterSectorPost == false){
-        this.showMobileFilterSectorPost =true
+      if (this.showMobileFilterSectorPost == false) {
+        this.showMobileFilterSectorPost = true
       }
       this.showMobileFilterZonePost = !this.showMobileFilterZonePost
     },
 
     toogleShowMobileFilterSectorPost() {
-      if(this.showMobileFilterZonePost== false){
+      if (this.showMobileFilterZonePost == false) {
         this.showMobileFilterZonePost = true
       }
       this.showMobileFilterSectorPost = !this.showMobileFilterSectorPost
@@ -412,13 +556,8 @@ export default {
     async filterPostBySectors() {
       try {
         this.topLoading = true
-      console.log(this.$route.params.zoneId)
-
-        let id = this.$route.params.zoneId == undefined ? this.$route.params.zoneId : 1;
-
-        let updatedSectorIds = [...this.sectorId]
-
-        this.posts = await getFilterPosts(this.zoneId, updatedSectorIds ? updatedSectorIds : null )
+        let id = this.$route.params.zoneId;
+        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
         this.$router.push(`/community/${id}/${this.sectorId}`);
       } catch (error) {
         console.error('Failed to load posts:', error)
@@ -439,17 +578,15 @@ export default {
     async filterPostByZone(id) {
       console.log(id)
 
-      this.zoneId = id || 1;
+      this.zoneId = id || 1
       this.filteringActive = true
       this.hasFetchAllPost = false
 
       try {
         this.topLoading = true
 
-        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
-        this.$router.push(`/community/${id}/${this.sectorId}`);
-        // this.$router.push(`/community/${id}/${this.sectorId}`);
-
+        this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId, null, null)
+        this.$router.push(`/community/${id}`);
 
       } catch (error) {
         console.error('Failed to load posts:', error)
@@ -590,8 +727,6 @@ export default {
 .enableScroll {
   height: 20vh;
 }
-
-
 
 .scroll-lock {
   overflow: hidden;
