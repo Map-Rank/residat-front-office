@@ -85,30 +85,9 @@ export default {
       Subdivision_id: '1',
       isDivisionLoading: false,
       isSubdivisionLoading: false,
-      regions: [
-        {
-          id: 0,
-          name: 'Choose a region',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ],
-      divisions: [
-        {
-          id: 0,
-          name: 'Choose a division',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ],
-      sub_divisions: [
-        {
-          id: 0,
-          name: 'Choose a sub-division',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ]
+      regions: this.props_regions,
+      divisions: this.props_divisions,
+      sub_divisions: this.props_sub_divisions
     }
   },
   methods: {
@@ -155,7 +134,34 @@ this.updateZone(zone)
   },
   props: {
     filterPostFunctionWithId: {},
-    updateZone:{}
+    updateZone:{},
+    props_regions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a region',
+        }
+      ]
+    },
+    props_divisions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a division',
+        }
+      ]
+    },
+    props_sub_divisions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a sub-division',
+        }
+      ]
+    }
   },
   components: {
     BaseDropdown,
