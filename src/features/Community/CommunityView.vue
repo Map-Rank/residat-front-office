@@ -27,7 +27,13 @@
             >
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden lg:block">
+                <div v-if="isZoneFilterLoading" class="flex justify-center">
+                  <LoadingIndicator />
+                </div>
+
                 <zone-post-filter
+                  v-if="!isZoneFilterLoading"
+                  :key="componentKey"
                   :props_regions="default_regions"
                   :props_divisions="default_divisions"
                   :props_sub_divisions="default_sub_divisions"
@@ -89,6 +95,7 @@
 
                       <div :class="{ hidden: showMobileFilterZonePost }" class="sm:hidden mt-2">
                         <zone-post-filter
+                          :key="componentKey"
                           :props_regions="default_regions"
                           :props_divisions="default_divisions"
                           :props_sub_divisions="default_sub_divisions"
@@ -199,6 +206,7 @@
                   </div>
                   <div class="hidden md:grid md:space-y-3 lg:hidden mt-3">
                     <zone-post-filter
+                      :key="componentKey"
                       :props_regions="default_regions"
                       :props_divisions="default_divisions"
                       :props_sub_divisions="default_sub_divisions"
@@ -245,60 +253,115 @@ export default {
   name: 'Community',
 
   async created() {
-    // const authStore = useAuthStore()
-    // console.log(authStore.user.zone);
-
+    
     try {
       const zoneId = this.$route.params.zoneId
       const sectorIdString = this.$route.params.sectorId
-      let paramZone = {}
-
+      
       // Convert sectorId from string to array (handle potential missing sectorId)
       const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : []
-
+      
       if (zoneId) {
+        this.isZoneFilterLoading = true
         this.posts = await getFilterPosts(zoneId, sectorIdArray)
-        paramZone = await getSpecificZones(zoneId)
-        let rest = await getZones(null, paramZone.parent_id)
-
-        if (paramZone.level_id == 4) {
-          console.log(rest);
-          this.default_sub_divisions[0] = {
-            id: paramZone.id,
-            name: paramZone.name
-          }
-
-          // let currentZone = {
-          //   id: paramZone.id,
-          //   name: paramZone.name
-          // }
-          // this.default_sub_divisions = this.default_sub_divisions.length > 0 ? [this.default_sub_divisions[0]] : []
-          // this.default_sub_divisions = this.default_sub_divisions.concat(
-          //   rest
-          // )
-
-          console.log('=======>'+ this.default_sub_divisions)
-        }
-
-        // switch (paramZone.level_id) {
-        //   case 4:
-        //     // Code to handle level_id 1
-        //     // break
-        //   case 2:
-        //     // Code to handle level_id 2
-        //     break
-        //   case 3:
-        //     // Code to handle level_id 3
-        //     break
-        //   default:
-        //   // Code to handle other cases
-        // }
+        this.paramZone = await getSpecificZones(zoneId)
+        this.isZoneFilterLoading = true
       } else {
         await this.fetchResources()
       }
       this.topLoading = false
     } catch (error) {
       console.error('Failed to load posts:', error)
+    }
+  },
+
+  watch: {
+    async paramZone(newValue) {
+      if (newValue) {
+        let region = null
+        let division = null
+        let sub_division = null
+        this.isZoneFilterLoading = true
+        ;(this.default_regions = [
+          {
+            id: 0,
+            name: 'Choose a region'
+          }
+        ]),
+          (this.default_divisions = [
+            {
+              id: 0,
+              name: 'Choose a division'
+            }
+          ]),
+          (this.default_sub_divisions = [
+            {
+              id: 0,
+              name: 'Choose a sub-division'
+            }
+          ])
+
+        if (newValue.level_id == 4) {
+          const rest = await getZones(null, newValue.parent_id)
+          const currentZone = {
+            id: newValue.id,
+            name: newValue.name
+          }
+          sub_division = [currentZone, ...rest]
+          console.log('Subdivisions updated:', sub_division)
+
+          const spec_division = await getSpecificZones(newValue.parent_id)
+          division = await getZones(null, spec_division.parent_id)
+          console.log('Divisions updated:', division)
+
+          const spec_region = await getSpecificZones(spec_division.parent_id)
+          region = await getZones(null, spec_region.parent_id)
+          console.log('region updated:', region)
+
+          this.default_sub_divisions = sub_division
+          this.default_divisions = [this.default_divisions[0]]
+          this.default_divisions = this.default_divisions.concat( division)
+          this.default_regions = [this.default_regions[0]]
+          this.default_regions = this.default_regions.concat( region)
+          this.componentKey++
+          
+          this.isZoneFilterLoading = false
+        }
+
+        if (newValue.level_id == 3) {
+          const rest = await getZones(null, newValue.parent_id)
+          const currentZone = {
+            id: newValue.id,
+            name: newValue.name
+          }
+          division = [currentZone, ...rest]
+          console.log('Divisions updated:', division)
+          
+          const spec_region = await getSpecificZones(newValue.parent_id)
+          region = await getZones(null, spec_region.parent_id)
+          console.log('region updated:', region)
+
+          this.default_divisions = division
+          this.default_regions = [this.default_regions[0]]
+          this.default_regions = this.default_regions.concat( region)
+          this.componentKey++
+          this.isZoneFilterLoading = false
+        }
+        if (newValue.level_id == 2) {
+          const rest = await getZones(null, newValue.parent_id)
+          const currentZone = {
+            id: newValue.id,
+            name: newValue.name
+          }
+          region = [currentZone, ...rest]
+          console.log('Region updated:', region)
+          this.default_regions = region
+          this.componentKey++
+          this.isZoneFilterLoading = false
+
+
+        }
+      }
     }
   },
   mounted() {
@@ -316,6 +379,8 @@ export default {
 
     return {
       zoneName: authStore.user.zone.name,
+      paramZone: {},
+      isZoneFilterLoading: false,
       profilePictureUrl: authStore.user.avatar,
       showMobileFilterZonePost: true,
       showMobileFilterSectorPost: true,
@@ -344,6 +409,7 @@ export default {
       posts: [],
       allPosts: [],
       showPageRefresh: false,
+      componentKey: 0,
 
       size: 20,
       page: 0,
@@ -382,6 +448,27 @@ export default {
   },
 
   methods: {
+    async updateSubDivisions(zone) {
+      let rest = await getZones(null, zone.parent_id)
+      let currentZone = {
+        id: zone.id,
+        name: zone.name
+      }
+      this.default_sub_divisions = [currentZone, ...rest]
+      this.componentKey++
+      console.log('Subdivisions updated:', this.default_sub_divisions)
+    },
+    async updateDivisions(zone) {
+      let rest = await getZones(null, zone.parent_id)
+      let currentZone = {
+        id: zone.id,
+        name: zone.name
+      }
+      this.default_divisions = [currentZone, ...rest]
+      this.componentKey++
+      console.log('Divisions updated:', this.default_divisions)
+    },
+
     toogleShowMobileFilterZonePost() {
       if (this.showMobileFilterSectorPost == false) {
         this.showMobileFilterSectorPost = true
