@@ -200,6 +200,7 @@ export default {
         return
       }
 
+
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
       if (response.status) {
@@ -215,7 +216,7 @@ export default {
       }
 
       this.formData.images = []
-      this.imagesToFromLocalPreview = []
+      // this.imagesToFromLocalPreview = []
 
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
