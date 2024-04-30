@@ -177,7 +177,7 @@
     const authStore = useAuthStore()
 
     this.formData = authStore.user
-    console.log(this.formData);
+    // console.log(this.formData);
     try {
       this.isLoading = true
       await this.getRegions()
@@ -410,7 +410,7 @@
       }
 
   if (!(this.formData.avatar instanceof File)) {
-    console.log('====> is not of type file');
+    // console.log('====> is not of type file');
     this.formData.avatar = null; 
   } 
   

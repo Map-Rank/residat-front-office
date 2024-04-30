@@ -12,7 +12,7 @@
               />
               <div>
 
-                <p class="user-name mb-3">{{
+                <p class="user-name mb-3 cursor-pointer hover:underline" @click="viewProfileUser(post.creator[0].id)">{{
                   `${post.creator[0].first_name} ${post.creator[0].last_name}`
                 }}</p>
                 <p class="caption-C1">{{ formatDate(post.published_at) }}</p>
@@ -61,6 +61,12 @@ export default {
     }
 
     // username:String
+  },
+  methods: {
+    viewProfileUser(id) { 
+      console.log(id)
+      this.$router.push({ name: 'view-profile-user', params: { id: id } })
+    },
   }
 }
 </script>
