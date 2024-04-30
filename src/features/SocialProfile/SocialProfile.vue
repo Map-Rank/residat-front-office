@@ -63,8 +63,10 @@
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
-import { getUserPosts } from '@/features/Post/services/postService.js'
+// import { getUserPosts } from '@/features/Post/services/postService.js'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+import {makeApiGetCall } from '@/api/api'
+import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 export default {
   name: 'SocialProfile',
@@ -102,9 +104,12 @@ export default {
     },
 
     async fetchUserPost() {
+      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+      const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
+      // console.log(response.data.data.my_posts)
       this.isLoading = true
-      this.userPost = await getUserPosts()
-      this.posts = this.userPost.my_posts
+      this.userPost = response.data.data;
+      this.posts = response.data.data.my_posts
     }
   }
 }

@@ -7,17 +7,24 @@
       <span class="ml-2  text-sm sm:text-base leading-normal">{{ label }}</span>
       <input :type="type" class="hidden" @change="handleFileChange" :accept="accept" multiple />
     </label>
-    
+    <!-- <div v-if="selectedImages.length">
+      <ul class="flex mt-2">
+        <li v-for="(image, index) in selectedImages" :key="index">
+          <img :src="createObjectURL(image)" alt="selected image" class="w-16 h-16 object-cover mr-2">
+          <button @click="removeImage(index)">Remove</button>
+        </li>
+      </ul>
+    </div> -->
   </div>
 </template>
 
 <script>
 export default {
-  name:'BaseImagePicker',
+  name: 'BaseImagePicker',
   props: {
     accept: {
       type: String,
-      default: 'image/*,video/*', 
+      default: 'image/*,video/*',
     },
     iconImg: {
       type: String,
@@ -29,15 +36,25 @@ export default {
       type: String,
     },
   },
+  data() {
+    return {
+      selectedImages: [],
+    };
+  },
   methods: {
     handleFileChange(event) {
-      const files = event.target.files;
-      console.log(files)
-      if (files.length > 0) {
-        // Emit an array of selected files
-        this.$emit('handleFileChange', Array.from(files));
-
-      }
+      const newFiles = event.target.files;
+      this.selectedImages = [...this.selectedImages, ...newFiles];
+      this.$emit('handleFileChange', this.selectedImages); // Emit the updated array
+    },
+    removeImage(index) {
+      // Create a copy of the array to avoid mutating the original
+      const updatedImages = [...this.selectedImages];
+      updatedImages.splice(index, 1); // Remove the image at the specified index
+      this.selectedImages = updatedImages;
+    },
+    createObjectURL(image) {
+      return URL.createObjectURL(image);
     },
   },
 };

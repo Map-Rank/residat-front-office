@@ -79,7 +79,9 @@
       <!-- Logo -->
       <div class="col-span-3">
         <div class="flex flex-col md:flex-row items-center md:space-x-5">
-          <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="" />
+          <a href="/dashboard">
+            <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="" />
+          </a>
 
           <div class="menu relative">
             <icon-with-label
