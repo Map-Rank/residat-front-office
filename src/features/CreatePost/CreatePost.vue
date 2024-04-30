@@ -112,6 +112,9 @@ export default {
           this.formData.content = this.post.content
           this.imagesFromHostToPreview = this.post.images
         }
+        if(this.prePostContent != null){
+          this.formData.content = this.prePostContent
+        }
 
         const sectorStore = useSectorStore()
 
@@ -123,7 +126,7 @@ export default {
       }
     }
   },
-  props: ['postId'],
+  props: ['postId','prePostContent'],
   data() {
     const router = useRouter()
     const postStore = usePostStore()
@@ -197,6 +200,7 @@ export default {
         return
       }
 
+
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
       if (response.status) {
@@ -212,7 +216,7 @@ export default {
       }
 
       this.formData.images = []
-      this.imagesToFromLocalPreview = []
+      // this.imagesToFromLocalPreview = []
 
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {

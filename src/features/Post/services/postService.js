@@ -7,7 +7,7 @@ const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 const createPost = async (postData, onSuccess, onError) => {
   try {
     const formData = new FormData()
-
+    
     formData.append('content', postData.content)
     formData.append('published_at', currentDate)
     formData.append('zone_id', postData.zoneId)
