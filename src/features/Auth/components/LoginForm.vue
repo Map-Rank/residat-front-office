@@ -55,9 +55,14 @@
       <div class="flex justify-center">
         <button
           type="submit"
-          class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
           @click.prevent="login()"
-          :disabled="login_in_submission"
+          :class="
+          this.isLoading
+            ? 'bg-gray-400 cursor-wait '
+            : 'bg-secondary-normal hover:bg-secondary-hover'
+        "
+          class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
+          :disabled="this.isLoading"
         >
           Sign In
         </button>
@@ -85,6 +90,7 @@ export default {
     return {
       authStore,
       alertStore,
+      isLoading: false,
       router,
       showPassword: false,
       schema: {
@@ -118,6 +124,7 @@ export default {
     },
 
     handleError(errors) {
+      this.isLoading= false
       if (errors.email && errors.email.length > 0) {
         this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
       } else if (errors.zone_id && errors.zone_id.length > 0) {
@@ -127,7 +134,7 @@ export default {
 
     async login() {
       this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ', 10000)
-
+      this.isLoading = true
       try {
         await loginUser(
           this.userData,
@@ -137,6 +144,7 @@ export default {
           this.handleEmailNotVerified
         )
       } catch (error) {
+        this.isLoading = false
         // console.log(error)
         return
       }
