@@ -1,7 +1,7 @@
 <template>
   <div class="hover:cursor-pointer" @click.prevent="handleClick" v-if="Images">
     <!-- Container for the first image -->
-    <div v-if="Images.length > 2 || Images.length === 1" class="flex mb-0.5">
+    <div v-if="Images.length === 1" class="flex mb-0.5 h-[350px]">
       <img
         :src="formatHostImageUrl(Images[0].url)"
         :alt="Images[0].alt"
@@ -10,9 +10,25 @@
     </div>
 
     <!-- Container for two images side by side -->
-    <div v-if="Images.length === 2" class="flex mb-0.5">
-      <img :src="formatHostImageUrl(Images[0].url)" :alt="Images[0].alt" class="w-1/2 h-1/2" />
-      <img :src="formatHostImageUrl(Images[1].url)" :alt="Images[1].alt" class="w-1/2 h-1/2" />
+    <div v-if="Images.length === 2" class="flex mb-0.5 h-[350px]">
+      <img :src="formatHostImageUrl(Images[0].url)" :alt="Images[0].alt" class="w-1/2 " />
+      <img :src="formatHostImageUrl(Images[1].url)" :alt="Images[1].alt" class="w-1/2 " />
+    </div>
+
+    <div v-if="Images.length === 3" class="grid grid-cols-3 gap-0.5 h-[350px]">
+      <img
+        v-for="(image, index) in Images.slice(0, 3)"
+        :src="formatHostImageUrl(image.url)"
+        :alt="image.alt"
+        :key="image.src"
+        class="h-full w-full object-cover"
+      />
+      <div
+        v-if="Images.length > 3"
+        class="flex items-center justify-center bg-black text-white opacity-75 cursor-pointer"
+      >
+        +{{ Images.length - 3 }} more
+      </div>
     </div>
 
     <!-- Container for the rest of the images displayed in a single row -->

@@ -66,10 +66,10 @@ export default {
   methods: {
     navigateCreatePost(){
       this.postStore.setContentFromPostInput(this.content)
-      this.$router.push({ name: 'create-post' })
+      this.$router.push({ name: 'create-post', params:{prePostContent: this.content } })
     },
     navigateCreateEvent(){
-      this.$router.push({ name: 'create-event' })
+      this.$router.push({ name: 'create-event', params:{preEventTitle: this.content } })
     },
   },
   components: {

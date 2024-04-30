@@ -7,6 +7,8 @@ export const API_ENDPOINTS = {
   getPosts: '/post',
   showSpecificPost: '/post',
   getUserPosts: '/profile',
+  UpdateUser: '/profile/update',
+  UpdatePassword: '/password/update',
   likePost: 'post/like',
   commentPost: 'post/comment',
   updatePost: 'post/update',

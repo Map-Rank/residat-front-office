@@ -142,10 +142,10 @@
                   <div class="sm:px-">
                     <div class="flex justify-center">
                       <button
-                        @click.prevent="nextStep()"
+                        @click.prevent="submitForm()"
                         class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
                       >
-                        Next
+                        Update Information
                       </button>
                     </div>
                   </div>
@@ -167,6 +167,7 @@
   import { getZones } from '@/services/zoneService.js'
   import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
   import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
+  import {UpdateUser} from '@/features/Auth/services/authService.js'
   
   export default {
   name: 'UpdateProfile',
@@ -176,6 +177,7 @@
     const authStore = useAuthStore()
 
     this.formData = authStore.user
+    // console.log(this.formData);
     try {
       this.isLoading = true
       await this.getRegions()
@@ -250,6 +252,7 @@
         location: 'required|min:3|max:50'
       },
       formData: {
+        id:'',
         first_name: '',
         last_name: '',
         email: '',
@@ -263,7 +266,9 @@
         avatar:'',
         selectedSectors: [],
         zone: '',
-        tos: true
+        isImageFromLocal:false,
+        tos: true,
+        token:'',
       },
       sectors: [],
       reg_in_submission: false
@@ -278,20 +283,20 @@
 
   computed: {
     imageUrl() {
-      if (this.formData.avatar) {
-        return this.formData.avatar;
-      } else {
-        return null;
+      if(this.isImageFromLocal){
+        return  URL.createObjectURL(this.formData.avatar);
+      }else{
+        return  this.formData.avatar;
       }
-    }
   },
-
+  },
   methods: {
     onFileChange(e) {
+      this.isImageFromLocal = true
     const file = e.target.files[0];
     if (file) {
       this.formData.avatar = file;
-      console.log(this.formData.avatar)
+      // console.log(this.formData.avatar)
     } else {
       this.formData.avatar = null;
     }
@@ -384,8 +389,8 @@
 
     handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = true
-      this.$router.push({ name: 'community' })
+      // this.authStore.isloggedIn = true
+      this.$router.push({ name: 'account-preferences' })
     },
 
     handleError(errors) {
@@ -396,29 +401,35 @@
       }
     },
 
-    async registerForm() {
+    async submitForm() {
 
-      // if (this.subDivision_id == '') {
-      //   this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
+      if (this.subDivision_id == '') {
+        this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
 
-      //   return
-      // }
+        return
+      }
 
-      // this.alertStore.setAlert(
-      //   AlertStates.PROCESSING,
-      //   'please wait we are creating your account...'
-      // )
+  if (!(this.formData.avatar instanceof File)) {
+    // console.log('====> is not of type file');
+    this.formData.avatar = null; 
+  } 
+  
 
-      // try {
-      //   await registerUser(
-      //     this.formData,
-      //     this.authStore,
-      //     this.handleSuccess,
-      //     this.handleError,
-      //   )
-      // } catch (error) {
-      //   console.log(error)
-      // }
+      this.alertStore.setAlert(
+        AlertStates.PROCESSING,
+        'please wait we are creating your account...'
+      )
+
+      try {
+        await UpdateUser(
+          this.formData,
+          this.authStore,
+          this.handleSuccess,
+          this.handleError,
+        )
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }

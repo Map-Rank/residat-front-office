@@ -41,30 +41,13 @@ import SettingsSection from '@/features/Setting/components/SettingsSection.vue'
       iconSize: 'w-[30px] h-[30px]',
       profileItems: [
         { name: 'Name, location and enterprise', route: 'update-profile' },
-        { name: 'Center of interest', route: 'community' }
+        { name: 'Center of interest', route: 'account-preferences' }
       ],
       generalItems: [
-        { name: 'Language', route: 'community' },
-        { name: 'Close Account', route: 'community' }
+        { name: 'Language', route: 'account-preferences' },
+        { name: 'Close Account', route: 'account-preferences' }
       ],
-      navItems: [
-        {
-          svgContent: '\\assets\\icons\\profile-outline.svg',
-          svgContentHover: '\\assets\\icons\\profile-fill.svg',
-          labelText: 'Account preferences',
-          isActive: false,
-          right: true,
-          routerName: 'community'
-        },
-        {
-          svgContent: '\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-          labelText: 'Sign In & Security',
-          isActive: false,
-          right: true,
-          routerName: 'dashbaord'
-        },
-      ]
+
     };
   }
   }

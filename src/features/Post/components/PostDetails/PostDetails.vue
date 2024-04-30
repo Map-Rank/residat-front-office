@@ -75,7 +75,7 @@
                     
                     
                     src="@\assets\icons\share-fill.svg" alt="" />
-                    <span class="ml-4 caption-c1-bold">{{ post.share_count }} Shares</span>
+                    <span @click="openShareModal()" class="ml-4 caption-c1-bold cursor-pointer">{{ post.share_count }} Shares</span>
                   </div>
                 </div>
               </div>
@@ -120,6 +120,7 @@ import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
 import { commentPost ,getSpecificPost } from "@/features/Post/services/postService";
 import IconWithLabel from '@/components/common/IconWithLabel/index.vue'
 import { likePost } from "../../services/postService";
+import useModalStore from '@/stores/modalStore.js'
 
 export default {
   name: "PostDetails",
@@ -138,7 +139,11 @@ export default {
     IconWithLabel
   },
   data() {
+
+    const modalStore = useModalStore()
+
     return {
+      modalStore,
       currentImageIndex: 0,
       post: null,
       commentText: "",
@@ -155,6 +160,11 @@ export default {
   },
   methods: {
     ...mapActions(usePostStore, ["togglePostDetails"]),
+
+    openShareModal() {
+      // this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
+      this.modalStore.openModal(`https://dev.residat.com/show-post`)
+    },
 
     async commentPost() {
       this.loading = true;

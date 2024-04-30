@@ -191,7 +191,12 @@
               type="Create Event"
               @click="createEvent()"
               class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-              :disabled="isCreatingEvent"
+              :class="
+              this.isLoading
+                ? 'bg-gray-400 cursor-wait '
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+            "
+            :disabled="this.isLoading"
             >
               Create Event
             </button>
@@ -219,6 +224,10 @@ export default {
   name: 'CreateEvent',
 
   async created() {
+    if(this.preEventTitle != null){
+          this.formData.title = this.preEventTitle
+        }
+
     const sectorStore = useSectorStore()
     const zoneSector = useZoneStore()
 
@@ -234,6 +243,7 @@ export default {
     }
   },
 
+  props: ['postId','preEventTitle'],
   data() {
     const router = useRouter()
     const authStore = useAuthStore()
@@ -427,11 +437,11 @@ export default {
     },
     
     handleError() {
-      this.isCreatingEvent = false;
+      this.isLoading = false;
     },
 
     async createEvent() {
-      this.isCreatingEvent = true;
+      this.isLoading = true;
       const fieldsToValidate = ['title', 'description', 'date_fin', 'date_debut']
 
       try {
@@ -464,6 +474,7 @@ export default {
           console.log('Some fields are invalid.')
         }
       } catch (error) {
+        
         console.error('Validation error:', error)
       }
     }

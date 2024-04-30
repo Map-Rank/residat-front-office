@@ -18,8 +18,10 @@ import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
 import EditEvent from '@/features/Event/Components/EditEvent.vue'
 import VulnerabilitiesForms from '@/components/common/Pages/VulnerabilitiesForms.vue'
 import SettingView from '@/features/Setting/SettingView.vue'
-import AccountPreferences from '@/features/Setting/Pages/AccountPreferences.vue'
-import UpdateProfile from '@/features/Setting/Pages/UpdateProfile.vue'
+import AccountPreferences from '@/features/Setting/Pages/AccountPreferences/AccountPreferences.vue'
+import UpdateProfile from '@/features/Setting/Pages/AccountPreferences/UpdateProfile.vue'
+import SecuritySetting from '@/features/Setting/Pages/SecuritySetting/SecuritySetting.vue'
+import UpdatePassword from '@/features/Setting/Pages/SecuritySetting/UpdatePassword.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -49,14 +51,24 @@ const router = createRouter({
       redirect: '/account-preferences', 
       children: [
         {
-          path: '/account-preferences', // Accessible at /settings/profile
+          path: '/account-preferences', 
           name: 'account-preferences',
           component: AccountPreferences,
         },
         {
-          path: '/account-preferences/update-profile', // Accessible at /settings/profile
+          path: '/account-preferences/update-profile', 
           name: 'update-profile',
           component: UpdateProfile,
+        },
+        {
+          path: '/security-setting', 
+          name: 'security-setting',
+          component: SecuritySetting,
+        },
+        {
+          path: '/security-setting/update-password', 
+          name: 'update-password',
+          component: UpdatePassword,
         },
 
       ],
@@ -74,6 +86,25 @@ const router = createRouter({
         mapSize: route.params.mapSize
       })
     },
+
+    {
+      path: '/create-post/:prePostContent?',
+      name: 'create-post',
+      component: CreatePost,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        prePostContent: route.params.prePostContent || '',
+      })
+    },
+    {
+      path: '/edit-post/:postId',
+      name: 'edit-post',
+      component: CreatePost,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        postId: route.params.postId || null,
+      })
+    },
     {
       path: '/search/result/:zoneId/:query?',
       name: 'search-result',
@@ -86,32 +117,22 @@ const router = createRouter({
       })
     },
     {
-      path: '/create-event',
+      path: '/create-event/:preEventTitle?',
       name: 'create-event',
       component: CreateEvent,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/edit-post/:postId',
-      name: 'edit-post',
-      component: CreatePost,
       meta: { requiresAuth: true },
       props: (route) => ({
-        postId: route.params.postId || null,
+        preEventTitle: route.params.preEventTitle || '',
       })
     },
+    
     {
       path: '/report',
       name: 'report',
       component: ReportView,
       meta: { requiresAuth: true }
     },
-    {
-      path: '/create-post',
-      name: 'create-post',
-      component: CreatePost,
-      meta: { requiresAuth: true }
-    },
+   
 
     {
       path: '/community',

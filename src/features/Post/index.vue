@@ -350,6 +350,7 @@ export default {
   font-style: normal;
   font-weight: 400;
   line-height: 20px;
+  text-align: justify;
 }
 
 @media only screen and (max-width: 480px) {
@@ -369,7 +370,7 @@ export default {
 
 @media only screen and (max-width: 375px) {
   .content {
-    font-size: 12px;
+    font-size: 13px;
     line-height: 16px;
   }
 }

@@ -30,6 +30,21 @@
         </div>
       </template>
     </div>
+    <div class="flex items-center mt-3">
+      <button
+            type="submit"
+            @click="updatePost"
+            :class="
+              this.isLoading
+                ? 'bg-gray-400 cursor-wait '
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+            "
+            :disabled="this.isLoading"
+            class="submit block w-full text-white py-1.5 rounded-full transition"
+          >
+          Update profile
+          </button>
+    </div>
   </div>
 </template>
 
@@ -47,7 +62,20 @@ export default {
     email: String,
     joinDate: String,
     website: String
-  }
+  },
+
+  data(){
+    return {
+      isLoading: false,
+    }
+  },
+  methods: {
+    updatePost() {
+      // console.log("test")
+      this.isLoading = true;
+      this.$router.push({ name: 'update-profile' })
+    },
+  },
 }
 </script>
 
