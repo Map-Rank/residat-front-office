@@ -86,6 +86,25 @@ const router = createRouter({
         mapSize: route.params.mapSize
       })
     },
+
+    {
+      path: '/create-post/:prePostContent?',
+      name: 'create-post',
+      component: CreatePost,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        prePostContent: route.params.prePostContent || '',
+      })
+    },
+    {
+      path: '/edit-post/:postId',
+      name: 'edit-post',
+      component: CreatePost,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        postId: route.params.postId || null,
+      })
+    },
     {
       path: '/search/result/:zoneId/:query?',
       name: 'search-result',
@@ -98,32 +117,22 @@ const router = createRouter({
       })
     },
     {
-      path: '/create-event',
+      path: '/create-event/:preEventTitle?',
       name: 'create-event',
       component: CreateEvent,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/edit-post/:postId',
-      name: 'edit-post',
-      component: CreatePost,
       meta: { requiresAuth: true },
       props: (route) => ({
-        postId: route.params.postId || null,
+        preEventTitle: route.params.preEventTitle || '',
       })
     },
+    
     {
       path: '/report',
       name: 'report',
       component: ReportView,
       meta: { requiresAuth: true }
     },
-    {
-      path: '/create-post',
-      name: 'create-post',
-      component: CreatePost,
-      meta: { requiresAuth: true }
-    },
+   
 
     {
       path: '/community',

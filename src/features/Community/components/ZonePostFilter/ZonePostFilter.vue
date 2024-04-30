@@ -62,8 +62,6 @@ export default {
   async created() {
     try {
       this.isLoading = true
-      console.log('==========> region lenght ' + this.props_regions.length)
-
       if (this.props_regions.length == 1) {
         await this.getRegions()
       }

@@ -219,6 +219,10 @@ export default {
   name: 'CreateEvent',
 
   async created() {
+    if(this.preEventTitle != null){
+          this.formData.title = this.preEventTitle
+        }
+
     const sectorStore = useSectorStore()
     const zoneSector = useZoneStore()
 
@@ -234,6 +238,7 @@ export default {
     }
   },
 
+  props: ['postId','preEventTitle'],
   data() {
     const router = useRouter()
     const authStore = useAuthStore()

@@ -112,6 +112,9 @@ export default {
           this.formData.content = this.post.content
           this.imagesFromHostToPreview = this.post.images
         }
+        if(this.prePostContent != null){
+          this.formData.content = this.prePostContent
+        }
 
         const sectorStore = useSectorStore()
 
@@ -123,7 +126,7 @@ export default {
       }
     }
   },
-  props: ['postId'],
+  props: ['postId','prePostContent'],
   data() {
     const router = useRouter()
     const postStore = usePostStore()
