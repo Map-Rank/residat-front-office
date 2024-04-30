@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="h-full">
     <div class="bg-white p-6 flex justify-center">
       <LoadingIndicator v-if="isLoading" />
@@ -47,6 +47,7 @@
                 :postImages="post.images"
                 :showMenu="true"
                 :post="post"
+                :zone-name="post.zone ? post.zone.name : 'zone name' "
               />
             </div>
           </div>

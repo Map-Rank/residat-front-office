@@ -8,7 +8,7 @@
       v-model="checked"
       @change="updateCheckedItems"
     />
-    <label :for="list.name" class="ml-2.5 text-body-dark font-Roboto text-base font-normal leading-6 transition-all checked:font-semibold" >
+    <label :for="list.name" class="ml-2.5 text-body-dark cursor-pointer  text-base font-normal leading-6 transition-all" >
       {{ list.name }}
     </label>
   </div>
@@ -25,9 +25,47 @@ export default {
       checked: false,
     };
   },
+  created() {
+    // Retrieve sectorIds from URL (if any)
+    const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
+
+    if(urlSectorIds.length == 0){
+      localStorage.removeItem('sectorId')
+    }
+    
+
+    // Retrieve sectorIds from local storage (if any)
+    const storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];
+
+    // Combine sectorIds from both sources (URL and local storage)
+    let initialSectorIds = [];
+    if (urlSectorIds.length > 0) {
+      initialSectorIds = urlSectorIds; // Use URL sector IDs if available
+    } else if (storedSectorIds.length > 0) {
+      initialSectorIds = storedSectorIds; // Use stored sector IDs if no URL IDs
+    }
+
+    // Check initial checkbox state based on the combined sectorIds
+    const isChecked = initialSectorIds.includes(this.list.id);
+    this.checked = isChecked;
+  },
   methods: {
     updateCheckedItems() {
       this.$emit('change', { list: this.list, checked: this.checked });
+
+      // Retrieve existing sectorIds from local storage (if any)
+      let storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];
+
+      if (this.checked) {
+        if (!storedSectorIds.includes(this.list.id)) {
+          storedSectorIds.push(this.list.id);
+        }
+      } else {
+        storedSectorIds = storedSectorIds.filter(id => id !== this.list.id);
+      }
+
+      // Save the updated sectorIds array to local storage
+      localStorage.setItem('sectorId', JSON.stringify(storedSectorIds));
     },
   },
 };
@@ -44,17 +82,7 @@ export default {
   height: 24px;
 }
 
-.checkbox-label {
-  margin-left: 10px;
-  color: var(--body-dark, #1B1B1B);
 
-/* Paragraphs/P2 */
-font-family: Roboto;
-font-size: 16px;
-font-style: normal;
-font-weight: 400;
-line-height: 24px; /* 150% */
-}
 
 .checkbox-input:checked + .checkbox-label {
   font-weight: 600;
@@ -62,10 +90,10 @@ line-height: 24px; /* 150% */
 
 label{
   color: var(--body-dark, #1b1b1b);
-  font-family: Roboto;
-  font-size: 14px;
+  font-size: 16px;
+  font-family: 'Poppins';
   font-style: normal;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 20px; /* 142.857% */
 }
 </style>

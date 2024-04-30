@@ -1,5 +1,5 @@
 <template>
-  <article class="bg-white rounded-lg overflow-hidden py-3 mx-2">
+  <article class="bg-white rounded-lg overflow-hidden py-3 sm:mx-2">
     <!-- Post Header with User Information -->
     <header class="flex justify-between px-5 mb-3">
       <UserPostInfo
@@ -53,7 +53,7 @@
 
     <!-- Post Content -->
     <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
-      <p class="p3 content font-medium">{{ postContent }}</p>
+      <p class=" content ">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
@@ -67,6 +67,8 @@
       <InteractionPostStatistics
         :comment_count="customPost.comment_count"
         :like_count="like_count"
+        :share_count="customPost.share_count"
+        @showPostDetails="showDetails(this.post.id)"
       />
 
       <!-- lower section  -->
@@ -88,21 +90,20 @@
       </div>
 
       <!-- comment section -->
-      <div v-if="showCommentBox" class="flex items-center mt-3">
+      <div v-if="showCommentBox" class="flex space-x-3 items-center mt-3 overflow-hidden">
         <AvatarPlaceholderVue :username="username" :size="20"></AvatarPlaceholderVue>
-        <div class="border w-full flex p-2 ml-5 rounded-lg">
+        <div class="border  p-2  rounded-lg">
           <input
             v-model="commentData.text"
             type="search"
             placeholder="Search "
-            class="flex-grow bg-transparent ml-3 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
+            class="flex bg-transparent w-3/4 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
           />
-          <input type="file" class="hidden" @change="handleFileChange" />
-          <img src="@\assets\icons\image-fill.svg" alt="" />
+       
         </div>
         <button
           @click.prevent="commentPost(this.commentData)"
-          class="btn bg-secondary-normal text-white ml-3 px-3 py-2 rounded-lg focus:outline-none"
+          class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
         >
           Post
         </button>
@@ -212,8 +213,15 @@ export default {
 
     editPost() {
       console.log('edit post ')
-      this.setpostToEdit(this.post)
-      this.$router.push({ name: 'create-post' })
+      // this.setpostToEdit(this.post)
+      // this.$router.push({ name: 'edit-post' })
+
+      this.$router.push({
+            name: 'edit-post',
+            params: {
+              postId: this.post.id,
+            }
+          })
     },
 
     async customFunction(index) {
@@ -338,30 +346,31 @@ export default {
 <style scoped>
 .content {
   color: var(--body-normal, #242424);
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
-  font-weight: 550;
+  font-weight: 400;
   line-height: 20px;
-  /* 142.857% */
+  text-align: justify;
 }
 
 @media only screen and (max-width: 480px) {
   .content {
-    /* Add your mobile styles here. For example: */
-    font-size: 10px;
+    font-size: 14px;
     line-height: 16px;
-    /* Adjust line height for smaller text */
   }
 
   h5 {
     color: var(--primary-normal, #021d40);
-
-    /* Desktop/H6-SemiBold */
-    font-family: Roboto;
-    font-size: 12px;
+    font-size: 14px;
     font-style: normal;
     font-weight: 600;
+    line-height: 16px;
+  }
+}
+
+@media only screen and (max-width: 375px) {
+  .content {
+    font-size: 13px;
     line-height: 16px;
   }
 }

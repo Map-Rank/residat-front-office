@@ -1,54 +1,51 @@
 <template>
   <SectionTitle :title="sectionTitle" />
-<div>
-
-  <div class=" grid align-middle items-start">
-    
-    <div class=" h-[250px] bg-white md:p-6 rounded-lg  " >
-      <div class="grid w-full">
-        <div class="w-full">
-          <label class="label inline-block mb-2">Choose Your Region</label>
-          <div v-if="isLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
-          </div>
-          <BaseDropdown
-            v-if="!isLoading"
-            :options="regions"
-            @selectedOptionId="returnZoneId"
-            @functionIdParams="getDivisions"
-            @input="returnZone"
-            
+  <div>
+    <div class="grid align-middle items-start">
+      <div class="bg-white p-2 md:p-3 rounded-lg">
+        <div class="grid w-full space-y-1">
+          <div class="w-full">
+            <p class="label inline-block mb-1">Choose Your Region</p>
+            <div v-if="isLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              v-if="!isLoading"
+              :options="regions"
+              @selectedOptionId="returnZoneId"
+              @functionIdParams="getDivisions"
+              @input="returnZone"
             />
           </div>
           <div class="w-full">
-            <label class="label inline-block mb-2">Choose Your Division</label>
+            <p class="label inline-block mb-1">Choose Your Division</p>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
             <BaseDropdown
-            v-if="!isLoading && !isDivisionLoading"
-            @selectedOptionId="returnZoneId"
-            :options="divisions"
-            @input="returnZone"
-            @functionIdParams="getSub_divisions"
+              v-if="!isLoading && !isDivisionLoading"
+              @selectedOptionId="returnZoneId"
+              :options="divisions"
+              @input="returnZone"
+              @functionIdParams="getSub_divisions"
             />
           </div>
           <div class="w-full">
-            <label class="label inline-block mb-2">Choose Your Sub-division</label>
+            <p class="label inline-block mb-1">Choose Your Sub-division</p>
             <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
             <BaseDropdown
-            v-if="!isLoading && !isSubdivisionLoading"
-            @selectedOptionId="returnZoneId"
-            @input="returnZone"
-            :options="sub_divisions"
-          />
+              v-if="!isLoading && !isSubdivisionLoading"
+              @selectedOptionId="returnZoneId"
+              @input="returnZone"
+              :options="sub_divisions"
+            />
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </template>
 
 <script>
@@ -65,8 +62,11 @@ export default {
   async created() {
     try {
       this.isLoading = true
+      console.log('==========> region lenght ' + this.props_regions.length)
 
-      await this.getRegions()
+      if (this.props_regions.length == 1) {
+        await this.getRegions()
+      }
     } catch (error) {
       console.error('Failed to load :', error)
     } finally {
@@ -85,30 +85,9 @@ export default {
       Subdivision_id: '1',
       isDivisionLoading: false,
       isSubdivisionLoading: false,
-      regions: [
-        {
-          id: 0,
-          name: 'Choose a region',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ],
-      divisions: [
-        {
-          id: 0,
-          name: 'Choose a division',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ],
-      sub_divisions: [
-        {
-          id: 0,
-          name: 'Choose a sub-division',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ]
+      regions: this.props_regions,
+      divisions: this.props_divisions,
+      sub_divisions: this.props_sub_divisions
     }
   },
   methods: {
@@ -116,8 +95,8 @@ export default {
       this.filterPostFunctionWithId(id)
     },
 
-    returnZone(zone){
-this.updateZone(zone)
+    returnZone(zone) {
+      this.updateZone(zone)
     },
 
     async getRegions() {
@@ -134,6 +113,7 @@ this.updateZone(zone)
         //delete all element and allow the first only
         this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
+        // this.sub_divisions = [this.sub_divisions[0]]
       } catch (error) {
         console.log(error)
       } finally {
@@ -155,7 +135,34 @@ this.updateZone(zone)
   },
   props: {
     filterPostFunctionWithId: {},
-    updateZone:{}
+    updateZone: {},
+    props_regions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a region'
+        }
+      ]
+    },
+    props_divisions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a division'
+        }
+      ]
+    },
+    props_sub_divisions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a sub-division'
+        }
+      ]
+    }
   },
   components: {
     BaseDropdown,
@@ -166,21 +173,12 @@ this.updateZone(zone)
 </script>
 
 <style scoped>
-.title {
-  font-family: Roboto;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px; /* 120% */
-  letter-spacing: -0.3px;
-}
-
 .label {
   color: var(--body-dark, #1b1b1b);
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
 }
 </style>

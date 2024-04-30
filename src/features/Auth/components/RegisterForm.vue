@@ -8,7 +8,7 @@
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
         <div class="flex-col space-y-6">
-          <h3 class="text-center">PERSONAL INFORMATION</h3>
+          <h2 class="text-center">PERSONAL INFORMATION</h2>
           <!-- First Name -->
           <div class="mb-6">
             <label class="inline-block mb-4">First Name</label>
@@ -183,7 +183,7 @@
       </div>
 
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
-        <h3 class="text-center">SPECIFIC INFORMATION</h3>
+        <h2 class="text-center">SPECIFIC INFORMATION</h2>
 
        <div class="mb-6">
          <label class="inline-block mb-2">Profile Picture</label>
@@ -261,7 +261,7 @@
           <div v-if="isLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
-          <div v-if="sectors || !isLoading" class="grid grid-cols-3 gap-7 content-between">
+          <div v-if="sectors || !isLoading" class="grid grid-cols-2 sm:grid-cols-3 gap-7  content-between">
             <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
               <vee-field
                 :name="sector.name"
@@ -595,14 +595,11 @@ export default {
 
 <style>
 label {
-  color: var(--content-secondary, #374151);
-
-  /* Paragraphs/P3/Medium */
-  font-family: Inter;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
 }
 
 span {

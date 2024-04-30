@@ -1,20 +1,20 @@
 <template>
-  <router-link :to="{ name: routerName }" 
+  <router-link :to="{ name: routerName  }" 
     class="icon-with-label relative"
-    :class="top || bottom ? 'grid place-items-center' : 'flex items-center'"
+    :class="[top || bottom ? 'grid place-items-center' : 'flex items-center' , customCss]"
     @mouseenter="hover = true"
     @mouseleave="hover = false"
     @click.prevent="handleClick()"
   >
       <!-- Label on Top -->
-      <span :class="this.textCss" v-show="top">
+      <p :class="this.textCss" v-show="top">
         {{ labelTextTop }}
-      </span>
+      </p>
 
       <!-- Label on left -->
-      <span :class="this.textCss" v-show="left">
-        {{ labelTextRight }}
-      </span>
+      <p :class="this.textCss" v-show="left">
+        {{ labelTextLeft }}
+      </p>
       <!-- Image -->
 
       <img
@@ -28,14 +28,14 @@
       />
 
       <!-- Label on Right -->
-      <span :class="this.textCss" v-show="right">
+      <p :class="this.textCss" v-show="right">
         {{ labelTextRight }}
-      </span>
+      </p>
 
       <!-- Label on Bottom -->
-      <span :class="this.textCss" class="text-primary-normal " v-show="bottom">
+      <p :class="this.textCss" class="text-primary-normal " v-show="bottom">
         {{ labelTextBottom }}
-      </span>
+      </p>
   </router-link>
 </template>
 
@@ -91,7 +91,8 @@ export default {
     labelTextTop: String,
     labelTextRight: String,
     labelTextBottom: String,
-    labelTextLeft: String
+    labelTextLeft: String,
+    customCss:String,
   },
   data() {
     return {
@@ -110,20 +111,8 @@ export default {
 
 <style scoped>
 
-span{
-  text-wrap: nowrap;
-}
-.label {
-  text-align: center;
-  font-family: Roboto;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 160% */
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
+
+
 
 .icon-with-label:hover {
   cursor: pointer;

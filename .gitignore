@@ -28,3 +28,8 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+
+#file
+public/storage
+.env

@@ -46,6 +46,7 @@
                 :comment_count="post.comment_count"
                 :postImages="post.images"
                 :showMenu="false"
+                :zone-name="post.zone ? post.zone.name : 'zone name' "
                 :post="post"
               />
             </div>

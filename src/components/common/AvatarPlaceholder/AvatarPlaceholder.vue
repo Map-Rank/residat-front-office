@@ -1,6 +1,6 @@
 <template>
     <div
-      class="avatar-placeholder rounded-full flex items-center justify-center"
+      class="avatar-placeholder  flex items-center justify-center"
       :style="{ backgroundColor: avatarColor, color: textColor }"
     >
       {{ initials }}
@@ -49,6 +49,7 @@
     align-items: center;
     padding: 10px;
     justify-content: center;
+    border-radius: 50%;
   }
   </style>
   

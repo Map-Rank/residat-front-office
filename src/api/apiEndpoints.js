@@ -2,10 +2,13 @@
 export const API_ENDPOINTS = {
   login: '/login',
   register: '/register',
-  createPost: '/create',
+  createPost: '/post',
+  post:'/post',
   getPosts: '/post',
   showSpecificPost: '/post',
   getUserPosts: '/profile',
+  UpdateUser: '/profile/update',
+  UpdatePassword: '/password/update',
   likePost: 'post/like',
   commentPost: 'post/comment',
   updatePost: 'post/update',
@@ -13,4 +16,6 @@ export const API_ENDPOINTS = {
   deletePost: 'post/delete',
   sharePost: 'post/share',
   zone: '/zone',
+  event: '/events',
+  getEvents: '/events',
 };

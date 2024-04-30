@@ -17,7 +17,7 @@ export default {
   props: {
     accept: {
       type: String,
-      default: 'image/*', 
+      default: 'image/*,video/*', 
     },
     iconImg: {
       type: String,
@@ -32,6 +32,7 @@ export default {
   methods: {
     handleFileChange(event) {
       const files = event.target.files;
+      console.log(files)
       if (files.length > 0) {
         // Emit an array of selected files
         this.$emit('handleFileChange', Array.from(files));
@@ -42,6 +43,15 @@ export default {
 };
 </script>
 
+
 <style scoped>
-/* Additional styling if necessary */
+span {
+  font-size: 14px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 500;
+  line-height: 24px;
+  letter-spacing: -0.3px;
+}
 </style>
+

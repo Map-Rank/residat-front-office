@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col space-y-6">
-    <h3 class="text-center">WELCOME BACK</h3>
+    <h2 class="text-center">WELCOME BACK</h2>
 
     <div>
       <AlertForm></AlertForm>
@@ -9,7 +9,7 @@
     <vee-form :validation-schema="schema" @submit="login">
       <!-- Email -->
       <div class="mb-6">
-        <label for="email" class="inline-block mb-2">Email</label>
+        <h3 for="email" class="inline-block mb-2">Email</h3>
         <vee-field
           v-model="userData.email"
           id="email"
@@ -22,7 +22,7 @@
       </div>
 
       <div class="relative w-full">
-        <label>Password</label>
+        <h3>Password</h3>
         <div class="flex items-center border border-gray-300 rounded overflow-hidden">
           <vee-field
             name="password"
@@ -146,12 +146,12 @@ export default {
 </script>
 
 <style>
-label {
-  color: var(--content-secondary, #374151);
-  font-family: Inter;
+h3 {
   font-size: 14px;
+
   font-style: normal;
-  font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
 }
 </style>

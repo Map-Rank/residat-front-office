@@ -7,7 +7,7 @@ import { createPinia } from 'pinia'
 import useSectorStore from '@/stores/sectorStore.js'
 import useAuthStore from '@/stores/auth.js'
 import InlineSvg from 'vue-inline-svg';
-
+// import useEventStore from './stores/eventStore.js'
 import App from './App.vue'
 import router from './router'
 
@@ -25,5 +25,6 @@ sectorStore.initializeStore()
 
 const authStore = useAuthStore()
 authStore.initializeAuthState()
+
 
 app.mount('#app')
