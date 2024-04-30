@@ -19,7 +19,7 @@
               </div>
             </div>
 
-            <h5 class="post-title hover:cursor-pointer">{{ truncateText(post.content ,70 )  }}</h5>
+            <h5 class="post-title hover:cursor-pointer" @click="viewPost(post.id)">{{ truncateText(post.content ,70 )  }}</h5>
           </div>
         </li>
       </ul>
@@ -67,6 +67,9 @@ export default {
       console.log(id)
       this.$router.push({ name: 'view-profile-user', params: { id: id } })
     },
+    viewPost(id){
+      this.$router.push({ name: 'show-post', params: { id: id } })
+    }
   }
 }
 </script>
