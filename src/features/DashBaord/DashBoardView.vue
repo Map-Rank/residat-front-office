@@ -234,7 +234,7 @@ export default {
               this.displayStatistics = true
               // this.inSubDivision = true
               this.getReport(this.zone.id)
-
+              return 
             }
             // console.log(this.zone)
            
