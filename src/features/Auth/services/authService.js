@@ -48,11 +48,11 @@ const UpdateUser = async (userData, authStore, onSuccess, onError) => {
     // Append user data to formData
     formData.append('first_name', userData.first_name)
     formData.append('last_name', userData.last_name)
-    formData.append('email', userData.email)
+    // formData.append('email', userData.email)
     formData.append('phone', userData.phone)
     formData.append('date_of_birth', userData.date_of_birth)
     formData.append('gender', userData.gender)
-    formData.append('zone_id', userData.zone)
+    // formData.append('zone_id', userData.zone)
     // formData.append('avatar', userData.avatar)
     formData.append('_method', 'PUT')
     if (userData.avatar !== null) {

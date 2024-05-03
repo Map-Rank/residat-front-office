@@ -79,9 +79,7 @@
       <!-- Logo -->
       <div class="col-span-3">
         <div class="flex flex-col md:flex-row items-center md:space-x-5">
-          <a href="/dashboard">
-            <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="" />
-          </a>
+          <app-logo></app-logo>
 
           <div class="menu relative">
             <icon-with-label
@@ -230,7 +228,7 @@ export default {
           labelText: 'Dashboard',
           isActive: false,
           bottom: true,
-          routerName: 'dashbaord'
+          routerName: 'dashboard'
         },
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
@@ -241,9 +239,9 @@ export default {
           routerName: 'chat-room'
         },
         {
-          svgContent: '\\assets\\icons\\notification-outline.svg',
-          svgContentHover: '\\assets\\icons\\notification-fill.svg',
-          labelText: 'Notification',
+          svgContent: '\\assets\\icons\\event-outline.svg',
+          svgContentHover: '\\assets\\icons\\event-fill.svg',
+          labelText: 'Event',
           isActive: false,
           bottom: true,
           routerName: 'event'

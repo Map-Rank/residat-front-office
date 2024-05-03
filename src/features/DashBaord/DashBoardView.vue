@@ -401,7 +401,7 @@ export default {
 
           console.log(this.selectedZone)
           this.$router.push({
-            name: 'dashbaord',
+            name: 'dashboard',
             params: {
               zoneId: 0,
               parentId: this.presentMapId,

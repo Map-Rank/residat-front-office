@@ -3,7 +3,7 @@ import useAuthStore from '../stores/auth.js' // Adjust this import path as neces
 
 import CommunityView from '../features/Community/CommunityView.vue'
 import ChatRoomView from '../features/ChatRoom/ChatRoomView.vue'
-import DashBoardView from '../features/DashBaord/DashBoardView.vue'
+import DashBoardView from '@/features/DashBaord/DashBoardView.vue'
 import AuthView from '../features/Auth/AuthView.vue'
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue'
 import CreatePost from '../features/CreatePost/CreatePost.vue'
@@ -75,8 +75,8 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/dashbaord/:zoneId?/:parentId?/:zoneName?/:mapSize?',
-      name: 'dashbaord',
+      path: '/dashboard/:zoneId?/:parentId?/:zoneName?/:mapSize?',
+      name: 'dashboard',
       component: DashBoardView,
       meta: { requiresAuth: true },
       props: (route) => ({
@@ -202,7 +202,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'authentication' })
   } else if (to.name === 'authentication' && authStore.user != null) {
-    next({ name: 'dashbaord' }) 
+    next({ name: 'dashboard' }) 
   } else {
     next()
   }

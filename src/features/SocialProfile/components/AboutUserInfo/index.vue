@@ -2,7 +2,7 @@
   <div class="bg-white rounded-lg p-6 shadow">
     <div class="infobox mb-2 pb-2">
         <h4 class="text-lg text-primary-normal font-bold mb-2">About {{ username }}</h4>
-        <p class="text-sm text-gray-700 ">{{ description }}</p>
+        <p class=" text-gray-700 ">{{ description }}</p>
     </div>
     <div class="space-y-2">
       <template v-if="location">
@@ -30,7 +30,9 @@
         </div>
       </template>
     </div>
-    <div class="flex items-center mt-3">
+    <div 
+    v-if="showUpdateProfile"
+    class="flex items-center mt-3">
       <button
             type="submit"
             @click="updatePost"
@@ -61,7 +63,10 @@ export default {
     phone: String,
     email: String,
     joinDate: String,
-    website: String
+    website: String,
+    showUpdateProfile:{
+      type:Boolean,
+    default:false}
   },
 
   data(){
@@ -85,16 +90,7 @@ export default {
 .infobox{
     border-bottom: 0.1px solid var(--gray-dark, #505050);
 }
-p {
-  color: var(--gray-dark, #505050);
 
-  /* Captions/C2 */
-  font-family: Roboto;
-  font-size: 10px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 160% */
-}
 span {
   color: var(--gray-dark, #505050);
   text-align: center;
