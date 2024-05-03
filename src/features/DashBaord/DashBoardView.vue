@@ -362,13 +362,16 @@ export default {
   },
 
   methods: {
-    getReport(zoneId) {
+    async getReport(zoneId) {
       // console.log(zoneId);
       const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
       // console.log(authToken);
-      const response = makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${zoneId}`, authToken)
-
-      console.log(response.data.data)
+      const response = await makeApiGetCall(`http://localhost:8000/api/reports/${zoneId}`, authToken)
+      
+      console.log(response)
+      this.mapSvgPath = response.data.data.vector.path;
+      this.vectorKeys = response.data.data.vector.keys;
+      this.isLoadingMap = false;
     },
 
     updateHazardId(hazardId) {
