@@ -366,7 +366,7 @@ export default {
       // console.log(zoneId);
       const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
       // console.log(authToken);
-      const response = await makeApiGetCall(`http://localhost:8000/api/reports/${zoneId}`, authToken)
+      const response = await makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${zoneId}`, authToken)
       
       console.log(response)
       this.mapSvgPath = response.data.data.vector.path;
