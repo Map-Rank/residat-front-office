@@ -214,7 +214,7 @@ export default {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
 
-        // console.log(this.zoneId);
+        console.log(this.zoneId);
 
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
@@ -239,7 +239,7 @@ export default {
             // console.log(this.zone)
            
 
-            // this.zone = zones[0]
+            this.zone = zones[0]
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
             this.vectorKeys = this.zone.vector?.keys
