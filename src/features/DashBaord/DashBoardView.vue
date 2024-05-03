@@ -185,6 +185,8 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
+import { makeApiGetCall } from '@/api/api'
+import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
@@ -222,19 +224,25 @@ export default {
         } else {
           const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
 
-          console.log(zones)
+          // console.log(zones)
 
           if (zones.length > 0) {
-            if (this.zone.id > 69) {
+            console.log(zones)
+            // console.log(zones[0].level_id);
+            if (zones[0].level_id == 4) {
+              this.zone = zones[0]
               this.displayStatistics = true
-              this.inSubDivision = true
+              // this.inSubDivision = true
+              this.getReport(this.zone.id)
 
             }
+            // console.log(this.zone)
+           
 
-            this.zone = zones[0]
+            // this.zone = zones[0]
             this.presentMapId = this.zone.id
-            this.mapSvgPath = this.zone.vector.path
-            this.vectorKeys = this.zone.vector.keys
+            this.mapSvgPath = this.zone.vector?.path
+            this.vectorKeys = this.zone.vector?.keys
           } else {
             this.isErrorLoadMap = true
             this.vectorKeys = [0]
@@ -246,17 +254,18 @@ export default {
     },
     hazardId:{
       immediate: true,
-    handler(newVal, oldVal) {
+    // handler(newVal, oldVal) {
+    //   console.log(this.zone)
+    //   // if(this.inSubDivision){
+    //     // console.log(this.inSubDivision);
+    //     // const zones = this.getReport(this.hazardId,this.zoneId)
 
-      if(this.inSubDivision){
-        const zones = this.getReport(this.hazardId,this.zoneId)
-
-        this.zone = zones[0]
-            this.presentMapId = this.zone.id
-            this.mapSvgPath = this.zone.vector.path
-            this.vectorKeys = this.zone.vector.keys
-      }
-    }
+    //     this.zone = zones[0]
+    //         this.presentMapId = this.zone.id
+    //         this.mapSvgPath = this.zone.vector?.path
+    //         this.vectorKeys = this.zone.vector?.keys
+    //   // }
+    // }
     }
   },
 
@@ -353,8 +362,12 @@ export default {
   },
 
   methods: {
-    getReport(type, zoneId) {
+    getReport(zoneId) {
+      console.log(zoneId);
+      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+      const response = makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${this.zone.id}`, authToken)
 
+      console.log(response.data.data)
     },
 
     updateHazardId(hazardId) {
