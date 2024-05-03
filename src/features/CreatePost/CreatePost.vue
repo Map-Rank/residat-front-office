@@ -109,6 +109,7 @@ export default {
           this.isEditing = true
 
           this.post = await getSpecificPost(this.postId)
+          this.formData.id = this.post.id
           this.formData.content = this.post.content
           this.imagesFromHostToPreview = this.post.images
         }
@@ -148,6 +149,7 @@ export default {
       imagesFromHostToPreview: [],
       zoneId: '',
       formData: {
+        id:'',
         content: '',
         images: [],
         videos: [],

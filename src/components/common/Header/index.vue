@@ -264,7 +264,6 @@ export default {
     },
 
     menuMethods(index) {
-      console.log('click')
       switch (index) {
         case 0:
           this.$router.push({ name: 'social-profile' })

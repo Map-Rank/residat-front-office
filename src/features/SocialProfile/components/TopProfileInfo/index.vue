@@ -4,7 +4,7 @@
     <div>
       <img
         v-if="profileImageUrl"
-        :src="formatHostImageUrl(profileImageUrl)"
+        :src="profileImageUrl"
         alt="Profile Image"
         class="w-14 h-14 rounded-full mb-4"
       />
