@@ -24,6 +24,7 @@
             :email="userPost.email"
             :joinDate="formatDate(userPost.created_at)"
             :website="'your-website-url.com'"
+            :showUpdateProfile="true"
           />
         </aside>
 

@@ -55,7 +55,7 @@
                   </div>
         
                   <!-- Email -->
-                  <div class="mb-6">
+                  <!-- <div class="mb-6">
                     <label class="inline-block mb-2">Email</label>
                     <vee-field
                       name="email"
@@ -66,7 +66,7 @@
                       placeholder="Enter Email"
                     />
                     <ErrorMessage class="text-danger-normal" name="email" />
-                  </div>
+                  </div> -->
         
                   <!-- phone -->
                   <div class="mb-6">
@@ -97,7 +97,7 @@
                     </select>
                   </div>
         
-                  <TitleSubtitle label="Location" message="You can change your location" />
+                  <!-- <TitleSubtitle label="Location" message="You can change your location" />
 
 
                   <div class="flex flex-row space-x-4 justify-between">
@@ -137,7 +137,7 @@
                       v-if="!isLoading && !isSubdivisionLoading"
                       :options="sub_divisions"
                     />
-                  </div>
+                  </div> -->
         
                   <div class="sm:px-">
                     <div class="flex justify-center">
@@ -163,10 +163,10 @@
   import { AlertStates } from '@/components'
   import useAlertStore from '@/stores/alertStore'
   import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
-  import BaseDropdown from '@/components/base/BaseDropdown.vue'
-  import { getZones } from '@/services/zoneService.js'
-  import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-  import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
+  // import BaseDropdown from '@/components/base/BaseDropdown.vue'
+  // import { getZones } from '@/services/zoneService.js'
+  // import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
+  // import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
   import {UpdateUser} from '@/features/Auth/services/authService.js'
   
   export default {
@@ -276,9 +276,9 @@
   },
   components: {
     AlertForm,
-    BaseDropdown,
-    LoadingIndicator,
-    TitleSubtitle
+    // BaseDropdown,
+    // LoadingIndicator,
+    // TitleSubtitle
   },
 
   computed: {
@@ -301,37 +301,37 @@
       this.formData.avatar = null;
     }
   },
-    async getRegions() {
-      try {
-        this.regions = this.regions.concat(await getZones(2, null))
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    // async getRegions() {
+    //   try {
+    //     this.regions = this.regions.concat(await getZones(2, null))
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
 
-    async getDivisions(parent_id) {
-      try {
-        this.isDivisionLoading = true
-        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
-        this.divisions = this.divisions.concat(await getZones(null, parent_id))
-      } catch (error) {
-        console.log(error)
-      } finally {
-        this.isDivisionLoading = false
-      }
-    },
+    // async getDivisions(parent_id) {
+    //   try {
+    //     this.isDivisionLoading = true
+    //     this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
+    //     this.divisions = this.divisions.concat(await getZones(null, parent_id))
+    //   } catch (error) {
+    //     console.log(error)
+    //   } finally {
+    //     this.isDivisionLoading = false
+    //   }
+    // },
 
-    async getSub_divisions(parent_id) {
-      this.isSubdivisionLoading = true
-      try {
-        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
-        this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
-      } catch (error) {
-        console.log(error)
-      } finally {
-        this.isSubdivisionLoading = false
-      }
-    },
+    // async getSub_divisions(parent_id) {
+    //   this.isSubdivisionLoading = true
+    //   try {
+    //     this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
+    //     this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
+    //   } catch (error) {
+    //     console.log(error)
+    //   } finally {
+    //     this.isSubdivisionLoading = false
+    //   }
+    // },
 
     handleSelectedOptionIdChange(selectedOptionId) {
       this.zone_id = selectedOptionId
@@ -354,34 +354,7 @@
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword
     },
-    async nextStep() {
-      const fieldsToValidate = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'password',
-        'confirm_password'
-      ]
 
-      try {
-        const validationResults = await Promise.all(
-          fieldsToValidate.map((field) => this.$refs.form.validateField(field))
-        )
-
-        // Check if all fields are valid
-        const allFieldsValid = validationResults.every((result) => result.valid)
-
-        // Proceed to the next step only if all fields are valid
-        if (allFieldsValid) {
-          this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
-        } else {
-          console.log('Some fields are invalid.')
-        }
-      } catch (error) {
-        console.error('Validation error:', error)
-      }
-    },
 
  
 
@@ -403,11 +376,11 @@
 
     async submitForm() {
 
-      if (this.subDivision_id == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
+      // if (this.subDivision_id == '') {
+      //   this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
 
-        return
-      }
+      //   return
+      // }
 
   if (!(this.formData.avatar instanceof File)) {
     // console.log('====> is not of type file');

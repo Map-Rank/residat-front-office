@@ -239,7 +239,7 @@ export default {
             // console.log(this.zone)
            
 
-            // this.zone = zones[0]
+            this.zone = zones[0]
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
             this.vectorKeys = this.zone.vector?.keys
@@ -400,7 +400,7 @@ export default {
 
           console.log(this.selectedZone)
           this.$router.push({
-            name: 'dashbaord',
+            name: 'dashboard',
             params: {
               zoneId: 0,
               parentId: this.presentMapId,

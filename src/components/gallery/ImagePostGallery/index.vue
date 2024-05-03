@@ -32,7 +32,7 @@
     </div>
 
     <!-- Container for the rest of the images displayed in a single row -->
-    <div v-if="Images.length > 2" class="flex gap-0.5 overflow-hidden">
+    <div v-if="Images.length > 3" class="flex gap-0.5 overflow-hidden  h-[350px]">
       <img
         v-for="(image, index) in Images.slice(1, 4)"
         :src="formatHostImageUrl(image.url)"
@@ -45,7 +45,7 @@
       <!-- "See more" box if there are more images than can be shown -->
       <div
         v-if="Images.length > 4"
-        class="flex-grow h-auto flex justify-center items-center bg-black opacity-50 cursor-pointer"
+        class="flex-grow h-auto flex justify-center items-center bg-black opacity-50 cursor-pointer "
       >
         +{{ Images.length - 4 }} more
       </div>

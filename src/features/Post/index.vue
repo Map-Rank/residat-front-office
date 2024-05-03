@@ -90,14 +90,14 @@
       </div>
 
       <!-- comment section -->
-      <div v-if="showCommentBox" class="flex space-x-3 items-center mt-3 overflow-hidden">
+      <div v-if="showCommentBox" class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full">
         <AvatarPlaceholderVue :username="username" :size="20"></AvatarPlaceholderVue>
-        <div class="border  p-2  rounded-lg">
+        <div class="border  p-2  rounded-lg flex-grow">
           <input
             v-model="commentData.text"
             type="search"
             placeholder="Search "
-            class="flex bg-transparent w-3/4 focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
+            class=" bg-transparent w-full focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
           />
        
         </div>
