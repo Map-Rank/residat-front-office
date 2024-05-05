@@ -9,7 +9,7 @@
       <input
         type="text"
         v-model="content"
-        placeholder="What's on your mind?"
+        :placeholder="$t('input_placeholder')"
         class="flex-grow px-4 py-2 border rounded-full focus:outline-none"
       />
     </div>
@@ -18,7 +18,7 @@
       <!-- Live Video -->
 
       <ButtonUi
-        :label="'Post'"
+      :label="$t('post')"
         color="bg-secondary-normal "
         :isRoundedFull="true"
         customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
@@ -27,7 +27,7 @@
         >
       </ButtonUi>
       <ButtonUi
-        :label="'Create Event'"
+      :label="$t('create_event')"
         color="bg-secondary-normal "
         :isRoundedFull="true"
         customCss="justify-center item-center  hover:bg-secondary-hover font-medium"

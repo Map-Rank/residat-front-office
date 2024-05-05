@@ -3,7 +3,7 @@
     <div class="bg-white-normal h-10">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
         <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>Previous Map</p>
+        <p>{{ $t('previous_map') }}</p>
       </div>
     </div>
 
@@ -14,7 +14,7 @@
         <div :class="{ hidden: !displayStatistics }">
           <div class="">
             <button-ui
-              :label="'Water Risk'"
+              :label="$t('water_risk')"
               :color="'text-white'"
               :textCss="'text-white font-bold text-center'"
               :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
@@ -40,7 +40,7 @@
           <div class="">
             <div class="">
               <button-ui
-                :label="'Key Actors'"
+                :label="$t('key_actors')"
                 :color="'text-white'"
                 :textCss="'text-white font-bold text-center'"
                 :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
@@ -50,7 +50,7 @@
             </div>
 
             <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
-              <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" :showAll="showAllActors" />
+              <key-actors :sectionTitle="$t('key_actors')" :actors="actors" :showAll="showAllActors" />
             </div>
           </div>
         </div>
@@ -145,7 +145,7 @@
     >
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
-          label="Degree of Impact"
+          :label="$t('degree_of_impact')"
           canvasId="impactChart"
           :percentage="20"
         ></DegreeImpactDoughnutChart>
@@ -154,7 +154,7 @@
         <BaseBarChart
           :canvas-id="'climateVulnerabilityIndex'"
           :data="climateVulnerabilityIndex"
-          label="Climate Vulnerability Index"
+          :label="$t('climate_vulnerability_index')"
           @clickItem="displayChartItemModalStats"
         ></BaseBarChart>
       </div>
@@ -163,7 +163,7 @@
           @clickItem="displayChartItemModalStats"
           :canvas-id="'climateRiskThreats'"
           :data="climateRiskThreats"
-          label="Climate Risk Threats"
+          :label="$t('climate_risk_threats')"
           :isHorizontal="true"
           :barSpacing="30"
         ></BaseBarChart>
@@ -186,7 +186,7 @@ import { getSpecificZones, getSpecificMapZones } from '../../services/zoneServic
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { makeApiGetCall } from '@/api/api'
-import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'

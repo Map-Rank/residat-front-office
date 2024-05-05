@@ -6,9 +6,9 @@
       :style="computedBannerImage"
     >
       <h2
-        class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase"
+        class="text-white  font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase"
       >
-        WELCOME TO {{ zoneName }}
+      {{ $t('welcome_to') }} {{ zoneName }}
       </h2>
     </div>
 
@@ -141,7 +141,7 @@
                     :postDate="post.humanize_date_creation"
                     :postContent="post.content"
                     :liked="post.liked"
-                    :userProfileImage="`${imageHost}${post.creator[0].avatar}`"
+                    :userProfileImage="`${post.creator[0].avatar}`"
                     :id="`${post.creator[0].id}`"
                     :like_count="post.like_count"
                     :comment_count="post.comment_count"
@@ -309,19 +309,19 @@ export default {
         ;(this.default_regions = [
           {
             id: 0,
-            name: 'Choose a region'
+            name:this.$t('choose_your_region')
           }
         ]),
           (this.default_divisions = [
             {
               id: 0,
-              name: 'Choose a division'
+              name:this.$t('choose_your_division')
             }
           ]),
           (this.default_sub_divisions = [
             {
               id: 0,
-              name: 'Choose a sub-division'
+              name: this.$t('choose_your_subdivision')
             }
           ])
 

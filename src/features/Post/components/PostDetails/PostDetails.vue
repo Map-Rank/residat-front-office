@@ -56,7 +56,7 @@
                   <icon-with-label
                   :svgContentHover="'\\assets\\icons\\heart-fill.svg'"
                   :svgContent="'\\assets\\icons\\heart-outline.svg'"
-                  :labelTextRight="'Like'"
+                  :labelTextRight="$t('like')"
                   :iconDesktopSize="'w-6 h-6'"
                   :iconMobileSize="'w-5 h-5'"
                   :isActive="post.liked"
@@ -70,12 +70,12 @@
                     <img 
                     
                     src="@\assets\icons\heart-fill.svg" alt="" />
-                    <span class="caption-c1-bold">{{ post.like_count }}  likes</span>
+                    <span class="caption-c1-bold">{{ post.like_count }}  {{ $t('like') }}s</span>
                     <img 
                     
                     
                     src="@\assets\icons\share-fill.svg" alt="" />
-                    <span @click="openShareModal()" class="ml-4 caption-c1-bold cursor-pointer">{{ post.share_count }} Shares</span>
+                    <span @click="openShareModal()" class="ml-4 caption-c1-bold cursor-pointer">{{ post.share_count }} {{ $t('share') }}s</span>
                   </div>
                 </div>
               </div>
@@ -162,8 +162,8 @@ export default {
     ...mapActions(usePostStore, ["togglePostDetails"]),
 
     openShareModal() {
-      // this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
-      this.modalStore.openModal(`https://dev.residat.com/show-post`)
+      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
+      // this.modalStore.openModal(`https://dev.residat.com/show-post`)
     },
 
     async commentPost() {

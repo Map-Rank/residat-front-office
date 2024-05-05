@@ -5,7 +5,7 @@
       <app-logo></app-logo>
 
       <div class=" items-center ">
-        <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
+        <SearchBar />
       </div>
 
       <div class="menu relative">
@@ -217,7 +217,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\community-outline.svg',
           svgContentHover: '\\assets\\icons\\community-fill.svg',
-          labelText: 'Community',
+          labelText: this.$t('community'),
           isActive: false,
           bottom: true,
           routerName: 'community'
@@ -225,7 +225,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\dashboard-outline.svg',
           svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-          labelText: 'Dashboard',
+          labelText: this.$t('dashboard'),
           isActive: false,
           bottom: true,
           routerName: 'dashboard'
@@ -233,7 +233,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
           svgContentHover: '\\assets\\icons\\chat-fill.svg',
-          labelText: 'Chat Room',
+          labelText: this.$t('chat_room'),
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
@@ -241,7 +241,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\event-outline.svg',
           svgContentHover: '\\assets\\icons\\event-fill.svg',
-          labelText: 'Event',
+          labelText: this.$t('event'),
           isActive: false,
           bottom: true,
           routerName: 'event'

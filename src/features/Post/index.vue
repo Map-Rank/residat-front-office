@@ -91,7 +91,7 @@
 
       <!-- comment section -->
       <div v-if="showCommentBox" class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full">
-        <AvatarPlaceholderVue :username="username" :size="20"></AvatarPlaceholderVue>
+        <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
         <div class="border  p-2  rounded-lg flex-grow">
           <input
             v-model="commentData.text"
@@ -105,7 +105,7 @@
           @click.prevent="commentPost(this.commentData)"
           class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
         >
-          Post
+        {{ $t('post') }}
         </button>
       </div>
     </footer>
@@ -127,7 +127,6 @@ import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
 import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
-import AvatarPlaceholderVue from '../../components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
 
 import useModalStore from '@/stores/modalStore.js'
 
@@ -159,21 +158,21 @@ export default {
         {
           svgContent: '\\assets\\icons\\heart-outline.svg',
           svgContentHover: '\\assets\\icons\\heart-fill.svg',
-          labelText: 'Like',
+          labelText:  this.$t('like'),
           isActive: this.customLiked,
           right: true
         },
         {
           svgContent: '\\assets\\icons\\comment-outline.svg',
           svgContentHover: '\\assets\\icons\\comment-fill.svg',
-          labelText: 'Comment',
+          labelText: this.$t('comment'),
           isActive: this.isCommenting,
           right: true
         },
         {
           svgContent: '\\assets\\icons\\share-fill.svg',
           svgContentHover: '\\assets\\icons\\share-fill.svg',
-          labelText: 'Share',
+          labelText:  this.$t('share'),
           right: true
         }
       ]
@@ -310,7 +309,6 @@ export default {
     PostDetails,
     ButtonUi,
     ImagePostGallery,
-    AvatarPlaceholderVue
   },
   computed: {
     ...mapWritableState(usePostStore, ['showPostDetails']),
