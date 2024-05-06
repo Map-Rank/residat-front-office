@@ -19,7 +19,7 @@ const messages = {
     fr: fr
 };
 const i18n = createI18n({
-    locale: 'en', 
+    locale: 'fr', 
     fallbackLocale: 'en', 
     messages 
 });

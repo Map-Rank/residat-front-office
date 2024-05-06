@@ -64,7 +64,7 @@
           class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
           :disabled="this.isLoading"
         >
-          Log In
+        {{ $t('login') }}
         </button>
       </div>
     </vee-form>

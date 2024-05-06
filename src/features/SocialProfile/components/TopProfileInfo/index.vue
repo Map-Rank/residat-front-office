@@ -5,7 +5,7 @@
       <img
         v-if="profileImageUrl"
         :src="profileImageUrl"
-        alt="Profile Image"
+        :alt="$t('profile_image_alt')"
         class="w-14 h-14 rounded-full mb-4"
       />
 
@@ -22,11 +22,11 @@
     <!-- Followers and Articles/Posts Info -->
     <div class="flex space-x-3 mb-4">
       <p>
-        <span>{{ followersCount }}</span> followers
+        <span>{{ followersCount }}</span> {{ $t('followers_count') }}
       </p>
       ·
       <p>
-        <span>{{ postsCount }}</span> Articles/Posts
+        <span>{{ postsCount }}</span> {{ $t('posts_count') }}
       </p>
     </div>
   </div>

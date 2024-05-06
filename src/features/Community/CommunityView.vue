@@ -182,7 +182,7 @@
                 <div class="hidden lg:block">
                   <event-alert-box
                     v-if="shouldDisplayEventAlert"
-                    sectionTitle="Upcoming Event"
+                    :sectionTitle="$t('section_title_upcoming_event')"
                     :events="events"
                   />
                 </div>

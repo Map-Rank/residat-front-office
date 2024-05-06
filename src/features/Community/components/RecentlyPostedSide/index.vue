@@ -38,7 +38,7 @@ export default {
     return {
       formatDate,
       truncateText,
-      sectionTitle:'Recently Posted'
+      sectionTitle:this.$t('section_title_recently_posted')
     }
   },
   computed: {

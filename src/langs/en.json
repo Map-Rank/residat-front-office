@@ -94,7 +94,23 @@
   "password_management": "Password Management",
   "phone_number": "Phone Number",
   "update_password": "Update Password",
-  "currrent_pwd":"Current Password"
+  "currrent_pwd":"Current Password",
+
+  "section_title_upcoming_event": "Upcoming Event",
+  "section_title_recently_posted": "Recently Posted",
+
+  "profile_image_alt": "Profile Image",
+  "followers_count": "followers",
+  "posts_count": "Articles/Posts",
+
+  "about_label": "About",
+  "from_label": "From",
+  "location_icon_alt": "Location",
+  "phone_icon_alt": "Phone",
+  "email_icon_alt": "Email",
+  "join_date_icon_alt": "Join Date",
+  "update_profile_button": "Update profile",
+  "your_description_here": "Your description here"
 
 
 
