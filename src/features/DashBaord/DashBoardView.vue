@@ -94,7 +94,9 @@
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <div class="h-[70vh]">
             <inline-svg
-              :title="hoverMapText"
+              
+              @mousemove="handleStateHover"
+              @mouseout="handleStateLeave"
               fill-opacity="1"
               :color="'#fff'"
               fill="black"

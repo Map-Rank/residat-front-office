@@ -306,9 +306,11 @@ export default {
     },
 
     toggleMenu() {
+      this.isMenulangauge = false
       this.isMenuVisible = !this.isMenuVisible
     },
     toggleMenuLangauge() {
+      this.isMenuVisible =false
       this.isMenulangauge = !this.isMenulangauge
     },
 
