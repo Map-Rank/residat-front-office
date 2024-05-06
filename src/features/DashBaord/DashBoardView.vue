@@ -358,13 +358,23 @@ export default {
   },
 
   methods: {
-    getReport(zoneId,hazardId) {
-      console.log(zoneId);
-      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-      const response = makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${this.zone.id}`, authToken)
-
-      console.log(response.data.data)
-    },
+  async getReport(zoneId, hazardId) {
+    console.log(zoneId);
+  
+    if (hazardId) {
+      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken);
+      let params = new URLSearchParams({ hazardId: hazardId.toString() });
+      let response = await makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${zoneId}?${params.toString()}`, authToken);
+      console.log(response.data.data);
+      return response;
+    } else {
+      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken);
+      const response = await makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${zoneId}`, authToken);
+      console.log(response.data.data);
+      return response;
+    }
+  },
+  
 
     updateHazardId(hazardId) {
       this.hazardId = hazardId
