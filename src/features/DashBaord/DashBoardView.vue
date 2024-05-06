@@ -219,7 +219,7 @@ export default {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
 
-        // console.log(this.zoneId);
+        console.log(this.zoneId);
 
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
@@ -239,6 +239,7 @@ export default {
               this.displayStatistics = true
               // this.inSubDivision = true
               this.getReport(this.zone.id)
+              return 
             }
 
             this.zone = zones[0]
