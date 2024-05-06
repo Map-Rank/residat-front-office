@@ -50,7 +50,11 @@
             </div>
 
             <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
-              <key-actors :sectionTitle="$t('key_actors')" :actors="actors" :showAll="showAllActors" />
+              <key-actors
+                :sectionTitle="$t('key_actors')"
+                :actors="actors"
+                :showAll="showAllActors"
+              />
             </div>
           </div>
         </div>
@@ -59,7 +63,7 @@
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div class="col-span-1 md:col-span-2 lg:col-span-1">
         <div></div>
-        <div class="mt-2 sm:mt-0"  v-if="vectorKeys && vectorKeys.length > 0">
+        <div class="mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
             <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
             <span
@@ -234,10 +238,7 @@ export default {
               this.displayStatistics = true
               // this.inSubDivision = true
               this.getReport(this.zone.id)
-
             }
-            // console.log(this.zone)
-           
 
             this.zone = zones[0]
             this.presentMapId = this.zone.id
@@ -252,16 +253,13 @@ export default {
         this.isLoadingMap = false
       }
     },
-    hazardId:{
+    hazardId: {
       immediate: true,
-    handler() {
-
-      if (this.zones.level_id == 4) {
-
-              this.getReport(this.zone.id,this.hazardId)
-
-            }
-    }
+      handler() {
+        // if (this.zone.level_id == 4) {
+        //         this.getReport(this.zone.id,this.hazardId)
+        //       }
+      }
     }
   },
 
@@ -287,7 +285,7 @@ export default {
       isErrorLoadMap: false,
       displayStatistics: true,
       hazardId: '',
-      inSubDivision:false,
+      inSubDivision: false,
       modalStates: {
         healthVisible: false,
         agricultureVisible: false,
@@ -323,6 +321,8 @@ export default {
         { id: 2, name: 'Drought' },
         { id: 3, name: 'Water Stress' }
       ],
+
+      
       actors: [
         {
           title: 'Unicef',
@@ -358,26 +358,34 @@ export default {
   },
 
   methods: {
-  async getReport(zoneId, hazardId) {
-    console.log(zoneId);
-  
-    if (hazardId) {
-      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken);
-      let params = new URLSearchParams({ hazardId: hazardId.toString() });
-      let response = await makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${zoneId}?${params.toString()}`, authToken);
-      console.log(response.data.data);
-      return response;
-    } else {
-      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken);
-      const response = await makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${zoneId}`, authToken);
-      console.log(response.data.data);
-      return response;
-    }
-  },
-  
+    async getReport(zoneId, hazardId) {
+      console.log(zoneId)
+
+      if (hazardId) {
+        const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+        let params = new URLSearchParams({ hazardId: hazardId.toString() })
+        let response = await makeApiGetCall(
+          `https://backoffice-dev.residat.com/api/reports/${zoneId}?${params.toString()}`,
+          authToken
+        )
+        console.log(response.data.data)
+        return response
+      } else {
+        const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+        const response = await makeApiGetCall(
+          `https://backoffice-dev.residat.com/api/reports/${zoneId}`,
+          authToken
+        )
+        console.log(response.data.data)
+        return response
+      }
+    },
 
     updateHazardId(hazardId) {
       this.hazardId = hazardId
+      if (this.zone.level_id == 4) {
+        this.getReport(this.zone.id, this.hazardId)
+      }
     },
 
     showModal() {
