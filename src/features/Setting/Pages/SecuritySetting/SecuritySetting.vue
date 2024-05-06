@@ -3,7 +3,7 @@
       <div class="flex-1 overflow-auto">
         <div class="container mx-auto p-6">
             <settings-section
-              title="Security"
+              :title="$t('security')"
               :items="profileItems"
             ></settings-section>
           </div>
@@ -36,8 +36,8 @@ import SettingsSection from '@/features/Setting/components/SettingsSection.vue'
     return {
       iconSize: 'w-[30px] h-[30px]',
       profileItems: [
-        { name: 'Password Management', route: 'update-password' },
-        { name: 'Phone Number', route: 'security-setting' }
+        { name: this.$t('password_management'), route: 'update-password' },
+        { name: this.$t('phone_number'), route: 'security-setting' }
       ],
 
 

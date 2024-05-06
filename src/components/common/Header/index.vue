@@ -17,7 +17,6 @@
         :svgContentHover="
           authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
         "
-        labelText="Profile"
         :labelTextBottom="authStore.user ? authStore.user.first_name : null"
         :iconDesktopSize="this.iconSize"
         :isActive="true"
@@ -31,7 +30,7 @@
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
           <button-ui
-            :label="'Profile Page'"
+            :label="$t('profile_page')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(0)"
@@ -39,21 +38,21 @@
           </button-ui>
 
           <button-ui
-            :label="'Create Post'"
+            :label="$t('create_post')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(1)"
           >
           </button-ui>
           <button-ui
-            :label="'Create Event'"
+            :label="$t('create_event')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(2)"
           >
           </button-ui>
           <button-ui
-            :label="'Settings & Privacy'"
+            :label="$t('settings_privacy')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(3)"
@@ -61,7 +60,7 @@
           </button-ui>
 
           <button-ui
-            :label="'Logout'"
+            :label="$t('logout')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(4)"
@@ -105,43 +104,43 @@
               v-show="isMenuVisible"
               class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
-              <button-ui
-                :label="'Profile Page'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(0)"
-              >
-              </button-ui>
+            <button-ui
+            :label="$t('profile_page')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(0)"
+          >
+          </button-ui>
 
-              <button-ui
-                :label="'Create Post'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(1)"
-              >
-              </button-ui>
-              <button-ui
-                :label="'Create Event'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(2)"
-              >
-              </button-ui>
-              <button-ui
-                :label="'Settings & Privacy'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(3)"
-              >
-              </button-ui>
+          <button-ui
+            :label="$t('create_post')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(1)"
+          >
+          </button-ui>
+          <button-ui
+            :label="$t('create_event')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(2)"
+          >
+          </button-ui>
+          <button-ui
+            :label="$t('settings_privacy')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(3)"
+          >
+          </button-ui>
 
-              <button-ui
-                :label="'Logout'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(4)"
-              >
-              </button-ui>
+          <button-ui
+            :label="$t('logout')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(4)"
+          >
+          </button-ui>
             </div>
           </div>
         </div>

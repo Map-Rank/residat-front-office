@@ -27,6 +27,7 @@
   "next": "next",
   "specific_information": "Specific Information",
   "profile_picture": "Profile Picture",
+  "preview_picture": "Preview Picture",
   "choose_your_region": "Choose Your Region",
   "choose_your_division": "Choose Your Division",
   "choose_your_subdivision": "Choose your Sub-division",
@@ -63,5 +64,38 @@
   "key_actors": "Key Actors",
   "degree_of_impact": "Degree of Impact",
   "climate_vulnerability_index": "Climate Vulnerability Index",
-  "climate_risk_threats": "Climate Risk Threats"
+  "climate_risk_threats": "Climate Risk Threats",
+  "profile_page": "Profile Page",
+  "create_post": "Create Post",
+  "settings_privacy": "Settings & Privacy",
+  "logout": "Logout",
+
+  "your_editing_post": "Your Editing a post",
+  "share_your_thoughts": "Share your thoughts",
+  "attach_images_optional": "Attach images (optional)",
+  "add_image": "Add Image",
+  "creating_post": "Creating...",
+  "updating_post": "Updating Post...",
+  "update_post": "Update Post",
+  "please_input_content": "Please input some content to your post",
+  "premium_user_specify_zone": "As a premium user you need to specify a zone",
+  "select_zone_title": "Select Zone",
+  "select_zone_message": "Select the zone you will like this post to reach",
+  "sectors": "Sectors",
+  "select_sectors_message": "Select your the sectors of interest for this post",
+  "settings": "Settings",
+  "account_preferences": "Account preferences",
+  "signin_ecurity": "Sign In & Security",
+  "name_location_enterprise": "Name, location and enterprise",
+  "center_of_interest": "Center of interest",
+  "language": "Language",
+  "close_account": "Close Account",
+  "update_information": "Update Information",
+  "password_management": "Password Management",
+  "phone_number": "Phone Number",
+  "update_password": "Update Password",
+  "currrent_pwd":"Current Password"
+
+
+
 }

@@ -196,7 +196,7 @@
           <ErrorMessage class="text-danger-normal" name="avatar" />
 
           <div v-if="formData.avatar" class="mt-4 grid justify-center">
-            <p class="mb-2">Preview Picture:</p>
+            <p class="mb-2">{{ $t('preview_picture') }}:</p>
             <div class="w-24 h-24 rounded-full overflow-hidden">
               <img
                 :src="imageUrl"
