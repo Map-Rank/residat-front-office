@@ -90,7 +90,7 @@
             :hideButton="true"
           ></RefreshError>
         </div>
-
+        <div id="tooltip" display="none" style="position: absolute; display: none"></div>
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <div class="h-[70vh]">
             <inline-svg
@@ -103,6 +103,7 @@
               width=""
               height=""
             />
+          
           </div>
           <div class="h-[150px] rounded-lg">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
@@ -322,7 +323,6 @@ export default {
         { id: 3, name: 'Water Stress' }
       ],
 
-      
       actors: [
         {
           title: 'Unicef',
@@ -353,7 +353,20 @@ export default {
             'https://logos-download.com/wp-content/uploads/2018/09/Economic_Cooperation_Organization_Logo.png',
           name: 'Economic Cooperation Organization'
         }
-      ]
+      ],
+      tooltip: {
+        theme: 'dark',
+        x: {
+          show: false
+        },
+        y: {
+          title: {
+            formatter: function () {
+              return ''
+            }
+          }
+        }
+      }
     }
   },
 
@@ -424,6 +437,42 @@ export default {
           })
         }
       }
+      this.hideTooltip()
+    },
+
+    handleStateHover: function (e) {
+      if (e.target.tagName === 'path') {
+        this.showTooltip(e, e.target.dataset.name)
+
+
+        if (e.target.dataset.active === 'true') {
+          this.color = e.target.style.fill
+          e.target.setAttribute('fill', '#42b983');
+          e.target.setAttribute('stroke', '#ffffff');
+
+        }
+      }
+    },
+    handleStateLeave: function (e) {
+      if (e.target.tagName === 'path') {
+        this.hideTooltip()
+        if ((e.target.dataset.active === 'true')) {
+          e.target.style.fill = this.color
+          e.target.style.strokeWidth = '0.25px'
+        }
+      }
+    },
+
+    showTooltip: function (evt, text) {
+      const tooltip = document.getElementById('tooltip')
+      tooltip.innerHTML = text
+      tooltip.style.display = 'block'
+      tooltip.style.left = evt.pageX + 10 + 'px'
+      tooltip.style.top = evt.pageY + 10 + 'px'
+    },
+    hideTooltip: function () {
+      var tooltip = document.getElementById('tooltip')
+      tooltip.style.display = 'none'
     },
 
     reloadMap() {},
@@ -465,5 +514,16 @@ span {
   font-weight: 500;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
+}
+#tooltip {
+  background: #42b983;
+  color: white;
+  font-size: 0.7em;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 </style>
