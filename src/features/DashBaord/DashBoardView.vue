@@ -254,18 +254,14 @@ export default {
     },
     hazardId:{
       immediate: true,
-    // handler(newVal, oldVal) {
-    //   console.log(this.zone)
-    //   // if(this.inSubDivision){
-    //     // console.log(this.inSubDivision);
-    //     // const zones = this.getReport(this.hazardId,this.zoneId)
+    handler() {
 
-    //     this.zone = zones[0]
-    //         this.presentMapId = this.zone.id
-    //         this.mapSvgPath = this.zone.vector?.path
-    //         this.vectorKeys = this.zone.vector?.keys
-    //   // }
-    // }
+      if (this.zones.level_id == 4) {
+
+              this.getReport(this.zone.id,this.hazardId)
+
+            }
+    }
     }
   },
 
@@ -362,7 +358,7 @@ export default {
   },
 
   methods: {
-    getReport(zoneId) {
+    getReport(zoneId,hazardId) {
       console.log(zoneId);
       const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
       const response = makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${this.zone.id}`, authToken)
