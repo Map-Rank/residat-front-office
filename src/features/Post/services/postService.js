@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall, makeApiPutCall,makeApiDeleteCall } from '@/api/api'
+import { makeApiPostCall, makeApiGetCall, makeApiPutCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const currentDate = new Date().toISOString().split('T')[0]
@@ -7,7 +7,7 @@ const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 const createPost = async (postData, onSuccess, onError) => {
   try {
     const formData = new FormData()
-    
+
     formData.append('content', postData.content)
     formData.append('published_at', currentDate)
     formData.append('zone_id', postData.zoneId)
@@ -65,8 +65,36 @@ const updatePost = async (postData, onSuccess, onError) => {
     formData.append('zone_id', postData.zoneId)
     formData.append('_method', 'PUT')
 
+    // Append media files
+    postData.images.forEach((image, index) => {
+      if (
+        [
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/gif',
+          'application/pdf',
+          'video/mp4',
+          'video/mov',
+          'video/avi',
+          'video/wmv',
+          'audio/mp3'
+        ].includes(image.type)
+      ) {
+        formData.append(`media[${index}]`, image, image.name)
+      } else {
+        console.log('not correct format')
+      }
+    })
+
+    postData.sectorId.forEach((id, index) => {
+      formData.append(`sectors[${index}]`, id)
+    })
+
+    // console.log(postData)
+
     console.log('form data:', formData)
-    console.log('post id' + postData.id)
+
 
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.post}/${postData.id}`,
@@ -172,7 +200,7 @@ const getUserPosts = async () => {
 
 const getUserProfile = async (id) => {
   try {
-    const endpoint = `/profile/detail/${id}`; 
+    const endpoint = `/profile/detail/${id}`;
     const response = await makeApiGetCall(endpoint, authToken);
     return response.data.data;
   } catch (error) {

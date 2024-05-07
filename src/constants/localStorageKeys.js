@@ -7,6 +7,7 @@ export const LOCAL_STORAGE_KEYS = {
     sector: 'sector',
     zone: 'zone',
     userEmailVerification: 'userEmailVerification',
+    appLanguage: 'appLanguage',
     // other keys...
 
   };

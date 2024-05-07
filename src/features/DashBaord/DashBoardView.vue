@@ -3,7 +3,7 @@
     <div class="bg-white-normal h-10">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
         <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>Previous Map</p>
+        <p>{{ $t('previous_map') }}</p>
       </div>
     </div>
 
@@ -14,7 +14,7 @@
         <div :class="{ hidden: !displayStatistics }">
           <div class="">
             <button-ui
-              :label="'Water Risk'"
+              :label="$t('water_risk')"
               :color="'text-white'"
               :textCss="'text-white font-bold text-center'"
               :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
@@ -31,7 +31,7 @@
 
       <div class="lg:w-1/4">
         <div :class="{ hidden: !displayStatistics }">
-          <BaseDropdown @selectedOptionId="updateHazardId" :options="hazard" />
+          <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
         </div>
       </div>
 
@@ -40,7 +40,7 @@
           <div class="">
             <div class="">
               <button-ui
-                :label="'Key Actors'"
+                :label="$t('key_actors')"
                 :color="'text-white'"
                 :textCss="'text-white font-bold text-center'"
                 :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
@@ -50,7 +50,11 @@
             </div>
 
             <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
-              <key-actors :sectionTitle="'KEY ACTORS'" :actors="actors" :showAll="showAllActors" />
+              <key-actors
+                :sectionTitle="$t('key_actors')"
+                :actors="actors"
+                :showAll="showAllActors"
+              />
             </div>
           </div>
         </div>
@@ -59,7 +63,7 @@
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div class="col-span-1 md:col-span-2 lg:col-span-1">
         <div></div>
-        <div class="mt-2 sm:mt-0">
+        <div class="mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
             <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
             <span
@@ -86,11 +90,12 @@
             :hideButton="true"
           ></RefreshError>
         </div>
-
+        <div id="tooltip" display="none" style="position: absolute; display: none"></div>
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <div class="h-[70vh]">
             <inline-svg
-              :title="hoverMapText"
+              @mousemove="handleStateHover"
+              @mouseout="handleStateLeave"
               fill-opacity="1"
               :color="'#fff'"
               fill="black"
@@ -133,9 +138,7 @@
             </div>
           </div>
         </div>
-        <div v-else>
-          <img :src="mapSvgPath" alt="" />
-        </div>
+       
       </div>
     </div>
 
@@ -145,7 +148,7 @@
     >
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
-          label="Degree of Impact"
+          :label="$t('degree_of_impact')"
           canvasId="impactChart"
           :percentage="20"
         ></DegreeImpactDoughnutChart>
@@ -154,7 +157,7 @@
         <BaseBarChart
           :canvas-id="'climateVulnerabilityIndex'"
           :data="climateVulnerabilityIndex"
-          label="Climate Vulnerability Index"
+          :label="$t('climate_vulnerability_index')"
           @clickItem="displayChartItemModalStats"
         ></BaseBarChart>
       </div>
@@ -163,7 +166,7 @@
           @clickItem="displayChartItemModalStats"
           :canvas-id="'climateRiskThreats'"
           :data="climateRiskThreats"
-          label="Climate Risk Threats"
+          :label="$t('climate_risk_threats')"
           :isHorizontal="true"
           :barSpacing="30"
         ></BaseBarChart>
@@ -185,9 +188,8 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
-import { makeApiGetCall } from '@/api/api'
-import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
-
+import { getReport } from '@/services/reportService.js'
+import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
 
@@ -214,8 +216,6 @@ export default {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
 
-        console.log(this.zoneId);
-
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
           this.presentMapId = this.zone.id
@@ -227,17 +227,14 @@ export default {
           // console.log(zones)
 
           if (zones.length > 0) {
-            console.log(zones)
-            // console.log(zones[0].level_id);
             if (zones[0].level_id == 4) {
+              this.reportType=null
               this.zone = zones[0]
               this.displayStatistics = true
               // this.inSubDivision = true
               this.getReport(this.zone.id)
-              return 
+              return
             }
-            // console.log(this.zone)
-           
 
             this.zone = zones[0]
             this.presentMapId = this.zone.id
@@ -251,21 +248,6 @@ export default {
 
         this.isLoadingMap = false
       }
-    },
-    hazardId:{
-      immediate: true,
-    // handler(newVal, oldVal) {
-    //   console.log(this.zone)
-    //   // if(this.inSubDivision){
-    //     // console.log(this.inSubDivision);
-    //     // const zones = this.getReport(this.hazardId,this.zoneId)
-
-    //     this.zone = zones[0]
-    //         this.presentMapId = this.zone.id
-    //         this.mapSvgPath = this.zone.vector?.path
-    //         this.vectorKeys = this.zone.vector?.keys
-    //   // }
-    // }
     }
   },
 
@@ -290,8 +272,8 @@ export default {
       isLoadingMap: false,
       isErrorLoadMap: false,
       displayStatistics: true,
-      hazardId: '',
-      inSubDivision:false,
+      reportType: null,
+      inSubDivision: false,
       modalStates: {
         healthVisible: false,
         agricultureVisible: false,
@@ -323,10 +305,10 @@ export default {
 
       hazard: [
         { id: 0, name: 'Chose Environmental Hazard' },
-        { id: 1, name: 'Floods' },
-        { id: 2, name: 'Drought' },
-        { id: 3, name: 'Water Stress' }
+        { id: 1, name: 'Floods', value: ReportType.FLOODS },
+        { id: 2, name: 'Drought', value: ReportType.DROUGHT }
       ],
+
       actors: [
         {
           title: 'Unicef',
@@ -357,25 +339,47 @@ export default {
             'https://logos-download.com/wp-content/uploads/2018/09/Economic_Cooperation_Organization_Logo.png',
           name: 'Economic Cooperation Organization'
         }
-      ]
+      ],
+      tooltip: {
+        theme: 'dark',
+        x: {
+          show: false
+        },
+        y: {
+          title: {
+            formatter: function () {
+              return ''
+            }
+          }
+        }
+      }
     }
   },
 
   methods: {
     async getReport(zoneId) {
-      // console.log(zoneId);
-      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-      // console.log(authToken);
-      const response = await makeApiGetCall(`https://backoffice-dev.residat.com/api/reports/${zoneId}`, authToken)
-      
-      console.log(response)
-      this.mapSvgPath = response.data.data.vector.path;
-      this.vectorKeys = response.data.data.vector.keys;
-      this.isLoadingMap = false;
+      this.isLoadingMap = true
+
+      try {
+        let response = await getReport(zoneId, this.reportType)
+        this.mapSvgPath = response[0].vector.path
+        this.vectorKeys = response[0].vector.keys
+        this.isLoadingMap = false
+      } catch (error) {
+        console.error('Error loading map:', error)
+        this.isLoadingMap = false
+      }
     },
 
-    updateHazardId(hazardId) {
-      this.hazardId = hazardId
+    updateReportType(type) {
+      if (type) {
+        this.reportType = type
+      }else{
+        this.reportType = null
+
+      }
+      if(this.zone.level_id && this.zone.level_id == 4)
+      this.getReport(this.zone.id)
     },
 
     showModal() {
@@ -414,6 +418,40 @@ export default {
           })
         }
       }
+      this.hideTooltip()
+    },
+
+    handleStateHover: function (e) {
+      if (e.target.tagName === 'path') {
+        this.showTooltip(e, e.target.dataset.name)
+
+        if (e.target.dataset.active === 'true') {
+          this.color = e.target.style.fill
+          e.target.setAttribute('fill', '#42b983')
+          e.target.setAttribute('stroke', '#ffffff')
+        }
+      }
+    },
+    handleStateLeave: function (e) {
+      if (e.target.tagName === 'path') {
+        this.hideTooltip()
+        if (e.target.dataset.active === 'true') {
+          e.target.style.fill = this.color
+          e.target.style.strokeWidth = '0.25px'
+        }
+      }
+    },
+
+    showTooltip: function (evt, text) {
+      const tooltip = document.getElementById('tooltip')
+      tooltip.innerHTML = text
+      tooltip.style.display = 'block'
+      tooltip.style.left = evt.pageX + 10 + 'px'
+      tooltip.style.top = evt.pageY + 10 + 'px'
+    },
+    hideTooltip: function () {
+      var tooltip = document.getElementById('tooltip')
+      tooltip.style.display = 'none'
     },
 
     reloadMap() {},
@@ -455,5 +493,16 @@ span {
   font-weight: 500;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
+}
+#tooltip {
+  background: #42b983;
+  color: white;
+  font-size: 0.7em;
+  border: 1px solid white;
+  border-radius: 10px;
+  padding-bottom: 5px;
+  padding-top: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 </style>

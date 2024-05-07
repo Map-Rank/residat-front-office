@@ -8,10 +8,10 @@
     <p 
     @click="showPostDetails"
   
-    v-if="comment_count < 1" class="caption-c1-bold cursor-pointer ">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</p>
+    v-if="comment_count < 1" class="caption-c1-bold cursor-pointer ">{{ comment_count }} {{ $t('comment') }}{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} {{ $t('share') }}{{ share_count > 1 ? 's' : '' }}</p>
     <p 
     @click="showPostDetails"
-    v-else class="caption-c1-bold cursor-pointer">{{ comment_count }} Comment{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} Share{{ share_count > 1 ? 's' : '' }}</p>
+    v-else class="caption-c1-bold cursor-pointer">{{ comment_count }} {{ $t('comment') }}{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} {{ $t('share') }}{{ share_count > 1 ? 's' : '' }}</p>
   
   </div>
 </template>
@@ -28,11 +28,11 @@ export default {
   computed: {
     likeCountText() {
       if (this.like_count === 1) {
-        return `${this.like_count} like`;
+        return `${this.like_count} ${this.$t('like')}`;
       } else if (this.like_count > 1) {
-        return `${this.like_count} likes`;
+        return `${this.like_count} ${this.$t('like')}s`;
       } else {
-        return 'Be the first to like';
+        return this.$t('be_first_to_like');
       }
     }
   },
@@ -40,7 +40,6 @@ export default {
   methods:{
     showPostDetails() {
       this.$emit('showPostDetails')
-      console.log('ddfdf')
     },
   }
 }

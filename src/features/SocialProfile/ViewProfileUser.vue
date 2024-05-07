@@ -8,6 +8,7 @@
         :profileName="`${userProfile.first_name} ${userProfile.last_name}`"
         :followersCount="0"
         :postsCount="posts.length"
+        :profileImageUrl="userProfile.avatar"
         :isCurrentUser="true"
       />
     </div>

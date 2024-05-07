@@ -23,7 +23,7 @@
             <ul class="flex flex-wrap mb-4 border-2 border-secondary-normal">
               <li class="flex-auto text-center border-secondary-normal">
                 <button-ui
-                  label="LogIn"
+                :label=" $t('login')"
                   customCss="flex justify-center"
                   :colorObject="
                     tab === 'login'
@@ -43,7 +43,7 @@
               </li>
               <li class="flex-auto text-center">
                 <button-ui
-                  label="Register"
+                  :label=" $t('register')"
                   customCss="flex justify-center"
                   :colorObject="
                     tab === 'register'
@@ -64,7 +64,7 @@
             </ul>
             <login-form v-if="tab === 'login'"></login-form>
             <register-form v-if="tab === 'register'"></register-form>
-            <SocialButton />
+            <!-- <SocialButton /> -->
           </div>
         </div>
       </div>

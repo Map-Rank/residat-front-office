@@ -297,8 +297,8 @@ export default {
       schema: {
         title: 'required|min:3|max:50',
         description: 'required|min:3|max:250',
-        date_fin: 'required',
-        date_debut: 'required',
+        date_fin: 'required|dateNotBelowPresent',
+        date_debut: 'required|dateNotBelowPresent',
         organized_by: 'min:3|max:50',
         location: 'required|min:3|max:50'
       },
@@ -337,6 +337,7 @@ export default {
   },
 
   methods: {
+    
     onFileChange(e) {
       const file = e.target.files[0]
       if (file) {

@@ -2,7 +2,7 @@
   <div class="container m-auto w-full lg:w-1/2 p-2 sm:p-6">
     <div class="flex justify-center mb-9">
       <h2 class="uppercase font-semibold">
-        {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
+        {{ isEditing ?  $t('your_editing_post') : $t('share_your_thoughts') }}
       </h2>
     </div>
     <div>
@@ -35,12 +35,12 @@
         </div>
 
         <div class="mb-4">
-          <label class="block mb-2">Attach images (optional):</label>
+          <label class="block mb-2">{{ $t('attach_images_optional') }}:</label>
           <div class="flex space-x-4">
             <base-image-picker
               :iconImg="'assets\\icons\\colored\\image-icon.svg'"
               :type="'file'"
-              :label="'Add Image'"
+              :label="$t('add_image')"
               @handleFileChange="handleImageUpload"
             >
             </base-image-picker>
@@ -71,11 +71,11 @@
             {{
               !isEditing
                 ? this.isLoading
-                  ? 'Creating...'
-                  : 'Create Post'
+                  ?  $t('creating_post')
+                  : $t('create_post')
                 : this.isLoading
-                  ? 'Updating Post...'
-                  : 'Update Post'
+                  ? $t('updating_post')
+                  : $t('update_post')
             }}
           </button>
         </div>
@@ -109,6 +109,7 @@ export default {
           this.isEditing = true
 
           this.post = await getSpecificPost(this.postId)
+          this.formData.id = this.post.id
           this.formData.content = this.post.content
           this.imagesFromHostToPreview = this.post.images
         }
@@ -148,6 +149,7 @@ export default {
       imagesFromHostToPreview: [],
       zoneId: '',
       formData: {
+        id:'',
         content: '',
         images: [],
         videos: [],
@@ -175,17 +177,15 @@ export default {
     },
     async submitPost() {
       this.formData.zoneId = this.zoneId
+if (this.formData.content == '') {
+  this.alertStore.setAlert(AlertStates.ERROR, this.$t('please_input_content'));
+  return;
+}
+if (this.zoneId == '') {
+  this.alertStore.setAlert(AlertStates.ERROR, this.$t('premium_user_specify_zone'));
+  return;
+}
 
-      if (this.formData.content == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'Please input some content to your post')
-
-        return
-      }
-      if (this.zoneId == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'As a premium user you need to specify a zone')
-
-        return
-      }
 
       let response
       this.isLoading = true

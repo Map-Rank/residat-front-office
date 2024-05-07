@@ -7,6 +7,7 @@
         :profile-image-url="''"
         :profileName="`${userPost.first_name} ${userPost.last_name}`"
         :followersCount="0"
+        :profileImageUrl="userPost.avatar"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />

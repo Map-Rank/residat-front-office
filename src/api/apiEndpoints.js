@@ -16,6 +16,7 @@ export const API_ENDPOINTS = {
   deletePost: 'post/delete',
   sharePost: 'post/share',
   zone: '/zone',
+  report: '/reports',
   event: '/events',
   getEvents: '/events',
 };

@@ -6,10 +6,11 @@
         <li v-for="(post, index) in limitedPosts" :key="index" class="mb-2 last:mb-0 bg-white px-5 py-3 rounded-lg">
           <div class="space-y-2">
             <div class="flex space-x-4 items-center">
-              <avatar-placeholder
-                :username="`${post.creator[0].first_name} ${post.creator[0].last_name}`"
-                :size="20"
-              />
+              <img
+              :src="post.creator[0].avatar"
+              alt="Event image"
+              class="h-12 w-12 rounded-full border-2 border-white"
+            />
               <div>
 
                 <p class="user-name mb-3 cursor-pointer hover:underline" @click="viewProfileUser(post.creator[0].id)">{{
@@ -28,7 +29,6 @@
 </template>
 
 <script>
-import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue'
 import { formatDate, truncateText } from '@/utils/formating'
 import SectionTitle from '@/components/base/SectionTitle.vue'
 
@@ -38,7 +38,7 @@ export default {
     return {
       formatDate,
       truncateText,
-      sectionTitle:'Recently Posted'
+      sectionTitle:this.$t('section_title_recently_posted')
     }
   },
   computed: {
@@ -48,7 +48,6 @@ export default {
   },
   components: {
     SectionTitle,
-    AvatarPlaceholder
   },
   props: {
     recentPosts: {
