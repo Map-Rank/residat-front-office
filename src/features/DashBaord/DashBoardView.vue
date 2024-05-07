@@ -31,7 +31,7 @@
 
       <div class="lg:w-1/4">
         <div :class="{ hidden: !displayStatistics }">
-          <BaseDropdown @selectedOptionId="updateHazardId" :options="hazard" />
+          <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
         </div>
       </div>
 
@@ -94,7 +94,6 @@
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <div class="h-[70vh]">
             <inline-svg
-              
               @mousemove="handleStateHover"
               @mouseout="handleStateLeave"
               fill-opacity="1"
@@ -105,7 +104,6 @@
               width=""
               height=""
             />
-          
           </div>
           <div class="h-[150px] rounded-lg">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
@@ -140,9 +138,7 @@
             </div>
           </div>
         </div>
-        <div v-else>
-          <img :src="mapSvgPath" alt="" />
-        </div>
+       
       </div>
     </div>
 
@@ -192,9 +188,8 @@ import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
-import { makeApiGetCall } from '@/api/api'
-import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
-
+import { getReport } from '@/services/reportService.js'
+import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
 
@@ -221,8 +216,6 @@ export default {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
 
-        console.log(this.zoneId);
-
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
           this.presentMapId = this.zone.id
@@ -234,14 +227,13 @@ export default {
           // console.log(zones)
 
           if (zones.length > 0) {
-            console.log(zones)
-            // console.log(zones[0].level_id);
             if (zones[0].level_id == 4) {
+              this.reportType=null
               this.zone = zones[0]
               this.displayStatistics = true
               // this.inSubDivision = true
               this.getReport(this.zone.id)
-              return 
+              return
             }
 
             this.zone = zones[0]
@@ -255,14 +247,6 @@ export default {
         }
 
         this.isLoadingMap = false
-      }
-    },
-    hazardId: {
-      immediate: true,
-      handler() {
-        // if (this.zone.level_id == 4) {
-        //         this.getReport(this.zone.id,this.hazardId)
-        //       }
       }
     }
   },
@@ -288,7 +272,7 @@ export default {
       isLoadingMap: false,
       isErrorLoadMap: false,
       displayStatistics: true,
-      hazardId: '',
+      reportType: null,
       inSubDivision: false,
       modalStates: {
         healthVisible: false,
@@ -321,9 +305,8 @@ export default {
 
       hazard: [
         { id: 0, name: 'Chose Environmental Hazard' },
-        { id: 1, name: 'Floods' },
-        { id: 2, name: 'Drought' },
-        { id: 3, name: 'Water Stress' }
+        { id: 1, name: 'Floods', value: ReportType.FLOODS },
+        { id: 2, name: 'Drought', value: ReportType.DROUGHT }
       ],
 
       actors: [
@@ -374,34 +357,29 @@ export default {
   },
 
   methods: {
-    async getReport(zoneId, hazardId) {
-      console.log(zoneId)
+    async getReport(zoneId) {
+      this.isLoadingMap = true
 
-      if (hazardId) {
-        const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-        let params = new URLSearchParams({ hazardId: hazardId.toString() })
-        let response = await makeApiGetCall(
-          `https://backoffice-dev.residat.com/api/reports/${zoneId}?${params.toString()}`,
-          authToken
-        )
-        console.log(response.data.data)
-        return response
-      } else {
-        const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-        const response = await makeApiGetCall(
-          `https://backoffice-dev.residat.com/api/reports/${zoneId}`,
-          authToken
-        )
-        console.log(response.data.data)
-        return response
+      try {
+        let response = await getReport(zoneId, this.reportType)
+        this.mapSvgPath = response[0].vector.path
+        this.vectorKeys = response[0].vector.keys
+        this.isLoadingMap = false
+      } catch (error) {
+        console.error('Error loading map:', error)
+        this.isLoadingMap = false
       }
     },
 
-    updateHazardId(hazardId) {
-      this.hazardId = hazardId
-      if (this.zone.level_id == 4) {
-        this.getReport(this.zone.id, this.hazardId)
+    updateReportType(type) {
+      if (type) {
+        this.reportType = type
+      }else{
+        this.reportType = null
+
       }
+      if(this.zone.level_id && this.zone.level_id == 4)
+      this.getReport(this.zone.id)
     },
 
     showModal() {
@@ -447,19 +425,17 @@ export default {
       if (e.target.tagName === 'path') {
         this.showTooltip(e, e.target.dataset.name)
 
-
         if (e.target.dataset.active === 'true') {
           this.color = e.target.style.fill
-          e.target.setAttribute('fill', '#42b983');
-          e.target.setAttribute('stroke', '#ffffff');
-
+          e.target.setAttribute('fill', '#42b983')
+          e.target.setAttribute('stroke', '#ffffff')
         }
       }
     },
     handleStateLeave: function (e) {
       if (e.target.tagName === 'path') {
         this.hideTooltip()
-        if ((e.target.dataset.active === 'true')) {
+        if (e.target.dataset.active === 'true') {
           e.target.style.fill = this.color
           e.target.style.strokeWidth = '0.25px'
         }
