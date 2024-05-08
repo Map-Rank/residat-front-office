@@ -1,6 +1,6 @@
 <template>
-  <div class="grid gap-8 items-center p-4  sm:mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
-    <div class="flex">
+  <div class="d-flex gap-8 items-center p-4  sm:mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
+    <div class="flex w-full">
      <div class="mr-4">
        <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 rounded-full" />
      </div>
@@ -10,11 +10,11 @@
         type="text"
         v-model="content"
         :placeholder="$t('input_placeholder')"
-        class="flex-grow px-4 py-2 border rounded-full focus:outline-none"
+        class="px-4 py-2 border rounded-full focus:outline-none w-full" 
       />
     </div>
     <!-- Action Buttons -->
-    <div class="flex space-x-2 md:space-x-6 lg:space-x-14 justify-between">
+    <div class="flex space-x-2 md:space-x-6 lg:space-x-14 justify-between w-full pt-5">
       <!-- Live Video -->
 
       <ButtonUi
@@ -78,5 +78,7 @@ export default {
 }
 </script>
 <style scoped>
-/* Additional custom styles if needed */
+.mobile-button-post {
+ 
+}
 </style>
