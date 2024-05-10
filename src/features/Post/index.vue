@@ -111,7 +111,9 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails"></post-details>
+  <!-- <post-details v-if="showPostDetails"></post-details> -->
+  <PostDetailModal v-if="showPostDetails"  @close="closeModal" />
+
 </template>
 
 <script>
@@ -127,6 +129,7 @@ import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
 import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
+import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
 
 import useModalStore from '@/stores/modalStore.js'
 
@@ -142,6 +145,7 @@ export default {
       modalStore,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
+      isModalVisible: false,
       likeCount: this.like_count,
       customPost: this.post,
       customLiked: this.liked,
@@ -187,6 +191,9 @@ export default {
       'showDetails',
       'setpostIdToShowDetails'
     ]),
+    closeModal() {
+      this.isModalVisible = false
+    },
 
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       if (window.confirm(alertMessage)) {
@@ -309,6 +316,7 @@ export default {
     PostDetails,
     ButtonUi,
     ImagePostGallery,
+    PostDetailModal
   },
   computed: {
     ...mapWritableState(usePostStore, ['showPostDetails']),
