@@ -1,9 +1,9 @@
 <template>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-    <div class="bg-white-normal h-10 mb-3" v-if="zone.level_id !== 1">
+    <div class="bg-white-normal h-10 mb-3 goback" v-if="zone.level_id > 1">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
         <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>{{ $t('previous_map') }}</p>
+        <p>{{ zone.name }}</p>
       </div>
     </div>
 
@@ -295,7 +295,7 @@ export default {
         { name: ChartItemData.foodSecurity, percentage: 100 },
         { name: ChartItemData.waterStress, percentage: 50 },
         { name: ChartItemData.epidemics, percentage: 25 },
-        { name: ChartItemData.business, percentage: 75 },
+        // { name: ChartItemData.business, percentage: 75 },
         { name: ChartItemData.migration, percentage: 20 }
       ],
 
@@ -504,5 +504,8 @@ span {
   padding-top: 5px;
   padding-left: 10px;
   padding-right: 10px;
+}
+.goback {
+  width: fit-content;
 }
 </style>
