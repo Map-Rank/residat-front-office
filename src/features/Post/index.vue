@@ -119,7 +119,6 @@
 <script>
 import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
-import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapActions, mapWritableState } from 'pinia'
 import usePostStore from './store/postStore'
 import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
@@ -313,7 +312,6 @@ export default {
     InteractionPostStatistics,
     UserPostInfo,
     IconWithLabel,
-    PostDetails,
     ButtonUi,
     ImagePostGallery,
     PostDetailModal

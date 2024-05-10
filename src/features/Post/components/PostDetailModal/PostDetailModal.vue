@@ -104,13 +104,13 @@
   import { mapActions } from 'pinia'
   import usePostStore from '../../store/postStore'
   import { URL_LINK } from '@/constants'
-  import ImageSlider from '../../../../components/gallery/ImageSlider.vue'
-  import CommentInfoBox from '@/features/Post/components/PostDetails/components/CommentInfoBox.vue'
-  import UserInfoPostDetails from '@/features/Post/components/PostDetails/components/UserInfoPostDetails.vue'
+  import ImageSlider from '@/components/gallery/ImageSlider.vue'
+  import CommentInfoBox from './components/CommentInfoBox.vue'
+  import UserInfoPostDetails from './components/UserInfoPostDetails.vue'
   import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-  import { commentPost, getSpecificPost } from '@/features/Post/services/postService'
+  import { commentPost ,getSpecificPost,likePost } from "@/features/Post/services/postService";
   import IconWithLabel from '@/components/common/IconWithLabel/index.vue'
-  import { likePost } from '../../services/postService'
+
   import useModalStore from '@/stores/modalStore.js'
   
   export default {
