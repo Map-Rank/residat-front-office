@@ -1,0 +1,15 @@
+@import './base.css';
+@import './css/global.scss';
+
+
+#app {
+  /* max-width: 1280px; */
+  margin: 0 auto;
+  font-weight: normal;
+  font-family: 'Poppins', sans-serif;
+}
+
+
+
+
+

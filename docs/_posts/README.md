@@ -1,4 +1,4 @@
-<h1 style="display: flex; justify-content: space-between; align-items: center;">Welcome to residat-front-platform <img src="public/assets/images/Logos/logo-small.svg" alt="Image Description" height="70"></h1>
+<h1 style="display: flex; justify-content: space-between; align-items: center;">Welcome to residat-front-platform <img src="./logo-small.svg" alt="Image Description" height="70"></h1>
 
 
 
@@ -17,7 +17,7 @@
 - Chatroom for community climate realities
 - Sending out mobile notifications by local and regional climate authoritative bodies.
 
-<img src="public\assets\images\Documentation\communityView.png"> </img>
+<img src="./communityView.png"> </img>
 
 
 
