@@ -52,13 +52,13 @@
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
+    <div @click.prevent="showModal()" class="px-5 mb-2 cursor-pointer">
       <p class=" content ">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showDetails(this.post.id)">
+    <image-post-gallery :Images="postImages" @customFunction="showModal()">
     </image-post-gallery>
 
     <!-- Post Interaction Area -->
@@ -68,7 +68,7 @@
         :comment_count="customPost.comment_count"
         :like_count="like_count"
         :share_count="customPost.share_count"
-        @showPostDetails="showDetails(this.post.id)"
+        @showPostDetails="showModal()"
       />
 
       <!-- lower section  -->
@@ -112,7 +112,7 @@
   </article>
 
   <!-- <post-details v-if="showPostDetails"></post-details> -->
-  <PostDetailModal v-if="showPostDetails"  @close="closeModal" />
+  <PostDetailModal v-if="isModalVisible" :postId="this.post.id" @close="closeModal" />
 
 </template>
 
@@ -192,6 +192,9 @@ export default {
     ]),
     closeModal() {
       this.isModalVisible = false
+    },
+    showModal() {
+      this.isModalVisible = true
     },
 
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
