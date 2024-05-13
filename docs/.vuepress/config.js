@@ -16,7 +16,6 @@ module.exports = {
               id: 'documentation',
               // NOTE: Target directory, which means your readme file will have to stay under this directory
               dirname: 'posts',
-              // Path of the `entry page` (or `list page`)
               path: '/',
               itemPermalink: '/:year/:month/:day/:slug',
               pagination: {
