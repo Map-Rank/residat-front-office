@@ -8,10 +8,10 @@
     <p 
     @click="showPostDetails"
   
-    v-if="comment_count < 1" class="caption-c1-bold cursor-pointer ">{{ comment_count }} {{ $t('comment') }}{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} {{ $t('share') }}{{ share_count > 1 ? 's' : '' }}</p>
+    v-if="comment_count < 1" class="caption-c1-bold cursor-pointer ">{{ comment_count }} {{ $t('comment') }}{{ comment_count > 1 ? 's' : '' }} • {{ share_count }} {{ $t('share') }}{{ share_count > 1 ? 's' : '' }}</p>
     <p 
     @click="showPostDetails"
-    v-else class="caption-c1-bold cursor-pointer">{{ comment_count }} {{ $t('comment') }}{{ comment_count !== 1 ? 's' : '' }} • {{ share_count }} {{ $t('share') }}{{ share_count > 1 ? 's' : '' }}</p>
+    v-else class="caption-c1-bold cursor-pointer">{{ comment_count }} {{ $t('comment') }}{{ comment_count > 1 ? 's' : '' }} • {{ share_count }} {{ $t('share') }}{{ share_count > 1 ? 's' : '' }}</p>
   
   </div>
 </template>

@@ -70,7 +70,7 @@
                     <img 
                     
                     src="@\assets\icons\heart-fill.svg" alt="" />
-                    <span class="caption-c1-bold">{{ post.like_count }}  {{ $t('like') }}s</span>
+                    <span class="caption-c1-bold">{{ post.like_count }}  {{ $t('like') }}{{ post.like_count > 1 ? 's' : '' }}</span>
                     <img 
                     
                     
