@@ -10,8 +10,8 @@
     "test:coverage": "vitest run --coverage ",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs --fix --ignore-path .gitignore",
     "format": "prettier --write src/",
-    "docs:dev": "vuepress dev docs",
-    "docs:build": "vuepress build docs"
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "dependencies": {
     "@vee-validate/rules": "^4.11.8",
@@ -46,7 +46,7 @@
     "prettier": "^3.0.3",
     "sass": "^1.69.5",
     "vite": "^4.5.1",
-    "vitest": "^1.4.0",
-    "vuepress": "^1.9.10"
+    "vitepress": "^1.1.4",
+    "vitest": "^1.4.0"
   }
 }
