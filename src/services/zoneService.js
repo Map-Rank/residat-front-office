@@ -1,4 +1,4 @@
-import { makeApiGetCall } from '@/api/api' // Import the makeApiPostCall function
+import { makeApiGetCall } from '@/api/api' 
 import {  API_ENDPOINTS,LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)

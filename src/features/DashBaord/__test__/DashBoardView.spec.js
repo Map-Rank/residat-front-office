@@ -1,14 +1,14 @@
 import { describe, it, expect, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
-import DashBaord from '@/features/DashBoard/DashBoard.vue'
+import dashboard from '@/features/DashBoard/DashBoard.vue'
 import UnderConstruction from '@/components/common/Pages/UnderConstruction.vue'
 
 // Mock the UnderConstruction component
 
-describe('DashBaord Component', () => {
+describe('dashboard Component', () => {
   let wrapper
   beforeEach(() => {
-    wrapper = mount(DashBaord, {
+    wrapper = mount(dashboard, {
       props: { UnderConstruction }
     })
   })

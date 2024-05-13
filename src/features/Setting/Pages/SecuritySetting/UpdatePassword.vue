@@ -9,11 +9,11 @@
       <vee-form ref="form" :validation-schema="schema">
         <div class="flex-col space-y-6">
           <div class="flex-col space-y-6">
-            <h2 class="text-center text-xl md:text-3xl lg:text-4xl">UPDATE PASSWORD</h2>
+            <h2 class="text-center text-xl md:text-3xl lg:text-4xl">{{ $t('update_password') }}</h2>
 
             <!-- Current Password -->
             <div class="relative w-full">
-              <label>Current Password</label>
+              <label>{{ $t('currrent_pwd') }}</label>
               <div class="flex items-center border border-gray-300 rounded overflow-hidden">
                 <vee-field
                   name="old_password"
@@ -21,7 +21,7 @@
                   :type="showCurrentPassword ? 'text' : 'password'"
                   id="old_password"
                   class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                  placeholder="Current Password"
+                  :placeholder="$t('currrent_pwd')"
                 ></vee-field>
                 <button
                   @click="toggleCurrentPasswordVisibility"
@@ -49,7 +49,7 @@
 
             <!-- Password -->
             <div class="relative w-full">
-              <label>Password</label>
+            <label>{{ $t('password') }}</label>
               <div class="flex items-center border border-gray-300 rounded overflow-hidden">
                 <vee-field
                   name="password"
@@ -57,7 +57,7 @@
                   :type="showPassword ? 'text' : 'password'"
                   id="password"
                   class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                  placeholder="Password"
+                :placeholder="$t('enter_password')"
                 ></vee-field>
                 <button
                   @click="togglePasswordVisibility"
@@ -85,7 +85,7 @@
 
             <!-- Confirm Password -->
             <div class="relative w-full">
-              <label>Confirm Password</label>
+            <label>{{ $t('confirm_password') }}</label>
               <div class="flex items-center border border-gray-300 rounded overflow-hidden">
                 <vee-field
                   name="password_confirmation"
@@ -94,7 +94,7 @@
                   :rules="schema.password_confirmation"
                   id="password_confirmation"
                   class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                  placeholder="Confirm Password"
+                :placeholder="$t('enter_confirm_password')"
                 ></vee-field>
                 <button
                   @click="toggleConfirmPasswordVisibility"
@@ -125,7 +125,7 @@
                   @click.prevent="updatePassword()"
                   class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
                 >
-                  Update Password
+                {{ $t('update_password') }}
                 </button>
               </div>
             </div>

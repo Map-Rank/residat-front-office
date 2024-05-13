@@ -9,15 +9,15 @@
         <vee-form ref="form" :validation-schema="schema">
             <div class="flex-col space-y-6" >
                 <div class="flex-col space-y-6">
-                  <h2 class="text-center text-xl md:text-3xl lg:text-4xl ">PERSONAL INFORMATION</h2>
+                  <h2 class="text-center text-xl md:text-3xl lg:text-4xl ">{{ $t('personal_information') }}</h2>
 
                   <div class="mb-6">
-                    <label class="inline-block mb-2 text">Profile Picture</label>
+                    <label class="inline-block mb-2 text">{{ $t('profile_picture') }}</label>
                     <input type="file" @change="onFileChange" accept="image/*" class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"/>
                     <ErrorMessage class="text-danger-normal" name="avatar" />
                   
                     <div v-if="formData.avatar" class="mt-4 grid  justify-center">
-                      <p class="mb-2">Preview Picture:</p>
+                      <p class="mb-2">{{ $t('preview_picture') }}:</p>
                       <div class="w-24 h-24 rounded-full overflow-hidden">
                         <img :src="imageUrl" alt="Profile Picture Preview" class="w-full rounded-full h-full object-cover" />
                       </div>
@@ -26,7 +26,7 @@
 
                   <!-- First Name -->
                   <div class="mb-6">
-                    <label class="inline-block mb-4">First Name</label>
+                    <label class="inline-block mb-4">{{ $t('first_name') }}</label>
                     <vee-field
                       name="first_name"
                       v-model="formData.first_name"
@@ -34,14 +34,14 @@
                       as="input"
                       type="text"
                       class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                      placeholder="Enter First Name"
+                      :placeholder="$t('enter_first_name')"
                     />
                     <ErrorMessage class="text-danger-normal" name="first_name" />
                   </div>
         
                   <!-- Second Name -->
                   <div class="mb-6">
-                    <label class="inline-block mb-2">Second Name</label>
+            <label class="inline-block mb-2">{{ $t('second_name') }}</label>
                     <vee-field
                       name="last_name"
                       v-model="formData.last_name"
@@ -49,28 +49,13 @@
                       as="input"
                       type="text"
                       class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                      placeholder="Enter Second Name"
+              :placeholder="$t('enter_second_name')"
                     />
                     <ErrorMessage class="text-danger-normal" name="last_name" />
                   </div>
         
-                  <!-- Email -->
                   <div class="mb-6">
-                    <label class="inline-block mb-2">Email</label>
-                    <vee-field
-                      name="email"
-                      :rules="schema.email"
-                      v-model="formData.email"
-                      type="email"
-                      class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                      placeholder="Enter Email"
-                    />
-                    <ErrorMessage class="text-danger-normal" name="email" />
-                  </div>
-        
-                  <!-- phone -->
-                  <div class="mb-6">
-                    <label class="inline-block mb-2">phone</label>
+            <label class="inline-block mb-2">{{ $t('phone') }}</label>
                     <vee-field
                       name="phone"
                       v-model="formData.phone"
@@ -78,66 +63,26 @@
                       as="input"
                       type="tel"
                       class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-                      placeholder="Enter phone number"
+              :placeholder="$t('enter_phone_number')"
                     />
                     <ErrorMessage class="text-danger-normal" name="phone" />
                   </div>
     
                   <!-- User Gender  -->
                   <div class="mb-6">
-                    <label class="inline-block mb-2">Gender</label>
+                    <label class="inline-block mb-2">{{ $t('gender') }}</label>
                     <select
                       v-model="formData.gender"
                       class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                     >
-                      <option value="">Select gender</option>
-                      <option value="male">Male</option>
-                      <option value="female">Female</option>
-                      <option value="other">Other</option>
+                      <option value="">{{ $t('select_gender') }}</option>
+                      <option value="male">{{ $t('male') }}</option>
+                      <option value="female">{{ $t('female') }}</option>
+                      <option value="other">{{ $t('other') }}</option>
                     </select>
                   </div>
         
-                  <TitleSubtitle label="Location" message="You can change your location" />
-
-
-                  <div class="flex flex-row space-x-4 justify-between">
-                    <div class="w-1/2">
-                      <label class="inline-block mb-2">Choose Your Region</label>
-                      <div v-if="isLoading" class="flex h-full justify-center">
-                        <LoadingIndicator />
-                      </div>
-                      <BaseDropdown
-                        v-if="!isLoading"
-                        :options="regions"
-                        @selectedOptionId="handleSelectedRegionIdChange"
-                        @functionIdParams="getDivisions"
-                      />
-                    </div>
-                    <div class="w-1/2">
-                      <label class="inline-block mb-2">Choose Your Division</label>
-                      <div v-if="isDivisionLoading" class="flex h-full justify-center">
-                        <LoadingIndicator />
-                      </div>
-                      <BaseDropdown
-                        v-if="!isLoading && !isDivisionLoading"
-                        @selectedOptionId="handleSelectedDivisionIdChange"
-                        :options="divisions"
-                        @functionIdParams="getSub_divisions"
-                      />
-                    </div>
-                  </div>
-          
-                  <div class="w-full">
-                    <label class="inline-block mb-2">Choose your Sub-division</label>
-                    <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
-                      <LoadingIndicator />
-                    </div>
-                    <BaseDropdown
-                      @selectedOptionId="handleSelectedSubdivisionIdChange"
-                      v-if="!isLoading && !isSubdivisionLoading"
-                      :options="sub_divisions"
-                    />
-                  </div>
+        
         
                   <div class="sm:px-">
                     <div class="flex justify-center">
@@ -145,7 +90,7 @@
                         @click.prevent="submitForm()"
                         class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
                       >
-                        Update Information
+                      {{ $t('update_information') }}
                       </button>
                     </div>
                   </div>
@@ -163,10 +108,10 @@
   import { AlertStates } from '@/components'
   import useAlertStore from '@/stores/alertStore'
   import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
-  import BaseDropdown from '@/components/base/BaseDropdown.vue'
-  import { getZones } from '@/services/zoneService.js'
-  import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-  import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
+  // import BaseDropdown from '@/components/base/BaseDropdown.vue'
+  // import { getZones } from '@/services/zoneService.js'
+  // import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
+  // import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
   import {UpdateUser} from '@/features/Auth/services/authService.js'
   
   export default {
@@ -177,7 +122,7 @@
     const authStore = useAuthStore()
 
     this.formData = authStore.user
-    console.log(this.formData);
+    // console.log(this.formData);
     try {
       this.isLoading = true
       await this.getRegions()
@@ -276,9 +221,9 @@
   },
   components: {
     AlertForm,
-    BaseDropdown,
-    LoadingIndicator,
-    TitleSubtitle
+    // BaseDropdown,
+    // LoadingIndicator,
+    // TitleSubtitle
   },
 
   computed: {
@@ -301,37 +246,37 @@
       this.formData.avatar = null;
     }
   },
-    async getRegions() {
-      try {
-        this.regions = this.regions.concat(await getZones(2, null))
-      } catch (error) {
-        console.log(error)
-      }
-    },
+    // async getRegions() {
+    //   try {
+    //     this.regions = this.regions.concat(await getZones(2, null))
+    //   } catch (error) {
+    //     console.log(error)
+    //   }
+    // },
 
-    async getDivisions(parent_id) {
-      try {
-        this.isDivisionLoading = true
-        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
-        this.divisions = this.divisions.concat(await getZones(null, parent_id))
-      } catch (error) {
-        console.log(error)
-      } finally {
-        this.isDivisionLoading = false
-      }
-    },
+    // async getDivisions(parent_id) {
+    //   try {
+    //     this.isDivisionLoading = true
+    //     this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
+    //     this.divisions = this.divisions.concat(await getZones(null, parent_id))
+    //   } catch (error) {
+    //     console.log(error)
+    //   } finally {
+    //     this.isDivisionLoading = false
+    //   }
+    // },
 
-    async getSub_divisions(parent_id) {
-      this.isSubdivisionLoading = true
-      try {
-        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
-        this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
-      } catch (error) {
-        console.log(error)
-      } finally {
-        this.isSubdivisionLoading = false
-      }
-    },
+    // async getSub_divisions(parent_id) {
+    //   this.isSubdivisionLoading = true
+    //   try {
+    //     this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
+    //     this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
+    //   } catch (error) {
+    //     console.log(error)
+    //   } finally {
+    //     this.isSubdivisionLoading = false
+    //   }
+    // },
 
     handleSelectedOptionIdChange(selectedOptionId) {
       this.zone_id = selectedOptionId
@@ -354,34 +299,7 @@
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword
     },
-    async nextStep() {
-      const fieldsToValidate = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'password',
-        'confirm_password'
-      ]
 
-      try {
-        const validationResults = await Promise.all(
-          fieldsToValidate.map((field) => this.$refs.form.validateField(field))
-        )
-
-        // Check if all fields are valid
-        const allFieldsValid = validationResults.every((result) => result.valid)
-
-        // Proceed to the next step only if all fields are valid
-        if (allFieldsValid) {
-          this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
-        } else {
-          console.log('Some fields are invalid.')
-        }
-      } catch (error) {
-        console.error('Validation error:', error)
-      }
-    },
 
  
 
@@ -403,14 +321,14 @@
 
     async submitForm() {
 
-      if (this.subDivision_id == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
+      // if (this.subDivision_id == '') {
+      //   this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
 
-        return
-      }
+      //   return
+      // }
 
   if (!(this.formData.avatar instanceof File)) {
-    console.log('====> is not of type file');
+    // console.log('====> is not of type file');
     this.formData.avatar = null; 
   } 
   

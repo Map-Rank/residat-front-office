@@ -72,14 +72,14 @@ export default {
       popularPosts: [
         {
           id: 1,
-          title: 'Lorem Ipsum',
+          title: 'Upcomming',
           excerpt: 'UPCOMMING EVENT'
         },
-        {
-          id: 2,
-          title: 'Template images',
-          excerpt: '3 Images in this template!'
-        }
+        // {
+        //   id: 2,
+        //   title: 'Still Loading',
+        //   excerpt: '3 Images in this template!'
+        // }
         // ...more events
       ]
       // ...other data

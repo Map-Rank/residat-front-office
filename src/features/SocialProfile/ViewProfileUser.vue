@@ -8,6 +8,7 @@
         :profileName="`${userProfile.first_name} ${userProfile.last_name}`"
         :followersCount="0"
         :postsCount="posts.length"
+        :profileImageUrl="userProfile.avatar"
         :isCurrentUser="true"
       />
     </div>
@@ -18,10 +19,8 @@
           <about-user-info
             v-if="!isLoading && userProfile"
             :username="`${userProfile.first_name} ${userProfile.last_name}`"
-            :description="'Your description here'"
+            :description="`${userProfile.last_name} Information`"
             :location="user.address"
-            :phone="userProfile.phone"
-            :email="userProfile.email"
             :joinDate="formatDate(userProfile.created_at)"
             :website="'your-website-url.com'"
           />

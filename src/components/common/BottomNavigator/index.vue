@@ -45,7 +45,7 @@ export default {
           svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
           labelText: 'Dashboard',
           isActive: false,
-          routerName: 'dashbaord'
+          routerName: 'dashboard'
         },
         {
           svgContent: '\\assets\\icons\\add-circle-outline.svg',

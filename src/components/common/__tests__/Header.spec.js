@@ -17,7 +17,7 @@ vi.mock('@/stores/auth', () => ({
 // Setup mock router
 const routes = [
   { path: '/community', name: 'community' },
-  { path: '/dashbaord', name: 'dashbaord' },
+  { path: '/dashboard', name: 'dashboard' },
   { path: '/chat-room', name: 'chat-room' },
   { path: '/event', name: 'event' },
   { path: '/social-profile', name: 'social-profile' },

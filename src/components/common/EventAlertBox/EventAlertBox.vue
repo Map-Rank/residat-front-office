@@ -16,15 +16,15 @@
       <div class="text-black gap-3">
         <div class="menu font-semibold title">{{  truncateText(event.title ,25 )  }}</div>
         <p class="menu">
-          Organized by:
+          {{ $t('organized_by') }}
           <span>{{   truncateText(event.organized_by  ,25 ) }}</span>
         </p>
         <p class="menu">
-          Date:
+          {{ $t('date') }}
           <span>{{ event.published_at }}</span>
         </p>
         <p class="menu">
-          Location:
+          {{ $t('location') }}
           <span>{{ event.location }}</span>
         </p>
       </div>
