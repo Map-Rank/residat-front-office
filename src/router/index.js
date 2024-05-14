@@ -3,7 +3,7 @@ import useAuthStore from '../stores/auth.js' // Adjust this import path as neces
 
 import CommunityView from '../features/Community/CommunityView.vue'
 import ChatRoomView from '../features/ChatRoom/ChatRoomView.vue'
-import DashBoardView from '../features/DashBaord/DashBoardView.vue'
+import DashBoardView from '@/features/DashBaord/DashBoardView.vue'
 import AuthView from '../features/Auth/AuthView.vue'
 import SocialProfile from '../features/SocialProfile/SocialProfile.vue'
 import CreatePost from '../features/CreatePost/CreatePost.vue'
@@ -75,8 +75,8 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/dashbaord/:zoneId?/:parentId?/:zoneName?/:mapSize?',
-      name: 'dashbaord',
+      path: '/dashboard/:zoneId?/:parentId?/:zoneName?/:mapSize?',
+      name: 'dashboard',
       component: DashBoardView,
       meta: { requiresAuth: true },
       props: (route) => ({
@@ -84,6 +84,25 @@ const router = createRouter({
         parentId: route.params.parentId,
         zoneName: route.params.zoneName,
         mapSize: route.params.mapSize
+      })
+    },
+
+    {
+      path: '/create-post/:prePostContent?',
+      name: 'create-post',
+      component: CreatePost,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        prePostContent: route.params.prePostContent || '',
+      })
+    },
+    {
+      path: '/edit-post/:postId',
+      name: 'edit-post',
+      component: CreatePost,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        postId: route.params.postId || null,
       })
     },
     {
@@ -98,32 +117,22 @@ const router = createRouter({
       })
     },
     {
-      path: '/create-event',
+      path: '/create-event/:preEventTitle?',
       name: 'create-event',
       component: CreateEvent,
-      meta: { requiresAuth: true }
-    },
-    {
-      path: '/edit-post/:postId',
-      name: 'edit-post',
-      component: CreatePost,
       meta: { requiresAuth: true },
       props: (route) => ({
-        postId: route.params.postId || null,
+        preEventTitle: route.params.preEventTitle || '',
       })
     },
+    
     {
       path: '/report',
       name: 'report',
       component: ReportView,
       meta: { requiresAuth: true }
     },
-    {
-      path: '/create-post',
-      name: 'create-post',
-      component: CreatePost,
-      meta: { requiresAuth: true }
-    },
+   
 
     {
       path: '/community',
@@ -193,7 +202,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'authentication' })
   } else if (to.name === 'authentication' && authStore.user != null) {
-    next({ name: 'dashbaord' }) 
+    next({ name: 'dashboard' }) 
   } else {
     next()
   }

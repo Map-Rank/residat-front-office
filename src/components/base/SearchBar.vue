@@ -12,7 +12,7 @@ import { getZones } from '@/services/zoneService.js';
       class="w-full file bg-transparent h-10 px-2 rounded-lg text-sm focus:outline-none"
       type="search"
       name="search"
-      placeholder="Search in your location"
+      :placeholder="$t('search_location')"
     />
     <div
       class="absolute z-10 bg-white mt-10 rounded-lg shadow-lg w-full"

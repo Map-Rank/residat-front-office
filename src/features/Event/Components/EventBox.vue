@@ -1,7 +1,7 @@
 <template>
   <div class="mb-4 p-4 bg-white rounded cursor-pointer">
     <router-link to="/event" class="grid sm:flex mb-2">
-      <img :src="event.image" class="rounded-[50%] h-[100px] mr-4" alt="event image" />
+      <img :src="event.image" class="rounded-[50%] h-[100px] w-[100px] mr-4" alt="event image" />
       <div class="w-full">
         <div class="flex justify-between ">
           <h3 class="text-xl text-start ">{{ event.title }}</h3>

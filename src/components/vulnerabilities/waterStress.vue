@@ -61,13 +61,13 @@ export default {
     <div class="h-1/2 border-2 border-gray-500 rounded p-2">
       <canvas ref="canvas1"></canvas>
     </div>
-    <input class="w-full h-16 p-2 rounded-md" type="text" placeholder="Your text here">
+    <label class="w-full h-16 p-2 rounded-md" type="text">Data coming here</label>
 
     <p class="mt-5 text-center"><b>Crisis level</b></p>
     <div class="h-1/2 border-2 border-gray-500 rounded p-2">
       <canvas ref="canvas"></canvas>
     </div>
-    <input class="w-full h-16 p-2 rounded-md" type="text" placeholder="Your text here">
+    <label class="w-full h-16 p-2 rounded-md" type="text">Data coming here</label>
 
     <a href="#">
       <p class="text-center mt-3 underline text-blue-700">

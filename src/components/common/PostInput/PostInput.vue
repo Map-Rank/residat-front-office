@@ -1,6 +1,6 @@
 <template>
-  <div class="grid gap-8 items-center p-4  sm:mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
-    <div class="flex">
+  <div class="d-flex gap-8 items-center p-4  sm:mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
+    <div class="flex w-full">
      <div class="mr-4">
        <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 rounded-full" />
      </div>
@@ -9,16 +9,16 @@
       <input
         type="text"
         v-model="content"
-        placeholder="What's on your mind?"
-        class="flex-grow px-4 py-2 border rounded-full focus:outline-none"
+        :placeholder="$t('input_placeholder')"
+        class="px-4 py-2 border rounded-full focus:outline-none w-full" 
       />
     </div>
     <!-- Action Buttons -->
-    <div class="flex space-x-2 md:space-x-6 lg:space-x-14 justify-between">
+    <div class="flex space-x-2 md:space-x-6 lg:space-x-14 justify-between w-full pt-5">
       <!-- Live Video -->
 
       <ButtonUi
-        :label="'Post'"
+      :label="$t('post')"
         color="bg-secondary-normal "
         :isRoundedFull="true"
         customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
@@ -27,7 +27,7 @@
         >
       </ButtonUi>
       <ButtonUi
-        :label="'Create Event'"
+      :label="$t('create_event')"
         color="bg-secondary-normal "
         :isRoundedFull="true"
         customCss="justify-center item-center  hover:bg-secondary-hover font-medium"
@@ -66,10 +66,10 @@ export default {
   methods: {
     navigateCreatePost(){
       this.postStore.setContentFromPostInput(this.content)
-      this.$router.push({ name: 'create-post' })
+      this.$router.push({ name: 'create-post', params:{prePostContent: this.content } })
     },
     navigateCreateEvent(){
-      this.$router.push({ name: 'create-event' })
+      this.$router.push({ name: 'create-event', params:{preEventTitle: this.content } })
     },
   },
   components: {
@@ -78,5 +78,7 @@ export default {
 }
 </script>
 <style scoped>
-/* Additional custom styles if needed */
+.mobile-button-post {
+ 
+}
 </style>

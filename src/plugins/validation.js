@@ -19,7 +19,19 @@ export default {
         defineRule('passwords_mismatch',confirmed)
         defineRule('excluded',excluded)
         defineRule('country_excluded',excluded)
-        // defineRule('alpha_spaces',alphaSpaces)
+        defineRule('dobNotBelowTenYears', (value) => {
+            const selectedDate = new Date(value);
+            const today = new Date();
+            const tenYearsAgo = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+            return selectedDate <= tenYearsAgo;
+          });
+          defineRule('dateNotBelowPresent', (value) => {
+            const selectedDate = new Date(value);
+            const today = new Date();
+            return selectedDate >= today;
+          });
+          
+        // defineRule('dob', 'required|dobNotBelowTenYears');
 
 
         configure({
@@ -35,6 +47,8 @@ export default {
                     exclude:`Your not allow to use  ${ctx.field} must be a valide email`,
                     passwords_mismatch:`The password dont match`,
                     tos:`You are required to accept the terms of validation`,
+                    dobNotBelowTenYears:`Please the platform is not allowed to -10year old of aged users`,
+                    dateNotBelowPresent:`Please you can't select a day below today`
                     
                 };
 
@@ -47,7 +61,6 @@ export default {
             },
         
         validateOnBlur:true,
-        //ppermite to validate while the input is changing
         validateOnChange:true,
         validateOnInput:false,
         validateOnModelUpdate:true

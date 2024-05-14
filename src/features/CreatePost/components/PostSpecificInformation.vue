@@ -1,9 +1,9 @@
 <template>
   <div class="mb-4 mx-auto  bg-white rounded-lg ">
-    <TitleSubtitle label="Select Zone" message="Select the zone you will like this post to reach" />
+    <TitleSubtitle :label="$t('select_zone_title')" :message="$t('select_zone_message')" />
     <div class="flex flex-row space-x-4 mb-5 justify-between">
       <div class="w-1/2">
-        <label class="inline-block mb-2">Choose Your Region</label>
+            <label class="inline-block mb-2">{{ $t('choose_your_region') }}</label>
         <div v-if="isLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -15,7 +15,7 @@
         />
       </div>
       <div class="w-1/2">
-        <label class="inline-block mb-2">Choose Your Division</label>
+            <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
         <div v-if="isDivisionLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -27,7 +27,7 @@
         />
       </div>
       <div class="w-1/2">
-        <label class="inline-block mb-2">Choose Your Division</label>
+          <label class="inline-block mb-2">{{ $t('choose_your_subdivision') }} </label>
         <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -39,7 +39,7 @@
       </div>
     </div>
 
-    <TitleSubtitle label="Sectors" message="Select your the sectors of interest for this post" />
+<TitleSubtitle :label="$t('sectors')" :message="$t('select_sectors_message')" />
     <div class="grid grid-cols-2 md:grid-cols-3 gap-3 content-between">
       <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
         <base-checkbox
@@ -82,7 +82,7 @@ export default {
       regions: [
         {
           id: 0,
-          name: 'Choose a region',
+          name: this.$t('choose_your_region'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
@@ -90,7 +90,7 @@ export default {
       divisions: [
         {
           id: 0,
-          name: 'Choose a division',
+          name: this.$t('choose_your_division'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
@@ -98,11 +98,11 @@ export default {
       sub_divisions: [
         {
           id: 0,
-          name: 'Choose a sub-division',
+          name: this.$t('choose_your_subdivision'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
-      ]
+      ],
     }
   },
 

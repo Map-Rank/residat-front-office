@@ -25,8 +25,8 @@ export default {
   name: 'SectorSide',
   data() {
     return {
-      sectionTitle:'Select Sector',
-      sectors: this.sectorArray // initialize with your set of sectors
+      sectionTitle:this.$t('select_sector_title'),
+      sectors: this.sectorArray
     }
   },
   props: {
