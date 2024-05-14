@@ -1,13 +1,3 @@
-<h1 style="display: flex; justify-content: space-between; align-items: center;">Welcome to residat-front-platform <img src="./logo-small.svg" alt="Image Description" height="70"></h1>
-
-
-
-[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)](#)
-[![License: agpl](https://img.shields.io/badge/License-agpl-yellow.svg)](#)
-
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-63%25-brightgreen)
-![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen)
 
 
 RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
@@ -603,6 +593,5 @@ By contributing to RESIDAT, you agree to abide by these principles and behaviors
 
 // Log of changes and version history.
 
-
-
+---
 
