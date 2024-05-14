@@ -1,16 +1,25 @@
 <template>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-    <div class="bg-white-normal h-10 mb-3 goback" v-if="zone.level_id > 1">
+    <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
         <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
         <p>{{ zone.name }}</p>
       </div>
-    </div>
+    </div> -->
 
     <div
-      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative" v-if="zone.level_id == 4"
+      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative header-nav"
+      
     >
-      <div class="lg:w-2/4 md:w-3/4">
+    
+    <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
+      <div class="h-full bg-white flex items-center px-2">
+        <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
+        <p>{{ zone.name }}</p>
+      </div>
+    </div>
+    
+      <div class="lg:w-2/4 md:w-3/4" v-if="!isLoadingMap && zone.level_id == 4">
         <div :class="{ hidden: !displayStatistics }">
           <div class="">
             <button-ui
@@ -29,13 +38,13 @@
         </div>
       </div>
 
-      <div class="lg:w-1/4">
+      <div class="lg:w-1/4" v-if="!isLoadingMap && zone.level_id == 4">
         <div :class="{ hidden: !displayStatistics }">
           <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
         </div>
       </div>
 
-      <div class="lg:w-1/3 hidden lg:block">
+      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && zone.level_id == 4">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -105,7 +114,7 @@
               height=""
             />
           </div>
-          <div class="h-[150px] rounded-lg" v-if="zone.level_id == 4">
+          <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && zone.level_id == 4">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
                 <img
@@ -138,13 +147,13 @@
             </div>
           </div>
         </div>
-       
       </div>
     </div>
 
     <div
       class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 md:space-x-3"
-      :class="{ hidden: !displayStatistics }" v-if="zone.level_id == 4"
+      :class="{ hidden: !displayStatistics }"
+      v-if="!isLoadingMap && zone.level_id == 4"
     >
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
@@ -228,7 +237,7 @@ export default {
 
           if (zones.length > 0) {
             if (zones[0].level_id == 4) {
-              this.reportType=null
+              this.reportType = null
               this.zone = zones[0]
               this.displayStatistics = true
               // this.inSubDivision = true
@@ -374,12 +383,10 @@ export default {
     updateReportType(type) {
       if (type) {
         this.reportType = type
-      }else{
+      } else {
         this.reportType = null
-
       }
-      if(this.zone.level_id && this.zone.level_id == 4)
-      this.getReport(this.zone.id)
+      if (this.zone.level_id && this.zone.level_id == 4) this.getReport(this.zone.id)
     },
 
     showModal() {
@@ -506,6 +513,9 @@ span {
   padding-right: 10px;
 }
 .goback {
-  width: fit-content;
+  width: auto;
+}
+.header-nav {
+  margin-bottom: 1%;
 }
 </style>
