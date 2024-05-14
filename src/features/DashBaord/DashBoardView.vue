@@ -1,14 +1,14 @@
 <template>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-    <div class="bg-white-normal h-10">
+    <div class="bg-white-normal h-10 mb-3 goback" v-if="zone.level_id > 1">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
         <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>{{ $t('previous_map') }}</p>
+        <p>{{ zone.name }}</p>
       </div>
     </div>
 
     <div
-      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative"
+      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative" v-if="zone.level_id == 4"
     >
       <div class="lg:w-2/4 md:w-3/4">
         <div :class="{ hidden: !displayStatistics }">
@@ -106,7 +106,7 @@
               height=""
             />
           </div>
-          <div class="h-[150px] rounded-lg">
+          <div class="h-[150px] rounded-lg" v-if="zone.level_id == 4">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
                 <img
@@ -145,7 +145,7 @@
 
     <div
       class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 md:space-x-3"
-      :class="{ hidden: !displayStatistics }"
+      :class="{ hidden: !displayStatistics }" v-if="zone.level_id == 4"
     >
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
@@ -296,7 +296,7 @@ export default {
         { name: ChartItemData.foodSecurity, percentage: 100 },
         { name: ChartItemData.waterStress, percentage: 50 },
         { name: ChartItemData.epidemics, percentage: 25 },
-        { name: ChartItemData.business, percentage: 75 },
+        // { name: ChartItemData.business, percentage: 75 },
         { name: ChartItemData.migration, percentage: 20 }
       ],
 
@@ -505,5 +505,8 @@ span {
   padding-top: 5px;
   padding-left: 10px;
   padding-right: 10px;
+}
+.goback {
+  width: fit-content;
 }
 </style>

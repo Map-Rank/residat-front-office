@@ -11,8 +11,8 @@
 
     <!-- Container for two images side by side -->
     <div v-if="Images.length === 2" class="flex mb-0.5 h-[350px]">
-      <img :src="formatHostImageUrl(Images[0].url)" :alt="Images[0].alt" class="w-1/2 " />
-      <img :src="formatHostImageUrl(Images[1].url)" :alt="Images[1].alt" class="w-1/2 " />
+      <img :src="formatHostImageUrl(Images[0].url)" :alt="Images[0].alt" class="w-1/2 display_img" />
+      <img :src="formatHostImageUrl(Images[1].url)" :alt="Images[1].alt" class="w-1/2 display_img" />
     </div>
 
     <div v-if="Images.length === 3" class="grid grid-cols-3 gap-0.5 h-[350px]">
@@ -96,5 +96,8 @@ export default {
 </script>
 
 <style scoped>
+.display_img{
+  object-fit: cover;
+}
 /* Add your styles here if necessary */
 </style>

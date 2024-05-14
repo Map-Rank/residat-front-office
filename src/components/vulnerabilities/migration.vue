@@ -49,7 +49,7 @@ export default {
 <template>
   <div class="w-full mx-auto border-2 border-gray-500 rounded p-2">
     <canvas ref="canvas"/>
-    <input class="w-full border-gray-900 h-16 p-2 rounded-md" type="text" placeholder="Your text here">
+    <label class="w-full h-16 p-2 rounded-md" type="text">Data coming here</label>
     <a href="#">
       <p class="text-center underline text-blue-700">
         additional data
