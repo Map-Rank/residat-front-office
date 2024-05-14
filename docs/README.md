@@ -48,7 +48,7 @@
 
 - Visualization Dashboards: Interactive maps and graphs for understanding local climate risks and stakeholder activities.
 - Community Intelligence: A repository for stakeholders to publish, manage, and interact with climate adaptation reports.
-- Community Chat Rooms: Spaces for real-time discussion and exchange of climate-related information and services.
+- Community Chat Rooms: Spaces for real-time discussion and exchange of climate-related information and services..
 
  <a href="https://dev.residat.com/community">RESIDAT</a> serves as a critical tool for local and regional climate authoritative bodies to send out mobile notifications and engage communities in proactive climate risk management.
 
