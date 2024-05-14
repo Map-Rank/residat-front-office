@@ -74,7 +74,8 @@
         <div></div>
         <div class="mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
           <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
-            <span class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
+            <img v-if="key.type == 'IMAGE'" :src= key.value height="30px" width="30px"/>
+            <span v-if="key.type == 'COLOR'" class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
             <span
               class="text-sm font-semibold"
               :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
