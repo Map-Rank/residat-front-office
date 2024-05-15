@@ -15,12 +15,12 @@
             class="flex items-center justify-center mt-1"
             v-if="!loading && post.images && post.images.length > 0"
           >
-            <ImageSlider class="w-full " :images="post.images"></ImageSlider>
+            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
 
-          <div class="info h-[50vh] md:h-full grid grid-rows-custom pl-5 py-3">
+          <div class="info h-[50vh] md:h-[70vh] grid grid-rows-custom pl-5 py-3">
             <!-- user informations -->
             <div class="relative pb-4 mr-5 items-start">
               <button @click="dismiss()" class="flex justify-end w-full">

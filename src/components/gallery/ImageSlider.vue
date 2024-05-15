@@ -5,7 +5,7 @@
       class=""
       v-for="i in [currentIndex]" :key="i">
         <img 
-        class="w-full"
+        class="w-full  max-h-[40vh] md:max-h-[50vh] "
         :src="`${imageHost}${currentImg.url}`" />
       </div>
     </transition-group>
