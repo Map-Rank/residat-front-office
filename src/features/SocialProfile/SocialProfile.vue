@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="h-full">
     <div class="bg-white p-6 flex justify-center">
       <LoadingIndicator v-if="isLoading" />
@@ -7,6 +7,7 @@
         :profile-image-url="''"
         :profileName="`${userPost.first_name} ${userPost.last_name}`"
         :followersCount="0"
+        :profileImageUrl="userPost.avatar"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />
@@ -24,6 +25,7 @@
             :email="userPost.email"
             :joinDate="formatDate(userPost.created_at)"
             :website="'your-website-url.com'"
+            :showUpdateProfile="true"
           />
         </aside>
 
@@ -47,6 +49,7 @@
                 :postImages="post.images"
                 :showMenu="true"
                 :post="post"
+                :zone-name="post.zone ? post.zone.name : 'zone name' "
               />
             </div>
           </div>
@@ -62,8 +65,10 @@
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
-import { getUserPosts } from '@/features/Post/services/postService.js'
+// import { getUserPosts } from '@/features/Post/services/postService.js'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+import {makeApiGetCall } from '@/api/api'
+import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 export default {
   name: 'SocialProfile',
@@ -101,9 +106,12 @@ export default {
     },
 
     async fetchUserPost() {
+      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+      const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
+      // console.log(response.data.data.my_posts)
       this.isLoading = true
-      this.userPost = await getUserPosts()
-      this.posts = this.userPost.my_posts
+      this.userPost = response.data.data;
+      this.posts = response.data.data.my_posts
     }
   }
 }

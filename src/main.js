@@ -6,23 +6,23 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import useSectorStore from '@/stores/sectorStore.js'
 import useAuthStore from '@/stores/auth.js'
-// import useZoneStore from '@/stores/zoneStore.js'
-
-
+import InlineSvg from 'vue-inline-svg'
+// import useEventStore from './stores/eventStore.js'
 import App from './App.vue'
 import router from './router'
+import { i18n } from '@/langs/i18nSetup'
 
 const app = createApp(App)
 
+// Register InlineSvg globally
+app.component('inline-svg', InlineSvg)
 app.use(createPinia())
 app.use(router)
-app.use(VeeValidatePlugin )
+app.use(VeeValidatePlugin)
+app.use(i18n)
 
 const sectorStore = useSectorStore()
 sectorStore.initializeStore()
-
-// const zoneStore = useZoneStore()
-// zoneStore.initializeStore()
 
 const authStore = useAuthStore()
 authStore.initializeAuthState()

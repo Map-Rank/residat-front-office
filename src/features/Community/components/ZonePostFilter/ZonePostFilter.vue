@@ -1,46 +1,48 @@
-5q<template>
+<template>
   <SectionTitle :title="sectionTitle" />
-
-  <div class="bg-white md:p-6 rounded-lg">
-    <div class="grid w-full">
-      <div class="w-full">
-        <label class="label inline-block mb-2">Choose Your Region</label>
-        <div v-if="isLoading" class="flex h-full justify-center">
-          <LoadingIndicator />
-        </div>
-        <BaseDropdown
-          v-if="!isLoading"
-          :options="regions"
-          @selectedOptionId="returnZoneId"
-          @functionIdParams="getDivisions"
-          @selectedOptionName="returnZoneName"
-          
-          />
-        </div>
-        <div class="w-full">
-          <label class="label inline-block mb-2">Choose Your Division</label>
-          <div v-if="isDivisionLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
+  <div>
+    <div class="grid align-middle items-start">
+      <div class="bg-white p-2 md:p-3 rounded-lg">
+        <div class="grid w-full space-y-1">
+          <div class="w-full">
+            <p class="label inline-block mb-1">{{ $t('choose_your_region') }}</p>
+            <div v-if="isLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              v-if="!isLoading"
+              :options="regions"
+              @selectedOptionId="returnZoneId"
+              @functionIdParams="getDivisions"
+              @input="returnZone"
+            />
           </div>
-          <BaseDropdown
-          v-if="!isLoading && !isDivisionLoading"
-          @selectedOptionId="returnZoneId"
-          :options="divisions"
-          @selectedOptionName="returnZoneName"
-          @functionIdParams="getSub_divisions"
-          />
-        </div>
-        <div class="w-full">
-          <label class="label inline-block mb-2">Choose Your Sub-division</label>
-          <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
+          <div class="w-full">
+            <p class="label inline-block mb-1">{{ $t('choose_your_division') }}</p>
+            <div v-if="isDivisionLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              v-if="!isLoading && !isDivisionLoading"
+              @selectedOptionId="returnZoneId"
+              :options="divisions"
+              @input="returnZone"
+              @functionIdParams="getSub_divisions"
+            />
           </div>
-          <BaseDropdown
-          v-if="!isLoading && !isSubdivisionLoading"
-          @selectedOptionId="returnZoneId"
-          @selectedOptionName="returnZoneName"
-          :options="sub_divisions"
-        />
+          <div class="w-full">
+            <p class="label inline-block mb-1">{{ $t('choose_your_subdivision') }} </p>
+            <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
+              <LoadingIndicator />
+            </div>
+            <BaseDropdown
+              v-if="!isLoading && !isSubdivisionLoading"
+              @selectedOptionId="returnZoneId"
+              @input="returnZone"
+              :options="sub_divisions"
+            />
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -60,8 +62,9 @@ export default {
   async created() {
     try {
       this.isLoading = true
-
-      await this.getRegions()
+      if (this.props_regions.length == 1) {
+        await this.getRegions()
+      }
     } catch (error) {
       console.error('Failed to load :', error)
     } finally {
@@ -74,36 +77,15 @@ export default {
       isLoading: false,
 
       region_id: '1',
-      sectionTitle: 'Select Region',
+      sectionTitle:this.$t('select_location_title'),
 
       division_id: '',
       Subdivision_id: '1',
       isDivisionLoading: false,
       isSubdivisionLoading: false,
-      regions: [
-        {
-          id: 0,
-          name: 'Choose a region',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ],
-      divisions: [
-        {
-          id: 0,
-          name: 'Choose a division',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ],
-      sub_divisions: [
-        {
-          id: 0,
-          name: 'Choose a sub-division',
-          banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
-      ]
+      regions: this.props_regions,
+      divisions: this.props_divisions,
+      sub_divisions: this.props_sub_divisions
     }
   },
   methods: {
@@ -111,9 +93,8 @@ export default {
       this.filterPostFunctionWithId(id)
     },
 
-
-    returnZoneName(name){
-this.updateZoneName(name)
+    returnZone(zone) {
+      this.updateZone(zone)
     },
 
     async getRegions() {
@@ -130,6 +111,7 @@ this.updateZoneName(name)
         //delete all element and allow the first only
         this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
+        // this.sub_divisions = [this.sub_divisions[0]]
       } catch (error) {
         console.log(error)
       } finally {
@@ -151,7 +133,34 @@ this.updateZoneName(name)
   },
   props: {
     filterPostFunctionWithId: {},
-    updateZoneName:{}
+    updateZone: {},
+    props_regions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a region'
+        }
+      ]
+    },
+    props_divisions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a division'
+        }
+      ]
+    },
+    props_sub_divisions: {
+      type: Array,
+      default: () => [
+        {
+          id: 0,
+          name: 'Choose a sub-division'
+        }
+      ]
+    }
   },
   components: {
     BaseDropdown,
@@ -162,21 +171,12 @@ this.updateZoneName(name)
 </script>
 
 <style scoped>
-.title {
-  font-family: Roboto;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 24px; /* 120% */
-  letter-spacing: -0.3px;
-}
-
 .label {
   color: var(--body-dark, #1b1b1b);
-  font-family: Roboto;
   font-size: 14px;
   font-style: normal;
   font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
 }
 </style>

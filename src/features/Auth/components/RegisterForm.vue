@@ -8,10 +8,10 @@
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
         <div class="flex-col space-y-6">
-          <h3 class="text-center">PERSONAL INFORMATION</h3>
+          <h2 class="text-center uppercase">{{ $t('personal_information') }}</h2>
           <!-- First Name -->
           <div class="mb-6">
-            <label class="inline-block mb-4">First Name</label>
+            <label class="inline-block mb-4">{{ $t('first_name') }}</label>
             <vee-field
               name="first_name"
               v-model="formData.first_name"
@@ -19,14 +19,14 @@
               as="input"
               type="text"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              placeholder="Enter First Name"
+              :placeholder="$t('enter_first_name')"
             />
             <ErrorMessage class="text-danger-normal" name="first_name" />
           </div>
 
           <!-- Second Name -->
           <div class="mb-6">
-            <label class="inline-block mb-2">Second Name</label>
+            <label class="inline-block mb-2">{{ $t('second_name') }}</label>
             <vee-field
               name="last_name"
               v-model="formData.last_name"
@@ -34,28 +34,28 @@
               as="input"
               type="text"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              placeholder="Enter Second Name"
+              :placeholder="$t('enter_second_name')"
             />
             <ErrorMessage class="text-danger-normal" name="last_name" />
           </div>
 
           <!-- Email -->
           <div class="mb-6">
-            <label class="inline-block mb-2">Email</label>
+            <label class="inline-block mb-2">{{ $t('email') }}</label>
             <vee-field
               name="email"
               :rules="schema.email"
               v-model="formData.email"
               type="email"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              placeholder="Enter Email"
+              :placeholder="$t('enter_email')"
             />
             <ErrorMessage class="text-danger-normal" name="email" />
           </div>
 
           <!-- phone -->
           <div class="mb-6">
-            <label class="inline-block mb-2">phone</label>
+            <label class="inline-block mb-2">{{ $t('phone') }}</label>
             <vee-field
               name="phone"
               v-model="formData.phone"
@@ -63,14 +63,14 @@
               as="input"
               type="tel"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              placeholder="Enter phone number"
+              :placeholder="$t('enter_phone_number')"
             />
             <ErrorMessage class="text-danger-normal" name="phone" />
           </div>
 
           <!-- date of birth -->
           <div class="mb-6">
-            <label class="inline-block mb-2">Date of Birth</label>
+            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
             <vee-field
               name="dob"
               v-model="formData.date_of_birth"
@@ -78,28 +78,28 @@
               as="input"
               type="date"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              placeholder="Select date of birth"
+              :placeholder="$t('select_date_of_birth')"
             />
             <ErrorMessage class="text-danger-normal" name="dob" />
           </div>
 
           <!-- User Gender  -->
           <div class="mb-6">
-            <label class="inline-block mb-2">Gender</label>
+            <label class="inline-block mb-2">{{ $t('gender') }}</label>
             <select
               v-model="formData.gender"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
             >
-              <option value="">Select gender</option>
-              <option value="male">Male</option>
-              <option value="female">Female</option>
-              <option value="other">Other</option>
+              <option value="">{{ $t('select_gender') }}</option>
+              <option value="male">{{ $t('male') }}</option>
+              <option value="female">{{ $t('female') }}</option>
+              <option value="other">{{ $t('other') }}</option>
             </select>
           </div>
 
           <!-- Password -->
           <div class="relative w-full">
-            <label>Password</label>
+            <label>{{$t('password')}}</label>
             <div class="flex items-center border border-gray-300 rounded overflow-hidden">
               <vee-field
                 name="password"
@@ -107,7 +107,7 @@
                 :type="showPassword ? 'text' : 'password'"
                 id="password"
                 class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                placeholder="Password"
+                :placeholder="$t('enter_password')"
               ></vee-field>
               <button
                 @click="togglePasswordVisibility"
@@ -135,7 +135,7 @@
 
           <!-- Confirm Password -->
           <div class="relative w-full">
-            <label>Confirm Password</label>
+            <label>{{ $t('confirm_password') }}</label>
             <div class="flex items-center border border-gray-300 rounded overflow-hidden">
               <vee-field
                 name="confirm_password"
@@ -144,7 +144,7 @@
                 :rules="schema.confirm_password"
                 id="confirm_password"
                 class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                placeholder="Confirm Password"
+                :placeholder="$t('enter_confirm_password')"
               ></vee-field>
               <button
                 @click="toggleConfirmPasswordVisibility"
@@ -173,9 +173,9 @@
             <div class="flex justify-center">
               <button
                 @click.prevent="nextStep()"
-                class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+                class="block w-full capitalize bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
               >
-                Next
+              {{ $t('next') }}
               </button>
             </div>
           </div>
@@ -183,11 +183,33 @@
       </div>
 
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
-        <h3 class="text-center">SPECIFIC INFORMATION</h3>
+        <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
+
+        <div class="mb-6">
+          <label class="inline-block mb-2">{{ $t('profile_picture') }}</label>
+          <input
+            type="file"
+            @change="onFileChange"
+            accept="image/*"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          />
+          <ErrorMessage class="text-danger-normal" name="avatar" />
+
+          <div v-if="formData.avatar" class="mt-4 grid justify-center">
+            <p class="mb-2">{{ $t('preview_picture') }}:</p>
+            <div class="w-24 h-24 rounded-full overflow-hidden">
+              <img
+                :src="imageUrl"
+                alt="Profile Picture Preview"
+                class="w-full rounded-full h-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
 
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
-            <label class="inline-block mb-2">Choose Your Region</label>
+            <label class="inline-block mb-2">{{ $t('choose_your_region') }}</label>
             <div v-if="isLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -199,7 +221,7 @@
             />
           </div>
           <div class="w-1/2">
-            <label class="inline-block mb-2">Choose Your Division</label>
+            <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -213,7 +235,7 @@
         </div>
 
         <div class="w-full">
-          <label class="inline-block mb-2">Choose your Sub-division</label>
+          <label class="inline-block mb-2">{{ $t('choose_your_subdivision') }} </label>
           <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
@@ -226,7 +248,7 @@
 
         <!-- Company -->
         <div class="mb-6">
-          <label class="inline-block mb-2">Company Name</label>
+          <label class="inline-block mb-2">{{ $t('company_name') }}</label>
           <vee-field
             name="company_name"
             :rules="schema.company_name"
@@ -234,20 +256,23 @@
             as="input"
             type="text"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            placeholder="Enter Company Name"
+            :placeholder="$t('company_name')"
           />
           <ErrorMessage class="text-danger-normal" name="company_name" />
         </div>
 
         <div class="mb-4">
           <div class="grid mb-5">
-            <label class="inline-block mb-2">Sector</label>
-            <span>Select your sector of interest</span>
+            <label class="inline-block mb-2">{{ $t('sector') }}</label>
+            <span>{{ $t('select_your_sector_of_interest') }}</span>
           </div>
           <div v-if="isLoading" class="flex h-full justify-center">
             <LoadingIndicator />
           </div>
-          <div v-if="sectors || !isLoading" class="grid grid-cols-3 gap-7 content-between">
+          <div
+            v-if="sectors || !isLoading"
+            class="grid grid-cols-2 sm:grid-cols-3 gap-7 content-between"
+          >
             <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
               <vee-field
                 :name="sector.name"
@@ -271,9 +296,10 @@
             value="1"
             name="tos"
             v-model="formData.tos"
+            :rules="schema.tos"
             class="w-4 h-4 float-left -ml-6 mt-1 rounded"
           />
-          <label class="inline-block">Accept terms of service</label> <br />
+          <label class="inline-block">{{ $t('accept_terms_of_service') }}</label> <br />
           <ErrorMessage class="text-red-600" name="tos" />
         </div>
 
@@ -281,18 +307,23 @@
           <button
             @click.prevent="previousStep()"
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-            :disable="reg_in_submission"
+            :disabled="this.isLoading"
           >
-            Previous
+{{ $t('previous') }}
           </button>
 
           <button
             type="submit"
             @click="registerForm()"
+            :class="
+              this.isLoading
+                ? 'bg-gray-400 cursor-wait '
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+            "
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-            :disable="reg_in_submission"
+            :disabled="this.isLoading"
           >
-            Sign up
+            {{ $t('sign_up') }}
           </button>
         </div>
       </div>
@@ -344,7 +375,7 @@ export default {
       subDivision_id: '',
       region_id: '',
       division_id: '',
-      zone_id:'',
+      zone_id: '',
       zones: {
         region_id: '6',
         division_id: '1',
@@ -353,7 +384,7 @@ export default {
       regions: [
         {
           id: 0,
-          name: 'Choose a region',
+          name: this.$t('choose_your_region'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
@@ -361,7 +392,7 @@ export default {
       divisions: [
         {
           id: 0,
-          name: 'Choose a division',
+          name: this.$t('choose_your_division'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
@@ -369,7 +400,7 @@ export default {
       sub_divisions: [
         {
           id: 0,
-          name: 'Choose a sub-division',
+          name: this.$t('choose_your_subdivision'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
@@ -388,7 +419,7 @@ export default {
         phone: 'required|min:3|max:12',
         email: 'required|email',
         password: 'required|min:6',
-        dob: 'required',
+        dob: 'required|dobNotBelowTenYears',
         confirm_password: 'required|passwords_mismatch:@password',
         tos: 'required|tos',
         company_name: 'min:3|max:50',
@@ -405,9 +436,10 @@ export default {
         country: '',
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
+        avatar: '',
         selectedSectors: [],
         zone: '',
-        tos: true
+        tos: false
       },
       showPassword: false,
       showConfirmPassword: false,
@@ -424,10 +456,27 @@ export default {
     LoadingIndicator
   },
 
+  computed: {
+    imageUrl() {
+      if (this.formData.avatar) {
+        return URL.createObjectURL(this.formData.avatar)
+      } else {
+        return null
+      }
+    }
+  },
+
   methods: {
+    onFileChange(e) {
+      const file = e.target.files[0]
+      if (file) {
+        this.formData.avatar = file
+      } else {
+        this.formData.avatar = null
+      }
+    },
     async getRegions() {
       try {
-        // this.regions = await getZones(2, null)
         this.regions = this.regions.concat(await getZones(2, null))
       } catch (error) {
         console.log(error)
@@ -437,7 +486,6 @@ export default {
     async getDivisions(parent_id) {
       try {
         this.isDivisionLoading = true
-        // this.divisions = await getZones(null, parent_id)
         this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
       } catch (error) {
@@ -465,19 +513,13 @@ export default {
     },
     handleSelectedRegionIdChange(selectedOptionId) {
       this.region_id = selectedOptionId
-      console.log('region id' + selectedOptionId)
-      // this.zones.region_id = selectedOptionId
     },
     handleSelectedDivisionIdChange(selectedOptionId) {
       this.division_id = selectedOptionId
-      console.log('division id' + selectedOptionId)
-      // this.zones.region_id = selectedOptionId
     },
     handleSelectedSubdivisionIdChange(selectedOptionId) {
-      console.log('sub id' + selectedOptionId)
       this.subDivision_id = selectedOptionId
       this.formData.zone = selectedOptionId
-      // this.zones.region_id = selectedOptionId
     },
 
     togglePasswordVisibility() {
@@ -507,9 +549,7 @@ export default {
         // Proceed to the next step only if all fields are valid
         if (allFieldsValid) {
           this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
-        } else {
-          console.log('Some fields are invalid.')
-        }
+        } 
       } catch (error) {
         console.error('Validation error:', error)
       }
@@ -531,6 +571,7 @@ export default {
     },
 
     handleError(errors) {
+      this.isLoading = false
       if (errors.email && errors.email.length > 0) {
         this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
       } else if (errors.zone_id && errors.zone_id.length > 0) {
@@ -538,45 +579,38 @@ export default {
       }
     },
 
-    async registerForm() {
+async registerForm() {
+  const validationResults = await Promise.all(['tos'].map((field) => this.$refs.form.validateField(field)));
 
-      if (this.subDivision_id == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
-
-        return
-      }
-
-      this.alertStore.setAlert(
-        AlertStates.PROCESSING,
-        'please wait we are creating your account...'
-      )
-
-      try {
-        await registerUser(
-          this.formData,
-          this.authStore,
-          this.handleSuccess,
-          this.handleError,
-          this.handleEmailNotVerified
-        )
-      } catch (error) {
-        console.log(error)
-      }
+  if (validationResults.every((result) => result.valid)) {
+    if (this.subDivision_id === '') {
+      this.alertStore.setAlert(AlertStates.ERROR, this.$t('please_select_your_subdivision'));
+      return;
     }
+
+    this.alertStore.setAlert(AlertStates.PROCESSING, this.$t('please_wait_creating_account'));
+
+    try {
+      this.isLoading = true
+      await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError, this.handleEmailNotVerified);
+    } catch (error) {
+      this.isLoading = false
+      console.log(error);
+    }
+  } 
+}
+
   }
 }
 </script>
 
 <style>
 label {
-  color: var(--content-secondary, #374151);
-
-  /* Paragraphs/P3/Medium */
-  font-family: Inter;
   font-size: 14px;
   font-style: normal;
-  font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
 }
 
 span {

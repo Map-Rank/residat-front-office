@@ -1,22 +1,16 @@
 <template>
-  <div class="container mx-auto p-6">
+  <div class="container m-auto w-full lg:w-1/2 p-2 sm:p-6">
     <div class="flex justify-center mb-9">
-      <h3 class="uppercase font-semibold">
-        {{ isEditing ? 'Your Editing a post' : 'Share your thoughts' }}
-      </h3>
+      <h2 class="uppercase font-semibold">
+        {{ isEditing ?  $t('your_editing_post') : $t('share_your_thoughts') }}
+      </h2>
     </div>
     <div>
       <AlertForm></AlertForm>
     </div>
 
-    <PostSpecificInformation
-      :sectors="sectors"
-      :updatesector-checked="updateSectorChecked"
-      :update-zone-id="updateZoneId"
-    />
-
-    <div class="mx-auto h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
-      <TopContentForm />
+    <div class="mx-auto mb-4 h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
+      <TopContentForm :userProfileImage="userProfileImage" />
       <vee-form class="h-3/4" :validation-schema="schema" @submit.prevent="submitPost">
         <ErrorMessage class="text-danger-normal" name="content" />
         <div class="flex mb-4 flex-col space-y-2 sm:flex-row sm:space-x-2">
@@ -24,7 +18,6 @@
             name="content"
             :rules="schema.content"
             as="textarea"
-            
             v-model="formData.content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2"
@@ -42,44 +35,51 @@
         </div>
 
         <div class="mb-4">
-          <label class="block mb-2">Attach images (optional):</label>
+          <label class="block mb-2">{{ $t('attach_images_optional') }}:</label>
           <div class="flex space-x-4">
             <base-image-picker
               :iconImg="'assets\\icons\\colored\\image-icon.svg'"
               :type="'file'"
-              :label="'Add Image'"
+              :label="$t('add_image')"
               @handleFileChange="handleImageUpload"
             >
             </base-image-picker>
           </div>
         </div>
-
-        <div class="flex justify-center mt-5">
-          <div class="flex w-full sm:w-1/2">
-            <button
-              type="submit"
-              @click.prevent="submitPost"
-              :class="
-                this.isLoading
-                  ? 'bg-gray-400 cursor-wait '
-                  : 'bg-secondary-normal hover:bg-secondary-hover'
-              "
-              :disabled="this.isLoading"
-              class=" submit block w-full text-white py-1.5 rounded-full transition"
-            >
-              {{
-                !isEditing
-                  ? this.isLoading
-                    ? 'Creating...'
-                    : 'Create Post'
-                  : this.isLoading
-                    ? 'Updating Post...'
-                    : 'Update Post'
-              }}
-            </button>
-          </div>
-        </div>
       </vee-form>
+    </div>
+
+    <div class="mx-auto mb-4 p-6 h-3/4 space-y-4 bg-white rounded-lg shadow">
+      <PostSpecificInformation
+        :sectors="sectors"
+        :updatesector-checked="updateSectorChecked"
+        :update-zone-id="updateZoneId"
+      />
+      <div class="flex justify-center mt-5">
+        <div class="flex w-full sm:w-1/2">
+          <button
+            type="submit"
+            @click.prevent="submitPost"
+            :class="
+              this.isLoading
+                ? 'bg-gray-400 cursor-wait '
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+            "
+            :disabled="this.isLoading"
+            class="submit block w-full text-white py-1.5 rounded-full transition"
+          >
+            {{
+              !isEditing
+                ? this.isLoading
+                  ?  $t('creating_post')
+                  : $t('create_post')
+                : this.isLoading
+                  ? $t('updating_post')
+                  : $t('update_post')
+            }}
+          </button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -95,40 +95,52 @@ import PostSpecificInformation from '@/features/CreatePost/components/PostSpecif
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 import AlertForm from '../../components/common/AlertFrom/AlertForm.vue'
 import { AlertStates } from '../../components/common/AlertFrom/AlertState'
-import useAlertStore from '@/stores/alertStore';
-
+import useAlertStore from '@/stores/alertStore'
+import useAuthStore from '@/stores/auth.js'
+import { getSpecificPost } from '@/features/Post/services/postService'
 export default {
   name: 'CreatePost',
-  async created() {
-    const sectorStore = useSectorStore()
-    const postStore = usePostStore()
-    this.formData.content = postStore.contentFromPostInput
 
-    if (postStore.postToEdit) {
-      this.isEditing = true
-      this.formData = postStore.postToEdit
-      // this.imagesToFromLocalPreview = postStore.postToEdit.images
-      this.imagesFromHostToPreview = postStore.postToEdit.images
-    }
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        if (this.postId != null) {
+          this.isEditing = true
 
-    try {
-      this.sectors = sectorStore.getAllSectors
-    } catch (error) {
-      console.error('Failed to load sector:', error)
+          this.post = await getSpecificPost(this.postId)
+          this.formData.id = this.post.id
+          this.formData.content = this.post.content
+          this.imagesFromHostToPreview = this.post.images
+        }
+        if(this.prePostContent != null){
+          this.formData.content = this.prePostContent
+        }
+
+        const sectorStore = useSectorStore()
+
+        try {
+          this.sectors = sectorStore.getAllSectors
+        } catch (error) {
+          console.error('Failed to load sector:', error)
+        }
+      }
     }
   },
-
+  props: ['postId','prePostContent'],
   data() {
     const router = useRouter()
     const postStore = usePostStore()
     const alertStore = useAlertStore()
-
+    const authStore = useAuthStore()
 
     return {
       schema: {
         content: 'required'
       },
       router,
+      authStore,
+      userProfileImage: authStore.user.avatar,
       alertStore,
       postStore,
       isLoading: false,
@@ -137,6 +149,7 @@ export default {
       imagesFromHostToPreview: [],
       zoneId: '',
       formData: {
+        id:'',
         content: '',
         images: [],
         videos: [],
@@ -164,17 +177,15 @@ export default {
     },
     async submitPost() {
       this.formData.zoneId = this.zoneId
+if (this.formData.content == '') {
+  this.alertStore.setAlert(AlertStates.ERROR, this.$t('please_input_content'));
+  return;
+}
+if (this.zoneId == '') {
+  this.alertStore.setAlert(AlertStates.ERROR, this.$t('premium_user_specify_zone'));
+  return;
+}
 
-      if (this.formData.content == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'Please input some content to your post')
-
-        return
-      }
-      if (this.zoneId == '') {
-        this.alertStore.setAlert(AlertStates.ERROR, 'As a premium user you need to specify a zone')
-
-        return
-      }
 
       let response
       this.isLoading = true
@@ -188,6 +199,7 @@ export default {
         this.$router.push({ name: 'community' })
         return
       }
+
 
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
@@ -204,7 +216,7 @@ export default {
       }
 
       this.formData.images = []
-      this.imagesToFromLocalPreview = []
+      // this.imagesToFromLocalPreview = []
 
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
@@ -243,3 +255,13 @@ export default {
   }
 }
 </script>
+<style scoped>
+label {
+  font-size: 14px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+</style>

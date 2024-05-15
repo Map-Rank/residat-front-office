@@ -1,10 +1,7 @@
-import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api'
+import { makeApiPostCall, makeApiGetCall, makeApiPutCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
-// import useAuthStore from '@/stores/auth'
 
 const currentDate = new Date().toISOString().split('T')[0]
-// const authStore = useAuthStore()
-// const authToken = authStore.token
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const createPost = async (postData, onSuccess, onError) => {
@@ -65,18 +62,46 @@ const updatePost = async (postData, onSuccess, onError) => {
 
     formData.append('content', postData.content)
     formData.append('published_at', currentDate)
-    formData.append('zone_id', '1')
+    formData.append('zone_id', postData.zoneId)
     formData.append('_method', 'PUT')
 
+    // Append media files
+    postData.images.forEach((image, index) => {
+      if (
+        [
+          'image/jpeg',
+          'image/png',
+          'image/jpg',
+          'image/gif',
+          'application/pdf',
+          'video/mp4',
+          'video/mov',
+          'video/avi',
+          'video/wmv',
+          'audio/mp3'
+        ].includes(image.type)
+      ) {
+        formData.append(`media[${index}]`, image, image.name)
+      } else {
+        console.log('not correct format')
+      }
+    })
+
+    postData.sectorId.forEach((id, index) => {
+      formData.append(`sectors[${index}]`, id)
+    })
+
+    // console.log(postData)
+
     console.log('form data:', formData)
-    console.log('post id' + postData.id)
+
 
     const response = await makeApiPostCall(
-      API_ENDPOINTS.updatePost,
+      `${API_ENDPOINTS.post}/${postData.id}`,
       formData,
       authToken,
       true,
-      postData.id
+
     )
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)
@@ -120,7 +145,7 @@ const getPosts = async (page, size, token) => {
 const getSpecificPost = async (id) => {
   try {
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.showSpecificPost}/${id.toString()}`,
+      `${API_ENDPOINTS.post}/${id}`,
       authToken
     )
     return response.data.data
@@ -130,18 +155,10 @@ const getSpecificPost = async (id) => {
   }
 }
 
-const getPostsBySectors = async (sectorId) => {
-  try {
-    let params = new URLSearchParams({
-      // size: size.toString(),
-      // page: page.toString(),
-      sectors: JSON.stringify(sectorId)
-    })
 
-    const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      authToken
-    )
+const filterPost = async (params) => {
+  try {
+    const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, authToken)
     console.log('post filtered!!')
     return response.data.data
   } catch (error) {
@@ -149,37 +166,31 @@ const getPostsBySectors = async (sectorId) => {
     throw error
   }
 }
-const getPostsByZone = async (zoneId,size,page) => {
 
+const getFilterPosts = async (zoneId, sectorId, size, page) => {
   let defaultSize = 20
   let defaultPage = 0
 
   size = size || defaultSize
   page = page || defaultPage
 
-  try {
-   
-    let params = new URLSearchParams({
-      size: size.toString(),
-      page: page.toString(),
-      zone_id: JSON.stringify(zoneId)
-    })
+  let params = new URLSearchParams({
+    size: size.toString(),
+    page: page.toString(),
+    zone_id: zoneId,
+  })
 
-    const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      authToken
-    )
-
-    return response.data.data
-  } catch (error) {
-    console.error('Error fetching posts:', error)
-    throw error
+  if (sectorId && sectorId.length > 0) {
+    params.append('sectors', JSON.stringify(sectorId));
   }
+
+  return await filterPost(params)
 }
 
 const getUserPosts = async () => {
   try {
     const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
+    console.log(authToken)
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -189,7 +200,7 @@ const getUserPosts = async () => {
 
 const getUserProfile = async (id) => {
   try {
-    const endpoint = `/profile/detail/${id}`; 
+    const endpoint = `/profile/detail/${id}`;
     const response = await makeApiGetCall(endpoint, authToken);
     return response.data.data;
   } catch (error) {
@@ -244,7 +255,6 @@ export {
   createPost,
   getPosts,
   getSpecificPost,
-  getPostsBySectors,
   likePost,
   commentPost,
   updatePost,
@@ -252,5 +262,5 @@ export {
   sharePost,
   getUserPosts,
   getUserProfile,
-  getPostsByZone
+  getFilterPosts
 }

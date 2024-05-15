@@ -2,37 +2,31 @@
     <div class="flex justify-between w-full">
 
       <div class="user-profile flex items-center space-x-2">
-        <!-- <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" /> -->
-        <avatar-placeholder
-        :username="username"
-        :size="20"
-      />
+        <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
+    
         <div>
-            <h5 class="font-bold cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
+            <h5 class=" cursor-pointer hover:underline" @click="viewProfileUser">{{ username }}</h5>
             <div class="flex items-center ">
 
-              <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}  
-                </h5>
-              <img src="/assets/icons/location.svg" class="h-6" alt="" srcset="">
-              <span class="caption-c1">{{ postDate }}</span>
+              <img src="\assets\icons\location.png" class="h-4 mr-1" alt="" srcset="">
+            <h5 class="zoneName" @click="viewProfileUser">{{ zoneName }}</h5>
+            <p style="font-weight: 400; margin: 0 5px;"> • </p>
+            <span class=" zoneName">{{ postDate }}</span>
+            
             </div>
           
         </div>
       </div>
 
-      <!-- <div>
-        <span :style="{ backgroundColor: getColor(zoneName) }" class="p-1 px-2 rounded-full text-white items-center">{{ zoneName }}</span>      </div> -->
+  
     </div>
   </template>
   <script>
-  import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
   import randomColor from 'randomcolor';
 
   export default {
     name: 'UserPostInfo',
-    components:{
-      AvatarPlaceholder
-    },
+  
     props: {
       postDate: {},
       userProfileImage: {},
@@ -62,16 +56,22 @@
   .zoneName{
     font-size: 13px;
     color: gray;
+    font-weight: 400;
+    font-family: 'Poppins'
+  }
+
+  h5 {
+    color: var(--primary-normal, #021d40);
+    font-size: 14px;
+    font-style: normal;
+    font-weight: 600;
   }
 
   @media only screen and (max-width: 480px) {
 
     h5 {
       color: var(--primary-normal, #021d40);
-
-      /* Desktop/H6-SemiBold */
-      font-family: Roboto;
-      font-size: 12px;
+      font-size: 14px;
       font-style: normal;
       font-weight: 600;
       line-height: 16px;

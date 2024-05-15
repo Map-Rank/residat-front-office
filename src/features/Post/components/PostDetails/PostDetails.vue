@@ -56,7 +56,7 @@
                   <icon-with-label
                   :svgContentHover="'\\assets\\icons\\heart-fill.svg'"
                   :svgContent="'\\assets\\icons\\heart-outline.svg'"
-                  :labelTextRight="'Like'"
+                  :labelTextRight="$t('like')"
                   :iconDesktopSize="'w-6 h-6'"
                   :iconMobileSize="'w-5 h-5'"
                   :isActive="post.liked"
@@ -70,12 +70,12 @@
                     <img 
                     
                     src="@\assets\icons\heart-fill.svg" alt="" />
-                    <span class="caption-c1-bold">{{ post.like_count }}  likes</span>
+                    <span class="caption-c1-bold">{{ post.like_count }}  {{ $t('like') }}{{ post.like_count > 1 ? 's' : '' }}</span>
                     <img 
                     
                     
                     src="@\assets\icons\share-fill.svg" alt="" />
-                    <span class="ml-4 caption-c1-bold">{{ post.share_count }} Shares</span>
+                    <span @click="openShareModal()" class="ml-4 caption-c1-bold cursor-pointer">{{ post.share_count }} {{ $t('share') }}s</span>
                   </div>
                 </div>
               </div>
@@ -120,6 +120,7 @@ import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
 import { commentPost ,getSpecificPost } from "@/features/Post/services/postService";
 import IconWithLabel from '@/components/common/IconWithLabel/index.vue'
 import { likePost } from "../../services/postService";
+import useModalStore from '@/stores/modalStore.js'
 
 export default {
   name: "PostDetails",
@@ -138,7 +139,11 @@ export default {
     IconWithLabel
   },
   data() {
+
+    const modalStore = useModalStore()
+
     return {
+      modalStore,
       currentImageIndex: 0,
       post: null,
       commentText: "",
@@ -155,6 +160,11 @@ export default {
   },
   methods: {
     ...mapActions(usePostStore, ["togglePostDetails"]),
+
+    openShareModal() {
+      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
+      // this.modalStore.openModal(`https://dev.residat.com/show-post`)
+    },
 
     async commentPost() {
       this.loading = true;
@@ -186,16 +196,6 @@ export default {
         this.loading = false;
       }
 
-      
-      // if (this.customLiked) {
-      //       this.customLiked = false
-      //       this.customPost.like_count--
-      //       console.log(this.customLiked)
-      //     } else {
-      //       this.customLiked = true
-      //       this.customPost.like_count++
-      //     }
-
     },
     dismiss() {
       this.togglePostDetails();
@@ -217,7 +217,7 @@ export default {
 
 <style scoped>
 .back {
-  background: rgba(13, 13, 13, 0.3);
+  background: rgba(13, 13, 13, 0.155);
 }
 
 .grid-rows-custom {

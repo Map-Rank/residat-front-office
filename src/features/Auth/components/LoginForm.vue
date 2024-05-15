@@ -1,28 +1,28 @@
 <template>
   <div class="flex flex-col space-y-6">
-    <h3 class="text-center">WELCOME BACK</h3>
+    <h2 class="text-center uppercase">{{ $t('welcome_back') }}</h2>
 
     <div>
       <AlertForm></AlertForm>
     </div>
 
-    <vee-form :validation-schema="schema" @submit="login">
+    <vee-form ref="form" :validation-schema="schema" @submit="login">
       <!-- Email -->
       <div class="mb-6">
-        <label for="email" class="inline-block mb-2">Email</label>
+        <h3 for="email" class="inline-block mb-2">{{ $t('email') }}</h3>
         <vee-field
           v-model="userData.email"
           id="email"
           name="email"
           type="email"
           class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          placeholder="Enter Email"
+          :placeholder="$t('enter_email')"
         />
         <ErrorMessage class="text-danger-normal" name="email" />
       </div>
 
       <div class="relative w-full">
-        <label>Password</label>
+        <h3>{{ $t('password') }}</h3>
         <div class="flex items-center border border-gray-300 rounded overflow-hidden">
           <vee-field
             name="password"
@@ -30,7 +30,7 @@
             :type="showPassword ? 'text' : 'password'"
             id="password"
             class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-            placeholder="Password"
+            :placeholder="$t('password')"
           ></vee-field>
           <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none">
             <img
@@ -55,11 +55,16 @@
       <div class="flex justify-center">
         <button
           type="submit"
-          class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
           @click.prevent="login()"
-          :disabled="login_in_submission"
+          :class="
+            this.isLoading
+              ? 'bg-gray-400 cursor-wait '
+              : 'bg-secondary-normal hover:bg-secondary-hover'
+          "
+          class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
+          :disabled="this.isLoading"
         >
-          Sign In
+        {{ $t('login') }}
         </button>
       </div>
     </vee-form>
@@ -85,6 +90,7 @@ export default {
     return {
       authStore,
       alertStore,
+      isLoading: false,
       router,
       showPassword: false,
       schema: {
@@ -118,6 +124,7 @@ export default {
     },
 
     handleError(errors) {
+      this.isLoading = false
       if (errors.email && errors.email.length > 0) {
         this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
       } else if (errors.zone_id && errors.zone_id.length > 0) {
@@ -126,32 +133,47 @@ export default {
     },
 
     async login() {
-      this.alertStore.setAlert(AlertStates.PROCESSING, 'please wait we are login you in ', 10000)
+      const fieldsToValidate = ['email', 'password']
 
       try {
-        await loginUser(
-          this.userData,
-          this.authStore,
-          this.handleSuccess,
-          this.handleError,
-          this.handleEmailNotVerified
+        const validationResults = await Promise.all(
+          fieldsToValidate.map((field) => this.$refs.form.validateField(field))
         )
+
+        const allFieldsValid = validationResults.every((result) => result.valid)
+        if (allFieldsValid) {
+          this.alertStore.setAlert(AlertStates.PROCESSING, this.$t('please_wait_login_in'), 10000)
+          this.isLoading = true
+
+          try {
+            await loginUser(
+              this.userData,
+              this.authStore,
+              this.handleSuccess,
+              this.handleError,
+              this.handleEmailNotVerified
+            )
+          } catch (error) {
+            this.isLoading = false
+            return
+          }
+        }
       } catch (error) {
-        // console.log(error)
-        return
+        console.error('Validation error:', error)
       }
+
     }
   }
 }
 </script>
 
 <style>
-label {
-  color: var(--content-secondary, #374151);
-  font-family: Inter;
+h3 {
   font-size: 14px;
+
   font-style: normal;
-  font-weight: 500;
-  line-height: 20px; /* 142.857% */
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
 }
 </style>

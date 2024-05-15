@@ -8,6 +8,8 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+coverage
+html
 .DS_Store
 dist
 dist-ssr
@@ -26,3 +28,8 @@ coverage
 *.njsproj
 *.sln
 *.sw?
+
+
+#file
+public/storage
+.env

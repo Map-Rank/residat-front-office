@@ -1,20 +1,23 @@
 <template>
-  <header class="py-4 md:px-100 bg-white ">
+  <header class="py-1 md:px-8 lg:px-100 bg-white">
     <!-- Mobile view: Hamburger icon -->
-    <div class="flex justify-between items-center space-x-6 py-2 p-4 md:hidden">
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15" />
+    <div class="flex justify-between items-center space-x-2 sm:space-x-6 py-1 p-4 md:hidden">
+      <app-logo></app-logo>
 
-      <div class="flex-grow items-center">
-        <input type="search" placeholder="Search" class="search gray h-8 p-2 rounded-md" />
+      <div class="items-center">
+        <SearchBar />
       </div>
 
       <div class="menu relative">
         <icon-with-label
-        class="dropdown"
-          svgContentHover="\assets\icons\profile-outline.svg"
-          svgContent="\assets\icons\profile-fill.svg"
-          labelText="Profile"
-          labelTextBottom="Profile"
+          class="dropdown"
+          :svgContent="
+            authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+          "
+          :svgContentHover="
+            authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+          "
+          :labelTextBottom="authStore.user ? authStore.user.first_name : null"
           :iconDesktopSize="this.iconSize"
           :isActive="true"
           :bottom="true"
@@ -27,7 +30,7 @@
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
           <button-ui
-            :label="'Profile Page'"
+            :label="$t('profile_page')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(0)"
@@ -35,18 +38,32 @@
           </button-ui>
 
           <button-ui
-            :label="'Create Post'"
+            :label="$t('create_post')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(1)"
           >
           </button-ui>
-
           <button-ui
-            :label="'Logout'"
+            :label="$t('create_event')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
             @clickButton="menuMethods(2)"
+          >
+          </button-ui>
+          <button-ui
+            :label="$t('settings_privacy')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(3)"
+          >
+          </button-ui>
+
+          <button-ui
+            :label="$t('logout')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100'"
+            @clickButton="menuMethods(4)"
           >
           </button-ui>
         </div>
@@ -55,79 +72,140 @@
 
     <!-- Full menu for larger screens, hidden menu for mobile -->
     <div
-      :class="{   }"
-      class=" hidden sm:hidden md:flex w-full justify-between   "
+      :class="{}"
+      class="hidden sm:hidden md:grid md:grid-cols-12 gap-x-4 w-full justify-between"
     >
       <!-- Logo -->
-      <img src="@\assets\images\Logos\logo-small.svg" alt="Logo" class="h-15 "  />
+      <div class="col-span-3">
+        <div class="flex flex-col md:flex-row items-center md:space-x-5">
+          <app-logo></app-logo>
+
+          <div class="menu relative">
+            <icon-with-label
+              class="dropdown"
+              :textCss="'text-primary-normal text-xs'"
+              :svgContent="'\\assets\\icons\\translate.svg'"
+              :svgContentHover="'\\assets\\icons\\translate.svg'"
+              :labelTextBottom="this.lang"
+              :iconDesktopSize="this.iconSize"
+              :isActive="true"
+              :bottom="true"
+              @customFunction="toggleMenuLangauge"
+            ></icon-with-label>
+
+            <div
+              ref="menu"
+              v-show="isMenulangauge"
+              class="absolute left-0 mt-2 w-42 bg-white rounded-md shadow-lg z-10"
+            >
+              <button-ui
+                :label="$t('en')"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="changeLanguage('en')"
+              >
+              </button-ui>
+
+              <button-ui
+                :label="$t('fr')"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="changeLanguage('fr')"
+              >
+              </button-ui>
+            </div>
+          </div>
+
+          <div class="menu relative">
+            <icon-with-label
+              class="dropdown"
+              :textCss="'text-primary-normal text-xs'"
+              :svgContent="
+                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+              "
+              :svgContentHover="
+                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+              "
+              labelText="Profile"
+              :labelTextBottom="authStore.user ? authStore.user.first_name : null"
+              :iconDesktopSize="this.iconSize"
+              :isActive="true"
+              :bottom="true"
+              @customFunction="toggleMenu"
+            ></icon-with-label>
+
+            <!-- Dropdown Menu -->
+            <div
+              ref="menu"
+              v-show="isMenuVisible"
+              class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
+            >
+              <button-ui
+                :label="$t('profile_page')"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(0)"
+              >
+              </button-ui>
+
+              <button-ui
+                :label="$t('create_post')"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(1)"
+              >
+              </button-ui>
+              <button-ui
+                :label="$t('create_event')"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(2)"
+              >
+              </button-ui>
+              <button-ui
+                :label="$t('settings_privacy')"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(3)"
+              >
+              </button-ui>
+
+              <button-ui
+                :label="$t('logout')"
+                :textCss="'text-left '"
+                :customCss="'items-left justify-start hover:bg-gray-100'"
+                @clickButton="menuMethods(4)"
+              >
+              </button-ui>
+            </div>
+          </div>
+        </div>
+      </div>
 
       <!-- Search bar -->
-      <div class="col-span-5 sm:px-4 flex flex-grow items-center justify-center w-full">
-        <SearchBar  />
-</div>
+      <div class="grid col-span-4">
+        <div class="w-[80%] grid items-center">
+          <SearchBar />
+        </div>
+      </div>
 
       <!-- Navigation Links -->
-      <div class="col-span-3 grid justify-end">
-
-        <nav class="flex flex-col md:flex-row items-center space-x-10">
+      <div class="col-span-5 justify-self-end">
+        <nav class="flex flex-col md:flex-row items-center space-x-10 md:space-x-5">
           <icon-with-label
-          class=""
+            class=""
             v-for="(item, index) in navItems"
             :svgContentHover="item.svgContentHover"
             :svgContent="item.svgContent"
             :labelText="item.labelText"
             :labelTextBottom="item.labelText"
-            :textCss="'text-primary-normal'"
+            :textCss="'text-primary-normal text-xs'"
             :iconDesktopSize="this.iconSize"
             :isActive="isActive(item.routerName) || false"
             :bottom="item.bottom"
             :routerName="item.routerName"
             :key="index"
           ></icon-with-label>
-  
-          <div class="menu relative">
-            <icon-with-label
-            class="dropdown"
-              svgContentHover="\assets\icons\profile-outline.svg"
-              svgContent="\assets\icons\profile-fill.svg"
-              labelText="Profile"
-              labelTextBottom="Profile"
-              :iconDesktopSize="this.iconSize"
-              :isActive="true"
-              :bottom="true"
-              @customFunction="toggleMenu"
-            ></icon-with-label>
-  
-            <!-- Dropdown Menu -->
-            <div
-              v-show="isMenuVisible"
-              class=" absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
-            >
-              <button-ui
-                :label="'Profile Page'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(0)"
-              >
-              </button-ui>
-  
-              <button-ui
-                :label="'Create Post'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(1)"
-              >
-              </button-ui>
-  
-              <button-ui
-                :label="'Logout'"
-                :textCss="'text-left '"
-                :customCss="'items-left justify-start hover:bg-gray-100'"
-                @clickButton="menuMethods(2)"
-              >
-              </button-ui>
-            </div>
-          </div>
         </nav>
       </div>
     </div>
@@ -140,13 +218,25 @@ import useAuthStore from '../../../stores/auth'
 import { useRouter } from 'vue-router'
 import SearchBar from '@/components/base/SearchBar.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
+import AppLogo from '@/components/base/AppLogo.vue'
+import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
 export default {
   name: 'HeaderApp',
   components: {
     SearchBar,
     IconWithLabel,
-    ButtonUi
+    ButtonUi,
+    AppLogo
+  },
+
+  created() {
+    document.addEventListener('click', this.handleClickOutside)
+    this.lang=this.$i18n.locale
+  },
+
+  unmounted() {
+    document.removeEventListener('click', this.handleClickOutside)
   },
   data() {
     const authStore = useAuthStore()
@@ -156,15 +246,17 @@ export default {
       authStore,
       router,
       isMenuVisible: false,
-      // isMenuOpen : ref(false),
+      isMenulangauge: false,
       isActiveRoute: '',
+      userProfileImage: authStore && authStore.user ? authStore.user.avatar : '',
       isMenuOpen: false,
       iconSize: 'w-7 h-7',
+      lang: 'en',
       navItems: [
         {
           svgContent: '\\assets\\icons\\community-outline.svg',
           svgContentHover: '\\assets\\icons\\community-fill.svg',
-          labelText: 'Community',
+          labelText: this.$t('community'),
           isActive: false,
           bottom: true,
           routerName: 'community'
@@ -172,15 +264,15 @@ export default {
         {
           svgContent: '\\assets\\icons\\dashboard-outline.svg',
           svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-          labelText: 'Dashboard',
+          labelText: this.$t('dashboard'),
           isActive: false,
           bottom: true,
-          routerName: 'dashbaord'
+          routerName: 'dashboard'
         },
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
           svgContentHover: '\\assets\\icons\\chat-fill.svg',
-          labelText: 'Chat Room',
+          labelText: this.$t('chat_room'),
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
@@ -188,16 +280,23 @@ export default {
         {
           svgContent: '\\assets\\icons\\event-outline.svg',
           svgContentHover: '\\assets\\icons\\event-fill.svg',
-          labelText: 'Event',
+          labelText: this.$t('event'),
           isActive: false,
           bottom: true,
           routerName: 'event'
-        },
+        }
       ]
     }
   },
 
   methods: {
+   changeLanguage(lang) {
+     this.lang = lang;
+    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, lang); 
+     this.toggleMenuLangauge();
+     window.location.reload();
+   },
+   
     isActive(routerName) {
       if (this.$route.name === routerName) {
         return true
@@ -207,11 +306,15 @@ export default {
     },
 
     toggleMenu() {
+      this.isMenulangauge = false
       this.isMenuVisible = !this.isMenuVisible
+    },
+    toggleMenuLangauge() {
+      this.isMenuVisible =false
+      this.isMenulangauge = !this.isMenulangauge
     },
 
     menuMethods(index) {
-      console.log('click')
       switch (index) {
         case 0:
           this.$router.push({ name: 'social-profile' })
@@ -222,6 +325,15 @@ export default {
           this.toggleMenu()
           break
         case 2:
+          this.$router.push({ name: 'create-event' })
+          this.toggleMenu()
+          break
+        case 3:
+          this.$router.push({ name: 'setting' })
+          this.toggleMenu()
+          break
+        case 4:
+          this.toggleMenu()
           this.logout()
           break
       }

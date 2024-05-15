@@ -1,17 +1,7 @@
-import { makeApiGetCall } from '@/api' // Import the makeApiPostCall function
-import {  API_ENDPOINTS } from '@/constants/index.js'
+import { makeApiGetCall } from '@/api/api' 
+import {  API_ENDPOINTS,LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
-
-
-// const getZones = async () => {
-//     try {
-//       const response = await makeApiGetCall(API_ENDPOINTS.zone)
-//       return response.data.data
-//     } catch (error) {
-//       console.error('Error fetching all Zones:', error)
-//       throw error
-//     }
-//   }
+const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
   const getZones = async (level_id, parent_id) => {
     let params = new URLSearchParams();
@@ -31,14 +21,55 @@ import {  API_ENDPOINTS } from '@/constants/index.js'
         `${API_ENDPOINTS.zone}?${params.toString()}`
       )
   
-      console.log(response)
       return response.data.data;
     } catch (error) {
       console.error('Error fetching zones:', error);
       throw error;
     }
   }
+
+  const getSpecificZones = async (id) => {
+
+    try {
+      const response = await makeApiGetCall(
+        `${API_ENDPOINTS.zone}/${id}`
+      )
+      
+      return response.data.data;
+    } catch (error) {
+      console.error('Error fetching zones:', error);
+      throw error;
+    }
+  }
+
+  const getSpecificMapZones = async (parent_id, name, size ,level_id, token) => {
+
+    let defaulWithVector = 1
+    let params = new URLSearchParams({
+      name: name.toString(),
+      parent_id: parent_id.toString(),
+      size: size.toString(),
+      with_vector: defaulWithVector.toString(),
+      // with_vector: defaulWithVector,
+      // level_id: level_id.toString(),
+    })
+    
+    
+    try {
+      const response = await makeApiGetCall(
+        `${API_ENDPOINTS.zone}?${params.toString()}`,
+        token ? token : authToken
+        )
+        
+        // console.log(response.data);
+      return response.data.data
+    } catch (error) {
+      console.error('Error fetching posts:', error)
+      throw error
+    }
+  }
+
   
 
 
-  export {getZones}
+  export {getZones,getSpecificZones,getSpecificMapZones}

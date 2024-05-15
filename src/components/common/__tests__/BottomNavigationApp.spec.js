@@ -9,7 +9,7 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     { path: '/community', name: 'community' },
-    { path: '/dashbaord', name: 'dashbaord' },
+    { path: '/dashboard', name: 'dashboard' },
     { path: '/create-post', name: 'create-post' },
     { path: '/event', name: 'event' },
     { path: '/chat-room', name: 'chat-room' },

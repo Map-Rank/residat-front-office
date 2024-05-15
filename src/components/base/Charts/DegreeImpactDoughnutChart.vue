@@ -5,7 +5,7 @@
             <canvas :id="canvasId"></canvas>
           </div>
     
-        <span class="barTitle"> {{label}}</span>
+        <p class="barTitle"> {{label}}</p>
       </div>
  
 </template>
@@ -123,13 +123,9 @@ methods: {
 
 <style scoped>
 .barTitle {
-  color: #000;
-
-  /* Desktop/H4-Bold */
-  font-family: Roboto;
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }

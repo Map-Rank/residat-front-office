@@ -1,16 +1,16 @@
 <template>
     <div
         :class="`mt-5 box grid ${
-          post && post.medias && post.medias.length === 0? 'grid-cols-auto' : 'md:grid-cols-2'
+          post && post.images && post.images.length === 0? 'grid-cols-auto' : 'md:grid-cols-2'
         } bg-black shadow rounded-lg w-4/5 mx-auto`"
       >
       
           <!-- Display post images  -->
           <div
             class="flex items-center justify-center mt-1"
-            v-if="post.medias && post.medias.length > 0"
+            v-if="post.images && post.images.length > 0"
           >
-            <ImageSlider class="w-full" :images="post.medias"></ImageSlider>
+            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
@@ -50,7 +50,7 @@
                 <div class="flex justify-between mb-2 pb-2">
                   <div class="flex items-center space-x-1">
                     <img src="@\assets\icons\heart-fill.svg" alt="" />
-                    <span class="caption-c1-bold">{{ post.likes.length }}  likes</span>
+                    <span class="caption-c1-bold">{{ post.like_count }}  likes</span>
                     <img src="@\assets\icons\share-fill.svg" alt="" />
                     <span class="ml-4 caption-c1-bold">{{ post.shares.length }} Shares</span>
                   </div>
@@ -119,7 +119,7 @@ export default {
 
   computed: {
     currentImage() {
-      return this.post.medias[this.currentImageIndex].url;
+      return this.post.images[this.currentImageIndex].url;
     },
   },
   methods: {
@@ -143,7 +143,7 @@ export default {
       this.togglePostDetails();
     },
     nextImage() {
-      if (this.currentImageIndex < this.post.medias.length - 1) {
+      if (this.currentImageIndex < this.post.images.length - 1) {
         this.currentImageIndex + 1;
       }
       console.log(this.currentImageIndex);

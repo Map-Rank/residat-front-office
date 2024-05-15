@@ -1,21 +1,9 @@
 <template>
-  <div class="mb-4 mx-auto p-6 bg-white rounded-lg shadow">
-    <TitleSubtitle label="Sectors" message="Select your the sectors of interest for this post" />
-    <div class="grid grid-cols-2 md:grid-cols-5 gap-7 content-between mb-5">
-      <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
-        <base-checkbox
-          :key="sector.name"
-          :list="sector"
-          @change="updatesectorChecked"
-        ></base-checkbox>
-      </div>
-    </div>
-
-    <TitleSubtitle label="Select Zone" message="Select the zone you will like this post to reach" />
-
-    <div class="flex flex-row space-x-4 justify-between">
+  <div class="mb-4 mx-auto  bg-white rounded-lg ">
+    <TitleSubtitle :label="$t('select_zone_title')" :message="$t('select_zone_message')" />
+    <div class="flex flex-row space-x-4 mb-5 justify-between">
       <div class="w-1/2">
-        <label class="inline-block mb-2">Choose Your Region</label>
+            <label class="inline-block mb-2">{{ $t('choose_your_region') }}</label>
         <div v-if="isLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -27,7 +15,7 @@
         />
       </div>
       <div class="w-1/2">
-        <label class="inline-block mb-2">Choose Your Division</label>
+            <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
         <div v-if="isDivisionLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -39,7 +27,7 @@
         />
       </div>
       <div class="w-1/2">
-        <label class="inline-block mb-2">Choose Your Division</label>
+          <label class="inline-block mb-2">{{ $t('choose_your_subdivision') }} </label>
         <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
           <LoadingIndicator />
         </div>
@@ -50,6 +38,17 @@
         />
       </div>
     </div>
+
+<TitleSubtitle :label="$t('sectors')" :message="$t('select_sectors_message')" />
+    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 content-between">
+      <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
+        <base-checkbox
+          :key="sector.name"
+          :list="sector"
+          @change="updatesectorChecked"
+        ></base-checkbox>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -58,7 +57,6 @@ import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-
 
 export default {
   name: 'PostSpecificInformation',
@@ -84,7 +82,7 @@ export default {
       regions: [
         {
           id: 0,
-          name: 'Choose a region',
+          name: this.$t('choose_your_region'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
@@ -92,7 +90,7 @@ export default {
       divisions: [
         {
           id: 0,
-          name: 'Choose a division',
+          name: this.$t('choose_your_division'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
@@ -100,11 +98,11 @@ export default {
       sub_divisions: [
         {
           id: 0,
-          name: 'Choose a sub-division',
+          name: this.$t('choose_your_subdivision'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
         }
-      ]
+      ],
     }
   },
 
@@ -121,7 +119,7 @@ export default {
       try {
         this.isDivisionLoading = true
         //delete all element and allow the first only
-        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : [];
+        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
@@ -129,22 +127,20 @@ export default {
         this.isDivisionLoading = false
       }
     },
-    
+
     async getSub_divisions(parent_id) {
       this.isSubdivisionLoading = true
       try {
-        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : [];
+        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
         this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
       } catch (error) {
         console.log(error)
       } finally {
         this.isSubdivisionLoading = false
       }
-    },
-
-
+    }
   },
-  components: { TitleSubtitle, BaseCheckbox, BaseDropdown,LoadingIndicator },
+  components: { TitleSubtitle, BaseCheckbox, BaseDropdown, LoadingIndicator },
   props: {
     sectors: {},
     updatesectorChecked: {},
@@ -152,3 +148,14 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+label {
+  font-size: 14px;
+  font-family: 'Poppins';
+  font-style: normal;
+  font-weight: 600;
+  line-height: 24px; /* 120% */
+  letter-spacing: -0.3px;
+}
+</style>

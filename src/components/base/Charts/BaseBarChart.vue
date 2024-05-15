@@ -1,13 +1,13 @@
 // BarChartComponent.vue
 <template>
-  <div class="flex flex-col space-y-4 items-center justify-center ">
+  <div class="flex flex-col space-y-4 items-center justify-center">
     <div
       class="w-full h-[300px] p-5 flex align-middle justify-center items-center bg-white rounded-lg"
     >
       <canvas :id="canvasId"></canvas>
     </div>
 
-    <span class="barTitle"> {{label}}</span>
+    <p class="barTitle">{{ label }}</p>
   </div>
 </template>
 
@@ -73,6 +73,32 @@ export default {
 
       const options = {
         ...chartOptions,
+        events: ['click'],
+        plugins: {
+        tooltip: {
+          // Disable the tooltip from being sticky after click
+          mode: 'index',
+          intersect: false,
+          enabled: false
+        }
+      },
+        onClick: (e, activeEls) => {
+          let datasetIndex = activeEls[0].datasetIndex
+          let dataIndex = activeEls[0].index
+          let datasetLabel = e.chart.data.datasets[datasetIndex].label
+          let value = e.chart.data.datasets[datasetIndex].data[dataIndex]
+          let label = e.chart.data.labels[dataIndex]
+          // console.log('In click', datasetLabel, label, value)
+
+          // Hide the tooltip manually after click
+          e.chart.tooltip.setActiveElements([], null); // Pass an empty array to clear active elements
+          e.chart.update();
+
+          this.$emit('clickItem', label)
+
+
+        },
+
         indexAxis: this.isHorizontal ? 'y' : 'x',
         scales: {
           x: {
@@ -107,13 +133,9 @@ export default {
 
 <style scoped>
 .barTitle {
-  color: #000;
-
-  /* Desktop/H4-Bold */
-  font-family: Roboto;
-  font-size: 20px;
+  font-size: 18px;
   font-style: normal;
-  font-weight: 700;
+  font-weight: 600;
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }
