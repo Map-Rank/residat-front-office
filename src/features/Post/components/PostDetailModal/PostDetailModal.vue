@@ -1,11 +1,11 @@
 <template>
-  <transition name="modal-fade">
-    <div v-if="show" class="modal-backdrop">
+  <transition name="modal-fade h[100px]">
+    <div v-if="show" class="modal-backdrop  z-100 p-4 items-center ">
       <div class="flex pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0 w-full">
         <div
           :class="`box grid ${
             post && post.medias && post.medias.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
-          }  bg-black shadow rounded-lg w-4/5 mx-auto`"
+          }  bg-black shadow rounded-lg md:w-4/5  mx-auto`"
         >
           <!-- Display post images  -->
           <div v-if="loading" class="flex justify-center items-center">
@@ -15,12 +15,12 @@
             class="flex items-center justify-center mt-1"
             v-if="!loading && post.images && post.images.length > 0"
           >
-            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
+            <ImageSlider class="w-full " :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
 
-          <div class="info grid grid-rows-custom pl-5 py-3">
+          <div class="info h-[50vh] md:h-full grid grid-rows-custom pl-5 py-3">
             <!-- user informations -->
             <div class="relative pb-4 mr-5 items-start">
               <button @click="dismiss()" class="flex justify-end w-full">
@@ -222,14 +222,12 @@ export default {
 <style scoped>
 .modal-backdrop {
   position: fixed;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 1000;
 }
 
 .modal {
@@ -286,13 +284,5 @@ export default {
 .info {
   background: #f5f2f2;
 }
-.info {
-  height: 80vh;
-}
 
-@media only screen and (max-width: 600px) {
-  .info {
-    height: 60vh;
-  }
-}
 </style>
