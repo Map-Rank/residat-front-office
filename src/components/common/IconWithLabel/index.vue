@@ -33,7 +33,7 @@
       </p>
 
       <!-- Label on Bottom -->
-      <p :class="this.textCss" class="text-primary-normal " v-show="bottom">
+      <p :class="this.textCss" class="text-primary-normal text-center" v-show="bottom">
         {{ labelTextBottom }}
       </p>
   </router-link>
