@@ -32,6 +32,7 @@ coverage
 
 #file
 public/storage
+public/report_images
 .env
 docs/.vitepress/cache
 docs/.vitepress/dist

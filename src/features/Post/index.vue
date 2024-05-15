@@ -52,13 +52,13 @@
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showDetails(this.post.id)" class="px-5 mb-2 cursor-pointer">
+    <div @click.prevent="showModal()" class="px-5 mb-2 cursor-pointer">
       <p class=" content ">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showDetails(this.post.id)">
+    <image-post-gallery :Images="postImages" @customFunction="showModal()">
     </image-post-gallery>
 
     <!-- Post Interaction Area -->
@@ -68,7 +68,7 @@
         :comment_count="customPost.comment_count"
         :like_count="like_count"
         :share_count="customPost.share_count"
-        @showPostDetails="showDetails(this.post.id)"
+        @showPostDetails="showModal()"
       />
 
       <!-- lower section  -->
@@ -111,13 +111,14 @@
     </footer>
   </article>
 
-  <post-details v-if="showPostDetails"></post-details>
+  <!-- <post-details v-if="showPostDetails"></post-details> -->
+  <PostDetailModal v-if="isModalVisible" :postId="this.post.id" @close="closeModal" />
+
 </template>
 
 <script>
 import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
-import PostDetails from './components/PostDetails/PostDetails.vue'
 import { mapActions, mapWritableState } from 'pinia'
 import usePostStore from './store/postStore'
 import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
@@ -127,6 +128,7 @@ import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
 import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
+import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
 
 import useModalStore from '@/stores/modalStore.js'
 
@@ -142,6 +144,7 @@ export default {
       modalStore,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
+      isModalVisible: false,
       likeCount: this.like_count,
       customPost: this.post,
       customLiked: this.liked,
@@ -187,6 +190,12 @@ export default {
       'showDetails',
       'setpostIdToShowDetails'
     ]),
+    closeModal() {
+      this.isModalVisible = false
+    },
+    showModal() {
+      this.isModalVisible = true
+    },
 
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       if (window.confirm(alertMessage)) {
@@ -306,9 +315,9 @@ export default {
     InteractionPostStatistics,
     UserPostInfo,
     IconWithLabel,
-    PostDetails,
     ButtonUi,
     ImagePostGallery,
+    PostDetailModal
   },
   computed: {
     ...mapWritableState(usePostStore, ['showPostDetails']),
