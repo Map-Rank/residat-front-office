@@ -1,14 +1,4 @@
-<h1 style="display: flex; justify-content: space-between; align-items: center;">Welcome to residat-front-platform <img src="public/assets/images/Logos/logo-small.svg" alt="Image Description" height="70"></h1>
-
-
-
-[![Version](https://img.shields.io/badge/version-0.0.1-blue.svg?cacheSeconds=2592000)](#)
-[![License: AGPL](https://img.shields.io/badge/License-agpl-yellow.svg)](#)
-
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-![Coverage](https://img.shields.io/badge/coverage-63%25-brightgreen)
-![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen)
-
+<a href="https://vitepress.dev/reference/default-theme-home-page"></a>
 
 RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
 - Visualization of place-based climate risks
@@ -17,7 +7,7 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 - Chatroom for community climate realities
 - Sending out mobile notifications by local and regional climate authoritative bodies.
 
-<img src="public\assets\images\Documentation\communityView.png"> </img>
+<img src="./communityView.png"> </img>
 
 
 
@@ -27,7 +17,10 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 3. [Features](#features-✨)
 4. [Test](#test-🧪)
 5. [Code of Conduct](#code-of-conduct-)
-6. [License](#license-)
+6. [FAQs](#faqs-)
+7. [License](#license-)
+8. [Acknowledgments](#acknowledgments-)
+9. [Change Log](#change-log-)
 
 ## Introduction 🌟
 
@@ -137,19 +130,22 @@ By contributing to RESIDAT, you agree to abide by these principles and behaviors
 
 
 
-## License ⚖️
- 
- * MapAndRank - Residat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation, either version 3 of the License, or
- * (at your option) any later version.
- *
- * MapAndRank - Residat is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with MapAndRank - Residat. If not, see <https://www.gnu.org/licenses/>.
+## FAQs ❓
 
+// Answers to frequently asked questions.
+
+
+## License ⚖️
+
+// Open-source license information.
+
+## Acknowledgments 🙏
+
+// Credits to contributors and special mentions.
+
+## Change Log 📝
+
+// Log of changes and version history.
+
+---
 

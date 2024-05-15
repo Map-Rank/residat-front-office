@@ -33,3 +33,5 @@ coverage
 #file
 public/storage
 .env
+docs/.vitepress/cache
+docs/.vitepress/dist
