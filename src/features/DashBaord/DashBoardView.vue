@@ -19,7 +19,7 @@
       </div>
     </div>
     
-      <div class="lg:w-2/4 md:w-3/4" v-if="!isLoadingMap && zone.level_id == 4">
+      <div class="lg:w-2/4 md:w-3/4" v-if="!isLoadingMap && inSubDivision">
         <div :class="{ hidden: !displayStatistics }">
           <div class="">
             <button-ui
@@ -38,13 +38,13 @@
         </div>
       </div>
 
-      <div class="lg:w-1/4" v-if="!isLoadingMap && zone.level_id == 4">
+      <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
         <div :class="{ hidden: !displayStatistics }">
           <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
         </div>
       </div>
 
-      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && zone.level_id == 4">
+      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -84,7 +84,7 @@
           </div>
         </div>
       </div>
-      <div class="flex md:col-span-6 lg:col-span-5 min-h-[70vh]">
+      <div class="flex md:col-span-6  " :class="!inSubDivision ? 'lg:col-span-7 min-h-[90vh]':'lg:col-span-5 min-h-[70vh]' ">
         <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
           <LoadingIndicator />
         </div>
@@ -102,7 +102,7 @@
         </div>
         <div id="tooltip" display="none" style="position: absolute; display: none"></div>
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
-          <div class="h-[70vh]">
+          <div class="h-[80vh]">
             <inline-svg
               @mousemove="handleStateHover"
               @mouseout="handleStateLeave"
@@ -115,7 +115,7 @@
               height=""
             />
           </div>
-          <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && zone.level_id == 4">
+          <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
                 <img
@@ -154,7 +154,7 @@
     <div
       class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 md:space-x-3"
       :class="{ hidden: !displayStatistics }"
-      v-if="!isLoadingMap && zone.level_id == 4"
+      v-if="!isLoadingMap && inSubDivision"
     >
       <div class="col-span-1">
         <DegreeImpactDoughnutChart
@@ -225,6 +225,7 @@ export default {
       async handler() {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
+        this.inSubDivision = false
 
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
@@ -238,6 +239,7 @@ export default {
 
           if (zones.length > 0) {
             if (zones[0].level_id == 4) {
+              this.inSubDivision = true
               this.reportType = null
               this.zone = zones[0]
               this.displayStatistics = true
@@ -372,6 +374,22 @@ export default {
 
       try {
         let response = await getReport(zoneId, this.reportType)
+
+        if(response.length == 0){
+          console.log('data is empty 11111111111111111111111111111');
+
+          if(this.zone.vector === null){
+            this.isErrorLoadMap = true
+            this.vectorKeys = [0]
+            this.isLoadingMap = false
+            return
+          }
+
+          this.mapSvgPath = this.zone.vector?.path
+            this.vectorKeys = this.zone.vector?.keys
+            this.isLoadingMap = false
+            return
+        }
         this.mapSvgPath = response[0].vector.path
         this.vectorKeys = response[0].vector.keys
         this.isLoadingMap = false
@@ -387,7 +405,7 @@ export default {
       } else {
         this.reportType = null
       }
-      if (this.zone.level_id && this.zone.level_id == 4) this.getReport(this.zone.id)
+      if (this.zone.level_id && this.inSubDivision) this.getReport(this.zone.id)
     },
 
     showModal() {
@@ -424,6 +442,8 @@ export default {
               mapSize: this.defaultMapSize
             }
           })
+          this.vectorKeys = [0]
+          this.inSubDivision = false
         }
       }
       this.hideTooltip()
@@ -431,7 +451,11 @@ export default {
 
     handleStateHover: function (e) {
       if (e.target.tagName === 'path') {
-        this.showTooltip(e, e.target.dataset.name)
+       let name = e.target.dataset.name;
+       if (typeof name !== 'undefined') {
+           this.showTooltip(e, name);
+       }
+       
 
         if (e.target.dataset.active === 'true') {
           this.color = e.target.style.fill
