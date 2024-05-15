@@ -115,7 +115,7 @@
               height=""
             />
           </div>
-          <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
+          <!-- <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
                 <img
@@ -146,7 +146,7 @@
                 />
               </div>
             </div>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
