@@ -1,5 +1,8 @@
 <a href="https://vitepress.dev/reference/default-theme-home-page"></a>
 
+# Residat Documentation
+
+
 RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
 - Visualization of place-based climate risks
 - information through dashboards 
@@ -17,10 +20,7 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 3. [Features](#features-✨)
 4. [Test](#test-🧪)
 5. [Code of Conduct](#code-of-conduct-)
-6. [FAQs](#faqs-)
-7. [License](#license-)
-8. [Acknowledgments](#acknowledgments-)
-9. [Change Log](#change-log-)
+6. [License](#license-)
 
 ## Introduction 🌟
 

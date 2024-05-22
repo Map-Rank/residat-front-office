@@ -23,7 +23,7 @@ export default defineConfig({
     ],
 
     socialLinks: [
-      { icon: 'github', link: 'https://github.com/Map-Rank/residat-front-office' }
+      // { icon: 'github', link: 'https://github.com/Map-Rank/residat-front-office' }
     ]
   }
 })
