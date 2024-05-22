@@ -10,7 +10,8 @@ describe('BaseImagePicker', () => {
       props: {
         label: 'Upload Image',
         iconImg: 'path/to/icon.png',
-        type: 'file'
+        type: 'file',
+        accept: 'image/*'  // Explicitly setting the accept prop for this test
       }
     })
   })

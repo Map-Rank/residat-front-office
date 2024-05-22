@@ -51,6 +51,7 @@ export default {
       truncateText
     }
   },
+
   props: {
     events: {
       type: Array,
