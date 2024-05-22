@@ -52,6 +52,8 @@ export default {
   methods: {
     updateCheckedItems() {
       this.$emit('change', { list: this.list, checked: this.checked });
+      console.log('change event emitted', { list: this.list, checked: this.checked });
+
 
       // Retrieve existing sectorIds from local storage (if any)
       let storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];

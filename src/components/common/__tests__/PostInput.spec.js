@@ -1,74 +1,70 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest';
+// import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import PostInput from '@/components/common/PostInput/PostInput.vue';
 import ButtonUi from '@/components/base/ButtonUi.vue';
+// import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+// import PostInput from '@/components/path/to/PostInput.vue';
+// import ButtonUi from '@/components/base/ButtonUi.vue';
+import { useRoute, useRouter } from 'vue-router';
+import usePostStore from '@/features/Post/store/postStore';
 
 vi.mock('vue-router', () => ({
-  useRoute: vi.fn(() => ({ path: '/some-path' })),
-  useRouter: vi.fn(() => ({ push: vi.fn() }))
+  useRoute: vi.fn(),
+  useRouter: vi.fn(),
 }));
-
-
 vi.mock('@/features/Post/store/postStore', () => ({
-    default:vi.fn(()=>({
-      state:{
-        shoePostDetails:false,
-        contentFromPostInput:''
-      },
-
-      setContentFromPostInput:vi.fn(),
-      togglePostDetails:vi.fn()
-    }))
+  default: vi.fn(),
 }));
 
-describe('PostInput Component', () => {
+describe('PostInput.vue', () => {
   let wrapper;
-  const useRouterMock = { push: vi.fn() };
-  const postStoreMock = {
-    setContentFromPostInput: vi.fn()
-  };
+  let routerMock;
+  let postStoreMock;
 
   beforeEach(() => {
+    routerMock = {
+      push: vi.fn(),
+    };
+    postStoreMock = {
+      setContentFromPostInput: vi.fn(),
+    };
+
+    useRouter.mockReturnValue(routerMock);
+    useRoute.mockReturnValue({});
+    usePostStore.mockReturnValue(postStoreMock);
+
     wrapper = mount(PostInput, {
       global: {
-        stubs: { ButtonUi },
         mocks: {
-          $router: useRouterMock,
-          usePostStore: postStoreMock
-        }
-      }
+          $t: (msg) => msg, // Mocking the $t function for localization
+        },
+        components: {
+          ButtonUi,
+        },
+      },
     });
   });
 
-  it('renders input and buttons', () => {
-    expect(wrapper.find('input[type="text"]').exists()).toBe(true);
-    expect(wrapper.findAllComponents(ButtonUi)).toHaveLength(2);
+  afterEach(() => {
+    vi.clearAllMocks();
   });
 
-  it('updates content on input', async () => {
-    const input = wrapper.find('input[type="text"]');
-    await input.setValue('New post content');
-    expect(input.element.value).toBe('New post content');
+  it('renders the component', () => {
+    expect(wrapper.exists()).toBe(true);
+    expect(wrapper.find('img').attributes('src')).toBe('\\assets\\images\\smile.png');
+    expect(wrapper.find('input').exists()).toBe(true);
+    expect(wrapper.findComponent(ButtonUi).exists()).toBe(true);
   });
 
+  it('displays the correct placeholder in the input field', () => {
+    const input = wrapper.find('input');
+    expect(input.attributes('placeholder')).toBe('input_placeholder');
+  });
 
-  //TODO correct the problem in this test 
-  // it('calls navigateCreatePost and updates store on post button click', async () => {
-  //   wrapper.vm.navigateCreatePost = vi.fn()
-  //   await wrapper.vm.$nextTick();
-
-  //   // Assuming the first ButtonUi is the "Post" button
-  //     // Find the "Post" ButtonUi component and trigger the click event
-  // const postButton = wrapper.findAllComponents(ButtonUi).at(0); // Assuming the first button is the "Post" button
-  // await postButton.vm.$emit('clickButton');
-  // await wrapper.vm.$nextTick();
-  
-  //   expect(wrapper.vm.navigateCreatePost).toHaveBeenCalledTimes(1);
-
-  //   expect(postStoreMock.setContentFromPostInput).toHaveBeenCalledTimes(1);
-  //   expect(postStoreMock.setContentFromPostInput).toHaveBeenCalledWith('New post content');
-  //   expect(useRouterMock.push).toHaveBeenCalledWith({ name: 'create-post' });
-  // });
-
-  // Add more tests as necessary
+  it('updates the v-model when input is changed', async () => {
+    const input = wrapper.find('input');
+    await input.setValue('Test content');
+    expect(wrapper.vm.content).toBe('Test content');
+  });
 });

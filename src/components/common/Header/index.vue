@@ -80,7 +80,7 @@
         <div class="flex flex-col md:flex-row items-center md:space-x-5">
           <app-logo></app-logo>
 
-          <div class="menu relative">
+          <div class="menu langMenu relative">
             <icon-with-label
               class="dropdown"
               :textCss="'text-primary-normal text-xs'"
