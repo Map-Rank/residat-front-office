@@ -10,9 +10,10 @@
   <a href="https://map-rank.github.io/residat-front-office/state-component" 
      style="color: #7AA64E;text-align: center;padding: 14px 16px;text-decoration: none;font-size: 17px;">
      State and Components</a>
-  <a href="https://map-rank.github.io/residat-front-office/api-examples" 
-     style="color: #7AA64E;text-align: center;padding: 14px 16px;text-decoration: none;font-size: 17px">
+ <a href="https://map-rank.github.io/residat-front-office/api-examples" 
+     style="color: #7AA64E;text-align: center;padding: 14px 16px;text-decoration: none;font-size: 17px; ">
      API Examples</a>
+     
 </div>
 
 
