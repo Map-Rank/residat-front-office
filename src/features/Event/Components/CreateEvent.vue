@@ -192,14 +192,17 @@
               @click="createEvent()"
               class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
               :class="
-              this.isLoading
+              this.isLoadingBtn
                 ? 'bg-gray-400 cursor-wait '
                 : 'bg-secondary-normal hover:bg-secondary-hover'
             "
-            :disabled="this.isLoading"
+            :disabled="this.isLoadingBtn"
             >
               Create Event
             </button>
+          </div>
+          <div>
+            <AlertForm></AlertForm>
           </div>
         </div>
       </vee-form>
@@ -288,6 +291,7 @@ export default {
         }
       ],
       isLoading: false,
+      isLoadingBtn: false,
       isDivisionLoading: false,
       isSubdivisionLoading: false,
       dropdownOptions: [
@@ -309,7 +313,7 @@ export default {
         organized_by: '',
         date_debut: '2023-12-06T13:10:59',
         date_fin: '2023-12-06T13:10:59',
-        media: '',
+        media: null,
         selectedSectorId: [],
         sector_id: '',
         zone_id: '',
@@ -355,7 +359,6 @@ export default {
     },
 
     updateSectorId(sectorId) {
-      console.log(this.authStore.user)
       let id =sectorId
       if (this.formData.selectedSectorId.includes(sectorId)) {
         // Remove sector ID if already selected
@@ -438,43 +441,52 @@ export default {
     },
     
     handleError() {
-      this.isLoading = false;
+      this.isLoadingBtn = false;
     },
-
+    
     async createEvent() {
-      this.isLoading = true;
+      this.isLoadingBtn = true;
       const fieldsToValidate = ['title', 'description', 'date_fin', 'date_debut']
-
+      
       try {
         const validationResults = await Promise.all(
           fieldsToValidate.map((field) => this.$refs.form.validateField(field))
         )
-
+        
         // Check if all fields are valid
         const allFieldsValid = validationResults.every((result) => result.valid)
-
+        
         // Proceed to the next step only if all fields are valid
         if (allFieldsValid) {
           if (this.formData.zone_id == '') {
             this.alertStore.setAlert(AlertStates.ERROR, 'Please select a Region,division or subdivision')
+            this.isLoadingBtn = false;
+            
+            return
+          }
+          if (this.formData.media == null) {
+            this.alertStore.setAlert(AlertStates.ERROR, 'Please select a Banner')
+            this.isLoadingBtn = false;
 
             return
           }
 
-
+          
           this.alertStore.setAlert(
             AlertStates.PROCESSING,
             'please wait we are creating your account...'
           )
 
           let response = await createEvent(this.formData,this.authStore, this.handleSuccess, this.handleError)
-
+          
           console.log(response)
-
+          
         } else {
+          this.isLoadingBtn = false;
           console.log('Some fields are invalid.')
         }
       } catch (error) {
+        this.isLoadingBtn = false;
         
         console.error('Validation error:', error)
       }
