@@ -39,6 +39,22 @@
             <ErrorMessage class="text-danger-normal" name="last_name" />
           </div>
 
+
+          <!-- Description  -->
+          <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('description') }}</label>
+            <vee-field
+              name="last_name"
+              v-model="formData.description"
+              :rules="schema.description"
+              as="textarea"
+              type="text"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('description')"
+            />
+            <ErrorMessage class="text-danger-normal" name="last_name" />
+          </div>
+
           <!-- Email -->
           <div class="mb-6">
             <label class="inline-block mb-2">{{ $t('email') }}</label>
@@ -416,6 +432,7 @@ export default {
         name: 'required|min:3|max:50',
         first_name: 'required|min:3|max:50',
         last_name: 'required|min:3|max:50',
+        description: 'required|min:3|max:2000',
         phone: 'required|min:3|max:12',
         email: 'required|email',
         password: 'required|min:6',
@@ -428,6 +445,7 @@ export default {
       formData: {
         first_name: '',
         last_name: '',
+        description: '',
         email: '',
         phone: '',
         password: '',
