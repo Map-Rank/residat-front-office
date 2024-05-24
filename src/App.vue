@@ -13,7 +13,8 @@
       v-if="hideComponent"
     ></bottom-navigation-app-app>
 
-    <!-- <footer-app class="mt-auto" :class="!hiddenClass"></footer-app> -->
+    <FeedbackButton />
+
  
 
     <share-modal
@@ -34,6 +35,7 @@ import BottomNavigationAppApp from './components/common/BottomNavigator/index.vu
 import usePostStore from '@/features/Post/store/postStore'
 import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import useModalStore from '@/stores/modalStore.js'
+import FeedbackButton from '@/components/base/FeedbackButton.vue'
 
 export default {
   name: 'App',
@@ -48,6 +50,7 @@ export default {
     HeaderApp,
     FooterApp,
     ShareModal,
+    FeedbackButton,
     BottomNavigationAppApp
   },
 
