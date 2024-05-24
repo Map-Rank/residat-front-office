@@ -39,8 +39,8 @@ import { truncateText } from '@/utils/formating'
 export default {
   name: 'EventAlertBox',
   mounted() {
-    this.startRotation()
-    this.startRotation()
+    // this.startRotation()
+    // this.startRotation()
     // this.displayedEvents()
   },
 
@@ -51,6 +51,7 @@ export default {
       truncateText
     }
   },
+
   props: {
     events: {
       type: Array,

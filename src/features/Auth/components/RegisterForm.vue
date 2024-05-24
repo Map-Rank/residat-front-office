@@ -1,10 +1,7 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
   <div class="flex-col">
-    <div>
-      <AlertForm></AlertForm>
-    </div>
-
+ 
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
         <div class="flex-col space-y-6">
@@ -35,6 +32,22 @@
               type="text"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               :placeholder="$t('enter_second_name')"
+            />
+            <ErrorMessage class="text-danger-normal" name="last_name" />
+          </div>
+
+
+          <!-- Description  -->
+          <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('description') }}</label>
+            <vee-field
+              name="description"
+              v-model="formData.description"
+              :rules="schema.description"
+              as="textarea"
+              type="text"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('description')"
             />
             <ErrorMessage class="text-danger-normal" name="last_name" />
           </div>
@@ -337,12 +350,10 @@ import useSectorStore from '@/stores/sectorStore.js'
 import useZoneStore from '@/stores/zoneStore.js'
 import { registerUser } from '../services/authService'
 import { useRouter } from 'vue-router'
-import { AlertStates } from '@/components'
-import useAlertStore from '@/stores/alertStore'
-import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
+import { useToast } from "vue-toastification";
 
 export default {
   name: 'RegisterForm',
@@ -366,11 +377,11 @@ export default {
   data() {
     const router = useRouter()
     const authStore = useAuthStore()
-    const alertStore = useAlertStore()
+    const toast = useToast();
 
     return {
       authStore,
-      alertStore,
+      toast,
       router,
       subDivision_id: '',
       region_id: '',
@@ -416,6 +427,7 @@ export default {
         name: 'required|min:3|max:50',
         first_name: 'required|min:3|max:50',
         last_name: 'required|min:3|max:50',
+        description: 'required|min:3|max:2000',
         phone: 'required|min:3|max:12',
         email: 'required|email',
         password: 'required|min:6',
@@ -428,6 +440,7 @@ export default {
       formData: {
         first_name: '',
         last_name: '',
+        description: '',
         email: '',
         phone: '',
         password: '',
@@ -451,7 +464,6 @@ export default {
     }
   },
   components: {
-    AlertForm,
     BaseDropdown,
     LoadingIndicator
   },
@@ -560,7 +572,7 @@ export default {
     },
 
     handleEmailNotVerified() {
-      this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
+      this.toast.error('Check your email to verifie your mail');
       this.$router.push({ name: 'email-verification' })
     },
 
@@ -573,9 +585,9 @@ export default {
     handleError(errors) {
       this.isLoading = false
       if (errors.email && errors.email.length > 0) {
-        this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
+        this.toast.error(errors.email[0]);
       } else if (errors.zone_id && errors.zone_id.length > 0) {
-        this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0])
+        this.toast.error(errors.zone_id[0]);
       }
     },
 
@@ -584,11 +596,11 @@ async registerForm() {
 
   if (validationResults.every((result) => result.valid)) {
     if (this.subDivision_id === '') {
-      this.alertStore.setAlert(AlertStates.ERROR, this.$t('please_select_your_subdivision'));
+      this.toast.error(this.$t('please_select_your_subdivision'));
       return;
     }
-
-    this.alertStore.setAlert(AlertStates.PROCESSING, this.$t('please_wait_creating_account'));
+    
+    this.toast.error(this.$t('please_wait_creating_account'));
 
     try {
       this.isLoading = true

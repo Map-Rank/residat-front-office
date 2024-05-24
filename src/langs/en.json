@@ -23,6 +23,7 @@
   "male": "Male",
   "female": "Female",
   "other": "Other",
+  "description": "Description",
   "confirm_password": "Confirm Password",
   "enter_password": "Enter Password",
   "enter_confirm_password": "Enter Confirm Password",
@@ -112,8 +113,9 @@
   "email_icon_alt": "Email",
   "join_date_icon_alt": "Join Date",
   "update_profile_button": "Update profile",
-  "your_description_here": "Your description here"
-
+  "your_description_here": "Your description here",
+  
+  "follow": "Follow"
 
 
 }

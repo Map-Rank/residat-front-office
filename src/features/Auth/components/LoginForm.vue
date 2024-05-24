@@ -2,9 +2,7 @@
   <div class="flex flex-col space-y-6">
     <h2 class="text-center uppercase">{{ $t('welcome_back') }}</h2>
 
-    <div>
-      <AlertForm></AlertForm>
-    </div>
+    
 
     <vee-form ref="form" :validation-schema="schema" @submit="login">
       <!-- Email -->
@@ -75,9 +73,9 @@
 import useAuthStore from '../../../stores/auth'
 import { loginUser } from '../services/authService'
 import { useRouter } from 'vue-router'
-import AlertForm from '../../../components/common/AlertFrom/AlertForm.vue'
-import { AlertStates } from '@/components'
+
 import useAlertStore from '@/stores/alertStore'
+import { useToast } from "vue-toastification";
 
 export default {
   name: 'LoginForm',
@@ -86,10 +84,13 @@ export default {
     const router = useRouter()
     const authStore = useAuthStore()
     const alertStore = useAlertStore()
+    const toast = useToast();
 
     return {
       authStore,
       alertStore,
+      // alertToast,
+      toast,
       isLoading: false,
       router,
       showPassword: false,
@@ -105,17 +106,16 @@ export default {
     }
   },
 
-  components: {
-    AlertForm
-  },
+ 
 
   methods: {
     handleEmailNotVerified() {
-      this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
+      this.toast.error('Check your email to verifie your mail');
       this.$router.push({ name: 'waiting-email-verification' })
     },
-
+    
     handleSuccess() {
+      this.toast.success('Successfully login',{timeout:2000});
       this.authStore.isloggedIn = true
       this.$router.push({ name: 'community' })
     },
@@ -126,9 +126,9 @@ export default {
     handleError(errors) {
       this.isLoading = false
       if (errors.email && errors.email.length > 0) {
-        this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
+        this.toast.error(errors.email[0]);
       } else if (errors.zone_id && errors.zone_id.length > 0) {
-        this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0])
+        this.toast.error(errors.zone_id[0]);
       }
     },
 
@@ -142,7 +142,7 @@ export default {
 
         const allFieldsValid = validationResults.every((result) => result.valid)
         if (allFieldsValid) {
-          this.alertStore.setAlert(AlertStates.PROCESSING, this.$t('please_wait_login_in'), 10000)
+          this.toast.info(this.$t('please_wait_login_in'));
           this.isLoading = true
 
           try {

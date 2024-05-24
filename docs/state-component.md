@@ -1,3 +1,17 @@
+<div style="">
+  <a href="https://map-rank.github.io/residat-front-office/" 
+     style="color: #7AA64E;text-align: center;padding: 14px 16px;text-decoration: none ; font-size: 17px;">
+     Home Page</a>
+  <a href="https://map-rank.github.io/residat-front-office/setup-testing" 
+     style="color: #7AA64E;text-align: center;padding: 14px 16px;text-decoration: none;font-size: 17px;">
+     Project Setup and Testing </a>
+  <a href="https://map-rank.github.io/residat-front-office/state-component" 
+     style="color: #7AA64E;text-align: center;padding: 14px 16px;text-decoration: none;font-size: 17px;font-weight: bold;">
+     State and Components</a>
+  <a href="https://map-rank.github.io/residat-front-office/api-examples" 
+     style="color: #7AA64E;text-align: center;padding: 14px 16px;text-decoration: none;font-size: 17px; ">
+     API Examples</a>
+</div>
 
 ## State Management with Pinia 🔄
 
