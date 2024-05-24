@@ -215,13 +215,13 @@ import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
 import useZoneStore from '@/stores/zoneStore.js'
 import { useRouter } from 'vue-router'
-import { AlertStates } from '@/components'
 import useAlertStore from '@/stores/alertStore'
 import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import {createEvent} from '@/services/eventService.js'
+import { useToast } from "vue-toastification";
 
 export default {
   name: 'CreateEvent',
@@ -251,11 +251,13 @@ export default {
     const router = useRouter()
     const authStore = useAuthStore()
     const alertStore = useAlertStore()
+    const toast = useToast();
 
     return {
       isCreatingEvent: false,
       authStore,
       alertStore,
+      toast,
       router,
       subDivision_id: '',
       region_id: '',
@@ -416,7 +418,7 @@ export default {
     },
 
     handleEmailNotVerified() {
-      this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
+      this.toast.error('Check your email to verifie your mail');
       this.$router.push({ name: 'email-verification' })
     },
 
@@ -459,23 +461,21 @@ export default {
         // Proceed to the next step only if all fields are valid
         if (allFieldsValid) {
           if (this.formData.zone_id == '') {
-            this.alertStore.setAlert(AlertStates.ERROR, 'Please select a Region,division or subdivision')
+            this.toast.error( 'Please select a Region,division or subdivision');
             this.isLoadingBtn = false;
             
             return
           }
           if (this.formData.media == null) {
-            this.alertStore.setAlert(AlertStates.ERROR, 'Please select a Banner')
+            this.toast.error('Please select a Banner');
             this.isLoadingBtn = false;
-
+            
             return
           }
-
           
-          this.alertStore.setAlert(
-            AlertStates.PROCESSING,
-            'please wait we are creating your account...'
-          )
+          
+       
+          this.toast.info( 'please wait we are creating your Event...');
 
           let response = await createEvent(this.formData,this.authStore, this.handleSuccess, this.handleError)
           
