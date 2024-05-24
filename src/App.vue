@@ -3,7 +3,7 @@
   <div class="body flex flex-col min-h-screen">
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
 
-    <main class="flex-grow h-full py-16 md:pb-0  overflow-hidden">
+    <main class="flex-grow h-full py-24 md:pb-0  overflow-hidden">
       <router-view></router-view>
     </main>
 
@@ -13,7 +13,6 @@
       v-if="hideComponent"
     ></bottom-navigation-app-app>
 
-    <!-- <footer-app class="mt-auto" :class="!hiddenClass"></footer-app> -->
  
 
     <share-modal
