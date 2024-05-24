@@ -141,7 +141,7 @@ export default {
 }
 
 .feedback-form button {
-  background-color: #28a745;
+  background-color: #7aa64e;
   color: white;
   border: none;
   padding: 10px 20px;
@@ -150,7 +150,7 @@ export default {
 }
 
 .feedback-form button:hover {
-  background-color: #218838;
+  background-color: #5c7d3b;
 }
 
 .feedback-message {

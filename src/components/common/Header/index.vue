@@ -141,6 +141,7 @@
               class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
               <button-ui
+                :leftIcon="'\\assets\\icons\\profile-fill.svg'"
                 :label="$t('profile_page')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -149,6 +150,7 @@
               </button-ui>
 
               <button-ui
+                :leftIcon="'\\assets\\icons\\post-fill.svg'"
                 :label="$t('create_post')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -156,6 +158,7 @@
               >
               </button-ui>
               <button-ui
+                :leftIcon="'\\assets\\icons\\event-fill.svg'"
                 :label="$t('create_event')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -163,6 +166,7 @@
               >
               </button-ui>
               <button-ui
+                :leftIcon="'\\assets\\icons\\edit.svg'"
                 :label="$t('settings_privacy')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -171,6 +175,7 @@
               </button-ui>
 
               <button-ui
+                :leftIcon="'\\assets\\icons\\logout.svg'"
                 :label="$t('logout')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -232,7 +237,7 @@ export default {
 
   created() {
     document.addEventListener('click', this.handleClickOutside)
-    this.lang=this.$i18n.locale
+    this.lang = this.$i18n.locale
   },
 
   unmounted() {
@@ -290,13 +295,13 @@ export default {
   },
 
   methods: {
-   changeLanguage(lang) {
-     this.lang = lang;
-    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, lang); 
-     this.toggleMenuLangauge();
-     window.location.reload();
-   },
-   
+    changeLanguage(lang) {
+      this.lang = lang
+      localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, lang)
+      this.toggleMenuLangauge()
+      window.location.reload()
+    },
+
     isActive(routerName) {
       if (this.$route.name === routerName) {
         return true
@@ -310,7 +315,7 @@ export default {
       this.isMenuVisible = !this.isMenuVisible
     },
     toggleMenuLangauge() {
-      this.isMenuVisible =false
+      this.isMenuVisible = false
       this.isMenulangauge = !this.isMenulangauge
     },
 
