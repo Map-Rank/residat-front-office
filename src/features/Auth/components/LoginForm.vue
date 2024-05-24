@@ -76,8 +76,10 @@ import useAuthStore from '../../../stores/auth'
 import { loginUser } from '../services/authService'
 import { useRouter } from 'vue-router'
 import AlertForm from '../../../components/common/AlertFrom/AlertForm.vue'
-import { AlertStates } from '@/components'
+
 import useAlertStore from '@/stores/alertStore'
+import AlertToast , {AlertStates} from '@/components/common/AlertToast/AlertToast.vue'
+import { useToast } from "vue-toastification";
 
 export default {
   name: 'LoginForm',
@@ -86,10 +88,14 @@ export default {
     const router = useRouter()
     const authStore = useAuthStore()
     const alertStore = useAlertStore()
+    // const alertToast = AlertToast();
+    const toast = useToast();
 
     return {
       authStore,
       alertStore,
+      // alertToast,
+      toast,
       isLoading: false,
       router,
       showPassword: false,
@@ -106,12 +112,15 @@ export default {
   },
 
   components: {
-    AlertForm
+    AlertForm,
+    // AlertToast,
   },
 
   methods: {
     handleEmailNotVerified() {
-      this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
+      // this.alertStore.setAlert(AlertStates.ERROR, 'Check your email to verifie your mail')
+      // this.alertToast.showAlert('Check your email to verifie your mail', AlertStates.ERROR);
+      this.toast.error('Check your email to verifie your mail');
       this.$router.push({ name: 'waiting-email-verification' })
     },
 
@@ -126,9 +135,13 @@ export default {
     handleError(errors) {
       this.isLoading = false
       if (errors.email && errors.email.length > 0) {
-        this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
+        // this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
+        // this.alertToast.showAlert(errors.email[0], AlertStates.ERROR);
+        this.toast.error(errors.email[0]);
       } else if (errors.zone_id && errors.zone_id.length > 0) {
-        this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0])
+        // this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0])
+        this.toast.error(errors.zone_id[0]);
+        // this.alertToast.showAlert(errors.zone_id[0], AlertStates.ERROR);
       }
     },
 

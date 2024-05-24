@@ -44,7 +44,7 @@
           <div class="mb-6">
             <label class="inline-block mb-2">{{ $t('description') }}</label>
             <vee-field
-              name="last_name"
+              name="description"
               v-model="formData.description"
               :rules="schema.description"
               as="textarea"
