@@ -25,8 +25,8 @@ app.use(i18n)
 
 
 const options = {
-    position: POSITION.TOP_RIGHT,
-    timeout: 5000,
+    position: POSITION.TOP_CENTER,
+    timeout: 3000,
     closeOnClick: true,
     pauseOnFocusLoss: true,
     pauseOnHover: true,
