@@ -15,7 +15,7 @@
         Get to us on Whatsap
       </a>
     </div>
-    <div v-if="showMessage" class="feedback-message">Get to us if you have any problem.</div>
+    <div v-if="showMessage" class="feedback-message hidden sm:block">Get to us if you have any problem.</div>
   </div>
 </template>
 
@@ -168,4 +168,18 @@ export default {
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+/* Media Query for Mobile Devices */
+@media screen and (max-width: 768px) {
+  .feedback-container {
+    position: fixed;
+    bottom:100px;
+    right: 20px;
+    z-index: 1000;
+  }
+  .feedback-message {
+    display:hidden;
+  }
+}
+
 </style>
