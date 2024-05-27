@@ -5,9 +5,7 @@
         {{ isEditing ?  $t('your_editing_post') : $t('share_your_thoughts') }}
       </h2>
     </div>
-    <div>
-      <AlertForm></AlertForm>
-    </div>
+   
 
     <div class="mx-auto mb-4 h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm :userProfileImage="userProfileImage" />
@@ -93,11 +91,11 @@ import usePostStore from '../Post/store/postStore.js'
 import ImagePreviewGallery from '@/components/gallery/ImagePreviewGallery/index.vue'
 import PostSpecificInformation from '@/features/CreatePost/components/PostSpecificInformation.vue'
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
-import AlertForm from '../../components/common/AlertFrom/AlertForm.vue'
-import { AlertStates } from '../../components/common/AlertFrom/AlertState'
-import useAlertStore from '@/stores/alertStore'
 import useAuthStore from '@/stores/auth.js'
 import { getSpecificPost } from '@/features/Post/services/postService'
+import { useToast } from "vue-toastification";
+
+
 export default {
   name: 'CreatePost',
 
@@ -131,17 +129,17 @@ export default {
   data() {
     const router = useRouter()
     const postStore = usePostStore()
-    const alertStore = useAlertStore()
     const authStore = useAuthStore()
+    const toast = useToast();
 
     return {
       schema: {
         content: 'required'
       },
       router,
+      toast,
       authStore,
       userProfileImage: authStore.user.avatar,
-      alertStore,
       postStore,
       isLoading: false,
       isEditing: false,
@@ -166,7 +164,6 @@ export default {
     PostSpecificInformation,
     BaseImagePicker,
     ImagePreviewGallery,
-    AlertForm
   },
   methods: {
     handleError() {
@@ -178,11 +175,11 @@ export default {
     async submitPost() {
       this.formData.zoneId = this.zoneId
 if (this.formData.content == '') {
-  this.alertStore.setAlert(AlertStates.ERROR, this.$t('please_input_content'));
+  this.toast.error(this.$t('please_input_content'));
   return;
 }
 if (this.zoneId == '') {
-  this.alertStore.setAlert(AlertStates.ERROR, this.$t('premium_user_specify_zone'));
+  this.toast.error(this.$t('premium_user_specify_zone'));
   return;
 }
 
@@ -206,6 +203,7 @@ if (this.zoneId == '') {
       if (response.status) {
         this.resetForm()
         this.$router.push({ name: 'community' })
+        this.toast.success('Post successfuly created');
       }
     },
 
