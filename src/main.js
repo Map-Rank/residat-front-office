@@ -11,6 +11,8 @@ import InlineSvg from 'vue-inline-svg'
 import App from './App.vue'
 import router from './router'
 import { i18n } from '@/langs/i18nSetup'
+import Toast, { POSITION } from 'vue-toastification';
+import 'vue-toastification/dist/index.css';
 import { app as firebaseApp, analytics } from './firebaseConfig'; 
 
 const app = createApp(App)
@@ -22,6 +24,24 @@ app.use(router)
 app.use(VeeValidatePlugin)
 app.use(i18n)
 
+
+const options = {
+    position: POSITION.TOP_CENTER,
+    timeout: 3000,
+    closeOnClick: true,
+    pauseOnFocusLoss: true,
+    pauseOnHover: true,
+    draggable: true,
+    draggablePercent: 0.6,
+    showCloseButtonOnHover: false,
+    hideProgressBar: true,
+    closeButton: "button",
+    icon: true,
+    rtl: false
+};
+
+app.use(Toast, options);
+
 const sectorStore = useSectorStore()
 sectorStore.initializeStore()
 
@@ -29,4 +49,3 @@ const authStore = useAuthStore()
 authStore.initializeAuthState()
 
 app.mount('#app')
-
