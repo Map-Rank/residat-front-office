@@ -218,6 +218,15 @@ const likePost = async (postId) => {
   }
 }
 
+const followUser = async (userId) => {
+  try {
+    await makeApiPostCall(`${API_ENDPOINTS.follow}/${userId}`, null, authToken)
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
 const sharePost = async (postId) => {
   try {
     await makeApiPostCall(`${API_ENDPOINTS.sharePost}/${postId}`, null, authToken)
@@ -262,5 +271,6 @@ export {
   sharePost,
   getUserPosts,
   getUserProfile,
-  getFilterPosts
+  getFilterPosts,
+  followUser
 }

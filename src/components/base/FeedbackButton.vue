@@ -54,8 +54,8 @@ export default {
     },
     startHideShowCycle() {
       this.hideShowInterval = setInterval(() => {
-        this.feedbackContainer.style.display =
-          this.feedbackContainer.style.display === 'none' ? 'block' : 'none'
+        // this.feedbackContainer.style.display =
+        //   this.feedbackContainer.style.display === 'none' ? 'block' : 'none'
       }, 60000) // Toggle every minute
     },
     showFeedbackMessage() {

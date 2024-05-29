@@ -133,7 +133,7 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import { mapActions, mapWritableState } from 'pinia'
 import usePostStore from './store/postStore'
-import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
+import { commentPost, deletePost, likePost, sharePost,followUser } from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
@@ -207,7 +207,10 @@ export default {
       'setpostIdToShowDetails'
     ]),
 
-    onClickFollow() {
+    async onClickFollow() {
+      
+      
+      await followUser(this.post.creator[0].id);
             // Change showMenu status
             this.isFollowing = !this.isFollowing
             // Depending on the showMenu value, update icon source and text
