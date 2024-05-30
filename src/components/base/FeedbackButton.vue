@@ -74,9 +74,9 @@ export default {
       if (this.feedback == null) {
         this.toast.error('Please Enter a feedback')
       } else {
-        const email = 'konomelifuente@gmail.com' // Replace with your email
-        const subject = 'MapandRank Feedback'
-        const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(this.feedback)}`
+        // const email = 'konomelifuente@gmail.com' 
+        // const subject = 'MapandRank Feedback'
+        // const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(this.feedback)}`
         // window.location.href = emailUrl
         this.showForm = false
         this.feedback = null

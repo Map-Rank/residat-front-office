@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall, makeApiPutCall, makeApiDeleteCall } from '@/api/api'
+import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const currentDate = new Date().toISOString().split('T')[0]
