@@ -53,9 +53,15 @@
 
               <!-- Main Content Area: Posts -->
               <main class="col-span-5 lg:px-4 md:px-0" ref="mainContent">
-                <div v-if="topLoading" class="flex h-full justify-center">
+                <!-- <div v-if="topLoading" class="flex h-full justify-center">
                   <LoadingIndicator />
+                </div> -->
+
+                <div v-if="topLoading">
+                    <ShimmerLoading v-for="index in 4" :key="index"  class="mb-4" />
                 </div>
+
+               
 
                 <div v-if="showPageRefresh && !filteringActive">
                   <RefreshError
@@ -116,6 +122,7 @@
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
+
                   <post-input v-if="!showPageRefresh" :profilePictureUrl="userProfileImage">
                   </post-input>
 
@@ -248,6 +255,7 @@ import ZonePostFilter from './components/ZonePostFilter/ZonePostFilter.vue'
 import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { getSpecificZones, getZones } from '@/services/zoneService'
+import ShimmerLoading from '@/components/common/ShimmerLoading/ShimmerLoading.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -718,6 +726,7 @@ export default {
     PostInput,
     ZonePostFilter,
     EventAlertBox,
+    ShimmerLoading,
     ButtonUi
   }
 }
