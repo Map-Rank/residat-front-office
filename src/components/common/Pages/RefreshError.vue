@@ -1,9 +1,13 @@
 <template>
   <div class="flex flex-col items-center justify-center ">
-    <div class="text-center mb-4">
-      <img :src="imageUrl" class="h-full w-full" alt="" />
-      <p class="text-2xl font-light text-gray-600">{{ errorMessage }}</p>
-    </div>
+
+    
+ <div class="mb-4 flex flex-col items-center justify-center">
+     <img :src="imageUrl" alt="" :width="imgSize" :height="imgSize" class="mx-auto"/>
+     <p class="text-2xl font-normal text-gray-600 text-center">{{ errorMessage }}</p>
+ </div>
+ 
+  
     <div v-if="!hideButton"> <!-- Add v-if directive to conditionally render the button -->
       <ButtonUi 
         @clickButton="handleRefresh()"
@@ -34,7 +38,8 @@ export default {
     hideButton: {
       type: Boolean,
       default: false // Set default value to false if not provided
-    }
+    },
+    imgSize:Number,
   },
   components: {
     ButtonUi
