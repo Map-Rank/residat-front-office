@@ -69,7 +69,9 @@
         </div>
       </div>
     </div>
+
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
+      
       <div class="col-span-1 md:col-span-2 lg:col-span-1">
         <div></div>
         <div class="mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
@@ -86,8 +88,10 @@
       </div>
       <div class="flex md:col-span-6  " :class="!inSubDivision ? 'lg:col-span-7 min-h-[90vh]':'lg:col-span-5 min-h-[70vh]' ">
         <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
-          <LoadingIndicator />
+          <MapShimmer  :legendItems="5" />
         </div>
+        
+
 
         <div
           v-if="isErrorLoadMap && !isLoadingMap"
@@ -196,12 +200,12 @@ import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
-import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
+import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
 
 export default {
   name: 'DashBoardView',
@@ -214,9 +218,9 @@ export default {
     InlineSvg,
     WaterStressChart,
     ButtonUi,
-    LoadingIndicator,
     RefreshError,
-    Modal
+    Modal,
+    MapShimmer
   },
 
   watch: {
