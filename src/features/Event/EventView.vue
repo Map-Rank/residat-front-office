@@ -7,12 +7,13 @@
           <LoadingIndicator />
         </div> -->
         <AvatarEventShimmer v-if="topLoading" :numShimmers="8" :componentHeight="'auto'" />
-        
+
         <div v-if="showPageRefresh">
           <RefreshError
-          :imageUrl="'assets\\images\\Community\\loading.svg'"
-          :errorMessage="errorMessage"
-          @refreshPage="reloadEvents()"
+            :imgSize="400"
+            :imageUrl="'assets\\images\\Community\\loading.svg'"
+            :errorMessage="errorMessage"
+            @refreshPage="reloadEvents()"
           ></RefreshError>
         </div>
         <div v-if="!topLoading">
@@ -22,28 +23,20 @@
 
       <!-- Sidebar widgets -->
       <div>
-        <AvatarEventShimmer v-if="topLoading" :numShimmers="1" :componentHeight="'auto'" />
+        <AvatarEventShimmer v-if="isZoneLoading" :numShimmers="1" :componentHeight="'auto'" />
 
-        <div v-if="!topLoading" class="">
-
+        <div v-if="!isZoneLoading" class="">
           <div class="mb-4 p-4 bg-white rounded shadow">
-
             <zone-post-filter
-                      :props_regions="default_regions"
-                      :props_divisions="default_divisions"
-                      :props_sub_divisions="default_sub_divisions"
-                      :filterPostFunctionWithId="filterEventByZone"
-                      :updateZone="updateZone"
-                    ></zone-post-filter>
-                    
-            <!-- <h3 class="font-semibold text-xl mb-2">POPULAR EVENT</h3>
-            <div v-for="post in popularEvents" :key="post.id" class="mb-2">
-              <h4 class="text-sm font-semibold">{{ post.title }}</h4>
-              <p class="text-gray-600 text-xs">{{ post.excerpt }}</p>
-            </div> -->
+              :props_regions="default_regions"
+              :props_divisions="default_divisions"
+              :props_sub_divisions="default_sub_divisions"
+              :filterPostFunctionWithId="filterEventByZone"
+              :updateZone="updateZone"
+            ></zone-post-filter>
+
           </div>
         </div>
-
       </div>
     </div>
   </div>
@@ -57,13 +50,15 @@ import { formatHostImageUrl } from '@/utils/formating'
 import EventBox from './Components/EventBox.vue'
 import AvatarEventShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
-import {getFilterEvents }from '@/services/eventService.js'
+import { getFilterEvents } from '@/services/eventService.js'
 
 export default {
   name: 'EventView',
   async created() {
     // this.fetcheventById()
     try {
+      this.topLoading = true
+      this.isZoneLoading = true
       await this.fetchEvents()
       this.topLoading = false
     } catch (error) {
@@ -82,18 +77,18 @@ export default {
       authStore,
       formatHostImageUrl,
       topLoading: false,
+      isZoneLoading: false,
       showPageRefresh: false,
       errorMessage: 'Sorry no event found',
       showMenu: false,
-      isMenuVisible:false,
+      isMenuVisible: false,
       events: [],
       popularEvents: [
         {
           id: 1,
           title: 'Upcomming',
           excerpt: 'UPCOMMING EVENT'
-        },
-     
+        }
       ],
       default_regions: [
         {
@@ -130,7 +125,6 @@ export default {
 
         this.events = await getFilterEvents(id != 1 ? id : null, null, null, null)
         // this.$router.push(`/community/${id}`);
-
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -139,21 +133,20 @@ export default {
         this.filteringActive = true
         if (this.events.length == 0) {
           this.showPageRefresh = true
-          this.errorMessage = 'No post found under this location , chose another location '
+          this.errorMessage = 'No event found under this location , chose another location '
         } else {
           this.showPageRefresh = false
         }
       }
     },
     updateZone(zone) {
-      console.log(zone);
+      console.log(zone)
     },
 
     async fetchEvents() {
       this.hasNewEvents = false
 
       try {
-        this.topLoading = true
         this.events = await getEvents(0, 10, this.authStore.user.token)
         // this.recentEvents = await getEvents(0, 3, this.authStore.user.token)
       } catch (error) {
@@ -161,6 +154,7 @@ export default {
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
+        this.isZoneLoading = false
         if (this.events.length == 0) {
           this.showPageRefresh = true
           this.errorMessage = 'Could not get post refresh your page or check your connection'
@@ -171,7 +165,7 @@ export default {
     },
 
     async reloadEvents() {
-      this.topLoading = false
+      this.topLoading = true
 
       this.showPageRefresh = false
       // this.hasFetchAllEvent = false
@@ -206,8 +200,7 @@ export default {
 
     viewEvent() {
       // this.$router.push({ name: 'show-post', params: { id: this.post.id } })
-    },
-
+    }
   }
 }
 </script>

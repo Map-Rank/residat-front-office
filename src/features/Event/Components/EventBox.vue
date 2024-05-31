@@ -24,13 +24,17 @@
           </div>
         </div>
         <div>
-          <div class="flex items-center">
-            <img src="\assets\icons\location.png" class="h-4 mr-1" alt="" srcset="" />
-            <span class="span">{{ event.location }},</span>
-            <span class="span"> Date : {{ event.published_at }}</span>
+          <div class="grid items-center">
+            <div class="flex items-center">
+              <img src="\assets\icons\location.png" class="h-4 mr-1" alt="" srcset="" />
+              <span class="span">{{ event.location }} • </span>
+          
+              <span class="span ml-1"> {{ event.humanize_date_creation }}</span> <br>
+            </div>
+            <p class="span"> Date : {{ event.published_at }}</p>
           </div>
         </div>
-        <p class="text-gray-700 text-start mt-2 content">{{ event.description }}</p>
+        <p class="text-gray-700 text-start mt-1 content">{{ event.description }}</p>
       </div>
     </router-link>
     
