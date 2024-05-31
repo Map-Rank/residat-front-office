@@ -3,15 +3,16 @@
     <div class="grid md:grid-cols-3 gap-4">
       <!-- Main content -->
       <div class="md:col-span-2">
-        <div v-if="topLoading" class="flex h-full justify-center">
+        <!-- <div v-if="topLoading" class="flex h-full justify-center">
           <LoadingIndicator />
-        </div>
-
+        </div> -->
+        <AvatarPostShimmer v-if="topLoading" :numShimmers="8" :componentHeight="'auto'" />
+        
         <div v-if="showPageRefresh">
           <RefreshError
-            :imageUrl="'assets\\images\\Community\\loading.svg'"
-            :errorMessage="errorMessage"
-            @refreshPage="reloadEvents()"
+          :imageUrl="'assets\\images\\Community\\loading.svg'"
+          :errorMessage="errorMessage"
+          @refreshPage="reloadEvents()"
           ></RefreshError>
         </div>
         <div v-if="!topLoading">
@@ -21,13 +22,16 @@
 
       <!-- Sidebar widgets -->
       <div>
-        <div class="mb-4 p-4 bg-white rounded shadow">
+        <AvatarPostShimmer v-if="topLoading" :numShimmers="1" :componentHeight="'auto'" />
+
+        <div v-if="!topLoading" class="mb-4 p-4 bg-white rounded shadow">
           <h3 class="font-semibold text-xl mb-2">POPULAR EVENT</h3>
           <div v-for="post in popularPosts" :key="post.id" class="mb-2">
             <h4 class="text-sm font-semibold">{{ post.title }}</h4>
             <p class="text-gray-600 text-xs">{{ post.excerpt }}</p>
           </div>
         </div>
+
       </div>
     </div>
   </div>
@@ -35,12 +39,11 @@
 
 <script>
 import { getEvents } from '../../services/eventService'
-import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import useAuthStore from '@/stores/auth.js'
 import { formatHostImageUrl } from '@/utils/formating'
 import EventBox from './Components/EventBox.vue'
-
+import AvatarPostShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
 
 export default {
   name: 'EventView',
@@ -54,9 +57,9 @@ export default {
     }
   },
   components: {
-    LoadingIndicator,
     RefreshError,
-    EventBox
+    EventBox,
+    AvatarPostShimmer
   },
   data() {
     const authStore = useAuthStore()

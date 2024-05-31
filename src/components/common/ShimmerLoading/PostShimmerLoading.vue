@@ -1,6 +1,6 @@
-<!-- src/components/ShimmerLoading.vue -->
+<!-- src/components/PostShimmerLoading.vue -->
 <template>
-    <div class="shimmer-loading">
+    <div v-for="index in numPost" :key="index" class="shimmer-loading mb-3">
       <div class="shimmer-post">
         <div class="shimmer-header">
           <div class="shimmer-avatar shimmer"></div>
@@ -22,7 +22,13 @@
   
   <script>
   export default {
-    name: 'ShimmerLoading',
+    name: 'PostShimmerLoading',
+    props: {
+      numPost: {
+        type: Number,
+        default: 3, // Default number of dropdowns
+      },
+    },
   };
   </script>
   

@@ -1,7 +1,10 @@
   <template>
   <div class="h-full">
     <div class="bg-white p-6 flex justify-center">
-      <LoadingIndicator v-if="isLoading" />
+      <!-- <LoadingIndicator v-if="isLoading" /> -->
+      <TopProfileShimmer v-if="isLoading" />
+
+
       <top-profile-info
         v-if="!isLoading && userPost"
         :profile-image-url="''"
@@ -16,6 +19,7 @@
     <div class="md:px-100 pb-5">
       <div class="container mx-auto pt-3 sm:grid grid-cols-1 md:grid-cols-4">
         <aside class="col-span-1 mb-2 sm:block">
+          <DropdownShimmer v-if="isLoading" :numDropdowns="3" :componentHeight="'auto' " class="mb-4" />
           <about-user-info
             v-if="!isLoading && userPost"
             :username="`${userPost.first_name} ${userPost.last_name}`"
@@ -32,9 +36,11 @@
         <!-- Main Content Area: Posts -->
         <main class="col-span-2 sm:px-4">
           <div class="space-y-5">
-            <div class="flex justify-center">
-              <LoadingIndicator v-if="isLoading" />
-            </div>
+            
+
+            <div v-if="isLoading">
+              <PostShimmerLoading  class="mb-4" />
+          </div>
 
             <div class="space-y-5" v-if="!isLoading">
               <PostComponent
@@ -66,9 +72,11 @@ import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
 // import { getUserPosts } from '@/features/Post/services/postService.js'
-import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
 import {makeApiGetCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import TopProfileShimmer from '@/components/common/ShimmerLoading/TopProfileShimmer.vue'
+import DropdownShimmer from '@/components/common/ShimmerLoading/DropdownShimmer.vue';
+import PostShimmerLoading from '@/components/common/ShimmerLoading/PostShimmerLoading.vue'
 
 export default {
   name: 'SocialProfile',
@@ -97,7 +105,9 @@ export default {
     PostComponent,
     AboutUserInfo,
     TopProfileInfo,
-    LoadingIndicator
+    TopProfileShimmer,
+    DropdownShimmer,
+    PostShimmerLoading
   },
 
   methods: {

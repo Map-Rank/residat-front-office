@@ -64,7 +64,7 @@
                 </div> -->
 
                 <div v-if="topLoading">
-                    <ShimmerLoading v-for="index in 4" :key="index"  class="mb-4" />
+                    <PostShimmerLoading  class="mb-4" />
                 </div>
 
                
@@ -266,7 +266,7 @@ import ZonePostFilter from './components/ZonePostFilter/ZonePostFilter.vue'
 import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { getSpecificZones, getZones } from '@/services/zoneService'
-import ShimmerLoading from '@/components/common/ShimmerLoading/ShimmerLoading.vue'
+import PostShimmerLoading from '@/components/common/ShimmerLoading/PostShimmerLoading.vue'
 import DropdownShimmer from '@/components/common/ShimmerLoading/DropdownShimmer.vue'
 import AvatarPostShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
 
@@ -741,7 +741,7 @@ export default {
     PostInput,
     ZonePostFilter,
     EventAlertBox,
-    ShimmerLoading,
+    PostShimmerLoading,
     DropdownShimmer,
     ButtonUi,
     AvatarPostShimmer
