@@ -10,6 +10,7 @@ export const API_ENDPOINTS = {
   UpdateUser: '/profile/update',
   UpdatePassword: '/password/update',
   likePost: 'post/like',
+  follow: 'follow',
   commentPost: 'post/comment',
   updatePost: 'post/update',
   sector: '/sector',

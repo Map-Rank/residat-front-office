@@ -9,6 +9,18 @@
         :zoneName="zoneName"
         :id="id"
       />
+      <div>
+        <div v-if="!showMenu" class="flex items-center">
+          <label
+            @click="onClickFollow"
+            class="flex items-center px-2 py-1 hover:bg-primary-light bg-white text-green-600 rounded-[8px] tracking-wide cursor-pointer hover:text-white"
+            style="min-width: max-content"
+          >
+            <img :src="iconSource" alt="" />
+            <p class="ml-2 text-sm sm:text-base leading-normal">{{ labelText }}</p>
+          </label>
+        </div>
+      </div>
       <div v-if="showMenu" class="menu relative">
         <button @click="toggleMenu" class="p-2 flex">
           <!-- Three dots icon -->
@@ -53,13 +65,12 @@
 
     <!-- Post Content -->
     <div @click.prevent="showModal()" class="px-5 mb-2 cursor-pointer">
-      <p class=" content ">{{ postContent }}</p>
+      <p class="content">{{ postContent }}</p>
     </div>
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showModal()">
-    </image-post-gallery>
+    <image-post-gallery :Images="postImages" @customFunction="showModal()"> </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="px-5 pt-2">
@@ -90,22 +101,24 @@
       </div>
 
       <!-- comment section -->
-      <div v-if="showCommentBox" class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full">
+      <div
+        v-if="showCommentBox"
+        class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full"
+      >
         <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
-        <div class="border  p-2  rounded-lg flex-grow">
+        <div class="border p-2 rounded-lg flex-grow">
           <input
             v-model="commentData.text"
             type="search"
             placeholder="Search "
-            class=" bg-transparent w-full focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
+            class="bg-transparent w-full focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
           />
-       
         </div>
         <button
           @click.prevent="commentPost(this.commentData)"
           class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
         >
-        {{ $t('post') }}
+          {{ $t('post') }}
         </button>
       </div>
     </footer>
@@ -113,7 +126,6 @@
 
   <!-- <post-details v-if="showPostDetails"></post-details> -->
   <PostDetailModal v-if="isModalVisible" :postId="this.post.id" @close="closeModal" />
-
 </template>
 
 <script>
@@ -121,7 +133,7 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import { mapActions, mapWritableState } from 'pinia'
 import usePostStore from './store/postStore'
-import { commentPost, deletePost, likePost, sharePost } from '../Post/services/postService'
+import { commentPost, deletePost, likePost, sharePost,followUser } from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
@@ -129,7 +141,6 @@ import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.v
 import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
 import { URL_LINK } from '@/constants/url.js'
 import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
-
 import useModalStore from '@/stores/modalStore.js'
 
 export default {
@@ -142,6 +153,10 @@ export default {
     return {
       route,
       modalStore,
+      iconSource: '/assets/icons/add-circle-dark-outline.svg',
+      labelText: this.$t('follow'),
+      isFollowing:false,
+
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isModalVisible: false,
@@ -157,11 +172,12 @@ export default {
         text: ' ',
         image: ' '
       },
+      plusIcon: 'public\\assets\\icons\\add-circle-dark-outline.svg',
       iconLabels: [
         {
           svgContent: '\\assets\\icons\\heart-outline.svg',
           svgContentHover: '\\assets\\icons\\heart-fill.svg',
-          labelText:  this.$t('like'),
+          labelText: this.$t('like'),
           isActive: this.customLiked,
           right: true
         },
@@ -175,7 +191,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\share-fill.svg',
           svgContentHover: '\\assets\\icons\\share-fill.svg',
-          labelText:  this.$t('share'),
+          labelText: this.$t('share'),
           right: true
         }
       ]
@@ -190,6 +206,23 @@ export default {
       'showDetails',
       'setpostIdToShowDetails'
     ]),
+
+    async onClickFollow() {
+      
+      
+      await followUser(this.post.creator[0].id);
+            // Change showMenu status
+            this.isFollowing = !this.isFollowing
+            // Depending on the showMenu value, update icon source and text
+            if (this.isFollowing) {
+                this.iconSource = '/assets/icons/tick.svg';
+                this.labelText = this.$t('following');
+            } else {
+                this.iconSource = '/assets/icons/add-circle-dark-outline.svg';
+                this.labelText = this.$t('follow');
+            }
+        }
+    ,
     closeModal() {
       this.isModalVisible = false
     },
@@ -225,11 +258,11 @@ export default {
       // this.$router.push({ name: 'edit-post' })
 
       this.$router.push({
-            name: 'edit-post',
-            params: {
-              postId: this.post.id,
-            }
-          })
+        name: 'edit-post',
+        params: {
+          postId: this.post.id
+        }
+      })
     },
 
     async customFunction(index) {
@@ -256,7 +289,6 @@ export default {
           // this.$emit('postFetch')
           break
         case 3:
-          
           break
       }
     },
@@ -339,7 +371,7 @@ export default {
     postId: Number,
     liked: Boolean,
     id: String,
-    zoneName:String,
+    zoneName: String,
     showMenu: {
       type: Boolean,
       default: false
