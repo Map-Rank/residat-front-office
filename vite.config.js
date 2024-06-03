@@ -5,7 +5,6 @@ import vue from '@vitejs/plugin-vue'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: '/residat-front-office',
   test: {
     global: true,
     include: ['src/**/__tests__/*.spec.js']
