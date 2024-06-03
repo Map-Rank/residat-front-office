@@ -9,8 +9,13 @@
       <h3>Send us your feedback</h3>
       <textarea v-model="feedback" placeholder="Enter your feedback here..." rows="4"></textarea>
       <button @click="submitFeedback">Submit</button>
+      <h3></h3>
+      <a :href="'https://wa.me/690160047'" target="_blank">
+        <!-- <img src="/assets/icons/chat.svg" alt="Whatsapp icon"/> -->
+        Get to us on Whatsap
+      </a>
     </div>
-    <div v-if="showMessage" class="feedback-message">Get to us if you have any problem.</div>
+    <div v-if="showMessage" class="feedback-message hidden sm:block">Get to us if you have any problem.</div>
   </div>
 </template>
 
@@ -163,4 +168,18 @@ export default {
   border-radius: 5px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
+
+/* Media Query for Mobile Devices */
+@media screen and (max-width: 768px) {
+  .feedback-container {
+    position: fixed;
+    bottom:100px;
+    right: 20px;
+    z-index: 1000;
+  }
+  .feedback-message {
+    display:hidden;
+  }
+}
+
 </style>

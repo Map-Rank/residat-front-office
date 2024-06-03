@@ -13,6 +13,7 @@ import router from './router'
 import { i18n } from '@/langs/i18nSetup'
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
+import { app as firebaseApp, analytics } from './firebaseConfig'; 
 
 const app = createApp(App)
 
