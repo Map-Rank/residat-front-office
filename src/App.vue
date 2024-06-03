@@ -48,7 +48,7 @@ export default {
   },
   components: {
     HeaderApp,
-    FooterApp,
+    // FooterApp,
     ShareModal,
     FeedbackButton,
     BottomNavigationAppApp
