@@ -27,22 +27,28 @@
             >
               <!-- Sidebar: Sectors and Topics -->
               <aside class="col-span-2 hidden lg:block">
-                <div v-if="isZoneFilterLoading" class="flex justify-center">
+                <!-- <div v-if="isZoneFilterLoading" class="flex justify-center">
                   <LoadingIndicator />
+                </div> -->
+
+                <DropdownShimmer v-if="isZoneFilterLoading" :numDropdowns="3" :componentHeight="'auto' " class="mb-4" />
+                
+                <div v-if="!isZoneFilterLoading">
+                  
+                  <zone-post-filter
+        
+                  :key="componentKey"
+                    :props_regions="default_regions"
+                    :props_divisions="default_divisions"
+                    :props_sub_divisions="default_sub_divisions"
+                    :filterPostFunctionWithId="filterPostByZone"
+                    :updateZone="updateZone"
+                  >
+                  </zone-post-filter>
                 </div>
 
-                <zone-post-filter
-                  v-if="!isZoneFilterLoading"
-                  :key="componentKey"
-                  :props_regions="default_regions"
-                  :props_divisions="default_divisions"
-                  :props_sub_divisions="default_sub_divisions"
-                  :filterPostFunctionWithId="filterPostByZone"
-                  :updateZone="updateZone"
-                >
-                </zone-post-filter>
-
-                <div class="mt-3">
+                    <DropdownShimmer v-if="isZoneFilterLoading" :numDropdowns="3" :componentHeight="'auto'"  />
+                <div class="mt-3" v-if="!isZoneFilterLoading">
                   <sector-side
                     :sectorArray="this.sectors"
                     :updatesectorChecked="updateSectorChecked"
@@ -53,12 +59,19 @@
 
               <!-- Main Content Area: Posts -->
               <main class="col-span-5 lg:px-4 md:px-0" ref="mainContent">
-                <div v-if="topLoading" class="flex h-full justify-center">
+                <!-- <div v-if="topLoading" class="flex h-full justify-center">
                   <LoadingIndicator />
+                </div> -->
+
+                <div v-if="topLoading">
+                    <PostShimmerLoading  class="mb-4" />
                 </div>
+
+               
 
                 <div v-if="showPageRefresh && !filteringActive">
                   <RefreshError
+                  :imgSize="400"
                     :imageUrl="'assets\\images\\Community\\loading.svg'"
                     :errorMessage="errorMessage"
                     @refreshPage="reloadPosts()"
@@ -116,6 +129,7 @@
                 </div>
 
                 <div v-if="!topLoading" class="space-y-2">
+
                   <post-input v-if="!showPageRefresh" :profilePictureUrl="userProfileImage">
                   </post-input>
 
@@ -175,19 +189,23 @@
               </main>
 
               <aside class="col-span-3 justify-end hidden sm:block">
-                <div v-if="isloadingEvent" class="flex h-full justify-center">
+                <!-- <div v-if="isloadingEvent" class="flex h-full justify-center">
                   <LoadingIndicator />
-                </div>
+                </div> -->
 
+                <AvatarPostShimmer v-if="isloadingEvent" :numShimmers="3" :componentHeight="'auto'" />
+                
                 <div class="hidden lg:block">
                   <event-alert-box
                     v-if="shouldDisplayEventAlert"
                     :sectionTitle="$t('section_title_upcoming_event')"
                     :events="events"
-                  />
+                    />
                 </div>
 
-                <div>
+                <AvatarPostShimmer v-if="isloadingEvent" :numShimmers="3" :componentHeight="'auto'" />
+
+                <div v-if="!isloadingEvent">
                   <div class="hidden lg:mt-3 lg:block">
                     <recently-posted-side
                       :recentPosts="recentPosts"
@@ -248,6 +266,9 @@ import ZonePostFilter from './components/ZonePostFilter/ZonePostFilter.vue'
 import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { getSpecificZones, getZones } from '@/services/zoneService'
+import PostShimmerLoading from '@/components/common/ShimmerLoading/PostShimmerLoading.vue'
+import DropdownShimmer from '@/components/common/ShimmerLoading/DropdownShimmer.vue'
+import AvatarPostShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -616,6 +637,7 @@ export default {
     async fetchResources() {
       this.topLoading = true
       this.isloadingEvent = true
+      this.isZoneFilterLoading = true
 
       await this.fetchPosts()
       await this.fetchEvent()
@@ -648,6 +670,7 @@ export default {
         console.error('Failed to load events:', error)
       } finally {
         this.isloadingEvent = false
+        this.isZoneFilterLoading = false
       }
     },
 
@@ -718,7 +741,10 @@ export default {
     PostInput,
     ZonePostFilter,
     EventAlertBox,
-    ButtonUi
+    PostShimmerLoading,
+    DropdownShimmer,
+    ButtonUi,
+    AvatarPostShimmer
   }
 }
 </script>

@@ -210,6 +210,7 @@
             :bottom="item.bottom"
             :routerName="item.routerName"
             :key="index"
+            @clickIcon="closeAllMenu()"
           ></icon-with-label>
         </nav>
       </div>
@@ -317,6 +318,12 @@ export default {
     toggleMenuLangauge() {
       this.isMenuVisible = false
       this.isMenulangauge = !this.isMenulangauge
+    },
+    
+    closeAllMenu(){
+      this.isMenuVisible = false
+      this.isMenulangauge = false
+
     },
 
     menuMethods(index) {

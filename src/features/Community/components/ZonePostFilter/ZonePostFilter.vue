@@ -93,9 +93,13 @@ export default {
       this.filterPostFunctionWithId(id)
     },
 
-    returnZone(zone) {
-      this.updateZone(zone)
-    },
+   returnZone(zone) {
+     if(this.updateZone !== null) {
+       this.updateZone(zone);
+       return
+     } 
+   },
+   
 
     async getRegions() {
       try {
@@ -133,7 +137,9 @@ export default {
   },
   props: {
     filterPostFunctionWithId: {},
-    updateZone: {},
+    updateZone: {
+      type:Function
+    },
     props_regions: {
       type: Array,
       default: () => [
