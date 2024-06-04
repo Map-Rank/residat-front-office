@@ -67,6 +67,37 @@ const UpdateEvent = async (eventId,eventData, authStore, onSuccess, onError) => 
 }
 
 
+const filterEvent = async (params) => {
+  try {
+    const response = await makeApiGetCall(`${API_ENDPOINTS.event}?${params.toString()}`, authToken)
+    console.log('post filtered!!')
+    return response.data.data
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
+const getFilterEvents = async (zoneId, sectorId, size, page) => {
+  let defaultSize = 20
+  let defaultPage = 0
+
+  size = size || defaultSize
+  page = page || defaultPage
+
+  let params = new URLSearchParams({
+    size: size.toString(),
+    page: page.toString(),
+    zone_id: zoneId,
+  })
+
+  if (sectorId && sectorId.length > 0) {
+    params.append('sectors', JSON.stringify(sectorId));
+  }
+
+  return await filterEvent(params)
+}
+
 
 const getEvents = async (page, size, token) => {
   let defaultSize = 10
@@ -119,4 +150,4 @@ const deleteEvent = async (eventId) => {
   }
 }
 
-export { createEvent ,getEvents,deleteEvent,getSpecificEvent,UpdateEvent}
+export { createEvent ,getEvents, getFilterEvents,deleteEvent,getSpecificEvent,UpdateEvent}

@@ -1,6 +1,6 @@
-import { test  ,expect,describe} from 'vitest';
-import ButtonUi from '@/components/base/ButtonUi.vue'
-import {mount} from '@vue/test-utils'
+import { test, expect, describe } from 'vitest';
+import { mount } from '@vue/test-utils';
+import ButtonUi from '@/components/base/ButtonUi.vue';
 
 describe('ButtonUi.vue Test', () => {
   test('Renders with label and click event', () => {
@@ -11,11 +11,11 @@ describe('ButtonUi.vue Test', () => {
       },
     });
 
-    // Check  correct label
-    expect(wrapper.find('span').text()).toBe(label);
+    // Check correct label
+    expect(wrapper.find('p').text()).toBe(label);
 
     // Assert that the click event is emitted when button is clicked
-    wrapper.trigger('click');
+    wrapper.find('button').trigger('click');
     expect(wrapper.emitted().clickButton).toBeTruthy();
   });
 

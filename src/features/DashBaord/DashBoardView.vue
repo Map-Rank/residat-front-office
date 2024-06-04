@@ -69,14 +69,17 @@
         </div>
       </div>
     </div>
+
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
+      
       <div class="col-span-1 md:col-span-2 lg:col-span-1">
         <div></div>
         <div class="mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
-          <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2">
-            <img v-if="key.type == 'IMAGE'" :src= key.value height="30px" width="30px"/>
-            <span v-if="key.type == 'COLOR'" class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
+          <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2 cursor-pointer">
+            <img  v-if="key.type == 'IMAGE'" :src= key.value height="30px" width="30px"/>
+            <span  v-if="key.type == 'COLOR'" class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
             <span
+            @click="handleVectorClick(key)" 
               class="text-sm font-semibold"
               :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
               >{{ key.name }}</span
@@ -86,8 +89,10 @@
       </div>
       <div class="flex md:col-span-6  " :class="!inSubDivision ? 'lg:col-span-7 min-h-[90vh]':'lg:col-span-5 min-h-[70vh]' ">
         <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
-          <LoadingIndicator />
+          <MapShimmer  :legendItems="5" />
         </div>
+        
+
 
         <div
           v-if="isErrorLoadMap && !isLoadingMap"
@@ -196,12 +201,12 @@ import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
-import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
+import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
 
 export default {
   name: 'DashBoardView',
@@ -214,9 +219,9 @@ export default {
     InlineSvg,
     WaterStressChart,
     ButtonUi,
-    LoadingIndicator,
     RefreshError,
-    Modal
+    Modal,
+    MapShimmer
   },
 
   watch: {
@@ -426,6 +431,29 @@ export default {
       }
     },
 
+    handleVectorClick (key) {
+      if (key!=null && key.name!=null) {
+        this.selectedZone = key.name
+        console.log(this.selectedZone)
+  
+        console.log(this.selectedZone)
+        console.log(this.presentMapId)
+        this.$router.push({
+          name: 'dashboard',
+          params: {
+            zoneId: 0,
+            parentId: this.presentMapId,
+            zoneName: this.selectedZone,
+            mapSize: this.defaultMapSize
+          }
+        })
+        this.vectorKeys = [0]
+        this.inSubDivision = false
+      }
+   
+        
+
+    },
     handleStateClick: async function (e) {
       if (e.target.tagName === 'path') {
         if (e.target.dataset.name) {

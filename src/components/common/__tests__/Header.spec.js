@@ -1,90 +1,109 @@
-import { describe, it, expect, vi } from 'vitest';
+// import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
-import { createRouter, createWebHistory } from 'vue-router';
+// import { createRouter, createWebHistory } from 'vue-router';
 import HeaderApp from '@/components/common/Header/index.vue';
 import IconWithLabel from '@/components/common/IconWithLabel/index.vue';
 import ButtonUi from '@/components/base/ButtonUi.vue';
 import SearchBar from '@/components/base/SearchBar.vue';
 import useAuthStore from '@/stores/auth';
+// import { mount } from '@vue/test-utils';
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+// import HeaderApp from '@/components/base/HeaderApp.vue';
+// import SearchBar from '@/components/base/SearchBar.vue';
+// import IconWithLabel from '@/components/base/IconWithLabel.vue';
+// import ButtonUi from '@/components/base/ButtonUi.vue';
+import AppLogo from '@/components/base/AppLogo.vue';
+// import useAuthStore from '@/stores/auth';
+import { useRouter } from 'vue-router';
 
-//mock store
-vi.mock('@/stores/auth', () => ({
-  default:vi.fn(()=>({
-    logOut:vi.fn()
-  }))
-}));
+vi.mock('@/stores/auth');
+vi.mock('vue-router');
 
-// Setup mock router
-const routes = [
-  { path: '/community', name: 'community' },
-  { path: '/dashboard', name: 'dashboard' },
-  { path: '/chat-room', name: 'chat-room' },
-  { path: '/event', name: 'event' },
-  { path: '/social-profile', name: 'social-profile' },
-  { path: '/create-post', name: 'create-post' },
-  { path: '/authentication', name: 'authentication' },
-  { path: '/:catchAll(.*)*', name: 'not-found' }
 
-];
-const router = createRouter({
-  history: createWebHistory(process.env.BASE_URL),
-  routes,
-});
+describe('HeaderApp.vue', () => {
+  let wrapper;
+  let authStoreMock;
+  let routerMock;
 
-// Mock router.push to return a promise
-router.push = vi.fn().mockImplementation(() => Promise.resolve());
+  beforeEach(() => {
+    authStoreMock = {
+      user: {
+        first_name: 'John',
+        avatar: 'path/to/avatar.jpg',
+      },
+      logOut: vi.fn(),
+    };
 
-describe('HeaderApp Component', () => {
-  it('renders navigation items correctly', async () => {
-    
-    const wrapper = mount(HeaderApp, {
+    useAuthStore.mockReturnValue(authStoreMock);
+    routerMock = {
+      push: vi.fn(),
+      replace: vi.fn(),
+      currentRoute: { name: 'home' },
+    };
+
+    useRouter.mockReturnValue(routerMock);
+
+    wrapper = mount(HeaderApp, {
       global: {
-        plugins: [router],
-        components: { IconWithLabel, ButtonUi, SearchBar },
+        mocks: {
+          $t: (msg) => msg, // Mocking the $t function for localization
+          $router: routerMock,
+          $route: { name: 'home' },
+          $i18n: { locale: 'en' }, // Mocking the $i18n object
+        },
+        components: {
+          SearchBar,
+          IconWithLabel,
+          ButtonUi,
+          AppLogo,
+        },
       },
     });
+  });
 
-    expect(wrapper.findAllComponents(IconWithLabel).length).toBe(6);
-    expect(wrapper.findAllComponents(ButtonUi).length).toBe(6);
+  afterEach(() => {
+    vi.clearAllMocks();
+  });
+
+  it('renders the component', () => {
+    expect(wrapper.exists()).toBe(true);
+    expect(wrapper.findComponent(AppLogo).exists()).toBe(true);
     expect(wrapper.findComponent(SearchBar).exists()).toBe(true);
   });
 
-  it('toggles dropdown menu visibility', async () => {
-    const wrapper = mount(HeaderApp, {
-      global: {
-        plugins: [router],
-      },
-    });
-
+  it('toggles the profile menu visibility', async () => {
     expect(wrapper.vm.isMenuVisible).toBe(false);
-    const dropdown = wrapper.find('.dropdown')
-    expect(dropdown.exists()).toBe(true)
-    await dropdown.trigger('click');
+    await wrapper.find('.menu .dropdown').trigger('click');
     expect(wrapper.vm.isMenuVisible).toBe(true);
   });
 
-  it('navigates correctly when menu items are clicked', async () => {
-    router.push = vi.fn();
-    const authStore = useAuthStore();
-    authStore.logOut = vi.fn();
-    const wrapper = mount(HeaderApp, {
-      global: {
-        plugins: [router],
-      },
-    });
+  it('navigates to the correct route when a menu item is clicked', async () => {
+    wrapper.vm.isMenuVisible = true;
+    await wrapper.vm.$nextTick();
 
-    await wrapper.vm.menuMethods(0); // Simulate clicking 'Profile Page'
-    expect(router.push).toHaveBeenCalledWith({ name: 'social-profile' });
+    const buttons = wrapper.findAllComponents(ButtonUi);
+    expect(buttons.length).toBe(12); // Profile, Create Post, Create Event, Settings, Logout
 
-    await wrapper.vm.menuMethods(1); // Simulate clicking 'Create Post'
-    expect(router.push).toHaveBeenCalledWith({ name: 'create-post' });
+    await buttons[0].trigger('click');
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'social-profile' });
 
-    // TODO correst this test 
-    // // Ensure logout action calls auth store logout method and navigates
-    // await wrapper.vm.menuMethods(2); // Simulate clicking 'Logout'
-    // await flushPromises();
-    // expect(wrapper.vm.logout()).toHaveBeenCalled();
-    // expect(router.push).toHaveBeenCalledWith({ name: 'authentication' });
+    await buttons[1].trigger('click');
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'create-post' });
+
+    await buttons[2].trigger('click');
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'create-event' });
+
+    await buttons[3].trigger('click');
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'setting' });
+
+    await buttons[4].trigger('click');
+    expect(authStoreMock.logOut).toHaveBeenCalled();
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'authentication' });
   });
 
+  it('toggles the language menu visibility and changes language', async () => {
+    expect(wrapper.vm.isMenulangauge).toBe(false);
+    await wrapper.find('.langMenu .dropdown').trigger('click');
+    expect(wrapper.vm.isMenulangauge).toBe(true);
+  });
 });

@@ -3,7 +3,7 @@
   <div class="body flex flex-col min-h-screen">
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
 
-    <main class="flex-grow h-full py-16 md:pb-0  overflow-hidden">
+    <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
       <router-view></router-view>
     </main>
 
@@ -13,7 +13,8 @@
       v-if="hideComponent"
     ></bottom-navigation-app-app>
 
-    <!-- <footer-app class="mt-auto" :class="!hiddenClass"></footer-app> -->
+    <FeedbackButton />
+
  
 
     <share-modal
@@ -34,6 +35,7 @@ import BottomNavigationAppApp from './components/common/BottomNavigator/index.vu
 import usePostStore from '@/features/Post/store/postStore'
 import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import useModalStore from '@/stores/modalStore.js'
+import FeedbackButton from '@/components/base/FeedbackButton.vue'
 
 export default {
   name: 'App',
@@ -48,6 +50,7 @@ export default {
     HeaderApp,
     FooterApp,
     ShareModal,
+    FeedbackButton,
     BottomNavigationAppApp
   },
 

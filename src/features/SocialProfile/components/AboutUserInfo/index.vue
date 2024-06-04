@@ -41,6 +41,16 @@
       {{ $t('update_profile_button') }}
     </button>
   </div>
+  <div v-if="!showUpdateProfile" class="flex items-center mt-3">
+    <button
+      type="submit"
+      :class="this.isLoading ? 'bg-gray-400 cursor-wait ' : 'bg-secondary-normal hover:bg-secondary-hover'"
+      :disabled="this.isLoading"
+      class="submit block w-full text-white py-1.5 rounded-full transition"
+    >
+      {{ $t('follow')  }} {{ username }}
+    </button>
+  </div>
 </div>
 
 </template>

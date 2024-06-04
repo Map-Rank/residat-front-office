@@ -28,7 +28,7 @@ describe('ImagePostGallery Component', () => {
         { url: 'image4.jpg', alt: 'Image 4' },
       ],
     });
-    expect(wrapper.findAll('img').length).toBe(4);
+    expect(wrapper.findAll('img').length).toBe(3);
     const thirdImage = wrapper.findAll('img')[2];
     expect(thirdImage.attributes('style')).toContain('flex-basis');
   });

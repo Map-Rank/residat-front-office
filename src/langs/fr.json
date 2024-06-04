@@ -23,6 +23,7 @@
   "male": "Homme",
   "female": "Femme",
   "other": "Autre",
+  "description": "Description",
   "confirm_password": "Confirmez le mot de passe",
   "enter_password": "Entrez votre mot de passe",
   "enter_confirm_password": "Confirmez le mot de passe",
@@ -108,5 +109,8 @@
   "email_icon_alt": "Email",
   "join_date_icon_alt": "Date d'inscription",
   "update_profile_button": "Mettre à jour le profil",
-  "your_description_here": "Votre description ici"
+  "your_description_here": "Votre description ici",
+
+  "follow": "S'abonnés a",
+  "following": "Abonner"
 }

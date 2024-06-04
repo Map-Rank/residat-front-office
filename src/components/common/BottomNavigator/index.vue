@@ -56,8 +56,8 @@ export default {
           routerName: 'create-post'
         },
         {
-          svgContent: '\\assets\\icons\\notification-outline.svg',
-          svgContentHover: '\\assets\\icons\\notification-fill.svg',
+          svgContent: '\\assets\\icons\\event-outline.svg',
+          svgContentHover: '\\assets\\icons\\event-fill.svg',
           labelText: 'Notification',
           isActive: false,
           routerName: 'event'

@@ -1,4 +1,4 @@
-import { makeApiPostCall, makeApiGetCall, makeApiPutCall, makeApiDeleteCall } from '@/api/api'
+import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 const currentDate = new Date().toISOString().split('T')[0]
@@ -218,6 +218,15 @@ const likePost = async (postId) => {
   }
 }
 
+const followUser = async (userId) => {
+  try {
+    await makeApiPostCall(`${API_ENDPOINTS.follow}/${userId}`, null, authToken)
+  } catch (error) {
+    console.error('Error fetching posts:', error)
+    throw error
+  }
+}
+
 const sharePost = async (postId) => {
   try {
     await makeApiPostCall(`${API_ENDPOINTS.sharePost}/${postId}`, null, authToken)
@@ -262,5 +271,6 @@ export {
   sharePost,
   getUserPosts,
   getUserProfile,
-  getFilterPosts
+  getFilterPosts,
+  followUser
 }
