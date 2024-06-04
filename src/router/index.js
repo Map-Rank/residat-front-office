@@ -22,6 +22,7 @@ import AccountPreferences from '@/features/Setting/Pages/AccountPreferences/Acco
 import UpdateProfile from '@/features/Setting/Pages/AccountPreferences/UpdateProfile.vue'
 import SecuritySetting from '@/features/Setting/Pages/SecuritySetting/SecuritySetting.vue'
 import UpdatePassword from '@/features/Setting/Pages/SecuritySetting/UpdatePassword.vue'
+import LangaugeModal from '@/components/common/Modal/LangaugeModal.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -59,6 +60,11 @@ const router = createRouter({
           path: '/account-preferences/update-profile', 
           name: 'update-profile',
           component: UpdateProfile,
+        },
+        {
+          path: '/account-preferences/change-langauge', 
+          name: 'change-langauge',
+          component: LangaugeModal,
         },
         {
           path: '/security-setting', 
