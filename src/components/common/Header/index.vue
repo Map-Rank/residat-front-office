@@ -166,7 +166,7 @@
               >
               </button-ui>
               <button-ui
-                :leftIcon="'\\assets\\icons\\edit.svg'"
+                :leftIcon="'\\assets\\icons\\setting-fill.svg'"
                 :label="$t('settings_privacy')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -175,7 +175,7 @@
               </button-ui>
 
               <button-ui
-                :leftIcon="'\\assets\\icons\\logout.svg'"
+                :leftIcon="'\\assets\\icons\\logout-fill.svg'"
                 :label="$t('logout')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
