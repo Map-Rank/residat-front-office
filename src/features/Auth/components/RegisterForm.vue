@@ -481,10 +481,13 @@ export default {
   methods: {
     onFileChange(e) {
       const file = e.target.files[0]
-      if (file) {
+      const isValidSize = file.size <= 2000 * 1024
+
+      if (file && isValidSize) {
         this.formData.avatar = file
       } else {
         this.formData.avatar = null
+        this.toast.error('The avatar selected exceed the specified max size');
       }
     },
     async getRegions() {
