@@ -23,6 +23,7 @@ import UpdateProfile from '@/features/Setting/Pages/AccountPreferences/UpdatePro
 import SecuritySetting from '@/features/Setting/Pages/SecuritySetting/SecuritySetting.vue'
 import UpdatePassword from '@/features/Setting/Pages/SecuritySetting/UpdatePassword.vue'
 import LangaugeModal from '@/components/common/Modal/LangaugeModal.vue'
+import NotificationView from '@/features/Notification/NotificationView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -31,6 +32,12 @@ const router = createRouter({
       path: '/social-profile',
       name: 'social-profile',
       component: SocialProfile,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/notification',
+      name: 'notification',
+      component: NotificationView,
       meta: { requiresAuth: true }
     },
     {

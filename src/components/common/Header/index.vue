@@ -211,7 +211,30 @@
             :routerName="item.routerName"
             :key="index"
             @clickIcon="closeAllMenu()"
-          ></icon-with-label>
+            ></icon-with-label>
+            
+            <div class="relative">
+              <icon-with-label
+              :textCss="'text-primary-normal text-xs'"
+              :svgContent="'assets\\icons\\notification-outline.svg'"
+              :svgContentHover="'assets\\icons\\notification-fill.svg'"
+              labelText="Notification"
+              :labelTextBottom="'Notification'"
+              :iconDesktopSize="this.iconSize"
+              :isActive="false"
+              :bottom="true"
+              :routerName="'notification'"
+  ></icon-with-label>
+  
+  <!-- Circular Div at the top -->
+  <div class="absolute top-0 right-0 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center">
+    <!-- Displaying the number of new messages -->
+    {{ newMessagesCount }}
+  </div>
+</div>
+
+       
+
         </nav>
       </div>
     </div>
@@ -252,6 +275,7 @@ export default {
       authStore,
       router,
       isMenuVisible: false,
+      newMessagesCount:5,
       isMenulangauge: false,
       isActiveRoute: '',
       userProfileImage: authStore && authStore.user ? authStore.user.avatar : '',
