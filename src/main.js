@@ -13,7 +13,7 @@ import router from './router'
 import { i18n } from '@/langs/i18nSetup'
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
-import { app as firebaseApp, analytics } from './firebaseConfig'; 
+import { app as firebaseApp, analytics } from './firebase/firebaseConfig'; 
 
 const app = createApp(App)
 
@@ -49,3 +49,10 @@ const authStore = useAuthStore()
 authStore.initializeAuthState()
 
 app.mount('#app')
+
+
+
+
+  
+
+  

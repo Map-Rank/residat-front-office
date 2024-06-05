@@ -4,6 +4,7 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -22,5 +23,20 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+const messaging = getMessaging(app);
 
-export { app, analytics };
+onMessage(messaging, (payload) => {
+  console.log('Message received. ', payload);
+  // Show notification or update notification state
+  const notificationTitle = payload.notification.title;
+  const notificationOptions = {
+    body: payload.notification.body,
+    icon: payload.notification.icon,
+  };
+
+  if (Notification.permission === 'granted') {
+    new Notification(notificationTitle, notificationOptions);
+  }
+});
+
+export { app, analytics,messaging, getToken, onMessage};

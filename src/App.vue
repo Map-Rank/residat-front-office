@@ -5,6 +5,7 @@
 
     <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
       <router-view></router-view>
+      <NotificationHandler />
     </main>
 
     <bottom-navigation-app-app
@@ -36,6 +37,7 @@ import usePostStore from '@/features/Post/store/postStore'
 import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import useModalStore from '@/stores/modalStore.js'
 import FeedbackButton from '@/components/base/FeedbackButton.vue'
+import NotificationHandler from './components/base/NotificationHandler.vue'
 
 export default {
   name: 'App',
@@ -49,6 +51,7 @@ export default {
   components: {
     HeaderApp,
     FooterApp,
+    NotificationHandler,
     ShareModal,
     FeedbackButton,
     BottomNavigationAppApp

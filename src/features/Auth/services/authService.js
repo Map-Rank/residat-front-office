@@ -1,7 +1,11 @@
 import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import { getFcmToken } from '@/firebase/firebaseUtils.js';
+
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+
+
 
 const registerUser = async (userData, authStore, onSuccess, onError) => {
   try {
@@ -19,10 +23,18 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     formData.append('zone_id', userData.zone)
     formData.append('avatar', userData.avatar)
 
+     // Get FCM token
+     const fcmToken = await getFcmToken();
+     if (fcmToken) {
+       formData.append('fcm_token', fcmToken);
+     }
+
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData, null, true)
     const user = response.data.data
     const token = response.data.data.token
     console.log('register successfull !!!!')
+
+    
 
     authStore.setUser(user)
     localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
@@ -102,6 +114,13 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
       localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+
+        // Get FCM token
+        const fcmToken = await getFcmToken();
+        if (fcmToken) {
+          // const updateTokenResponse = await makeApiPostCall(API_ENDPOINTS.updateFcmToken, { fcmToken }, token);
+          console.log('FCM token updated successfully.');
+        }
 
       onSuccess()
     }
