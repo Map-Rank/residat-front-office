@@ -26,7 +26,7 @@
 
         <!-- Dropdown Menu -->
         <div
-          v-show="isMenuVisible"
+          v-show="currentMenu === 'menu'"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
           <button-ui
@@ -95,7 +95,7 @@
 
             <div
               ref="menu"
-              v-show="isMenulangauge"
+              v-show="currentMenu === 'language'"
               class="absolute left-0 mt-2 w-42 bg-white rounded-md shadow-lg z-10"
             >
               <button-ui
@@ -137,7 +137,7 @@
             <!-- Dropdown Menu -->
             <div
               ref="menu"
-              v-show="isMenuVisible"
+              v-show="currentMenu === 'menu'"
               class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
               <button-ui
@@ -211,10 +211,10 @@
             :routerName="item.routerName"
             :key="index"
             @clickIcon="closeAllMenu()"
-            ></icon-with-label>
-            
-            <div class="relative">
-              <icon-with-label
+          ></icon-with-label>
+
+          <div class="relative">
+            <icon-with-label
               :textCss="'text-primary-normal text-xs'"
               :svgContent="'assets\\icons\\notification-outline.svg'"
               :svgContentHover="'assets\\icons\\notification-fill.svg'"
@@ -223,18 +223,43 @@
               :iconDesktopSize="this.iconSize"
               :isActive="false"
               :bottom="true"
-              :routerName="'notification'"
-  ></icon-with-label>
-  
-  <!-- Circular Div at the top -->
-  <div class="absolute top-0 right-0 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center">
-    <!-- Displaying the number of new messages -->
-    {{ newMessagesCount }}
-  </div>
-</div>
-
-       
-
+              @customFunction="toggleNotificationDropdown"
+            ></icon-with-label>
+            <!-- Circular Div at the top -->
+            <div
+              class="absolute top-0 right-0 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center"
+            >
+              <!-- Displaying the number of new messages -->
+              {{ newMessagesCount }}
+            </div>
+            <!-- Notification Dropdown -->
+            <div
+              v-show="currentMenu === 'notification'"
+              class="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-10 max-h-[80vh] overflow-y-auto no-scrollbar"
+            >
+              <div class="p-4 text-center">
+                <button @click="redirectToNotifications" class="text-blue-600 hover:underline">
+                  see more
+                </button>
+              </div>
+              <ul class="divide-y divide-gray-200">
+                <li
+                  v-for="(notification, index) in notifications"
+                  :key="index"
+                  class="p-4 hover:bg-gray-100"
+                >
+                  <div class="flex items-start space-x-4">
+                    <img :src="notification.image" alt="Profile" class="w-10 h-10 rounded-full" />
+                    <div>
+                      <p class="font-bold">{{ notification.title }}</p>
+                      <p>{{ notification.body }}</p>
+                      <p class="text-xs text-gray-500">{{ notification.time }}</p>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
         </nav>
       </div>
     </div>
@@ -274,14 +299,171 @@ export default {
     return {
       authStore,
       router,
-      isMenuVisible: false,
-      newMessagesCount:5,
-      isMenulangauge: false,
+      newMessagesCount: 5,
+      isNotificationDropdownVisible: false,
+      currentMenu: null,
       isActiveRoute: '',
       userProfileImage: authStore && authStore.user ? authStore.user.avatar : '',
-      isMenuOpen: false,
       iconSize: 'w-7 h-7',
       lang: 'en',
+      notifications: [
+        {
+          image: 'assets/images/profile1.jpg',
+          title: 'New Message',
+          body: 'You have a new message from John',
+          time: '2m ago'
+        },
+        {
+          image: 'assets/images/profile2.jpg',
+          title: 'New Comment',
+          body: 'Anna commented on your post',
+          time: '10m ago'
+        },
+        {
+          image: 'assets/images/profile3.jpg',
+          title: 'New Like',
+          body: 'David liked your photo',
+          time: '30m ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        },
+        {
+          image: 'assets/images/profile4.jpg',
+          title: 'Friend Request',
+          body: 'Emily sent you a friend request',
+          time: '1h ago'
+        }
+      ],
       navItems: [
         {
           svgContent: '\\assets\\icons\\community-outline.svg',
@@ -320,6 +502,16 @@ export default {
   },
 
   methods: {
+    redirectToNotifications() {
+      this.$router.push({ name: 'notification' })
+      this.isNotificationDropdownVisible = false
+    },
+    // handleClickOutside(event) {
+    //   const menu = this.$refs.menu
+    //   if (menu && !menu.contains(event.target)) {
+    //     this.closeAllMenu()
+    //   }
+    // },
     changeLanguage(lang) {
       this.lang = lang
       localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, lang)
@@ -334,20 +526,22 @@ export default {
         return false
       }
     },
+    
+    toggleNotificationDropdown() {
+      this.currentMenu = this.currentMenu === 'notification' ? null : 'notification';
+    },
 
     toggleMenu() {
-      this.isMenulangauge = false
-      this.isMenuVisible = !this.isMenuVisible
+      this.currentMenu = this.currentMenu === 'menu' ? null : 'menu';
     },
     toggleMenuLangauge() {
-      this.isMenuVisible = false
-      this.isMenulangauge = !this.isMenulangauge
+      this.currentMenu = this.currentMenu === 'language' ? null : 'language';
+  },
     },
-    
-    closeAllMenu(){
+
+    closeAllMenu() {
       this.isMenuVisible = false
       this.isMenulangauge = false
-
     },
 
     menuMethods(index) {
@@ -385,12 +579,20 @@ export default {
       })
     }
   }
-}
+
 </script>
 
 <style lang="scss" scoped>
 .search {
   background-color: var(--primary-light, #e6e8ec);
   border-color: #e6e8ec;
+}
+body {
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 </style>
