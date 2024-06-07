@@ -7,14 +7,12 @@ import { createPinia } from 'pinia'
 import useSectorStore from '@/stores/sectorStore.js'
 import useAuthStore from '@/stores/auth.js'
 import InlineSvg from 'vue-inline-svg'
-// import useEventStore from './stores/eventStore.js'
 import App from './App.vue'
 import router from './router'
 import { i18n } from '@/langs/i18nSetup'
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
-// import { app as firebaseApp, analytics } from './firebase/firebaseConfig';
-import { app as firebaseApp, analytics, messaging, getFcmToken } from '@/firebaseConfig'; 
+import { getFcmToken } from '@/firebaseConfig';
 
 const app = createApp(App)
 

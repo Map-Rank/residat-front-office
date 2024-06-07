@@ -4,7 +4,6 @@ import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { useToast } from 'vue-toastification';
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyBTb9dECqZKjHDDP3nOgSWSW824xEVYWSc",
   authDomain: "residat-7f3e3.firebaseapp.com",
@@ -20,9 +19,13 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
+navigator.serviceWorker.register('/public/firebase-messaging-sw.js')
+  .then((registration) => {
+    messaging.useServiceWorker(registration);
+  });
+
 export const getFcmToken = async () => {
   const toast = useToast();
-
   try {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
@@ -46,13 +49,11 @@ export const getFcmToken = async () => {
 
 onMessage(messaging, (payload) => {
   console.log('Message received. ', payload);
-  // Show notification or update notification state
   const notificationTitle = payload.notification.title;
   const notificationOptions = {
     body: payload.notification.body,
     icon: payload.notification.icon,
   };
-
   if (Notification.permission === 'granted') {
     new Notification(notificationTitle, notificationOptions);
   }
