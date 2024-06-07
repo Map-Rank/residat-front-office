@@ -4,7 +4,7 @@
 
 <script>
 import { onMessage } from "firebase/messaging";
-import { messaging } from "@/firebase/firebaseConfig";
+import { messaging } from "@/firebaseConfig";
 import { useToast } from "vue-toastification";
 import AppLogo from "@/assets/images/Logos/logo-small.svg";
 export default {

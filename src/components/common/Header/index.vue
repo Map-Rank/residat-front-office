@@ -26,6 +26,7 @@
 
         <!-- Dropdown Menu -->
         <div
+        ref="menus"
           v-show="currentMenu === 'menu'"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
@@ -234,6 +235,7 @@
             </div>
             <!-- Notification Dropdown -->
             <div
+            ref="menus"
               v-show="currentMenu === 'notification'"
               class="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-10 max-h-[80vh] overflow-y-auto no-scrollbar"
             >
@@ -284,14 +286,14 @@ export default {
     AppLogo
   },
 
-  created() {
-    document.addEventListener('click', this.handleClickOutside)
-    this.lang = this.$i18n.locale
-  },
+  // created() {
+  //   document.addEventListener('click', this.handleClickOutside)
+  //   this.lang = this.$i18n.locale
+  // },
 
-  unmounted() {
-    document.removeEventListener('click', this.handleClickOutside)
-  },
+  // unmounted() {
+  //   document.removeEventListener('click', this.handleClickOutside)
+  // },
   data() {
     const authStore = useAuthStore()
     const router = useRouter()
@@ -506,12 +508,21 @@ export default {
       this.$router.push({ name: 'notification' })
       this.isNotificationDropdownVisible = false
     },
-    // handleClickOutside(event) {
-    //   const menu = this.$refs.menu
-    //   if (menu && !menu.contains(event.target)) {
-    //     this.closeAllMenu()
-    //   }
-    // },
+    handleClickOutside(event) {
+      const menus = this.$refs.menus
+      if (menus) {
+        let isClickOutside = true
+        menus.forEach((menu) => {
+          if (menu.contains(event.target)) {
+            isClickOutside = false
+          }
+        })
+
+        if (isClickOutside) {
+          this.currentMenu = null
+        }
+      }
+    },
     changeLanguage(lang) {
       this.lang = lang
       localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, lang)
@@ -526,24 +537,22 @@ export default {
         return false
       }
     },
-    
+
     toggleNotificationDropdown() {
-      this.currentMenu = this.currentMenu === 'notification' ? null : 'notification';
+      this.currentMenu = this.currentMenu === 'notification' ? null : 'notification'
     },
 
     toggleMenu() {
-      this.currentMenu = this.currentMenu === 'menu' ? null : 'menu';
+      this.currentMenu = this.currentMenu === 'menu' ? null : 'menu'
     },
     toggleMenuLangauge() {
-      this.currentMenu = this.currentMenu === 'language' ? null : 'language';
-  },
+      this.currentMenu = this.currentMenu === 'language' ? null : 'language'
     },
-
     closeAllMenu() {
       this.isMenuVisible = false
       this.isMenulangauge = false
     },
-
+  
     menuMethods(index) {
       switch (index) {
         case 0:
@@ -568,7 +577,7 @@ export default {
           break
       }
     },
-
+  
     logout() {
       this.authStore.logOut()
       this.$router.push({ name: 'authentication' }).catch((err) => {
@@ -578,8 +587,9 @@ export default {
         }
       })
     }
-  }
+  },
 
+}
 </script>
 
 <style lang="scss" scoped>

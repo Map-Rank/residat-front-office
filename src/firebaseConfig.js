@@ -1,15 +1,10 @@
-
-
-
-// Import the functions you need from the SDKs you need
+// src/firebaseConfig.js
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { useToast } from 'vue-toastification';
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyBTb9dECqZKjHDDP3nOgSWSW824xEVYWSc",
   authDomain: "residat-7f3e3.firebaseapp.com",
@@ -25,6 +20,30 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
+export const getFcmToken = async () => {
+  const toast = useToast();
+
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission === 'granted') {
+      console.log('Notification permission granted.');
+      const currentToken = await getToken(messaging, { vapidKey: 'BGQqaKwYEpAMrVNsiIequoOK2CoEwgkWrDO-PuC0Xk-8Nvp1gRwV7qT88sjk_AnZKcdvEPD9kS3caej3Rv8k9tw' });
+      if (currentToken) {
+        console.log('FCM Token:', currentToken);
+        return currentToken;
+      } else {
+        console.log('No registration token available. Request permission to generate one.');
+      }
+    } else {
+      toast.error('Unable to get permission to notify. Please enable notifications in your browser settings to receive updates.');
+      console.log('Unable to get permission to notify.');
+    }
+  } catch (err) {
+    console.log('An error occurred while retrieving token. ', err);
+  }
+  return null;
+};
+
 onMessage(messaging, (payload) => {
   console.log('Message received. ', payload);
   // Show notification or update notification state
@@ -39,4 +58,4 @@ onMessage(messaging, (payload) => {
   }
 });
 
-export { app, analytics,messaging, getToken, onMessage};
+export { app, analytics, messaging, getToken, onMessage };

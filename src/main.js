@@ -13,7 +13,8 @@ import router from './router'
 import { i18n } from '@/langs/i18nSetup'
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
-import { app as firebaseApp, analytics } from './firebase/firebaseConfig'; 
+// import { app as firebaseApp, analytics } from './firebase/firebaseConfig';
+import { app as firebaseApp, analytics, messaging, getFcmToken } from '@/firebaseConfig'; 
 
 const app = createApp(App)
 
@@ -47,6 +48,12 @@ sectorStore.initializeStore()
 
 const authStore = useAuthStore()
 authStore.initializeAuthState()
+
+getFcmToken().then(token => {
+    if (token) {
+      console.log('FCM token:', token);
+    }
+  });
 
 app.mount('#app')
 

@@ -47,7 +47,6 @@ export default {
       const isValidSize = files.every((file) => file.size <= this.maxSize * 1024) // Check if all files are of valid size
 
       if (files.length > 0 && isValidSize) {
-        // Emit an array of selected files
         this.$emit('handleFileChange', files)
       } else {
         this.toast.error('One or more files exceed the specified max size');

@@ -1,6 +1,6 @@
 import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
-import { getFcmToken } from '@/firebase/firebaseUtils.js';
+import { getFcmToken } from '@/firebaseConfig.js';
 
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
