@@ -24,6 +24,7 @@ import SecuritySetting from '@/features/Setting/Pages/SecuritySetting/SecuritySe
 import UpdatePassword from '@/features/Setting/Pages/SecuritySetting/UpdatePassword.vue'
 import LangaugeModal from '@/components/common/Modal/LangaugeModal.vue'
 import NotificationView from '@/features/Notification/NotificationView.vue'
+import BroadcastNotification from '@/features/ChatRoom/Pages/BraodcastNotification.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,12 @@ const router = createRouter({
       path: '/notification',
       name: 'notification',
       component: NotificationView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/broadcast-notification',
+      name: 'broadcast-notification',
+      component: BroadcastNotification,
       meta: { requiresAuth: true }
     },
     {

@@ -23,7 +23,6 @@ export default {
 
       const notificationMessage = `${notificationTitle}: ${notificationOptions.body}`
 
-      // Display the alert
       window.alert(notificationMessage)
 
       toast.info(payload.notification.body, {
