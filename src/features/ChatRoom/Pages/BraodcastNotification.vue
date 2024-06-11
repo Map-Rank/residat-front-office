@@ -6,7 +6,7 @@
   
         <vee-form ref="form" :validation-schema="schema" @submit="createBroadcast">
           <div class="flex-col space-y-6">
-            <h2 class="text-center">BRAODCAST A NOTIFICATION</h2>
+            <h2 class="text-center">SEND ALERTS</h2>
   
             <!-- First Name -->
             <div class="mb-6">
@@ -360,12 +360,12 @@
               
               return
             }
-            if (this.formData.media == null) {
-              this.toast.error('Please select a Banner');
-              this.isLoadingBtn = false;
+            // if (this.formData.media == null) {
+            //   this.toast.error('Please select a Banner');
+            //   this.isLoadingBtn = false;
               
-              return
-            }
+            //   return
+            // }
             
 
             print(this.formData);
