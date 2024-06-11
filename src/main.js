@@ -49,7 +49,7 @@ authStore.initializeAuthState()
 
 getFcmToken().then(token => {
     if (token) {
-      console.log('FCM token:', token);
+      console.log('FCM token:Firebase initialise');
     }
   });
 

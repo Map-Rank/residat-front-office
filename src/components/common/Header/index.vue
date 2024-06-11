@@ -507,7 +507,9 @@ export default {
     redirectToNotifications() {
       this.$router.push({ name: 'notification' })
       this.isNotificationDropdownVisible = false
+      this.closeAllMenu()
     },
+
     handleClickOutside(event) {
       const menus = this.$refs.menus
       if (menus) {
@@ -549,8 +551,7 @@ export default {
       this.currentMenu = this.currentMenu === 'language' ? null : 'language'
     },
     closeAllMenu() {
-      this.isMenuVisible = false
-      this.isMenulangauge = false
+      this.currentMenu = null;
     },
   
     menuMethods(index) {

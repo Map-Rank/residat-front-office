@@ -25,14 +25,14 @@
             <div class="mb-6">
               <p class="inline-block mb-4">Content</p>
               <vee-field
-                name="description"
-                v-model="formData.description"
-                :rules="schema.description"
+                name="content"
+                v-model="formData.content"
+                :rules="schema.content"
                 as="textarea"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Event Description"
               ></vee-field>
-              <ErrorMessage class="text-danger-normal" name="description" />
+              <ErrorMessage class="text-danger-normal" name="content" />
             </div>
   
             <div class="mb-6">
@@ -131,6 +131,7 @@
   import { getZones } from '@/services/zoneService.js'
   import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
   import { useToast } from "vue-toastification";
+  import {createNotification} from '@/services/notificationService.js' 
   
   export default {
     name: 'BraodcastNotification',
@@ -211,12 +212,12 @@
         ],
         schema: {
           title: 'required|min:3|max:50',
-          description: 'required|min:3|max:250',
+          content: 'required|min:3|max:250',
           location: 'required|min:3|max:50'
         },
         formData: {
           title: '',
-          description: '',
+          content: '',
           location: '',
           media: null,
           zone_id: '',
@@ -313,15 +314,6 @@
         this.formData.zone_id = selectedOptionId
       },
   
-      previousStep() {
-        this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
-      },
-  
-      handleEmailNotVerified() {
-        this.toast.error('Check your email to verifie your mail');
-        this.$router.push({ name: 'email-verification' })
-      },
-  
       handleSuccess() {
         this.isCreatingEvent = false;
         this.resetForm()
@@ -330,7 +322,7 @@
   
       resetForm() {
           this.formData.title= '',
-          this.formData.description= '',
+          this.formData.content= '',
           this.formData.location= '',
           this.formData.media= '',
           this.formData.zone_id= ''
@@ -342,7 +334,7 @@
       
       async createBroadcast() {
         this.isLoadingBtn = true;
-        const fieldsToValidate = ['title', 'description']
+        const fieldsToValidate = ['title', 'content']
         
         try {
           const validationResults = await Promise.all(
@@ -360,22 +352,18 @@
               
               return
             }
-            // if (this.formData.media == null) {
-            //   this.toast.error('Please select a Banner');
-            //   this.isLoadingBtn = false;
+            if (this.formData.media == null) {
+              this.toast.error('Please select a Banner');
+              this.isLoadingBtn = false;
               
-            //   return
-            // }
-            
-
-            print(this.formData);
-            
-         
+              return
+            }
+ 
             this.toast.info( 'please wait we are creating your Event...');
   
-            // let response = await createBroadcast(this.formData,this.authStore, this.handleSuccess, this.handleError)
+            let response = await createNotification(this.formData,this.authStore, this.handleSuccess, this.handleError)
             
-            // console.log(response)
+            console.log(response)
             
           } else {
             this.isLoadingBtn = false;
