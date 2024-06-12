@@ -62,6 +62,14 @@ export default {
     routerName: 'account-preferences'
   },
   {
+    svgContent: '\\assets\\icons\\profile-outline.svg',
+    svgContentHover: '\\assets\\icons\\profile-fill.svg',
+    labelText: this.$t('institution'),
+    isActive: false,
+    right: true,
+    routerName: 'account-preferences'
+  },
+  {
     svgContent: '\\assets\\icons\\dashboard-outline.svg',
     svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
     labelText: this.$t('signin_ecurity'),

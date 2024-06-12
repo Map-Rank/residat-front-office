@@ -133,7 +133,13 @@ import '../../assets/css/global.scss'
 import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
 import { mapActions, mapWritableState } from 'pinia'
 import usePostStore from './store/postStore'
-import { commentPost, deletePost, likePost, sharePost,followUser } from '../Post/services/postService'
+import {
+  commentPost,
+  deletePost,
+  likePost,
+  sharePost,
+  followUser
+} from '../Post/services/postService'
 import ButtonUi from '../../components/base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
@@ -153,9 +159,9 @@ export default {
     return {
       route,
       modalStore,
-      iconSource: '/assets/icons/add-circle-dark-outline.svg',
-      labelText: this.$t('follow'),
-      isFollowing:false,
+      iconSource: this.post?.is_following ? '/assets/icons/tick.svg' : '/assets/icons/add-circle-dark-outline.svg',
+      labelText: this.post?.is_following ? this.$t('following') : this.$t('follow'),
+      isFollowing: false,
 
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
@@ -208,21 +214,23 @@ export default {
     ]),
 
     async onClickFollow() {
-      
-      
-      await followUser(this.post.creator[0].id);
-            // Change showMenu status
-            this.isFollowing = !this.isFollowing
-            // Depending on the showMenu value, update icon source and text
-            if (this.isFollowing) {
-                this.iconSource = '/assets/icons/tick.svg';
-                this.labelText = this.$t('following');
-            } else {
-                this.iconSource = '/assets/icons/add-circle-dark-outline.svg';
-                this.labelText = this.$t('follow');
-            }
-        }
-    ,
+
+      if (this.post.is_following) {
+        return
+      }
+
+      await followUser(this.post.creator[0].id)
+      // Change showMenu status
+      this.isFollowing = !this.isFollowing
+      // Depending on the showMenu value, update icon source and text
+      if (this.isFollowing) {
+        this.iconSource = '/assets/icons/tick.svg'
+        this.labelText = this.$t('following')
+      } else {
+        this.iconSource = '/assets/icons/add-circle-dark-outline.svg'
+        this.labelText = this.$t('follow')
+      }
+    },
     closeModal() {
       this.isModalVisible = false
     },
