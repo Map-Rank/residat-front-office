@@ -1,6 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
-import RegisterForm from '@/features/Auth/components/RegisterForm.vue';
+import RegisterForm from '@/features/Auth/Forms/RegisterForm.vue';
 // import { useRouter } from 'vue-router';
 // import useAuthStore from '@/stores/auth';
 

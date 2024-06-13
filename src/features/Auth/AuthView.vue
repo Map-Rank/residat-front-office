@@ -64,6 +64,7 @@
             </ul>
             <login-form v-if="tab === 'login'"></login-form>
             <register-form v-if="tab === 'register'"></register-form>
+            <InstitutionRegister v-if="tab === 'institution'" ></InstitutionRegister>
             <!-- <SocialButton /> -->
           </div>
         </div>
@@ -73,11 +74,11 @@
 </template>
 
 <script>
-import LoginForm from "./components/LoginForm.vue";
-import RegisterForm from "./components/RegisterForm.vue";
+import LoginForm from "./Forms/LoginForm.vue";
+import RegisterForm from "./Forms/RegisterForm.vue";
 import ButtonUi from "../../components/base/ButtonUi.vue";
+import InstitutionRegister from "./Forms/InstitutionRegister.vue";
 import "../../plugins/validation";
-import SocialButton from "./components/SocialButton.vue";
 
 export default {
   name: "AuthView",
@@ -95,7 +96,7 @@ export default {
     LoginForm,
     RegisterForm,
     ButtonUi,
-    SocialButton,
+    InstitutionRegister
   },
 };
 </script>

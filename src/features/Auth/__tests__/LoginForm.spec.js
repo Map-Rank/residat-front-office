@@ -1,6 +1,6 @@
 import { describe, it, expect, vi,beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import LoginForm from '@/features/Auth/components/LoginForm.vue';
+import LoginForm from '@/features/Auth/Forms/LoginForm.vue';
 import AlertForm from '@/components/common/AlertFrom/AlertForm.vue';
 import useAuthStore from '@/stores/auth';
 import { createPinia, setActivePinia } from 'pinia';

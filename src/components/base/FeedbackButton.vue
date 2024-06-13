@@ -2,20 +2,20 @@
 <template>
   <div class="feedback-container">
     <button class="feedback-button" @click="toggleForm">
-      <p v-if="!showForm">Feedback</p>
-      <p v-if="showForm">Close</p>
+      <p v-if="!showForm">{{$t('feedback')}}</p>
+      <p v-if="showForm">{{$t('close')}}</p>
     </button>
     <div v-if="showForm" class="feedback-form">
-      <h3>Send us your feedback</h3>
+      <h3>{{$t('send_feedback')}}</h3>
       <textarea v-model="feedback" placeholder="Enter your feedback here..." rows="4"></textarea>
-      <button @click="submitFeedback">Submit</button>
+      <button @click="submitFeedback">{{$t('submit')}}</button>
       <h3></h3>
       <a :href="'https://wa.me/690160047'" target="_blank">
         <!-- <img src="/assets/icons/chat.svg" alt="Whatsapp icon"/> -->
-        Get to us on Whatsap
+        {{$t('get_on_whatsap')}}
       </a>
     </div>
-    <div v-if="showMessage" class="feedback-message hidden sm:block">Get to us if you have any problem.</div>
+    <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('search_location')}}</div>
   </div>
 </template>
 
