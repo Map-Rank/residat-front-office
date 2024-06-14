@@ -4,7 +4,7 @@ eslint-disable vue/no-parsing-error
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
         <div class="flex-col space-y-6">
-          <h2 class="text-center uppercase">{{ $t('personal_information') }}</h2>
+          <h2 class="text-center uppercase">{{ $t('institution_information') }}</h2>
 
           <!-- Company -->
           <div class="mb-6">
@@ -23,7 +23,7 @@ eslint-disable vue/no-parsing-error
 
           <!-- First Name -->
           <div class="mb-6">
-            <label class="inline-block mb-4">{{ $t('first_name') }}</label>
+            <label class="inline-block mb-4">{{ $t('owner_name') }}</label>
             <vee-field
               name="first_name"
               v-model="formData.first_name"
@@ -304,7 +304,7 @@ eslint-disable vue/no-parsing-error
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
             :disabled="this.isLoading"
           >
-            {{ $t('create_institution') }}
+            {{ $t('submit_request') }}
           </button>
         </div>
       </div>
