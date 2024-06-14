@@ -2,8 +2,8 @@
 <template>
     <div class="container mx-auto p-4">
       <div class="flex justify-between items-center mb-4">
-        <h1 class="text-2xl font-bold">Notifications</h1>
-        <button class="bg-primary-normal text-white px-4 py-2 rounded">View Settings</button>
+        <h1 class="text-2xl font-bold"> {{$t('notification')}}</h1>
+        <!-- <button class="bg-primary-normal text-white px-4 py-2 rounded">View Settings</button> -->
       </div>
       <div v-if="notifications && notifications.length" class="bg-white shadow-md rounded-lg">
         <NotificationItem 
@@ -14,7 +14,7 @@
         />
       </div>
       <div v-else class="text-center mt-3">
-        No Notifications
+        {{$t('no_notification')}}
       </div>
     </div>
   </template>

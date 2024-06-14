@@ -125,6 +125,10 @@
   "submit": "Soumettre",
   "get_on_whatsap": "Contactez-nous sur Whatsapp",
 
-    "update_profile_success":"Mise ajour du profile avec succes"
+    "update_profile_success":"Mise ajour du profile avec succes",
+
+    "no_notification":"Vous n'avez pas de notification",
+    "no_alert":"Vous n'avez pas d'alert",
+    "notification":"Notification"
 
 }

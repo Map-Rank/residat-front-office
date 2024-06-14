@@ -14,7 +14,7 @@
      />
    </div>
    <div v-else class="text-center mt-3">
-     No Notifications
+    {{$t('no_alert')}}
    </div>
    
   </div>

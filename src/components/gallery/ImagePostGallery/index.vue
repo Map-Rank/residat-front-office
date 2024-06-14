@@ -3,7 +3,7 @@
     <!-- Container for the first image -->
     <div v-if="Images.length === 1" class="flex mb-0.5 h-[350px]">
       <img
-        :src="formatHostImageUrl(Images[0].url)"
+        :src="Images[0].url"
         :alt="Images[0].alt"
         class="w-full h-auto object-cover"
       />
@@ -11,16 +11,16 @@
 
     <!-- Container for two images side by side -->
     <div v-if="Images.length === 2" class="flex mb-0.5 h-[350px]">
-      <img :src="formatHostImageUrl(Images[0].url)" :alt="Images[0].alt" class="w-1/2 display_img" />
-      <img :src="formatHostImageUrl(Images[1].url)" :alt="Images[1].alt" class="w-1/2 display_img" />
+      <img :src="Images[0].url" :alt="Images[0].alt" class="w-1/2 display_img" />
+      <img :src="Images[1].url" :alt="Images[1].alt" class="w-1/2 display_img" />
     </div>
 
     <div v-if="Images.length === 3" class="grid grid-cols-3 gap-0.5 h-[350px]">
       <img
         v-for="(image, index) in Images.slice(0, 3)"
-        :src="formatHostImageUrl(image.url)"
-        :alt="image.alt"
-        :key="image.src"
+        :src="image.url"
+       :alt="image.alt"
+        :key="index"
         class="h-full w-full object-cover"
       />
       <div
@@ -35,8 +35,8 @@
     <div v-if="Images.length > 3" class="flex gap-0.5 overflow-hidden  h-[350px]">
       <img
         v-for="(image, index) in Images.slice(1, 4)"
-        :src="formatHostImageUrl(image.url)"
-        :alt="image.alt"
+        :src="image.url"
+       :alt="image.alt"
         :key="image.src"
         class="flex-grow h-auto w-4 object-cover"
         :style="{ 'flex-basis': calculateFlexBasis(index) }"
@@ -55,14 +55,14 @@
 
 <script>
 import { URL_LINK } from '@/constants'
-import { formatHostImageUrl } from '@/utils/formating'
+// import { formatHostImageUrl } from '@/utils/formating'
 
 export default {
   name: 'ImagePostGallery',
   data() {
     return {
       imageHost: URL_LINK.imageHostLink,
-      formatHostImageUrl
+      // formatHostImageUrl
     }
   },
   props: {

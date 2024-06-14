@@ -131,7 +131,10 @@
   "submit": "Submit",
   "get_on_whatsap": "Get to us on Whatsapp",
 
-  "update_profile_success":"Updated profile successful'"
-
+  "update_profile_success":"Updated profile successful",
+  
+  "no_notification":"You have no notification",
+  "no_alert":"You have no alert",
+  "notification":"Notification"
 
 }

@@ -246,7 +246,7 @@
                 </button>
               </div>
 
-              <p class="text-center mb-4 " >You have no notification </p>
+              <p class="text-center mb-4 " >{{$t('no_notification')}} </p>
               <ul 
               v-if="notifications.lenght > 0"
               class="divide-y divide-gray-200">
