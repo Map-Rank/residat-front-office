@@ -9,7 +9,7 @@
 ![Coverage](https://img.shields.io/badge/coverage-63%25-brightgreen)
 ![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen)
 
-Official document: <a href="https://dev.residat.com/community">RESIDAT</a>
+Official document: <a href="https://dev.residat.com/community">residat doc</a>
 
 RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
 - Visualization of place-based climate risks
