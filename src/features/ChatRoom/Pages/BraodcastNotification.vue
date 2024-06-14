@@ -1,7 +1,7 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
-    <div class="flex items-center justify-center min-h-screen bg-gray-100">
-      <div class="flex-col bg-white my-5 rounded-lg md:w-1/2 p-10 mx-4">
+    <div class="flex items-center justify-center h-screen bg-gray-100">
+      <div class="flex-col bg-white my-5 rounded-lg w-full md:w-3/4 lg:w-1/2 p-10 mx-4">
       
   
         <vee-form ref="form" :validation-schema="schema" @submit="createBroadcast">
@@ -110,7 +110,7 @@
               "
               :disabled="this.isLoadingBtn"
               >
-                Create Notification
+                Create Alert
               </button>
             </div>
             <div>
@@ -317,7 +317,7 @@
       handleSuccess() {
         this.isCreatingEvent = false;
         this.resetForm()
-        this.$router.push({ name: 'community' })
+        this.$router.push({ name: 'chat-room' })
       },
   
       resetForm() {
@@ -359,7 +359,7 @@
               return
             }
  
-            this.toast.info( 'please wait we are creating your Event...');
+            this.toast.info( 'please wait we are creating your Alerts...');
   
             let response = await createNotification(this.formData,this.authStore, this.handleSuccess, this.handleError)
             

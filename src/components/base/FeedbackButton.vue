@@ -2,7 +2,7 @@
 <template>
   <div class="feedback-container">
     <button class="feedback-button" @click="toggleForm">
-      <p v-if="!showForm">{{$t('feedback')}}</p>
+      <p v-if="!showForm">{{$t('contact_us')}}</p>
       <p v-if="showForm">{{$t('close')}}</p>
     </button>
     <div v-if="showForm" class="feedback-form">
@@ -15,7 +15,7 @@
         {{$t('get_on_whatsap')}}
       </a>
     </div>
-    <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('search_location')}}</div>
+    <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('get_to_us')}}</div>
   </div>
 </template>
 

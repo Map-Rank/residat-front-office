@@ -122,13 +122,16 @@
 
   "institution": "Institution",
   "get_to_us": "Get to us for any problem or suggestion.",
+  "contact_us":"Contact us",
 
   "feedback": "Feedback",
   "close": "Close",
   "send_feedback": "Send us your feedback",
   "enter_feedback": "Enter your feedback here...",
   "submit": "Submit",
-  "get_on_whatsap": "Get to us on Whatsapp"
+  "get_on_whatsap": "Get to us on Whatsapp",
+
+  "update_profile_success":"Updated profile successful'"
 
 
 }
