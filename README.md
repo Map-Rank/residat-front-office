@@ -9,6 +9,7 @@
 ![Coverage](https://img.shields.io/badge/coverage-63%25-brightgreen)
 ![Dependencies](https://img.shields.io/badge/dependencies-up%20to%20date-brightgreen)
 
+Official document: <a href="https://dev.residat.com/community">RESIDAT</a>
 
 RESIDAT is a digital platform for sharing place-based information on climate risks from spatial data and citizen science reports .This platform shall have five main components 
 - Visualization of place-based climate risks
@@ -16,6 +17,7 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 - Hosting of published reports by community stakeholders 
 - Chatroom for community climate realities
 - Sending out mobile notifications by local and regional climate authoritative bodies.
+
 
 <img src="public\assets\images\Documentation\communityView.png"> </img>
 
@@ -140,16 +142,16 @@ By contributing to RESIDAT, you agree to abide by these principles and behaviors
 ## License ⚖️
  
  * MapAndRank - Residat is free software: you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
+ * it under the terms of the AGPL License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * MapAndRank - Residat is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
+ * AGPL License for more details.
  *
- * You should have received a copy of the GNU General Public License
- * along with MapAndRank - Residat. If not, see <https://www.gnu.org/licenses/>.
+ * You should have received a copy of the AGPL License
+ * along with MapAndRank - Residat. If not, see <https://github.com/Map-Rank/residat-front-office?tab=AGPL-3.0-1-ov-file/>.
 
 
