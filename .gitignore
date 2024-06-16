@@ -36,3 +36,5 @@ public/report_images
 .env
 docs/.vitepress/cache
 docs/.vitepress/dist
+docs-frontend/.vitepress/dist
+docs-frontend/.vitepress/cache

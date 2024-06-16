@@ -2,29 +2,22 @@ import { defineConfig } from 'vitepress'
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Residat Docs",
-  description: "This site has the documentation of the residat project for a potential frontend developer",
+  base: '/residat-front-office',
+  title: "Map and Rank Doc",
+  description: "This is site is aim in presenting map and rank doc",
   themeConfig: {
     // https://vitepress.dev/reference/default-theme-config
-    logo: '/logo-small.svg',
     nav: [
       { text: 'Home', link: '/' },
-      { text: 'Documentation', link: '/setup-testing' }
     ],
 
     sidebar: [
       {
-        text: 'Examples',
-        items: [
-          { text: 'Project Setup', link: '/setup-testing' },
-          { text: 'State and Component Management', link: '/state-component' },
-          { text: 'API', link: '/api-examples' }
-        ]
+        text: 'Home',
+   
       }
     ],
 
-    socialLinks: [
-      { icon: 'github', link: 'https://github.com/vuejs/vitepress' }
-    ]
+
   }
 })
