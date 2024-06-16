@@ -30,7 +30,7 @@ export default {
   },
   data() {
     return {
-      isInstitution: false, // Change this based on user type
+      isInstitution: true, // Change this based on user type
       notifications: [
         // { id: 1, avatar: 'https://example.com/avatar1.jpg', message: 'Sarah NJOLLE reposted a photo.', time: '19m ago', isNew: true },
         // { id: 2, avatar: 'https://example.com/avatar2.jpg', message: 'Your post impressions took off. They grew by 100+% on June 4. View your analytics.', time: '19m ago', isNew: false },
