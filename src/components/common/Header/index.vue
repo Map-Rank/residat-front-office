@@ -228,6 +228,7 @@
             ></icon-with-label>
             <!-- Circular Div at the top -->
             <div
+            v-if="newMessagesCount"
               class="absolute top-0 right-0 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center"
             >
               <!-- Displaying the number of new messages -->
@@ -244,7 +245,11 @@
                   see more
                 </button>
               </div>
-              <ul class="divide-y divide-gray-200">
+
+              <p class="text-center mb-4 " >{{$t('no_notification')}} </p>
+              <ul 
+              v-if="notifications.lenght > 0"
+              class="divide-y divide-gray-200">
                 <li
                   v-for="(notification, index) in notifications"
                   :key="index"
@@ -301,7 +306,7 @@ export default {
     return {
       authStore,
       router,
-      newMessagesCount: 5,
+      newMessagesCount: null,
       isNotificationDropdownVisible: false,
       currentMenu: null,
       isActiveRoute: '',
@@ -309,162 +314,9 @@ export default {
       iconSize: 'w-7 h-7',
       lang: 'en',
       notifications: [
-        {
-          image: 'assets/images/profile1.jpg',
-          title: 'New Message',
-          body: 'You have a new message from John',
-          time: '2m ago'
-        },
-        {
-          image: 'assets/images/profile2.jpg',
-          title: 'New Comment',
-          body: 'Anna commented on your post',
-          time: '10m ago'
-        },
-        {
-          image: 'assets/images/profile3.jpg',
-          title: 'New Like',
-          body: 'David liked your photo',
-          time: '30m ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        },
-        {
-          image: 'assets/images/profile4.jpg',
-          title: 'Friend Request',
-          body: 'Emily sent you a friend request',
-          time: '1h ago'
-        }
+      
+      
+      
       ],
       navItems: [
         {
@@ -507,7 +359,9 @@ export default {
     redirectToNotifications() {
       this.$router.push({ name: 'notification' })
       this.isNotificationDropdownVisible = false
+      this.closeAllMenu()
     },
+
     handleClickOutside(event) {
       const menus = this.$refs.menus
       if (menus) {
@@ -549,8 +403,7 @@ export default {
       this.currentMenu = this.currentMenu === 'language' ? null : 'language'
     },
     closeAllMenu() {
-      this.isMenuVisible = false
-      this.isMenulangauge = false
+      this.currentMenu = null;
     },
   
     menuMethods(index) {

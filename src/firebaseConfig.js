@@ -5,13 +5,13 @@ import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { useToast } from 'vue-toastification';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBTb9dECqZKjHDDP3nOgSWSW824xEVYWSc",
-  authDomain: "residat-7f3e3.firebaseapp.com",
-  projectId: "residat-7f3e3",
-  storageBucket: "residat-7f3e3.appspot.com",
-  messagingSenderId: "390075232477",
-  appId: "1:390075232477:web:6ae22692796e85616b2b34",
-  measurementId: "G-HE0MFB69XK"
+  apiKey: "AIzaSyC_2oYB8rGVSgKVf9kTEiiUs27AacLhHbA",
+  authDomain: "rankit-74583.firebaseapp.com",
+  projectId: "rankit-74583",
+  storageBucket: "rankit-74583.appspot.com",
+  messagingSenderId: "273830249825",
+  appId: "1:273830249825:web:e9d42f73070dc2617c3120",
+  measurementId: "G-P7NLRFZEVB"
 };
 
 // Initialize Firebase
@@ -30,7 +30,7 @@ export const getFcmToken = async () => {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
       console.log('Notification permission granted.');
-      const currentToken = await getToken(messaging, { vapidKey: 'BGQqaKwYEpAMrVNsiIequoOK2CoEwgkWrDO-PuC0Xk-8Nvp1gRwV7qT88sjk_AnZKcdvEPD9kS3caej3Rv8k9tw' });
+      const currentToken = await getToken(messaging, { vapidKey: 'BOMH3teG4u__B5UBCP6h4iV07QqhrpNLx4eED99q6zpbFjK1mGCJ6f_Tx2wmNvnEhVC045Jbtpg8yf7G86VD49E' });
       if (currentToken) {
         console.log('FCM Token:', currentToken);
         return currentToken;

@@ -10,8 +10,11 @@
   "password": "Password",
   "welcome_back": "Welcome Back",
   "personal_information": "Personal Information",
+  "institution_information": "Institution Information",
   "first_name": "First Name",
+  "owner_name": "Owner Name",
   "enter_first_name": "Enter First Name",
+  "enter_owner_name": "Enter owner name",
   "second_name": "Second Name",
   "enter_second_name": "Enter Second Name",
   "phone": "Phone",
@@ -30,6 +33,7 @@
   "next": "next",
   "specific_information": "Specific Information",
   "profile_picture": "Profile Picture",
+  "upload_official_doc": "Upload your Official document",
   "preview_picture": "Preview Picture",
   "choose_your_region": "Choose Your Region",
   "choose_your_division": "Choose Your Division",
@@ -47,7 +51,7 @@
   "dashboard": "Dashboard",
   "chat_room": "Chat Room",
   "event": "Event",
-  "search_location": "Search in your location",
+  "search_location": "Search sub division",
   "welcome_to": "welcome to",
   "select_location_title": "Select Location",
   "select_sector_title": "Select Sector",
@@ -70,6 +74,8 @@
   "climate_risk_threats": "Climate Risk Threats",
   "profile_page": "Profile Page",
   "create_post": "Create Post",
+  "create_institution": "Create institution",
+  "submit_request": "Submit my request",
   "settings_privacy": "Settings & Privacy",
   "logout": "Logout",
 
@@ -116,7 +122,23 @@
   "your_description_here": "Your description here",
   
   "follow": "Follow",
-  "following": "Following"
+  "following": "Following",
 
+  "institution": "Institution",
+  "get_to_us": "Get to us for any problem or suggestion.",
+  "contact_us":"Contact us",
+
+  "feedback": "Feedback",
+  "close": "Close",
+  "send_feedback": "Send us your feedback",
+  "enter_feedback": "Enter your feedback here...",
+  "submit": "Submit",
+  "get_on_whatsap": "Get to us on Whatsapp",
+
+  "update_profile_success":"Updated profile successful",
+  
+  "no_notification":"You have no notification",
+  "no_alert":"You have no alert",
+  "notification":"Notification"
 
 }

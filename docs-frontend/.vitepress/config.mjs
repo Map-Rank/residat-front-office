@@ -9,6 +9,7 @@ export default defineConfig({
     logo: '/logo-small.svg',
     nav: [
       { text: 'Home', link: '/' },
+      { text: 'Documentation', link: '/setup-testing' }
     ],
 
     sidebar: [

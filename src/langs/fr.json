@@ -12,6 +12,7 @@
   "personal_information": "Informations personnelles",
   "first_name": "Prénom",
   "enter_first_name": "Entrez votre prénom",
+  "enter_owner_name": "Entre le nom du proprietaire",
   "second_name": "Nom",
   "enter_second_name": "Entrez votre nom",
   "phone": "Téléphone",
@@ -30,6 +31,7 @@
   "next": "Suivant",
   "specific_information": "Informations spécifiques",
   "profile_picture": "Photo de profil",
+  "upload_official_doc": "Uploader vous document officiel",
   "preview_picture": "Aperçu de la photo",
   "choose_your_region": "Choisissez votre région",
   "choose_your_division": "Choisissez votre département",
@@ -47,7 +49,8 @@
   "dashboard": "Tableau de bord",
   "chat_room": "Salon de discussion",
   "event": "Événement",
-  "search_location": "Recherchez dans votre emplacement",
+  "submit_request": "Envoiyez ma requette",
+  "search_location": "Recherchez votre sous-division",
   "welcome_to": "Bienvenue à",
   "select_location_title": "Choisissez un emplacement",
   "select_sector_title": "Choisissez un secteur",
@@ -110,7 +113,24 @@
   "join_date_icon_alt": "Date d'inscription",
   "update_profile_button": "Mettre à jour le profil",
   "your_description_here": "Votre description ici",
+  "create_institution": "Cree l'institution",
 
   "follow": "S'abonnés a",
-  "following": "Abonner"
+  "following": "Abonner",
+  "get_to_us": "Contactez nous si vous rencontre un problem.",
+  "contact_us":"Comtactez nous",
+
+  "feedback": "Retour d'information",
+  "close": "Fermer",
+  "send_feedback": "Envoyez-nous vos commentaires",
+  "enter_feedback": "Entrez vos commentaires ici...",
+  "submit": "Soumettre",
+  "get_on_whatsap": "Contactez-nous sur Whatsapp",
+
+    "update_profile_success":"Mise ajour du profile avec succes",
+
+    "no_notification":"Vous n'avez pas de notification",
+    "no_alert":"Vous n'avez pas d'alert",
+    "notification":"Notification"
+
 }

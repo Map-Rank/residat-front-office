@@ -101,10 +101,14 @@ span {
   text-align: center;
 
   /* Paragraphs/P3-Bold */
-  font-family: Roboto;
   font-size: 14px;
-  font-style: normal;
   font-weight: 500;
   line-height: normal;
+}
+
+@media screen and (min-width: 768px) {
+  span {
+    font-size: 12px; 
+  }
 }
 </style>

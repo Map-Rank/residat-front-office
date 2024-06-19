@@ -4,6 +4,7 @@ export const API_ENDPOINTS = {
     register: '/register',
     createPost: '/post',
     getPosts: '/post',
+    getNotifications: '/notifications',
     showSpecificPost: '/post',
     getUserPosts: '/profile',
     likePost: 'post/like',
@@ -13,6 +14,7 @@ export const API_ENDPOINTS = {
     deletePost: '/post',
     sharePost: 'post/share',
     zone: '/zone',
+    notifications: '/notifications',
     // other endpoints...
   };
   

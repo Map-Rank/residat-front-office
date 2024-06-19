@@ -1,14 +1,29 @@
-<!-- eslint-disable vue/no-parsing-error -->
+eslint-disable vue/no-parsing-error
 <template>
   <div class="flex-col">
- 
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
         <div class="flex-col space-y-6">
-          <h2 class="text-center uppercase">{{ $t('personal_information') }}</h2>
+          <h2 class="text-center uppercase">{{ $t('institution_information') }}</h2>
+
+          <!-- Company -->
+          <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('company_name') }}</label>
+            <vee-field
+              name="company_name"
+              :rules="schema.company_name"
+              v-model="formData.company_name"
+              as="input"
+              type="text"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('company_name')"
+            />
+            <ErrorMessage class="text-danger-normal" name="company_name" />
+          </div>
+
           <!-- First Name -->
           <div class="mb-6">
-            <label class="inline-block mb-4">{{ $t('first_name') }}</label>
+            <label class="inline-block mb-4">{{ $t('owner_name') }}</label>
             <vee-field
               name="first_name"
               v-model="formData.first_name"
@@ -20,22 +35,6 @@
             />
             <ErrorMessage class="text-danger-normal" name="first_name" />
           </div>
-
-          <!-- Second Name -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('second_name') }}</label>
-            <vee-field
-              name="last_name"
-              v-model="formData.last_name"
-              :rules="schema.last_name"
-              as="input"
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('enter_second_name')"
-            />
-            <ErrorMessage class="text-danger-normal" name="last_name" />
-          </div>
-
 
           <!-- Description  -->
           <div class="mb-6">
@@ -49,7 +48,7 @@
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               :placeholder="$t('description')"
             />
-            <ErrorMessage class="text-danger-normal" name="last_name" />
+            <ErrorMessage class="text-danger-normal" name="description" />
           </div>
 
           <!-- Email -->
@@ -81,38 +80,9 @@
             <ErrorMessage class="text-danger-normal" name="phone" />
           </div>
 
-          <!-- date of birth -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
-            <vee-field
-              name="dob"
-              v-model="formData.date_of_birth"
-              :rules="schema.dob"
-              as="input"
-              type="date"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('select_date_of_birth')"
-            />
-            <ErrorMessage class="text-danger-normal" name="dob" />
-          </div>
-
-          <!-- User Gender  -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('gender') }}</label>
-            <select
-              v-model="formData.gender"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            >
-              <option value="">{{ $t('select_gender') }}</option>
-              <option value="male">{{ $t('male') }}</option>
-              <option value="female">{{ $t('female') }}</option>
-              <option value="other">{{ $t('other') }}</option>
-            </select>
-          </div>
-
           <!-- Password -->
           <div class="relative w-full">
-            <label>{{$t('password')}}</label>
+            <label>{{ $t('password') }}</label>
             <div class="flex items-center border border-gray-300 rounded overflow-hidden">
               <vee-field
                 name="password"
@@ -188,7 +158,7 @@
                 @click.prevent="nextStep()"
                 class="block w-full capitalize bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
               >
-              {{ $t('next') }}
+                {{ $t('next') }}
               </button>
             </div>
           </div>
@@ -202,7 +172,7 @@
           <label class="inline-block mb-2">{{ $t('profile_picture') }}</label>
           <input
             type="file"
-            @change="onFileChange"
+            @change="onPickAvatar"
             accept="image/*"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           />
@@ -219,6 +189,19 @@
             </div>
           </div>
         </div>
+
+
+
+        <label class="inline-block mb-2">{{ $t('upload_official_doc') }}</label>
+        <input
+          type="file"
+          @change="onPickDocument"
+          accept="*/*"
+          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+        />
+        <ErrorMessage class="text-danger-normal" name="avatar" />
+
+
 
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
@@ -257,21 +240,6 @@
             v-if="!isLoading && !isSubdivisionLoading"
             :options="sub_divisions"
           />
-        </div>
-
-        <!-- Company -->
-        <div class="mb-6">
-          <label class="inline-block mb-2">{{ $t('company_name') }}</label>
-          <vee-field
-            name="company_name"
-            :rules="schema.company_name"
-            v-model="formData.company_name"
-            as="input"
-            type="text"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            :placeholder="$t('company_name')"
-          />
-          <ErrorMessage class="text-danger-normal" name="company_name" />
         </div>
 
         <div class="mb-4">
@@ -322,7 +290,7 @@
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
             :disabled="this.isLoading"
           >
-{{ $t('previous') }}
+            {{ $t('previous') }}
           </button>
 
           <button
@@ -336,7 +304,7 @@
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
             :disabled="this.isLoading"
           >
-            {{ $t('sign_up') }}
+            {{ $t('submit_request') }}
           </button>
         </div>
       </div>
@@ -353,10 +321,10 @@ import { useRouter } from 'vue-router'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-import { useToast } from "vue-toastification";
+import { useToast } from 'vue-toastification'
 
 export default {
-  name: 'RegisterForm',
+  name: 'InstitutionRegister',
 
   async created() {
     const sectorStore = useSectorStore()
@@ -377,7 +345,7 @@ export default {
   data() {
     const router = useRouter()
     const authStore = useAuthStore()
-    const toast = useToast();
+    const toast = useToast()
 
     return {
       authStore,
@@ -428,7 +396,7 @@ export default {
         first_name: 'required|min:3|max:50',
         last_name: 'required|min:3|max:50',
         description: 'required|min:3|max:2000',
-        phone: 'required|min:3|max:12',
+        phone: 'required|min:3|max:20',
         email: 'required|email',
         password: 'required|min:6',
         dob: 'required|dobNotBelowTenYears',
@@ -450,6 +418,7 @@ export default {
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
         avatar: '',
+        document: '',
         selectedSectors: [],
         zone: '',
         tos: false
@@ -479,7 +448,7 @@ export default {
   },
 
   methods: {
-    onFileChange(e) {
+    onPickAvatar(e) {
       const file = e.target.files[0]
       const isValidSize = file.size <= 2000 * 1024
 
@@ -487,7 +456,18 @@ export default {
         this.formData.avatar = file
       } else {
         this.formData.avatar = null
-        this.toast.error('The avatar selected exceed the specified max size');
+        this.toast.error('The avatar selected exceed the specified max size')
+      }
+    },
+    onPickDocument(e) {
+      const file = e.target.files[0]
+      const isValidSize = file.size <= 2000 * 1024
+
+      if (file && isValidSize) {
+        this.formData.document = file
+      } else {
+        this.formData.avatar = null
+        this.toast.error('The avatar selected exceed the specified max size')
       }
     },
     async getRegions() {
@@ -544,14 +524,7 @@ export default {
       this.showConfirmPassword = !this.showConfirmPassword
     },
     async nextStep() {
-      const fieldsToValidate = [
-        'first_name',
-        'last_name',
-        'email',
-        'phone',
-        'password',
-        'confirm_password'
-      ]
+      const fieldsToValidate = ['email', 'phone', 'password', 'confirm_password']
 
       try {
         const validationResults = await Promise.all(
@@ -564,7 +537,7 @@ export default {
         // Proceed to the next step only if all fields are valid
         if (allFieldsValid) {
           this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
-        } 
+        }
       } catch (error) {
         console.error('Validation error:', error)
       }
@@ -575,7 +548,7 @@ export default {
     },
 
     handleEmailNotVerified() {
-      this.toast.error('Check your email to verifie your mail');
+      this.toast.error('Check your email to verifie your mail')
       this.$router.push({ name: 'email-verification' })
     },
 
@@ -588,33 +561,40 @@ export default {
     handleError(errors) {
       this.isLoading = false
       if (errors.email && errors.email.length > 0) {
-        this.toast.error(errors.email[0]);
+        this.toast.error(errors.email[0])
       } else if (errors.zone_id && errors.zone_id.length > 0) {
-        this.toast.error(errors.zone_id[0]);
+        this.toast.error(errors.zone_id[0])
       }
     },
 
-async registerForm() {
-  const validationResults = await Promise.all(['tos'].map((field) => this.$refs.form.validateField(field)));
+    async registerForm() {
+      const validationResults = await Promise.all(
+        ['tos'].map((field) => this.$refs.form.validateField(field))
+      )
 
-  if (validationResults.every((result) => result.valid)) {
-    if (this.subDivision_id === '') {
-      this.toast.error(this.$t('please_select_your_subdivision'));
-      return;
+      if (validationResults.every((result) => result.valid)) {
+        if (this.subDivision_id === '') {
+          this.toast.error(this.$t('please_select_your_subdivision'))
+          return
+        }
+
+        this.toast.error(this.$t('please_wait_creating_account'))
+
+        try {
+          this.isLoading = true
+          await registerUser(
+            this.formData,
+            this.authStore,
+            this.handleSuccess,
+            this.handleError,
+            this.handleEmailNotVerified
+          )
+        } catch (error) {
+          this.isLoading = false
+          console.log(error)
+        }
+      }
     }
-    
-    this.toast.error(this.$t('please_wait_creating_account'));
-
-    try {
-      this.isLoading = true
-      await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError, this.handleEmailNotVerified);
-    } catch (error) {
-      this.isLoading = false
-      console.log(error);
-    }
-  } 
-}
-
   }
 }
 </script>
