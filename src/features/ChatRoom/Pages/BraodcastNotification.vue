@@ -6,7 +6,7 @@
   
         <vee-form ref="form" :validation-schema="schema" @submit="createBroadcast">
           <div class="flex-col space-y-6">
-            <h2 class="text-center">SEND ALERTS</h2>
+            <h2 class="text-center">SEND MASS MESSAGE</h2>
   
             <!-- First Name -->
             <div class="mb-6">

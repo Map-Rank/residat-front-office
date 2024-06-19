@@ -6,13 +6,13 @@ importScripts('https://www.gstatic.com/firebasejs/9.6.10/firebase-messaging-comp
 
 // Initialize the Firebase app in the service worker by passing the generated config
 const firebaseConfig = {
-  apiKey: "AIzaSyBTb9dECqZKjHDDP3nOgSWSW824xEVYWSc",
-  authDomain: "residat-7f3e3.firebaseapp.com",
-  projectId: "residat-7f3e3",
-  storageBucket: "residat-7f3e3.appspot.com",
-  messagingSenderId: "390075232477",
-  appId: "1:390075232477:web:6ae22692796e85616b2b34",
-  measurementId: "G-HE0MFB69XK"
+  apiKey: "AIzaSyC_2oYB8rGVSgKVf9kTEiiUs27AacLhHbA",
+  authDomain: "rankit-74583.firebaseapp.com",
+  projectId: "rankit-74583",
+  storageBucket: "rankit-74583.appspot.com",
+  messagingSenderId: "273830249825",
+  appId: "1:273830249825:web:e9d42f73070dc2617c3120",
+  measurementId: "G-P7NLRFZEVB"
 };
 
 firebase.initializeApp(firebaseConfig);

@@ -1,5 +1,18 @@
-<!-- <a href="https://vitepress.dev/reference/default-theme-home-page"></a> -->
+---
+# https://vitepress.dev/reference/default-theme-home-page
+layout: home
 
+hero:
+  name: "Residat Documentation"
+  tagline: Empowering communities with climate risk information.
+  actions:
+    - theme: brand
+      text: Project Website
+      link: /https://dev.residat.com/community
+ 
+
+
+---
 
 
 # Residat Documentation

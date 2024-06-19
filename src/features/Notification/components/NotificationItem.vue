@@ -1,10 +1,10 @@
 <!-- src/components/NotificationItem.vue -->
 <template>
   <div ref="notificationItem" :class="['flex items-start p-4 border-b', isNew ? 'bg-blue-50' : 'bg-white']">
-    <img :src="notification.avatar" alt="User Avatar" class="w-12 h-12 rounded-full mr-4">
+    <img :src="notification.image" alt="User Avatar" class="w-12 h-12 rounded-full mr-4">
     <div class="flex-grow">
-      <p class="font-semibold">{{ notification.message }}</p>
-      <p class="text-sm text-gray-500">{{ notification.time }}</p>
+      <p class="font-semibold">{{ notification.content_en }}</p>
+      <p class="text-sm text-gray-500">{{ notification.created_at }}</p>
     </div>
     <div class="relative" v-if="isInstitution">
       <button @click="toggleMenu" class="text-gray-500 hover:text-gray-700 focus:outline-none">

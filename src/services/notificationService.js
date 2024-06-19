@@ -1,5 +1,5 @@
 import { makeApiPostCall, makeApiDeleteCall, makeApiGetCall, makeApiPutCall } from '@/api/api'
-import { API_ENDPOINTS } from '@/constants/index.js'
+import { API_ENDPOINTS } from '../constants/apiEndpoints'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
@@ -13,14 +13,17 @@ const createNotification = async (notificationData, authStore, onSuccess, onErro
         // Append user data to formData
         formData.append('titre_en', notificationData.title)
         formData.append('titre_fr', notificationData.title)
-        formData.append('content_en', notificationData.description)
-        formData.append('content_fr', notificationData.description)
-        formData.append('firebase_id', authStore.user.id)
+        formData.append('content_en', notificationData.content)
+        formData.append('content_fr', notificationData.content)
+        // formData.append('firebase_id', authStore.user.id)
         formData.append('user_id', authStore.user.id)
         formData.append('zone_id', notificationData.zone_id)
         formData.append('image', notificationData.media)
 
-        const response = await makeApiPostCall(API_ENDPOINTS.notifications, formData, authToken, true)
+
+        console.log("this is the api" + API_ENDPOINTS.notifications)
+
+        const response = await makeApiPostCall("/notifications", formData, authToken, true)
 
         onSuccess()
 
@@ -40,8 +43,8 @@ const UpdateNotification = async (notificationId, notificationData, authStore, o
          // Append user data to formData
          formData.append('titre_en', notificationData.title)
          formData.append('titre_fr', notificationData.title)
-         formData.append('content_en', notificationData.description)
-         formData.append('content_fr', notificationData.description)
+         formData.append('content_en', notificationData.content)
+         formData.append('content_fr', notificationData.content)
          formData.append('firebase_id', authStore.user.id)
          formData.append('user_id', authStore.user.id)
          formData.append('zone_id', notificationData.zone_id)
