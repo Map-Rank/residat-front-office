@@ -21,7 +21,8 @@ const messaging = getMessaging(app);
 
 navigator.serviceWorker.register('/public/firebase-messaging-sw.js')
   .then((registration) => {
-    messaging.useServiceWorker(registration);
+    // Use the service workers directly on the messaging instance
+    messaging.swRegistration = registration;
   });
 
 export const getFcmToken = async () => {
