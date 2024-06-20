@@ -338,7 +338,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
           svgContentHover: '\\assets\\icons\\chat-fill.svg',
-          labelText: this.$t('chat_room'),
+          labelText: this.$t('inbox'),
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
