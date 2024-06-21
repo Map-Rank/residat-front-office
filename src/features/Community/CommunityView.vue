@@ -330,7 +330,7 @@ export default {
         ;(this.default_regions = [
           {
             id: 0,
-            name:this.$t('choose_your_region')
+            name:this.$t('cameroon')
           }
         ]),
           (this.default_divisions = [
@@ -467,7 +467,7 @@ export default {
       default_regions: [
         {
           id: 0,
-          name: 'Choose a region'
+          name: 'Cameroon'
         }
       ],
       default_divisions: [
@@ -615,9 +615,10 @@ export default {
       } finally {
         this.topLoading = false
         this.filteringActive = true
-        if (this.posts.length == 0) {
+        if (this.posts.length === 0) {
           this.showPageRefresh = true
-          this.errorMessage = 'No post found under this location , chose another location '
+          console.log('No post found under this location , chose another location ')
+          // this.errorMessage = 'No post found under this location , chose another location '
         } else {
           this.showPageRefresh = false
         }

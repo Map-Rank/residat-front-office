@@ -4,6 +4,8 @@ import { getAnalytics } from "firebase/analytics";
 import { getMessaging, getToken, onMessage } from 'firebase/messaging';
 import { useToast } from 'vue-toastification';
 
+const vapidKey = import.meta.env.FIREBASE_VAPIDKEY
+
 const firebaseConfig = {
   apiKey: "AIzaSyC_2oYB8rGVSgKVf9kTEiiUs27AacLhHbA",
   authDomain: "rankit-74583.firebaseapp.com",
@@ -27,13 +29,15 @@ navigator.serviceWorker.register('/public/firebase-messaging-sw.js')
 
 export const getFcmToken = async () => {
   const toast = useToast();
+  
+  
   try {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
       console.log('Notification permission granted.');
-      const currentToken = await getToken(messaging, { vapidKey: 'BOMH3teG4u__B5UBCP6h4iV07QqhrpNLx4eED99q6zpbFjK1mGCJ6f_Tx2wmNvnEhVC045Jbtpg8yf7G86VD49E' });
+      const currentToken = await getToken(messaging, { vapidKey: vapidKey });
       if (currentToken) {
-        console.log('FCM Token:', currentToken);
+        // console.log('FCM Token:', currentToken);
         return currentToken;
       } else {
         console.log('No registration token available. Request permission to generate one.');

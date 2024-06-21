@@ -239,7 +239,7 @@ const sharePost = async (postId) => {
 
 const deletePost = async (postId) => {
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deletePost}/${postId}`, authToken)
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.post}/${postId}`, authToken)
     console.log('delete post sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting posts:', error)

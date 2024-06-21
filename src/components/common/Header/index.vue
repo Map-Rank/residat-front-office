@@ -215,7 +215,7 @@
           ></icon-with-label>
 
           <div class="relative">
-            <icon-with-label
+            <!-- <icon-with-label
               :textCss="'text-primary-normal text-xs'"
               :svgContent="'assets\\icons\\notification-outline.svg'"
               :svgContentHover="'assets\\icons\\notification-fill.svg'"
@@ -225,17 +225,16 @@
               :isActive="false"
               :bottom="true"
               @customFunction="toggleNotificationDropdown"
-            ></icon-with-label>
+            ></icon-with-label> -->
             <!-- Circular Div at the top -->
-            <div
+            <!-- <div
             v-if="newMessagesCount"
               class="absolute top-0 right-0 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center"
             >
-              <!-- Displaying the number of new messages -->
               {{ newMessagesCount }}
-            </div>
+            </div> -->
             <!-- Notification Dropdown -->
-            <div
+            <!-- <div
             ref="menus"
               v-show="currentMenu === 'notification'"
               class="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-10 max-h-[80vh] overflow-y-auto no-scrollbar"
@@ -265,7 +264,7 @@
                   </div>
                 </li>
               </ul>
-            </div>
+            </div> -->
           </div>
         </nav>
       </div>
@@ -327,22 +326,22 @@ export default {
           bottom: true,
           routerName: 'community'
         },
-        {
-          svgContent: '\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-          labelText: this.$t('dashboard'),
-          isActive: false,
-          bottom: true,
-          routerName: 'dashboard'
-        },
-        {
-          svgContent: '\\assets\\icons\\chat-outline.svg',
-          svgContentHover: '\\assets\\icons\\chat-fill.svg',
-          labelText: this.$t('inbox'),
-          isActive: false,
-          bottom: true,
-          routerName: 'chat-room'
-        },
+        // {
+        //   svgContent: '\\assets\\icons\\dashboard-outline.svg',
+        //   svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+        //   labelText: this.$t('dashboard'),
+        //   isActive: false,
+        //   bottom: true,
+        //   routerName: 'dashboard'
+        // },
+        // {
+        //   svgContent: '\\assets\\icons\\chat-outline.svg',
+        //   svgContentHover: '\\assets\\icons\\chat-fill.svg',
+        //   labelText: this.$t('inbox'),
+        //   isActive: false,
+        //   bottom: true,
+        //   routerName: 'chat-room'
+        // },
         {
           svgContent: '\\assets\\icons\\event-outline.svg',
           svgContentHover: '\\assets\\icons\\event-fill.svg',
