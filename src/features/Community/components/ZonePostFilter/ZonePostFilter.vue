@@ -90,11 +90,14 @@ export default {
   },
   methods: {
     returnZoneId(id) {
-      this.filterPostFunctionWithId(id)
+      if(id){
+        this.filterPostFunctionWithId(id)
+      }
     },
 
    returnZone(zone) {
-     if(this.updateZone !== null) {
+    console.log('this is the zone '+ zone);
+     if(this.updateZone !== null && zone.id != null) {
        this.updateZone(zone);
        return
      } 
@@ -115,7 +118,7 @@ export default {
         //delete all element and allow the first only
         this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
-        // this.sub_divisions = [this.sub_divisions[0]]
+        this.sub_divisions = [this.sub_divisions[0]]
       } catch (error) {
         console.log(error)
       } finally {

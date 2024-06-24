@@ -466,7 +466,7 @@ export default {
       recentPosts: [],
       default_regions: [
         {
-          id: 0,
+          id: 1,
           name: 'Cameroon'
         }
       ],

@@ -222,7 +222,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'authentication' })
   } else if (to.name === 'authentication' && authStore.user != null) {
-    next({ name: 'dashboard' }) 
+    next({ name: 'community' }) 
   } else {
     next()
   }
