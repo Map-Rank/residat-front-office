@@ -77,7 +77,7 @@ export default {
       isLoading: false,
 
       region_id: '1',
-      sectionTitle:this.$t('select_location_title'),
+      sectionTitle: this.title || this.$t('select_location_title') ,
 
       division_id: '',
       Subdivision_id: '1',
@@ -143,6 +143,7 @@ export default {
     updateZone: {
       type:Function
     },
+    title:String,
     props_regions: {
       type: Array,
       default: () => [

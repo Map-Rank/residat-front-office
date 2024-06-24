@@ -55,6 +55,7 @@
   "search_location": "Recherchez votre sous-division",
   "welcome_to": "Bienvenue à",
   "select_location_title": "Choisissez un emplacement",
+  "select_event_by_location": "filtre les evement par location",
   "select_sector_title": "Choisissez un secteur",
   "input_placeholder": "À quoi pensez-vous?",
   "post": "Publier",

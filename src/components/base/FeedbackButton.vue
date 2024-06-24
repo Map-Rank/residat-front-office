@@ -103,7 +103,7 @@ export default {
   border-radius: 50px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  animation: float 2s ease-in-out infinite;
+
 }
 
 .feedback-button:hover {

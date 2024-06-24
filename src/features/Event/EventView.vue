@@ -28,6 +28,7 @@
         <div v-if="!isZoneLoading" class="">
           <div class="mb-4 p-4 bg-white rounded shadow">
             <zone-post-filter
+          :title="$t('select_event_by_location')"
               :props_regions="default_regions"
               :props_divisions="default_divisions"
               :props_sub_divisions="default_sub_divisions"

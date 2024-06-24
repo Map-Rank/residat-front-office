@@ -6,7 +6,7 @@
       v-for="i in [currentIndex]" :key="i">
         <img 
         class="w-full  max-h-[40vh] md:max-h-[50vh] "
-        :src="`${imageHost}${currentImg.url}`" />
+        :src="`${currentImg.url}`" />
       </div>
     </transition-group>
     <div class="flex justify-center">
