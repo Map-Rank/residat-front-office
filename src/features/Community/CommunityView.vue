@@ -329,7 +329,7 @@ export default {
         this.isZoneFilterLoading = true
         ;(this.default_regions = [
           {
-            id: 0,
+            id: 1,
             name:this.$t('cameroon')
           }
         ]),
@@ -606,7 +606,7 @@ export default {
       try {
         this.topLoading = true
 
-        this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId, null, null)
+        this.posts = await getFilterPosts(id != 0 ? id : null, this.sectorId, null, null)
         this.$router.push(`/community/${id}`);
 
       } catch (error) {

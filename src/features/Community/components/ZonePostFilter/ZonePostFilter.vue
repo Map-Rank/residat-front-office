@@ -113,6 +113,12 @@ export default {
     },
 
     async getDivisions(parent_id) {
+      //here i will avoid fetching the divisions in the case 
+      // that the user chosed to filter post according to Cameroon
+      if(parent_id == 1){
+        this.divisions = [this.divisions[0]]
+        return
+      }
       try {
         this.isDivisionLoading = true
         //delete all element and allow the first only
@@ -148,8 +154,8 @@ export default {
       type: Array,
       default: () => [
         {
-          id: 0,
-          name: 'Choose a region'
+          id: 1,
+          name: 'Cameroon'
         }
       ]
     },
