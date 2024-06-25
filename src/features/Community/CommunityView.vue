@@ -59,9 +59,7 @@
 
               <!-- Main Content Area: Posts -->
               <main class="col-span-5 lg:px-4 md:px-0" ref="mainContent">
-                <!-- <div v-if="topLoading" class="flex h-full justify-center">
-                  <LoadingIndicator />
-                </div> -->
+             
                 
                 <post-input  :profilePictureUrl="userProfileImage">
                 </post-input>
