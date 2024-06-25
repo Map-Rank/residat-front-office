@@ -62,6 +62,9 @@
                 <!-- <div v-if="topLoading" class="flex h-full justify-center">
                   <LoadingIndicator />
                 </div> -->
+                
+                <post-input  :profilePictureUrl="userProfileImage">
+                </post-input>
 
                 <div v-if="topLoading">
                     <PostShimmerLoading  class="mb-4" />
@@ -127,11 +130,11 @@
                     </div>
                   </div>
                 </div>
-
+<!-- 
+                <post-input  :profilePictureUrl="userProfileImage">
+                </post-input> -->
                 <div v-if="!topLoading" class="space-y-2">
 
-                  <post-input v-if="!showPageRefresh" :profilePictureUrl="userProfileImage">
-                  </post-input>
 
                   <div v-if="hasNewPosts" class="">
                     <div class="my-10 flex flex-col justify-center items-center">
@@ -284,9 +287,24 @@ export default {
       const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : []
       
       if (zoneId) {
+        this.topLoading = true
+        this.showPageRefresh = false
         this.isZoneFilterLoading = true
-        this.posts = await getFilterPosts(zoneId, sectorIdArray)
-        this.paramZone = await getSpecificZones(zoneId)
+        try {
+          this.posts = await getFilterPosts(zoneId, sectorIdArray);
+          this.paramZone = await getSpecificZones(zoneId);
+          this.topLoading = false
+
+        } catch (error) {
+          this.showPageRefresh = true
+          console.error('An error occurred:', error);
+
+        }finally {
+         this.topLoading = false
+         this.posts.length < 1 ?   this.showPageRefresh = true : null
+
+       }
+       
         this.isZoneFilterLoading = true
       } else {
         await this.fetchResources()
@@ -347,6 +365,7 @@ export default {
           ])
 
         if (newValue.level_id == 4) {
+         
           const rest = await getZones(null, newValue.parent_id)
           const currentZone = {
             id: newValue.id,
@@ -614,9 +633,10 @@ export default {
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
-        this.filteringActive = true
+        this.filteringActive = false
         if (this.posts.length === 0) {
           this.showPageRefresh = true
+          console.log("this is howpager" + this.showPageRefresh)
           console.log('No post found under this location , chose another location ')
           // this.errorMessage = 'No post found under this location , chose another location '
         } else {
@@ -626,13 +646,9 @@ export default {
     },
 
     async reloadPosts() {
-      this.page = 0
-      this.topLoading = false
-      this.filteringActive = false
-      this.showPageRefresh = false
-      this.hasFetchAllPost = false
-      this.zoneName = this.authStore.user.zone.name
-      await this.fetchPosts()
+      this.$router.push({ name: 'community' }).then(() => {
+    window.location.reload();
+  });
     },
 
     async fetchResources() {
