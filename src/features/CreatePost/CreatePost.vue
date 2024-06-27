@@ -213,8 +213,17 @@ export default {
         return
       }
 
-      this.formData.images = []
-      // this.imagesToFromLocalPreview = []
+      if (!Array.isArray(this.formData.images)) {
+        this.formData.images = []
+      }
+      if (!Array.isArray(this.formData.videos)) {
+        this.formData.videos = []
+      }
+
+      // Initialize imagesToFromLocalPreview if it is not already
+      if (!Array.isArray(this.imagesToFromLocalPreview)) {
+        this.imagesToFromLocalPreview = []
+      }
 
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
@@ -226,9 +235,12 @@ export default {
           this.formData.videos.push(file)
         }
       })
+      console.log(this.formData.images.length)
 
       this.imagesFromHostToPreview = null
     },
+
+
     handleCroppedImage(croppedImage) {
       const file = this.dataURLtoFile(croppedImage, 'croppedImage.png')
       this.formData.images.push(file)
@@ -275,6 +287,6 @@ label {
   font-style: normal;
   font-weight: 600;
   line-height: 24px; /* 120% */
-  letter-spacing: -0.3px
+  letter-spacing: -0.3px;
 }
 </style>

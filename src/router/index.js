@@ -34,12 +34,16 @@ const router = createRouter({
       name: 'social-profile',
       component: SocialProfile,
       meta: { requiresAuth: true }
+      
     },
     {
       path: '/notification',
       name: 'notification',
       component: NotificationView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      redirect: (to) => {
+        return '/community';
+      }
     },
     {
       path: '/broadcast-notification',
@@ -104,7 +108,17 @@ const router = createRouter({
         parentId: route.params.parentId,
         zoneName: route.params.zoneName,
         mapSize: route.params.mapSize
-      })
+      }),
+      redirect: (to) => {
+        return '/community';
+      }
+    },
+
+    {
+      path: '/community',
+      name: 'community',
+      component: CommunityView,
+      meta: { requiresAuth: true }
     },
 
     {
@@ -190,7 +204,10 @@ const router = createRouter({
       path: '/chat-room',
       name: 'chat-room',
       component: ChatRoomView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      redirect: (to) => {
+        return '/community';
+      }
     },
 
 

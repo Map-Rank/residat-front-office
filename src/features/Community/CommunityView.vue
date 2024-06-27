@@ -8,7 +8,8 @@
       <h2
         class="text-white  font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase"
       >
-      {{ $t('welcome_to') }} {{ zoneName }}
+      <!-- {{ $t('welcome_to') }} {{ zoneName }} -->
+       {{ zoneName }}
       </h2>
     </div>
 
