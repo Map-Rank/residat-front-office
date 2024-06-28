@@ -63,6 +63,9 @@ import UseEventStore from '@/stores/eventStore.js';
 
 export default {
   name: 'EventBox',
+  
+
+
   props: {
     event: Object,
     showMenu: Boolean,
