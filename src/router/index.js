@@ -25,6 +25,7 @@ import UpdatePassword from '@/features/Setting/Pages/SecuritySetting/UpdatePassw
 import LangaugeModal from '@/components/common/Modal/LangaugeModal.vue'
 import NotificationView from '@/features/Notification/NotificationView.vue'
 import BroadcastNotification from '@/features/ChatRoom/Pages/BraodcastNotification.vue'
+import EventDetails from '@/features/Event/Pages/EventDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -139,6 +140,7 @@ const router = createRouter({
         postId: route.params.postId || null,
       })
     },
+
     {
       path: '/search/result/:zoneId/:query?',
       name: 'search-result',
@@ -216,6 +218,15 @@ const router = createRouter({
       name: 'show-post',
       component: ShowPost,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/event-detail/:eventId',
+      name: 'event-detail',
+      component: EventDetails,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        eventId: route.params.eventId ,
+      })
     },
     {
       path: '/edit-event/:id',

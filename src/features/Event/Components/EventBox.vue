@@ -1,6 +1,8 @@
 <template>
-  <div class="mb-4 p-4 bg-white rounded cursor-pointer">
-    <router-link to="/event" class="grid sm:flex mb-2">
+  <div 
+  @click="navigateEventDetail"
+  class="mb-4 p-4 bg-white rounded cursor-pointer">
+    <div to="/event-detail/1" class="grid sm:flex mb-2">
       <img :src="event.image" class="rounded-[50%] h-[100px] w-[100px] mr-4" alt="event image" />
       <div class="w-full">
         <div class="flex justify-between ">
@@ -49,7 +51,7 @@
           </span>
         </p>
       </div>
-    </router-link>
+    </div>
   </div>
 </template>
 
@@ -93,6 +95,20 @@ export default {
     }
   },
   methods: {
+
+    navigateEventDetail () {
+      if (this.event.id) {
+        console.log(this.event.id)
+
+        this.$router.push({
+          name: 'event-detail',
+          params: {
+            eventId: this.event.id,
+          }
+        })
+      }
+   
+    },
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible;
     },
