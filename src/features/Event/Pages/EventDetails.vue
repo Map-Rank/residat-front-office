@@ -47,14 +47,14 @@
         </div>
 
         <div class="flex mb-4">
-          <img :src="event.image" alt="Event Image" class="w-32 h-32 rounded-full mr-4" />
+          <!-- <img :src="event.image" alt="Event Image" class="w-32 h-32 rounded-full mr-4" /> -->
           <div class="flex flex-col justify-center">
-            <p class="text-lg font-semibold">{{ event.organized_by }}</p>
-            <p class="text-sm text-gray-600">{{ event.location }}</p>
-            <p class="text-sm text-gray-600">{{ event.published_at }}</p>
-            <p class="text-sm text-gray-600">{{ event.date_debut }} - {{ event.date_fin }}</p>
+            <p class="text-lg font-semibold"> By: {{ event.organized_by }}</p>
+            <p class="text-sm text-gray-600"> <span class="text-[14px] text-body-darker font-semibold" >Town : </span>{{ event.location }}</p>
+            <p class="text-sm text-gray-600"><span class="text-[14px] text-body-darker font-semibold" >Starting on : </span>{{ event.published_at }}</p>
           </div>
         </div>
+        <h3>Details</h3>
         <p class="text-gray-700 mt-2">
           {{ trimmedDescription }}
           <button v-if="showReadMore" @click="toggleReadMore" class="text-blue-600 hover:underline">
@@ -150,4 +150,7 @@ export default {
 
 <style scoped>
 /* Add your custom styles here */
+span{
+
+}
 </style>
