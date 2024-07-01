@@ -13,6 +13,7 @@ import { i18n } from '@/langs/i18nSetup'
 import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import { getFcmToken } from '@/firebaseConfig';
+import dateFormat from './utils/dateFormat'
 
 const app = createApp(App)
 
@@ -22,6 +23,7 @@ app.use(createPinia())
 app.use(router)
 app.use(VeeValidatePlugin)
 app.use(i18n)
+app.directive('date-format', dateFormat);
 
 
 const options = {

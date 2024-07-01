@@ -30,6 +30,14 @@ export default {
             const today = new Date();
             return selectedDate >= today;
           });
+
+          // defineRule('dobNotBelowTenYears', (value) => {
+          //   const [day, month, year] = value.split('/');
+          //   const selectedDate = new Date(`${year}-${month}-${day}`);
+          //   const today = new Date();
+          //   const tenYearsAgo = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+          //   return selectedDate <= tenYearsAgo;
+          // });
           
         // defineRule('dob', 'required|dobNotBelowTenYears');
 

@@ -16,6 +16,6 @@ export default defineConfig({
     }
   },
   devServer: {
-    proxy: 'https://backoffice-dev.residat.com',
+    proxy: 'https://admin.residat.com',
   }
 })

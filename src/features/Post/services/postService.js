@@ -159,7 +159,6 @@ const getSpecificPost = async (id) => {
 const filterPost = async (params) => {
   try {
     const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, authToken)
-    console.log('post filtered!!')
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -239,7 +238,7 @@ const sharePost = async (postId) => {
 
 const deletePost = async (postId) => {
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deletePost}/${postId}`, authToken)
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.post}/${postId}`, authToken)
     console.log('delete post sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting posts:', error)

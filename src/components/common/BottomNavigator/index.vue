@@ -40,13 +40,13 @@ export default {
         //   bottom: true,
           routerName: 'community'
         },
-        {
-          svgContent: '\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-          labelText: 'Dashboard',
-          isActive: false,
-          routerName: 'dashboard'
-        },
+        // {
+        //   svgContent: '\\assets\\icons\\dashboard-outline.svg',
+        //   svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+        //   labelText: 'Dashboard',
+        //   isActive: false,
+        //   routerName: 'dashboard'
+        // },
         {
           svgContent: '\\assets\\icons\\add-circle-outline.svg',
           svgContentHover: '\\assets\\icons\\add-circle-outline.svg',
@@ -62,14 +62,14 @@ export default {
           isActive: false,
           routerName: 'event'
         },
-        {
-          svgContent: '\\assets\\icons\\chat-outline.svg',
-          svgContentHover: '\\assets\\icons\\chat-fill.svg',
-          labelText: 'Profile',
-          isActive: false,
-          routerName: 'chat-room'
-        //   bottom: true
-        },
+        // {
+        //   svgContent: '\\assets\\icons\\chat-outline.svg',
+        //   svgContentHover: '\\assets\\icons\\chat-fill.svg',
+        //   labelText: 'Profile',
+        //   isActive: false,
+        //   routerName: 'chat-room'
+        // //   bottom: true
+        // },
       ]
     }
   },

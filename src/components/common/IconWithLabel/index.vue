@@ -23,7 +23,8 @@
         :class="[
           hover || isActive ? iconDesktopSize : iconMobileSize,
           'md:' + iconDesktopSize,
-          'sm:' + iconMobileSize
+          'sm:' + iconMobileSize,
+          imageCss
         ]"
       />
 
@@ -93,6 +94,7 @@ export default {
     labelTextBottom: String,
     labelTextLeft: String,
     customCss:String,
+    imageCss:String,
   },
   data() {
     return {

@@ -10,12 +10,15 @@
     />
     <label
       :for="list.name"
-      class="ml-2.5 text-body-dark cursor-pointer text-base font-normal leading-6 transition-all"
+      class="ml-2.5 w-3/4 text-body-dark cursor-pointer sm:text-[14px] lg:text-[15px] font-normal leading-6 transition-all"
     >
       {{ list.name }}
     </label>
   </div>
 </template>
+
+
+
 
 <script>
 export default {
@@ -80,21 +83,12 @@ export default {
   align-items: center;
 }
 
-.checkbox-input {
-  width: 24px;
-  height: 24px;
-}
+
+
 
 .checkbox-input:checked + .checkbox-label {
   font-weight: 600;
 }
 
-label {
-  color: var(--body-dark, #1b1b1b);
-  font-size: 16px;
-  font-family: 'Poppins';
-  font-style: normal;
-  font-weight: 400;
-  line-height: 20px; /* 142.857% */
-}
+
 </style>

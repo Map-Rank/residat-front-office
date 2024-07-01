@@ -322,7 +322,7 @@ export default {
 
       hazard: [
         { id: 0, name: 'Chose Environmental Hazard' },
-        { id: 1, name: 'Floods', value: ReportType.FLOODS },
+        { id: 1, name: 'Flood', value: ReportType.FLOOD },
         { id: 2, name: 'Drought', value: ReportType.DROUGHT }
       ],
 

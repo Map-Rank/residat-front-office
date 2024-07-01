@@ -25,6 +25,7 @@ import UpdatePassword from '@/features/Setting/Pages/SecuritySetting/UpdatePassw
 import LangaugeModal from '@/components/common/Modal/LangaugeModal.vue'
 import NotificationView from '@/features/Notification/NotificationView.vue'
 import BroadcastNotification from '@/features/ChatRoom/Pages/BraodcastNotification.vue'
+import EventDetails from '@/features/Event/Pages/EventDetails.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -34,12 +35,16 @@ const router = createRouter({
       name: 'social-profile',
       component: SocialProfile,
       meta: { requiresAuth: true }
+      
     },
     {
       path: '/notification',
       name: 'notification',
       component: NotificationView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      redirect: (to) => {
+        return '/community';
+      }
     },
     {
       path: '/broadcast-notification',
@@ -104,7 +109,17 @@ const router = createRouter({
         parentId: route.params.parentId,
         zoneName: route.params.zoneName,
         mapSize: route.params.mapSize
-      })
+      }),
+      redirect: (to) => {
+        return '/community';
+      }
+    },
+
+    {
+      path: '/community',
+      name: 'community',
+      component: CommunityView,
+      meta: { requiresAuth: true }
     },
 
     {
@@ -125,6 +140,7 @@ const router = createRouter({
         postId: route.params.postId || null,
       })
     },
+
     {
       path: '/search/result/:zoneId/:query?',
       name: 'search-result',
@@ -190,7 +206,10 @@ const router = createRouter({
       path: '/chat-room',
       name: 'chat-room',
       component: ChatRoomView,
-      meta: { requiresAuth: true }
+      meta: { requiresAuth: true },
+      redirect: (to) => {
+        return '/community';
+      }
     },
 
 
@@ -199,6 +218,15 @@ const router = createRouter({
       name: 'show-post',
       component: ShowPost,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/event-detail/:eventId',
+      name: 'event-detail',
+      component: EventDetails,
+      meta: { requiresAuth: true },
+      props: (route) => ({
+        eventId: route.params.eventId ,
+      })
     },
     {
       path: '/edit-event/:id',
@@ -222,7 +250,7 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'authentication' })
   } else if (to.name === 'authentication' && authStore.user != null) {
-    next({ name: 'dashboard' }) 
+    next({ name: 'community' }) 
   } else {
     next()
   }

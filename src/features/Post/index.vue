@@ -65,8 +65,16 @@
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showModal()" class="px-5 mb-2 cursor-pointer">
-      <p class="content">{{ postContent }}</p>
+    <div  class="px-5 mb-2 cursor-pointer">
+      <!-- <p class="content">{{ postContent }}</p> -->
+
+      <p class="text-gray-700 text-start mt-1 content">
+        {{ truncatedDescription }}
+        <br>
+        <span v-if="shouldShowReadMore" @click="toggleReadMore" class="text-blue-700 cursor-pointer">
+          {{ showFullDescription ? 'Read less' : 'Read more' }}
+        </span>
+      </p>
     </div>
 
     <!-- Post Images -->
@@ -164,7 +172,8 @@ export default {
       iconSource: this.post?.is_following ? '/assets/icons/tick.svg' : '/assets/icons/add-circle-dark-outline.svg',
       labelText: this.post?.is_following ? this.$t('following') : this.$t('follow'),
       isFollowing: false,
-
+      maxDescriptionLength: 100, 
+      showFullDescription: false,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isModalVisible: false,
@@ -206,7 +215,32 @@ export default {
     }
   },
 
+  computed: {
+    truncatedDescription() {
+      if (this.showFullDescription) {
+        return this.postContent;
+      } else {
+        return this.postContent.length > this.maxDescriptionLength
+          ? this.postContent.substring(0, this.maxDescriptionLength) + '...'
+          : this.postContent;
+      }
+    },
+    shouldShowReadMore() {
+      return this.postContent.length > this.maxDescriptionLength;
+    },
+    ...mapWritableState(usePostStore, ['showPostDetails']),
+
+    slicedImages() {
+      return this.postImages.slice(1).filter((image, index) => index < 3)
+    }
+  },
+
   methods: {
+
+    toggleReadMore() {
+      this.showFullDescription = !this.showFullDescription;
+    },
+
     ...mapActions(usePostStore, [
       'togglePostDetails',
       'setpostToShowDetails',
@@ -361,13 +395,7 @@ export default {
     ImagePostGallery,
     PostDetailModal
   },
-  computed: {
-    ...mapWritableState(usePostStore, ['showPostDetails']),
 
-    slicedImages() {
-      return this.postImages.slice(1).filter((image, index) => index < 3)
-    }
-  },
 
   props: {
     username: String,

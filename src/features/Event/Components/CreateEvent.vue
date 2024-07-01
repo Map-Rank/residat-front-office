@@ -301,7 +301,7 @@ export default {
         { p: 'Option 2', value: 'option2' }
       ],
       schema: {
-        title: 'required|min:3|max:50',
+        title: 'required|min:3|max:150',
         description: 'required|min:3|max:250',
         date_fin: 'required|dateNotBelowPresent',
         date_debut: 'required|dateNotBelowPresent',
