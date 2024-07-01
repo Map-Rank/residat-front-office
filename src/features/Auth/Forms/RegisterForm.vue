@@ -82,7 +82,7 @@
           </div>
 
           <!-- date of birth -->
-          <div class="mb-6">
+          <!-- <div class="mb-6">
             <label class="inline-block mb-2">{{ $t('date_of_birth') }}
             </label>
             <vee-field
@@ -91,6 +91,20 @@
               :rules="schema.dob"
               as="input"
               type="date"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('select_date_of_birth')"
+            />
+            <ErrorMessage class="text-danger-normal" name="dob" />
+          </div> -->
+
+          <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
+            <vee-field
+              name="dob"
+              v-model="formData.date_of_birth"
+              :rules="schema.dob"
+              as="input"
+              v-mask="'##/##/####'"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
               :placeholder="$t('select_date_of_birth')"
             />
@@ -290,21 +304,6 @@
           />
         </div>
 
-        <!-- Company -->
-        <div class="mb-6">
-          <label class="inline-block mb-2">{{ $t('company_name') }}</label>
-          <vee-field
-            name="company_name"
-            :rules="schema.company_name"
-            v-model="formData.company_name"
-            as="input"
-            type="text"
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-            :placeholder="$t('company_name')"
-          />
-          <ErrorMessage class="text-danger-normal" name="company_name" />
-        </div>
-
         <div class="mb-4">
           <div class="grid mb-5">
             <label class="inline-block mb-2">{{ $t('sector') }}</label>
@@ -385,6 +384,7 @@ import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import { useToast } from "vue-toastification";
+import {mask} from 'vue-the-mask'
 
 export default {
   name: 'RegisterForm',
@@ -407,6 +407,7 @@ export default {
 
  
   },
+  directives: {mask},
 
   data() {
     const router = useRouter()
@@ -462,7 +463,7 @@ export default {
         first_name: 'required|min:3|max:50',
         last_name: 'required|min:3|max:50',
         description: 'required|min:3|max:2000',
-        phone: 'required|min:3|max:12',
+        phone: 'required|min:3|max:22',
         email: 'required|email',
         password: 'required|min:6',
         dob: 'required|dobNotBelowTenYears',
@@ -578,6 +579,8 @@ export default {
       this.showConfirmPassword = !this.showConfirmPassword
     },
     async nextStep() {
+console.log(typeof this.formData.date_of_birth);
+
       const fieldsToValidate = [
         'first_name',
         'last_name',
@@ -637,10 +640,10 @@ async registerForm() {
       return;
     }
     
-    this.toast.error(this.$t('please_wait_creating_account'));
-
+    
     try {
       this.isLoading = true
+      this.toast.error(this.$t('please_wait_creating_account'));
       await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError, this.handleEmailNotVerified);
     } catch (error) {
       this.isLoading = false

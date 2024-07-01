@@ -7,6 +7,7 @@ import { createPinia } from 'pinia'
 import useSectorStore from '@/stores/sectorStore.js'
 import useAuthStore from '@/stores/auth.js'
 import InlineSvg from 'vue-inline-svg'
+import VueTheMask from 'vue-the-mask'
 import App from './App.vue'
 import router from './router'
 import { i18n } from '@/langs/i18nSetup'
@@ -23,6 +24,7 @@ app.use(createPinia())
 app.use(router)
 app.use(VeeValidatePlugin)
 app.use(i18n)
+app.use(VueTheMask)
 app.directive('date-format', dateFormat);
 
 
