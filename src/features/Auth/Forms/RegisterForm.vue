@@ -81,21 +81,6 @@
             <ErrorMessage class="text-danger-normal" name="phone" />
           </div>
 
-          <!-- date of birth -->
-          <!-- <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('date_of_birth') }}
-            </label>
-            <vee-field
-              name="dob"
-              v-model="formData.date_of_birth"
-              :rules="schema.dob"
-              as="input"
-              type="date"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('select_date_of_birth')"
-            />
-            <ErrorMessage class="text-danger-normal" name="dob" />
-          </div> -->
 
           <div class="mb-6">
             <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
@@ -111,36 +96,6 @@
             <ErrorMessage class="text-danger-normal" name="dob" />
           </div>
 
-          <!-- <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
-            <vee-field
-              name="dob"
-              v-model="formData.date_of_birth"
-              :rules="schema.dob"
-              as="input"
-              v-date-format
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('select_date_of_birth')"
-            />
-            <ErrorMessage class="text-danger-normal" name="dob" />
-          </div> -->
-
-          <!-- <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
-            <vee-field
-              name="dob"
-              v-model="formData.date_of_birth"
-              :rules="schema.dob"
-              as="input"
-              v-date-format
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('select_date_of_birth')"
-            />
-            <ErrorMessage class="text-danger-normal" name="dob" />
-          </div> -->
-
           <!-- User Gender  -->
           <div class="mb-6">
             <label class="inline-block mb-2">{{ $t('gender') }}</label>
@@ -151,7 +106,6 @@
               <option value="">{{ $t('select_gender') }}</option>
               <option value="male">{{ $t('male') }}</option>
               <option value="female">{{ $t('female') }}</option>
-              <option value="other">{{ $t('other') }}</option>
             </select>
           </div>
 

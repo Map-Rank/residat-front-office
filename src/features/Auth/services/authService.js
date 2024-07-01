@@ -20,7 +20,7 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     formData.append('avatar', userData.avatar)
 
     //since i get date as a string here am converting to  a date type
-    const dateOfBirth = convertToDate(userData.date_of_birth).toISOString()
+    const dateOfBirth = convertToDate(userData.date_of_birth)
     formData.append('date_of_birth', dateOfBirth)
 
     const fcmToken = await getFcmToken()
@@ -42,9 +42,12 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
 
     return response
   } catch (error) {
-    if (error.response.data?.errors) {
-      onError(error.response.data.errors)
-    }
+  if (error.response?.data?.errors) {
+    onError(error.response.data.errors);
+  } else {
+    console.log('No errors found in the response.'+ error);
+  }
+  
     throw error
   }
 }
