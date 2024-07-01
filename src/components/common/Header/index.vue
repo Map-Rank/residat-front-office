@@ -133,6 +133,7 @@
               :isActive="true"
               :bottom="true"
               @customFunction="toggleMenu"
+              imageCss="rounded-lg"
             ></icon-with-label>
 
             <!-- Dropdown Menu -->
