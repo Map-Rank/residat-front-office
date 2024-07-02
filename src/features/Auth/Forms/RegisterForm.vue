@@ -39,7 +39,7 @@
 
           <!-- Description  -->
           <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('description') }}</label>
+            <label class="inline-block mb-2">{{ $t('occupation') }}</label>
             <vee-field
               name="description"
               v-model="formData.description"
@@ -47,7 +47,7 @@
               as="textarea"
               type="text"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('description')"
+              :placeholder="$t('occupation')"
             />
             <ErrorMessage class="text-danger-normal" name="description" />
           </div>
@@ -67,6 +67,7 @@
           </div>
 
           <!-- phone -->
+
           <div class="mb-6">
             <label class="inline-block mb-2">{{ $t('phone') }}</label>
             <vee-field
@@ -340,8 +341,13 @@ import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import { useToast } from "vue-toastification";
 import {mask} from 'vue-the-mask'
 
+
 export default {
   name: 'RegisterForm',
+components: {
+  BaseDropdown,
+  LoadingIndicator
+},
 
   async created() {
     const sectorStore = useSectorStore()
@@ -451,10 +457,6 @@ export default {
       currentStep: 'step_1',
       reg_in_submission: false
     }
-  },
-  components: {
-    BaseDropdown,
-    LoadingIndicator
   },
 
   computed: {

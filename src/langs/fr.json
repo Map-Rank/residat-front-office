@@ -26,6 +26,7 @@
   "female": "Femme",
   "other": "Autre",
   "description": "Description",
+  "occupation": "Occupation",
   "confirm_password": "Confirmez le mot de passe",
   "enter_password": "Entrez votre mot de passe",
   "enter_confirm_password": "Confirmez le mot de passe",

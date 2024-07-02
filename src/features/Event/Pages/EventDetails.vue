@@ -4,7 +4,7 @@
 
     <div v-if="!isLoading">
       <!-- Event Banner -->
-      <div class=" hidden relative mb-6">
+      <div class="  relative mb-6">
         <img
           :src="event.image"
           alt="Event Banner"

@@ -28,6 +28,7 @@
   "female": "Female",
   "other": "Other",
   "description": "Description",
+  "occupation": "Occupation",
   "confirm_password": "Confirm Password",
   "enter_password": "Enter Password",
   "enter_confirm_password": "Enter Confirm Password",
