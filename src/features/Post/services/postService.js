@@ -38,7 +38,7 @@ const createPost = async (postData, onSuccess, onError) => {
       formData.append(`sectors[${index}]`, id)
     })
 
-    console.log(postData)
+    console.log(authToken)
 
     const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
     if (onSuccess && typeof onSuccess === 'function') {
