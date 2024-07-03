@@ -238,8 +238,11 @@ const sharePost = async (postId) => {
 }
 
 const deletePost = async (postId) => {
+  
+  let token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.post}/${postId}`, authToken)
+    console.log('Deleting post')
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.post}/${postId}`, token)
     console.log('delete post sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting posts:', error)

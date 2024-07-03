@@ -214,10 +214,13 @@ export default {
 
   computed: {
 
-    formattedPostContent() {
-    // Ensure the content is correctly formatted with paragraphs
-    return this.postContent.replace(/\n/g, '<br>');
-  },
+formattedPostContent() {
+  return this.postContent
+    .replace(/<p><\/p>/g, '<br>') 
+    .replace(/\n/g, '<br>');
+}
+
+ ,
   shouldShowReadMore() {
     return this.postContent.length > this.maxDescriptionLength;
   },
@@ -268,9 +271,10 @@ export default {
 
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       if (window.confirm(alertMessage)) {
-        console.log('Deleting post', this.postId)
+        
         try {
           await deletePost(this.postId)
+          
           window.location.reload()
         } catch (error) {
           console.error('Error deleting post:', error)

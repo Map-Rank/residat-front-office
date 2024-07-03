@@ -21,11 +21,11 @@
         </p>
         <p class="menu">
           {{ $t('date') }}
-          <span>{{ event.published_at }}</span>
+          <span>{{ event.published_at }} </span>
         </p>
         <p class="menu">
           {{ $t('location') }}
-          <span>{{ event.location }}</span>
+          <span> {{   truncateText(event.location  ,15 ) }}</span>
         </p>
       </div>
     </div>

@@ -59,6 +59,7 @@ const makeApiGetCall = async (endpoint, authToken, id) => {
 
 
 const makeApiDeleteCall = async (endpoint, authToken) => {
+
   const response = await api.delete(endpoint, {
     headers: {
       Authorization: `Bearer ${authToken}`
