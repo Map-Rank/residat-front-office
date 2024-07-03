@@ -53,7 +53,8 @@ export default {
   computed: {
     formattedPostContent() {
       // Ensure the content is correctly formatted with paragraphs
-      return this.showFullDescription ? this.post.content.replace(/\n/g, '<br>') : this.truncateText(this.post.content, this.maxDescriptionLength);
+      return this.showFullDescription ? this.post.content .replace(/<p><\/p>/g, '<br>') 
+        .replace(/\n/g, '<br>') : this.truncateText(this.post.content, this.maxDescriptionLength);
     },
     shouldShowReadMore() {
       return this.post.content.length > this.maxDescriptionLength;
