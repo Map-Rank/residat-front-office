@@ -65,12 +65,9 @@
     </header>
 
     <!-- Post Content -->
-    <div  class="px-5 mb-2 cursor-pointer">
-      <!-- <p class="content">{{ postContent }}</p> -->
-
+    <div class="px-5 mb-2 cursor-pointer">
+      <p class="text-gray-700 text-start mt-1 content" :class="{ 'limited-text': !showFullDescription }" v-html="formattedPostContent"></p>
       <p class="text-gray-700 text-start mt-1 content">
-        {{ truncatedDescription }}
-        <br>
         <span v-if="shouldShowReadMore" @click="toggleReadMore" class="text-blue-700 cursor-pointer">
           {{ showFullDescription ? 'Read less' : 'Read more' }}
         </span>
@@ -216,23 +213,18 @@ export default {
   },
 
   computed: {
-    truncatedDescription() {
-      if (this.showFullDescription) {
-        return this.postContent;
-      } else {
-        return this.postContent.length > this.maxDescriptionLength
-          ? this.postContent.substring(0, this.maxDescriptionLength) + '...'
-          : this.postContent;
-      }
-    },
-    shouldShowReadMore() {
-      return this.postContent.length > this.maxDescriptionLength;
-    },
-    ...mapWritableState(usePostStore, ['showPostDetails']),
 
-    slicedImages() {
-      return this.postImages.slice(1).filter((image, index) => index < 3)
-    }
+    formattedPostContent() {
+    // Ensure the content is correctly formatted with paragraphs
+    return this.postContent.replace(/\n/g, '<br>');
+  },
+  shouldShowReadMore() {
+    return this.postContent.length > this.maxDescriptionLength;
+  },
+  ...mapWritableState(usePostStore, ['showPostDetails']),
+  slicedImages() {
+    return this.postImages.slice(1).filter((image, index) => index < 3);
+  }
   },
 
   methods: {
@@ -428,6 +420,14 @@ export default {
   font-weight: 400;
   line-height: 20px;
   text-align: justify;
+}
+
+.limited-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limits the text to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media only screen and (max-width: 480px) {

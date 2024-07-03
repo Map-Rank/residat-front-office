@@ -26,7 +26,7 @@
               <button @click="dismiss()" class="flex justify-end w-full">
                 <img src="@\assets\icons\dismiss.svg" alt="" class="" />
               </button>
-              <div v-if="!loading" class="flex items-start justify-between border-b-2">
+              <div v-if="!loading" class=" max-h-[200px] overflow-y-auto flex items-start justify-between border-b-2">
                 <UserInfoPostDetails :image-host="imageHost" :post="post" />
               </div>
             </div>

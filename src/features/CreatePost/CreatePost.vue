@@ -15,7 +15,7 @@
             name="content"
             :rules="schema.content"
             as="textarea"
-            v-model="formData.content"
+            v-model="content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2"
             rows="4"
@@ -148,6 +148,7 @@ export default {
       imagesToFromLocalPreview: [],
       imagesFromHostToPreview: [],
       zoneId: '',
+      content:'',
       formData: {
         id: '',
         content: '',
@@ -177,7 +178,7 @@ export default {
     },
     async submitPost() {
       this.formData.zoneId = this.zoneId
-      if (this.formData.content == '') {
+      if (this.content == '') {
         this.toast.error(this.$t('please_input_content'))
         return
       }
@@ -186,10 +187,16 @@ export default {
         return
       }
 
+    const formattedContent = this.content
+      .split('\n')
+      .map((paragraph) => `<p>${paragraph}</p>`)
+      .join('')
+
       let response
       this.isLoading = true
 
       if (this.isEditing) {
+        this.formData.content = formattedContent
         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
         console.log(response.status)
         response.status ? (this.postStore.postToEdit = null) : null
@@ -199,6 +206,7 @@ export default {
         return
       }
 
+      this.formData.content = formattedContent
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
       if (response.status) {

@@ -38,9 +38,10 @@ const createPost = async (postData, onSuccess, onError) => {
       formData.append(`sectors[${index}]`, id)
     })
 
-    console.log(authToken)
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+    console.log(token)
 
-    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
+    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, token, true)
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)
     }
