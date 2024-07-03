@@ -110,9 +110,9 @@ const router = createRouter({
         zoneName: route.params.zoneName,
         mapSize: route.params.mapSize
       }),
-      redirect: (to) => {
-        return '/community';
-      }
+      // redirect: (to) => {
+      //   return '/community';
+      // }
     },
 
     {

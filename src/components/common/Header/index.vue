@@ -327,14 +327,14 @@ export default {
           bottom: true,
           routerName: 'community'
         },
-        // {
-        //   svgContent: '\\assets\\icons\\dashboard-outline.svg',
-        //   svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
-        //   labelText: this.$t('dashboard'),
-        //   isActive: false,
-        //   bottom: true,
-        //   routerName: 'dashboard'
-        // },
+        {
+          svgContent: '\\assets\\icons\\dashboard-outline.svg',
+          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+          labelText: this.$t('dashboard'),
+          isActive: false,
+          bottom: true,
+          routerName: 'dashboard'
+        },
         // {
         //   svgContent: '\\assets\\icons\\chat-outline.svg',
         //   svgContentHover: '\\assets\\icons\\chat-fill.svg',
