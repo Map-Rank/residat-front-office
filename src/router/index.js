@@ -13,6 +13,7 @@ import ViewProfileUser from '../features/SocialProfile/ViewProfileUser.vue'
 import EmailVerification from '../features/Auth/components/EmailVerification.vue'
 import SearchResult from '../features/Search/SearchResult.vue'
 import EventView from '@/features/Event/EventView.vue'
+import UserEventView from '@/features/Event/UserEventView.vue'
 import ReportView from '@/features/Report/ReportView.vue'
 import CreateEvent from '@/features/Event/Components/CreateEvent.vue'
 import EditEvent from '@/features/Event/Components/EditEvent.vue'
@@ -26,6 +27,8 @@ import LangaugeModal from '@/components/common/Modal/LangaugeModal.vue'
 import NotificationView from '@/features/Notification/NotificationView.vue'
 import BroadcastNotification from '@/features/ChatRoom/Pages/BraodcastNotification.vue'
 import EventDetails from '@/features/Event/Pages/EventDetails.vue'
+import ForgotPassword from '../features/Auth/ForgotPassword.vue'
+import ResetPassword from '../features/Auth/ResetPassword.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -95,7 +98,7 @@ const router = createRouter({
           name: 'update-password',
           component: UpdatePassword,
         },
-
+        
       ],
       meta: { requiresAuth: true }
     },
@@ -111,21 +114,41 @@ const router = createRouter({
         mapSize: route.params.mapSize
       }),
       // redirect: (to) => {
-      //   return '/community';
-      // }
-    },
+        //   return '/community';
+        // }
+      },
+      
+      {
+        path: '/community',
+        name: 'community',
+        component: CommunityView,
+        meta: { requiresAuth: true }
+      },
+      
+      {
+        path: '/user-events',
+        name: 'user-events',
+        component: UserEventView,
+        meta: { requiresAuth: true }
+      },
+      {
+        path: '/forgot-password',
+        name: 'forgot-password',
+        component: ForgotPassword,
+        meta: { requiresAuth: false }
+      },
 
-    {
-      path: '/community',
-      name: 'community',
-      component: CommunityView,
-      meta: { requiresAuth: true }
-    },
-
-    {
-      path: '/create-post/:prePostContent?',
-      name: 'create-post',
-      component: CreatePost,
+      {
+        path: '/reset-password',
+        name: 'reset-password',
+        component: ResetPassword,
+        meta: { requiresAuth: false }
+      },
+      
+      {
+        path: '/create-post/:prePostContent?',
+        name: 'create-post',
+        component: CreatePost,
       meta: { requiresAuth: true },
       props: (route) => ({
         prePostContent: route.params.prePostContent || '',

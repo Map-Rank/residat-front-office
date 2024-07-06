@@ -144,6 +144,13 @@
   
   "no_notification":"You have no notification",
   "no_alert":"You have no alert",
-  "notification":"Notification"
+  "notification":"Notification",
+  "your_events": "Your Created Events",
+  "forgot_password": "Forgot password",
+  "forgot_password_description": "Enter your email to get your verification email",
+  "enter_new_password": "New password",
+  "confirm_enter_new_password": "Confirm the new password",
+  "reset_password":"Reset password",
+  "enter_password_confirmation": "Enter password confirmation"
 
 }

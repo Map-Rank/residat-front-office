@@ -1,5 +1,5 @@
 <template>
-  <SectionTitle :title="sectionTitle" :isLink="true" linkTo="event" />
+  <SectionTitle :title="sectionTitle" :isLink="true" :linkTo=navigationLink />
   <div class=" grid space-y-2">
     <div
       v-for="event in displayedEvents"
@@ -57,7 +57,11 @@ export default {
       type: Array,
       required: true
     },
-    sectionTitle: String
+    sectionTitle: String,
+    navigationLink:{
+      type:String,
+      default:"event"
+    },
   },
   components: {
     SectionTitle

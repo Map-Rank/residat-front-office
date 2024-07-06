@@ -136,6 +136,13 @@
 
     "no_notification":"Vous n'avez pas de notification",
     "no_alert":"Vous n'avez pas d'alert",
-    "notification":"Notification"
+    "notification":"Notification",
+    "your_events": "Vos Événements Crées",
+    "forgot_password": "Mot de passe oublié",
+    "forgot_password_description": "Entrez votre email pour obtenir votre mail de vérification",
+    "enter_new_password": "Nouveau mot de passe",
+    "confirm_enter_new_password": "Confirmer le nouveau mot de passe",
+    "reset_password":"réinitialiser le mot de passe",
+    "enter_password_confirmation":"Entrer la confirmation du mot de passe"
 
 }

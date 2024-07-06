@@ -163,4 +163,48 @@ const UpdatePassword = async (userData, onSuccess, onError) => {
   }
 }
 
-export { registerUser, loginUser, logOut, UpdateUser, UpdatePassword }
+const ForgotPassword = async (userData, onSuccess, onError) => {
+  // console.log(userData.email);
+  const formData = new FormData()
+  formData.append('email', userData.email)
+
+  try {
+    const endpoint = `/forgot-password`;
+    const response = await makeApiPostCall(endpoint, formData, true);
+    // console.log(response.status == 200);
+    // return response.data.data;
+    if (response.status == 200) {
+      onSuccess();
+    }
+  } catch (error) {
+    onError(error.response.data.errors)
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
+const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) => {
+  
+  // console.log(userData.email);
+  const formData = new FormData()
+  formData.append('email', emailFromUrl)
+  formData.append('password', userData.password)
+  formData.append('password_confirmation', userData.password_confirmation)
+  formData.append('token', token)
+
+  try {
+    const endpoint = `/reset-password`;
+    const response = await makeApiPostCall(endpoint, formData, true);
+    // console.log(response.status == 200);
+    // return response.data.data;
+    if (response.status == 200) {
+      onSuccess();
+    }
+  } catch (error) {
+    onError(error.response.data.errors)
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
+export { registerUser, loginUser, logOut, UpdateUser, UpdatePassword, ForgotPassword, ResetPassword }
