@@ -18,12 +18,7 @@
 
  
 
-    <share-modal
-      :showModal="modalStore.showModal"
-      :postLink="modalStore.postLink"
-      :message="modalStore.message"
-      @close="modalStore.closeModal"
-    ></share-modal>
+
   </div>
 </template>
 
@@ -34,7 +29,6 @@ import HeaderApp from './components/common/Header/index.vue'
 import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
 import usePostStore from '@/features/Post/store/postStore'
-import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import useModalStore from '@/stores/modalStore.js'
 import FeedbackButton from '@/components/base/FeedbackButton.vue'
 import NotificationHandler from './components/base/NotificationHandler.vue'
@@ -52,7 +46,6 @@ export default {
     HeaderApp,
     FooterApp,
     NotificationHandler,
-    ShareModal,
     FeedbackButton,
     BottomNavigationAppApp
   },

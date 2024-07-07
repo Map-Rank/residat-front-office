@@ -132,6 +132,12 @@
 
   <!-- <post-details v-if="showPostDetails"></post-details> -->
   <PostDetailModal v-if="isModalVisible" :postId="this.post.id" @close="closeModal" />
+  <share-modal
+  :showModal="this.showShareModal"
+  :postLink="this.postLink"
+  :message="this.messageShare"
+  @close="this.closeShareModal"
+></share-modal>
 </template>
 
 <script>
@@ -154,6 +160,7 @@ import InteractionPostStatistics from '@/features/Post/components/InteractionPos
 import { URL_LINK } from '@/constants/url.js'
 import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
 import useModalStore from '@/stores/modalStore.js'
+import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 
 
 export default {
@@ -166,6 +173,9 @@ export default {
     return {
       route,
       modalStore,
+      showShareModal: false,
+    postLink: '',
+    messageShare: 'Check out this post!',
       iconSource: this.post?.is_following ? '/assets/icons/tick.svg' : '/assets/icons/add-circle-dark-outline.svg',
       labelText: this.post?.is_following ? this.$t('following') : this.$t('follow'),
       isFollowing: false,
@@ -232,6 +242,18 @@ formattedPostContent() {
 
   methods: {
 
+    openShareModal() {
+        console.log('open modal')
+      this.postLink = `https://dev.residat.com/show-post/${this.post.id}`;
+      this.showShareModal = true;
+    },
+    closeShareModal() {
+      this.showShareModal = false;
+    },
+    setMessageShare(message) {
+      this.messageShare = message;
+    },
+
     toggleReadMore() {
       this.showFullDescription = !this.showFullDescription;
     },
@@ -288,9 +310,7 @@ formattedPostContent() {
       this.$router.push({ name: 'show-post', params: { id: this.post.id } })
     },
 
-    openShareModal() {
-      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
-    },
+ 
 
     editPost() {
       console.log('edit post ')
@@ -324,8 +344,8 @@ formattedPostContent() {
           console.log(this.postImages)
           break
         case 2:
-          await sharePost(this.postId)
           this.openShareModal()
+          await sharePost(this.postId)
           // this.$emit('postFetch')
           break
         case 3:
@@ -389,7 +409,8 @@ formattedPostContent() {
     IconWithLabel,
     ButtonUi,
     ImagePostGallery,
-    PostDetailModal
+    PostDetailModal,
+    ShareModal
   },
 
 

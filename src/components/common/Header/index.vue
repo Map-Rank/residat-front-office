@@ -26,7 +26,7 @@
 
         <!-- Dropdown Menu -->
         <div
-        ref="menus"
+          ref="menus"
           v-show="currentMenu === 'menu'"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
@@ -313,11 +313,7 @@ export default {
       userProfileImage: authStore && authStore.user ? authStore.user.avatar : '',
       iconSize: 'w-7 h-7',
       lang: 'en',
-      notifications: [
-      
-      
-      
-      ],
+      notifications: [],
       navItems: [
         {
           svgContent: '\\assets\\icons\\community-outline.svg',
@@ -403,9 +399,9 @@ export default {
       this.currentMenu = this.currentMenu === 'language' ? null : 'language'
     },
     closeAllMenu() {
-      this.currentMenu = null;
+      this.currentMenu = null
     },
-  
+
     menuMethods(index) {
       switch (index) {
         case 0:
@@ -425,23 +421,25 @@ export default {
           this.toggleMenu()
           break
         case 4:
+          if (window.confirm('Are you sure you want to log out?')) {
+            this.logout()
+          } else {
+            console.log('Logout cancelled')
+          }
           this.toggleMenu()
-          this.logout()
           break
       }
     },
-  
+
     logout() {
       this.authStore.logOut()
       this.$router.push({ name: 'authentication' }).catch((err) => {
-        // Ignore the Vue Router error regarding navigating to the page we are currently on.
         if (err.name !== 'NavigationDuplicated') {
           console.error(err)
         }
       })
     }
-  },
-
+  }
 }
 </script>
 
