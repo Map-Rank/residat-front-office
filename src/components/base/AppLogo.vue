@@ -2,7 +2,7 @@
   <router-link to="/community">
     <img 
       v-if="isWhite"
-      src="@/assets/images/Logos/logo-medium-white.svg" 
+      src="@/assets/images/Logos/logo-small-white.svg" 
       alt="Logo" 
       class="h-15" 
     />
