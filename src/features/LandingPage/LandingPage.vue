@@ -2,13 +2,12 @@
     <div>
       <HeaderLanding  ></HeaderLanding>
   
-      <!-- Hero Section -->
-      <section class="bg-blue-900 text-white text-center py-16">
+      <section class="grid items-center text-white text-center py-16 h-auto md:h-[80vh]">
         <div class="container mx-auto px-4">
-          <div class="flex justify-center mb-8">
-            <img src="@/assets/image.png" alt="Hero Image" class="h-48 w-48 rounded-full object-cover" />
+          <div class="flex justify-center items-center mb-8">
+            <img src="/assets/images/LandingPage/hero-image.png" alt="Hero Image" class="object-cover" />
           </div>
-          <h1 class="text-3xl md:text-4xl font-bold mb-4">Empowering Communities with Actionable Climate Data for Effective Adaptation</h1>
+          <div class="w-full text-center text-white  text-[24px] lg:text-[48px] font-bold font-['Poppins']  leading-[34px] lg:leading-[64px]">Empowering Communities with <br/>Actionable Climate Data for Effective Adaptation</div>
         </div>
       </section>
     </div>
@@ -26,12 +25,8 @@ import HeaderLanding from '../../components/common/Header/HeaderLanding.vue';
   </script>
   
   <style scoped>
-  header {
-    background-color: #3a7d44; /* Customize the green color as needed */
-  }
-  
   section {
-    background-color: #123456; /* Customize the blue color as needed */
+    background: linear-gradient(180deg, rgba(2, 39, 87, 0.85) 0%, #021D40 71.5%);
   }
   </style>
   
