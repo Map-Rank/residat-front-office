@@ -29,6 +29,7 @@ import BroadcastNotification from '@/features/ChatRoom/Pages/BraodcastNotificati
 import EventDetails from '@/features/Event/Pages/EventDetails.vue'
 import ForgotPassword from '../features/Auth/ForgotPassword.vue'
 import ResetPassword from '../features/Auth/ResetPassword.vue'
+import LandingPage from '@/features/LandingPage/LandingPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +49,16 @@ const router = createRouter({
       redirect: (to) => {
         return '/community';
       }
+    },
+    {
+      path: '/home',
+      name: 'home',
+      component: LandingPage,
+      meta: { requiresAuth: false },
+      // meta: { requiresAuth: true },
+      // redirect: (to) => {
+      //   return '/community';
+      // }
     },
     {
       path: '/broadcast-notification',

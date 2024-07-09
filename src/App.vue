@@ -2,11 +2,12 @@
   <div></div>
   <div class="body flex flex-col min-h-screen">
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
+   <LandingPage></LandingPage>
 
-    <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
+    <!-- <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
       <router-view></router-view>
       <NotificationHandler />
-    </main>
+    </main> -->
 
     <bottom-navigation-app-app
       class="mobile-nav block md:hidden mt-4"
@@ -32,6 +33,8 @@ import usePostStore from '@/features/Post/store/postStore'
 import useModalStore from '@/stores/modalStore.js'
 import FeedbackButton from '@/components/base/FeedbackButton.vue'
 import NotificationHandler from './components/base/NotificationHandler.vue'
+import HeaderLanding from './components/common/Header/HeaderLanding.vue'
+import LandingPage from './features/LandingPage/LandingPage.vue'
 
 export default {
   name: 'App',
@@ -45,9 +48,11 @@ export default {
   components: {
     HeaderApp,
     FooterApp,
+    LandingPage,
     NotificationHandler,
     FeedbackButton,
-    BottomNavigationAppApp
+    BottomNavigationAppApp,
+    HeaderLanding
   },
 
   computed: {
