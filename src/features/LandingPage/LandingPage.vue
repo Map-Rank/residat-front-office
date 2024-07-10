@@ -14,7 +14,7 @@
         <div
           class="w-full text-center text-white text-[24px] lg:text-[48px] font-bold font-['Poppins'] leading-[34px] lg:leading-[64px]"
         >
-          Empowering Communities with <br />Actionable Climate Data for Effective Adaptation
+        Connecting communities to  <br />actionable climate and environmental data
         </div>
       </div>
     </section>
@@ -24,36 +24,17 @@
       class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]"
     >
       <div class="flex flex-col w-full lg:w-[52%] justify-start items-start gap-8 lg:gap-[30px]">
-        <div
-          class="self-stretch text-primary-normal text-5xl font-bold font-['Poppins'] leading-[44px]"
-        >
+        <div class="self-stretch text-primary-normal text-5xl font-bold font-['Poppins'] leading-[44px]">
           ABOUT US
         </div>
-        <div class="w-full text-black text-lg font-normal font-['Poppins'] leading-7">
-          Residat is an integrated Geospatial web service profiling climate hazards of vulnerable
-          communities in Cameroon. It displays analyzed climate risks data in GIS format and
-          provides climate hazard models that inform risk recommendations for community
-          stakeholders. Its interactive maps serve both as dashboards for forecasting and
-          visualizing updated community climate hazard models and as a data pool for community
-          climate reality.
+        <div class="w-full text-black text-[16px] md:text-lg font-normal font-['Poppins'] md:leading-7">
+          Residat is Africa’s premier open data web service to profile climate and environmental risks of vulnerable communities. It models and displays location-based climate risks data to inform risks recommendations and anticipatory actions for community stakeholders. This platform is enabling a growing number of communities in Cameroon to monitor and forecast climate risks and providing actionable adaption insights to build resilience across varying sectors.
         </div>
         <div class="self-stretch h-full flex flex-col justify-start items-start gap-5">
-          <div class="flex justify-start items-start gap-2.5">
-            <img src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]" />
-            <div class="text-black text-lg font-normal font-['Poppins'] leading-7">
-              Connect with key actors for adaptation advice
-            </div>
-          </div>
-          <div class="flex justify-start items-start gap-2.5">
-            <img src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]" />
-            <div class="text-black text-lg font-normal font-['Poppins'] leading-7">
-              Monitor in real time local climate risk data
-            </div>
-          </div>
-          <div class="self-stretch flex justify-start items-start gap-2.5">
-            <img src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]" />
-            <div class="text-black text-lg font-normal font-['Poppins'] leading-7">
-              Share local sightings of climate risks impact climate risk data
+          <div v-for="(item, index) in aboutUs.listItems" :key="index" class="flex justify-start items-start gap-2.5">
+            <img :src="aboutUs.icon" class="w-[30px] h-[30px]" />
+            <div class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">
+              {{ item.text }}
             </div>
           </div>
         </div>
@@ -70,58 +51,27 @@
     <!-- solution section  -->
 
     <div>
-      <div
-        class="w-full h-auto md:px-[60px] lg:px-[80px] py-[35px] flex-col justify-start items-center inline-flex"
-      >
-        <div
-          class="self-stretch text-center text-primary-normal text-5xl font-bold font-['Poppins'] leading-[44px]"
-        >
+      <div class="w-full h-auto md:px-[60px] lg:px-[80px] py-[35px] flex-col justify-start items-center inline-flex">
+        <div class="self-stretch text-center text-primary-normal text-5xl font-bold font-['Poppins'] leading-[44px]">
           Solution
         </div>
-
+  
         <div
+          v-for="(solution, index) in solutions"
+          :key="index"
           class="w-full px-5 lg:w-[90%] grid items-center md:flex justify-between md:items-start my-10"
         >
-          <div class="md:w-[45%] py-5 flex-col justify-start items-start gap-[30px] inline-flex">
-            <div
-              class="text-black text-[30px] lg:text-[48px] font-bold font-['Poppins'] leading-[44px]"
-            >
-              Community Intelligence Reports
+          <div class="md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+              {{ solution.title }}
             </div>
-            <div
-              class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7"
-            >
-              A dedicated space for stakeholders to publish, manage, and interact with reports on
-              climate adaptation efforts. These reports provide valuable insights into local
-              initiatives and challenges.
+            <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+              {{ solution.description }}
             </div>
           </div>
-
+  
           <div class="md:w-[55%] flex justify-center">
-            <img class="" src="\assets\images\LandingPage\community-display.svg" />
-          </div>
-        </div>
-
-        <div
-          class="w-full px-5 lg:w-[90%] grid items-center md:flex justify-between md:items-start my-10"
-        >
-          <div class="md:w-[45%] py-5 flex-col justify-start items-start gap-[30px] inline-flex">
-            <div
-              class="text-black text-[30px] lg:text-[48px] font-bold font-['Poppins'] leading-[44px]"
-            >
-              Community Intelligence Reports
-            </div>
-            <div
-              class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7"
-            >
-              A dedicated space for stakeholders to publish, manage, and interact with reports on
-              climate adaptation efforts. These reports provide valuable insights into local
-              initiatives and challenges.
-            </div>
-          </div>
-
-          <div class="md:w-[55%] flex justify-center">
-            <img class="" src="\assets\images\LandingPage\community-display.svg" />
+            <img :src="solution.image" />
           </div>
         </div>
       </div>
@@ -133,11 +83,11 @@
     <div class="w-full h-auto px-4 lg:px-16 py-8 bg-sky-950 flex flex-col justify-start items-center gap-8">
         <div class="flex flex-col justify-start items-center gap-2 text-white text-center">
             <div class="text-[24px] md:text-4xl font-bold font-['Poppins'] leading-snug md:leading-9">
-                Improving communities better climatic change adaptation
+              Our Impact
             </div>
-            <div class="w-[80%]  lg:max-w-[60%] text-[10px]  md:text-[16px] font-normal font-['Poppins'] leading-normal">
+            <!-- <div class="w-[80%]  lg:max-w-[60%] text-[10px]  md:text-[16px] font-normal font-['Poppins'] leading-normal">
                 With over 3 years of constant community engagement and data collection, we the RESIDAT team succeeded to rise up with the following statistics:
-            </div>
+            </div> -->
         </div>
     
         <div class="w-full flex flex-wrap justify-around items-center gap-6 lg:gap-12">
@@ -179,15 +129,10 @@
   class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]"
 >
   <div class="flex flex-col w-full lg:w-[52%] justify-start items-start gap-8 lg:gap-[30px]">
-    <div class="text-sky-950 text-[38px] md:text-[54px] font-bold font-['Poppins'] leading-[35px] md:leading-[50px]">Join us to improve climate change Adaptation</div>
+    <div class="text-start text-sky-950 text-[34px] md:text-[54px] font-bold font-['Poppins'] leading-[35px] md:leading-[50px]">Join us to improve climate change adaptation </div>
 
-    <div class="w-full text-black text-lg font-normal font-['Poppins'] leading-7">
-      Residat is an integrated Geospatial web service profiling climate hazards of vulnerable
-      communities in Cameroon. It displays analyzed climate risks data in GIS format and
-      provides climate hazard models that inform risk recommendations for community
-      stakeholders. Its interactive maps serve both as dashboards for forecasting and
-      visualizing updated community climate hazard models and as a data pool for community
-      climate reality.
+    <div class="w-full text-black text-[16px] md:text-lg font-normal font-['Poppins']  md:leading-7">
+      Join a growing community of users improving livelihoods and growing resilience with actionable climate risks data. 
     </div>
     <div class="mt-4 flex w-3/4  space-x-2">
       <ButtonUi
@@ -220,7 +165,7 @@
 <!-- sponsors -->
 
 <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-8">
-  <div class="text-sky-950 text-[38px] md:text-[54px] font-bold font-['Poppins'] leading-[35px] md:leading-[50px]">Our Trusted Partners</div>
+  <div class="text-sky-950 text-[38px] md:text-[54px] font-bold font-['Poppins'] leading-[35px] md:leading-[50px]">They Support us</div>
   <div class="w-full flex justify-around items-center flex-wrap">
       <img class="max-w-xs h-auto" src="\assets\images\Logos\logo-small.svg" />
       <div class="flex justify-start items-center max-w-xs h-auto p-2.5">
@@ -266,21 +211,50 @@ export default {
   },
   data() {
     return {
+      aboutUs: {
+        icon: "/assets/images/LandingPage/check-icon.svg",
+        listItems: [
+          { text: "Share your sightings of local climate risks impacts" },
+          { text: "Monitor in real time hyper local climate risks data" },
+          { text: "Connect with key stakeholders for adaptation advice." }
+        ]
+      },
+      solutions: [
+        {
+          title: "Community intelligence reports",
+          description:
+            "A dedicated space for stakeholders to publish, manage and interact with reports on climate adaptation. ",
+          image: "\\assets\\images\\LandingPage\\community-display.svg",
+        },
+        {
+          title: "Interactive geospatial dashboard",
+          description:
+            "Smart and interactive spatial maps (granular drone maps) profiling and forecasting climate risks (floods and droughts) in space and time. ",
+          image: "\\assets\\images\\LandingPage\\community-display.svg",
+        },
+        {
+          title: "Mass alert infrastructure",
+          description:
+            "Place-based alerts and early warning services to keep users upend on imminent hazard and risks scenarios. ",
+          image: "\\assets\\images\\LandingPage\\community-display.svg",
+        },
+      ],
+        
       statistics: [
         {
           imgSrc: "\\assets\\images\\LandingPage\\community.svg",
-          number: 300,
-          description: "Field works"
+          number: 25,
+          description: "Communities mapped"
         },
         {
           imgSrc: "\\assets\\images\\LandingPage\\society.svg",
-          number: 250,
-          description: "Communities"
+          number: 10 ,
+          description: "local partnerships"
         },
         {
           imgSrc: "\\assets\\images\\LandingPage\\society.svg",
-          number: 2000,
-          description: "User Engaged"
+          number: 50000,
+          description: "People reached"
         }
       ]
     };

@@ -31,14 +31,14 @@
         <ButtonUi
           label="Register"
           colorObject="bg-white text-center w-auto"
-          customCss="text-center flex justify-center px-10 py-4"
+          customCss="text-center flex justify-center px-[20px] py-10"
           textCss="text-center"
           :isRoundedFull="true"
         ></ButtonUi>
         <ButtonUi
           label="Sign In"
           colorObject="bg-white text-center w-auto"
-          customCss="text-center flex justify-center px-10 py-3"
+          customCss="text-center flex justify-center px-[20px] py-3"
           textCss="text-center"
           :isRoundedFull="true"
         ></ButtonUi>
