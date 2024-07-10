@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="overflow-hidden">
     <HeaderLanding></HeaderLanding>
 
     <section class="grid items-center text-white text-center py-16 h-auto md:h-[80vh]">
@@ -71,7 +71,7 @@
 
     <div>
       <div
-        class="w-full h-auto md:px-[60px] lg:px-[80px] py-[35px] flex-col justify-start items-center gap-[49px] inline-flex"
+        class="w-full h-auto md:px-[60px] lg:px-[80px] py-[35px] flex-col justify-start items-center inline-flex"
       >
         <div
           class="self-stretch text-center text-primary-normal text-5xl font-bold font-['Poppins'] leading-[44px]"
@@ -132,32 +132,24 @@
 
     <div class="w-full h-auto px-4 lg:px-16 py-8 bg-sky-950 flex flex-col justify-start items-center gap-8">
         <div class="flex flex-col justify-start items-center gap-2 text-white text-center">
-            <div class="text-2xl md:text-4xl font-medium font-['Poppins'] leading-snug md:leading-9">
+            <div class="text-[24px] md:text-4xl font-bold font-['Poppins'] leading-snug md:leading-9">
                 Improving communities better climatic change adaptation
             </div>
-            <div class="max-w-lg md:max-w-2xl text-base md:text-lg font-normal font-['Poppins'] leading-normal">
+            <div class="w-[80%]  lg:max-w-[60%] text-[10px]  md:text-[16px] font-normal font-['Poppins'] leading-normal">
                 With over 3 years of constant community engagement and data collection, we the RESIDAT team succeeded to rise up with the following statistics:
             </div>
         </div>
     
         <div class="w-full flex flex-wrap justify-around items-center gap-6 lg:gap-12">
-            <div class="flex flex-col justify-start items-center gap-3 text-center text-white">
-                <img class="w-12 h-12" src="\assets\images\LandingPage\community.svg" />
-                <div class="text-4xl font-medium font-['Poppins'] leading-9">300</div>
-                <div class="text-xl font-normal font-['Poppins'] leading-normal">Field works</div>
-            </div>
-    
-            <div class="flex flex-col justify-start items-center gap-3 text-center text-white">
-                <img class="w-12 h-12" src="\assets\images\LandingPage\society.svg" />
-                <div class="text-4xl font-medium font-['Poppins'] leading-9">250</div>
-                <div class="text-xl font-normal font-['Poppins'] leading-normal">Communities</div>
-            </div>
-    
-            <div class="flex flex-col justify-start items-center gap-3 text-center text-white">
-                <img class="w-12 h-12" src="\assets\images\LandingPage\society.svg" />
-                <div class="text-4xl font-medium font-['Poppins'] leading-9">2000</div>
-                <div class="text-xl font-normal font-['Poppins'] leading-normal">User Engaged</div>
-            </div>
+          <div 
+          v-for="(item, index) in statistics" 
+          :key="index" 
+          class="flex flex-col justify-start items-center md:gap-3 text-center text-white"
+        >
+          <img :src="item.imgSrc" class="w-12 h-12" />
+          <div class="text-[24px] md:text-[36px] font-medium font-['Poppins'] leading-9">{{ item.number }}</div>
+          <div class="text-[16px] md:text-[20px] font-normal font-['Poppins'] leading-normal">{{ item.description }}</div>
+        </div>
         </div>
     </div>
 
@@ -167,7 +159,7 @@
       <div class="self-stretch text-center text-white text-3xl md:text-5xl font-bold font-['Poppins'] leading-snug md:leading-[44px]">Demo</div>
       
       <!-- Container for embedding YouTube video -->
-      <div class="relative w-full max-w-screen-xl aspect-video">
+      <div class="relative w-full w-full aspect-video">
           <!-- Embed YouTube video -->
           <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
       </div>
@@ -187,7 +179,7 @@
   class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]"
 >
   <div class="flex flex-col w-full lg:w-[52%] justify-start items-start gap-8 lg:gap-[30px]">
-    <div class="text-sky-950 text-[54px] font-bold font-['Poppins'] leading-[49px]">Join us to improve <br/>climate change <br/>Adaptation</div>
+    <div class="text-sky-950 text-[38px] md:text-[54px] font-bold font-['Poppins'] leading-[35px] md:leading-[50px]">Join us to improve climate change Adaptation</div>
 
     <div class="w-full text-black text-lg font-normal font-['Poppins'] leading-7">
       Residat is an integrated Geospatial web service profiling climate hazards of vulnerable
@@ -228,13 +220,11 @@
 <!-- sponsors -->
 
 <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-8">
-  <div class="w-full text-center text-sky-950 text-5xl font-bold font-poppins leading-tight">
-    Our Trusted Partners
-  </div>
+  <div class="text-sky-950 text-[38px] md:text-[54px] font-bold font-['Poppins'] leading-[35px] md:leading-[50px]">Our Trusted Partners</div>
   <div class="w-full flex justify-around items-center flex-wrap">
       <img class="max-w-xs h-auto" src="\assets\images\Logos\logo-small.svg" />
       <div class="flex justify-start items-center max-w-xs h-auto p-2.5">
-        <img class="max-w-xs h-auto" src="\assets\images\Logos\logo-small.svg" />
+        <img class="w-auto h-auto" src="\assets\images\Logos\logo-small.svg" />
       </div>
       <div class="flex justify-start items-center max-w-xs h-auto p-2.5">
         <img class="max-w-xs h-auto" src="\assets\images\Logos\logo-small.svg" />
@@ -256,36 +246,7 @@
 
 <!-- footer 
   -->
-  <div class="w-full h-[329px] px-[209px] pt-[61px] pb-4 bg-sky-950 flex-col justify-end items-center gap-[77px] inline-flex">
-    <div class="self-stretch justify-between items-start inline-flex">
-        <div class="w-[211px] flex-col justify-start items-start gap-1 inline-flex">
-            <div class="w-[146px] h-[101px] pb-px justify-end items-center inline-flex">
-                <img class="w-[150px] h-[100px]" src="\assets\images\Logos\logo-small-white.svg" />
-            </div>
-            <div class="w-[211px] text-white text-lg font-normal font-['Nunito Sans']">Your climate adaptation resilience solution</div>
-        </div>
-        <div class="w-[95px] flex-col justify-start items-start gap-7 inline-flex">
-            <div class="self-stretch text-white text-lg font-semibold font-['Poppins']">Quick links</div>
-            <div class="h-[88px] flex-col justify-start items-start gap-[11px] flex">
-                <div class="self-stretch text-white text-base font-normal font-['Nunito Sans']">Solution</div>
-                <div class="self-stretch text-white text-base font-normal font-['Nunito Sans']">About Us</div>
-                <div class="w-[83px] text-white text-base font-normal font-['Nunito Sans']">Contact Us</div>
-            </div>
-        </div>
-        <div class="w-[138px] flex-col justify-start items-start gap-[17px] inline-flex">
-            <div class="self-stretch text-white text-lg font-normal font-['Poppins']">Resources</div>
-            <div class="self-stretch text-white text-base font-normal font-['Nunito Sans']">Term and condition</div>
-            <div class="self-stretch text-white text-base font-normal font-['Nunito Sans']">Cookies policy</div>
-        </div>
-        <div class="w-[111px] flex-col justify-start items-start gap-[19px] inline-flex">
-            <div class="self-stretch text-white text-lg font-semibold font-['Metropolis']">Social Media</div>
-            <div class="self-stretch text-white text-base font-normal font-['Nunito Sans']">Facebook</div>
-            <div class="self-stretch text-white text-base font-normal font-['Nunito Sans']">Twitter</div>
-            <div class="self-stretch text-white text-base font-normal font-['Nunito Sans']">Whatsapp</div>
-        </div>
-    </div>
-    <div class="text-white text-sm font-normal font-['Nunito Sans'] leading-tight">Residat © Copyright 2024, Inc. All rights reserved</div>
-</div>
+<FooterLanding></FooterLanding>
 
 
   </div>
@@ -294,12 +255,35 @@
 <script>
 import HeaderLanding from '../../components/common/Header/HeaderLanding.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue';
+import FooterLanding from './components/FooterLanding.vue'
 
 export default {
   name: 'LandingPage',
   components: {
     HeaderLanding,
-    ButtonUi
+    ButtonUi,
+    FooterLanding
+  },
+  data() {
+    return {
+      statistics: [
+        {
+          imgSrc: "\\assets\\images\\LandingPage\\community.svg",
+          number: 300,
+          description: "Field works"
+        },
+        {
+          imgSrc: "\\assets\\images\\LandingPage\\society.svg",
+          number: 250,
+          description: "Communities"
+        },
+        {
+          imgSrc: "\\assets\\images\\LandingPage\\society.svg",
+          number: 2000,
+          description: "User Engaged"
+        }
+      ]
+    };
   }
 }
 </script>
