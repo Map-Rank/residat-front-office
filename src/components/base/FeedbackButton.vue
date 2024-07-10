@@ -5,7 +5,7 @@
       <p v-if="!showForm">{{$t('contact_us')}}</p>
       <p v-if="showForm">{{$t('close')}}</p>
     </button>
-    <div v-if="showForm" class="feedback-form">
+    <div v-if="showForm" class="feedback-form w-[300px] md:w-[500px]">
       <h3>{{$t('send_feedback')}}</h3>
       <textarea v-model="formData.text" placeholder="Enter your feedback here..." rows="4"></textarea>
       <button 
@@ -152,7 +152,6 @@ export default {
   position: absolute;
   bottom: 60px;
   right: 0;
-  width: 400px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);

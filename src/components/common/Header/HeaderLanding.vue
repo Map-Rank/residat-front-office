@@ -73,13 +73,15 @@
               customCss="text-center flex justify-center px-10 py-4"
               textCss="text-center"
               :isRoundedFull="true"
-            ></ButtonUi>
-            <ButtonUi
+              @clickButton="navigateTo"
+              ></ButtonUi>
+              <ButtonUi
               label="Sign In"
               colorObject="bg-primary-normal text-center w-auto"
               customCss="text-center flex justify-center px-10 py-3"
               textCss="text-center"
               :isRoundedFull="true"
+              @clickButton="navigateTo"
             ></ButtonUi>
           </div>
         </div>
@@ -103,9 +105,9 @@ export default {
       navItems: [
         { href: '#about-us', label: 'About Us' },
         { href: '#solution', label: 'Solution' },
-        { href: '#demo', label: 'Demo' },
-        { href: '#blog', label: 'Blog' },
-        { href: '#contact-us', label: 'Contact Us' }
+        { href: '#impact', label: 'Impact' },
+        // { href: '#blog', label: 'Blog' },
+        // { href: '#contact-us', label: 'Contact Us' }
       ],
       isSidebarOpen: false
     };
@@ -113,6 +115,10 @@ export default {
   methods: {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
+    },
+    navigateTo() {
+      console.log('object');
+        this.$router.push({name:'community'});
     }
   }
 };

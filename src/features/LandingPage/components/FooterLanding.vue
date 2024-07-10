@@ -34,9 +34,9 @@ export default {
         {
           title: 'Quick links',
           links: [
-            { text: 'Solution', href: '#solution' },
             { text: 'About Us', href: '#about-us' },
-            { text: 'Contact Us', href: '#contact-us' }
+            { text: 'Solution', href: '#solution' },
+            { text: 'Impact', href: '#impact' }
           ]
         },
         {
@@ -49,9 +49,9 @@ export default {
         {
           title: 'Social Media',
           links: [
-            { text: 'Facebook', href: 'https://facebook.com' },
-            { text: 'Twitter', href: 'https://twitter.com' },
-            { text: 'Whatsapp', href: 'https://whatsapp.com' }
+            { text: 'Facebook', href: 'https://web.facebook.com/profile.php?id=100064106499810' },
+            { text: 'LinkedIn', href: 'https://www.linkedin.com/company/100603971/' },
+            // { text: 'Whatsapp', href: 'https://whatsapp.com' }
           ]
         }
       ]

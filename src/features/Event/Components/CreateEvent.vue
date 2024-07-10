@@ -317,7 +317,7 @@ export default {
         date_fin: '2023-12-06T13:10:59',
         media: null,
         selectedSectorId: [],
-        sector_id: '',
+        sector_id: null,
         zone_id: '',
         tos: true
       },
@@ -424,8 +424,8 @@ export default {
 
     handleSuccess() {
       this.isCreatingEvent = false;
-      this.resetForm()
-      this.$router.push({ name: 'community' })
+      // this.resetForm()
+      // this.$router.push({ name: 'community' })
     },
 
     resetForm() {
@@ -466,8 +466,14 @@ export default {
             
             return
           }
-          if (this.formData.media == null) {
-            this.toast.error('Please select a Banner');
+          // if (this.formData.media == null) {
+          //   this.toast.error('Please select a Banner');
+          //   this.isLoadingBtn = false;
+            
+          //   return
+          // }
+          if (this.formData.sector_id == null) {
+            this.toast.error('Please select a Sector');
             this.isLoadingBtn = false;
             
             return

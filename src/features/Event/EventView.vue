@@ -158,7 +158,7 @@ export default {
         this.isZoneLoading = false
         if (this.events.length == 0) {
           this.showPageRefresh = true
-          this.errorMessage = 'Could not get post refresh your page or check your connection'
+          this.errorMessage = 'Could not get event refresh your page or check your connection'
         } else {
           this.showPageRefresh = false
         }

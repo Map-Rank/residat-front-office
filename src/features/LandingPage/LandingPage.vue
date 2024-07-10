@@ -21,6 +21,7 @@
 
     <!-- about us -->
     <div
+    id="about-us"
       class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]"
     >
       <div class="flex flex-col w-full lg:w-[52%] justify-start items-start gap-8 lg:gap-[30px]">
@@ -50,7 +51,9 @@
 
     <!-- solution section  -->
 
-    <div>
+    <div
+    id="solution"
+    >
       <div class="w-full h-auto md:px-[60px] lg:px-[80px] py-[35px] flex-col justify-start items-center inline-flex">
         <div class="self-stretch text-center text-primary-normal text-5xl font-bold font-['Poppins'] leading-[44px]">
           Solution
@@ -80,7 +83,9 @@
     <!-- statistics  -->
 
 
-    <div class="w-full h-auto px-4 lg:px-16 py-8 bg-sky-950 flex flex-col justify-start items-center gap-8">
+    <div 
+    id="impact"
+    class="w-full h-auto px-4 lg:px-16 py-8 bg-sky-950 flex flex-col justify-start items-center gap-8">
         <div class="flex flex-col justify-start items-center gap-2 text-white text-center">
             <div class="text-[24px] md:text-4xl font-bold font-['Poppins'] leading-snug md:leading-9">
               Our Impact

@@ -9,7 +9,7 @@ const createEvent = async (eventData, authStore, onSuccess, onError) => {
 
   try {
     const formData = new FormData()
-
+    
     // Append user data to formData
     formData.append('title', eventData.title)
     formData.append('description', eventData.description)
@@ -18,13 +18,14 @@ const createEvent = async (eventData, authStore, onSuccess, onError) => {
     formData.append('date_debut', eventData.date_debut)
     formData.append('published_at', eventData.date_debut)
     formData.append('date_fin', eventData.date_fin)
-      formData.append('user_id', authStore.user.id)
+    formData.append('user_id', authStore.user.id)
     // formData.append('user_id', '1')
     formData.append('sector_id', eventData.sector_id)
     formData.append('zone_id', eventData.zone_id)
     formData.append('media', eventData.media)
-
-    const response = await makeApiPostCall(API_ENDPOINTS.event, formData, authToken, true)
+    
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+    const response = await makeApiPostCall(API_ENDPOINTS.event, formData, token, true)
 
     onSuccess()
 
@@ -141,8 +142,11 @@ const getSpecificEvent = async (id) => {
 
 
 const deleteEvent = async (eventId) => {
+
+  const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.event}/${eventId}`, authToken)
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.event}/${eventId}`, token)
     console.log('delete event sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting event:', error)
