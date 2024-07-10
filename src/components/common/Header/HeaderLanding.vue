@@ -1,11 +1,11 @@
 <template>
-  <header class="bg-secondary-normal p-4">
+  <header class="bg-white p-4">
     <div class="container mx-auto flex justify-between items-center">
-      <AppLogo :isWhite="true"></AppLogo>
+      <AppLogo :isWhite="false"></AppLogo>
       
       <!-- Burger Menu Icon for Mobile View -->
       <button 
-        class="block lg:hidden text-white" 
+        class="block lg:hidden text-primary-normal" 
         @click="toggleSidebar"
       >
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
@@ -15,11 +15,11 @@
 
       <!-- Navbar Links for Large Screen -->
       <nav class="hidden lg:block">
-        <ul class="flex space-x-4 text-white">
+        <ul class="flex space-x-4 text-primary-normal">
           <li v-for="(item, index) in navItems" :key="index">
             <a
               :href="item.href"
-              class="text-center text-white sm:text-[16px] lg:text-xl font-normal font-['Poppins'] leading-normal"
+              class="text-center text-primary-normal sm:text-[16px] lg:text-xl font-normal font-['Poppins'] leading-normal"
             >
               {{ item.label }}
             </a>
@@ -30,16 +30,16 @@
       <div class="hidden lg:flex justify-between space-x-2">
         <ButtonUi
           label="Register"
-          colorObject="bg-white text-center w-auto"
+          colorObject="bg-primary-normal text-center w-auto"
           customCss="text-center flex justify-center px-[20px] py-10"
-          textCss="text-center"
+          textCss="text-center text-white"
           :isRoundedFull="true"
         ></ButtonUi>
         <ButtonUi
           label="Sign In"
-          colorObject="bg-white text-center w-auto"
+          colorObject="bg-primary-normal text-center w-auto"
           customCss="text-center flex justify-center px-[20px] py-3"
-          textCss="text-center"
+          textCss="text-center text-white"
           :isRoundedFull="true"
         ></ButtonUi>
       </div>
@@ -50,17 +50,17 @@
       <div v-if="isSidebarOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden" @click.self="toggleSidebar">
         <div class="fixed right-0 top-0 w-[60%] h-full bg-primary-normal p-4 space-y-4 shadow-lg z-50">
           <!-- Close Button -->
-          <button class="text-white mb-4" @click="toggleSidebar">
+          <button class="text-primary-normal mb-4" @click="toggleSidebar">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
           <!-- Sidebar Links -->
-          <ul class="space-y-4 text-white">
+          <ul class="space-y-4 text-primary-normal">
             <li v-for="(item, index) in navItems" :key="index">
               <a
                 :href="item.href"
-                class="block text-right text-white text-xl font-normal font-['Poppins'] leading-normal"
+                class="block text-right text-primary-normal text-xl font-normal font-['Poppins'] leading-normal"
               >
                 {{ item.label }}
               </a>
@@ -69,14 +69,14 @@
           <div class="mt-4 flex flex-col space-y-2">
             <ButtonUi
               label="Register"
-              colorObject="bg-white text-center w-auto"
+              colorObject="bg-primary-normal text-center w-auto"
               customCss="text-center flex justify-center px-10 py-4"
               textCss="text-center"
               :isRoundedFull="true"
             ></ButtonUi>
             <ButtonUi
               label="Sign In"
-              colorObject="bg-white text-center w-auto"
+              colorObject="bg-primary-normal text-center w-auto"
               customCss="text-center flex justify-center px-10 py-3"
               textCss="text-center"
               :isRoundedFull="true"
