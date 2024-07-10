@@ -6,7 +6,6 @@
       <button v-if="isInstitution" @click="createNotification" class="bg-primary-normal text-white px-4 py-2 rounded">Send Mass Message</button>
     </div>
 
-    <!-- Tab Navigation -->
     <div class="mb-4">
       <button
         :class="['px-4 py-2 rounded-t-lg', activeTab === 'important' ? 'bg-primary-normal text-white' : 'bg-gray-200']"
@@ -14,50 +13,55 @@
       >
         {{ isInstitution ? 'Recently Sent' : 'Important messages' }}
       </button>
-      <button
+      <!-- <button
         :class="['px-4 py-2 rounded-t-lg ml-2', activeTab === 'inbox' ? 'bg-primary-normal text-white' : 'bg-gray-200']"
         @click="activeTab = 'inbox'"
       >
         {{ isInstitution ? 'Inbox' : 'Inbox' }}
-      </button>
+      </button> -->
     </div>
 
-    <!-- Notifications List -->
-    <div v-if="activeTab === 'important' && !isInstitution">
-      <div
-        v-for="institution in institutionalNotifications"
-        :key="institution.id"
-        class="  mb-2"
-      >
-        <div class=" bg-white shadow-md rounded-lg p-4 flex justify-between items-center cursor-pointer" @click="toggleInstitution(institution.id)">
-          <div class="flex items-center bg-white">
-            <img :src="institution.avatar" alt="Institution Avatar" class="w-10 h-10 rounded-full mr-4">
-            <div>{{ institution.name }}</div>
+    <div v-if="isLoading">
+      <AvatarEventShimmer :numShimmers="8" :componentHeight="'auto'"  />
+    </div>
+
+    <div v-else>
+      <div v-if="activeTab === 'important' && !isInstitution">
+        <div
+          v-for="institution in institutionalNotifications"
+          :key="institution.id"
+          class="mb-2"
+        >
+          <div class="bg-white shadow-md rounded-lg p-4 flex justify-between items-center cursor-pointer" @click="toggleInstitution(institution.id)">
+            <div class="flex items-center bg-white">
+              <img :src="institution.avatar" alt="Institution Avatar" class="w-10 h-10 rounded-full mr-4">
+              <div>{{ institution.name }}</div>
+            </div>
+            <div>{{ institution.notifications.length }} messages</div>
           </div>
-          <div>{{ institution.notifications.length }} messages</div>
+          <div v-show="institution.isVisible" class="ml-5 rounded-lg mt-2">
+            <NotificationItem 
+              v-for="notification in institution.notifications" 
+              :key="notification.id" 
+              :notification="notification" 
+              :isInstitution="isInstitution" 
+            />
+          </div>
         </div>
-        <div v-show="institution.isVisible" class="ml-5  rounded-lg mt-2">
+      </div>
+
+      <div v-if="activeTab === 'inbox' || isInstitution">
+        <div v-if="filteredNotifications.length" class="bg-white shadow-md rounded-lg">
           <NotificationItem 
-            v-for="notification in institution.notifications" 
+            v-for="notification in filteredNotifications" 
             :key="notification.id" 
             :notification="notification" 
             :isInstitution="isInstitution" 
           />
         </div>
-      </div>
-    </div>
-
-    <div v-if="activeTab === 'inbox' || isInstitution">
-      <div v-if="filteredNotifications.length" class="bg-white shadow-md rounded-lg">
-        <NotificationItem 
-          v-for="notification in filteredNotifications" 
-          :key="notification.id" 
-          :notification="notification" 
-          :isInstitution="isInstitution" 
-        />
-      </div>
-      <div v-else class="text-center mt-3">
-        {{ $t('no_alert') }}
+        <div v-else class="text-center mt-3">
+          {{ $t('no_alert') }}
+        </div>
       </div>
     </div>
   </div>
@@ -65,6 +69,7 @@
 
 <script>
 import NotificationItem from '../Notification/components/NotificationItem.vue'
+import AvatarEventShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
 import { getNotifications } from '@/services/notificationService.js'
 import useAuthStore from '@/stores/auth.js'
 
@@ -72,6 +77,7 @@ export default {
   name: 'ChatRoomView',
   components: {
     NotificationItem,
+    AvatarEventShimmer,
   },
 
   async created() {
@@ -85,30 +91,31 @@ export default {
     const authStore = useAuthStore()
     return {
       authStore,
-      isInstitution: false, // Change this based on user type
+      isInstitution: true, 
       activeTab: 'important',
+      isLoading: true,
       notifications: [],
       institutionalNotifications: [
-        {
-          id: 1,
-          name: 'UNICEF',
-          avatar: 'https://th.bing.com/th/id/R.8ba0a0bd48bee97f7b6d347b8efa96a3?rik=DNFW%2fU%2ff8%2fLFUQ&pid=ImgRaw&r=0',
-          isVisible: false,
-          notifications: [
-            { id: 1, banner: 'https://th.bing.com/th/id/OIP.onIgi3XdIcwUhZYMlR7S1gHaE7?w=980&h=653&rs=1&pid=ImgDetMain', title: 'UNICEF Message 1', content_en: "This is a new notification for you guys pay attention please", time: '19m ago', isNew: true },
-            { id: 2, banner: 'https://th.bing.com/th/id/OIP.onIgi3XdIcwUhZYMlR7S1gHaE7?w=980&h=653&rs=1&pid=ImgDetMain', title: 'UNICEF Message 2', content_en: "This is a new notification for you guys pay attention please", time: '1h ago', isNew: false },
-          ],
-        },
-        {
-          id: 2,
-          name: 'Government',
-          avatar: 'https://example.com/institution2.jpg',
-          isVisible: false,
-          notifications: [
-            { id: 3, banner: 'https://example.com/avatar3.jpg', title: 'Government Message 1', content_en: "This is a new notification for you guys pay attention please", time: '30m ago', isNew: true },
-            { id: 4, banner: 'https://example.com/avatar4.jpg', title: 'Government Message 2', content_en: "This is a new notification for you guys pay attention please", time: '2h ago', isNew: false },
-          ],
-        },
+        // {
+        //   id: 1,
+        //   name: 'UNICEF',
+        //   avatar: 'https://example.com/institution1.jpg',
+        //   isVisible: false,
+        //   notifications: [
+        //     { id: 1, avatar: 'https://example.com/avatar1.jpg', title: 'UNICEF Message 1', content_en: "This is a new notification for you guys pay attention please", time: '19m ago', isNew: true },
+        //     { id: 2, avatar: 'https://example.com/avatar2.jpg', title: 'UNICEF Message 2', content_en: "This is a new notification for you guys pay attention please", time: '1h ago', isNew: false },
+        //   ],
+        // },
+        // {
+        //   id: 2,
+        //   name: 'Government',
+        //   avatar: 'https://example.com/institution2.jpg',
+        //   isVisible: false,
+        //   notifications: [
+        //     { id: 3, avatar: 'https://example.com/avatar3.jpg', title: 'Government Message 1', content_en: "This is a new notification for you guys pay attention please", time: '30m ago', isNew: true },
+        //     { id: 4, avatar: 'https://example.com/avatar4.jpg', title: 'Government Message 2', content_en: "This is a new notification for you guys pay attention please", time: '2h ago', isNew: false },
+        //   ],
+        // },
         // Add more institutions here
       ],
     };
@@ -134,18 +141,18 @@ export default {
     },
     async fetchNotifications() {
       this.hasNewEvents = false
-
+      this.isLoading = true
       try {
         this.notifications = await getNotifications(0, 10, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load notifications:', error)
         this.showPageRefresh = true
+      } finally {
+        this.isLoading = false
       }
     },
   },
 };
 </script>
 
-<style>
-/* Custom styles if needed */
-</style>
+

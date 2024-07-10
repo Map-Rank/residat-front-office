@@ -13,8 +13,8 @@
         <div v-if="!showMenu" class="flex items-center">
           <label
             @click="onClickFollow"
-            class="flex items-center px-2 py-1  bg-white text-green-600 rounded-[8px] tracking-wide  hover:text-white"
-            :class='[ this.post?.is_following ? " ": "hover:bg-primary-light cursor-pointer"]'
+            class="flex items-center px-2 py-1 bg-white text-green-600 rounded-[8px] tracking-wide hover:text-white"
+            :class="[this.post?.is_following ? ' ' : 'hover:bg-primary-light cursor-pointer']"
             style="min-width: max-content"
           >
             <img :src="iconSource" alt="" />
@@ -65,8 +65,21 @@
     </header>
 
     <!-- Post Content -->
-    <div @click.prevent="showModal()" class="px-5 mb-2 cursor-pointer">
-      <p class="content">{{ postContent }}</p>
+    <div class="px-5 mb-2 cursor-pointer">
+      <p
+        class="text-gray-700 text-start mt-1 content"
+        :class="{ 'limited-text': !showFullDescription }"
+        v-html="formattedPostContent"
+      ></p>
+      <p class="text-gray-700 text-start mt-1 content">
+        <span
+          v-if="shouldShowReadMore"
+          @click="toggleReadMore"
+          class="text-blue-700 cursor-pointer"
+        >
+          {{ showFullDescription ? 'Read less' : 'Read more' }}
+        </span>
+      </p>
     </div>
 
     <!-- Post Images -->
@@ -118,6 +131,12 @@
         <button
           @click.prevent="commentPost(this.commentData)"
           class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
+            :disabled="this.isCommenting"
+          :class="
+            this.isCommenting
+              ? 'bg-gray-400 cursor-wait disabled '
+              : 'bg-secondary-normal hover:bg-secondary-hover'
+          "
         >
           {{ $t('post') }}
         </button>
@@ -127,6 +146,12 @@
 
   <!-- <post-details v-if="showPostDetails"></post-details> -->
   <PostDetailModal v-if="isModalVisible" :postId="this.post.id" @close="closeModal" />
+  <share-modal
+    :showModal="this.showShareModal"
+    :postLink="this.postLink"
+    :message="this.messageShare"
+    @close="this.closeShareModal"
+  ></share-modal>
 </template>
 
 <script>
@@ -149,7 +174,8 @@ import InteractionPostStatistics from '@/features/Post/components/InteractionPos
 import { URL_LINK } from '@/constants/url.js'
 import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
 import useModalStore from '@/stores/modalStore.js'
-
+import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'PostComponent',
@@ -157,14 +183,22 @@ export default {
   data() {
     const route = useRoute()
     const modalStore = useModalStore()
+    const toast = useToast()
 
     return {
       route,
       modalStore,
-      iconSource: this.post?.is_following ? '/assets/icons/tick.svg' : '/assets/icons/add-circle-dark-outline.svg',
+      showShareModal: false,
+      toast,
+      postLink: '',
+      messageShare: 'Check out this post!',
+      iconSource: this.post?.is_following
+        ? '/assets/icons/tick.svg'
+        : '/assets/icons/add-circle-dark-outline.svg',
       labelText: this.post?.is_following ? this.$t('following') : this.$t('follow'),
       isFollowing: false,
-
+      maxDescriptionLength: 100,
+      showFullDescription: false,
       iconDesktopSize: 'w-6 h-6',
       iconMobileSize: 'w-5 h-5',
       isModalVisible: false,
@@ -177,7 +211,7 @@ export default {
       showCommentBox: false,
       isCommenting: false,
       commentData: {
-        text: ' ',
+        text: null,
         image: ' '
       },
       plusIcon: 'public\\assets\\icons\\add-circle-dark-outline.svg',
@@ -206,7 +240,37 @@ export default {
     }
   },
 
+  computed: {
+    formattedPostContent() {
+      return this.postContent.replace(/<p><\/p>/g, '<br>').replace(/\n/g, '<br>')
+    },
+
+    shouldShowReadMore() {
+      return this.postContent.length > this.maxDescriptionLength
+    },
+    ...mapWritableState(usePostStore, ['showPostDetails']),
+    slicedImages() {
+      return this.postImages.slice(1).filter((image, index) => index < 3)
+    }
+  },
+
   methods: {
+    openShareModal() {
+      console.log('open modal')
+      this.postLink = `https://dev.residat.com/show-post/${this.post.id}`
+      this.showShareModal = true
+    },
+    closeShareModal() {
+      this.showShareModal = false
+    },
+    setMessageShare(message) {
+      this.messageShare = message
+    },
+
+    toggleReadMore() {
+      this.showFullDescription = !this.showFullDescription
+    },
+
     ...mapActions(usePostStore, [
       'togglePostDetails',
       'setpostToShowDetails',
@@ -216,7 +280,6 @@ export default {
     ]),
 
     async onClickFollow() {
-
       if (this.post.is_following) {
         return
       }
@@ -242,9 +305,9 @@ export default {
 
     async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
       if (window.confirm(alertMessage)) {
-        console.log('Deleting post', this.postId)
         try {
           await deletePost(this.postId)
+
           window.location.reload()
         } catch (error) {
           console.error('Error deleting post:', error)
@@ -256,10 +319,6 @@ export default {
 
     viewPost() {
       this.$router.push({ name: 'show-post', params: { id: this.post.id } })
-    },
-
-    openShareModal() {
-      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
     },
 
     editPost() {
@@ -289,13 +348,12 @@ export default {
           }
           break
         case 1:
-          this.isCommenting = true
           this.showCommentBox = !this.showCommentBox
           console.log(this.postImages)
           break
         case 2:
-          await sharePost(this.postId)
           this.openShareModal()
+          await sharePost(this.postId)
           // this.$emit('postFetch')
           break
         case 3:
@@ -303,13 +361,29 @@ export default {
       }
     },
 
-    async commentPost(text) {
-      await commentPost(this.postId, text)
-      this.commentData.text = ''
-      this.isCommenting = false
-
-      this.showCommentBox = !this.showCommentBox
-      this.customPost.comment_count++
+    async commentPost(comment) {
+      // await commentPost(this.postId, text)
+      console.log('this is text' + comment);
+      if (comment.text == null) {
+        this.toast.info('Please insert a comment')
+        return
+      }
+      
+      this.isCommenting = true
+      try {
+        await commentPost(this.postId, comment)
+        this.toast.success('Comment posted')
+        this.showCommentBox = false
+        this.commentData.text = null
+        this.showCommentBox = !this.showCommentBox
+        this.customPost.comment_count++
+        this.isCommenting = false
+      } catch (error) {
+        console.error('Failed to post comment:', error)
+        this.isCommenting = false
+      } finally {
+        this.isCommenting = false
+      }
     },
 
     clickIcon(index) {
@@ -359,14 +433,8 @@ export default {
     IconWithLabel,
     ButtonUi,
     ImagePostGallery,
-    PostDetailModal
-  },
-  computed: {
-    ...mapWritableState(usePostStore, ['showPostDetails']),
-
-    slicedImages() {
-      return this.postImages.slice(1).filter((image, index) => index < 3)
-    }
+    PostDetailModal,
+    ShareModal
   },
 
   props: {
@@ -400,6 +468,14 @@ export default {
   font-weight: 400;
   line-height: 20px;
   text-align: justify;
+}
+
+.limited-text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2; /* Limits the text to 3 lines */
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 @media only screen and (max-width: 480px) {

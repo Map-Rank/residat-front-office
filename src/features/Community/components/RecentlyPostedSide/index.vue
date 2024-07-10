@@ -7,20 +7,20 @@
           <div class="space-y-2">
             <div class="flex space-x-4 items-center">
               <img
-              :src="post.creator[0].avatar"
-              alt="Event image"
-              class="h-12 w-12 rounded-full border-2 border-white"
-            />
+                :src="post.creator[0].avatar"
+                alt="Event image"
+                class="h-12 w-12 rounded-full border-2 border-white"
+              />
               <div>
-
-                <p class="user-name mb-3 cursor-pointer hover:underline" @click="viewProfileUser(post.creator[0].id)">{{
-                  `${post.creator[0].first_name} ${post.creator[0].last_name}`
-                }}</p>
+                <p class="user-name mb-3 cursor-pointer hover:underline" @click="viewProfileUser(post.creator[0].id)">
+                  {{ `${post.creator[0].first_name} ${post.creator[0].last_name}` }}
+                </p>
                 <p class="caption-C1">{{ formatDate(post.published_at) }}</p>
               </div>
             </div>
-
-            <h5 class="post-title hover:cursor-pointer" @click="viewPost(post.id)">{{ truncateText(post.content ,70 )  }}</h5>
+            <h5 class="post-title hover:cursor-pointer" @click="viewPost(post.id)">
+              <p v-html="truncateHtmlText(post.content, 70)"></p>
+            </h5>
           </div>
         </li>
       </ul>
@@ -28,8 +28,10 @@
   </div>
 </template>
 
+
+
 <script>
-import { formatDate, truncateText } from '@/utils/formating'
+import { formatDate } from '@/utils/formating'
 import SectionTitle from '@/components/base/SectionTitle.vue'
 
 export default {
@@ -37,8 +39,7 @@ export default {
   data() {
     return {
       formatDate,
-      truncateText,
-      sectionTitle:this.$t('section_title_recently_posted')
+      sectionTitle: this.$t('section_title_recently_posted')
     }
   },
   computed: {
@@ -58,23 +59,26 @@ export default {
       type: Number,
       default: 3 // Set a default value or remove this line if no default is needed
     }
-
-    // username:String
   },
   methods: {
-    viewProfileUser(id) { 
+    viewProfileUser(id) {
       console.log(id)
       this.$router.push({ name: 'view-profile-user', params: { id: id } })
     },
-    viewPost(id){
+    viewPost(id) {
       this.$router.push({ name: 'show-post', params: { id: id } })
+    },
+    truncateHtmlText(html, length) {
+      const div = document.createElement('div');
+      div.innerHTML = html;
+      const text = div.innerText;
+      return text.length > length ? text.substring(0, length) + '...' : text;
     }
   }
 }
 </script>
 
 <style scoped>
-
 .button {
   display: flex;
   padding: 4px 19px;
@@ -112,3 +116,4 @@ export default {
   line-height: 20px; /* 142.857% */
 }
 </style>
+

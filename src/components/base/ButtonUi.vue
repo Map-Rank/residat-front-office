@@ -37,7 +37,7 @@ export default {
     isDisabled: Boolean,
     customCss:String,
     hoverState: Boolean,
-    colorObject: Object,
+    colorObject: String,
     color: String,
     loading: Boolean,
     isRoundedMd:Boolean,
@@ -50,7 +50,7 @@ export default {
     },
     width: {
       type: String,
-      default: 'full' // full, auto, or any specific width like 1/2, 1/3, etc.
+      default: 'full' 
     }
   },
   computed: {

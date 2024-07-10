@@ -8,7 +8,8 @@
       <h2
         class="text-white  font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase"
       >
-      {{ $t('welcome_to') }} {{ zoneName }}
+      <!-- {{ $t('welcome_to') }} {{ zoneName }} -->
+       {{ zoneName }}
       </h2>
     </div>
 
@@ -59,9 +60,10 @@
 
               <!-- Main Content Area: Posts -->
               <main class="col-span-5 lg:px-4 md:px-0" ref="mainContent">
-                <!-- <div v-if="topLoading" class="flex h-full justify-center">
-                  <LoadingIndicator />
-                </div> -->
+             
+                
+                <post-input  :profilePictureUrl="userProfileImage">
+                </post-input>
 
                 <div v-if="topLoading">
                     <PostShimmerLoading  class="mb-4" />
@@ -127,11 +129,11 @@
                     </div>
                   </div>
                 </div>
-
+<!-- 
+                <post-input  :profilePictureUrl="userProfileImage">
+                </post-input> -->
                 <div v-if="!topLoading" class="space-y-2">
 
-                  <post-input v-if="!showPageRefresh" :profilePictureUrl="userProfileImage">
-                  </post-input>
 
                   <div v-if="hasNewPosts" class="">
                     <div class="my-10 flex flex-col justify-center items-center">
@@ -284,9 +286,24 @@ export default {
       const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : []
       
       if (zoneId) {
+        this.topLoading = true
+        this.showPageRefresh = false
         this.isZoneFilterLoading = true
-        this.posts = await getFilterPosts(zoneId, sectorIdArray)
-        this.paramZone = await getSpecificZones(zoneId)
+        try {
+          this.posts = await getFilterPosts(zoneId, sectorIdArray);
+          this.paramZone = await getSpecificZones(zoneId);
+          this.topLoading = false
+
+        } catch (error) {
+          this.showPageRefresh = true
+          console.error('An error occurred:', error);
+
+        }finally {
+         this.topLoading = false
+         this.posts.length < 1 ?   this.showPageRefresh = true : null
+
+       }
+       
         this.isZoneFilterLoading = true
       } else {
         await this.fetchResources()
@@ -329,8 +346,8 @@ export default {
         this.isZoneFilterLoading = true
         ;(this.default_regions = [
           {
-            id: 0,
-            name:this.$t('choose_your_region')
+            id: 1,
+            name:this.$t('cameroon')
           }
         ]),
           (this.default_divisions = [
@@ -347,6 +364,7 @@ export default {
           ])
 
         if (newValue.level_id == 4) {
+         
           const rest = await getZones(null, newValue.parent_id)
           const currentZone = {
             id: newValue.id,
@@ -466,8 +484,8 @@ export default {
       recentPosts: [],
       default_regions: [
         {
-          id: 0,
-          name: 'Choose a region'
+          id: 1,
+          name: 'Cameroon'
         }
       ],
       default_divisions: [
@@ -606,7 +624,7 @@ export default {
       try {
         this.topLoading = true
 
-        this.posts = await getFilterPosts(id != 1 ? id : null, this.sectorId, null, null)
+        this.posts = await getFilterPosts(id != 0 ? id : null, this.sectorId, null, null)
         this.$router.push(`/community/${id}`);
 
       } catch (error) {
@@ -614,10 +632,12 @@ export default {
         this.showPageRefresh = true
       } finally {
         this.topLoading = false
-        this.filteringActive = true
-        if (this.posts.length == 0) {
+        this.filteringActive = false
+        if (this.posts.length === 0) {
           this.showPageRefresh = true
-          this.errorMessage = 'No post found under this location , chose another location '
+          console.log("this is howpager" + this.showPageRefresh)
+          console.log('No post found under this location , chose another location ')
+          // this.errorMessage = 'No post found under this location , chose another location '
         } else {
           this.showPageRefresh = false
         }
@@ -625,13 +645,9 @@ export default {
     },
 
     async reloadPosts() {
-      this.page = 0
-      this.topLoading = false
-      this.filteringActive = false
-      this.showPageRefresh = false
-      this.hasFetchAllPost = false
-      this.zoneName = this.authStore.user.zone.name
-      await this.fetchPosts()
+      this.$router.push({ name: 'community' }).then(() => {
+    window.location.reload();
+  });
     },
 
     async fetchResources() {

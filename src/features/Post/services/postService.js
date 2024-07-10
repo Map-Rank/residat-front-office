@@ -38,9 +38,10 @@ const createPost = async (postData, onSuccess, onError) => {
       formData.append(`sectors[${index}]`, id)
     })
 
-    console.log(postData)
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+    console.log(token)
 
-    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
+    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, token, true)
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)
     }
@@ -159,7 +160,6 @@ const getSpecificPost = async (id) => {
 const filterPost = async (params) => {
   try {
     const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, authToken)
-    console.log('post filtered!!')
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -238,8 +238,11 @@ const sharePost = async (postId) => {
 }
 
 const deletePost = async (postId) => {
+  
+  let token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deletePost}/${postId}`, authToken)
+    console.log('Deleting post')
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.post}/${postId}`, token)
     console.log('delete post sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting posts:', error)

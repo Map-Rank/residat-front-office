@@ -15,6 +15,7 @@ export const API_ENDPOINTS = {
     sharePost: 'post/share',
     zone: '/zone',
     notifications: '/notifications',
+    createFeedback: '/create-feedback',
     // other endpoints...
   };
   

@@ -3,7 +3,7 @@
       class="fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full flex justify-center items-center"
       v-if="showModal"
     >
-      <div class="bg-white p-5 rounded-lg shadow-lg w-1/3">
+      <div class="bg-white p-5 rounded-lg shadow-lg  md:w-1/3">
         <h3 class="text-lg font-bold mb-4">Share this Post</h3>
         
         <div class="flex justify-between items-center bg-gray-100 p-2 rounded">

@@ -77,7 +77,7 @@ export default {
       isLoading: false,
 
       region_id: '1',
-      sectionTitle:this.$t('select_location_title'),
+      sectionTitle: this.title || this.$t('select_location_title') ,
 
       division_id: '',
       Subdivision_id: '1',
@@ -90,11 +90,14 @@ export default {
   },
   methods: {
     returnZoneId(id) {
-      this.filterPostFunctionWithId(id)
+      if(id){
+        this.filterPostFunctionWithId(id)
+      }
     },
 
    returnZone(zone) {
-     if(this.updateZone !== null) {
+    console.log('this is the zone '+ zone);
+     if(this.updateZone !== null && zone.id != null) {
        this.updateZone(zone);
        return
      } 
@@ -110,12 +113,18 @@ export default {
     },
 
     async getDivisions(parent_id) {
+      //here i will avoid fetching the divisions in the case 
+      // that the user chosed to filter post according to Cameroon
+      if(parent_id == 1){
+        this.divisions = [this.divisions[0]]
+        return
+      }
       try {
         this.isDivisionLoading = true
         //delete all element and allow the first only
         this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
-        // this.sub_divisions = [this.sub_divisions[0]]
+        this.sub_divisions = [this.sub_divisions[0]]
       } catch (error) {
         console.log(error)
       } finally {
@@ -140,12 +149,13 @@ export default {
     updateZone: {
       type:Function
     },
+    title:String,
     props_regions: {
       type: Array,
       default: () => [
         {
-          id: 0,
-          name: 'Choose a region'
+          id: 1,
+          name: 'Cameroon'
         }
       ]
     },

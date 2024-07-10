@@ -48,7 +48,12 @@
 
         <!-- Error Message -->
         <ErrorMessage class="text-red-500 text-sm mt-1" name="password" />
+        
+          
+        <!-- </span> -->
       </div>
+      <h6 class="text-right mt-3 hover:cursor-pointer" @click="forgotPassword">{{ $t('forgot_password') }}</h6>
+
 
       <div class="flex justify-center">
         <button
@@ -162,7 +167,11 @@ export default {
         console.error('Validation error:', error)
       }
 
-    }
+    },
+    forgotPassword() {
+      console.log("bonjour");
+      this.$router.push({ name: 'forgot-password'})
+    },
   }
 }
 </script>

@@ -1,40 +1,37 @@
 import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
-import { getFcmToken } from '@/firebaseConfig.js';
-
+import { getFcmToken } from '@/firebaseConfig.js'
+import convertToDate from '../../../utils/dateFormat.js'
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
-
-
 const registerUser = async (userData, authStore, onSuccess, onError) => {
+  
   try {
     const formData = new FormData()
-    console.log(userData)
 
-    // Append user data to formData
     formData.append('first_name', userData.first_name)
     formData.append('last_name', userData.last_name)
     formData.append('email', userData.email)
     formData.append('phone', userData.phone)
-    formData.append('date_of_birth', userData.date_of_birth)
     formData.append('password', userData.password)
     formData.append('gender', userData.gender)
     formData.append('zone_id', userData.zone)
     formData.append('avatar', userData.avatar)
 
-     // Get FCM token
-     const fcmToken = await getFcmToken();
-     if (fcmToken) {
-       formData.append('fcm_token', fcmToken);
-     }
+    //since i get date as a string here am converting to  a date type
+    const dateOfBirth = convertToDate(userData.date_of_birth)
+    formData.append('date_of_birth', dateOfBirth)
+
+    const fcmToken = await getFcmToken()
+    if (fcmToken) {
+      formData.append('fcm_token', fcmToken)
+    }
 
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData, null, true)
     const user = response.data.data
     const token = response.data.data.token
     console.log('register successfull !!!!')
-
-    
 
     authStore.setUser(user)
     localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
@@ -45,7 +42,12 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
 
     return response
   } catch (error) {
-    onError(error.response.data.errors)
+  if (error.response?.data?.errors) {
+    onError(error.response.data.errors);
+  } else {
+    console.log('No errors found in the response.'+ error);
+  }
+  
     throw error
   }
 }
@@ -115,12 +117,12 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
 
-        // Get FCM token
-        const fcmToken = await getFcmToken();
-        if (fcmToken) {
-          // const updateTokenResponse = await makeApiPostCall(API_ENDPOINTS.updateFcmToken, { fcmToken }, token);
-          console.log('FCM token updated successfully.');
-        }
+      // Get FCM token
+      const fcmToken = await getFcmToken()
+      if (fcmToken) {
+        // const updateTokenResponse = await makeApiPostCall(API_ENDPOINTS.updateFcmToken, { fcmToken }, token);
+        console.log('FCM token updated successfully.')
+      }
 
       onSuccess()
     }
@@ -136,13 +138,12 @@ const logOut = async (authStore) => {
 
 const UpdatePassword = async (userData, onSuccess, onError) => {
   try {
-  const formData = {
-    old_password: userData.old_password,
-    password: userData.password,
-    password_confirmation: userData.password_confirmation,
-    _method: 'PUT'
-  };
-  
+    const formData = {
+      old_password: userData.old_password,
+      password: userData.password,
+      password_confirmation: userData.password_confirmation,
+      _method: 'PUT'
+    }
 
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.UpdatePassword}`,
@@ -162,4 +163,48 @@ const UpdatePassword = async (userData, onSuccess, onError) => {
   }
 }
 
-export { registerUser, loginUser, logOut, UpdateUser, UpdatePassword }
+const ForgotPassword = async (userData, onSuccess, onError) => {
+  // console.log(userData.email);
+  const formData = new FormData()
+  formData.append('email', userData.email)
+
+  try {
+    const endpoint = `/forgot-password`;
+    const response = await makeApiPostCall(endpoint, formData, true);
+    // console.log(response.status == 200);
+    // return response.data.data;
+    if (response.status == 200) {
+      onSuccess();
+    }
+  } catch (error) {
+    onError(error.response.data.errors)
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
+const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) => {
+  
+  // console.log(userData.email);
+  const formData = new FormData()
+  formData.append('email', emailFromUrl)
+  formData.append('password', userData.password)
+  formData.append('password_confirmation', userData.password_confirmation)
+  formData.append('token', token)
+
+  try {
+    const endpoint = `/reset-password`;
+    const response = await makeApiPostCall(endpoint, formData, true);
+    // console.log(response.status == 200);
+    // return response.data.data;
+    if (response.status == 200) {
+      onSuccess();
+    }
+  } catch (error) {
+    onError(error.response.data.errors)
+    console.error('Error fetching user profile:', error);
+    throw error;
+  }
+};
+
+export { registerUser, loginUser, logOut, UpdateUser, UpdatePassword, ForgotPassword, ResetPassword }

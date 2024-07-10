@@ -4,7 +4,6 @@
       <!-- <LoadingIndicator v-if="isLoading" /> -->
       <TopProfileShimmer v-if="isLoading" />
 
-
       <top-profile-info
         v-if="!isLoading && userPost"
         :profile-image-url="''"
@@ -61,13 +60,23 @@
           </div>
         </main>
 
-        <aside class="col-span-1 hidden sm:block"></aside>
+        <aside class="col-span-1 hidden sm:block">
+          <div class="hidden lg:block">
+              <event-alert-box
+                v-if="shouldDisplayEventAlert"
+                :sectionTitle="$t('your_events')"
+                :events="events"
+                navigationLink="user-events"
+                />
+            </div>
+        </aside>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
@@ -94,10 +103,17 @@ export default {
 
   data() {
     return {
+      events: [],
       user: '',
       posts: [],
       userPost: null,
       isLoading: true
+    }
+  },
+
+  computed: {
+    shouldDisplayEventAlert() {
+      return this.events.length > 0
     }
   },
 
@@ -107,7 +123,8 @@ export default {
     TopProfileInfo,
     TopProfileShimmer,
     DropdownShimmer,
-    PostShimmerLoading
+    PostShimmerLoading,
+    EventAlertBox
   },
 
   methods: {
@@ -121,10 +138,34 @@ export default {
       // console.log(response.data.data.my_posts)
       this.isLoading = true
       this.userPost = response.data.data;
+      this.events = this.userPost.events
       this.posts = response.data.data.my_posts
     }
   }
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.enableScroll {
+  height: 20vh;
+}
+
+.scroll-lock {
+  overflow: hidden;
+  height: 100%;
+}
+
+.static {
+  position: static;
+  overflow: hidden;
+}
+
+main {
+  height: calc(1000px);
+  overflow-y: auto;
+}
+
+main::-webkit-scrollbar {
+  display: none;
+}
+</style>

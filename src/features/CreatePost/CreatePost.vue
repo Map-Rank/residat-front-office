@@ -2,10 +2,9 @@
   <div class="container m-auto w-full lg:w-1/2 p-2 sm:p-6">
     <div class="flex justify-center mb-9">
       <h2 class="uppercase font-semibold">
-        {{ isEditing ?  $t('your_editing_post') : $t('share_your_thoughts') }}
+        {{ isEditing ? $t('your_editing_post') : $t('share_your_thoughts') }}
       </h2>
     </div>
-   
 
     <div class="mx-auto mb-4 h-3/4 p-6 space-y-4 bg-white rounded-lg shadow">
       <TopContentForm :userProfileImage="userProfileImage" />
@@ -16,7 +15,7 @@
             name="content"
             :rules="schema.content"
             as="textarea"
-            v-model="formData.content"
+            v-model="content"
             placeholder="what will you share today ..."
             class="w-full rounded-lg focus:outline-none focus:ring-2"
             rows="4"
@@ -27,8 +26,12 @@
               :Images="imagesToFromLocalPreview"
               :ImagesFromHostToPreview="imagesFromHostToPreview"
               @removeImage="removeImage"
-            >
-            </image-preview-gallery>
+            />
+            <image-cropper
+              v-if="selectedImage"
+              :image="selectedImage"
+              @cropped="handleCroppedImage"
+            />
           </div>
         </div>
 
@@ -40,8 +43,7 @@
               :type="'file'"
               :label="$t('add_image')"
               @handleFileChange="handleImageUpload"
-            >
-            </base-image-picker>
+            />
           </div>
         </div>
       </vee-form>
@@ -69,7 +71,7 @@
             {{
               !isEditing
                 ? this.isLoading
-                  ?  $t('creating_post')
+                  ? $t('creating_post')
                   : $t('create_post')
                 : this.isLoading
                   ? $t('updating_post')
@@ -93,8 +95,8 @@ import PostSpecificInformation from '@/features/CreatePost/components/PostSpecif
 import TopContentForm from '@/features/CreatePost/components/TopContentForm.vue'
 import useAuthStore from '@/stores/auth.js'
 import { getSpecificPost } from '@/features/Post/services/postService'
-import { useToast } from "vue-toastification";
-
+import { useToast } from 'vue-toastification'
+import ImageCropper from '@/components/gallery/ImageCropper/ImageCropper.vue'
 
 export default {
   name: 'CreatePost',
@@ -111,7 +113,7 @@ export default {
           this.formData.content = this.post.content
           this.imagesFromHostToPreview = this.post.images
         }
-        if(this.prePostContent != null){
+        if (this.prePostContent != null) {
           this.formData.content = this.prePostContent
         }
 
@@ -125,12 +127,12 @@ export default {
       }
     }
   },
-  props: ['postId','prePostContent'],
+  props: ['postId', 'prePostContent'],
   data() {
     const router = useRouter()
     const postStore = usePostStore()
     const authStore = useAuthStore()
-    const toast = useToast();
+    const toast = useToast()
 
     return {
       schema: {
@@ -146,17 +148,18 @@ export default {
       imagesToFromLocalPreview: [],
       imagesFromHostToPreview: [],
       zoneId: '',
+      content:'',
       formData: {
-        id:'',
+        id: '',
         content: '',
         images: [],
         videos: [],
         zoneId: ' ',
         sectorChecked: [],
-
         sectorId: []
       },
-      sectors: []
+      sectors: [],
+      selectedImage: null
     }
   },
   components: {
@@ -164,6 +167,7 @@ export default {
     PostSpecificInformation,
     BaseImagePicker,
     ImagePreviewGallery,
+    ImageCropper
   },
   methods: {
     handleError() {
@@ -174,20 +178,25 @@ export default {
     },
     async submitPost() {
       this.formData.zoneId = this.zoneId
-if (this.formData.content == '') {
-  this.toast.error(this.$t('please_input_content'));
-  return;
-}
-if (this.zoneId == '') {
-  this.toast.error(this.$t('premium_user_specify_zone'));
-  return;
-}
+      if (this.content == '') {
+        this.toast.error(this.$t('please_input_content'))
+        return
+      }
+      if (this.zoneId == '') {
+        this.toast.error(this.$t('premium_user_specify_zone'))
+        return
+      }
 
+    const formattedContent = this.content
+      .split('\n')
+      .map((paragraph) => `<p>${paragraph}</p>`)
+      .join('')
 
       let response
       this.isLoading = true
 
       if (this.isEditing) {
+        this.formData.content = formattedContent
         response = await updatePost(this.formData, this.handleSuccess, this.handleError)
         console.log(response.status)
         response.status ? (this.postStore.postToEdit = null) : null
@@ -197,24 +206,32 @@ if (this.zoneId == '') {
         return
       }
 
-
+      this.formData.content = formattedContent
       response = await createPost(this.formData, this.handleSuccess, this.handleError)
 
       if (response.status) {
         this.resetForm()
         this.$router.push({ name: 'community' })
-        this.toast.success('Post successfuly created');
+        this.toast.success('Post successfuly created')
       }
     },
-
     handleImageUpload(files) {
       if (!files || !files.length) {
         console.error('No files provided or the provided data is not an array')
         return
       }
 
-      this.formData.images = []
-      // this.imagesToFromLocalPreview = []
+      if (!Array.isArray(this.formData.images)) {
+        this.formData.images = []
+      }
+      if (!Array.isArray(this.formData.videos)) {
+        this.formData.videos = []
+      }
+
+      // Initialize imagesToFromLocalPreview if it is not already
+      if (!Array.isArray(this.imagesToFromLocalPreview)) {
+        this.imagesToFromLocalPreview = []
+      }
 
       files.forEach((file) => {
         if (file.type.startsWith('image/')) {
@@ -226,17 +243,34 @@ if (this.zoneId == '') {
           this.formData.videos.push(file)
         }
       })
+      console.log(this.formData.images.length)
 
       this.imagesFromHostToPreview = null
     },
 
+
+    handleCroppedImage(croppedImage) {
+      const file = this.dataURLtoFile(croppedImage, 'croppedImage.png')
+      this.formData.images.push(file)
+      this.selectedImage = null
+    },
+    dataURLtoFile(dataurl, filename) {
+      var arr = dataurl.split(','),
+        mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]),
+        n = bstr.length,
+        u8arr = new Uint8Array(n)
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n)
+      }
+      return new File([u8arr], filename, { type: mime })
+    },
     resetForm() {
       this.formData.content = ''
       this.formData.images = []
       this.formData.videos = []
       this.sectors.forEach((sector) => (sector.checked = false))
     },
-
     updateSectorChecked({ list, checked }) {
       if (checked) {
         this.formData.sectorChecked.push(list)
@@ -253,6 +287,7 @@ if (this.zoneId == '') {
   }
 }
 </script>
+
 <style scoped>
 label {
   font-size: 14px;

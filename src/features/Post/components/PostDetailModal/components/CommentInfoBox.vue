@@ -2,12 +2,7 @@
   <avatar-placeholder
   :username="`${comment.user.first_name} ${comment.user.second_name}`"
 ></avatar-placeholder>
-<!-- immage that will be gotten from host -->
-  <!-- <img
-    class="w-10 h-10 rounded-full"
-    :src="`${imageHost}${comment.user.avatar}`"
-    alt="User profile"
-  /> -->
+
   <div>
     <div>
       <div>
@@ -15,16 +10,7 @@
         <div class="comment-text">{{ comment.text }}</div>
         <div class="text-sm caption-1">{{ comment.created_at }}</div>
       </div>
-<!-- 
-      <div class="flex space-x-2 mt-2">
-        <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
-          Like
-        </button>
 
-        <button class="btn2 rounded hover:bg-gray-100 text-gray-normal font-bold">
-          Comment
-        </button>
-      </div> -->
     </div>
   </div>
 </template>
