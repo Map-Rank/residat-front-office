@@ -82,7 +82,7 @@
         isZoneLoading: false,
         showPageRefresh: false,
         errorMessage: 'Sorry no event found',
-        showMenu: false,
+        showMenu: true,
         isMenuVisible: false,
         events: [],
         popularEvents: [
