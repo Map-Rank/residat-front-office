@@ -297,6 +297,12 @@ router.beforeEach((to, from, next) => {
    else if (to.name === 'authentication' && authStore.user != null) {
     next({ name: 'community' }) 
   }
+   else if (to.name === 'reset-password' && authStore.user != null) {
+    next({ name: 'community' }) 
+  }
+   else if (to.name === 'forgot-password' && authStore.user != null) {
+    next({ name: 'community' }) 
+  }
   
   else {
     next()

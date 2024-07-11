@@ -1,10 +1,11 @@
 <template>
   <div class="reset-password-container flex">
-    <div class="image-container">
+    <div class="w-[30%] hidden md:flex items-center mr-4 ">
       <img src="/assets/images/Pages/Two factor authentication.svg" alt="Reset Password Image" class="reset-image"/>
     </div>
-    <div class="form-container">
-      <h1 class="mb-6">{{ $t('reset_password') }}</h1>
+    
+    <div class="form-container items-center">
+      <h2 class="text-xl font-semibold mb-2">{{ $t('reset_password') }}</h2>
       <vee-form ref="form" :validation-schema="schema" @submit="resetPassword">
         <div class="mb-6">
           <h3 for="email" class="inline-block mb-2">{{ $t('email') }}</h3>
@@ -206,10 +207,7 @@
     background-color: #fff;
   }
   
-  .image-container {
-    flex: 1;
-    margin-right: 20px;
-  }
+
   
   .reset-image {
     max-width: 100%;
