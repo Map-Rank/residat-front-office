@@ -89,11 +89,12 @@
 
     <div 
     id="impact"
-    class="w-full h-auto px-4 lg:px-16 py-8 bg-primary-normal flex flex-col justify-start items-center gap-8">
+    class="w-full  px-4 lg:px-16 py-8 bg-primary-normal flex flex-col justify-start items-center gap-8">
         <div class="flex flex-col justify-start items-center gap-2 text-white text-center">
             
             <TitleLanding
             text="Our Impact"
+            class="text-white"
             ></TitleLanding>
         </div>
     
@@ -110,13 +111,13 @@
         </div>
     </div>
 
- <div class="w-full h-auto py-16 bg-primary-normal flex flex-col justify-start items-center gap-10">
+ <div class="w-full  py-16 bg-primary-normal flex flex-col justify-start items-center gap-10">
      
-  <div class="w-full h-auto  bg-primary-normal flex flex-col justify-start items-center gap-10">
+  <div class="w-full   bg-primary-normal flex flex-col justify-start items-center gap-10">
       <div class="self-stretch text-center text-white text-3xl md:text-5xl font-bold font-['Poppins'] leading-snug md:leading-[44px]">Demo</div>
       
       <!-- Container for embedding YouTube video -->
-      <div class="relative w-full w-full aspect-video">
+      <div class="relative  w-full aspect-video">
           <!-- Embed YouTube video -->
           <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
       </div>
@@ -179,17 +180,10 @@
   <TitleLanding
   text="They Support Us"
   ></TitleLanding>
-  <div class="w-full flex justify-around items-center flex-wrap">
-      <img class="max-w-xs h-auto" src="\assets\images\LandingPage\WR logotype Red.jpg" />
-      <div class="flex justify-start items-center max-w-xs h-auto p-2.5">
-        <img class="w-auto h-auto" src="\assets\images\LandingPage\image001 (1).png" />
-      </div>
-      <div class="flex justify-start items-center max-w-xs h-auto p-2.5">
-        <img class="max-w-xs h-auto" src="\assets\images\LandingPage\Unicef venture fund.png" />
-      </div>
-    
-  
+  <div class="w-full grid gap-10 justify-center md:flex md:justify-around items-center">
+    <img v-for="src in suppoterLogos" :key="src" :src="src" class="w-auto h-24" />
   </div>
+
 </div>
 
 
@@ -227,6 +221,11 @@ export default {
           { text: "Connect with key stakeholders for adaptation advice." }
         ]
       },
+      suppoterLogos: [
+        "/assets/images/LandingPage/WR logotype Red.jpg",
+        "/assets/images/LandingPage/image001 (1).png",
+        "/assets/images/LandingPage/Unicef venture fund.png"
+      ],
       solutions: [
         {
           title: "Community intelligence reports",
