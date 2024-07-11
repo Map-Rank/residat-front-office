@@ -19,7 +19,7 @@
           <li v-for="(item, index) in navItems" :key="index">
             <a
               :href="absoluteHref(item.href)"
-              class="text-center text-primary-normal sm:text-[16px] lg:text-xl font-normal font-['Poppins'] leading-normal"
+              class="text-center text-primary-normal sm:text-[16px] lg:text-[16px] font-normal font-['Poppins'] leading-normal"
             >
               {{ item.label }}
             </a>
@@ -29,20 +29,18 @@
       
       <div class="hidden lg:flex justify-between space-x-2">
         <ButtonUi
-          label="Register"
-          colorObject="bg-primary-normal text-center w-auto"
-          customCss="text-center flex justify-center px-[40px] py-10"
-          textCss="text-center text-white"
-          @clickButton="navigateTo"
-          :isRoundedFull="true"
+        label="Register"
+        customCss="bg-secondary-normal text-center flex justify-center px-[40px] py-10"
+        textCss="text-center text-white"
+        @clickButton="navigateTo('register')"
+        :isRoundedFull="true"
           ></ButtonUi>
         <ButtonUi
           label="Sign In"
-          colorObject="bg-primary-normal text-center w-auto"
-          customCss="text-center flex justify-center px-[40px] py-3"
+          customCss=" bg-secondary-normal text-center flex justify-center px-[40px] py-3"
           textCss="text-center text-white"
           :isRoundedFull="true"
-          @clickButton="navigateTo"
+          @clickButton="navigateTo('login')"
         ></ButtonUi>
       </div>
     </div>
@@ -71,20 +69,18 @@
           <div class="mt-4 flex flex-col space-y-2">
             <ButtonUi
               label="Register"
-              colorObject="bg-primary-normal text-center w-auto"
-              customCss="text-center flex justify-center px-10 py-4"
+              customCss="bg-secondary-normal text-center flex justify-center px-10 py-4"
               textCss="text-center"
               :isRoundedFull="true"
-              @clickButton="navigateTo"
+              @clickButton="navigateTo('register')"
               :isDisabled="false"
               ></ButtonUi>
               <ButtonUi
               label="Sign In"
-              colorObject="bg-primary-normal text-center w-auto"
-              customCss="text-center flex justify-center px-10 py-3"
+              customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
               textCss="text-center"
               :isRoundedFull="true"
-              @clickButton="navigateTo"
+              @clickButton="navigateTo('login')"
             ></ButtonUi>
 
             
@@ -121,9 +117,10 @@ export default {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
-    navigateTo() {
-      console.log('object');
-        this.$router.push({name:'authentication'});
+    navigateTo(tab) {
+      console.log('object' + tab);
+      this.$router.push({ name: 'authentication', params: { tab: tab } });
+      
     },
     absoluteHref(relativeHref) {
       const baseUrl = window.location.origin;

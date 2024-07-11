@@ -5,7 +5,7 @@
         class="flex items-center justify-center min-h-screen pt-4 pb-20 text-center sm:block sm:p-0"
       >
         <div
-          class="inline-block mx-2 md:py-9 sm:px-6 md:px-5 md:w-4/5 lg:px-20  lg:w-3/5   align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform w-full transition-all sm:my-8 sm:align-middle "
+          class="inline-block mx-2 md:py-9 sm:px-6 md:px-5 md:w-4/5 lg:px-20  lg:w-3/5 align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform w-full transition-all sm:my-8 sm:align-middle "
         >
           <div class="grid gap-3 py-4 text-left px-6">
             <div class="flex justify-between items-center pb-4">
@@ -15,7 +15,7 @@
             </div>
             <div class="flex justify-center">
               <img
-                src="@\assets\images\Logos\logo-medium.svg"
+                src="@/assets/images/Logos/logo-medium.svg"
                 alt="Logo"
                 class="mx-auto"
               />
@@ -23,10 +23,10 @@
             <ul class="flex flex-wrap mb-4 border-2 border-secondary-normal">
               <li class="flex-auto text-center border-secondary-normal">
                 <button-ui
-                :label=" $t('login')"
+                  :label="$t('login')"
                   customCss="flex justify-center"
                   :colorObject="
-                    tab === 'login'
+                    currentTab === 'login'
                       ? {
                           'hover:text-white text-white bg-secondary-hover ': true,
                           'hover:text-secondary-normal': false,
@@ -37,16 +37,16 @@
                         }
                   "
                   width="full"
-                  @clickButton="clickButton()"
+                  @clickButton="setTab('login')"
                 >
                 </button-ui>
               </li>
               <li class="flex-auto text-center">
                 <button-ui
-                  :label=" $t('register')"
+                  :label="$t('register')"
                   customCss="flex justify-center"
                   :colorObject="
-                    tab === 'register'
+                    currentTab === 'register'
                       ? {
                           'hover:text-white text-white bg-secondary-hover': true,
                           'hover:text-secondary-normal': false,
@@ -57,14 +57,14 @@
                         }
                   "
                   width="full"
-                  @clickButton="clickButton()"
+                  @clickButton="setTab('register')"
                 >
                 </button-ui>
               </li>
             </ul>
-            <login-form v-if="tab === 'login'"></login-form>
-            <register-form v-if="tab === 'register'"></register-form>
-            <InstitutionRegister v-if="tab === 'institution'" ></InstitutionRegister>
+            <login-form v-if="currentTab === 'login'"></login-form>
+            <register-form v-if="currentTab === 'register'"></register-form>
+            <InstitutionRegister v-if="currentTab === 'institution'"></InstitutionRegister>
             <!-- <SocialButton /> -->
           </div>
         </div>
@@ -82,21 +82,33 @@ import "../../plugins/validation";
 
 export default {
   name: "AuthView",
+  props: ['tab',],
   data() {
     return {
-      tab: "login",
+      currentTab: this.tab || "login",
     };
   },
+  watch: {
+    $route: {
+      immediate: true,
+      async handler() {
+        console.log('this is tab' + this.tab);
+        this.currentTab = this.tab || 'login';
+      }}},
+
   methods: {
-    clickButton() {
-      this.tab = this.tab === "login" ? "register" : "login";
+    setTab(currentTabName) {
+      this.$router.push({ name: 'authentication', params: { tab: currentTabName } });
     },
+    closeAuthModel() {
+      // Logic to close the modal, if any
+    }
   },
   components: {
     LoginForm,
     RegisterForm,
     ButtonUi,
-    InstitutionRegister
+    InstitutionRegister,
   },
 };
 </script>

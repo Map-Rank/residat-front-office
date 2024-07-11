@@ -213,9 +213,14 @@ const router = createRouter({
       })
     },
     {
-      path: '/authentication',
+      path: '/authentication/:tab?',
       name: 'authentication',
-      component: AuthView
+      component: AuthView,
+      meta: { requiresAuth: false },
+      props: (route) => ({
+        tab: route.params.tab ,
+
+      })
     },
     {
       path: '/',
@@ -285,9 +290,15 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'landing-page' })
     next({ name: 'landing-page' })
-  } else if (to.name === 'landing-page' && authStore.user != null) {
+  }
+   else if (to.name === 'landing-page' && authStore.user != null) {
     next({ name: 'community' }) 
-  } else {
+  }
+   else if (to.name === 'authentication' && authStore.user != null) {
+    next({ name: 'community' }) 
+  }
+  
+  else {
     next()
   }
 })

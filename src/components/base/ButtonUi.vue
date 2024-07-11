@@ -40,7 +40,7 @@ export default {
       default:false},
     customCss:String,
     hoverState: Boolean,
-    colorObject: String,
+    colorObject: Object,
     color: String,
     loading: Boolean,
     isRoundedMd:Boolean,
