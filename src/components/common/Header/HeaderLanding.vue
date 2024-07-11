@@ -18,7 +18,7 @@
         <ul class="flex space-x-4 text-primary-normal">
           <li v-for="(item, index) in navItems" :key="index">
             <a
-              :href="item.href"
+              :href="absoluteHref(item.href)"
               class="text-center text-primary-normal sm:text-[16px] lg:text-xl font-normal font-['Poppins'] leading-normal"
             >
               {{ item.label }}
@@ -31,16 +31,18 @@
         <ButtonUi
           label="Register"
           colorObject="bg-primary-normal text-center w-auto"
-          customCss="text-center flex justify-center px-[20px] py-10"
+          customCss="text-center flex justify-center px-[40px] py-10"
           textCss="text-center text-white"
+          @clickButton="navigateTo"
           :isRoundedFull="true"
-        ></ButtonUi>
+          ></ButtonUi>
         <ButtonUi
           label="Sign In"
           colorObject="bg-primary-normal text-center w-auto"
-          customCss="text-center flex justify-center px-[20px] py-3"
+          customCss="text-center flex justify-center px-[40px] py-3"
           textCss="text-center text-white"
           :isRoundedFull="true"
+          @clickButton="navigateTo"
         ></ButtonUi>
       </div>
     </div>
@@ -59,7 +61,7 @@
           <ul class="space-y-4 text-primary-normal">
             <li v-for="(item, index) in navItems" :key="index">
               <a
-                :href="item.href"
+                :href="absoluteHref(item.href)"
                 class="block text-right text-primary-normal text-xl font-normal font-['Poppins'] leading-normal"
               >
                 {{ item.label }}
@@ -74,6 +76,7 @@
               textCss="text-center"
               :isRoundedFull="true"
               @clickButton="navigateTo"
+              :isDisabled="false"
               ></ButtonUi>
               <ButtonUi
               label="Sign In"
@@ -83,6 +86,8 @@
               :isRoundedFull="true"
               @clickButton="navigateTo"
             ></ButtonUi>
+
+            
           </div>
         </div>
       </div>
@@ -118,7 +123,11 @@ export default {
     },
     navigateTo() {
       console.log('object');
-        this.$router.push({name:'community'});
+        this.$router.push({name:'authentication'});
+    },
+    absoluteHref(relativeHref) {
+      const baseUrl = window.location.origin;
+      return `${baseUrl}/${relativeHref}`;
     }
   }
 };

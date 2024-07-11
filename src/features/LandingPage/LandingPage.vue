@@ -1,8 +1,8 @@
 <template>
   <div class="overflow-hidden">
-    <HeaderLanding></HeaderLanding>
+    <!-- <HeaderLanding></HeaderLanding> -->
 
-    <section class="grid items-center text-white text-center py-16 h-auto md:h-[80vh]">
+    <section class="grid items-center text-white text-center py-16 h-auto md:h-[90vh]">
       <div class="container mx-auto px-4">
         <div class="flex justify-center items-center mb-8">
           <img
@@ -146,6 +146,7 @@
         customCss="text-center flex justify-center px-10 py-4"
         textCss="text-center text-white"
         :isRoundedFull="true"
+        @clickButton="navigateTo"
       ></ButtonUi>
       <ButtonUi
         label="Sign In"
@@ -153,6 +154,7 @@
         customCss="text-center flex justify-center px-10 py-4"
         textCss="text-center text-white"
         :isRoundedFull="true"
+        @clickButton="navigateTo"
       ></ButtonUi>
       
     </div>
@@ -203,14 +205,12 @@
 </template>
 
 <script>
-import HeaderLanding from '../../components/common/Header/HeaderLanding.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue';
 import FooterLanding from './components/FooterLanding.vue'
 
 export default {
   name: 'LandingPage',
   components: {
-    HeaderLanding,
     ButtonUi,
     FooterLanding
   },
@@ -263,6 +263,14 @@ export default {
         }
       ]
     };
+
+ 
+  },
+  methods: {
+    navigateTo() {
+      console.log('object');
+        this.$router.push({name:'authentication'});
+    },
   }
 }
 </script>

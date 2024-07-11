@@ -13,6 +13,9 @@ export default defineStore('auth', {
     hiddenClass(state) {
       return state.user ==null ? 'hidden' : ''
     },
+    showClass(state) {
+      return state.user ==null ? '' : 'hidden'
+    },
     getCurrentUser(state) {
       return state.user;
     },
