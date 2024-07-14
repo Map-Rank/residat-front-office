@@ -257,7 +257,7 @@ export default {
   methods: {
     openShareModal() {
       console.log('open modal')
-      this.postLink = `https://dev.residat.com/show-post/${this.post.id}`
+      this.postLink = `https://www.residat.com/show-post/${this.post.id}`
       this.showShareModal = true
     },
     closeShareModal() {
