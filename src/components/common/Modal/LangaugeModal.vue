@@ -48,17 +48,17 @@ export default {
     goBack() {
     //   this.showModal = !this.showModal
     this.$router.go(-1)
+    // this.$router.push({ name: 'community',  });
     
-},
+    
+  },
+  
+  saveLanguage() {
+    console.log(this.lang);
+    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, this.lang);
+    window.location.reload();
 
-    saveLanguage() {
-      console.log(this.lang);
-      localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, this.lang)
-      this.goBack()
-      window.location.reload()
-      // this.changeLanguage(this.lang)
-      // this.goBack()
-    },
+  },
     changeLanguage(lang) {
       this.lang = lang
     }
