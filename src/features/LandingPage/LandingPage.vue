@@ -63,12 +63,15 @@
         text="Solution"
         ></TitleLanding>
   
-        <div
-          v-for="(solution, index) in solutions"
-          :key="index"
-          class="w-full  lg:w-[90%] grid items-center md:flex justify-between md:items-start my-10"
-        >
-          <div class="md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+      <div 
+        v-for="(solution, index) in solutions" 
+        :key="index" 
+        class="w-full lg:w-[90%] grid items-center md:flex justify-between md:items-start my-10"
+      >
+        <!-- For even rows -->
+        <template v-if="index % 2 === 0">
+          <!-- Normal alignment for mobile; text first then image -->
+          <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
             <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
               {{ solution.title }}
             </div>
@@ -76,11 +79,60 @@
               {{ solution.description }}
             </div>
           </div>
-  
-          <div class="md:w-[55%] flex justify-center">
+      
+          <div class="md:hidden md:w-[55%] flex justify-center">
             <img :src="solution.image" />
           </div>
-        </div>
+      
+          <!-- Interchanged alignment for desktop; text first then image -->
+          <div class="hidden md:block md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+              {{ solution.title }}
+            </div>
+            <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+              {{ solution.description }}
+            </div>
+          </div>
+      
+          <div class="hidden md:flex md:w-[55%]  justify-end">
+            <img :src="solution.image" />
+          </div>
+        </template>
+      
+        <!-- For odd rows -->
+        <template v-else>
+          <!-- Normal alignment for mobile; text first then image -->
+          <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+              {{ solution.title }}
+            </div>
+            <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+              {{ solution.description }}
+            </div>
+          </div>
+      
+          <div class="md:hidden md:w-[55%] flex justify-center">
+            <img :src="solution.image" />
+          </div>
+      
+          <!-- Interchanged alignment for desktop; image first then text -->
+          <div class="hidden md:block md:w-[55%] flex justify-end">
+            <img :src="solution.image" />
+          </div>
+          
+          <div class="hidden md:block md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+              {{ solution.title }}
+            </div>
+            <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+              {{ solution.description }}
+            </div>
+          </div>
+        </template>
+      </div>
+      
+
+
       </div>
     </div>
 
@@ -177,14 +229,14 @@
 <!-- sponsors -->
 
 <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-10">
-  <TitleLanding
-  text="They Support Us"
-  ></TitleLanding>
-  <div class="w-full grid gap-10 justify-center md:flex md:justify-around items-center">
-    <img v-for="src in suppoterLogos" :key="src" :src="src" class="w-auto h-24" />
+  <TitleLanding text="They Support Us"></TitleLanding>
+  
+  <!-- Adjust grid settings for mobile view -->
+  <div class="w-full flex flex-col md:flex-row gap-10 justify-center md:justify-around items-center">
+    <img v-for="src in suppoterLogos" :key="src" :src="src" class="w-auto h-20 md:h-24" />
   </div>
-
 </div>
+
 
 
 
@@ -237,7 +289,7 @@ export default {
           title: "Interactive geospatial dashboard",
           description:
             "Smart and interactive spatial maps (granular drone maps) profiling and forecasting climate risks (floods and droughts) in space and time. ",
-          image: "\\assets\\images\\LandingPage\\community-display.svg",
+          image: "\\assets\\images\\LandingPage\\dashboard-display.svg",
         },
         {
           title: "Mass alert infrastructure",

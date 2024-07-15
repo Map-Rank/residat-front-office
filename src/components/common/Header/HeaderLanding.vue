@@ -50,17 +50,21 @@
       <div v-if="isSidebarOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden" @click.self="toggleSidebar">
         <div class="fixed right-0 top-0 w-[60%] h-full bg-primary-normal p-4 space-y-4 shadow-lg z-50">
           <!-- Close Button -->
-          <button class="text-primary-normal mb-4" @click="toggleSidebar">
+          <button class="text-white mb-4" @click="toggleSidebar">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
           <!-- Sidebar Links -->
-          <ul class="space-y-4 text-primary-normal">
+           <div class="flex justify-end pb-[40px]">
+
+             <AppLogo isWhite=yes ></AppLogo>
+           </div>
+          <ul class="space-y-4 text-primary-normal pb-10">
             <li v-for="(item, index) in navItems" :key="index">
               <a
                 :href="absoluteHref(item.href)"
-                class="block text-right text-primary-normal text-xl font-normal font-['Poppins'] leading-normal"
+                class="block text-right text-white text-xl font-normal font-['Poppins'] leading-normal"
               >
                 {{ item.label }}
               </a>
