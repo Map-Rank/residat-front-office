@@ -49,7 +49,7 @@
             :label="'Delete'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
-            @clickButton="deletePost()"
+            @clickButton="openModal()"
           >
           </button-ui>
 
@@ -152,6 +152,9 @@
     :message="this.messageShare"
     @close="this.closeShareModal"
   ></share-modal>
+
+  <ConfirmationModal ref="confirmationModal" @confirm="deletePost()" />
+
 </template>
 
 <script>
@@ -176,6 +179,8 @@ import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
 import useModalStore from '@/stores/modalStore.js'
 import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import { useToast } from 'vue-toastification'
+import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
+
 
 export default {
   name: 'PostComponent',
@@ -302,19 +307,19 @@ export default {
     showModal() {
       this.isModalVisible = true
     },
+    openModal() {
+      this.$refs.confirmationModal.show();
+    },
 
-    async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
-      if (window.confirm(alertMessage)) {
+    async deletePost() {   
         try {
-          await deletePost(this.postId)
+        await deletePost(this.postId)
 
-          window.location.reload()
-        } catch (error) {
-          console.error('Error deleting post:', error)
-        }
-      } else {
-        console.log('Post deletion cancelled by user')
+        window.location.reload()
+      } catch (error) {
+        console.error('Error deleting post:', error)
       }
+       
     },
 
     viewPost() {
@@ -434,7 +439,8 @@ export default {
     ButtonUi,
     ImagePostGallery,
     PostDetailModal,
-    ShareModal
+    ShareModal,
+    ConfirmationModal
   },
 
   props: {

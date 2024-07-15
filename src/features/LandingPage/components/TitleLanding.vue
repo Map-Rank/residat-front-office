@@ -12,6 +12,7 @@ export default {
       type: String,
       required: true
     },
+    
     classes: {
       type: String,
       default: 'text-secondary-normal'

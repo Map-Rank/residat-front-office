@@ -92,6 +92,8 @@
         </div>
       </div>
     </transition>
+
+
   </header>
 </template>
 
@@ -103,7 +105,7 @@ export default {
   name: 'HeaderLanding',
   components: {
     AppLogo,
-    ButtonUi
+    ButtonUi,
   },
   data() {
     return {

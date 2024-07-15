@@ -72,7 +72,7 @@
         <template v-if="index % 2 === 0">
           <!-- Normal alignment for mobile; text first then image -->
           <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
-            <div class="text-black pb-4 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+            <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
               {{ solution.title }}
             </div>
             <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
@@ -86,7 +86,7 @@
       
           <!-- Interchanged alignment for desktop; text first then image -->
           <div class="hidden md:block md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
-            <div class="text-black pb-4 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+            <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
               {{ solution.title }}
             </div>
             <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
@@ -103,7 +103,7 @@
         <template v-else>
           <!-- Normal alignment for mobile; text first then image -->
           <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
-            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+            <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
               {{ solution.title }}
             </div>
             <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
@@ -121,7 +121,7 @@
           </div>
           
           <div class="hidden md:block md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
-            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+            <div class="text-black  pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
               {{ solution.title }}
             </div>
             <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
@@ -144,10 +144,9 @@
     class="w-full  px-4 lg:px-16 py-8 bg-primary-normal flex flex-col justify-start items-center gap-8">
         <div class="flex flex-col justify-start items-center gap-2 text-white text-center">
             
-            <TitleLanding
-            text="Our Impact"
-            class="text-white"
-            ></TitleLanding>
+          <div :class="classes" class="self-stretch text-center text-white text-[28px] md:text-[38] font-bold font-[Poppins] leading-[44px]">
+            Our Impact
+          </div>
         </div>
     
         <div class="w-full flex flex-wrap justify-center md:justify-around items-center gap-6 lg:gap-12">
@@ -163,11 +162,12 @@
         </div>
     </div>
 
- <div class="w-full  py-16 bg-primary-normal flex flex-col justify-start items-center gap-10">
+ <div class="w-full  py-16 bg-white flex flex-col justify-start items-center gap-10">
      
-  <div class="w-full   bg-primary-normal flex flex-col justify-start items-center gap-10">
-      <div class="self-stretch text-center text-white text-3xl md:text-5xl font-bold font-['Poppins'] leading-snug md:leading-[44px]">Demo</div>
-      
+  <div class="w-full   bg-white flex flex-col justify-start items-center gap-10">
+    <div :class="classes" class="self-stretch text-center text-primary-normal text-[28px] md:text-[38] font-bold font-[Poppins] leading-[44px]">
+      Demo
+    </div>      
       <!-- Container for embedding YouTube video -->
       <div class="relative  w-full aspect-video">
           <!-- Embed YouTube video -->
@@ -229,11 +229,12 @@
 <!-- sponsors -->
 
 <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-10">
-  <TitleLanding text="They Support Us"></TitleLanding>
+  <div :class="classes" class="self-stretch text-center text-secondary-norma text-[28px] md:text-[38] font-bold font-[Poppins] leading-[44px]">
+    They Support Us  </div>
   
   <!-- Adjust grid settings for mobile view -->
   <div class="w-full flex flex-col md:flex-row gap-10 justify-center md:justify-around items-center">
-    <img v-for="src in suppoterLogos" :key="src" :src="src" class="w-auto h-20 md:h-24" />
+    <img v-for="src in suppoterLogos" :key="src" :src="src" class="w-auto h-10 md:h-24" />
   </div>
 </div>
 
