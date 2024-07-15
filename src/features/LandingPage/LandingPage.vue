@@ -72,7 +72,7 @@
         <template v-if="index % 2 === 0">
           <!-- Normal alignment for mobile; text first then image -->
           <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
-            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+            <div class="text-black pb-4 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
               {{ solution.title }}
             </div>
             <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
@@ -86,7 +86,7 @@
       
           <!-- Interchanged alignment for desktop; text first then image -->
           <div class="hidden md:block md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
-            <div class="text-black text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+            <div class="text-black pb-4 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
               {{ solution.title }}
             </div>
             <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">

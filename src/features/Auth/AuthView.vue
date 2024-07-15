@@ -20,7 +20,9 @@
                 class="mx-auto"
               />
             </div>
-            <ul class="flex flex-wrap mb-4 border-2 border-secondary-normal">
+            <ul
+            v-if="tab != 'institution'"
+            class="flex flex-wrap mb-4 border-2 border-secondary-normal">
               <li class="flex-auto text-center border-secondary-normal">
                 <button-ui
                   :label="$t('login')"
@@ -66,6 +68,13 @@
             <register-form v-if="currentTab === 'register'"></register-form>
             <InstitutionRegister v-if="currentTab === 'institution'"></InstitutionRegister>
             <!-- <SocialButton /> -->
+             <div
+              v-if="tab != 'institution'"
+             class="flex justify-center ">
+              <p class="text-secondary-normal hover:underline cursor-pointer" 
+              @click="navigateTo('institution')"
+              >register as an institution</p>
+             </div>
           </div>
         </div>
       </div>
@@ -99,6 +108,11 @@ export default {
   methods: {
     setTab(currentTabName) {
       this.$router.push({ name: 'authentication', params: { tab: currentTabName } });
+    },
+    navigateTo(tab) {
+      console.log('object' + tab);
+      this.$router.push({ name: 'authentication', params: { tab: tab } });
+      
     },
     closeAuthModel() {
       // Logic to close the modal, if any
