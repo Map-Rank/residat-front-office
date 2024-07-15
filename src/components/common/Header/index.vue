@@ -31,6 +31,7 @@
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
           <button-ui
+            :leftIcon="'\\assets\\icons\\profile-fill.svg'"
             :label="$t('profile_page')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -39,6 +40,7 @@
           </button-ui>
 
           <button-ui
+             :leftIcon="'\\assets\\icons\\post-fill.svg'"
             :label="$t('create_post')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -46,6 +48,7 @@
           >
           </button-ui>
           <button-ui
+                :leftIcon="'\\assets\\icons\\event-fill.svg'"
             :label="$t('create_event')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -53,6 +56,7 @@
           >
           </button-ui>
           <button-ui
+          :leftIcon="'\\assets\\icons\\setting-fill.svg'"
             :label="$t('settings_privacy')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -61,6 +65,7 @@
           </button-ui>
 
           <button-ui
+            :leftIcon="'\\assets\\icons\\logout-fill.svg'"
             :label="$t('logout')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"

@@ -259,6 +259,14 @@
           />
         </div>
 
+        <div>
+          <label class="inline-block mb-2">{{ $t('chose_langauge') }}</label>
+          <BaseDropdown
+          v-if="!isLoading && !isSubdivisionLoading"
+          :options="langauge"
+        />
+        </div>
+
         <div class="mb-4">
           <div class="grid mb-5">
             <label class="inline-block mb-2">{{ $t('sector') }}</label>
@@ -409,6 +417,16 @@ components: {
           name: this.$t('choose_your_subdivision'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
+        }
+      ],
+      langauge: [
+        {
+          id: 0,
+          name: this.$t('en'),
+        },
+        {
+          id: 1,
+          name: this.$t('fr'),
         }
       ],
       isLoading: false,

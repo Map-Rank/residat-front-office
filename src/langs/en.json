@@ -1,6 +1,7 @@
 {
   "fr": "French",
   "en": "English",
+  "chose_langauge": "Select your preferences language",
   "greeting": "Hello!",
   "farewell": "Goodbye!",
   "email": "Email",
