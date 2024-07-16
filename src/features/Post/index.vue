@@ -49,7 +49,7 @@
             :label="'Delete'"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
-            @clickButton="deletePost()"
+            @clickButton="openModal()"
           >
           </button-ui>
 
@@ -152,6 +152,9 @@
     :message="this.messageShare"
     @close="this.closeShareModal"
   ></share-modal>
+
+  <ConfirmationModal ref="confirmationModal" @confirm="deletePost()" />
+
 </template>
 
 <script>
@@ -176,6 +179,8 @@ import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
 import useModalStore from '@/stores/modalStore.js'
 import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import { useToast } from 'vue-toastification'
+import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
+
 
 export default {
   name: 'PostComponent',
@@ -204,7 +209,7 @@ export default {
       isModalVisible: false,
       likeCount: this.like_count,
       customPost: this.post,
-      customLiked: this.liked,
+      customLike: this.liked,
       hasLikeouUnlike: false,
       isMenuVisible: false,
       imageHost: URL_LINK.imageHostLink,
@@ -220,7 +225,7 @@ export default {
           svgContent: '\\assets\\icons\\heart-outline.svg',
           svgContentHover: '\\assets\\icons\\heart-fill.svg',
           labelText: this.$t('like'),
-          isActive: this.customLiked,
+          isActive: this.liked,
           right: true
         },
         {
@@ -240,6 +245,7 @@ export default {
     }
   },
 
+
   computed: {
     formattedPostContent() {
       return this.postContent.replace(/<p><\/p>/g, '<br>').replace(/\n/g, '<br>')
@@ -257,7 +263,7 @@ export default {
   methods: {
     openShareModal() {
       console.log('open modal')
-      this.postLink = `https://dev.residat.com/show-post/${this.post.id}`
+      this.postLink = `https://www.residat.com/show-post/${this.post.id}`
       this.showShareModal = true
     },
     closeShareModal() {
@@ -302,19 +308,19 @@ export default {
     showModal() {
       this.isModalVisible = true
     },
+    openModal() {
+      this.$refs.confirmationModal.show();
+    },
 
-    async deletePost(alertMessage = 'Are you sure you want to delete this post?') {
-      if (window.confirm(alertMessage)) {
+    async deletePost() {   
         try {
-          await deletePost(this.postId)
+        await deletePost(this.postId)
 
-          window.location.reload()
-        } catch (error) {
-          console.error('Error deleting post:', error)
-        }
-      } else {
-        console.log('Post deletion cancelled by user')
+        window.location.reload()
+      } catch (error) {
+        console.error('Error deleting post:', error)
       }
+       
     },
 
     viewPost() {
@@ -338,12 +344,12 @@ export default {
       switch (index) {
         case 0:
           await likePost(this.postId)
-          if (this.customLiked) {
-            this.customLiked = false
+          if (this.customLike) {
+            this.customLike = false
             this.customPost.like_count--
-            console.log(this.customLiked)
+            console.log(this.customLike)
           } else {
-            this.customLiked = true
+            this.customLike = true
             this.customPost.like_count++
           }
           break
@@ -434,7 +440,8 @@ export default {
     ButtonUi,
     ImagePostGallery,
     PostDetailModal,
-    ShareModal
+    ShareModal,
+    ConfirmationModal
   },
 
   props: {

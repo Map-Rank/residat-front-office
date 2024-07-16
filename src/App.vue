@@ -1,8 +1,9 @@
 <template>
   <div></div>
   <div class="body flex flex-col min-h-screen">
+    <!-- <LandingPage></LandingPage> -->
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
-   <!-- <LandingPage></LandingPage> -->
+    <!-- <HeaderLanding  :class="showClass" class="fixed  w-full z-10"> </HeaderLanding> -->
 
     <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
       <router-view></router-view>
@@ -16,6 +17,8 @@
     ></bottom-navigation-app-app>
 
     <FeedbackButton />
+    
+    <ModalsContainer />
 
  
 
@@ -35,6 +38,8 @@ import FeedbackButton from '@/components/base/FeedbackButton.vue'
 import NotificationHandler from './components/base/NotificationHandler.vue'
 import HeaderLanding from './components/common/Header/HeaderLanding.vue'
 import LandingPage from './features/LandingPage/LandingPage.vue'
+import { ModalsContainer } from 'vue-final-modal'
+
 
 export default {
   name: 'App',
@@ -49,6 +54,7 @@ export default {
     HeaderApp,
     FooterApp,
     LandingPage,
+    ModalsContainer,
     NotificationHandler,
     FeedbackButton,
     BottomNavigationAppApp,
@@ -56,7 +62,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useAuthStore, ['hiddenClass']),
+    ...mapState(useAuthStore, ['hiddenClass','showClass']),
     ...mapState(usePostStore, ['hideComponent'])
   }
 }

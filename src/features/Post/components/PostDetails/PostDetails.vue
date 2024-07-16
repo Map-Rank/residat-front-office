@@ -162,7 +162,7 @@ export default {
     ...mapActions(usePostStore, ["togglePostDetails"]),
 
     openShareModal() {
-      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
+      this.modalStore.openModal(`https://www.residat.com/show-post/${this.post.id}`)
       // this.modalStore.openModal(`https://dev.residat.com/show-post`)
     },
 

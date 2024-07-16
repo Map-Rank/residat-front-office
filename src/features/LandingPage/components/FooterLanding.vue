@@ -1,6 +1,6 @@
 <template>
   <footer class="w-full bg-primary-normal py-15">
-    <div class="container mx-auto px-4 md:px-[20px] lg:px-24 flex flex-col md:flex-row justify-between  items-center lg:items-start gap-8">
+    <div class="container mx-auto px-4 md:px-[20px] lg:px-24 flex flex-col md:flex-row justify-between items-center lg:items-start gap-8">
       <!-- Logo Section -->
       <div class="w-[40%] grid justify-center lg:justify-start items-start gap-2">
         <div class="w-full flex justify-center md:justify-start">
@@ -12,7 +12,7 @@
       </div>
 
       <!-- Links Sections -->
-      <div v-for="section in sections" :key="section.title" class="w-full md:w-1/4 grid justify-center lg:justify-start items-start gap-4">
+      <div v-for="section in sections" :key="section.title" class="w-full md:w-1/4 grid justify-center md:justify-center lg:justify-start items-center md:items-center lg:items-start gap-4 text-center md:text-center lg:text-left">
         <div class="text-white text-lg font-semibold font-poppins">{{ section.title }}</div>
         <div class="flex flex-col gap-2">
           <a v-for="link in section.links" :key="link.text" :href="link.href" class="text-white text-base font-normal font-poppins">{{ link.text }}</a>
@@ -24,6 +24,7 @@
     </div>
   </footer>
 </template>
+
 
 <script>
 export default {

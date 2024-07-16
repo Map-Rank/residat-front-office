@@ -50,16 +50,7 @@ const router = createRouter({
         return '/community';
       }
     },
-    {
-      path: '/home',
-      name: 'home',
-      component: LandingPage,
-      meta: { requiresAuth: false },
-      // meta: { requiresAuth: true },
-      // redirect: (to) => {
-      //   return '/community';
-      // }
-    },
+
     {
       path: '/broadcast-notification',
       name: 'broadcast-notification',
@@ -222,9 +213,24 @@ const router = createRouter({
       })
     },
     {
-      path: '/',
+      path: '/authentication/:tab?',
       name: 'authentication',
-      component: AuthView
+      component: AuthView,
+      meta: { requiresAuth: false },
+      props: (route) => ({
+        tab: route.params.tab ,
+
+      })
+    },
+    {
+      path: '/',
+      name: 'landing-page',
+      component: LandingPage,
+      meta: { requiresAuth: false },
+      // meta: { requiresAuth: true },
+      // redirect: (to) => {
+      //   return '/community';
+      // }
     },
     {
       path: '/otp',
@@ -282,12 +288,37 @@ router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
 
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
-    next({ name: 'authentication' })
-  } else if (to.name === 'authentication' && authStore.user != null) {
+    next({ name: 'landing-page' })
+    next({ name: 'landing-page' })
+  }
+   else if (to.name === 'landing-page' && authStore.user != null) {
     next({ name: 'community' }) 
-  } else {
+  }
+   else if (to.name === 'authentication' && authStore.user != null) {
+    next({ name: 'community' }) 
+  }
+   else if (to.name === 'reset-password' && authStore.user != null) {
+    next({ name: 'community' }) 
+  }
+   else if (to.name === 'forgot-password' && authStore.user != null) {
+    next({ name: 'community' }) 
+  }
+  
+  else {
     next()
   }
 })
+// router.beforeEach((to, from, next) => {
+//   const authStore = useAuthStore()
+
+//   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
+//     next({ name: 'authentication' })
+//     next({ name: 'authentication' })
+//   } else if (to.name === 'authentication' && authStore.user != null) {
+//     next({ name: 'community' }) 
+//   } else {
+//     next()
+//   }
+// })
 
 export default router

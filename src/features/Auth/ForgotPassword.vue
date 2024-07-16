@@ -1,5 +1,5 @@
 <template>
-  <div class="back flex justify-center items-center bg-gray-100">
+  <div class="back flex justify-center items-center bg-gray-100 pt-[40px]">
     <div class="bg-white shadow-lg rounded-lg p-5" style="width: 25%;">
       <div class="text-center">
         <img

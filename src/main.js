@@ -15,6 +15,10 @@ import Toast, { POSITION } from 'vue-toastification';
 import 'vue-toastification/dist/index.css';
 import { getFcmToken } from '@/firebaseConfig';
 import dateFormat from './utils/dateFormat'
+import { createVfm } from 'vue-final-modal'
+import 'vue-final-modal/style.css'
+
+
 
 const app = createApp(App)
 
@@ -26,6 +30,9 @@ app.use(VeeValidatePlugin)
 app.use(i18n)
 app.use(VueTheMask)
 app.directive('date-format', dateFormat);
+
+const vfm = createVfm()
+app.use(vfm)
 
 
 const options = {
@@ -51,11 +58,11 @@ sectorStore.initializeStore()
 const authStore = useAuthStore()
 authStore.initializeAuthState()
 
-getFcmToken().then(token => {
-    if (token) {
-      console.log('FCM token:Firebase initialise');
-    }
-  });
+// getFcmToken().then(token => {
+//     if (token) {
+//       console.log('FCM token:Firebase initialise');
+//     }
+//   });
 
 app.mount('#app')
 

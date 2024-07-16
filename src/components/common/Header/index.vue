@@ -31,6 +31,7 @@
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
           <button-ui
+            :leftIcon="'\\assets\\icons\\profile-fill.svg'"
             :label="$t('profile_page')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -39,6 +40,7 @@
           </button-ui>
 
           <button-ui
+             :leftIcon="'\\assets\\icons\\post-fill.svg'"
             :label="$t('create_post')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -46,6 +48,7 @@
           >
           </button-ui>
           <button-ui
+                :leftIcon="'\\assets\\icons\\event-fill.svg'"
             :label="$t('create_event')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -53,6 +56,7 @@
           >
           </button-ui>
           <button-ui
+          :leftIcon="'\\assets\\icons\\setting-fill.svg'"
             :label="$t('settings_privacy')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -61,6 +65,16 @@
           </button-ui>
 
           <button-ui
+          :leftIcon="'\\assets\\icons\\translate.svg'"
+            :label="$t('translate')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100 block md:hidden'"
+            @clickButton="menuMethods(5)"
+          >
+          </button-ui>
+
+          <button-ui
+            :leftIcon="'\\assets\\icons\\logout-fill.svg'"
             :label="$t('logout')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -270,6 +284,9 @@
         </nav>
       </div>
     </div>
+
+    <ConfirmationModal ref="confirmationModal" @confirm="logout()" />
+
   </header>
 </template>
 
@@ -281,6 +298,8 @@ import SearchBar from '@/components/base/SearchBar.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import AppLogo from '@/components/base/AppLogo.vue'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
+import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
+
 
 export default {
   name: 'HeaderApp',
@@ -288,7 +307,9 @@ export default {
     SearchBar,
     IconWithLabel,
     ButtonUi,
-    AppLogo
+    AppLogo,
+    ConfirmationModal
+
   },
 
   // created() {
@@ -352,6 +373,9 @@ export default {
   },
 
   methods: {
+    openModal() {
+      this.$refs.confirmationModal.show();
+    },
     redirectToNotifications() {
       this.$router.push({ name: 'notification' })
       this.isNotificationDropdownVisible = false
@@ -420,14 +444,19 @@ export default {
           this.$router.push({ name: 'setting' })
           this.toggleMenu()
           break
-        case 4:
-          if (window.confirm('Are you sure you want to log out?')) {
-            this.logout()
-          } else {
-            console.log('Logout cancelled')
-          }
-          this.toggleMenu()
-          break
+          case 4:
+            this.openModal()
+            // if (window.confirm('Are you sure you want to log out?')) {
+            //   this.logout()
+            // } else {
+            //   console.log('Logout cancelled')
+            // }
+            this.toggleMenu()
+            break
+            case 5:
+              this.$router.push({ name: 'change-langauge' })
+              this.toggleMenu()
+              break
       }
     },
 

@@ -2,8 +2,8 @@
   <button
   :type="type"
     :class="[
-      'flex items-center  gap-2 px-2 py-2 transition secon ',
-      'disabled:opacity-50 disabled:cursor-not-allowed ',
+      'flex items-center  gap-2 px-2 py-2 transition ',
+   
       isRoundedFull ? 'rounded-full' : '',
       isRoundedMd ? 'rounded-lg' : '',
       color,
@@ -34,10 +34,13 @@ export default {
     },
     leftIcon: String,
     rightIcon: String,
-    isDisabled: Boolean,
+    isDisabled: {
+      type:Boolean,
+    
+      default:false},
     customCss:String,
     hoverState: Boolean,
-    colorObject: String,
+    colorObject: Object,
     color: String,
     loading: Boolean,
     isRoundedMd:Boolean,

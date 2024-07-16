@@ -18,8 +18,8 @@
         <ul class="flex space-x-4 text-primary-normal">
           <li v-for="(item, index) in navItems" :key="index">
             <a
-              :href="item.href"
-              class="text-center text-primary-normal sm:text-[16px] lg:text-xl font-normal font-['Poppins'] leading-normal"
+              :href="absoluteHref(item.href)"
+              class="text-center text-primary-normal sm:text-[16px] lg:text-[16px] font-normal font-['Poppins'] leading-normal"
             >
               {{ item.label }}
             </a>
@@ -29,18 +29,18 @@
       
       <div class="hidden lg:flex justify-between space-x-2">
         <ButtonUi
-          label="Register"
-          colorObject="bg-primary-normal text-center w-auto"
-          customCss="text-center flex justify-center px-[20px] py-10"
-          textCss="text-center text-white"
-          :isRoundedFull="true"
-        ></ButtonUi>
+        label="Register"
+        customCss="bg-secondary-normal text-center flex justify-center px-[40px] py-10"
+        textCss="text-center text-white"
+        @clickButton="navigateTo('register')"
+        :isRoundedFull="true"
+          ></ButtonUi>
         <ButtonUi
           label="Sign In"
-          colorObject="bg-primary-normal text-center w-auto"
-          customCss="text-center flex justify-center px-[20px] py-3"
+          customCss=" bg-secondary-normal text-center flex justify-center px-[40px] py-3"
           textCss="text-center text-white"
           :isRoundedFull="true"
+          @clickButton="navigateTo('login')"
         ></ButtonUi>
       </div>
     </div>
@@ -50,17 +50,21 @@
       <div v-if="isSidebarOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden" @click.self="toggleSidebar">
         <div class="fixed right-0 top-0 w-[60%] h-full bg-primary-normal p-4 space-y-4 shadow-lg z-50">
           <!-- Close Button -->
-          <button class="text-primary-normal mb-4" @click="toggleSidebar">
+          <button class="text-white mb-4" @click="toggleSidebar">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
             </svg>
           </button>
           <!-- Sidebar Links -->
-          <ul class="space-y-4 text-primary-normal">
+           <div class="flex justify-end pb-[40px]">
+
+             <AppLogo isWhite=yes ></AppLogo>
+           </div>
+          <ul class="space-y-4 text-primary-normal pb-10">
             <li v-for="(item, index) in navItems" :key="index">
               <a
-                :href="item.href"
-                class="block text-right text-primary-normal text-xl font-normal font-['Poppins'] leading-normal"
+                :href="absoluteHref(item.href)"
+                class="block text-right text-white text-xl font-normal font-['Poppins'] leading-normal"
               >
                 {{ item.label }}
               </a>
@@ -69,24 +73,27 @@
           <div class="mt-4 flex flex-col space-y-2">
             <ButtonUi
               label="Register"
-              colorObject="bg-primary-normal text-center w-auto"
-              customCss="text-center flex justify-center px-10 py-4"
+              customCss="bg-secondary-normal text-center flex justify-center px-10 py-4"
               textCss="text-center"
               :isRoundedFull="true"
-              @clickButton="navigateTo"
+              @clickButton="navigateTo('register')"
+              :isDisabled="false"
               ></ButtonUi>
               <ButtonUi
               label="Sign In"
-              colorObject="bg-primary-normal text-center w-auto"
-              customCss="text-center flex justify-center px-10 py-3"
+              customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
               textCss="text-center"
               :isRoundedFull="true"
-              @clickButton="navigateTo"
+              @clickButton="navigateTo('login')"
             ></ButtonUi>
+
+            
           </div>
         </div>
       </div>
     </transition>
+
+
   </header>
 </template>
 
@@ -98,7 +105,7 @@ export default {
   name: 'HeaderLanding',
   components: {
     AppLogo,
-    ButtonUi
+    ButtonUi,
   },
   data() {
     return {
@@ -116,9 +123,14 @@ export default {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
-    navigateTo() {
-      console.log('object');
-        this.$router.push({name:'community'});
+    navigateTo(tab) {
+      console.log('object' + tab);
+      this.$router.push({ name: 'authentication', params: { tab: tab } });
+      
+    },
+    absoluteHref(relativeHref) {
+      const baseUrl = window.location.origin;
+      return `${baseUrl}/${relativeHref}`;
     }
   }
 };
