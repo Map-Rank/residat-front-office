@@ -209,7 +209,7 @@ export default {
       isModalVisible: false,
       likeCount: this.like_count,
       customPost: this.post,
-      customLiked: this.liked,
+      customLike: this.liked,
       hasLikeouUnlike: false,
       isMenuVisible: false,
       imageHost: URL_LINK.imageHostLink,
@@ -225,7 +225,7 @@ export default {
           svgContent: '\\assets\\icons\\heart-outline.svg',
           svgContentHover: '\\assets\\icons\\heart-fill.svg',
           labelText: this.$t('like'),
-          isActive: this.customLiked,
+          isActive: this.liked,
           right: true
         },
         {
@@ -244,6 +244,7 @@ export default {
       ]
     }
   },
+
 
   computed: {
     formattedPostContent() {
@@ -343,12 +344,12 @@ export default {
       switch (index) {
         case 0:
           await likePost(this.postId)
-          if (this.customLiked) {
-            this.customLiked = false
+          if (this.customLike) {
+            this.customLike = false
             this.customPost.like_count--
-            console.log(this.customLiked)
+            console.log(this.customLike)
           } else {
-            this.customLiked = true
+            this.customLike = true
             this.customPost.like_count++
           }
           break
