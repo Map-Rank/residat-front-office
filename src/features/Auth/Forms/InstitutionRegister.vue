@@ -132,15 +132,14 @@ eslint-disable vue/no-parsing-error
       
           <div v-if="formData.documents.length > 0" class="mt-4">
             <p class="mb-2">{{ $t('preview_doc') }}:</p>
-            <div class="flex gap-4">
-              <div v-for="(doc, index) in documentPreviews" :key="index" class="overflow-hidden">
-                <div class="p-2 border rounded  w-fit">
-                  <div class="flex flex-col items-center justify-center">
-                    <img v-if="doc.type.startsWith('image/')" :src="doc.url" alt="Document Preview" class="w-auto h-24 object-cover">
-                    <img v-else-if="doc.type === 'application/pdf'" src="/assets/images/AuthView/pdf.png" alt="PDF Icon" class="w-10 h-10">
-                    <img v-else-if="['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(doc.type)" src="/assets/images/AuthView/pdf.png" alt="Word Icon" class="w-10 h-10">
-                    <p class="mt-2 text-primary-normal text-sm text-center">{{ doc.name }}</p>
-                  </div>
+            <div class="flex gap-4 flex-wrap">
+              <div v-for="(doc, index) in documentPreviews" :key="index" class="relative overflow-hidden p-2 border rounded  w-fit">
+                <div class="flex flex-col items-center justify-center">
+                  <button class="absolute top-0 right-0 w-4 font-bold text-red-600 bg-gray-800 text-base " @click="removeDocument(index)">X</button>
+                  <img v-if="doc.type.startsWith('image/')" :src="doc.url" alt="Document Preview" class="w-auto h-24 object-cover">
+                  <img v-else-if="doc.type === 'application/pdf'" src="/assets/images/AuthView/pdf.png" alt="PDF Icon" class="w-10 h-10">
+                  <img v-else-if="['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(doc.type)" src="/assets/images/AuthView/pdf.png" alt="Word Icon" class="w-10 h-10">
+                  <p class="mt-2 text-primary-normal text-sm text-center">{{ doc.name }}</p>
                 </div>
               </div>
             </div>
