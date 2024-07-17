@@ -67,20 +67,16 @@ const institutionalRequest = async (institutionData, authStore, onSuccess, onErr
     formData.append('gender', institutionData.gender)
     formData.append('zone_id', institutionData.zone)
     formData.append('profile_picture', institutionData.profile_picture)
-    formData.append('official_document', institutionData.documents)
+    formData.append('official_document', institutionData.documents[0])
 
 
-
-  
+    // institutionData.documents.forEach((doc, index) => {
+    
+    //     formData.append(`official_document[${index}]`, doc, doc.name)
+    
+    // })
     const response = await makeApiPostCall('/create/request', formData, null, true)
-    const user = response.data.data
-    const token = response.data.data.token
     console.log('request send  successfull !!!!')
-
-    authStore.setUser(user)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
-    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
     onSuccess()
 
 

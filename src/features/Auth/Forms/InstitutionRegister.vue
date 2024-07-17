@@ -438,9 +438,11 @@ export default {
     },
     handleSelectedRegionIdChange(selectedOptionId) {
       this.region_id = selectedOptionId
+      this.formData.zone = selectedOptionId
     },
     handleSelectedDivisionIdChange(selectedOptionId) {
       this.division_id = selectedOptionId
+      this.formData.zone = selectedOptionId
     },
     handleSelectedSubdivisionIdChange(selectedOptionId) {
       this.subDivision_id = selectedOptionId
@@ -483,9 +485,8 @@ export default {
     },
 
     handleSuccess() {
-      console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = true
-      this.$router.push({ name: 'community' })
+      this.toast.success(`Your request have succesfully be send`);
+      this.$router.push({ name: 'authentication' })
     },
 
     handleError(errors) {
@@ -508,7 +509,7 @@ export default {
           return
         }
 
-        this.toast.error(this.$t('please_wait_creating_account'))
+        this.toast.info(this.$t('please_wait_creating_account'))
 
         try {
           this.isLoading = true

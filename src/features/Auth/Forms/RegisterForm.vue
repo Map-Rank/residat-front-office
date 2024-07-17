@@ -617,7 +617,7 @@ async registerForm() {
     
     try {
       this.isLoading = true
-      this.toast.error(this.$t('please_wait_creating_account'));
+      this.toast.info(this.$t('please_wait_creating_account'));
       await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError, this.handleEmailNotVerified);
     } catch (error) {
       this.isLoading = false
