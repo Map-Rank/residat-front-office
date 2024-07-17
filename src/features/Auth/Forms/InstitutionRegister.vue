@@ -97,7 +97,8 @@ eslint-disable vue/no-parsing-error
         <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
 
         <div class="mb-6">
-          <label class="inline-block mb-2">{{ $t('profile_picture') }}</label>
+       <label class="inline-block mb-2">{{ $t('instu_logo') }} <span style="color:red;">({{$t('max_1mbs')}})</span></label>
+       
           <input
             type="file"
             @change="onPickAvatar"
@@ -119,29 +120,33 @@ eslint-disable vue/no-parsing-error
         </div>
 
         <div class="mb-6">
-          <label class="inline-block mb-2">{{ $t('upload_official_doc') }}</label>
+          <label class="inline-block mb-2">{{ $t('upload_official_doc') }} <span style="color: red;">({{ $t('max_1mbs') }})</span></label>
           <input
             type="file"
             @change="onPickDocuments"
             multiple
-            accept=".pdf,.doc,.docx,.txt"
+            accept=".pdf,.doc,.docx,.txt,image/*"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           />
           <ErrorMessage class="text-danger-normal" name="documents" />
       
           <div v-if="formData.documents.length > 0" class="mt-4">
-            <p class="mb-2">{{ $t('preview_documents') }}:</p>
-            <div class="grid grid-cols-2 gap-4">
+            <p class="mb-2">{{ $t('preview_doc') }}:</p>
+            <div class="flex gap-4">
               <div v-for="(doc, index) in documentPreviews" :key="index" class="overflow-hidden">
-                <div class="p-2 border rounded bg-red-400 ">
-                  <p class="truncate text-white">{{ doc.name }}</p>
-                  <img v-if="doc.type.startsWith('image/')" :src="doc.url" alt="Document Preview" class=" w-full h-24 object-cover doc">
-                  <p v-else class="text-center text-sm">{{ doc.type }}</p>
+                <div class="p-2 border rounded  w-fit">
+                  <div class="flex flex-col items-center justify-center">
+                    <img v-if="doc.type.startsWith('image/')" :src="doc.url" alt="Document Preview" class="w-auto h-24 object-cover">
+                    <img v-else-if="doc.type === 'application/pdf'" src="/assets/images/AuthView/pdf.png" alt="PDF Icon" class="w-10 h-10">
+                    <img v-else-if="['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(doc.type)" src="/assets/images/AuthView/pdf.png" alt="Word Icon" class="w-10 h-10">
+                    <p class="mt-2 text-primary-normal text-sm text-center">{{ doc.name }}</p>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
 
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
@@ -344,7 +349,8 @@ export default {
       step_1: 'step_1',
       step_2: 'step_2',
       currentStep: 'step_1',
-      reg_in_submission: false
+      reg_in_submission: false,
+      documentPreviews:[]
     }
   },
   components: {
@@ -376,8 +382,7 @@ export default {
     },
     onPickDocuments(e) {
       const files = Array.from(e.target.files);
-      this.formData.documents = [];
-      this.documentPreviews = [];
+
 
       files.forEach(file => {
         if (this.validateFile(file)) {
@@ -394,11 +399,26 @@ export default {
     },
 
 
-    validateFile(file) {
-      const maxFileSize = 2000 * 1024; 
-      const acceptedTypes = ['application/pdf', 'application/msword', 'text/plain', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'];
-      return file.size <= maxFileSize && acceptedTypes.includes(file.type);
-    },
+    removeDocument(index) {
+    this.formData.documents.splice(index, 1);
+    this.documentPreviews.splice(index, 1);
+  },
+
+
+
+
+  validateFile(file) {
+    const maxFileSize = 1024 * 1024; 
+    const acceptedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+      'image/jpeg',
+      'image/png'
+    ];
+    return file.size <= maxFileSize && acceptedTypes.includes(file.type);
+  },
 
     async getRegions() {
       try {

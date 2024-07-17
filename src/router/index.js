@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import useAuthStore from '../stores/auth.js' // Adjust this import path as necessary
+import useAuthStore from '../stores/auth.js' 
 
 import CommunityView from '../features/Community/CommunityView.vue'
 import ChatRoomView from '../features/ChatRoom/ChatRoomView.vue'
@@ -308,17 +308,6 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-// router.beforeEach((to, from, next) => {
-//   const authStore = useAuthStore()
 
-//   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
-//     next({ name: 'authentication' })
-//     next({ name: 'authentication' })
-//   } else if (to.name === 'authentication' && authStore.user != null) {
-//     next({ name: 'community' }) 
-//   } else {
-//     next()
-//   }
-// })
 
 export default router
