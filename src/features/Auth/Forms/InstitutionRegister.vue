@@ -505,7 +505,7 @@ export default {
 
     handleSuccess() {
       this.toast.success(`Your request have succesfully be send`);
-      this.$router.push({ name: 'authentication' })
+      this.$router.push({ name: 'success-submition' })
     },
 
     handleError(errors) {

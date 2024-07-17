@@ -30,6 +30,7 @@ import EventDetails from '@/features/Event/Pages/EventDetails.vue'
 import ForgotPassword from '../features/Auth/ForgotPassword.vue'
 import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
+import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -221,6 +222,12 @@ const router = createRouter({
         tab: route.params.tab ,
 
       })
+    },
+    {
+      path: '/authentication/success-submition',
+      name: 'success-submition',
+      component: SuccessPage,
+      meta: { requiresAuth: false },
     },
     {
       path: '/',
