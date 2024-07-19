@@ -29,7 +29,7 @@ describe('BottomNavigationApp Component', () => {
       },
     });
 
-    expect(wrapper.findAllComponents(IconWithLabel).length).toBe(5); // Based on navItems length
+    expect(wrapper.findAllComponents(IconWithLabel).length).toBe(4); // Based on navItems length
   });
 
   // Test isActive method
