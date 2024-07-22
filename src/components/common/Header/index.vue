@@ -446,11 +446,6 @@ export default {
           break
           case 4:
             this.openModal()
-            // if (window.confirm('Are you sure you want to log out?')) {
-            //   this.logout()
-            // } else {
-            //   console.log('Logout cancelled')
-            // }
             this.toggleMenu()
             break
             case 5:

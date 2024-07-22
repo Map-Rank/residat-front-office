@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div class="back" id="modal">
+    <div class="back " id="modal">
       <div
-        class="flex items-center justify-center min-h-screen pt-4 pb-20 text-center sm:block sm:p-0"
+        class="flex items-center justify-center min-h-screen mt-10 pb-20 text-center sm:block sm:p-0"
       >
         <div
           class="inline-block mx-2 md:py-9 sm:px-6 md:px-5 md:w-4/5 lg:px-20  lg:w-3/5 align-bottom bg-white-normal rounded-lg text-left overflow-hidden shadow-xl transform w-full transition-all sm:my-8 sm:align-middle "
@@ -140,6 +140,7 @@ export default {
   position: absolute;
   right: 0;
   left: 0;
+  top:0;
   background-image: url("/assets/images/AuthView/auth-background.png");
   background-size: cover;
   background-position: center;

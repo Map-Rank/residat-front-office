@@ -25,15 +25,15 @@ eslint-disable vue/no-parsing-error
           <div class="mb-6">
             <label class="inline-block mb-4">{{ $t('owner_name') }}</label>
             <vee-field
-              name="first_name"
-              v-model="formData.first_name"
-              :rules="schema.first_name"
+              name="owner_name"
+              v-model="formData.owner_name"
+              :rules="schema.owner_name"
               as="input"
               type="text"
               class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('enter_first_name')"
+              :placeholder="$t('enter_owner_name')"
             />
-            <ErrorMessage class="text-danger-normal" name="first_name" />
+            <ErrorMessage class="text-danger-normal" name="owner_name" />
           </div>
 
           <!-- Description  -->
@@ -80,78 +80,6 @@ eslint-disable vue/no-parsing-error
             <ErrorMessage class="text-danger-normal" name="phone" />
           </div>
 
-          <!-- Password -->
-          <div class="relative w-full">
-            <label>{{ $t('password') }}</label>
-            <div class="flex items-center border border-gray-300 rounded overflow-hidden">
-              <vee-field
-                name="password"
-                v-model="formData.password"
-                :type="showPassword ? 'text' : 'password'"
-                id="password"
-                class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                :placeholder="$t('enter_password')"
-              ></vee-field>
-              <button
-                @click="togglePasswordVisibility"
-                type="button"
-                class="p-2 focus:outline-none"
-              >
-                <img
-                  v-show="!showPassword"
-                  src="\assets\icons\password-open.svg"
-                  alt="Show password"
-                  class="block w-6 h-6"
-                />
-                <img
-                  v-show="showPassword"
-                  src="\assets\icons\password-closed.svg"
-                  alt="Hide password"
-                  class="block w-6 h-6"
-                />
-              </button>
-            </div>
-
-            <!-- Error Message -->
-            <ErrorMessage class="text-red-500 text-sm mt-1" name="password" />
-          </div>
-
-          <!-- Confirm Password -->
-          <div class="relative w-full">
-            <label>{{ $t('confirm_password') }}</label>
-            <div class="flex items-center border border-gray-300 rounded overflow-hidden">
-              <vee-field
-                name="confirm_password"
-                v-model="formData.confirm_password"
-                :type="showConfirmPassword ? 'text' : 'password'"
-                :rules="schema.confirm_password"
-                id="confirm_password"
-                class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                :placeholder="$t('enter_confirm_password')"
-              ></vee-field>
-              <button
-                @click="toggleConfirmPasswordVisibility"
-                type="button"
-                class="p-2 focus:outline-none"
-              >
-                <img
-                  v-show="!showConfirmPassword"
-                  src="\assets\icons\password-open.svg"
-                  alt="Show password"
-                  class="block w-6 h-6"
-                />
-                <img
-                  v-show="showConfirmPassword"
-                  src="\assets\icons\password-closed.svg"
-                  alt="Hide password"
-                  class="block w-6 h-6"
-                />
-              </button>
-            </div>
-
-            <ErrorMessage class="text-danger-normal" name="confirm_password" />
-          </div>
-
           <div class="sm:px-">
             <div class="flex justify-center">
               <button
@@ -169,16 +97,17 @@ eslint-disable vue/no-parsing-error
         <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
 
         <div class="mb-6">
-          <label class="inline-block mb-2">{{ $t('profile_picture') }}</label>
+       <label class="inline-block mb-2">{{ $t('instu_logo') }} <span style="color:red;">({{$t('max_1mbs')}})</span></label>
+       
           <input
             type="file"
             @change="onPickAvatar"
             accept="image/*"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           />
-          <ErrorMessage class="text-danger-normal" name="avatar" />
+          <ErrorMessage class="text-danger-normal" name="profile_picture" />
 
-          <div v-if="formData.avatar" class="mt-4 grid justify-center">
+          <div v-if="formData.profile_picture" class="mt-4 grid justify-center">
             <p class="mb-2">{{ $t('preview_picture') }}:</p>
             <div class="w-24 h-24 rounded-full overflow-hidden">
               <img
@@ -190,17 +119,32 @@ eslint-disable vue/no-parsing-error
           </div>
         </div>
 
-
-
-        <label class="inline-block mb-2">{{ $t('upload_official_doc') }}</label>
-        <input
-          type="file"
-          @change="onPickDocument"
-          accept="*/*"
-          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-        />
-        <ErrorMessage class="text-danger-normal" name="avatar" />
-
+        <div class="mb-6">
+          <label class="inline-block mb-2">{{ $t('upload_official_doc') }} <span style="color: red;">({{ $t('max_1mbs') }})</span></label>
+          <input
+            type="file"
+            @change="onPickDocuments"
+            multiple
+            accept=".pdf,.doc,.docx,.txt,image/*"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          />
+          <ErrorMessage class="text-danger-normal" name="documents" />
+      
+          <div v-if="formData.documents.length > 0" class="mt-4">
+            <p class="mb-2">{{ $t('preview_doc') }}:</p>
+            <div class="flex gap-4 flex-wrap">
+              <div v-for="(doc, index) in documentPreviews" :key="index" class="relative overflow-hidden p-2 border rounded  w-fit">
+                <div class="flex flex-col items-center justify-center">
+                  <button class="absolute top-0 right-0 w-4 font-bold text-red-600 bg-gray-800 text-base " @click="removeDocument(index)">X</button>
+                  <img v-if="doc.type.startsWith('image/')" :src="doc.url" alt="Document Preview" class="w-auto h-24 object-cover">
+                  <img v-else-if="doc.type === 'application/pdf'" src="/assets/images/AuthView/pdf.png" alt="PDF Icon" class="w-10 h-10">
+                  <img v-else-if="['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(doc.type)" src="/assets/images/AuthView/pdf.png" alt="Word Icon" class="w-10 h-10">
+                  <p class="mt-2 text-primary-normal text-sm text-center">{{ doc.name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
 
         <div class="flex flex-row space-x-4 justify-between">
@@ -242,32 +186,7 @@ eslint-disable vue/no-parsing-error
           />
         </div>
 
-        <div class="mb-4">
-          <div class="grid mb-5">
-            <label class="inline-block mb-2">{{ $t('sector') }}</label>
-            <span>{{ $t('select_your_sector_of_interest') }}</span>
-          </div>
-          <div v-if="isLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
-          </div>
-          <div
-            v-if="sectors || !isLoading"
-            class="grid grid-cols-2 sm:grid-cols-3 gap-7 content-between"
-          >
-            <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
-              <vee-field
-                :name="sector.name"
-                type="checkbox"
-                v-model="formData.selectedSectors"
-                :id="sector.name"
-                class="rounded text-primary-normal focus:ring-primary-light"
-              />
-              <label :for="sector.name" class="ml-2 block text-sm text-body-dark">
-                {{ sector.name }}
-              </label>
-            </div>
-          </div>
-        </div>
+      
 
         <div class="mb-3 pl-6">
           <!-- TOS -->
@@ -316,7 +235,7 @@ eslint-disable vue/no-parsing-error
 import useAuthStore from '../../../stores/auth'
 import useSectorStore from '@/stores/sectorStore.js'
 import useZoneStore from '@/stores/zoneStore.js'
-import { registerUser } from '../services/authService'
+import { institutionalRequest } from '../services/authService'
 import { useRouter } from 'vue-router'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
@@ -393,7 +312,7 @@ export default {
       ],
       schema: {
         name: 'required|min:3|max:50',
-        first_name: 'required|min:3|max:50',
+        owner_name: 'required|min:3|max:50',
         last_name: 'required|min:3|max:50',
         description: 'required|min:3|max:2000',
         phone: 'required|min:3|max:20',
@@ -402,11 +321,11 @@ export default {
         dob: 'required|dobNotBelowTenYears',
         confirm_password: 'required|passwords_mismatch:@password',
         tos: 'required|tos',
-        company_name: 'min:3|max:50',
+        company_name: 'required|min:3|max:50',
         location: 'required|min:3|max:50'
       },
       formData: {
-        first_name: '',
+        owner_name: '',
         last_name: '',
         description: '',
         email: '',
@@ -417,8 +336,8 @@ export default {
         country: '',
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
-        avatar: '',
-        document: '',
+        profile_picture: '',
+        documents: [],
         selectedSectors: [],
         zone: '',
         tos: false
@@ -429,7 +348,8 @@ export default {
       step_1: 'step_1',
       step_2: 'step_2',
       currentStep: 'step_1',
-      reg_in_submission: false
+      reg_in_submission: false,
+      documentPreviews:[]
     }
   },
   components: {
@@ -439,8 +359,8 @@ export default {
 
   computed: {
     imageUrl() {
-      if (this.formData.avatar) {
-        return URL.createObjectURL(this.formData.avatar)
+      if (this.formData.profile_picture) {
+        return URL.createObjectURL(this.formData.profile_picture)
       } else {
         return null
       }
@@ -453,23 +373,52 @@ export default {
       const isValidSize = file.size <= 2000 * 1024
 
       if (file && isValidSize) {
-        this.formData.avatar = file
+        this.formData.profile_picture = file
       } else {
-        this.formData.avatar = null
-        this.toast.error('The avatar selected exceed the specified max size')
+        this.formData.profile_picture = null
+        this.toast.error('The profile_picture selected exceed the specified max size')
       }
     },
-    onPickDocument(e) {
-      const file = e.target.files[0]
-      const isValidSize = file.size <= 2000 * 1024
+    onPickDocuments(e) {
+      const files = Array.from(e.target.files);
 
-      if (file && isValidSize) {
-        this.formData.document = file
-      } else {
-        this.formData.avatar = null
-        this.toast.error('The avatar selected exceed the specified max size')
-      }
+
+      files.forEach(file => {
+        if (this.validateFile(file)) {
+          this.formData.documents.push(file);
+          this.documentPreviews.push({
+            name: file.name,
+            type: file.type,
+            url: URL.createObjectURL(file),
+          });
+        } else {
+          this.toast.error(`${file.name} exceeds the size limit or is not a supported format`);
+        }
+      });
     },
+
+
+    removeDocument(index) {
+    this.formData.documents.splice(index, 1);
+    this.documentPreviews.splice(index, 1);
+  },
+
+
+
+
+  validateFile(file) {
+    const maxFileSize = 1024 * 1024; 
+    const acceptedTypes = [
+      'application/pdf',
+      'application/msword',
+      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+      'text/plain',
+      'image/jpeg',
+      'image/png'
+    ];
+    return file.size <= maxFileSize && acceptedTypes.includes(file.type);
+  },
+
     async getRegions() {
       try {
         this.regions = this.regions.concat(await getZones(2, null))
@@ -508,9 +457,11 @@ export default {
     },
     handleSelectedRegionIdChange(selectedOptionId) {
       this.region_id = selectedOptionId
+      this.formData.zone = selectedOptionId
     },
     handleSelectedDivisionIdChange(selectedOptionId) {
       this.division_id = selectedOptionId
+      this.formData.zone = selectedOptionId
     },
     handleSelectedSubdivisionIdChange(selectedOptionId) {
       this.subDivision_id = selectedOptionId
@@ -524,7 +475,7 @@ export default {
       this.showConfirmPassword = !this.showConfirmPassword
     },
     async nextStep() {
-      const fieldsToValidate = ['email', 'phone', 'password', 'confirm_password']
+      const fieldsToValidate = ['email', 'phone','company_name']
 
       try {
         const validationResults = await Promise.all(
@@ -553,9 +504,8 @@ export default {
     },
 
     handleSuccess() {
-      console.log('Current User:', this.authStore.getCurrentUser)
-      this.authStore.isloggedIn = true
-      this.$router.push({ name: 'community' })
+      this.toast.success(`Your request have succesfully be send`);
+      this.$router.push({ name: 'success-submition' })
     },
 
     handleError(errors) {
@@ -573,16 +523,16 @@ export default {
       )
 
       if (validationResults.every((result) => result.valid)) {
-        if (this.subDivision_id === '') {
+        if (this.region_id === '') {
           this.toast.error(this.$t('please_select_your_subdivision'))
           return
         }
 
-        this.toast.error(this.$t('please_wait_creating_account'))
+        this.toast.info(this.$t('please_wait_creating_account'))
 
         try {
           this.isLoading = true
-          await registerUser(
+          await institutionalRequest(
             this.formData,
             this.authStore,
             this.handleSuccess,
@@ -607,6 +557,12 @@ label {
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }
+
+.doc {
+  max-width: 100%;
+  height: auto;
+}
+
 
 span {
   color: var(--gray-dark, #505050);

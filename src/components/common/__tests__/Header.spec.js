@@ -1,19 +1,11 @@
-// import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
-// import { createRouter, createWebHistory } from 'vue-router';
 import HeaderApp from '@/components/common/Header/index.vue';
 import IconWithLabel from '@/components/common/IconWithLabel/index.vue';
 import ButtonUi from '@/components/base/ButtonUi.vue';
 import SearchBar from '@/components/base/SearchBar.vue';
 import useAuthStore from '@/stores/auth';
-// import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-// import HeaderApp from '@/components/base/HeaderApp.vue';
-// import SearchBar from '@/components/base/SearchBar.vue';
-// import IconWithLabel from '@/components/base/IconWithLabel.vue';
-// import ButtonUi from '@/components/base/ButtonUi.vue';
 import AppLogo from '@/components/base/AppLogo.vue';
-// import useAuthStore from '@/stores/auth';
 import { useRouter } from 'vue-router';
 
 vi.mock('@/stores/auth');
@@ -59,6 +51,9 @@ describe('HeaderApp.vue', () => {
         },
       },
     });
+
+    wrapper.vm.openModal = vi.fn();
+    wrapper.vm.toggleMenu = vi.fn();
   });
 
   afterEach(() => {
@@ -72,9 +67,9 @@ describe('HeaderApp.vue', () => {
   });
 
   it('toggles the profile menu visibility', async () => {
-    expect(wrapper.vm.isMenuVisible).toBe(false);
+    expect(wrapper.vm.currentMenu).toBe(null);
     await wrapper.find('.menu .dropdown').trigger('click');
-    expect(wrapper.vm.isMenuVisible).toBe(true);
+    expect(wrapper.vm.currentMenu).toBe('menu');
   });
 
   it('navigates to the correct route when a menu item is clicked', async () => {
@@ -82,7 +77,7 @@ describe('HeaderApp.vue', () => {
     await wrapper.vm.$nextTick();
 
     const buttons = wrapper.findAllComponents(ButtonUi);
-    expect(buttons.length).toBe(12); // Profile, Create Post, Create Event, Settings, Logout
+    expect(buttons.length).toBe(13); // Profile, Create Post, Create Event, Settings, Logout
 
     await buttons[0].trigger('click');
     expect(routerMock.push).toHaveBeenCalledWith({ name: 'social-profile' });
@@ -95,15 +90,21 @@ describe('HeaderApp.vue', () => {
 
     await buttons[3].trigger('click');
     expect(routerMock.push).toHaveBeenCalledWith({ name: 'setting' });
-
+    
     await buttons[4].trigger('click');
-    expect(authStoreMock.logOut).toHaveBeenCalled();
-    expect(routerMock.push).toHaveBeenCalledWith({ name: 'authentication' });
+    expect(wrapper.vm.toggleMenu).toHaveBeenCalled();
+    
+    
+    await buttons[5].trigger('click');
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'change-langauge' });
   });
 
   it('toggles the language menu visibility and changes language', async () => {
-    expect(wrapper.vm.isMenulangauge).toBe(false);
+    expect(wrapper.vm.currentMenu).toBe(null);
     await wrapper.find('.langMenu .dropdown').trigger('click');
-    expect(wrapper.vm.isMenulangauge).toBe(true);
+    expect(wrapper.vm.currentMenu).toBe('language');
+
+    const languageButtons = wrapper.findAllComponents(ButtonUi);
+    expect(languageButtons.length).toBeGreaterThanOrEqual(2);
   });
 });

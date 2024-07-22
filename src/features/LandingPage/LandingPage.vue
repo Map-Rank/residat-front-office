@@ -322,10 +322,15 @@ export default {
  
   },
   methods: {
-    navigateTo() {
-      console.log('object');
-        this.$router.push({name:'authentication'});
-    },
+    navigateTo(tab) {
+  console.log('object' + tab);
+  const newTabUrl = this.$router.resolve({
+    name: 'authentication',
+    params: { tab: tab }
+  }).href;
+  
+  window.open(newTabUrl, '_blank');
+}
   }
 }
 </script>

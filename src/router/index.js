@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import useAuthStore from '../stores/auth.js' // Adjust this import path as necessary
+import useAuthStore from '../stores/auth.js' 
 
 import CommunityView from '../features/Community/CommunityView.vue'
 import ChatRoomView from '../features/ChatRoom/ChatRoomView.vue'
@@ -30,6 +30,7 @@ import EventDetails from '@/features/Event/Pages/EventDetails.vue'
 import ForgotPassword from '../features/Auth/ForgotPassword.vue'
 import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
+import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -223,6 +224,12 @@ const router = createRouter({
       })
     },
     {
+      path: '/authentication/success-submition',
+      name: 'success-submition',
+      component: SuccessPage,
+      meta: { requiresAuth: false },
+    },
+    {
       path: '/',
       name: 'landing-page',
       component: LandingPage,
@@ -308,17 +315,6 @@ router.beforeEach((to, from, next) => {
     next()
   }
 })
-// router.beforeEach((to, from, next) => {
-//   const authStore = useAuthStore()
 
-//   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
-//     next({ name: 'authentication' })
-//     next({ name: 'authentication' })
-//   } else if (to.name === 'authentication' && authStore.user != null) {
-//     next({ name: 'community' }) 
-//   } else {
-//     next()
-//   }
-// })
 
 export default router

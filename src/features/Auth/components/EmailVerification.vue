@@ -64,12 +64,10 @@ export default {
         })
         .catch((error) => {
           this.resetLink = false
-
-          // Handle error
           this.error = error;
         })
         .finally(() => {
-          this.resetLink = false
+          this.resetLink = true
         });
     },
   }

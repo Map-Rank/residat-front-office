@@ -28,6 +28,7 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
       formData.append('fcm_token', fcmToken)
     }
 
+
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData, null, true)
     const user = response.data.data
     const token = response.data.data.token
@@ -39,6 +40,44 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
     onSuccess()
     // }
+
+    return response
+  } catch (error) {
+  if (error.response?.data?.errors) {
+    onError(error.response.data.errors);
+  } else {
+    console.log('No errors found in the response.'+ error);
+  }
+  
+    throw error
+  }
+}
+
+
+const institutionalRequest = async (institutionData, authStore, onSuccess, onError) => {
+  
+  try {
+    const formData = new FormData()
+
+    formData.append('company_name', institutionData.company_name)
+    formData.append('owner_name', institutionData.owner_name)
+    formData.append('description', institutionData.description)
+    formData.append('email', institutionData.email)
+    formData.append('phone', institutionData.phone)
+    formData.append('password', institutionData.password)
+    formData.append('gender', institutionData.gender)
+    formData.append('zone_id', institutionData.zone)
+    formData.append('profile_picture', institutionData.profile_picture)
+    formData.append('official_document', institutionData.documents[0])
+
+    // institutionData.documents.forEach((doc, index) => {
+    
+    //     formData.append(`official_document[${index}]`, doc, doc.name)
+    
+    // })
+    const response = await makeApiPostCall('/create/request', formData, null, true)
+    console.log('request send  successfull !!!!')
+    onSuccess()
 
     return response
   } catch (error) {
@@ -207,4 +246,4 @@ const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) 
   }
 };
 
-export { registerUser, loginUser, logOut, UpdateUser, UpdatePassword, ForgotPassword, ResetPassword }
+export { registerUser,institutionalRequest, loginUser, logOut, UpdateUser, UpdatePassword, ForgotPassword, ResetPassword }

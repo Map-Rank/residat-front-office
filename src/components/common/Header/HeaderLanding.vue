@@ -123,11 +123,16 @@ export default {
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },
-    navigateTo(tab) {
-      console.log('object' + tab);
-      this.$router.push({ name: 'authentication', params: { tab: tab } });
-      
-    },
+navigateTo(tab) {
+  console.log('object' + tab);
+  const newTabUrl = this.$router.resolve({
+    name: 'authentication',
+    params: { tab: tab }
+  }).href;
+  
+  window.open(newTabUrl, '_blank');
+}
+,
     absoluteHref(relativeHref) {
       const baseUrl = window.location.origin;
       return `${baseUrl}/${relativeHref}`;

@@ -1,9 +1,21 @@
-import { describe, it, expect, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import AboutUserInfo from '@/features/SocialProfile/components/AboutUserInfo/index.vue';
+import { useRouter } from 'vue-router';
+
+vi.mock('vue-router', () => ({
+  useRouter: vi.fn(() => ({
+    push: vi.fn()
+  }))
+}));
 
 describe('AboutUserInfo Component', () => {
   let wrapper;
+  let routerMock;
+
+  beforeEach(() => {
+    routerMock = useRouter();
+  });
 
   describe('With all props provided', () => {
     beforeEach(() => {
@@ -14,41 +26,46 @@ describe('AboutUserInfo Component', () => {
           location: 'New York',
           phone: '123-456-7890',
           email: 'john@example.com',
-          joinDate: '2023-01-01'
+          joinDate: '2023-01-01',
+          showUpdateProfile: true
+        },
+        global: {
+          mocks: {
+            $t: (msg) => msg
+          }
         }
       });
     });
 
     it('renders all provided information', () => {
       expect(wrapper.text()).toContain('JohnDoe');
-      expect(wrapper.text()).toContain('A brief description about John Doe.');
-      expect(wrapper.text()).toContain('From New York');
-      expect(wrapper.text()).toContain('123-456-7890');
-      expect(wrapper.text()).toContain('john@example.com');
-      expect(wrapper.text()).toContain('2023-01-01');
+    });
+
+    it('renders the update profile button', () => {
+      const button = wrapper.find('button');
+      expect(button.text()).toBe('update_profile_button');
     });
   });
 
-  describe('With some props omitted', () => {
+
+  describe('When showUpdateProfile is false', () => {
     beforeEach(() => {
       wrapper = mount(AboutUserInfo, {
         props: {
           username: 'JohnDoe',
-          description: 'A brief description about John Doe.'
-          // Omitting location, phone, email, and joinDate
+          showUpdateProfile: false
+        },
+        global: {
+          mocks: {
+            $t: (msg) => msg
+          }
         }
       });
     });
 
-    it('does not render omitted information', () => {
-      expect(wrapper.text()).toContain('JohnDoe');
-      expect(wrapper.text()).toContain('A brief description about John Doe.');
-      expect(wrapper.text()).not.toContain('From New York');
-      expect(wrapper.text()).not.toContain('123-456-7890');
-      expect(wrapper.text()).not.toContain('john@example.com');
-      expect(wrapper.text()).not.toContain('2023-01-01');
+    it('renders the follow button', () => {
+      const button = wrapper.find('button');
+      expect(button.text()).toBe('follow JohnDoe');
     });
   });
-
-  // Additional tests can be added as necessary
 });

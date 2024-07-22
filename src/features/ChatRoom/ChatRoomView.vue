@@ -91,32 +91,31 @@ export default {
     const authStore = useAuthStore()
     return {
       authStore,
-      isInstitution: true, 
+      isInstitution: false, 
       activeTab: 'important',
       isLoading: true,
       notifications: [],
       institutionalNotifications: [
-        // {
-        //   id: 1,
-        //   name: 'UNICEF',
-        //   avatar: 'https://example.com/institution1.jpg',
-        //   isVisible: false,
-        //   notifications: [
-        //     { id: 1, avatar: 'https://example.com/avatar1.jpg', title: 'UNICEF Message 1', content_en: "This is a new notification for you guys pay attention please", time: '19m ago', isNew: true },
-        //     { id: 2, avatar: 'https://example.com/avatar2.jpg', title: 'UNICEF Message 2', content_en: "This is a new notification for you guys pay attention please", time: '1h ago', isNew: false },
-        //   ],
-        // },
-        // {
-        //   id: 2,
-        //   name: 'Government',
-        //   avatar: 'https://example.com/institution2.jpg',
-        //   isVisible: false,
-        //   notifications: [
-        //     { id: 3, avatar: 'https://example.com/avatar3.jpg', title: 'Government Message 1', content_en: "This is a new notification for you guys pay attention please", time: '30m ago', isNew: true },
-        //     { id: 4, avatar: 'https://example.com/avatar4.jpg', title: 'Government Message 2', content_en: "This is a new notification for you guys pay attention please", time: '2h ago', isNew: false },
-        //   ],
-        // },
-        // Add more institutions here
+        {
+          id: 1,
+          name: 'UNICEF',
+          avatar: 'https://th.bing.com/th/id/R.f789c45e7c6126656eac8028cb7db28a?rik=BRNVQ2vHUkbikA&riu=http%3a%2f%2fwww.clipartbest.com%2fcliparts%2feTM%2fAM4%2feTMAM4bAc.jpg&ehk=uLmGOx7GjYzASsrK%2fRwkEzQimqj%2fXK4qoDBYGYrJNTg%3d&risl=&pid=ImgRaw&r=0',
+          isVisible: false,
+          notifications: [
+            { id: 1, avatar: 'https://example.com/avatar1.jpg', title: 'UNICEF Message 1', content_en: "This is a new notification for you guys pay attention please", time: '19m ago', isNew: true },
+            { id: 2, avatar: 'https://example.com/avatar2.jpg', title: 'UNICEF Message 2', content_en: "This is a new notification for you guys pay attention please", time: '1h ago', isNew: false },
+          ],
+        },
+        {
+          id: 2,
+          name: 'Government',
+          avatar: 'https://th.bing.com/th/id/R.8d50d8096e12fcfa504b0da1db39d8e0?rik=J7u%2fJGi6OGhaGQ&pid=ImgRaw&r=0&sres=1&sresct=1',
+          isVisible: false,
+          notifications: [
+            { id: 3, avatar: 'https://example.com/avatar3.jpg', title: 'Government Message 1', content_en: "This is a new notification for you guys pay attention please", time: '30m ago', isNew: true },
+            { id: 4, avatar: 'https://example.com/avatar4.jpg', title: 'Government Message 2', content_en: "This is a new notification for you guys pay attention please", time: '2h ago', isNew: false },
+          ],
+        },
       ],
     };
   },
