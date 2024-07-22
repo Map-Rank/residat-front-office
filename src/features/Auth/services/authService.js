@@ -28,6 +28,7 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
       formData.append('fcm_token', fcmToken)
     }
 
+
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData, null, true)
     const user = response.data.data
     const token = response.data.data.token
@@ -69,7 +70,6 @@ const institutionalRequest = async (institutionData, authStore, onSuccess, onErr
     formData.append('profile_picture', institutionData.profile_picture)
     formData.append('official_document', institutionData.documents[0])
 
-
     // institutionData.documents.forEach((doc, index) => {
     
     //     formData.append(`official_document[${index}]`, doc, doc.name)
@@ -78,7 +78,6 @@ const institutionalRequest = async (institutionData, authStore, onSuccess, onErr
     const response = await makeApiPostCall('/create/request', formData, null, true)
     console.log('request send  successfull !!!!')
     onSuccess()
-
 
     return response
   } catch (error) {
