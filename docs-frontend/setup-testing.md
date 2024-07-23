@@ -5,35 +5,35 @@
 ## Project Setup
 
 ### Project Requirements
-Before you start, make sure you have installed Node.js and npm in your system. For Vitest, it will be added to your project during the npm install phase if it is listed as a dependency in your package.json.
+Before you start, make sure you have installed Node.js and yarn in your system. For Vitest, it will be added to your project during the yarn install phase if it is listed as a dependency in your package.json.
 
 
 ```sh
-npm install
+yarn install
 ```
 
 ### Compile and Hot-Reload for Development
 
 ```sh
-npm run dev
+yarn run dev
 ```
 
 ### Compile and Minify for Production
 
 ```sh
-npm run build
+yarn run build
 ```
 
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-npm run test:unit
+yarn run test:unit
 ```
 ### Tests Couverage [Vitest](https://vitest.dev/)
 
 #### Run Tests Couverage [Vitest](https://vitest.dev/)
 ```sh
-npm run test:coverage --coverage.enabled=true
+yarn run test:coverage --coverage.enabled=true
 ```
 
 #### Preview Tests Couverage [Vitest](https://vitest.dev/)
@@ -44,7 +44,7 @@ npx vite preview --outDir html
 ### Lint with [ESLint](https://eslint.org/)
 
 ```sh
-npm run lint
+yarn run lint
 ```
 
 
@@ -55,7 +55,7 @@ npm run lint
 ```sh
     ├─ .vscode/              # Editor configuration files
     ├─ dist/                 # Compiled files ready for deployment
-    ├─ node_modules/         # npm packages
+    ├─ node_modules/         # yarn packages
     ├─ public/               # Public assets like index.html
     ├─ src/                  # Source code for the application
     │  ├─ assets/            # Global assets (images, fonts, etc.)
@@ -84,7 +84,7 @@ npm run lint
     ├─ .prettierrc.json      # Prettier configuration
     ├─ Dockerfile            # Docker configuration for builds
     ├─ index.html            # Entry HTML file
-    ├─ package-lock.json     # Auto-generated package lock for npm
+    ├─ package-lock.json     # Auto-generated package lock for yarn
     ├─ package.json          # Project metadata and dependencies
     ├─ postcss.config.js     # PostCSS configuration
     ├─ README.md             # Project documentation

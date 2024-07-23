@@ -118,7 +118,6 @@ export default {
       this.$router.push({ name: 'authentication', params: { tab: currentTabName } });
     },
     navigateTo(tab) {
-      console.log('object' + tab);
       this.$router.push({ name: 'authentication', params: { tab: tab } });
       
     },

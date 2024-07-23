@@ -97,8 +97,10 @@ eslint-disable vue/no-parsing-error
         <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
 
         <div class="mb-6">
-       <label class="inline-block mb-2">{{ $t('instu_logo') }} <span style="color:red;">({{$t('max_1mbs')}})</span></label>
-       
+          <label class="inline-block mb-2"
+            >{{ $t('instu_logo') }} <span style="color: red">({{ $t('max_1mbs') }})</span></label
+          >
+
           <input
             type="file"
             @change="onPickAvatar"
@@ -120,32 +122,63 @@ eslint-disable vue/no-parsing-error
         </div>
 
         <div class="mb-6">
-          <label class="inline-block mb-2">{{ $t('upload_official_doc') }} <span style="color: red;">({{ $t('max_1mbs') }})</span></label>
+          <label class="inline-block mb-2"
+            >{{ $t('upload_official_doc') }}
+            <span style="color: red">({{ $t('max_1mbs') }})</span></label
+          >
           <input
             type="file"
             @change="onPickDocuments"
             multiple
-            accept=".pdf,.doc,.docx,.txt,image/*"
+            accept=".pdf,.doc,.docx,.txt,.jpg,.jpeg,.png"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           />
           <ErrorMessage class="text-danger-normal" name="documents" />
-      
+
           <div v-if="formData.documents.length > 0" class="mt-4">
             <p class="mb-2">{{ $t('preview_doc') }}:</p>
             <div class="flex gap-4 flex-wrap">
-              <div v-for="(doc, index) in documentPreviews" :key="index" class="relative overflow-hidden p-2 border rounded  w-fit">
+              <div
+                v-for="(doc, index) in documentPreviews"
+                :key="index"
+                class="relative overflow-hidden p-2 border rounded w-fit"
+              >
                 <div class="flex flex-col items-center justify-center">
-                  <button class="absolute top-0 right-0 w-4 font-bold text-red-600 bg-gray-800 text-base " @click="removeDocument(index)">X</button>
-                  <img v-if="doc.type.startsWith('image/')" :src="doc.url" alt="Document Preview" class="w-auto h-24 object-cover">
-                  <img v-else-if="doc.type === 'application/pdf'" src="/assets/images/AuthView/pdf.png" alt="PDF Icon" class="w-10 h-10">
-                  <img v-else-if="['application/msword', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'].includes(doc.type)" src="/assets/images/AuthView/pdf.png" alt="Word Icon" class="w-10 h-10">
+                  <button
+                    class="absolute top-0 right-0 w-4 font-bold text-red-600 bg-gray-800 text-base"
+                    @click="removeDocument(index)"
+                  >
+                    X
+                  </button>
+                  <img
+                    v-if="doc.type.startsWith('image/')"
+                    :src="doc.url"
+                    alt="Document Preview"
+                    class="w-auto h-24 object-cover"
+                  />
+                  <img
+                    v-else-if="doc.type === 'application/pdf'"
+                    src="/assets/images/AuthView/pdf.png"
+                    alt="PDF Icon"
+                    class="w-10 h-10"
+                  />
+                  <img
+                    v-else-if="
+                      [
+                        'application/msword',
+                        'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+                      ].includes(doc.type)
+                    "
+                    src="/assets/images/AuthView/pdf.png"
+                    alt="Word Icon"
+                    class="w-10 h-10"
+                  />
                   <p class="mt-2 text-primary-normal text-sm text-center">{{ doc.name }}</p>
                 </div>
               </div>
             </div>
           </div>
         </div>
-
 
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
@@ -185,8 +218,6 @@ eslint-disable vue/no-parsing-error
             :options="sub_divisions"
           />
         </div>
-
-      
 
         <div class="mb-3 pl-6">
           <!-- TOS -->
@@ -241,6 +272,7 @@ import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import { useToast } from 'vue-toastification'
+import {handleSingleFileUpload, handleMultipleFileUpload} from '@/utils/Image.js'
 
 export default {
   name: 'InstitutionRegister',
@@ -368,34 +400,43 @@ export default {
   },
 
   methods: {
-    onPickAvatar(e) {
-      const file = e.target.files[0]
-      const isValidSize = file.size <= 2000 * 1024
 
-      if (file && isValidSize) {
-        this.formData.profile_picture = file
-      } else {
-        this.formData.profile_picture = null
-        this.toast.error('The profile_picture selected exceed the specified max size')
+
+    
+    async onPickAvatar(e) {
+      try {
+        const file = await handleSingleFileUpload(e, 2, ['image/jpeg', 'image/png'], true);
+        // console.log('this is the new size' + file.size / (1024 * 1024))
+        this.formData.profile_picture = file;
+      } catch (error) {
+        this.formData.profile_picture = null;
+        this.toast.error(error.message);
       }
     },
-    onPickDocuments(e) {
-      const files = Array.from(e.target.files);
-
-
-      files.forEach(file => {
-        if (this.validateFile(file)) {
-          this.formData.documents.push(file);
+    async onPickDocuments(e) {
+      try {
+        const files = await handleMultipleFileUpload(e, 1, [
+          'application/pdf',
+          'application/msword',
+          'text/plain',
+          'image/jpeg',
+          'image/png'
+        ], true);
+        this.formData.documents.push(...files);
+        files.forEach(file => {
           this.documentPreviews.push({
             name: file.name,
             type: file.type,
             url: URL.createObjectURL(file),
           });
-        } else {
-          this.toast.error(`${file.name} exceeds the size limit or is not a supported format`);
-        }
-      });
-    },
+        });
+      } catch (error) {
+        this.toast.error(error.message);
+      }
+    }
+  ,
+
+
 
 
     removeDocument(index) {
@@ -406,18 +447,7 @@ export default {
 
 
 
-  validateFile(file) {
-    const maxFileSize = 1024 * 1024; 
-    const acceptedTypes = [
-      'application/pdf',
-      'application/msword',
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-      'text/plain',
-      'image/jpeg',
-      'image/png'
-    ];
-    return file.size <= maxFileSize && acceptedTypes.includes(file.type);
-  },
+
 
     async getRegions() {
       try {
@@ -562,7 +592,6 @@ label {
   max-width: 100%;
   height: auto;
 }
-
 
 span {
   color: var(--gray-dark, #505050);

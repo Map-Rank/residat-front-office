@@ -477,7 +477,7 @@ export default {
       showPageRefresh: false,
       componentKey: 0,
 
-      size: 20,
+      size: 10,
       page: 0,
 
       imageHost: URL_LINK.imageHostLink,
@@ -700,7 +700,7 @@ export default {
       try {
         if (this.filteringActive) {
           const nextPage = this.page + 1
-          const size = 20
+          const size = 10
           nextPagePosts = await getFilterPosts(zoneId, sectorId, size, nextPage);
         } else {
           const nextPage = this.page + 1
@@ -708,7 +708,7 @@ export default {
         }
 
         if (nextPagePosts.length === 0) {
-          this.bottomLoading = false // no more pages to load
+          this.bottomLoading = false 
           this.hasFetchAllPost = true
           return
         }
@@ -743,7 +743,7 @@ export default {
         console.log(this.zoneId)
         console.log(this.$route.params.sectorId)
         const nextPage = this.page + 1
-          const size = 20
+          const size = 10
         this.loadMorePosts(this.zoneId, this.$route.params.sectorId, size, nextPage); // Assuming sectorId is in route params
       }
     }

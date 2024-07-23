@@ -348,6 +348,7 @@ import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import { useToast } from "vue-toastification";
 import {mask} from 'vue-the-mask'
+import { handleSingleFileUpload } from '@/utils/image.js';
 
 
 export default {
@@ -488,15 +489,17 @@ components: {
   },
 
   methods: {
-    onFileChange(e) {
-      const file = e.target.files[0]
-      const isValidSize = file.size <= 2000 * 1024
 
-      if (file && isValidSize) {
-        this.formData.avatar = file
-      } else {
-        this.formData.avatar = null
-        this.toast.error('The avatar selected exceed the specified max size');
+    async onFileChange(e) {
+      try {
+        const file = await handleSingleFileUpload(e, 1, ['image/jpeg', 'image/png'], true);
+
+   
+
+        this.formData.avatar = file;
+      } catch (error) {
+        this.formData.avatar = null;
+        this.toast.error(error.message);
       }
     },
     async getRegions() {
