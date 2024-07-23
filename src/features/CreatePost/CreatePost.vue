@@ -1,3 +1,4 @@
+
 <template>
   <div class="container m-auto w-full lg:w-1/2 p-2 sm:p-6">
     <div class="flex justify-center mb-9">
@@ -97,6 +98,8 @@ import useAuthStore from '@/stores/auth.js'
 import { getSpecificPost } from '@/features/Post/services/postService'
 import { useToast } from 'vue-toastification'
 import ImageCropper from '@/components/gallery/ImageCropper/ImageCropper.vue'
+import { handleMultipleFileUpload} from '@/utils/Image.js'
+
 
 export default {
   name: 'CreatePost',
@@ -215,8 +218,8 @@ export default {
         this.toast.success('Post successfuly created')
       }
     },
-    handleImageUpload(files) {
-      if (!files || !files.length) {
+    async handleImageUpload(event)  {
+      if (!event.target.files || !event.target.files.length) {
         console.error('No files provided or the provided data is not an array')
         return
       }
@@ -232,21 +235,22 @@ export default {
       if (!Array.isArray(this.imagesToFromLocalPreview)) {
         this.imagesToFromLocalPreview = []
       }
+    const  files = await handleMultipleFileUpload(event, 1, [
+          'image/jpeg',
+          'image/png'
+        ], true);
 
-      files.forEach((file) => {
-        if (file.type.startsWith('image/')) {
-          this.formData.images.push(file)
+        files.forEach(file => {
+          this.formData.images.push(file);
+                  console.log('this is the new size' + file.size / (1024 * 1024))
+          const imageUrl = URL.createObjectURL(file);
+          this.imagesToFromLocalPreview.push({ src: imageUrl, alt: file.name });
+        });
+        console.log(this.formData.images.length)
+        this.imagesFromHostToPreview = null;
+      } ,
+    
 
-          const imageUrl = URL.createObjectURL(file)
-          this.imagesToFromLocalPreview.push({ src: imageUrl, alt: file.name })
-        } else if (file.type.startsWith('video/')) {
-          this.formData.videos.push(file)
-        }
-      })
-      console.log(this.formData.images.length)
-
-      this.imagesFromHostToPreview = null
-    },
 
 
     handleCroppedImage(croppedImage) {
