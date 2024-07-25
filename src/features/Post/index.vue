@@ -180,6 +180,7 @@ import useModalStore from '@/stores/modalStore.js'
 import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import { useToast } from 'vue-toastification'
 import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 
 export default {
@@ -341,7 +342,10 @@ export default {
     },
 
     async customFunction(index) {
-      switch (index) {
+
+      if (checkAuthentication()) {
+        // Perform like action
+        switch (index) {
         case 0:
           await likePost(this.postId)
           if (this.customLike) {
@@ -365,6 +369,32 @@ export default {
         case 3:
           break
       }
+      }
+
+      // switch (index) {
+      //   case 0:
+      //     await likePost(this.postId)
+      //     if (this.customLike) {
+      //       this.customLike = false
+      //       this.customPost.like_count--
+      //       console.log(this.customLike)
+      //     } else {
+      //       this.customLike = true
+      //       this.customPost.like_count++
+      //     }
+      //     break
+      //   case 1:
+      //     this.showCommentBox = !this.showCommentBox
+      //     console.log(this.postImages)
+      //     break
+      //   case 2:
+      //     this.openShareModal()
+      //     await sharePost(this.postId)
+      //     // this.$emit('postFetch')
+      //     break
+      //   case 3:
+      //     break
+      // }
     },
 
     async commentPost(comment) {

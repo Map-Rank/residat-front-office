@@ -333,7 +333,7 @@ export default {
     }
 
     // Check initial checkbox state based on the combined sectorIds
-    const isChecked = initialSectorIds.includes(this.list.id);
+    const isChecked = initialSectorIds.includes(this.list?.id);
     this.checked = isChecked;
   },
 
@@ -419,7 +419,6 @@ export default {
             name: newValue.name
           }
           region = [currentZone, ...rest]
-          console.log('Region updated:', region)
           this.default_regions = region
           this.zoneName = currentZone.name
           this.componentKey++
@@ -444,17 +443,17 @@ export default {
     const modalStore = useModalStore()
 
     return {
-      zoneName: authStore.user.zone.name,
+      zoneName: authStore.user?.zone.name == null ? "Welcome to residat" : authStore.user.zone.name,
       paramZone: {},
       isZoneFilterLoading: false,
-      profilePictureUrl: authStore.user.avatar,
+      profilePictureUrl: authStore.user?.avatar,
       showMobileFilterZonePost: true,
       showMobileFilterSectorPost: true,
       postStore,
       modalStore,
-      userProfileImage: authStore.user.avatar,
+      userProfileImage: authStore.user?.avatar,
       bannerUrlImage:
-        authStore.user.zone.banner ||
+        authStore.user?.zone.banner ||
         'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
       hasNewPosts: false,
       hasFetchAllPost: false,
@@ -576,7 +575,7 @@ export default {
         return
       }
       try {
-        const latestPosts = await getPosts(0, 10, this.authStore.user.token)
+        const latestPosts = await getPosts(0, 10, this.authStore?.user.token)
         this.hasNewPosts = latestPosts.some(
           (post) => !this.posts.find((existingPost) => existingPost.id === post.id)
         )
@@ -663,8 +662,8 @@ export default {
       this.hasNewPosts = false
 
       try {
-        this.posts = await getPosts(0, 10, this.authStore.user.token)
-        this.recentPosts = await getPosts(0, 10, this.authStore.user.token)
+        this.posts = await getPosts(0, 10, this.authStore.user?.token)
+        this.recentPosts = await getPosts(0, 10, this.authStore.user?.token)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true

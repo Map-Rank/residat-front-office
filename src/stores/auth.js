@@ -14,7 +14,7 @@ export default defineStore('auth', {
       return state.user ==null ? 'hidden' : ''
     },
     showClass(state) {
-      return state.user ==null ? '' : 'hidden'
+      return state.user == null ? '' : 'hidden'
     },
     getCurrentUser(state) {
       return state.user;
@@ -30,7 +30,7 @@ export default defineStore('auth', {
         const userEmailVerification = localStorage.getItem(LOCAL_STORAGE_KEYS.userEmailVerification)
           if (userInfo) {
           this.user = JSON.parse(userInfo);
-          this.isLoggedIn = this.user? true : false;
+          this.isLoggedIn = !!this.user;
         }
         else if (userEmailVerification){
           this.isEmailVerified = false
