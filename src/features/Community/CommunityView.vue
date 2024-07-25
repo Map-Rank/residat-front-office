@@ -680,7 +680,7 @@ export default {
 
     async fetchEvent() {
       try {
-        this.events = await getEvents(0, 10, this.authStore.user.token)
+        this.events = await getEvents(0, 10, this.authStore.user?.token)
       } catch (error) {
         console.error('Failed to load events:', error)
       } finally {

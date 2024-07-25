@@ -1,5 +1,5 @@
 <template>
-  <div></div>
+ 
   <div class="body flex flex-col min-h-screen">
     <!-- <LandingPage></LandingPage> -->
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
@@ -50,7 +50,7 @@ export default {
 
     return {
       modalStore,
-      showAuthModal: false, 
+      // showAuthModal: false, 
     }
   },
   components: {
@@ -65,8 +65,15 @@ export default {
 
   computed: {
     ...mapState(useAuthStore, ['hiddenClass','showClass']),
-    ...mapState(usePostStore, ['hideComponent'])
-  }
+    ...mapState(usePostStore, ['hideComponent']),
+    ...mapState(useModalStore, ['showAuthModal']),
+  },
+
+  methods: {
+    closeAuthModal() {
+      this.showAuthModal = false;
+    },
+  },
 }
 </script>
 

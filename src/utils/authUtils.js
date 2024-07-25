@@ -1,6 +1,7 @@
 // utils/authUtils.js
 import useAuthStore from '@/stores/auth.js';
-import { useModalStore } from '@/stores/modalStore.js';
+import useModalStore from '@/stores/modalStore.js'
+import { ref } from 'vue';
 
 const isUserLoggedIn = ref(false);
 
@@ -13,6 +14,7 @@ export function checkAuthentication() {
   if (!isUserLoggedIn.value) {
     console.log('This user is not logged in');
     modalStore.openAuthModal(); // Open the modal using the store
+    console.log('This user is not logged in');
     return false;
   }
 
