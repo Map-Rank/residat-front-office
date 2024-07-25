@@ -43,15 +43,9 @@ export default {
   },
   methods: {
     handleFileChange(event) {
-      const files = Array.from(event.target.files)
-      const isValidSize = files.every((file) => file.size <= this.maxSize * 1024) // Check if all files are of valid size
 
-      if (files.length > 0 && isValidSize) {
         this.$emit('handleFileChange', event)
-      } else {
-        this.toast.error('One or more files exceed the specified max size');
-        // console.error('One or more files exceed the specified max size.')
-      }
+      
     }
   }
 }

@@ -39,7 +39,7 @@ const router = createRouter({
       path: '/social-profile',
       name: 'social-profile',
       component: SocialProfile,
-      meta: { requiresAuth: true }
+      // meta: { requiresAuth: true }
       
     },
     {
@@ -68,7 +68,7 @@ const router = createRouter({
       path: '/event',
       name: 'event',
       component: EventView,
-      meta: { requiresAuth: true }
+      // meta: { requiresAuth: true }
     },
     {
       path: '/setting',
@@ -109,7 +109,7 @@ const router = createRouter({
       path: '/dashboard/:zoneId?/:parentId?/:zoneName?/:mapSize?',
       name: 'dashboard',
       component: DashBoardView,
-      meta: { requiresAuth: true },
+      // meta: { requiresAuth: true },
       props: (route) => ({
         zoneId: route.params.zoneId || 1,
         parentId: route.params.parentId,
@@ -125,7 +125,7 @@ const router = createRouter({
         path: '/community',
         name: 'community',
         component: CommunityView,
-        meta: { requiresAuth: true }
+        // meta: { requiresAuth: true }
       },
       
       {
@@ -172,7 +172,7 @@ const router = createRouter({
       name: 'search-result',
       component: SearchResult,
       // props: true,
-      meta: { requiresAuth: true },
+      // meta: { requiresAuth: true },
       props: (route) => ({
         zoneId: route.params.zoneId ,
         query:route.params.query ,
@@ -192,7 +192,7 @@ const router = createRouter({
       path: '/report',
       name: 'report',
       component: ReportView,
-      meta: { requiresAuth: true }
+      // meta: { requiresAuth: true }
     },
    
 
@@ -200,13 +200,13 @@ const router = createRouter({
       path: '/community',
       name: 'community',
       component: CommunityView,
-      meta: { requiresAuth: true }
+      // meta: { requiresAuth: true }
     },
     {
       path: '/community/:zoneId?/:sectorId?',
       name: 'communitySearch',
       component: CommunityView,
-      meta: { requiresAuth: true },
+      // meta: { requiresAuth: true },
       props: (route) => ({
         zoneId: route.params.zoneId || null,
         sectorId: route.params.sectorId || null ,
@@ -264,7 +264,7 @@ const router = createRouter({
       path: '/show-post/:id',
       name: 'show-post',
       component: ShowPost,
-      meta: { requiresAuth: true }
+      // meta: { requiresAuth: true }
     },
     {
       path: '/event-detail/:eventId',
@@ -285,7 +285,7 @@ const router = createRouter({
       path: '/view-profile-user/:id',
       name: 'view-profile-user',
       component: ViewProfileUser,
-      meta: { requiresAuth: true }
+      // meta: { requiresAuth: true }
     }
   ]
 })

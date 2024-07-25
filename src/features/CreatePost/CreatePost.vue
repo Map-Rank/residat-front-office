@@ -235,7 +235,7 @@ export default {
       if (!Array.isArray(this.imagesToFromLocalPreview)) {
         this.imagesToFromLocalPreview = []
       }
-    const  files = await handleMultipleFileUpload(event, 1, [
+    const  files = await handleMultipleFileUpload(event, 2, [
           'image/jpeg',
           'image/png'
         ], true);

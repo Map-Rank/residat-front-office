@@ -222,6 +222,8 @@ import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import {createEvent} from '@/services/eventService.js'
 import { useToast } from "vue-toastification";
+import { handleSingleFileUpload} from '@/utils/Image.js'
+
 
 export default {
   name: 'CreateEvent',
@@ -344,8 +346,9 @@ export default {
 
   methods: {
     
-    onFileChange(e) {
-      const file = e.target.files[0]
+    async onFileChange(e) {
+      // const file = e.target.files[0]
+      const file = await handleSingleFileUpload(e, 2, ['image/jpeg', 'image/png'], true);
       if (file) {
         this.formData.media = file
       } else {
@@ -424,8 +427,8 @@ export default {
 
     handleSuccess() {
       this.isCreatingEvent = false;
-      // this.resetForm()
-      // this.$router.push({ name: 'community' })
+       this.resetForm()
+       this.$router.push({ name: 'event' })
     },
 
     resetForm() {

@@ -105,6 +105,7 @@ export async function handleMultipleFileUpload(event, maxFileSizeMB = 1, accepte
         continue;
       }
 
+      print('this is the size'+ processedFile.size)
       if (processedFile.size > maxFileSizeMB * 1024 * 1024) {
         toast.error(`${file.name} exceeds the size limit after compression`);
         continue;
