@@ -6,6 +6,7 @@ export default defineStore('auth', {
     user: null,
     token:null,
     isloggedIn: null,
+    showGuessHeader: false,
     isEmailVerified:null,
   }),
 
@@ -31,15 +32,25 @@ export default defineStore('auth', {
           if (userInfo) {
           this.user = JSON.parse(userInfo);
           this.isLoggedIn = !!this.user;
+          this.showGuessHeader = false
         }
         else if (userEmailVerification){
           this.isEmailVerified = false
+        }else{
+          this.showGuessHeader = true
         }
         
       } catch (error) {
         console.error('Failed to parse user info:', error);
         this.resetAuthState();
       }
+    },
+
+    hideGuessHeader() {
+      this.showGuessHeader = false;
+    },
+    showGuessHeader() {
+      this.showGuessHeader = true;
     },
 
 

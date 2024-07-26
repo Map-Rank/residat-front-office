@@ -2,6 +2,9 @@
   <div class="h-full">
     <div class="bg-white p-6 flex justify-center">
       <LoadingIndicator v-if="isLoading" />
+
+    
+
       <top-profile-info
         v-if="!isLoading && userProfile"
         :profile-image-url="''"
@@ -11,6 +14,15 @@
         :profileImageUrl="userProfile.avatar"
         :isCurrentUser="true"
       />
+    </div>
+
+    <div v-if="showPageRefresh">
+      <RefreshError
+        :imgSize="400"
+        :imageUrl="'assets\images\Community\loading.svg'"
+        :errorMessage="errorMessage"
+        @refreshPage="fetchUserProfile()"
+      ></RefreshError>
     </div>
 
     <div class="md:px-100 pb-5">
@@ -64,6 +76,8 @@ import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
 import { getUserProfile } from '@/features/Post/services/postService.js'
 import LoadingIndicator from '../../components/base/LoadingIndicator.vue'
+import RefreshError from '@/components/common/Pages/RefreshError.vue'
+
 
 export default {
   name: 'ViewProfileUser',
@@ -75,6 +89,7 @@ export default {
       console.error('Failed to load posts:', error)
     } finally {
       this.isLoading = false
+      this.showPageRefresh = true
     }
 
   },
@@ -85,7 +100,9 @@ export default {
       posts: [],
       userProfile: null,
       isLoading: true,
-      id: this.$route.params.id
+      id: this.$route.params.id,
+      showPageRefresh: false,
+      errorMessage: 'Culd not load user informaiton',
     }
   },
 
@@ -93,7 +110,8 @@ export default {
     PostComponent,
     AboutUserInfo,
     TopProfileInfo,
-    LoadingIndicator
+    LoadingIndicator,
+    RefreshError
   },
 
   methods: {
@@ -103,6 +121,7 @@ export default {
 
     async fetchUserProfile() {
       console.log()
+      this.showPageRefresh = false
       this.isLoading = true
       this.userProfile = await getUserProfile(this.id)
       this.posts = this.userProfile.my_posts

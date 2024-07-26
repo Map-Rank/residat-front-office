@@ -20,8 +20,8 @@
                 <button @click="goToLogin" class="w-full inline-flex justify-center rounded-md shadow-sm px-4 py-2 bg-secondary-normal text-base font-medium text-white hover:bg-secondary-hover sm:w-auto sm:text-sm">
                   Login 
                 </button>
-                <button @click="goToLogin" class="w-full mt-3 inline-flex justify-center rounded-md shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-600 sm:w-auto sm:text-sm">
-                  Continuer sans connexion
+                <button @click="closeModal" class="w-full mt-3 inline-flex justify-center rounded-md shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-600 sm:w-auto sm:text-sm">
+                 Continue as guest
                 </button>
             </div>
             <!-- <div class="mt-4 text-sm text-gray-500">

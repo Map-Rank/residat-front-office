@@ -271,6 +271,7 @@ import { getSpecificZones, getZones } from '@/services/zoneService'
 import PostShimmerLoading from '@/components/common/ShimmerLoading/PostShimmerLoading.vue'
 import DropdownShimmer from '@/components/common/ShimmerLoading/DropdownShimmer.vue'
 import AvatarPostShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -592,6 +593,10 @@ export default {
     },
 
     async filterPostBySectors() {
+      if (checkAuthentication()) {
+        return
+      }
+
       try {
         this.topLoading = true
         let id = this.$route.params.zoneId;
@@ -615,6 +620,10 @@ export default {
 
     async filterPostByZone(id) {
       console.log(id)
+
+      if (checkAuthentication()) {
+        return
+      }
 
       this.zoneId = id || 1
       this.filteringActive = true

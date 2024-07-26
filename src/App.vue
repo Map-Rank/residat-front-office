@@ -3,7 +3,7 @@
   <div class="body flex flex-col min-h-screen">
     <!-- <LandingPage></LandingPage> -->
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
-    <GuestHeader class="fixed  w-full z-10" :class="showClass"></GuestHeader>
+    <GuestHeader class="fixed  w-full z-10" v-if="showGuessHeader"></GuestHeader>
     <!-- <HeaderLanding  :class="showClass" class="fixed  w-full z-10"> </HeaderLanding> -->
 
     <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
@@ -64,7 +64,7 @@ export default {
   },
 
   computed: {
-    ...mapState(useAuthStore, ['hiddenClass','showClass']),
+    ...mapState(useAuthStore, ['hiddenClass','showClass','showGuessHeader']),
     ...mapState(usePostStore, ['hideComponent']),
     ...mapState(useModalStore, ['showAuthModal']),
   },

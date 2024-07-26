@@ -20,8 +20,8 @@
       {{ $t('submit') }}
     </button>
       <h3></h3>
-      <a :href="'https://wa.me/+237620162316'" target="_blank">
-        <!-- <img src="/assets/icons/chat.svg" alt="Whatsapp icon"/> -->
+      <a :href="'https://wa.me/+237620162316'" target="_blank"  class="flex items-center mt-2">
+        <img src="/assets/icons/colored/whatsapp.svg" class="h-10" alt="Whatsapp icon"/>
         {{$t('get_on_whatsap')}}
       </a>
     </div>

@@ -23,6 +23,7 @@
   </template>
   <script>
   import randomColor from 'randomcolor';
+  import { checkAuthentication } from '@/utils/authUtils.js';
 
   export default {
     name: 'UserPostInfo',
@@ -39,7 +40,12 @@
     },
     methods: {
       viewProfileUser() {
+
+        if (checkAuthentication()) {
         this.$router.push({ name: 'view-profile-user', params: { id: this.id } })
+        return
+      }
+      
       },
       getColor(zoneName) {
       // Generate a random color based on the zoneName

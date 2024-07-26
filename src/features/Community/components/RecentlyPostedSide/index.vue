@@ -33,6 +33,7 @@
 <script>
 import { formatDate } from '@/utils/formating'
 import SectionTitle from '@/components/base/SectionTitle.vue'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 export default {
   name: 'RecentlyPosted',
@@ -57,16 +58,24 @@ export default {
     },
     maxPosts: {
       type: Number,
-      default: 3 // Set a default value or remove this line if no default is needed
+      default: 3 
     }
   },
   methods: {
     viewProfileUser(id) {
-      console.log(id)
-      this.$router.push({ name: 'view-profile-user', params: { id: id } })
+      if (checkAuthentication()) {
+        console.log(id)
+        this.$router.push({ name: 'view-profile-user', params: { id: id } })
+        return
+      }
+
     },
     viewPost(id) {
-      this.$router.push({ name: 'show-post', params: { id: id } })
+      if (checkAuthentication()) {
+        this.$router.push({ name: 'show-post', params: { id: id } })
+        return
+      }
+
     },
     truncateHtmlText(html, length) {
       const div = document.createElement('div');

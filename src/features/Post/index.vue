@@ -330,8 +330,6 @@ export default {
 
     editPost() {
       console.log('edit post ')
-      // this.setpostToEdit(this.post)
-      // this.$router.push({ name: 'edit-post' })
 
       this.$router.push({
         name: 'edit-post',
@@ -344,7 +342,8 @@ export default {
     async customFunction(index) {
 
       if (checkAuthentication()) {
-        // Perform like action
+        return
+      }
         switch (index) {
         case 0:
           await likePost(this.postId)
@@ -368,33 +367,8 @@ export default {
           break
         case 3:
           break
+      
       }
-      }
-
-      // switch (index) {
-      //   case 0:
-      //     await likePost(this.postId)
-      //     if (this.customLike) {
-      //       this.customLike = false
-      //       this.customPost.like_count--
-      //       console.log(this.customLike)
-      //     } else {
-      //       this.customLike = true
-      //       this.customPost.like_count++
-      //     }
-      //     break
-      //   case 1:
-      //     this.showCommentBox = !this.showCommentBox
-      //     console.log(this.postImages)
-      //     break
-      //   case 2:
-      //     this.openShareModal()
-      //     await sharePost(this.postId)
-      //     // this.$emit('postFetch')
-      //     break
-      //   case 3:
-      //     break
-      // }
     },
 
     async commentPost(comment) {

@@ -42,6 +42,7 @@
 import ButtonUi from '../../base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import usePostStore from '@/features/Post/store/postStore';
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 export default {
   name: 'PostInput',
@@ -65,11 +66,18 @@ export default {
 
   methods: {
     navigateCreatePost(){
-      this.postStore.setContentFromPostInput(this.content)
-      this.$router.push({ name: 'create-post', params:{prePostContent: this.content } })
+
+      if(checkAuthentication()){
+        this.postStore.setContentFromPostInput(this.content)
+        this.$router.push({ name: 'create-post', params:{prePostContent: this.content } })
+      }
     },
     navigateCreateEvent(){
-      this.$router.push({ name: 'create-event', params:{preEventTitle: this.content } })
+
+      if(checkAuthentication()){
+        this.$router.push({ name: 'create-event', params:{preEventTitle: this.content } })
+      }
+      
     },
   },
   components: {

@@ -53,6 +53,7 @@ import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import SectionTitle from '@/components/base/SectionTitle.vue'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -105,16 +106,26 @@ export default {
    
 
     async getRegions() {
-      try {
-        this.regions = this.regions.concat(await getZones(2, null))
-      } catch (error) {
-        console.log(error)
-      }
+
+      // if (checkAuthentication()) {
+      //   return
+      // }
+
+        try {
+          this.regions = this.regions.concat(await getZones(2, null))
+        } catch (error) {
+          console.log(error)
+        }
+    
     },
 
     async getDivisions(parent_id) {
       //here i will avoid fetching the divisions in the case 
       // that the user chosed to filter post according to Cameroon
+      if (checkAuthentication()) {
+        return
+      }
+      
       if(parent_id == 1){
         this.divisions = [this.divisions[0]]
         return
