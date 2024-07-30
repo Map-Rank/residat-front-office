@@ -285,7 +285,7 @@
                 type="checkbox"
                 v-model="formData.selectedSectors"
                 :id="sector.name"
-                class="rounded text-primary-normal focus:ring-primary-light"
+                class="custom-checkbox rounded text-primary-normal focus:ring-primary-light"
               />
               <label :for="sector.name" class="ml-2 block text-sm text-body-dark">
                 {{ sector.name }}
@@ -303,7 +303,7 @@
             name="tos"
             v-model="formData.tos"
             :rules="schema.tos"
-            class="w-4 h-4 float-left -ml-6 mt-1 rounded"
+            class="custom-checkbox w-4 h-4 float-left -ml-6 mt-1 rounded"
           />
           <label class="inline-block">{{ $t('accept_terms_of_service') }}</label> <br />
           <ErrorMessage class="text-red-600" name="tos" />
@@ -322,12 +322,12 @@
             type="submit"
             @click="registerForm()"
             :class="
-              this.isLoading
+              this.isLoadingButton
                 ? 'bg-gray-400 cursor-wait '
                 : 'bg-secondary-normal hover:bg-secondary-hover'
             "
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-            :disabled="this.isLoading"
+            :disabled="this.isLoadingButton"
           >
             {{ $t('sign_up') }}
           </button>
@@ -431,6 +431,7 @@ components: {
         }
       ],
       isLoading: false,
+      isLoadingButton: false,
       isDivisionLoading: false,
       isSubdivisionLoading: false,
       dropdownOptions: [
@@ -594,13 +595,14 @@ console.log(typeof this.formData.date_of_birth);
     },
 
     handleSuccess() {
+      this.isLoadingButton = false
       console.log('Current User:', this.authStore.getCurrentUser)
       this.authStore.isloggedIn = true
       this.$router.push({ name: 'community' })
     },
 
     handleError(errors) {
-      this.isLoading = false
+      this.isLoadingButton = false
       if (errors.email && errors.email.length > 0) {
         this.toast.error(errors.email[0]);
       } else if (errors.zone_id && errors.zone_id.length > 0) {
@@ -619,11 +621,13 @@ async registerForm() {
     
     
     try {
-      this.isLoading = true
+      // this.isLoading = true
+      this.isLoadingButton = true
       this.toast.info(this.$t('please_wait_creating_account'));
       await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError, this.handleEmailNotVerified);
     } catch (error) {
-      this.isLoading = false
+      // this.isLoading = false
+      this.isLoadingButton = false
       console.log(error);
     }
   } 
@@ -652,4 +656,39 @@ span {
   font-weight: 400;
   line-height: 16px; /* 133.333% */
 }
+
+
+.custom-checkbox {
+  position: relative;
+  width: 18px; /* Ensure width */
+  height: 18px; /* Ensure height */
+  background-color: #f5f5f5; /* Default background color */
+  border: 1px solid #666565; /* Border for visibility */
+  appearance: none; /* Remove default styles */
+  outline: none; /* Remove default outline */
+  cursor: pointer;
+}
+
+.custom-checkbox:checked {
+  background-color: #5c7d3b; /* Background color when checked */
+  border-color: #5c7d3b; /* Border color when checked */
+}
+
+.custom-checkbox::after {
+  content: "";
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 2px;
+  height: 6px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+  display: none;
+}
+
+.custom-checkbox:checked::after {
+  display: block;
+}
+
 </style>

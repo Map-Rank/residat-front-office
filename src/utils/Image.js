@@ -59,6 +59,7 @@ export async function handleSingleFileUpload(event, maxFileSizeMB = 2, acceptedT
   'image/jpeg',
   'image/png'
 ], compress = false) {
+  event.preventDefault(); // Prevent default behavior
   const file = event.target.files[0];
   let processedFile = file;
 
@@ -68,11 +69,6 @@ export async function handleSingleFileUpload(event, maxFileSizeMB = 2, acceptedT
     } catch (error) {
       toast.error(`${file.name} compression failed: ${error.message}`);
       throw new Error(`${file.name} compression failed: ${error.message}`);
-    }
-
-    if (processedFile.size > maxFileSizeMB * 1024 * 1024) {
-      toast.error(`${file.name} exceeds the size limit after compression`);
-      throw new Error(`${file.name} exceeds the size limit after compression`);
     }
   }
 
@@ -91,6 +87,7 @@ export async function handleMultipleFileUpload(event, maxFileSizeMB = 1, accepte
   'image/jpeg',
   'image/png'
 ], compress = false) {
+  event.preventDefault(); // Prevent default behavior
   const files = Array.from(event.target.files);
   const processedFiles = [];
 
@@ -104,19 +101,12 @@ export async function handleMultipleFileUpload(event, maxFileSizeMB = 1, accepte
         console.error(`${file.name} compression failed: ${error.message}`);
         continue;
       }
-
-      print('this is the size'+ processedFile.size)
-      if (processedFile.size > maxFileSizeMB * 1024 * 1024) {
-        toast.error(`${file.name} exceeds the size limit after compression`);
-        continue;
-      }
     }
 
     if (validateFile(processedFile, maxFileSizeMB, acceptedTypes)) {
       processedFiles.push(processedFile);
     } else {
-      toast.error(`${processedFile.name} exceeds the size limit or is not a supported format`);
-      console.error(`${processedFile.name} exceeds the size limit or is not a supported format`);
+      throw new Error(`${processedFile.name} exceeds the size limit or is not a supported format`);
     }
   }
 

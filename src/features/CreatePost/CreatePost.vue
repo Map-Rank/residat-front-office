@@ -43,7 +43,7 @@
               :iconImg="'assets\\icons\\colored\\image-icon.svg'"
               :type="'file'"
               :label="$t('add_image')"
-              @handleFileChange="handleImageUpload"
+              @handleFileChange.prevent="handleImageUpload"
             />
           </div>
         </div>

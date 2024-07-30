@@ -27,16 +27,18 @@ const createPost = async (postData, onSuccess, onError) => {
           'audio/mp3'
         ].includes(image.type)
       ) {
+        console.log('thisis the image '+image);
         formData.append(`media[${index}]`, image, image.name)
       } else {
         console.log('not correct format')
       }
     })
-
+    
     postData.sectorId.forEach((id, index) => {
       formData.append(`sectors[${index}]`, id)
     })
-
+    
+    console.log('thisis the image '+ formData);
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
     console.log(token)
 
