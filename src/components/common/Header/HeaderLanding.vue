@@ -1,7 +1,45 @@
 <template>
   <header class="bg-white p-4">
     <div class="container mx-auto flex justify-between items-center">
-      <AppLogo :isWhite="false" :alt="$t('header_logo_alt')"></AppLogo>
+
+      <div class="flex flex-row items-center space-x-5">
+        <AppLogo :isWhite="false" :alt="$t('header_logo_alt')"></AppLogo>
+        <div class="menu langMenu relative">
+          <icon-with-label
+            class="dropdown"
+            :textCss="'text-primary-normal text-xs'"
+            :svgContent="'\\assets\\icons\\translate.svg'"
+            :svgContentHover="'\\assets\\icons\\translate.svg'"
+            :labelTextBottom="this.lang"
+            :iconDesktopSize="this.iconSize"
+            :isActive="true"
+            :bottom="true"
+            @customFunction="toggleMenuLangauge"
+          ></icon-with-label>
+
+          <div
+            ref="menu"
+            v-show="isShowLangaugeMenu"
+            class="absolute left-0 mt-2 w-42 bg-white rounded-md shadow-lg z-10"
+          >
+            <button-ui
+              :label="$t('en')"
+              :textCss="'text-left '"
+              :customCss="'items-left justify-start hover:bg-gray-100'"
+              @clickButton="changeLanguage('en')"
+            >
+            </button-ui>
+
+            <button-ui
+              :label="$t('fr')"
+              :textCss="'text-left '"
+              :customCss="'items-left justify-start hover:bg-gray-100'"
+              @clickButton="changeLanguage('fr')"
+            >
+            </button-ui>
+          </div>
+        </div>
+      </div>
       
       <!-- Burger Menu Icon for Mobile View -->
       <button 
@@ -96,12 +134,15 @@
 <script>
 import AppLogo from '@/components/base/AppLogo.vue';
 import ButtonUi from '@/components/base/ButtonUi.vue';
+import IconWithLabel from '@/components/common/IconWithLabel/index.vue';
+import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
 export default {
   name: 'HeaderLanding',
   components: {
     AppLogo,
     ButtonUi,
+    IconWithLabel
   },
   data() {
     return {
@@ -110,10 +151,22 @@ export default {
         { href: '#solution', label: 'header_solution' },
         { href: '#impact', label: 'header_impact' }
       ],
-      isSidebarOpen: false
+      isSidebarOpen: false,
+      iconSize: 'w-7 h-7',
+      lang: 'en',
+      isShowLangaugeMenu:false
     };
   },
   methods: {
+    toggleMenuLangauge() {
+      this.isShowLangaugeMenu = !this.isShowLangaugeMenu
+    },
+    changeLanguage(lang) {
+      this.lang = lang
+      localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, lang)
+      this.toggleMenuLangauge()
+      window.location.reload()
+    },
     toggleSidebar() {
       this.isSidebarOpen = !this.isSidebarOpen;
     },

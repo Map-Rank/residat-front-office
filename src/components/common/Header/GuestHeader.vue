@@ -3,16 +3,7 @@
       <div class="container mx-auto flex justify-between items-center">
         <AppLogo :isWhite="false" :alt="$t('header_logo_alt')"></AppLogo>
         
-        <!-- Burger Menu Icon for Mobile View -->
-        <button 
-          class="block lg:hidden text-primary-normal" 
-          @click="toggleSidebar"
-          :aria-label="$t('header_burger_menu')"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
-          </svg>
-        </button>
+    
   
    
         
@@ -27,51 +18,7 @@
         
         </div>
       </div>
-  
-      <!-- Sidebar for Mobile View -->
-      <transition name="slide">
-        <div v-if="isSidebarOpen" class="fixed inset-0 bg-black bg-opacity-50 z-50 lg:hidden" @click.self="toggleSidebar">
-          <div class="fixed right-0 top-0 w-[60%] h-full bg-primary-normal p-4 space-y-4 shadow-lg z-50">
-            <!-- Close Button -->
-            <button class="text-white mb-4" @click="toggleSidebar" :aria-label="$t('header_close_menu')">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-            <!-- Sidebar Links -->
-            <div class="flex justify-end pb-[40px]">
-              <AppLogo :isWhite="true" :alt="$t('header_logo_alt')"></AppLogo>
-            </div>
-            <ul class="space-y-4 text-primary-normal pb-10">
-              <li v-for="(item, index) in navItems" :key="index">
-                <a
-                  :href="absoluteHref(item.href)"
-                  class="block text-right text-white text-xl font-normal font-['Poppins'] leading-normal"
-                >
-                  {{ $t(item.label) }}
-                </a>
-              </li>
-            </ul>
-            <div class="mt-4 flex flex-col space-y-2">
-              <ButtonUi
-                :label="$t('header_register')"
-                customCss="bg-secondary-normal text-center flex justify-center px-10 py-4"
-                textCss="text-center"
-                :isRoundedFull="true"
-                @clickButton="navigateTo('register')"
-                :isDisabled="false"
-              ></ButtonUi>
-              <ButtonUi
-                :label="$t('header_sign_in')"
-                customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
-                textCss="text-center"
-                :isRoundedFull="true"
-                @clickButton="navigateTo('login')"
-              ></ButtonUi>
-            </div>
-          </div>
-        </div>
-      </transition>
+ 
     </header>
   </template>
   
