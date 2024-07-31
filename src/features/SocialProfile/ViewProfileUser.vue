@@ -85,11 +85,13 @@ export default {
   async created() {
     try {
       await this.fetchUserProfile()
+      this.showPageRefresh = false
     } catch (error) {
       console.error('Failed to load posts:', error)
+      this.showPageRefresh = true
     } finally {
       this.isLoading = false
-      this.showPageRefresh = true
+      // this.showPageRefresh = true
     }
 
   },

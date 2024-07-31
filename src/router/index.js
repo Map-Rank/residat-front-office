@@ -270,7 +270,7 @@ const router = createRouter({
       path: '/event-detail/:eventId',
       name: 'event-detail',
       component: EventDetails,
-      meta: { requiresAuth: true },
+      // meta: { requiresAuth: true },
       props: (route) => ({
         eventId: route.params.eventId ,
       })

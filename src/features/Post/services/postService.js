@@ -1,5 +1,6 @@
 import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 const currentDate = new Date().toISOString().split('T')[0]
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
@@ -118,7 +119,7 @@ const updatePost = async (postData, onSuccess, onError) => {
   }
 }
 
-const getPosts = async (page, size, token) => {
+const getPosts = async (page, size, token,isConnected = true) => {
   let defaultSize = 10
   let defaultPage = 0
 
@@ -132,10 +133,18 @@ const getPosts = async (page, size, token) => {
 
   const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      token ? token : localToken
-    )
+    let response;
+    let url;
+    
+
+    isConnected ? url = API_ENDPOINTS.getPosts : url = API_ENDPOINTS.getPostsGuest
+
+       response = await makeApiGetCall(
+        `${url}?${params.toString()}`,
+        token ? token : localToken
+      )
+
+
 
     return response.data.data
   } catch (error) {
@@ -149,8 +158,14 @@ const getSpecificPost = async (id) => {
 
   const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
+
+    let url;
+    const isConnected = checkAuthentication()
+
+    isConnected ? url = API_ENDPOINTS.post : url = API_ENDPOINTS.getSinglePostsGuest
+
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.post}/${id}`,
+      `${url}/${id}`,
       localToken
     )
     return response.data.data

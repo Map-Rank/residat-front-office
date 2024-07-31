@@ -15,7 +15,7 @@
     @click.prevent="handleClick()"
   >
     <img v-if="leftIcon" :src="leftIcon" alt="Left icon" class="w-6 h-6" />
-    <p :class="[textCss, colorObject, 'no-wrap']">
+    <p :class="[textCss, colorObject,'flex-wrap text-wrap']">
       {{ label }}
     </p>
     <img v-if="rightIcon" :src="rightIcon" alt="Right icon" class="w-5 h-5" />
@@ -93,7 +93,6 @@ p {
   font-style: normal;
   line-height: 20px; /* 171.429% */
   letter-spacing: 0.75px;
-  white-space: nowrap; /* Prevent wrapping */
 }
 
 

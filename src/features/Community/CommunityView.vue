@@ -278,6 +278,10 @@ export default {
   name: 'Community',
 
   async created() {
+
+    if (checkAuthentication()) {
+      this.isUserConnected = true
+      }
     
     try {
       const zoneId = this.$route.params.zoneId
@@ -476,6 +480,7 @@ export default {
       allPosts: [],
       showPageRefresh: false,
       componentKey: 0,
+      isUserConnected: false,
 
       size: 10,
       page: 0,
@@ -576,7 +581,7 @@ export default {
         return
       }
       try {
-        const latestPosts = await getPosts(0, 10, this.authStore?.user.token)
+        const latestPosts = await getPosts(0, 10, this.authStore?.user.token,this.isUserConnected)
         this.hasNewPosts = latestPosts.some(
           (post) => !this.posts.find((existingPost) => existingPost.id === post.id)
         )
@@ -671,8 +676,8 @@ export default {
       this.hasNewPosts = false
 
       try {
-        this.posts = await getPosts(0, 10, this.authStore.user?.token)
-        this.recentPosts = await getPosts(0, 10, this.authStore.user?.token)
+        this.posts = await getPosts(0, 10, this.authStore.user?.token ,this.isUserConnected)
+        this.recentPosts = await getPosts(0, 10, this.authStore.user?.token,this.isUserConnected)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -689,7 +694,7 @@ export default {
 
     async fetchEvent() {
       try {
-        this.events = await getEvents(0, 10, this.authStore.user?.token)
+        this.events = await getEvents(0, 10, this.authStore.user?.token,this.isUserConnected)
       } catch (error) {
         console.error('Failed to load events:', error)
       } finally {
@@ -712,7 +717,8 @@ export default {
           nextPagePosts = await getFilterPosts(zoneId, sectorId, size, nextPage);
         } else {
           const nextPage = this.page + 1
-          nextPagePosts = await getPosts(nextPage, this.size)
+          // console.log('this is the user sate '+ this.isUserConnected)
+          nextPagePosts = await getPosts(nextPage, this.size,null,this.isUserConnected)
         }
 
         if (nextPagePosts.length === 0) {

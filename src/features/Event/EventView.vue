@@ -52,11 +52,16 @@ import EventBox from './Components/EventBox.vue'
 import AvatarEventShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { getFilterEvents } from '@/services/eventService.js'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 export default {
   name: 'EventView',
   async created() {
     // this.fetcheventById()
+    if (checkAuthentication()) {
+      this.isUserConnected = true
+      }
+
     try {
       this.topLoading = true
       this.isZoneLoading = true
@@ -84,6 +89,8 @@ export default {
       showMenu: false,
       isMenuVisible: false,
       events: [],
+      
+      isUserConnected:false,
       popularEvents: [
         {
           id: 1,
@@ -146,9 +153,10 @@ export default {
 
     async fetchEvents() {
       this.hasNewEvents = false
+      console.log('fetching')
 
       try {
-        this.events = await getEvents(0, 10, this.authStore.user.token)
+        this.events = await getEvents(0, 10, this.authStore?.user?.token,this.isUserConnected)
         // this.recentEvents = await getEvents(0, 3, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load events:', error)
