@@ -341,7 +341,7 @@ export default {
 
     async customFunction(index) {
 
-      if (checkAuthentication()) {
+      if (!checkAuthentication()) {
         return
       }
         switch (index) {
@@ -367,6 +367,7 @@ export default {
           break
         case 3:
           break
+      
       
       }
     },

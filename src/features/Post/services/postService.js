@@ -177,6 +177,10 @@ const getSpecificPost = async (id) => {
 
 
 const filterPost = async (params) => {
+
+  if (!checkAuthentication()) {
+    return
+  }
   
   const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   

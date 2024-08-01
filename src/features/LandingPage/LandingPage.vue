@@ -168,14 +168,14 @@
     </div>
 
     <!-- sponsors -->
-    <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-10">
+    <!-- <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-10">
       <div :class="classes" class="self-stretch text-center text-secondary-normal text-[28px] md:text-[38px] font-bold font-['Poppins'] leading-[44px]">
         {{ $t('they_support_us') }}
       </div>
       <div class="w-full flex flex-col md:flex-row gap-10 justify-center md:justify-around items-center">
         <img v-for="src in suppoterLogos" :key="src" :src="src" class="w-auto h-10 md:h-24" />
       </div>
-    </div>
+    </div> -->
 
     <FooterLanding></FooterLanding>
   </div>

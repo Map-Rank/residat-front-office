@@ -598,9 +598,6 @@ export default {
     },
 
     async filterPostBySectors() {
-      if (checkAuthentication()) {
-        return
-      }
 
       try {
         this.topLoading = true
@@ -620,41 +617,41 @@ export default {
         } else {
           this.showPageRefresh = false
         }
+      
       }
+
     },
 
     async filterPostByZone(id) {
       console.log(id)
 
-      if (checkAuthentication()) {
-        return
-      }
-
-      this.zoneId = id || 1
-      this.filteringActive = true
-      this.hasFetchAllPost = false
-
-      try {
-        this.topLoading = true
-
-        this.posts = await getFilterPosts(id != 0 ? id : null, this.sectorId, null, null)
-        this.$router.push(`/community/${id}`);
-
-      } catch (error) {
-        console.error('Failed to load posts:', error)
-        this.showPageRefresh = true
-      } finally {
-        this.topLoading = false
-        this.filteringActive = false
-        if (this.posts.length === 0) {
+        this.zoneId = id || 1
+        this.filteringActive = true
+        this.hasFetchAllPost = false
+  
+        try {
+          this.topLoading = true
+  
+          this.posts = await getFilterPosts(id != 0 ? id : null, this.sectorId, null, null)
+          this.$router.push(`/community/${id}`);
+  
+        } catch (error) {
+          console.error('Failed to load posts:', error)
           this.showPageRefresh = true
-          console.log("this is howpager" + this.showPageRefresh)
-          console.log('No post found under this location , chose another location ')
-          // this.errorMessage = 'No post found under this location , chose another location '
-        } else {
-          this.showPageRefresh = false
-        }
+        } finally {
+          this.topLoading = false
+          this.filteringActive = false
+          if (this.posts.length === 0) {
+            this.showPageRefresh = true
+            console.log("this is howpager" + this.showPageRefresh)
+            console.log('No post found under this location , chose another location ')
+            // this.errorMessage = 'No post found under this location , chose another location '
+          } else {
+            this.showPageRefresh = false
+          }
+        
       }
+
     },
 
     async reloadPosts() {

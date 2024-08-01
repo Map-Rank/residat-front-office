@@ -71,10 +71,10 @@ export default {
 
     },
     viewPost(id) {
-      if (checkAuthentication()) {
+      // if (checkAuthentication()) {
         this.$router.push({ name: 'show-post', params: { id: id } })
         return
-      }
+      // }
 
     },
     truncateHtmlText(html, length) {
