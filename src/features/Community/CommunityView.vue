@@ -554,6 +554,12 @@ export default {
       this.showMobileFilterSectorPost = !this.showMobileFilterSectorPost
     },
     updateSectorChecked({ list, checked }) {
+
+      if (!checkAuthentication()) {
+        return
+      }
+
+
       this.showPageRefresh = false
       console.log(list.id)
 
