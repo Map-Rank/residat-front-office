@@ -36,20 +36,6 @@ eslint-disable vue/no-parsing-error
             <ErrorMessage class="text-danger-normal" name="owner_name" />
           </div>
 
-          <!-- Description  -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('description') }}</label>
-            <vee-field
-              name="description"
-              v-model="formData.description"
-              :rules="schema.description"
-              as="textarea"
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('description')"
-            />
-            <ErrorMessage class="text-danger-normal" name="description" />
-          </div>
 
           <!-- Email -->
           <div class="mb-6">
@@ -96,6 +82,22 @@ eslint-disable vue/no-parsing-error
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
         <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
 
+        
+          <!-- Description  -->
+          <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('description') }}</label>
+            <vee-field
+              name="description"
+              v-model="formData.description"
+              :rules="schema.description"
+              as="textarea"
+              type="text"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('description')"
+            />
+            <ErrorMessage class="text-danger-normal" name="description" />
+          </div>
+
         <div class="mb-6">
           <label class="inline-block mb-2"
             >{{ $t('instu_logo') }} <span style="color: red">({{ $t('max_1mbs') }})</span></label
@@ -120,7 +122,7 @@ eslint-disable vue/no-parsing-error
             </div>
           </div>
         </div>
-
+<!-- 
         <div class="mb-6">
           <label class="inline-block mb-2"
             >{{ $t('upload_official_doc') }}
@@ -178,11 +180,11 @@ eslint-disable vue/no-parsing-error
               </div>
             </div>
           </div>
-        </div>
+        </div> -->
 
         <div class="flex flex-row space-x-4 justify-between">
-          <div class="w-1/2">
-            <label class="inline-block mb-2">{{ $t('choose_your_region') }}</label>
+          <div class="w-full">
+            <label class="inline-block mb-2">{{ $t('Chose your territorial zone') }}</label>
             <div v-if="isLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -190,10 +192,10 @@ eslint-disable vue/no-parsing-error
               v-if="!isLoading"
               :options="regions"
               @selectedOptionId="handleSelectedRegionIdChange"
-              @functionIdParams="getDivisions"
+      
             />
           </div>
-          <div class="w-1/2">
+          <!-- <div class="w-1/2">
             <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
@@ -204,10 +206,10 @@ eslint-disable vue/no-parsing-error
               :options="divisions"
               @functionIdParams="getSub_divisions"
             />
-          </div>
+          </div> -->
         </div>
 
-        <div class="w-full">
+        <!-- <div class="w-full">
           <label class="inline-block mb-2">{{ $t('choose_your_subdivision') }} </label>
           <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
             <LoadingIndicator />
@@ -217,7 +219,7 @@ eslint-disable vue/no-parsing-error
             v-if="!isLoading && !isSubdivisionLoading"
             :options="sub_divisions"
           />
-        </div>
+        </div> -->
 
         <div class="mb-3 pl-6">
           <!-- TOS -->
@@ -283,7 +285,7 @@ export default {
 
     try {
       this.isLoading = true
-      await this.getRegions()
+      // await this.getRegions()
       this.sectors = sectorStore.getAllSectors
       this.zones = zoneSector.getAllZones
     } catch (error) {
@@ -312,12 +314,30 @@ export default {
         subDivision_id: '1'
       },
       regions: [
+        // {
+        //   id: 0,
+        //   name: this.$t('choose_your_region'),
+        //   banner: null,
+        //   created_at: '2024-01-05T13:43:24.000000Z'
+        // },
         {
-          id: 0,
-          name: this.$t('choose_your_region'),
+          id: 1,
+          name: this.$t('Regional'),
           banner: null,
           created_at: '2024-01-05T13:43:24.000000Z'
-        }
+        },
+        {
+          id: 2,
+          name: this.$t('divisional'),
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        },
+        {
+          id: 3,
+          name: this.$t('sub divisional'),
+          banner: null,
+          created_at: '2024-01-05T13:43:24.000000Z'
+        },
       ],
       divisions: [
         {
@@ -379,7 +399,7 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_1',
+      currentStep: 'step_2',
       reg_in_submission: false,
       documentPreviews:[]
     }

@@ -59,11 +59,11 @@ sectorStore.initializeStore()
 const authStore = useAuthStore()
 authStore.initializeAuthState()
 
-// getFcmToken().then(token => {
-//     if (token) {
-//       console.log('FCM token:Firebase initialise');
-//     }
-//   });
+getFcmToken().then(token => {
+    if (token) {
+      console.log('FCM token:Firebase initialise');
+    }
+  });
 
 app.mount('#app')
 

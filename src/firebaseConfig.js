@@ -37,7 +37,7 @@ export const getFcmToken = async () => {
       console.log('Notification permission granted.');
       const currentToken = await getToken(messaging, { vapidKey: vapidKey });
       if (currentToken) {
-        // console.log('FCM Token:', currentToken);
+        console.log('FCM Token:', currentToken);
         return currentToken;
       } else {
         console.log('No registration token available. Request permission to generate one.');

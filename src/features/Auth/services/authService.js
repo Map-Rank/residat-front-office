@@ -2,6 +2,8 @@ import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 import { getFcmToken } from '@/firebaseConfig.js'
 import convertToDate from '../../../utils/dateFormat.js'
+// import { getFcmToken } from '@/firebaseConfig';
+
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
