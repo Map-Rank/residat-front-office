@@ -1,70 +1,75 @@
 <!-- eslint-disable vue/no-parsing-error -->
 <template>
   <div class="flex-col">
- 
+    <!-- Progress Bar -->
+    <div class="flex justify-center space-x-4 mb-8">
+      <div class="w-1/3">
+        <div
+          class="h-2 rounded-full"
+          :class="{
+            'bg-primary-normal': currentStep >= 1,
+            'bg-gray-300': currentStep < 1
+          }"
+        ></div>
+        <!-- <p class="text-center mt-2">{{ $t('personal_information') }}</p> -->
+      </div>
+      <div class="w-1/3">
+        <div
+          class="h-2 rounded-full"
+          :class="{
+            'bg-primary-normal': currentStep >= 2,
+            'bg-gray-300': currentStep < 2
+          }"
+        ></div>
+        <!-- <p class="text-center mt-2">{{ $t('security_information') }}</p> -->
+      </div>
+      <div class="w-1/3">
+        <div
+          class="h-2 rounded-full"
+          :class="{
+            'bg-primary-normal': currentStep >= 3,
+            'bg-gray-300': currentStep < 3
+          }"
+        ></div>
+        <!-- <p class="text-center mt-2">{{$t('specific_information')  }}</p> -->
+      </div>
+    </div>
+
+    <!-- Step 1: Personal Information -->
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
-      <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
+      <div class="flex-col space-y-6" v-if="currentStep === 1">
+        <h2 class="text-center uppercase">{{ $t('personal_information') }}</h2>
+
         <div class="flex-col space-y-6">
-          <h2 class="text-center uppercase">{{ $t('personal_information') }}</h2>
-          <!-- First Name -->
-          <div class="mb-6">
-            <label class="inline-block mb-4">{{ $t('first_name') }}</label>
-            <vee-field
-              name="first_name"
-              v-model="formData.first_name"
-              :rules="schema.first_name"
-              as="input"
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('enter_first_name')"
-            />
-            <ErrorMessage class="text-danger-normal" name="first_name" />
-          </div>
-
-          <!-- Second Name -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('second_name') }}</label>
-            <vee-field
-              name="last_name"
-              v-model="formData.last_name"
-              :rules="schema.last_name"
-              as="input"
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('enter_second_name')"
-            />
-            <ErrorMessage class="text-danger-normal" name="last_name" />
-          </div>
-
-
-          <!-- Description  -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('occupation') }}</label>
-            <vee-field
-              name="description"
-              v-model="formData.description"
-              :rules="schema.description"
-              as="textarea"
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('occupation')"
-            />
-            <ErrorMessage class="text-danger-normal" name="description" />
-          </div>
-
-          <!-- Email -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('email') }}</label>
-            <vee-field
-              name="email"
-              :rules="schema.email"
-              v-model="formData.email"
-              type="email"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('enter_email')"
-            />
-            <ErrorMessage class="text-danger-normal" name="email" />
-          </div>
+               <!-- First Name -->
+               <div class="mb-6">
+                <label class="inline-block mb-4">{{ $t('first_name') }}</label>
+                <vee-field
+                  name="first_name"
+                  v-model="formData.first_name"
+                  :rules="schema.first_name"
+                  as="input"
+                  type="text"
+                  class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+                  :placeholder="$t('enter_first_name')"
+                />
+                <ErrorMessage class="text-danger-normal" name="first_name" />
+              </div>
+    
+              <!-- Second Name -->
+              <div class="mb-6">
+                <label class="inline-block mb-2">{{ $t('second_name') }}</label>
+                <vee-field
+                  name="last_name"
+                  v-model="formData.last_name"
+                  :rules="schema.last_name"
+                  as="input"
+                  type="text"
+                  class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+                  :placeholder="$t('enter_second_name')"
+                />
+                <ErrorMessage class="text-danger-normal" name="last_name" />
+              </div>
 
           <!-- phone -->
 
@@ -82,21 +87,6 @@
             <ErrorMessage class="text-danger-normal" name="phone" />
           </div>
 
-
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
-            <vee-field
-              name="dob"
-              v-model="formData.date_of_birth"
-              :rules="schema.dob"
-              as="input"
-              v-mask="'##/##/####'"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('select_date_of_birth')"
-            />
-            <ErrorMessage class="text-danger-normal" name="dob" />
-          </div>
-
           <!-- User Gender  -->
           <div class="mb-6">
             <label class="inline-block mb-2">{{ $t('gender') }}</label>
@@ -110,115 +100,122 @@
             </select>
           </div>
 
-          <!-- Password -->
-          <div class="relative w-full">
-            <label>{{$t('password')}}</label>
-            <div class="flex items-center border border-gray-300 rounded overflow-hidden">
-              <vee-field
-                name="password"
-                v-model="formData.password"
-                :type="showPassword ? 'text' : 'password'"
-                id="password"
-                class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                :placeholder="$t('enter_password')"
-              ></vee-field>
-              <button
-                @click="togglePasswordVisibility"
-                type="button"
-                class="p-2 focus:outline-none"
-              >
-                <img
-                  v-show="!showPassword"
-                  src="\assets\icons\password-open.svg"
-                  alt="Show password"
-                  class="block w-6 h-6"
-                />
-                <img
-                  v-show="showPassword"
-                  src="\assets\icons\password-closed.svg"
-                  alt="Hide password"
-                  class="block w-6 h-6"
-                />
-              </button>
-            </div>
-
-            <!-- Error Message -->
-            <ErrorMessage class="text-red-500 text-sm mt-1" name="password" />
-          </div>
-
-          <!-- Confirm Password -->
-          <div class="relative w-full">
-            <label>{{ $t('confirm_password') }}</label>
-            <div class="flex items-center border border-gray-300 rounded overflow-hidden">
-              <vee-field
-                name="confirm_password"
-                v-model="formData.confirm_password"
-                :type="showConfirmPassword ? 'text' : 'password'"
-                :rules="schema.confirm_password"
-                id="confirm_password"
-                class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
-                :placeholder="$t('enter_confirm_password')"
-              ></vee-field>
-              <button
-                @click="toggleConfirmPasswordVisibility"
-                type="button"
-                class="p-2 focus:outline-none"
-              >
-                <img
-                  v-show="!showConfirmPassword"
-                  src="\assets\icons\password-open.svg"
-                  alt="Show password"
-                  class="block w-6 h-6"
-                />
-                <img
-                  v-show="showConfirmPassword"
-                  src="\assets\icons\password-closed.svg"
-                  alt="Hide password"
-                  class="block w-6 h-6"
-                />
-              </button>
-            </div>
-
-            <ErrorMessage class="text-danger-normal" name="confirm_password" />
-          </div>
-
-          <div class="sm:px-">
-            <div class="flex justify-center">
-              <button
-                @click.prevent="nextStep()"
-                class="block w-full capitalize bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-              >
+          <div class="flex justify-between">
+            <button
+              @click.prevent="nextStep()"
+              class="block w-full capitalize bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+            >
               {{ $t('next') }}
-              </button>
-            </div>
+            </button>
           </div>
         </div>
       </div>
 
-      <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
-        <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
+      <!-- Step 2: Specific Information -->
+      <div class="flex-col space-y-6" v-if="currentStep === 2">
+        <h2 class="text-center uppercase">{{ $t('security_information') }}</h2>
 
+        <!-- Email -->
         <div class="mb-6">
-          <label class="inline-block mb-2">{{ $t('profile_picture') }}</label>
-          <input
-            type="file"
-            @change="onFileChange"
-            accept="image/*"
+          <label class="inline-block mb-2">{{ $t('email') }}</label>
+          <vee-field
+            name="email"
+            :rules="schema.email"
+            v-model="formData.email"
+            type="email"
             class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            :placeholder="$t('enter_email')"
           />
-          <ErrorMessage class="text-danger-normal" name="avatar" />
-
-          <div v-if="formData.avatar" class="mt-4 grid justify-center">
-            <p class="mb-2">{{ $t('preview_picture') }}:</p>
-            <div class="w-24 h-24 rounded-full overflow-hidden">
-              <img
-                :src="imageUrl"
-                alt="Profile Picture Preview"
-                class="w-full rounded-full h-full object-cover"
-              />
-            </div>
-          </div>
+          <ErrorMessage class="text-danger-normal" name="email" />
         </div>
+
+        <!-- Password -->
+        <div class="relative w-full">
+          <label>{{ $t('password') }}</label>
+          <div class="flex items-center border border-gray-300 rounded overflow-hidden">
+            <vee-field
+              name="password"
+              v-model="formData.password"
+              :type="showPassword ? 'text' : 'password'"
+              id="password"
+              class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
+              :placeholder="$t('enter_password')"
+            ></vee-field>
+            <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none">
+              <img
+                v-show="!showPassword"
+                src="\assets\icons\password-open.svg"
+                alt="Show password"
+                class="block w-6 h-6"
+              />
+              <img
+                v-show="showPassword"
+                src="\assets\icons\password-closed.svg"
+                alt="Hide password"
+                class="block w-6 h-6"
+              />
+            </button>
+          </div>
+
+          <!-- Error Message -->
+          <ErrorMessage class="text-red-500 text-sm mt-1" name="password" />
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="relative w-full">
+          <label>{{ $t('confirm_password') }}</label>
+          <div class="flex items-center border border-gray-300 rounded overflow-hidden">
+            <vee-field
+              name="confirm_password"
+              v-model="formData.confirm_password"
+              :type="showConfirmPassword ? 'text' : 'password'"
+              :rules="schema.confirm_password"
+              id="confirm_password"
+              class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
+              :placeholder="$t('enter_confirm_password')"
+            ></vee-field>
+            <button
+              @click="toggleConfirmPasswordVisibility"
+              type="button"
+              class="p-2 focus:outline-none"
+            >
+              <img
+                v-show="!showConfirmPassword"
+                src="\assets\icons\password-open.svg"
+                alt="Show password"
+                class="block w-6 h-6"
+              />
+              <img
+                v-show="showConfirmPassword"
+                src="\assets\icons\password-closed.svg"
+                alt="Hide password"
+                class="block w-6 h-6"
+              />
+            </button>
+          </div>
+
+          <ErrorMessage class="text-danger-normal" name="confirm_password" />
+        </div>
+
+        <div class="flex flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4">
+          <button
+            @click.prevent="prevStep()"
+            class="block w-full capitalize bg-gray-300 text-black py-1.5 rounded-full transition hover:bg-gray-400"
+          >
+            {{ $t('back') }}
+          </button>
+          <button
+            @click.prevent="nextStep()"
+            class="block w-full capitalize bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+          >
+            {{ $t('next') }}
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Final Confirmation -->
+      <div class="flex-col space-y-6" v-if="currentStep === 3">
+        <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
 
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-1/2">
@@ -261,37 +258,7 @@
 
         <div>
           <label class="inline-block mb-2">{{ $t('chose_langauge') }}</label>
-          <BaseDropdown
-          v-if="!isLoading && !isSubdivisionLoading"
-          :options="langauge"
-        />
-        </div>
-
-        <div class="mb-4">
-          <div class="grid mb-5">
-            <label class="inline-block mb-2">{{ $t('sector') }}</label>
-            <span>{{ $t('select_your_sector_of_interest') }}</span>
-          </div>
-          <div v-if="isLoading" class="flex h-full justify-center">
-            <LoadingIndicator />
-          </div>
-          <div
-            v-if="sectors || !isLoading"
-            class="grid grid-cols-2 sm:grid-cols-3 gap-7 content-between"
-          >
-            <div v-for="(sector, index) in sectors" :key="index" class="flex mb-2">
-              <vee-field
-                :name="sector.name"
-                type="checkbox"
-                v-model="formData.selectedSectors"
-                :id="sector.name"
-                class="custom-checkbox rounded text-primary-normal focus:ring-primary-light"
-              />
-              <label :for="sector.name" class="ml-2 block text-sm text-body-dark">
-                {{ sector.name }}
-              </label>
-            </div>
-          </div>
+          <BaseDropdown v-if="!isLoading && !isSubdivisionLoading" :options="langauge" />
         </div>
 
         <div class="mb-3 pl-6">
@@ -311,25 +278,23 @@
 
         <div class="flex flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4">
           <button
-            @click.prevent="previousStep()"
-            class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-            :disabled="this.isLoading"
+            @click.prevent="prevStep()"
+            class="block w-full capitalize bg-gray-300 text-black py-1.5 rounded-full transition hover:bg-gray-400"
           >
-{{ $t('previous') }}
+            {{ $t('back') }}
           </button>
-
           <button
-            type="submit"
-            @click="registerForm()"
-            :class="
-              this.isLoadingButton
-                ? 'bg-gray-400 cursor-wait '
-                : 'bg-secondary-normal hover:bg-secondary-hover'
-            "
-            class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
-            :disabled="this.isLoadingButton"
+          type="submit"
+          @click="registerForm()"
+          :class="
+            this.isLoadingButton
+              ? 'bg-gray-400 cursor-wait '
+              : 'bg-secondary-normal hover:bg-secondary-hover'
+          "
+          class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
+          :disabled="this.isLoadingButton"
           >
-            {{ $t('sign_up') }}
+            {{ $t('submit') }}
           </button>
         </div>
       </div>
@@ -346,17 +311,16 @@ import { useRouter } from 'vue-router'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-import { useToast } from "vue-toastification";
-import {mask} from 'vue-the-mask'
-import { handleSingleFileUpload } from '@/utils/image.js';
-
+import { useToast } from 'vue-toastification'
+import { mask } from 'vue-the-mask'
+import { handleSingleFileUpload } from '@/utils/image.js'
 
 export default {
   name: 'RegisterForm',
-components: {
-  BaseDropdown,
-  LoadingIndicator
-},
+  components: {
+    BaseDropdown,
+    LoadingIndicator
+  },
 
   async created() {
     const sectorStore = useSectorStore()
@@ -372,16 +336,13 @@ components: {
     } finally {
       this.isLoading = false
     }
-
-
- 
   },
-  directives: {mask},
+  directives: { mask },
 
   data() {
     const router = useRouter()
     const authStore = useAuthStore()
-    const toast = useToast();
+    const toast = useToast()
 
     return {
       authStore,
@@ -423,11 +384,11 @@ components: {
       langauge: [
         {
           id: 0,
-          name: this.$t('en'),
+          name: this.$t('en')
         },
         {
           id: 1,
-          name: this.$t('fr'),
+          name: this.$t('fr')
         }
       ],
       isLoading: false,
@@ -474,7 +435,7 @@ components: {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_1',
+      currentStep: 1,
       reg_in_submission: false
     }
   },
@@ -490,17 +451,14 @@ components: {
   },
 
   methods: {
-
     async onFileChange(e) {
       try {
-        const file = await handleSingleFileUpload(e, 1, ['image/jpeg', 'image/png'], true);
+        const file = await handleSingleFileUpload(e, 1, ['image/jpeg', 'image/png'], true)
 
-   
-
-        this.formData.avatar = file;
+        this.formData.avatar = file
       } catch (error) {
-        this.formData.avatar = null;
-        this.toast.error(error.message);
+        this.formData.avatar = null
+        this.toast.error(error.message)
       }
     },
     async getRegions() {
@@ -556,41 +514,75 @@ components: {
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword
     },
-    async nextStep() {
-console.log(typeof this.formData.date_of_birth);
 
-      const fieldsToValidate = [
+    async nextStep() {
+      // if (this.currentStep < 3) {
+        // }
+        
+        const step1FieldVerification = [
         'first_name',
-        'last_name',
-        'email',
         'phone',
-        'password',
+      ]
+      const step2FieldVerification = [
+        'email',
+-        'password',
         'confirm_password'
       ]
+      
+      switch (this.currentStep) {
+        case 1:
+          try {
+            const validationResults = await Promise.all(
+              step1FieldVerification.map((field) => this.$refs.form.validateField(field))
+            )
+            
+            // Check if all fields are valid
+            const allFieldsValid = validationResults.every((result) => result.valid)
+            
+            // Proceed to the next step only if all fields are valid
+            if (allFieldsValid) {
+                this.currentStep++
+              // this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
+            }
+          } catch (error) {
+            console.error('Validation error:', error)
+          }
+          break
+          case 2:
+          try {
+            const validationResults = await Promise.all(
+              step2FieldVerification.map((field) => this.$refs.form.validateField(field))
+            )
+            
+            // Check if all fields are valid
+            const allFieldsValid = validationResults.every((result) => result.valid)
+            
+            // Proceed to the next step only if all fields are valid
+            if (allFieldsValid) {
+                this.currentStep++
+              // this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
+            }
+          } catch (error) {
+            console.error('Validation error:', error)
+          }
 
-      try {
-        const validationResults = await Promise.all(
-          fieldsToValidate.map((field) => this.$refs.form.validateField(field))
-        )
+        
+          break
 
-        // Check if all fields are valid
-        const allFieldsValid = validationResults.every((result) => result.valid)
-
-        // Proceed to the next step only if all fields are valid
-        if (allFieldsValid) {
-          this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
-        } 
-      } catch (error) {
-        console.error('Validation error:', error)
+        default:
+          break
+      }
+    },
+    prevStep() {
+      if (this.currentStep > 1) {
+        this.currentStep--
       }
     },
 
-    previousStep() {
-      this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
-    },
+
 
     handleEmailNotVerified() {
-      this.toast.error('Check your email to verifie your mail');
+      this.toast.error('Check your email to verifie your mail')
       this.$router.push({ name: 'email-verification' })
     },
 
@@ -604,35 +596,41 @@ console.log(typeof this.formData.date_of_birth);
     handleError(errors) {
       this.isLoadingButton = false
       if (errors.email && errors.email.length > 0) {
-        this.toast.error(errors.email[0]);
+        this.toast.error(errors.email[0])
       } else if (errors.zone_id && errors.zone_id.length > 0) {
-        this.toast.error(errors.zone_id[0]);
+        this.toast.error(errors.zone_id[0])
       }
     },
 
-async registerForm() {
-  const validationResults = await Promise.all(['tos'].map((field) => this.$refs.form.validateField(field)));
+    async registerForm() {
+      const validationResults = await Promise.all(
+        ['tos'].map((field) => this.$refs.form.validateField(field))
+      )
 
-  if (validationResults.every((result) => result.valid)) {
-    if (this.subDivision_id === '') {
-      this.toast.error(this.$t('please_select_your_subdivision'));
-      return;
-    }
-    
-    
-    try {
-      // this.isLoading = true
-      this.isLoadingButton = true
-      this.toast.info(this.$t('please_wait_creating_account'));
-      await registerUser(this.formData, this.authStore, this.handleSuccess, this.handleError, this.handleEmailNotVerified);
-    } catch (error) {
-      // this.isLoading = false
-      this.isLoadingButton = false
-      console.log(error);
-    }
-  } 
-}
+      if (validationResults.every((result) => result.valid)) {
+        if (this.subDivision_id === '') {
+          this.toast.error(this.$t('please_select_your_subdivision'))
+          return
+        }
 
+        try {
+          // this.isLoading = true
+          this.isLoadingButton = true
+          this.toast.info(this.$t('please_wait_creating_account'))
+          await registerUser(
+            this.formData,
+            this.authStore,
+            this.handleSuccess,
+            this.handleError,
+            this.handleEmailNotVerified
+          )
+        } catch (error) {
+          // this.isLoading = false
+          this.isLoadingButton = false
+          console.log(error)
+        }
+      }
+    }
   }
 }
 </script>
@@ -657,7 +655,6 @@ span {
   line-height: 16px; /* 133.333% */
 }
 
-
 .custom-checkbox {
   position: relative;
   width: 18px; /* Ensure width */
@@ -675,7 +672,7 @@ span {
 }
 
 .custom-checkbox::after {
-  content: "";
+  content: '';
   position: absolute;
   top: 2px;
   left: 5px;
@@ -690,5 +687,4 @@ span {
 .custom-checkbox:checked::after {
   display: block;
 }
-
 </style>

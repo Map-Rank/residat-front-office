@@ -12,6 +12,7 @@
   "welcome_back": "Bon retour",
   "personal_information": "Informations personnelles",
   "institution_information": "Information de l'institution",
+  "name": "Nom",
   "first_name": "Prénom",
   "owner_name": "Nom du proprietaire",
   "enter_first_name": "Entrez votre prénom",
@@ -35,6 +36,7 @@
   "enter_confirm_password": "Confirmez le mot de passe",
   "next": "Suivant",
   "specific_information": "Informations spécifiques",
+  "security_information": "Informations de securite",
   "profile_picture": "Photo de profil",
   "max_1mbs":"taille maximum  1mbs",
   "instu_logo": "Importer Votre Logo",
@@ -199,6 +201,8 @@
     "header_logo_alt": "Logo",
     "header_burger_menu": "Menu",
     "header_close_menu": "Fermer le menu"
+
+    
   
 
 }

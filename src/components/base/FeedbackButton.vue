@@ -25,7 +25,7 @@
         {{$t('get_on_whatsap')}}
       </a>
     </div>
-    <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('get_to_us')}}</div>
+    <!-- <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('get_to_us')}}</div> -->
   </div>
 </template>
 
@@ -198,7 +198,7 @@ export default {
 @media screen and (max-width: 768px) {
   .feedback-container {
     position: fixed;
-    bottom:100px;
+    bottom:40px;
     right: 20px;
     z-index: 1000;
   }

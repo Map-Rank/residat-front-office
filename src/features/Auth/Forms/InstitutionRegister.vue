@@ -399,7 +399,7 @@ export default {
       sectors: [],
       step_1: 'step_1',
       step_2: 'step_2',
-      currentStep: 'step_2',
+      currentStep: 'step_1',
       reg_in_submission: false,
       documentPreviews:[]
     }
