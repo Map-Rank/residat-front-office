@@ -31,7 +31,7 @@
             </div>
 
             <!-- list of Comment  -->
-            <div class="overflow-auto ">
+            <div class="hidden overflow-auto  ">
               <div v-if="!loading" class="space-y-2">
                 <div
                   v-for="(comment, index) in post.comments"

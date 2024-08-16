@@ -19,6 +19,7 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     formData.append('password', userData.password)
     formData.append('gender', userData.gender)
     formData.append('zone_id', userData.zone)
+    formData.append('language', userData.lang)
     // formData.append('avatar', userData.avatar)
 
     //since i get date as a string here am converting to  a date type
@@ -162,6 +163,9 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
       localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+      if (user.langauge) {
+        localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.langauge)
+      }
 
       // Get FCM token
       const fcmToken = await getFcmToken()

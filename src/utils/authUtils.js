@@ -12,9 +12,9 @@ export function checkAuthentication() {
   isUserLoggedIn.value = !!authStore.user;
 
   if (!isUserLoggedIn.value) {
-    console.log('This user is not logged in');
+    // console.log('This user is not logged in');
     modalStore.openAuthModal(); // Open the modal using the store
-    console.log('This user is not logged in');
+    // console.log('This user is not logged in');
     return false;
   }
 

@@ -32,6 +32,7 @@ export default defineStore('auth', {
           if (userInfo) {
           this.user = JSON.parse(userInfo);
           this.isLoggedIn = !!this.user;
+
           this.showGuessHeader = false
         }
         else if (userEmailVerification){

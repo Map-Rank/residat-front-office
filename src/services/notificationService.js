@@ -18,7 +18,11 @@ const createNotification = async (notificationData, authStore, onSuccess, onErro
         // formData.append('firebase_id', authStore.user.id)
         formData.append('user_id', authStore.user.id)
         formData.append('zone_id', notificationData.zone_id)
-        formData.append('image', notificationData.media)
+
+      if (notificationData.media && notificationData.media.trim() !== '') {
+        formData.append('image', notificationData.media);
+      }
+      
 
 
         console.log("this is the api" + API_ENDPOINTS.notifications)

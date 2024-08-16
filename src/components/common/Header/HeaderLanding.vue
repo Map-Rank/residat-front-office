@@ -99,7 +99,7 @@
             <AppLogo :isWhite="true" :alt="$t('header_logo_alt')"></AppLogo>
           </div>
           <ul class="space-y-4 text-primary-normal pb-10">
-            <li v-for="(item, index) in navItems" :key="index">
+            <li  @click="toggleSidebar"  v-for="(item, index) in navItems" :key="index">
               <a
                 :href="absoluteHref(item.href)"
                 class="block text-right text-white text-xl font-normal font-['Poppins'] leading-normal"
@@ -179,6 +179,7 @@ export default {
     },
     absoluteHref(relativeHref) {
       const baseUrl = window.location.origin;
+      // this.toggleSidebar();
       return `${baseUrl}/${relativeHref}`;
     }
   }

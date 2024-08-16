@@ -1,23 +1,21 @@
 <template>
   <div class="grid content-center">
-    <transition-group class=" " name="fade" tag="div">
-      <div 
-      class=""
-      v-for="i in [currentIndex]" :key="i">
-        <img 
-        class="w-full  max-h-[40vh] md:max-h-[50vh] object-cover"
-        :src="`${currentImg.url}`" />
+    <transition-group name="fade" tag="div">
+      <div v-if="currentIndex >= 0 && currentIndex < images.length" :key="currentIndex">
+        <img class="w-full max-h-[40vh] md:max-h-[50vh] object-cover" :src="currentImg.url" />
       </div>
     </transition-group>
     <div class="flex justify-center">
       <button
         @click="prev"
+        :disabled="currentIndex <= 0"
         class="px-4 py-2 bg-transparent text-white font-semibold hover:text-white hover:border-transparent rounded"
       >
         &lt;
       </button>
       <button
         @click="next"
+        :disabled="currentIndex >= images.length - 1"
         class="px-4 py-2 bg-transparent text-white font-semibold hover:text-white hover:border-transparent rounded"
       >
         >
@@ -43,14 +41,16 @@ export default {
     images:Array
   },
 
-
   methods: {
-
     next: function () {
-      this.currentIndex += 1
+      if (this.currentIndex < this.images.length - 1) {
+        this.currentIndex += 1
+      }
     },
     prev: function () {
-      this.currentIndex -= 1
+      if (this.currentIndex > 0) {
+        this.currentIndex -= 1
+      }
     }
   },
 
@@ -63,15 +63,11 @@ export default {
 </script>
 
 <style scoped>
-.w {
-  color: aliceblue;
-}
-
 /* Add styles within your component's <style> tag */
 .fade-enter-active, .fade-leave-active {
-  transition: opacity 0.s;
+  transition: opacity 0.5s;
 }
-.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+.fade-enter, .fade-leave-to {
   opacity: 0;
 }
 

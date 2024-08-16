@@ -202,7 +202,7 @@
             @click.prevent="prevStep()"
             class="block w-full capitalize bg-gray-300 text-black py-1.5 rounded-full transition hover:bg-gray-400"
           >
-            {{ $t('back') }}
+            {{ $t('previous') }}
           </button>
           <button
             @click.prevent="nextStep()"
@@ -253,12 +253,15 @@
             @selectedOptionId="handleSelectedSubdivisionIdChange"
             v-if="!isLoading && !isSubdivisionLoading"
             :options="sub_divisions"
-          />
-        </div>
+            />
+          </div>
 
         <div>
           <label class="inline-block mb-2">{{ $t('chose_langauge') }}</label>
-          <BaseDropdown v-if="!isLoading && !isSubdivisionLoading" :options="langauge" />
+          <BaseDropdown 
+          
+          @selectedOptionValue="handleSelectLangauge"
+          :options="langauge" />
         </div>
 
         <div class="mb-3 pl-6">
@@ -281,7 +284,7 @@
             @click.prevent="prevStep()"
             class="block w-full capitalize bg-gray-300 text-black py-1.5 rounded-full transition hover:bg-gray-400"
           >
-            {{ $t('back') }}
+            {{ $t('previous') }}
           </button>
           <button
           type="submit"
@@ -382,13 +385,20 @@ export default {
         }
       ],
       langauge: [
-        {
-          id: 0,
-          name: this.$t('en')
-        },
+        // {
+        //   id: 1,
+        //   name: 'chose your langauge',
+        //   value:'en'
+        // },
         {
           id: 1,
-          name: this.$t('fr')
+          name: this.$t('en'),
+          value:'en'
+        },
+        {
+          id: 2,
+          name: this.$t('fr'),
+          value:'fr'
         }
       ],
       isLoading: false,
@@ -426,6 +436,7 @@ export default {
         gender: '',
         date_of_birth: '2023-12-06T13:10:59',
         avatar: '',
+        lang:'en',
         selectedSectors: [],
         zone: '',
         tos: false
@@ -506,6 +517,10 @@ export default {
     handleSelectedSubdivisionIdChange(selectedOptionId) {
       this.subDivision_id = selectedOptionId
       this.formData.zone = selectedOptionId
+    },
+    handleSelectLangauge(langCode) {
+      console.log(langCode);
+      this.formData.lang = langCode
     },
 
     togglePasswordVisibility() {
