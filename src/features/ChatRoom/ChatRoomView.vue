@@ -91,7 +91,7 @@ export default {
     const authStore = useAuthStore()
     return {
       authStore,
-      isInstitution: false, 
+      isInstitution: true, 
       activeTab: 'important',
       isLoading: true,
       notifications: [],

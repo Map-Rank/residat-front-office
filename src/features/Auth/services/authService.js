@@ -41,6 +41,7 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
     localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
     onSuccess()
     // }
 
@@ -163,6 +164,8 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
       localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+
+      localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
       if (user.langauge) {
         localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.langauge)
       }
@@ -184,6 +187,7 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
 
 const logOut = async (authStore) => {
   authStore.logOut()
+  localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, false)
 }
 
 const UpdatePassword = async (userData, onSuccess, onError) => {

@@ -254,9 +254,9 @@ const router = createRouter({
       name: 'chat-room',
       component: ChatRoomView,
       meta: { requiresAuth: true },
-      redirect: (to) => {
-        return '/community';
-      }
+      // redirect: (to) => {
+      //   return '/community';
+      // }
     },
 
 

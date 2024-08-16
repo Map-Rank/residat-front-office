@@ -352,14 +352,14 @@ export default {
           bottom: true,
           routerName: 'dashboard'
         },
-        // {
-        //   svgContent: '\\assets\\icons\\chat-outline.svg',
-        //   svgContentHover: '\\assets\\icons\\chat-fill.svg',
-        //   labelText: this.$t('inbox'),
-        //   isActive: false,
-        //   bottom: true,
-        //   routerName: 'chat-room'
-        // },
+        {
+          svgContent: '\\assets\\icons\\chat-outline.svg',
+          svgContentHover: '\\assets\\icons\\chat-fill.svg',
+          labelText: this.$t('inbox'),
+          isActive: false,
+          bottom: true,
+          routerName: 'chat-room'
+        },
         {
           svgContent: '\\assets\\icons\\event-outline.svg',
           svgContentHover: '\\assets\\icons\\event-fill.svg',
