@@ -278,69 +278,27 @@ export default {
   name: 'Community',
 
   async created() {
+    this.isUserConnected = checkAuthentication();
 
-    if (checkAuthentication()) {
-      this.isUserConnected = true
-      }
-    
     try {
-      const zoneId = this.$route.params.zoneId
-      const sectorIdString = this.$route.params.sectorId
-      
-      // Convert sectorId from string to array (handle potential missing sectorId)
-      const sectorIdArray = sectorIdString ? JSON.parse('[' + sectorIdString + ']') : []
-      
+      const { zoneId, sectorId } = this.$route.params;
+      const sectorIdArray = this.parseSectorIds(sectorId);
+
       if (zoneId) {
-        this.topLoading = true
-        this.showPageRefresh = false
-        this.isZoneFilterLoading = true
-        try {
-          this.posts = await getFilterPosts(zoneId, sectorIdArray);
-          this.paramZone = await getSpecificZones(zoneId);
-          this.topLoading = false
-
-        } catch (error) {
-          this.showPageRefresh = true
-          console.error('An error occurred:', error);
-
-        }finally {
-         this.topLoading = false
-         this.posts.length < 1 ?   this.showPageRefresh = true : null
-
-       }
-       
-        this.isZoneFilterLoading = true
+        this.topLoading = true;
+        await this.loadData(zoneId, sectorIdArray);
       } else {
-        await this.fetchResources()
+        await this.fetchResources();
       }
-      this.topLoading = false
     } catch (error) {
-      console.error('Failed to load posts:', error)
+      console.error('Initialization failed:', error);
+      this.showPageRefresh = true;
+    } finally {
+      this.topLoading = false;
     }
 
-    // Retrieve sectorIds from URL (if any)
-    const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
-
-    if(urlSectorIds.length == 0){
-      localStorage.removeItem('sectorId')
-    }
-    
-
-    // Retrieve sectorIds from local storage (if any)
-    const storedSectorIds = localStorage.getItem('sectorId') ? JSON.parse(localStorage.getItem('sectorId')) : [];
-
-    // Combine sectorIds from both sources (URL and local storage)
-    let initialSectorIds = [];
-    if (urlSectorIds.length > 0) {
-      initialSectorIds = urlSectorIds; // Use URL sector IDs if available
-    } else if (storedSectorIds.length > 0) {
-      initialSectorIds = storedSectorIds; // Use stored sector IDs if no URL IDs
-    }
-
-    // Check initial checkbox state based on the combined sectorIds
-    const isChecked = initialSectorIds.includes(this.list?.id);
-    this.checked = isChecked;
-  },
+    this.updateCheckboxState();
+},
 
   watch: {
     async paramZone(newValue) {
@@ -519,6 +477,44 @@ export default {
   },
 
   methods: {
+    parseSectorIds(sectorIdString) {
+    return sectorIdString ? JSON.parse(`[${sectorIdString}]`).map(Number) : [];
+  },
+
+  async loadData(zoneId, sectorIdArray) {
+    try {
+      [this.posts, this.paramZone] = await Promise.all([
+        getFilterPosts(zoneId, sectorIdArray),
+        getSpecificZones(zoneId)
+      ]);
+      if (this.posts.length < 1) this.showPageRefresh = true;
+    } catch (error) {
+      console.error('Error loading data:', error);
+      this.showPageRefresh = true;
+    } finally {
+      this.isZoneFilterLoading = false;
+    }
+  },
+
+  updateCheckboxState() {
+    const urlSectorIds = this.parseSectorIds(this.$route.params.sectorId);
+    const storedSectorIds = this.getStoredSectorIds();
+    const initialSectorIds = urlSectorIds.length > 0 ? urlSectorIds : storedSectorIds;
+    
+    this.checked = initialSectorIds.includes(this.list?.id);
+    
+    if (!urlSectorIds.length) localStorage.removeItem('sectorId');
+  },
+
+  getStoredSectorIds() {
+    try {
+      return JSON.parse(localStorage.getItem('sectorId') || '[]');
+    } catch (error) {
+      console.error('Failed to parse stored sector IDs:', error);
+      return [];
+    }
+  },
+    
     async updateSubDivisions(zone) {
       let rest = await getZones(null, zone.parent_id)
       let currentZone = {
