@@ -65,6 +65,73 @@ eslint-disable vue/no-parsing-error
             <ErrorMessage class="text-danger-normal" name="phone" />
           </div>
 
+          <div class="relative w-full">
+            <label>{{ $t('password') }}</label>
+            <div class="flex items-center border border-gray-300 rounded overflow-hidden">
+              <vee-field
+                name="password"
+                v-model="formData.password"
+                :type="showPassword ? 'text' : 'password'"
+                id="password"
+                class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
+                :placeholder="$t('enter_password')"
+              ></vee-field>
+              <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none">
+                <img
+                  v-show="!showPassword"
+                  src="\assets\icons\password-open.svg"
+                  alt="Show password"
+                  class="block w-6 h-6"
+                />
+                <img
+                  v-show="showPassword"
+                  src="\assets\icons\password-closed.svg"
+                  alt="Hide password"
+                  class="block w-6 h-6"
+                />
+              </button>
+            </div>
+  
+            <!-- Error Message -->
+            <ErrorMessage class="text-red-500 text-sm mt-1" name="password" />
+          </div>
+  
+          <!-- Confirm Password -->
+          <div class="relative w-full">
+            <label>{{ $t('confirm_password') }}</label>
+            <div class="flex items-center border border-gray-300 rounded overflow-hidden">
+              <vee-field
+                name="confirm_password"
+                v-model="formData.confirm_password"
+                :type="showConfirmPassword ? 'text' : 'password'"
+                :rules="schema.confirm_password"
+                id="confirm_password"
+                class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
+                :placeholder="$t('enter_confirm_password')"
+              ></vee-field>
+              <button
+                @click="toggleConfirmPasswordVisibility"
+                type="button"
+                class="p-2 focus:outline-none"
+              >
+                <img
+                  v-show="!showConfirmPassword"
+                  src="\assets\icons\password-open.svg"
+                  alt="Show password"
+                  class="block w-6 h-6"
+                />
+                <img
+                  v-show="showConfirmPassword"
+                  src="\assets\icons\password-closed.svg"
+                  alt="Hide password"
+                  class="block w-6 h-6"
+                />
+              </button>
+            </div>
+  
+            <ErrorMessage class="text-danger-normal" name="confirm_password" />
+          </div>
+
           <div class="sm:px-">
             <div class="flex justify-center">
               <button
@@ -221,6 +288,14 @@ eslint-disable vue/no-parsing-error
           />
         </div> -->
 
+        <div>
+          <label class="inline-block mb-2">{{ $t('chose_langauge') }}</label>
+          <BaseDropdown 
+          
+          @selectedOptionValue="handleSelectLangauge"
+          :options="langauge" />
+        </div>
+
         <div class="mb-3 pl-6">
           <!-- TOS -->
 
@@ -258,7 +333,7 @@ eslint-disable vue/no-parsing-error
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
             :disabled="this.isLoading"
           >
-            {{ $t("submit_request") }}
+            {{ $t("submit") }}
           </button>
         </div>
       </div>
@@ -370,6 +445,19 @@ export default {
         { label: "Option 1", value: "option1" },
         { label: "Option 2", value: "option2" },
       ],
+      langauge: [
+  
+        {
+          id: 1,
+          name: this.$t('en'),
+          value:'en'
+        },
+        {
+          id: 2,
+          name: this.$t('fr'),
+          value:'fr'
+        }
+      ],
       schema: {
         name: "required|min:3|max:50",
         owner_name: "min:3|max:50",
@@ -399,6 +487,7 @@ export default {
         date_of_birth: "2023-12-06T13:10:59",
         profile_picture: "",
         documents: [],
+        lang:'en',
         selectedSectors: [],
         zone: "",
         tos: false,
@@ -429,6 +518,12 @@ export default {
   },
 
   methods: {
+
+    handleSelectLangauge(langCode) {
+      console.log(langCode);
+      this.formData.lang = langCode
+    },
+
     async onPickAvatar(e) {
       try {
         const file = await handleSingleFileUpload(
@@ -531,7 +626,7 @@ export default {
       this.showConfirmPassword = !this.showConfirmPassword;
     },
     async nextStep() {
-      const fieldsToValidate = ["email", "phone", "company_name"];
+      const fieldsToValidate = ["email", "phone", "company_name","password","confirm_password"];
 
       try {
         const validationResults = await Promise.all(
@@ -561,7 +656,12 @@ export default {
 
     handleSuccess() {
       this.toast.success(`Your request have succesfully be send`);
-      this.$router.push({ name: "success-submition" });
+      // this.$router.push({ name: "success-submition" });
+
+      this.isLoadingButton = false
+      console.log('Current User:', this.authStore.getCurrentUser)
+      this.authStore.isloggedIn = true
+      this.$router.push({ name: 'community' })
     },
 
     handleError(errors) {

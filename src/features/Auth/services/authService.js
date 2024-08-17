@@ -64,14 +64,16 @@ const institutionalRequest = async (institutionData, authStore, onSuccess, onErr
     const formData = new FormData()
 
     formData.append('company_name', institutionData.company_name)
-    formData.append('owner_name', institutionData.owner_name)
+    // formData.append('owner_name', institutionData.owner_name)
     formData.append('description', institutionData.description)
     formData.append('email', institutionData.email)
     formData.append('phone', institutionData.phone)
     formData.append('password', institutionData.password)
-    formData.append('gender', institutionData.gender)
+    // formData.append('gender', institutionData.gender)
     formData.append('zone_id', institutionData.zone)
     formData.append('profile_picture', institutionData.profile_picture)
+    formData.append('language', institutionData.lang)
+    formData.append('password', institutionData.password)
     // formData.append('official_document', institutionData.documents[0])
 
     // institutionData.documents.forEach((doc, index) => {
@@ -79,8 +81,26 @@ const institutionalRequest = async (institutionData, authStore, onSuccess, onErr
     //     formData.append(`official_document[${index}]`, doc, doc.name)
 
     // })
+    // const response = await makeApiPostCall('/create/request', formData, null, true)
+    // console.log('request send  successfull !!!!')
+    // onSuccess()
+
+    const fcmToken = await getFcmToken()
+    if (fcmToken) {
+      formData.append('fcm_token', fcmToken)
+    }
+
+
     const response = await makeApiPostCall('/create/request', formData, null, true)
-    console.log('request send  successfull !!!!')
+    const user = response.data.data.user
+    const token = response.data.data.user.token
+    console.log('register successfull !!!!')
+
+    authStore.setUser(user)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
+    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
     onSuccess()
 
     return response
