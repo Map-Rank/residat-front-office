@@ -4,11 +4,11 @@ eslint-disable vue/no-parsing-error
     <vee-form ref="form" :validation-schema="schema" @submit="registerForm">
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_1">
         <div class="flex-col space-y-6">
-          <h2 class="text-center uppercase">{{ $t('institution_information') }}</h2>
+          <h2 class="text-center uppercase">{{ $t("institution_information") }}</h2>
 
           <!-- Company -->
           <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('company_name') }}</label>
+            <label class="inline-block mb-2">{{ $t("institution_name") }}</label>
             <vee-field
               name="company_name"
               :rules="schema.company_name"
@@ -22,7 +22,7 @@ eslint-disable vue/no-parsing-error
           </div>
 
           <!-- First Name -->
-          <div class="mb-6">
+          <!-- <div class="mb-6">
             <label class="inline-block mb-4">{{ $t('owner_name') }}</label>
             <vee-field
               name="owner_name"
@@ -34,12 +34,11 @@ eslint-disable vue/no-parsing-error
               :placeholder="$t('enter_owner_name')"
             />
             <ErrorMessage class="text-danger-normal" name="owner_name" />
-          </div>
-
+          </div> -->
 
           <!-- Email -->
           <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('email') }}</label>
+            <label class="inline-block mb-2">{{ $t("email") }}</label>
             <vee-field
               name="email"
               :rules="schema.email"
@@ -53,7 +52,7 @@ eslint-disable vue/no-parsing-error
 
           <!-- phone -->
           <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('phone') }}</label>
+            <label class="inline-block mb-2">{{ $t("phone") }}</label>
             <vee-field
               name="phone"
               v-model="formData.phone"
@@ -72,7 +71,7 @@ eslint-disable vue/no-parsing-error
                 @click.prevent="nextStep()"
                 class="block w-full capitalize bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
               >
-                {{ $t('next') }}
+                {{ $t("next") }}
               </button>
             </div>
           </div>
@@ -80,27 +79,27 @@ eslint-disable vue/no-parsing-error
       </div>
 
       <div class="flex-col space-y-6" v-if="this.currentStep === this.step_2">
-        <h2 class="text-center uppercase">{{ $t('specific_information') }}</h2>
+        <h2 class="text-center uppercase">{{ $t("specific_information") }}</h2>
 
-        
-          <!-- Description  -->
-          <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('description') }}</label>
-            <vee-field
-              name="description"
-              v-model="formData.description"
-              :rules="schema.description"
-              as="textarea"
-              type="text"
-              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('description')"
-            />
-            <ErrorMessage class="text-danger-normal" name="description" />
-          </div>
+        <!-- Description  -->
+        <div class="mb-6">
+          <label class="inline-block mb-2">{{ $t("description") }}</label>
+          <vee-field
+            name="description"
+            v-model="formData.description"
+            :rules="schema.description"
+            as="textarea"
+            type="text"
+            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            :placeholder="$t('description')"
+          />
+          <ErrorMessage class="text-danger-normal" name="description" />
+        </div>
 
         <div class="mb-6">
           <label class="inline-block mb-2"
-            >{{ $t('instu_logo') }} <span style="color: red">({{ $t('max_1mbs') }})</span></label
+            >{{ $t("instu_logo") }}
+            <span style="color: red">({{ $t("max_1mbs") }})</span></label
           >
 
           <input
@@ -112,7 +111,7 @@ eslint-disable vue/no-parsing-error
           <ErrorMessage class="text-danger-normal" name="profile_picture" />
 
           <div v-if="formData.profile_picture" class="mt-4 grid justify-center">
-            <p class="mb-2">{{ $t('preview_picture') }}:</p>
+            <p class="mb-2">{{ $t("preview_picture") }}:</p>
             <div class="w-24 h-24 rounded-full overflow-hidden">
               <img
                 :src="imageUrl"
@@ -122,7 +121,7 @@ eslint-disable vue/no-parsing-error
             </div>
           </div>
         </div>
-<!-- 
+        <!-- 
         <div class="mb-6">
           <label class="inline-block mb-2"
             >{{ $t('upload_official_doc') }}
@@ -184,7 +183,9 @@ eslint-disable vue/no-parsing-error
 
         <div class="flex flex-row space-x-4 justify-between">
           <div class="w-full">
-            <label class="inline-block mb-2">{{ $t('Chose your territorial zone') }}</label>
+            <label class="inline-block mb-2">{{
+              $t("Chose your territorial zone")
+            }}</label>
             <div v-if="isLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -192,7 +193,6 @@ eslint-disable vue/no-parsing-error
               v-if="!isLoading"
               :options="regions"
               @selectedOptionId="handleSelectedRegionIdChange"
-      
             />
           </div>
           <!-- <div class="w-1/2">
@@ -232,17 +232,19 @@ eslint-disable vue/no-parsing-error
             :rules="schema.tos"
             class="w-4 h-4 float-left -ml-6 mt-1 rounded"
           />
-          <label class="inline-block">{{ $t('accept_terms_of_service') }}</label> <br />
+          <label class="inline-block">{{ $t("accept_terms_of_service") }}</label> <br />
           <ErrorMessage class="text-red-600" name="tos" />
         </div>
 
-        <div class="flex flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4">
+        <div
+          class="flex flex-col sm:my-5 sm:flex-row sm:mb-5 space-y-3 sm:space-y-0 sm:space-x-4"
+        >
           <button
             @click.prevent="previousStep()"
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
             :disabled="this.isLoading"
           >
-            {{ $t('previous') }}
+            {{ $t("previous") }}
           </button>
 
           <button
@@ -256,7 +258,7 @@ eslint-disable vue/no-parsing-error
             class="block w-full bg-secondary-normal text-white py-1.5 rounded-full transition hover:bg-secondary-hover"
             :disabled="this.isLoading"
           >
-            {{ $t('submit_request') }}
+            {{ $t("submit_request") }}
           </button>
         </div>
       </div>
@@ -265,53 +267,53 @@ eslint-disable vue/no-parsing-error
 </template>
 
 <script>
-import useAuthStore from '../../../stores/auth'
-import useSectorStore from '@/stores/sectorStore.js'
-import useZoneStore from '@/stores/zoneStore.js'
-import { institutionalRequest } from '../services/authService'
-import { useRouter } from 'vue-router'
-import BaseDropdown from '@/components/base/BaseDropdown.vue'
-import { getZones } from '@/services/zoneService.js'
-import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-import { useToast } from 'vue-toastification'
-import {handleSingleFileUpload, handleMultipleFileUpload} from '@/utils/Image.js'
+import useAuthStore from "../../../stores/auth";
+import useSectorStore from "@/stores/sectorStore.js";
+import useZoneStore from "@/stores/zoneStore.js";
+import { institutionalRequest } from "../services/authService";
+import { useRouter } from "vue-router";
+import BaseDropdown from "@/components/base/BaseDropdown.vue";
+import { getZones } from "@/services/zoneService.js";
+import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
+import { useToast } from "vue-toastification";
+import { handleSingleFileUpload, handleMultipleFileUpload } from "@/utils/Image.js";
 
 export default {
-  name: 'InstitutionRegister',
+  name: "InstitutionRegister",
 
   async created() {
-    const sectorStore = useSectorStore()
-    const zoneSector = useZoneStore()
+    const sectorStore = useSectorStore();
+    const zoneSector = useZoneStore();
 
     try {
-      this.isLoading = true
+      this.isLoading = true;
       // await this.getRegions()
-      this.sectors = sectorStore.getAllSectors
-      this.zones = zoneSector.getAllZones
+      this.sectors = sectorStore.getAllSectors;
+      this.zones = zoneSector.getAllZones;
     } catch (error) {
-      console.error('Failed to load sector:', error)
+      console.error("Failed to load sector:", error);
     } finally {
-      this.isLoading = false
+      this.isLoading = false;
     }
   },
 
   data() {
-    const router = useRouter()
-    const authStore = useAuthStore()
-    const toast = useToast()
+    const router = useRouter();
+    const authStore = useAuthStore();
+    const toast = useToast();
 
     return {
       authStore,
       toast,
       router,
-      subDivision_id: '',
-      region_id: '',
-      division_id: '',
-      zone_id: '',
+      subDivision_id: "",
+      region_id: "",
+      division_id: "",
+      zone_id: "",
       zones: {
-        region_id: '6',
-        division_id: '1',
-        subDivision_id: '1'
+        region_id: "6",
+        division_id: "1",
+        subDivision_id: "1",
       },
       regions: [
         // {
@@ -322,110 +324,119 @@ export default {
         // },
         {
           id: 1,
-          name: this.$t('Regional'),
+          name: this.$t("National"),
           banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
+          created_at: "2024-01-05T13:43:24.000000Z",
         },
         {
           id: 2,
-          name: this.$t('divisional'),
+          name: this.$t("Regional"),
           banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
+          created_at: "2024-01-05T13:43:24.000000Z",
         },
         {
           id: 3,
-          name: this.$t('sub divisional'),
+          name: this.$t("division"),
           banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
+          created_at: "2024-01-05T13:43:24.000000Z",
+        },
+        {
+          id: 4,
+          name: this.$t("sub_division"),
+          banner: null,
+          created_at: "2024-01-05T13:43:24.000000Z",
         },
       ],
       divisions: [
         {
           id: 0,
-          name: this.$t('choose_your_division'),
+          name: this.$t("choose_your_division"),
           banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
+          created_at: "2024-01-05T13:43:24.000000Z",
+        },
       ],
       sub_divisions: [
         {
           id: 0,
-          name: this.$t('choose_your_subdivision'),
+          name: this.$t("choose_your_subdivision"),
           banner: null,
-          created_at: '2024-01-05T13:43:24.000000Z'
-        }
+          created_at: "2024-01-05T13:43:24.000000Z",
+        },
       ],
       isLoading: false,
       isDivisionLoading: false,
       isSubdivisionLoading: false,
       dropdownOptions: [
-        { label: 'Option 1', value: 'option1' },
-        { label: 'Option 2', value: 'option2' }
+        { label: "Option 1", value: "option1" },
+        { label: "Option 2", value: "option2" },
       ],
       schema: {
-        name: 'required|min:3|max:50',
-        owner_name: 'required|min:3|max:50',
-        last_name: 'required|min:3|max:50',
-        description: 'required|min:3|max:2000',
-        phone: 'required|min:3|max:20',
-        email: 'required|email',
-        password: 'required|min:6',
-        dob: 'required|dobNotBelowTenYears',
-        confirm_password: 'required|passwords_mismatch:@password',
-        tos: 'required|tos',
-        company_name: 'required|min:3|max:50',
-        location: 'required|min:3|max:50'
+        name: "required|min:3|max:50",
+        owner_name: "min:3|max:50",
+        institution_name: "min:3|max:50",
+        last_name: "required|min:3|max:50",
+        description: "required|min:3|max:2000",
+        phone: "required|min:3|max:20",
+        email: "required|email",
+        password: "required|min:6",
+        dob: "required|dobNotBelowTenYears",
+        confirm_password: "required|passwords_mismatch:@password",
+        tos: "required|tos",
+        company_name: "required|min:3|max:50",
+        location: "required|min:3|max:50",
       },
       formData: {
-        owner_name: '',
-        last_name: '',
-        description: '',
-        email: '',
-        phone: '',
-        password: '',
-        confirm_password: '',
-        location: '',
-        country: '',
-        gender: '',
-        date_of_birth: '2023-12-06T13:10:59',
-        profile_picture: '',
+        owner_name: "",
+        last_name: "",
+        description: "",
+        email: "",
+        phone: "",
+        password: "",
+        confirm_password: "",
+        location: "",
+        country: "",
+        gender: "",
+        date_of_birth: "2023-12-06T13:10:59",
+        profile_picture: "",
         documents: [],
         selectedSectors: [],
-        zone: '',
-        tos: false
+        zone: "",
+        tos: false,
       },
       showPassword: false,
       showConfirmPassword: false,
       sectors: [],
-      step_1: 'step_1',
-      step_2: 'step_2',
-      currentStep: 'step_1',
+      step_1: "step_1",
+      step_2: "step_2",
+      currentStep: "step_1",
       reg_in_submission: false,
-      documentPreviews:[]
-    }
+      documentPreviews: [],
+    };
   },
   components: {
     BaseDropdown,
-    LoadingIndicator
+    LoadingIndicator,
   },
 
   computed: {
     imageUrl() {
       if (this.formData.profile_picture) {
-        return URL.createObjectURL(this.formData.profile_picture)
+        return URL.createObjectURL(this.formData.profile_picture);
       } else {
-        return null
+        return null;
       }
-    }
+    },
   },
 
   methods: {
-
-
-    
     async onPickAvatar(e) {
       try {
-        const file = await handleSingleFileUpload(e, 2, ['image/jpeg', 'image/png'], true);
+        const file = await handleSingleFileUpload(
+          e,
+          2,
+          ["image/jpeg", "image/png"],
+          true
+        );
         // console.log('this is the new size' + file.size / (1024 * 1024))
         this.formData.profile_picture = file;
       } catch (error) {
@@ -435,15 +446,20 @@ export default {
     },
     async onPickDocuments(e) {
       try {
-        const files = await handleMultipleFileUpload(e, 1, [
-          'application/pdf',
-          'application/msword',
-          'text/plain',
-          'image/jpeg',
-          'image/png'
-        ], true);
+        const files = await handleMultipleFileUpload(
+          e,
+          1,
+          [
+            "application/pdf",
+            "application/msword",
+            "text/plain",
+            "image/jpeg",
+            "image/png",
+          ],
+          true
+        );
         this.formData.documents.push(...files);
-        files.forEach(file => {
+        files.forEach((file) => {
           this.documentPreviews.push({
             name: file.name,
             type: file.type,
@@ -453,150 +469,140 @@ export default {
       } catch (error) {
         this.toast.error(error.message);
       }
-    }
-  ,
-
-
-
-
+    },
     removeDocument(index) {
-    this.formData.documents.splice(index, 1);
-    this.documentPreviews.splice(index, 1);
-  },
-
-
-
-
-
+      this.formData.documents.splice(index, 1);
+      this.documentPreviews.splice(index, 1);
+    },
 
     async getRegions() {
       try {
-        this.regions = this.regions.concat(await getZones(2, null))
+        this.regions = this.regions.concat(await getZones(2, null));
       } catch (error) {
-        console.log(error)
+        console.log(error);
       }
     },
 
     async getDivisions(parent_id) {
       try {
-        this.isDivisionLoading = true
-        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
-        this.divisions = this.divisions.concat(await getZones(null, parent_id))
+        this.isDivisionLoading = true;
+        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : [];
+        this.divisions = this.divisions.concat(await getZones(null, parent_id));
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
-        this.isDivisionLoading = false
+        this.isDivisionLoading = false;
       }
     },
 
     async getSub_divisions(parent_id) {
-      this.isSubdivisionLoading = true
+      this.isSubdivisionLoading = true;
       try {
-        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
-        this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
+        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : [];
+        this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id));
       } catch (error) {
-        console.log(error)
+        console.log(error);
       } finally {
-        this.isSubdivisionLoading = false
+        this.isSubdivisionLoading = false;
       }
     },
 
     handleSelectedOptionIdChange(selectedOptionId) {
-      this.zone_id = selectedOptionId
-      return selectedOptionId
+      this.zone_id = selectedOptionId;
+      return selectedOptionId;
     },
     handleSelectedRegionIdChange(selectedOptionId) {
-      this.region_id = selectedOptionId
-      this.formData.zone = selectedOptionId
+      this.region_id = selectedOptionId;
+      this.formData.zone = selectedOptionId;
     },
     handleSelectedDivisionIdChange(selectedOptionId) {
-      this.division_id = selectedOptionId
-      this.formData.zone = selectedOptionId
+      this.division_id = selectedOptionId;
+      this.formData.zone = selectedOptionId;
     },
     handleSelectedSubdivisionIdChange(selectedOptionId) {
-      this.subDivision_id = selectedOptionId
-      this.formData.zone = selectedOptionId
+      this.subDivision_id = selectedOptionId;
+      this.formData.zone = selectedOptionId;
     },
 
     togglePasswordVisibility() {
-      this.showPassword = !this.showPassword
+      this.showPassword = !this.showPassword;
     },
     toggleConfirmPasswordVisibility() {
-      this.showConfirmPassword = !this.showConfirmPassword
+      this.showConfirmPassword = !this.showConfirmPassword;
     },
     async nextStep() {
-      const fieldsToValidate = ['email', 'phone','company_name']
+      const fieldsToValidate = ["email", "phone", "company_name"];
 
       try {
         const validationResults = await Promise.all(
           fieldsToValidate.map((field) => this.$refs.form.validateField(field))
-        )
+        );
 
         // Check if all fields are valid
-        const allFieldsValid = validationResults.every((result) => result.valid)
+        const allFieldsValid = validationResults.every((result) => result.valid);
 
         // Proceed to the next step only if all fields are valid
         if (allFieldsValid) {
-          this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1
+          this.currentStep = this.currentStep === this.step_1 ? this.step_2 : this.step_1;
         }
       } catch (error) {
-        console.error('Validation error:', error)
+        console.error("Validation error:", error);
       }
     },
 
     previousStep() {
-      this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
+      this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2;
     },
 
     handleEmailNotVerified() {
-      this.toast.error('Check your email to verifie your mail')
-      this.$router.push({ name: 'email-verification' })
+      this.toast.error("Check your email to verifie your mail");
+      this.$router.push({ name: "email-verification" });
     },
 
     handleSuccess() {
       this.toast.success(`Your request have succesfully be send`);
-      this.$router.push({ name: 'success-submition' })
+      this.$router.push({ name: "success-submition" });
     },
 
     handleError(errors) {
-      this.isLoading = false
+      this.isLoading = false;
       if (errors.email && errors.email.length > 0) {
-        this.toast.error(errors.email[0])
+        this.toast.error(errors.email[0]);
       } else if (errors.zone_id && errors.zone_id.length > 0) {
-        this.toast.error(errors.zone_id[0])
+        this.toast.error(errors.zone_id[0]);
       }
     },
 
     async registerForm() {
       const validationResults = await Promise.all(
-        ['tos'].map((field) => this.$refs.form.validateField(field))
-      )
+        ["tos"].map((field) => this.$refs.form.validateField(field))
+      );
 
       if (validationResults.every((result) => result.valid)) {
-        if (this.region_id === '') {
-          this.toast.error(this.$t('please_select_your_subdivision'))
-          return
+        if (this.region_id === "") {
+          this.toast.error(this.$t("please_select_your_subdivision"));
+          return;
         }
 
-        this.toast.info(this.$t('please_wait_creating_account'))
+        this.toast.info(this.$t("please_wait_creating_account"));
 
         try {
-          this.isLoading = true
+          this.isLoading = true;
           await institutionalRequest(
             this.formData,
             this.authStore,
             this.handleSuccess,
             this.handleError,
             this.handleEmailNotVerified
-          )
+          );
         } catch (error) {
-          this.isLoading = false
-          console.log(error)
+          this.isLoading = false;
+          console.log(error);
         }
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style>

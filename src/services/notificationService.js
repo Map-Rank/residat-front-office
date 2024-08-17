@@ -19,7 +19,7 @@ const createNotification = async (notificationData, authStore, onSuccess, onErro
         formData.append('user_id', authStore.user.id)
         formData.append('zone_id', notificationData.zone_id)
 
-      if (notificationData.media && notificationData.media.trim() !== '') {
+      if (notificationData.media) {
         formData.append('image', notificationData.media);
       }
       

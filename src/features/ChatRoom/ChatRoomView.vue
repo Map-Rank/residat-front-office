@@ -37,7 +37,7 @@
               <img :src="institution.avatar" alt="Institution Avatar" class="w-10 h-10 rounded-full mr-4">
               <div>{{ institution.name }}</div>
             </div>
-            <div>{{ institution.notifications.length }} messages</div>
+            <div>{{ institution.notifications?.length }} messages</div>
           </div>
           <div v-show="institution.isVisible" class="ml-5 rounded-lg mt-2">
             <NotificationItem 
@@ -83,6 +83,11 @@ export default {
   async created() {
     try {
       await this.fetchNotifications()
+      const authStore = useAuthStore()
+
+      const user = authStore.user
+      this.isInstitution = user.role[0].name == "admin" ? true : false ;
+
     } catch (error) {
       console.error('Failed to load posts:', error)
     }
@@ -91,7 +96,7 @@ export default {
     const authStore = useAuthStore()
     return {
       authStore,
-      isInstitution: true, 
+      isInstitution: authStore.user.role.some(role => role.name === "admin"), 
       activeTab: 'important',
       isLoading: true,
       notifications: [],
@@ -143,6 +148,7 @@ export default {
       this.isLoading = true
       try {
         this.notifications = await getNotifications(0, 10, this.authStore.user.token)
+        this.institutionalNotifications = await getNotifications(0, 10, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load notifications:', error)
         this.showPageRefresh = true
