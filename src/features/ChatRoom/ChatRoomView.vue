@@ -4,7 +4,7 @@
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">{{ isInstitution ? "Inbox" : "Inbox" }}</h1>
       <button
-        v-if="isInstitution"
+        v-if="display_button"
         @click="createNotification"
         class="bg-primary-normal text-white px-4 py-2 rounded"
       >
@@ -108,7 +108,8 @@ export default {
     const authStore = useAuthStore();
     return {
       authStore,
-      isInstitution: authStore.user.type === "COUNCIL",
+      display_button: authStore.user.type === "COUNCIL",
+      isInstitution: true,
       activeTab: "important",
       isLoading: true,
       notifications: [],

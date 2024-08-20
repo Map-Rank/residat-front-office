@@ -2,11 +2,12 @@
   <div class="flex flex-col space-y-6">
     <h2 class="text-center uppercase">{{ $t('welcome_back') }}</h2>
 
-    
+    <!-- Toggle Link -->
+   
 
     <vee-form ref="form" :validation-schema="schema" @submit="login">
-      <!-- Email -->
-      <div class="mb-6">
+      <!-- Conditional Email or Phone Input -->
+      <div v-if="inputMethod === 'email'" class="mb-2">
         <h3 for="email" class="inline-block mb-2">{{ $t('email') }}</h3>
         <vee-field
           v-model="userData.email"
@@ -18,7 +19,24 @@
         />
         <ErrorMessage class="text-danger-normal" name="email" />
       </div>
+      
+      <div v-else class="mb-2">
+        <h3 for="phone" class="inline-block mb-2">{{ $t('phone_number') }}</h3>
+        <vee-field
+          v-model="userData.phone"
+          id="phone"
+          name="phone"
+          type="tel"
+          class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+          :placeholder="$t('enter_phone_number')"
+        />
+        <ErrorMessage class="text-danger-normal" name="phone" />
+      </div>
+      <div class="text-start mb-4 cursor-pointer ">
+        <p  class="text-secondary-normal" @click="toggleInputMethod">{{ inputMethod === 'email' ? $t('use_phone') : $t('use_email') }}</p>
+      </div>
 
+      <!-- Password Field -->
       <div class="relative w-full">
         <h3>{{ $t('password') }}</h3>
         <div class="flex items-center border border-gray-300 rounded overflow-hidden">
@@ -31,43 +49,25 @@
             :placeholder="$t('password')"
           ></vee-field>
           <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none">
-            <img
-              v-show="!showPassword"
-              src="\assets\icons\password-open.svg"
-              alt="Show password"
-              class="block w-6 h-6"
-            />
-            <img
-              v-show="showPassword"
-              src="\assets\icons\password-closed.svg"
-              alt="Hide password"
-              class="block w-6 h-6"
-            />
+            <!-- Toggle Password Visibility Icons -->
           </button>
         </div>
-
-        <!-- Error Message -->
         <ErrorMessage class="text-red-500 text-sm mt-1" name="password" />
-        
-          
-        <!-- </span> -->
       </div>
+
+      <!-- Forgot Password Link -->
       <h6 class="text-right mt-3 hover:cursor-pointer" @click="forgotPassword">{{ $t('forgot_password') }}</h6>
 
-
+      <!-- Submit Button -->
       <div class="flex justify-center">
         <button
           type="submit"
           @click.prevent="login()"
-          :class="
-            this.isLoading
-              ? 'bg-gray-400 cursor-wait '
-              : 'bg-secondary-normal hover:bg-secondary-hover'
-          "
+          :class="this.isLoading ? 'bg-gray-400 cursor-wait ' : 'bg-secondary-normal hover:bg-secondary-hover'"
           class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
           :disabled="this.isLoading"
         >
-        {{ $t('login') }}
+          {{ $t('login') }}
         </button>
       </div>
     </vee-form>
@@ -77,7 +77,6 @@
 <script>
 import useAuthStore from '../../../stores/auth'
 import { loginUser } from '../services/authService'
-import { useRouter } from 'vue-router'
 
 import useAlertStore from '@/stores/alertStore'
 import { useToast } from "vue-toastification";
@@ -86,34 +85,35 @@ export default {
   name: 'LoginForm',
   setup() {},
   data() {
-    const router = useRouter()
-    const authStore = useAuthStore()
-    const alertStore = useAlertStore()
-    const toast = useToast();
+ 
 
     return {
-      authStore,
-      alertStore,
-      // alertToast,
-      toast,
+      authStore: useAuthStore(),
+      alertStore: useAlertStore(),
+      toast: useToast(),
       isLoading: false,
-      router,
+      // router,
       showPassword: false,
       schema: {
         email: 'required|email',
+        phone: 'required|numeric',
         password: 'required'
       },
       userData: {
         email: '',
+        phone: '',
         password: ''
       },
-      login_in_submission: false
-    }
+      inputMethod: 'email'
+    };
   },
-
- 
-
   methods: {
+
+    toggleInputMethod() {
+      this.inputMethod = this.inputMethod === 'email' ? 'phone' : 'email';
+      // this.$router.push({ name: 'login', query: { method: this.inputMethod }});
+    },
+
     handleEmailNotVerified() {
       this.toast.error('Check your email to verifie your mail');
       this.$router.push({ name: 'waiting-email-verification' })

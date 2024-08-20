@@ -8,6 +8,8 @@
   "register": "Register",
   "login": "Login",
   "enter_email": "Enter Email",
+  "use_email": "Login with email",
+  "use_phone": "Login with phone number",
   "password": "Password",
   "welcome_back": "Welcome Back",
   "personal_information": "Personal Information",
