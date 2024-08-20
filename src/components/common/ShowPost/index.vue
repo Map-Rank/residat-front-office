@@ -1,13 +1,13 @@
 <template>
     <div
-        :class="`mt-5 box grid ${
+        :class="`mt-5  grid md:grid-cols-3 ${
           post && post.images && post.images.length === 0? 'grid-cols-auto' : 'md:grid-cols-2'
-        } bg-black shadow rounded-lg w-4/5 mx-auto`"
+        } bg-black shadow rounded-lg md:w-[90%] h-full mx-auto`"
       >
       
           <!-- Display post images  -->
           <div
-            class="flex items-center justify-center mt-1"
+            class=" md:col-span-2 flex items-center justify-center mt-1"
             v-if="post.images && post.images.length > 0"
           >
             <ImageSlider class="w-full" :images="post.images"></ImageSlider>
@@ -15,7 +15,7 @@
 
           <!-- Post details and information  -->
 
-          <div class="info grid grid-rows-custom pl-5 py-3">
+          <div class=" md:col-span-1 info grid grid-rows-custom md:pl-5 px-3 py-3">
             <!-- user informations -->
             <div class="mt-5 relative pb-4 mr-5 items-start">
               <div class="flex items-start justify-between border-b-2">
@@ -31,7 +31,7 @@
             <div class="overflow-auto">
               <div v-if="!loading" class="space-y-2">
                 <div
-                  v-for="(comment, index) in post.post_comments"
+                  v-for="(comment, index) in post.comments"
                   :key="index"
                   class="flex items-start space-x-4"
                 >
@@ -57,14 +57,14 @@
                 </div>
               </div>
 
-              <div class="flex justify-between space-x-4">
+              <div class="flex justify-between space-x-4   ">
                 <input
                   v-model="commentText"
                   type="text"
                   placeholder="Add a comments"
-                  class="w-full p-2 border bg-white-gray border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
+                  class="w-full p-2 border-2 bg-white border-secondary-normal rounded-lg focus:outline-none focus:border-secondary-hover"
                 />
-
+  
                 <!-- Post button -->
                 <button
                   @click="
@@ -72,11 +72,13 @@
                       commentPost();
                     }
                   "
-                  class="btn text-green-500 px-6 py-2 rounded-lg hover:bg-white focus:outline-none"
+                  class="text-white px-6 py-2 rounded-lg bg-secondary-normal hover:bg-secondary-hover focus:outline-none"
                 >
                   send
                 </button>
               </div>
+
+
             </div>
           </div>
         </div>
@@ -190,4 +192,6 @@ export default {
     height: 60vh;
   }
 }
+
+
 </style>

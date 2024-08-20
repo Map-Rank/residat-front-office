@@ -12,25 +12,25 @@
         <vee-field
           v-model="userData.email"
           id="email"
-          name="email"
+          name="credential"
           type="email"
           class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           :placeholder="$t('enter_email')"
         />
-        <ErrorMessage class="text-danger-normal" name="email" />
+        <ErrorMessage class="text-danger-normal" name="credential" />
       </div>
       
       <div v-else class="mb-2">
         <h3 for="phone" class="inline-block mb-2">{{ $t('phone_number') }}</h3>
         <vee-field
-          v-model="userData.phone"
+          v-model="userData.email"
           id="phone"
-          name="phone"
+          name="credential"
           type="tel"
           class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
           :placeholder="$t('enter_phone_number')"
         />
-        <ErrorMessage class="text-danger-normal" name="phone" />
+        <ErrorMessage class="text-danger-normal" name="credential" />
       </div>
       <div class="text-start mb-4 cursor-pointer ">
         <p  class="text-secondary-normal" @click="toggleInputMethod">{{ inputMethod === 'email' ? $t('use_phone') : $t('use_email') }}</p>
@@ -96,6 +96,7 @@ export default {
       showPassword: false,
       schema: {
         email: 'required|email',
+        credential: 'required',
         phone: 'required|numeric',
         password: 'required'
       },
@@ -111,7 +112,6 @@ export default {
 
     toggleInputMethod() {
       this.inputMethod = this.inputMethod === 'email' ? 'phone' : 'email';
-      // this.$router.push({ name: 'login', query: { method: this.inputMethod }});
     },
 
     handleEmailNotVerified() {
@@ -138,7 +138,7 @@ export default {
     },
 
     async login() {
-      const fieldsToValidate = ['email', 'password']
+      const fieldsToValidate = ['credential']
 
       try {
         const validationResults = await Promise.all(
