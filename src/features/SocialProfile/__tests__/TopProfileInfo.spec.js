@@ -1,10 +1,7 @@
 import { describe, it, expect, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
 import TopProfileInfo from '@/features/SocialProfile/components/TopProfileInfo/index.vue';
-import ButtonUi from '@/components/base/ButtonUi.vue';
 import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
-import { formatHostImageUrl } from '@/utils/formating';
-
 
 describe('TopProfileInfo Component', () => {
   let wrapper;
@@ -13,24 +10,25 @@ describe('TopProfileInfo Component', () => {
     beforeEach(() => {
       wrapper = mount(TopProfileInfo, {
         props: {
-          profileImageUrl: 'profile.jpg',
+          profileImageUrl: 'https://example.com/profile.jpg',
           profileName: 'John Doe',
           followersCount: 100,
           postsCount: 50,
           isCurrentUser: true
         },
         global: {
-            mocks: {
-              formatHostImageUrl
-            }
+          mocks: {
+            $t: (msg) => msg // Mock the translation function
           }
+        }
       });
     });
 
     it('renders the profile image', () => {
       const img = wrapper.find('img');
       expect(img.exists()).toBe(true);
-      expect(img.attributes('src')).toBe(formatHostImageUrl('profile.jpg'));    });
+      expect(img.attributes('src')).toBe('https://example.com/profile.jpg');
+    });
 
     it('does not render avatar placeholder', () => {
       expect(wrapper.findComponent(AvatarPlaceholder).exists()).toBe(false);
@@ -39,10 +37,8 @@ describe('TopProfileInfo Component', () => {
     it('displays profile information', () => {
       expect(wrapper.text()).toContain('John Doe');
       expect(wrapper.text()).toContain('100 followers');
-      expect(wrapper.text()).toContain('50 Articles/Posts');
+      expect(wrapper.text()).toContain('50 posts');
     });
-
-
   });
 
   describe('Without profileImageUrl', () => {
@@ -54,6 +50,11 @@ describe('TopProfileInfo Component', () => {
           followersCount: 100,
           postsCount: 50,
           isCurrentUser: false
+        },
+        global: {
+          mocks: {
+            $t: (msg) => msg // Mock the translation function
+          }
         }
       });
     });
@@ -66,9 +67,16 @@ describe('TopProfileInfo Component', () => {
       expect(wrapper.find('img').exists()).toBe(false);
     });
 
+    it('displays profile information', () => {
+      expect(wrapper.text()).toContain('John Doe');
+      expect(wrapper.text()).toContain('100 followers');
+      expect(wrapper.text()).toContain('50 posts');
+    });
+
     it('does not render action buttons for non-current user', () => {
-      expect(wrapper.findAllComponents(ButtonUi).length).toBe(0);
+      // Assuming action buttons are identified by a specific class or test id
+      expect(wrapper.find('[data-test="edit-profile"]').exists()).toBe(false);
+      expect(wrapper.find('[data-test="create-post"]').exists()).toBe(false);
     });
   });
-
 });

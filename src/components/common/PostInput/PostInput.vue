@@ -2,7 +2,7 @@
   <div class="d-flex gap-8 items-center p-4  sm:mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
     <div class="flex w-full">
      <div class="mr-4">
-       <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 rounded-full" />
+       <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 img" />
      </div>
      
       <!-- Input Field -->

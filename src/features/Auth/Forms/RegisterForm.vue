@@ -316,7 +316,7 @@ import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import { useToast } from 'vue-toastification'
 import { mask } from 'vue-the-mask'
-import { handleSingleFileUpload } from '@/utils/image.js'
+import { handleSingleFileUpload } from '../../../utils/Image'
 
 export default {
   name: 'RegisterForm',
