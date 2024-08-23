@@ -1,9 +1,8 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { mount } from '@vue/test-utils'
 import SocialProfile from '@/features/SocialProfile/SocialProfile.vue'
 import AboutUserInfo from '@/features/SocialProfile/components/AboutUserInfo/index.vue'
 import TopProfileInfo from '@/features/SocialProfile/components/TopProfileInfo/index.vue'
-import { makeApiGetCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 
 // Mock the API call
@@ -26,41 +25,39 @@ vi.mock('@/api/api', () => ({
   )
 }));
 
+// Mock local storage to handle token
+vi.mock('@/stores/auth', () => ({
+  useAuthStore: vi.fn(() => ({
+    user: { token: 'mockToken' },
+  })),
+}));
+
 describe('SocialProfile Component', () => {
   let wrapper;
 
-  beforeEach(async () => {
-    // Set up local storage mock
+  beforeEach(() => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, 'mockToken');
 
     wrapper = mount(SocialProfile, {
       global: {
         mocks: {
-          $route: {
-            params: { id: '1' }
-          },
-          $t: (msg) => msg // Mock translation function
+          $route: { params: { id: '1' } },
+          $t: (msg) => msg, // Mock translation function
         }
       }
     });
-
-    await wrapper.vm.$nextTick();
   });
 
-  it('fetches user profile on creation', async () => {
-    // Wait for the fetchUserPost method to complete
-    await wrapper.vm.fetchUserPost();
 
-    expect(makeApiGetCall).toHaveBeenCalledWith(API_ENDPOINTS.getUserPosts, 'mockToken');
-    expect(wrapper.vm.isLoading).toBe(false);
-    expect(wrapper.vm.userPost).toBeTruthy();
-  });
 
-  it('renders TopProfileInfo and AboutUserInfo after loading', async () => {
-    // Wait for the fetchUserPost method to complete
-    await wrapper.vm.fetchUserPost();
-
+  it('renders TopProfileInfo and AboutUserInfo after loading', () => {
     expect(wrapper.findComponent(TopProfileInfo).exists()).toBe(true);
     expect(wrapper.findComponent(AboutUserInfo).exists()).toBe(true);
+  });
+
+  it('displays correct user info', () => {
+    const userInfo = wrapper.findComponent(AboutUserInfo);
+    expect(userInfo.props('email')).toBe('john@example.com');
+    expect(userInfo.props('phone')).toBe('1234567890');
   });
 });

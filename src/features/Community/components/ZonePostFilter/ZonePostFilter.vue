@@ -31,7 +31,7 @@
             />
           </div>
           <div class="w-full">
-            <p class="label inline-block mb-1">{{ $t('choose_your_subdivision') }} </p>
+            <p class="label inline-block mb-1">{{ $t('choose_your_subdivision') }}</p>
             <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -53,6 +53,7 @@ import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import SectionTitle from '@/components/base/SectionTitle.vue'
+import { checkAuthentication } from '@/utils/authUtils.js'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -77,7 +78,7 @@ export default {
       isLoading: false,
 
       region_id: '1',
-      sectionTitle: this.title || this.$t('select_location_title') ,
+      sectionTitle: this.title || this.$t('select_location_title'),
 
       division_id: '',
       Subdivision_id: '1',
@@ -90,19 +91,27 @@ export default {
   },
   methods: {
     returnZoneId(id) {
-      if(id){
+
+      if (!checkAuthentication()) {
+        return
+      }
+
+      if (id) {
         this.filterPostFunctionWithId(id)
       }
     },
 
-   returnZone(zone) {
-    console.log('this is the zone '+ zone);
-     if(this.updateZone !== null && zone.id != null) {
-       this.updateZone(zone);
-       return
-     } 
-   },
-   
+    returnZone(zone) {
+
+      if (!checkAuthentication()) {
+        return
+      }
+      console.log('this is the zone ' + zone)
+      if (this.updateZone !== null && zone.id != null) {
+        this.updateZone(zone)
+        return
+      }
+    },
 
     async getRegions() {
       try {
@@ -113,9 +122,11 @@ export default {
     },
 
     async getDivisions(parent_id) {
-      //here i will avoid fetching the divisions in the case 
-      // that the user chosed to filter post according to Cameroon
-      if(parent_id == 1){
+      if (!checkAuthentication()) {
+        return
+      }
+
+      if (parent_id == 1) {
         this.divisions = [this.divisions[0]]
         return
       }
@@ -147,9 +158,9 @@ export default {
   props: {
     filterPostFunctionWithId: {},
     updateZone: {
-      type:Function
+      type: Function
     },
-    title:String,
+    title: String,
     props_regions: {
       type: Array,
       default: () => [

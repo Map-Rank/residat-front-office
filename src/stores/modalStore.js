@@ -1,33 +1,18 @@
+// stores/modalStore.js
 import { defineStore } from 'pinia';
 
-export default defineStore('modal', {
-  // The state must return a function to ensure fresh state
+export default  defineStore('modal', {
   state: () => ({
-    showModal: false,
-    postLink: '',
-    message: 'Check out this post!',
+    showAuthModal: false,
   }),
-  // Actions for updating the state
   actions: {
-    openModal(link) {
-        console.log('open modal')
-      this.postLink = link;
-      this.showModal = true;
+    openAuthModal() {
+      console.log('openning the modal')
+      this.showAuthModal = true;
+      console.log('new value'+ this.showAuthModal)
     },
-    closeModal() {
-      this.showModal = false;
-    },
-    setMessage(message) {
-      this.message = message;
-    },
-  },
-  // Getters for computed states
-  getters: {
-    encodedPostLink: (state) => {
-      return encodeURIComponent(state.postLink);
-    },
-    encodedMessage: (state) => {
-      return encodeURIComponent(state.message);
+    closeAuthModal() {
+      this.showAuthModal = false;
     },
   },
 });

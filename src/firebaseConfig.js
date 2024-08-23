@@ -43,7 +43,7 @@ export const getFcmToken = async () => {
         console.log('No registration token available. Request permission to generate one.');
       }
     } else {
-      toast.error('Unable to get permission to notify. Please enable notifications in your browser settings to receive updates.');
+      toast.warning('Please enable notification on your browser, in for your to recieve important notificatios');
       console.log('Unable to get permission to notify.');
     }
   } catch (err) {

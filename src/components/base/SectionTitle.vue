@@ -1,3 +1,4 @@
+
 <template>
 
     <div  class="bg-secondary-normal px-5 py-3 mb-4 rounded-lg " :class="[css, { 'bg-secondary-normal': !isLink, 'hover:bg-primary-normal ': isLink } ]">
@@ -8,6 +9,7 @@
   </div>
 </template>
 <script>
+
 export default {
   name: 'SectionTitle',
   props: {

@@ -5,6 +5,8 @@ export const API_ENDPOINTS = {
   createPost: '/post',
   post:'/post',
   getPosts: '/post',
+  getPostsGuest: '/get-all-posts',
+  getSinglePostsGuest: '/one-post',
   showSpecificPost: '/post',
   getUserPosts: '/profile',
   UpdateUser: '/profile/update',
@@ -20,4 +22,6 @@ export const API_ENDPOINTS = {
   report: '/reports',
   event: '/events',
   getEvents: '/events',
+  getEventsGuest: '/get-all-events',
+  getSingleEventsGuest: '/one-event',
 };

@@ -31,9 +31,10 @@ app.use(i18n)
 app.use(VueTheMask)
 app.directive('date-format', dateFormat);
 
-const vfm = createVfm()
-app.use(vfm)
 
+
+const vfm = createVfm();
+app.use(vfm);
 
 const options = {
     position: POSITION.TOP_CENTER,
@@ -58,11 +59,11 @@ sectorStore.initializeStore()
 const authStore = useAuthStore()
 authStore.initializeAuthState()
 
-// getFcmToken().then(token => {
-//     if (token) {
-//       console.log('FCM token:Firebase initialise');
-//     }
-//   });
+getFcmToken().then(token => {
+    if (token) {
+      console.log('FCM token:Firebase initialise');
+    }
+  });
 
 app.mount('#app')
 

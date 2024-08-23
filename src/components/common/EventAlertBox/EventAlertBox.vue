@@ -36,6 +36,7 @@
 import SectionTitle from '@/components/base/SectionTitle.vue'
 import { truncateText } from '@/utils/formating'
 
+
 export default {
   name: 'EventAlertBox',
   mounted() {

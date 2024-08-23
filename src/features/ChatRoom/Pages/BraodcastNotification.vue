@@ -352,12 +352,12 @@
               
               return
             }
-            if (this.formData.media == null) {
-              this.toast.error('Please select a Banner');
-              this.isLoadingBtn = false;
+            // if (this.formData.media == null) {
+            //   this.toast.error('Please select a Banner');
+            //   this.isLoadingBtn = false;
               
-              return
-            }
+            //   return
+            // }
  
             this.toast.info( 'please wait we are creating your Alerts...');
   

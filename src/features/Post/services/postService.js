@@ -1,5 +1,6 @@
 import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 const currentDate = new Date().toISOString().split('T')[0]
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
@@ -12,7 +13,6 @@ const createPost = async (postData, onSuccess, onError) => {
     formData.append('published_at', currentDate)
     formData.append('zone_id', postData.zoneId)
 
-    // Append media files
     postData.images.forEach((image, index) => {
       if (
         [
@@ -28,16 +28,18 @@ const createPost = async (postData, onSuccess, onError) => {
           'audio/mp3'
         ].includes(image.type)
       ) {
+        console.log('thisis the image '+image);
         formData.append(`media[${index}]`, image, image.name)
       } else {
         console.log('not correct format')
       }
     })
-
+    
     postData.sectorId.forEach((id, index) => {
       formData.append(`sectors[${index}]`, id)
     })
-
+    
+    console.log('thisis the image '+ formData);
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
     console.log(token)
 
@@ -117,7 +119,7 @@ const updatePost = async (postData, onSuccess, onError) => {
   }
 }
 
-const getPosts = async (page, size, token) => {
+const getPosts = async (page, size, token,isConnected = true) => {
   let defaultSize = 10
   let defaultPage = 0
 
@@ -129,12 +131,20 @@ const getPosts = async (page, size, token) => {
     page: page.toString()
   })
 
-
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      token ? token : authToken
-    )
+    let response;
+    let url;
+    
+
+    isConnected ? url = API_ENDPOINTS.getPosts : url = API_ENDPOINTS.getPostsGuest
+
+       response = await makeApiGetCall(
+        `${url}?${params.toString()}`,
+        token ? token : localToken
+      )
+
+
 
     return response.data.data
   } catch (error) {
@@ -144,10 +154,19 @@ const getPosts = async (page, size, token) => {
 }
 
 const getSpecificPost = async (id) => {
+
+
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
+
+    let url;
+    const isConnected = checkAuthentication()
+
+    isConnected ? url = API_ENDPOINTS.post : url = API_ENDPOINTS.getSinglePostsGuest
+
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.post}/${id}`,
-      authToken
+      `${url}/${id}`,
+      localToken
     )
     return response.data.data
   } catch (error) {
@@ -158,8 +177,15 @@ const getSpecificPost = async (id) => {
 
 
 const filterPost = async (params) => {
+
+  if (!checkAuthentication()) {
+    return
+  }
+  
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+  
   try {
-    const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, authToken)
+    const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, localToken)
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -168,7 +194,7 @@ const filterPost = async (params) => {
 }
 
 const getFilterPosts = async (zoneId, sectorId, size, page) => {
-  let defaultSize = 20
+  let defaultSize = 10
   let defaultPage = 0
 
   size = size || defaultSize
@@ -188,8 +214,9 @@ const getFilterPosts = async (zoneId, sectorId, size, page) => {
 }
 
 const getUserPosts = async () => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
+    const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, localToken)
     console.log(authToken)
     return response.data.data
   } catch (error) {
@@ -199,9 +226,10 @@ const getUserPosts = async () => {
 }
 
 const getUserProfile = async (id) => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
     const endpoint = `/profile/detail/${id}`;
-    const response = await makeApiGetCall(endpoint, authToken);
+    const response = await makeApiGetCall(endpoint, localToken);
     return response.data.data;
   } catch (error) {
     console.error('Error fetching user profile:', error);
@@ -210,8 +238,9 @@ const getUserProfile = async (id) => {
 };
 
 const likePost = async (postId) => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`, null, authToken)
+    await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`, null, localToken)
   } catch (error) {
     console.error('Error fetching posts:', error)
     throw error
@@ -219,8 +248,9 @@ const likePost = async (postId) => {
 }
 
 const followUser = async (userId) => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    await makeApiPostCall(`${API_ENDPOINTS.follow}/${userId}`, null, authToken)
+    await makeApiPostCall(`${API_ENDPOINTS.follow}/${userId}`, null, localToken)
   } catch (error) {
     console.error('Error fetching posts:', error)
     throw error

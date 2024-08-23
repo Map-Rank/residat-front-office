@@ -43,10 +43,7 @@
             {{ isReadMore ? 'Read Less' : 'Read More' }}
           </button>
         </p>
-        <h3 class="my-4">Event Flyers</h3>
-        <div class="h-[300px] overflow-x-auto flex space-x-4 bg-white border border-gray-300 rounded">
-          <img :src="event.image" alt="" srcset="" class="h-full object-cover cursor-pointer" @click="showImageModal(event.image)">
-      </div>
+      
       </div>
     </div>
 

@@ -107,6 +107,8 @@
   import useAlertStore from '@/stores/alertStore'
   import {UpdateUser} from '@/features/Auth/services/authService.js'
   import { useToast } from "vue-toastification";
+  import { handleSingleFileUpload} from '@/utils/Image.js'
+
   
   export default {
   name: 'UpdateProfile',
@@ -227,9 +229,10 @@
   },
   },
   methods: {
-    onFileChange(e) {
+   async onFileChange(e) {
       this.isImageFromLocal = true
-    const file = e.target.files[0];
+    const file = await handleSingleFileUpload(e, 2, ['image/jpeg', 'image/png'], true);
+
     if (file) {
       this.formData.avatar = file;
     } else {

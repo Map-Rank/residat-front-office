@@ -1,8 +1,9 @@
 <template>
-  <div></div>
+ 
   <div class="body flex flex-col min-h-screen">
     <!-- <LandingPage></LandingPage> -->
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
+    <GuestHeader class="fixed  w-full z-10" v-if="showGuessHeader"></GuestHeader>
     <!-- <HeaderLanding  :class="showClass" class="fixed  w-full z-10"> </HeaderLanding> -->
 
     <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
@@ -19,7 +20,7 @@
     <FeedbackButton />
     
     <ModalsContainer />
-
+    <AuthModal v-if="showAuthModal" @close="showAuthModal = false"  ></AuthModal>
  
 
 
@@ -39,7 +40,8 @@ import NotificationHandler from './components/base/NotificationHandler.vue'
 import HeaderLanding from './components/common/Header/HeaderLanding.vue'
 import LandingPage from './features/LandingPage/LandingPage.vue'
 import { ModalsContainer } from 'vue-final-modal'
-
+import GuestHeader from '@/components/common/Header/GuestHeader.vue'
+import AuthModal from '@/components/common/Modal/AuthModal.vue'; 
 
 export default {
   name: 'App',
@@ -47,24 +49,31 @@ export default {
     const modalStore = useModalStore()
 
     return {
-      modalStore
+      modalStore,
+      // showAuthModal: false, 
     }
   },
   components: {
     HeaderApp,
-    FooterApp,
-    LandingPage,
     ModalsContainer,
     NotificationHandler,
     FeedbackButton,
     BottomNavigationAppApp,
-    HeaderLanding
+    GuestHeader,
+    AuthModal
   },
 
   computed: {
-    ...mapState(useAuthStore, ['hiddenClass','showClass']),
-    ...mapState(usePostStore, ['hideComponent'])
-  }
+    ...mapState(useAuthStore, ['hiddenClass','showClass','showGuessHeader']),
+    ...mapState(usePostStore, ['hideComponent']),
+    ...mapState(useModalStore, ['showAuthModal']),
+  },
+
+  methods: {
+    closeAuthModal() {
+      this.showAuthModal = false;
+    },
+  },
 }
 </script>
 
@@ -82,7 +91,7 @@ export default {
     position: fixed;
     bottom: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 50;
   }
 }
 </style>

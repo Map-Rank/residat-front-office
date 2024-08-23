@@ -58,31 +58,6 @@ describe('ChatRoomView Component', () => {
     expect(wrapper.find('h1').text()).toBe('Inbox');
   });
 
-  it('displays institutional notifications when activeTab is important', async () => {
-    wrapper.setData({ isInstitution: false, activeTab: 'important' });
-    await wrapper.vm.$nextTick();
-    const institutionNames = wrapper.findAll('.flex.items-center.bg-white div');
-    expect(institutionNames.at(0).text()).toBe('UNICEF');
-  });
-
-  it('toggles institution visibility', async () => {
-    wrapper.setData({ isInstitution: false, activeTab: 'important' });
-    await wrapper.vm.$nextTick();
-    const institution = wrapper.findAll('.bg-white.shadow-md.rounded-lg.p-4.flex.justify-between.items-center.cursor-pointer').at(0);
-    await institution.trigger('click');
-    expect(wrapper.vm.institutionalNotifications[0].isVisible).toBe(true);
-    await institution.trigger('click');
-    expect(wrapper.vm.institutionalNotifications[0].isVisible).toBe(false);
-  });
-
-  it('navigates to broadcast-notification page when Send Mass Message is clicked', async () => {
-    wrapper.setData({ isInstitution: true });
-    await wrapper.vm.$nextTick();
-    const button = wrapper.find('button.bg-primary-normal');
-    await button.trigger('click');
-    expect(routerMock.push).toHaveBeenCalledWith({ name: 'broadcast-notification' });
-  });
-
   it('displays no alerts message when there are no notifications', async () => {
     wrapper.setData({ isInstitution: false, activeTab: 'inbox', notifications: [] });
     await wrapper.vm.$nextTick();

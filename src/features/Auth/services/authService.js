@@ -1,12 +1,14 @@
 import { makeApiPostCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 import { getFcmToken } from '@/firebaseConfig.js'
-import convertToDate from '../../../utils/dateFormat.js'
+// import convertToDate from '../../../utils/dateFormat.js'
+// import { getFcmToken } from '@/firebaseConfig';
+
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const registerUser = async (userData, authStore, onSuccess, onError) => {
-  
+
   try {
     const formData = new FormData()
 
@@ -17,11 +19,12 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     formData.append('password', userData.password)
     formData.append('gender', userData.gender)
     formData.append('zone_id', userData.zone)
-    formData.append('avatar', userData.avatar)
+    formData.append('language', userData.lang)
+    // formData.append('avatar', userData.avatar)
 
     //since i get date as a string here am converting to  a date type
-    const dateOfBirth = convertToDate(userData.date_of_birth)
-    formData.append('date_of_birth', dateOfBirth)
+    // const dateOfBirth = convertToDate(userData.date_of_birth)
+    // formData.append('date_of_birth', dateOfBirth)
 
     const fcmToken = await getFcmToken()
     if (fcmToken) {
@@ -38,55 +41,76 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
     localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
     localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
     onSuccess()
     // }
 
     return response
   } catch (error) {
-  if (error.response?.data?.errors) {
-    onError(error.response.data.errors);
-  } else {
-    console.log('No errors found in the response.'+ error);
-  }
-  
+    if (error.response?.data?.errors) {
+      onError(error.response.data.errors);
+    } else {
+      console.log('No errors found in the response.' + error);
+    }
+
     throw error
   }
 }
 
 
 const institutionalRequest = async (institutionData, authStore, onSuccess, onError) => {
-  
+
   try {
     const formData = new FormData()
 
     formData.append('company_name', institutionData.company_name)
-    formData.append('owner_name', institutionData.owner_name)
+    // formData.append('owner_name', institutionData.owner_name)
     formData.append('description', institutionData.description)
     formData.append('email', institutionData.email)
     formData.append('phone', institutionData.phone)
     formData.append('password', institutionData.password)
-    formData.append('gender', institutionData.gender)
+    // formData.append('gender', institutionData.gender)
     formData.append('zone_id', institutionData.zone)
     formData.append('profile_picture', institutionData.profile_picture)
-    formData.append('official_document', institutionData.documents[0])
+    formData.append('language', institutionData.lang)
+    formData.append('password', institutionData.password)
+    // formData.append('official_document', institutionData.documents[0])
 
     // institutionData.documents.forEach((doc, index) => {
-    
+
     //     formData.append(`official_document[${index}]`, doc, doc.name)
-    
+
     // })
+    // const response = await makeApiPostCall('/create/request', formData, null, true)
+    // console.log('request send  successfull !!!!')
+    // onSuccess()
+
+    const fcmToken = await getFcmToken()
+    if (fcmToken) {
+      formData.append('fcm_token', fcmToken)
+    }
+
+
     const response = await makeApiPostCall('/create/request', formData, null, true)
-    console.log('request send  successfull !!!!')
+    const user = response.data.data.user
+    const token = response.data.data.user.token
+    console.log('register successfull !!!!')
+
+    authStore.setUser(user)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
+    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
     onSuccess()
 
     return response
   } catch (error) {
-  if (error.response?.data?.errors) {
-    onError(error.response.data.errors);
-  } else {
-    console.log('No errors found in the response.'+ error);
-  }
-  
+    if (error.response?.data?.errors) {
+      onError(error.response.data.errors);
+    } else {
+      console.log('No errors found in the response.' + error);
+    }
+
     throw error
   }
 }
@@ -142,6 +166,11 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
     formData.append('email', userCredentials.email)
     formData.append('password', userCredentials.password)
 
+    const fcmToken = await getFcmToken()
+    if (fcmToken) {
+      formData.append('fcm_token', fcmToken)
+    }
+
     const response = await makeApiPostCall(API_ENDPOINTS.login, formData)
 
     const user = response.data.data
@@ -155,6 +184,11 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
       localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
       localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
       localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+
+      localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
+      if (user.langauge) {
+        localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.langauge)
+      }
 
       // Get FCM token
       const fcmToken = await getFcmToken()
@@ -173,6 +207,7 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
 
 const logOut = async (authStore) => {
   authStore.logOut()
+  localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, false)
 }
 
 const UpdatePassword = async (userData, onSuccess, onError) => {
@@ -223,7 +258,7 @@ const ForgotPassword = async (userData, onSuccess, onError) => {
 };
 
 const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) => {
-  
+
   // console.log(userData.email);
   const formData = new FormData()
   formData.append('email', emailFromUrl)
@@ -246,4 +281,4 @@ const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) 
   }
 };
 
-export { registerUser,institutionalRequest, loginUser, logOut, UpdateUser, UpdatePassword, ForgotPassword, ResetPassword }
+export { registerUser, institutionalRequest, loginUser, logOut, UpdateUser, UpdatePassword, ForgotPassword, ResetPassword }

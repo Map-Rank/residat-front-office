@@ -96,29 +96,36 @@ import RegisterForm from "./Forms/RegisterForm.vue";
 import ButtonUi from "../../components/base/ButtonUi.vue";
 import InstitutionRegister from "./Forms/InstitutionRegister.vue";
 import "../../plugins/validation";
+import useAuthStore from '@/stores/auth'
 
 export default {
   name: "AuthView",
   props: ['tab',],
   data() {
+    const authStore = useAuthStore()
     return {
+      authStore,
       currentTab: this.tab || "login",
     };
   },
   watch: {
     $route: {
       immediate: true,
+      
       async handler() {
+        this.authStore.hideGuessHeader()
         console.log('this is tab' + this.tab);
         this.currentTab = this.tab || 'login';
       }}},
+
+
+  
 
   methods: {
     setTab(currentTabName) {
       this.$router.push({ name: 'authentication', params: { tab: currentTabName } });
     },
     navigateTo(tab) {
-      console.log('object' + tab);
       this.$router.push({ name: 'authentication', params: { tab: tab } });
       
     },

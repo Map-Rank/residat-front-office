@@ -1,6 +1,7 @@
 import { makeApiPostCall ,makeApiDeleteCall, makeApiGetCall,makeApiPutCall} from '@/api/api'
 import { API_ENDPOINTS } from '@/constants/index.js'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 // const user = localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo)
@@ -100,7 +101,7 @@ const getFilterEvents = async (zoneId, sectorId, size, page) => {
 }
 
 
-const getEvents = async (page, size, token) => {
+const getEvents = async (page, size, token,isConnected = true) => {
   let defaultSize = 10
   let defaultPage = 0
 
@@ -114,8 +115,14 @@ const getEvents = async (page, size, token) => {
 
 
   try {
+    let url;
+
+    console.log('this is the usre state'+ isConnected)
+    isConnected ? url = API_ENDPOINTS.getEvents : url = API_ENDPOINTS.getEventsGuest
+
+
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getEvents}?${params.toString()}`,
+      `${url}?${params.toString()}`,
       token ? token : authToken
     )
 
@@ -129,8 +136,13 @@ const getEvents = async (page, size, token) => {
 
 const getSpecificEvent = async (id) => {
   try {
+    let url;
+    const isConnected = checkAuthentication()
+
+    isConnected ? url = API_ENDPOINTS.event : url = API_ENDPOINTS.getSingleEventsGuest
+
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.event}/${id.toString()}`,
+      `${url}/${id.toString()}`,
       authToken
     )
     return response.data.data

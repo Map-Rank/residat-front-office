@@ -20,12 +20,12 @@
       {{ $t('submit') }}
     </button>
       <h3></h3>
-      <a :href="'https://wa.me/+237620162316'" target="_blank">
-        <!-- <img src="/assets/icons/chat.svg" alt="Whatsapp icon"/> -->
+      <a :href="'https://wa.me/+237620162316'" target="_blank"  class="flex items-center mt-2">
+        <img src="/assets/icons/colored/whatsapp.svg" class="h-10" alt="Whatsapp icon"/>
         {{$t('get_on_whatsap')}}
       </a>
     </div>
-    <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('get_to_us')}}</div>
+    <!-- <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('get_to_us')}}</div> -->
   </div>
 </template>
 
@@ -198,7 +198,7 @@ export default {
 @media screen and (max-width: 768px) {
   .feedback-container {
     position: fixed;
-    bottom:100px;
+    bottom:40px;
     right: 20px;
     z-index: 1000;
   }

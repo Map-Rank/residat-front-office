@@ -18,12 +18,16 @@ const createNotification = async (notificationData, authStore, onSuccess, onErro
         // formData.append('firebase_id', authStore.user.id)
         formData.append('user_id', authStore.user.id)
         formData.append('zone_id', notificationData.zone_id)
-        formData.append('image', notificationData.media)
 
+      if (notificationData.media) {
+        formData.append('image', notificationData.media);
+      }
+      
 
+      const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
         console.log("this is the api" + API_ENDPOINTS.notifications)
 
-        const response = await makeApiPostCall("/notifications", formData, authToken, true)
+        const response = await makeApiPostCall("/notifications", formData, localToken, true)
 
         onSuccess()
 

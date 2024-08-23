@@ -114,33 +114,49 @@
         ></icon-with-label>
       </div>
 
-      <!-- comment section -->
-      <div
-        v-if="showCommentBox"
-        class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full"
-      >
-        <img :src="userProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
-        <div class="border p-2 rounded-lg flex-grow">
-          <input
-            v-model="commentData.text"
-            type="search"
-            placeholder="Search "
-            class="bg-transparent w-full focus:border-none rounded-md outline-none hover:border-none transition-colors duration-200"
-          />
-        </div>
-        <button
-          @click.prevent="commentPost(this.commentData)"
-          class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
-            :disabled="this.isCommenting"
-          :class="
-            this.isCommenting
-              ? 'bg-gray-400 cursor-wait disabled '
-              : 'bg-secondary-normal hover:bg-secondary-hover'
-          "
-        >
-          {{ $t('post') }}
-        </button>
-      </div>
+ <!-- comment section -->
+<div v-if="showCommentBox" class="mt-3 w-full">
+  <!-- Display the last comment -->
+  <div v-if="post.comments && post.comments.length" class="flex items-center space-x-3">
+    <img
+      :src="post.comments[comments.length - 1].user.avatar"
+      alt="User profile"
+      class="w-8 h-8 rounded-full"
+    />
+    <div class="bg-gray-100 p-2 rounded-lg flex-grow">
+      <p class="text-gray-700">
+        <strong>{{ post.comments[comments.length - 1].user.first_name }}:</strong>
+        {{ post.comments[comments.length - 1].text }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Input for new comment -->
+  <div class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full">
+    <img :src="commentProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
+    <div class="border p-2 rounded-lg flex-grow">
+      <input
+        v-model="commentData.text"
+        type="text"
+        placeholder="Write a comment..."
+        class="bg-transparent w-full focus:outline-none rounded-md"
+      />
+    </div>
+    <button
+      @click.prevent="commentPost(commentData)"
+      class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
+      :disabled="isCommenting"
+      :class="
+        isCommenting
+          ? 'bg-gray-400 cursor-wait disabled'
+          : 'bg-secondary-normal hover:bg-secondary-hover'
+      "
+    >
+      {{ $t('post') }}
+    </button>
+  </div>
+</div>
+
     </footer>
   </article>
 
@@ -180,6 +196,8 @@ import useModalStore from '@/stores/modalStore.js'
 import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import { useToast } from 'vue-toastification'
 import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
+import { checkAuthentication } from '@/utils/authUtils.js';
+import useAuthStore from '@/stores/auth'
 
 
 export default {
@@ -189,13 +207,16 @@ export default {
     const route = useRoute()
     const modalStore = useModalStore()
     const toast = useToast()
+    const authStore = useAuthStore()
 
     return {
       route,
       modalStore,
+      authStore,
       showShareModal: false,
       toast,
       postLink: '',
+      commentProfileImage :  authStore && authStore.user ? authStore.user.avatar : this.userProfileImage,
       messageShare: 'Check out this post!',
       iconSource: this.post?.is_following
         ? '/assets/icons/tick.svg'
@@ -329,8 +350,6 @@ export default {
 
     editPost() {
       console.log('edit post ')
-      // this.setpostToEdit(this.post)
-      // this.$router.push({ name: 'edit-post' })
 
       this.$router.push({
         name: 'edit-post',
@@ -341,7 +360,11 @@ export default {
     },
 
     async customFunction(index) {
-      switch (index) {
+
+      if (!checkAuthentication()) {
+        return
+      }
+        switch (index) {
         case 0:
           await likePost(this.postId)
           if (this.customLike) {
@@ -355,7 +378,7 @@ export default {
           break
         case 1:
           this.showCommentBox = !this.showCommentBox
-          console.log(this.postImages)
+          console.log(this.post)
           break
         case 2:
           this.openShareModal()
@@ -364,6 +387,8 @@ export default {
           break
         case 3:
           break
+      
+      
       }
     },
 

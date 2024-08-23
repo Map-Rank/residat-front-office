@@ -23,6 +23,7 @@
   </template>
   <script>
   import randomColor from 'randomcolor';
+  import { checkAuthentication } from '@/utils/authUtils.js';
 
   export default {
     name: 'UserPostInfo',
@@ -39,11 +40,16 @@
     },
     methods: {
       viewProfileUser() {
+
+        if (!checkAuthentication()) {
+          return
+        }
+
         this.$router.push({ name: 'view-profile-user', params: { id: this.id } })
+      
       },
       getColor(zoneName) {
-      // Generate a random color based on the zoneName
-      const seed = zoneName.toLowerCase().replace(/\s/g, ''); // Convert the zoneName to lowercase and remove whitespace
+      const seed = zoneName.toLowerCase().replace(/\s/g, '');
       return randomColor({ seed });
     },
 

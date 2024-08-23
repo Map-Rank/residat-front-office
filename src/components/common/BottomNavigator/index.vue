@@ -62,14 +62,14 @@ export default {
           isActive: false,
           routerName: 'event'
         },
-        // {
-        //   svgContent: '\\assets\\icons\\chat-outline.svg',
-        //   svgContentHover: '\\assets\\icons\\chat-fill.svg',
-        //   labelText: 'Profile',
-        //   isActive: false,
-        //   routerName: 'chat-room'
-        // //   bottom: true
-        // },
+        {
+          svgContent: '\\assets\\icons\\chat-outline.svg',
+          svgContentHover: '\\assets\\icons\\chat-fill.svg',
+          labelText: 'Profile',
+          isActive: false,
+          routerName: 'chat-room'
+        //   bottom: true
+        },
       ]
     }
   },
