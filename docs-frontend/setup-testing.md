@@ -27,13 +27,13 @@ yarn run build
 ### Run Unit Tests with [Vitest](https://vitest.dev/)
 
 ```sh
-yarn run test:unit
+yarn test
 ```
 ### Tests Couverage [Vitest](https://vitest.dev/)
 
 #### Run Tests Couverage [Vitest](https://vitest.dev/)
 ```sh
-yarn run test:coverage --coverage.enabled=true
+yarn coverage 
 ```
 
 #### Preview Tests Couverage [Vitest](https://vitest.dev/)
