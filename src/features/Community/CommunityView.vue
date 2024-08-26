@@ -153,7 +153,7 @@
                     :key="post.id"
                     @postFetch="fetchPosts"
                     :postId="post.id"
-                    :username="`${post.creator[0].first_name} ${post.creator[0].last_name} `"
+                    :username="`${post.creator[0]?.first_name} ${post.creator[0]?.last_name} `"
                     :postDate="post.humanize_date_creation"
                     :postContent="post.content"
                     :liked="post.liked"
