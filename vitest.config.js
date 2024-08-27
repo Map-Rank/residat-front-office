@@ -9,7 +9,7 @@ export default mergeConfig(viteConfig, defineConfig({
         environment: 'jsdom',
         css: true,
         coverage: {
-            provider: 'istanbul',
+            provider: 'v8',
             reporter: ['html', 'text'],
             reportsDirectory: './html/ui',
 
