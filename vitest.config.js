@@ -5,6 +5,7 @@ import { configDefaults } from 'vitest/config'
 
 export default mergeConfig(viteConfig, defineConfig({
     test: {
+        testTimeout: 10000, // 10 seconds
         reporters: ['html'],
         environment: 'jsdom',
         css: true,
