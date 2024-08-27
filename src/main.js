@@ -1,3 +1,5 @@
+/* istanbul ignore file */
+
 import './assets/main.css'
 import './assets/base.css'
 import './assets/css/global.scss'

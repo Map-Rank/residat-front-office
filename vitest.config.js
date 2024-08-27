@@ -1,6 +1,7 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
-import viteConfig from './vite.config';
+import viteConfig from './vite.config.mjs';
 import { fileURLToPath, URL } from 'node:url';
+import { configDefaults } from 'vitest/config'
 
 export default mergeConfig(viteConfig, defineConfig({
     test: {
@@ -8,9 +9,10 @@ export default mergeConfig(viteConfig, defineConfig({
         environment: 'jsdom',
         css: true,
         coverage: {
-            provider: 'v8',
+            provider: 'istanbul',
             reporter: ['html', 'text'],
-            reportsDirectory: './html/ui', // Simplified path
+            reportsDirectory: './html/ui',
+
         },
         resolve: {
             alias: {

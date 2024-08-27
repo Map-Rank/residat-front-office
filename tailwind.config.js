@@ -1,5 +1,5 @@
 /* eslint-disable no-undef */
-
+/* istanbul ignore file */
 import  {colors} from './src/assets/styles/color'
 
 module.exports = {
