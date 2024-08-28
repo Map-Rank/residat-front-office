@@ -114,6 +114,7 @@
   import { useToast } from "vue-toastification";
   
   export default {
+    name: 'ResetPassword',
     data() {
         const toast = useToast();
 
