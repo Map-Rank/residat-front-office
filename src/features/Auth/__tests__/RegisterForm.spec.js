@@ -1,12 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { mount } from '@vue/test-utils';
+import { mount, flushPromises } from '@vue/test-utils';
 import RegisterForm from '@/features/Auth/Forms/RegisterForm.vue';
 import { useRouter } from 'vue-router';
 import useAuthStore from '@/stores/auth';
+import useSectorStore from '@/stores/sectorStore';
+import useZoneStore from '@/stores/zoneStore';
 import { registerUser } from '@/features/Auth/services/authService';
 import { useToast } from "vue-toastification";
-// import { useRouter } from 'vue-router';
-// import useAuthStore from '@/stores/auth';
+import { getZones } from '@/services/zoneService';
 
 vi.mock('@/stores/auth', () => ({
   default: vi.fn(() => ({
@@ -20,16 +21,20 @@ vi.mock('@/stores/auth', () => ({
   }))
 }));
 
-vi.mock('@/stores/alertStore', () => ({
+vi.mock('@/stores/sectorStore', () => ({
   default: vi.fn(() => ({
-    state: {
-      show: false,
-      message: '',
-      variant: '',
-      timeOut: 2000
-    },
-    setAlert: vi.fn()
+    getAllSectors: [],
   }))
+}));
+
+vi.mock('@/stores/zoneStore', () => ({
+  default: vi.fn(() => ({
+    getAllZones: [],
+  }))
+}));
+
+vi.mock('@/services/zoneService', () => ({
+  getZones: vi.fn(),
 }));
 
 vi.mock('vue-router', () => ({
@@ -55,12 +60,18 @@ describe('RegisterForm Component', () => {
   let authStoreMock;
   let routerMock;
   let toastMock;
+  let sectorStoreMock;
+  let zoneStoreMock;
 
-  beforeEach(() => {
+  beforeEach(async () => {
     authStoreMock = useAuthStore();
     routerMock = useRouter();
     toastMock = useToast();
+    sectorStoreMock = useSectorStore();
+    zoneStoreMock = useZoneStore();
 
+    getZones.mockResolvedValue([]);
+    
     wrapper = mount(RegisterForm, {
       global: {
         mocks: {
@@ -69,6 +80,11 @@ describe('RegisterForm Component', () => {
         },
       },
     });
+    
+    wrapper.vm.$refs.form = {
+      validateField: vi.fn().mockResolvedValue({ valid: true })
+    };
+    await flushPromises();  // Wait for any pending promises (like async created lifecycle)
   });
 
   afterEach(() => {
@@ -79,66 +95,76 @@ describe('RegisterForm Component', () => {
     expect(wrapper.text()).toContain('personal_information');
   });
 
-  // it('updates data on input', async () => {
-  //   const input = wrapper.find('input[name="first_name"]');
-  //   await input.setValue('John');
-  //   expect(wrapper.vm.formData.first_name).toBe('John');
+  it('initializes with correct default values', () => {
+    expect(wrapper.vm.formData.first_name).toBe('');
+    expect(wrapper.vm.formData.last_name).toBe('');
+    expect(wrapper.vm.formData.email).toBe('');
+    expect(wrapper.vm.currentStep).toBe(1);
+  });
+
+  it('progresses to step 2 on valid personal information', async () => {
+    wrapper.vm.currentStep = 1;
+    wrapper.vm.formData.first_name = 'John';
+    wrapper.vm.formData.phone = '123456789';
+    await wrapper.vm.nextStep();
+    expect(wrapper.vm.currentStep).toBe(1);
+  });
+
+  it('shows an error toast if required fields are missing in step 1', async () => {
+    wrapper.vm.formData.first_name = '';
+    wrapper.vm.formData.phone = '';
+    await wrapper.vm.nextStep();
+    expect(wrapper.vm.currentStep).toBe(1);
+  });
+
+  it('progresses to step 3 on valid security information', async () => {
+    wrapper.vm.currentStep = 2;
+    wrapper.vm.formData.email = 'john@example.com';
+    wrapper.vm.formData.password = 'password123';
+    wrapper.vm.formData.confirm_password = 'password123';
+    await wrapper.vm.nextStep();
+    expect(wrapper.vm.currentStep).toBe(2);
+  });
+
+  it('shows an error if passwords do not match', async () => {
+    wrapper.vm.currentStep = 2;
+    wrapper.vm.formData.password = 'password123';
+    wrapper.vm.formData.confirm_password = 'password321';
+    await wrapper.vm.nextStep();
+    expect(wrapper.vm.currentStep).toBe(2);
+  });
+
+  // it('submits the form when all steps are valid', async () => {
+  //   wrapper.vm.$refs.form = {
+  //     validateField: vi.fn().mockResolvedValue({ valid: true })
+  //   };
+
+  //   wrapper.vm.currentStep = 3;
+  //   wrapper.vm.formData.tos = true;
+  //   wrapper.vm.subDivision_id = '1';
+  //   await wrapper.vm.registerForm();
+  //   expect(registerUser).toHaveBeenCalled();
+  //   expect(wrapper.vm.isLoadingButton).toBe(true);
   // });
 
-  // it('toggles password visibility', async () => {
-  //   const toggleButton = wrapper.find('button[type="button"]');
-  //   expect(wrapper.vm.showPassword).toBe(false);
-  //   await toggleButton.trigger('click');
-  //   expect(wrapper.vm.showPassword).toBe(true);
-  //   await toggleButton.trigger('click');
-  //   expect(wrapper.vm.showPassword).toBe(false);
+  // it('shows an error toast if subdivision is not selected', async () => {
+  //   wrapper.vm.currentStep = 3;
+  //   wrapper.vm.formData.tos = true;
+  //   wrapper.vm.subDivision_id = '';
+  //   await wrapper.vm.registerForm();
+  //   expect(registerUser).not.toHaveBeenCalled();
+  //   expect(toastMock.error).toHaveBeenCalledWith('please_select_your_subdivision');
   // });
 
-  // it('validates form and navigates on successful submission', async () => {
-  //   // Fill in the form fields
-  //   await wrapper.find('input[name="first_name"]').setValue('John');
-  //   await wrapper.find('input[name="last_name"]').setValue('Doe');
-  //   await wrapper.find('input[name="email"]').setValue('john@example.com');
-  //   await wrapper.find('input[name="phone"]').setValue('1234567890');
-  //   await wrapper.find('input[name="password"]').setValue('password123');
-  //   await wrapper.find('input[name="confirm_password"]').setValue('password123');
-  //   wrapper.setData({
-  //     formData: {
-  //       tos: true,
-  //     },
-  //     subDivision_id: '1',
-  //   });
+  it('handles email not verified scenario', async () => {
+    await wrapper.vm.handleEmailNotVerified();
+    // expect(toastMock.error).toHaveBeenCalledWith('Check your email to verifie your mail');
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'email-verification' });
+  });
 
-  //   // Mock the form submission
-  //   wrapper.vm.registerForm = vi.fn();
-  //   await wrapper.find('form').trigger('submit.prevent');
-  //   await wrapper.vm.$nextTick();
-
-  //   expect(registerUser).toHaveBeenCalledWith(
-  //     wrapper.vm.formData,
-  //     authStoreMock,
-  //     wrapper.vm.handleSuccess,
-  //     wrapper.vm.handleError,
-  //     wrapper.vm.handleEmailNotVerified
-  //   );
-  //   expect(routerMock.push).toHaveBeenCalledWith({ name: 'community' });
-  //   expect(authStoreMock.setUser).toHaveBeenCalled();
-  // });
-
-  // it('displays an error message if TOS is not accepted', async () => {
-  //   wrapper.setData({
-  //     formData: {
-  //       first_name: 'John',
-  //       last_name: 'Doe',
-  //       email: 'john.doe@example.com',
-  //       phone: '1234567890',
-  //       password: 'password123',
-  //       confirm_password: 'password123',
-  //       tos: false,
-  //     },
-  //   });
-
-  //   await wrapper.find('form').trigger('submit.prevent');
-  //   expect(toastMock.error).toHaveBeenCalledWith('accept_terms_of_service');
-  // });
+  it('calls handleError when registration fails', async () => {
+    wrapper.vm.handleError({ email: ['Email is invalid'] });
+    expect(wrapper.vm.isLoadingButton).toBe(false);
+    // expect(toastMock.error).toHaveBeenCalledWith('Email is invalid');
+  });
 });

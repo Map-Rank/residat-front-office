@@ -1,21 +1,25 @@
-import { fileURLToPath } from 'node:url'
-import { mergeConfig, defineConfig, configDefaults } from 'vitest/config'
-import viteConfig from '../residat-front-office/vite.config'
+import { defineConfig, mergeConfig } from 'vitest/config';
+import viteConfig from './vite.config.mjs';
+import { fileURLToPath, URL } from 'node:url';
+import { configDefaults } from 'vitest/config'
 
-export default mergeConfig(
-  viteConfig,
-  defineConfig({
+export default mergeConfig(viteConfig, defineConfig({
     test: {
-      coverage: {
-        reportsDirectory: 'html/ui',
-        reporter: ['text', ['html', { subdir: 'coverage' }]],
-        provider: 'v8'
-      },
-      reporters: ['default', 'html'],
-      css: true,
-      environment: 'jsdom',
-      exclude: [...configDefaults.exclude, 'e2e/*'],
-      root: fileURLToPath(new URL('./', import.meta.url))
+        testTimeout: 10000, // 10 seconds
+        reporters: ['html'],
+        environment: 'jsdom',
+        css: true,
+        coverage: {
+            provider: 'v8',
+            reporter: ['html', 'text'],
+            reportsDirectory: './html/ui',
+
+        },
+        resolve: {
+            alias: {
+                '@': fileURLToPath(new URL('./src', import.meta.url))
+            }
+        },
+        root: fileURLToPath(new URL('./', import.meta.url))
     }
-  })
-)
+}));

@@ -15,9 +15,9 @@
     <!-- Display post images -->
     <div
       class="md:col-span-2 flex items-center justify-center mt-1"
-      v-if="post.images && post.images.length > 0"
+      v-if="post?.images && post?.images.length > 0"
     >
-      <ImageSlider class="w-full" :images="post.images"></ImageSlider>
+      <ImageSlider class="w-full" :images="post?.images"></ImageSlider>
     </div>
 
     <!-- Post details and information -->
@@ -33,7 +33,7 @@
       <div class="overflow-auto">
         <div v-if="!loading" class="space-y-2">
           <div
-            v-for="(comment, index) in post.comments"
+            v-for="(comment, index) in post?.comments"
             :key="index"
             class="flex items-start space-x-4"
           >
