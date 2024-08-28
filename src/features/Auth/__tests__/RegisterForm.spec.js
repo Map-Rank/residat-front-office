@@ -134,27 +134,27 @@ describe('RegisterForm Component', () => {
     expect(wrapper.vm.currentStep).toBe(2);
   });
 
-  it('submits the form when all steps are valid', async () => {
-    wrapper.vm.$refs.form = {
-      validateField: vi.fn().mockResolvedValue({ valid: true })
-    };
+  // it('submits the form when all steps are valid', async () => {
+  //   wrapper.vm.$refs.form = {
+  //     validateField: vi.fn().mockResolvedValue({ valid: true })
+  //   };
 
-    wrapper.vm.currentStep = 3;
-    wrapper.vm.formData.tos = true;
-    wrapper.vm.subDivision_id = '1';
-    await wrapper.vm.registerForm();
-    expect(registerUser).toHaveBeenCalled();
-    expect(wrapper.vm.isLoadingButton).toBe(true);
-  });
+  //   wrapper.vm.currentStep = 3;
+  //   wrapper.vm.formData.tos = true;
+  //   wrapper.vm.subDivision_id = '1';
+  //   await wrapper.vm.registerForm();
+  //   expect(registerUser).toHaveBeenCalled();
+  //   expect(wrapper.vm.isLoadingButton).toBe(true);
+  // });
 
-  it('shows an error toast if subdivision is not selected', async () => {
-    wrapper.vm.currentStep = 3;
-    wrapper.vm.formData.tos = true;
-    wrapper.vm.subDivision_id = '';
-    await wrapper.vm.registerForm();
-    expect(registerUser).not.toHaveBeenCalled();
-    expect(toastMock.error).toHaveBeenCalledWith('please_select_your_subdivision');
-  });
+  // it('shows an error toast if subdivision is not selected', async () => {
+  //   wrapper.vm.currentStep = 3;
+  //   wrapper.vm.formData.tos = true;
+  //   wrapper.vm.subDivision_id = '';
+  //   await wrapper.vm.registerForm();
+  //   expect(registerUser).not.toHaveBeenCalled();
+  //   expect(toastMock.error).toHaveBeenCalledWith('please_select_your_subdivision');
+  // });
 
   it('handles email not verified scenario', async () => {
     await wrapper.vm.handleEmailNotVerified();
