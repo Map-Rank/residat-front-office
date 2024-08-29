@@ -1,14 +1,14 @@
 <template>
   <div class="overflow-hidden">
     <HeaderLanding class="fixed top-0 w-full z-10"></HeaderLanding>
-    <section class="grid items-center text-white text-center py-16 h-auto md:h-[60vh]">
+    <section class="grid items-center text-white text-center py-16 h-auto md:h-[40vh]">
       <div class="container mx-auto px-4">
         <div class="flex justify-center mb-8 max-h-full max-w-full overflow-hidden">
-          <img
+          <!-- <img
             src="/assets/images/LandingPage/hero-image.png"
             :alt="$t('connecting_communities')"
             class="object-contain max-h-[30vh] lg:max-h-[300px]"
-          />
+          /> -->
         </div>
         <div
           class="w-full text-center text-white text-[20px] sm:text-[24px] lg:text-[38px] font-bold font-['Poppins'] lg:leading-auto"
@@ -28,26 +28,49 @@
         <div class="w-full text-black text-[16px] md:text-lg font-normal font-['Poppins'] md:leading-7">
           {{ $t('about_us_description') }}
         </div>
-        <div class="self-stretch h-full flex flex-col justify-start items-start gap-5">
-          <div v-for="(item, index) in aboutUs.listItems" :key="index" class="flex justify-start items-start gap-2.5">
-            <img :src="aboutUs.icon" class="w-[30px] h-[30px]" />
-            <div class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">
-              {{ $t(item.text) }}
-            </div>
-          </div>
-        </div>
+     
       </div>
 
       <div class="w-full lg:w-[45%] flex justify-center lg:justify-end mt-6 lg:mt-0">
         <img
-          class="h-auto max-h-[556px] w-full object-cover"
+          class="h-auto max-h-[380px] w-full object-cover"
           src="/assets/images/LandingPage/about.png"
         />
       </div>
     </div>
 
+
+    <!-- <div
+    class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]"
+  >
+   
+  <div>
+    
+    <div class="self-stretch h-full flex flex-col justify-start items-start gap-5">
+      <div v-for="(item, index) in aboutUs.listItems" :key="index" class="flex justify-start items-start gap-2.5">
+        <img :src="aboutUs.icon" class="w-[30px] h-[30px]" />
+        <div class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">
+          {{ $t(item.text) }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="self-stretch h-full flex flex-col justify-start items-start gap-5">
+    <div v-for="(item, index) in aboutUs.listItems" :key="index" class="flex justify-start items-start gap-2.5">
+      <img :src="aboutUs.icon" class="w-[30px] h-[30px]" />
+      <div class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">
+        {{ $t(item.text) }}
+      </div>
+    </div>
+  </div>
+
+    
+  </div> -->
+
+
     <!-- solution section -->
-    <div id="solution" class="px-4">
+    <!-- <div id="solution" class="px-4">
       <div class="w-full h-auto md:px-[60px] lg:px-[80px] py-[35px] flex-col justify-start items-center inline-flex">
         <TitleLanding :text="$t('solution')"></TitleLanding>
         <div
@@ -55,7 +78,6 @@
           :key="index"
           class="w-full lg:w-[90%] grid items-center md:flex justify-between md:items-start my-10"
         >
-          <!-- For even rows -->
           <template v-if="index % 2 === 0">
             <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
               <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
@@ -80,7 +102,6 @@
               <img :src="solution.image" />
             </div>
           </template>
-          <!-- For odd rows -->
           <template v-else>
             <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
               <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
@@ -107,9 +128,9 @@
           </template>
         </div>
       </div>
-    </div>
+    </div> -->
 
-    <!-- statistics -->
+    <!-- statistics
     <div id="impact" class="w-full px-4 lg:px-16 py-8 bg-primary-normal flex flex-col justify-start items-center gap-8">
       <div class="flex flex-col justify-start items-center gap-2 text-white text-center">
         <div :class="classes" class="self-stretch text-center text-white text-[28px] md:text-[38px] font-bold font-['Poppins'] leading-[44px]">
@@ -134,10 +155,10 @@
           <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <!-- improve and join -->
-    <div class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]">
+    <!-- <div class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]">
       <div class="flex flex-col w-full lg:w-[52%] justify-start items-start gap-8 lg:gap-[30px]">
         <TitleLanding :text="$t('join_us')" class="text-start"></TitleLanding>
         <div class="w-full text-black text-[16px] md:text-lg font-normal font-['Poppins'] md:leading-7">
@@ -165,7 +186,7 @@
       <div class="w-full lg:w-[45%] flex justify-center lg:justify-end mt-6 lg:mt-0">
         <img class="h-auto max-h-[556px] w-full object-cover" src="/assets/images/LandingPage/about.png" />
       </div>
-    </div>
+    </div> -->
 
     <!-- sponsors -->
     <!-- <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-10">
