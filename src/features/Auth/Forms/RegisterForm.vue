@@ -100,6 +100,22 @@
             </select>
           </div>
 
+          <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
+            <vee-field
+              name="dob"
+              v-model="formData.date_of_birth"
+              :rules="schema.dob"
+              as="input"
+              v-mask="'##/##/####'"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('select_date_of_birth')"
+            />
+            <ErrorMessage class="text-danger-normal" name="dob" />
+          </div>
+
+
+
           <div class="flex justify-between">
             <button
               @click.prevent="nextStep()"
@@ -536,6 +552,7 @@ export default {
         
         const step1FieldVerification = [
         'first_name',
+        'dob',
         'phone',
       ]
       const step2FieldVerification = [

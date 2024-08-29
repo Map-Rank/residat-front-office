@@ -47,10 +47,10 @@ export default defineStore('auth', {
       }
     },
 
-    disableGuessHeader() {
+    hideGuessHeader() {
       this.showGuessHeader = false;
     },
-    enableGuessHeader() {
+    showGuessHeader() {
       this.showGuessHeader = true;
     },
 
