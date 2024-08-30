@@ -40,13 +40,20 @@
     </div>
 
 
-    <!-- <div
-    class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]"
+    <div
+    class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:pb-[50px] flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-[47px]"
   >
    
   <div>
     
     <div class="self-stretch h-full flex flex-col justify-start items-start gap-5">
+      <div class="flex justify-center text-center w-full">
+
+    <p class="text-center text-[18] md:text-[20] lg:text-xl font-semibold text-gray-800 ">
+      Register as a community user
+    </p>
+    
+      </div>
       <div v-for="(item, index) in aboutUs.listItems" :key="index" class="flex justify-start items-start gap-2.5">
         <img :src="aboutUs.icon" class="w-[30px] h-[30px]" />
         <div class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">
@@ -57,7 +64,14 @@
   </div>
 
   <div class="self-stretch h-full flex flex-col justify-start items-start gap-5">
-    <div v-for="(item, index) in aboutUs.listItems" :key="index" class="flex justify-start items-start gap-2.5">
+
+    <div class="flex justify-center text-center w-full">
+
+      <p class="text-center text-[18] md:text-[20] lg:text-xl font-semibold text-gray-800 ">
+        Register as institutional user (Goverment , NGOs, Business etc..)
+      </p>
+    </div>
+    <div v-for="(item, index) in aboutUsInst.listItems" :key="index" class="flex justify-start items-start gap-2.5">
       <img :src="aboutUs.icon" class="w-[30px] h-[30px]" />
       <div class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">
         {{ $t(item.text) }}
@@ -66,7 +80,7 @@
   </div>
 
     
-  </div> -->
+  </div>
 
 
     <!-- solution section -->
@@ -224,6 +238,14 @@ export default {
           { text: 'about_us_list_1' },
           { text: 'about_us_list_2' },
           { text: 'about_us_list_3' },
+        ],
+      },
+      aboutUsInst: {
+        icon: '/assets/images/LandingPage/check-icon.svg',
+        listItems: [
+          { text: 'Send mass messages to users in target locations' },
+          { text: 'Inform decision making with location/sector specific climate risks data' },
+          { text: 'Collaborate with key stakeholders to drive adaptation impacts' },
         ],
       },
       suppoterLogos: [

@@ -8,7 +8,7 @@
     <vee-form ref="form" :validation-schema="schema" @submit="login">
       <!-- Conditional Email or Phone Input -->
       <div v-if="inputMethod === 'email'" class="mb-2">
-        <h3 for="email" class="inline-block mb-2">{{ $t('email') }}</h3>
+        <h3 for="email" class="inline-block mb-2">Email ou Phone number</h3>
         <vee-field
           v-model="userData.email"
           id="email"
@@ -32,9 +32,9 @@
         />
         <ErrorMessage class="text-danger-normal" name="credential" />
       </div>
-      <div class="text-start mb-4 cursor-pointer ">
+      <!-- <div class="text-start mb-4 cursor-pointer ">
         <p  class="text-secondary-normal" @click="toggleInputMethod">{{ inputMethod === 'email' ? $t('use_phone') : $t('use_email') }}</p>
-      </div>
+      </div> -->
 
       <!-- Password Field -->
       <div class="relative w-full">
