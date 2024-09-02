@@ -281,11 +281,13 @@ const deletePost = async (postId) => {
 }
 
 const commentPost = async (postId, commentData) => {
+
+  let token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
     await makeApiPostCall(
       `${API_ENDPOINTS.commentPost}/${postId}`,
       JSON.stringify({ text: commentData.text }),
-      authToken
+      token
     )
   } catch (error) {
     console.error('Error Commenting Post:', error)

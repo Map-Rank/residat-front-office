@@ -21,6 +21,11 @@ vi.mock('@/stores/auth', () => ({
   }))
 }));
 
+// Mock vue-the-mask directive
+vi.mock('vue-the-mask', () => ({
+  mask: vi.fn(),
+}));
+
 vi.mock('@/stores/sectorStore', () => ({
   default: vi.fn(() => ({
     getAllSectors: [],

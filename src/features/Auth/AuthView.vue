@@ -73,7 +73,7 @@
              class="flex justify-center ">
               <p class="text-secondary-normal hover:underline cursor-pointer" 
               @click="navigateTo('institution')"
-              >register as an institution</p>
+              >Register as an institution</p>
              </div>
 
              <div

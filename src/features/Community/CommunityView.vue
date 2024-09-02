@@ -122,8 +122,11 @@
                       </div>
                       <div :class="{ hidden: showMobileFilterSectorPost }" class="sm:hidden mt-2">
                         <sector-side
+                    
+
                           :sectorArray="this.sectors"
-                          :updatesectorChecked="updateSectorChecked"
+                    :updatesectorChecked="updateSectorChecked"
+                    :sectorId="sectorId"
                         ></sector-side>
                       </div>
                     </div>
@@ -236,8 +239,9 @@
                     ></zone-post-filter>
 
                     <sector-side
-                      :sectorArray="this.sectors"
-                      :updatesectorChecked="updateSectorChecked"
+                    :sectorArray="this.sectors"
+                    :updatesectorChecked="updateSectorChecked"
+                    :sectorId="sectorId"
                     ></sector-side>
                   </div>
                 </div>

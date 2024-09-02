@@ -100,6 +100,22 @@
             </select>
           </div>
 
+          <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
+            <vee-field
+              name="dob"
+              v-model="formData.date_of_birth"
+              :rules="schema.dob"
+              as="input"
+              v-mask="'##/##/####'"
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('select_date_of_birth')"
+            />
+            <ErrorMessage class="text-danger-normal" name="dob" />
+          </div>
+
+
+
           <div class="flex justify-between">
             <button
               @click.prevent="nextStep()"
@@ -230,6 +246,8 @@
               @functionIdParams="getDivisions"
             />
           </div>
+
+          
           <div class="w-1/2">
             <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
@@ -385,11 +403,7 @@ export default {
         }
       ],
       langauge: [
-        // {
-        //   id: 1,
-        //   name: 'chose your langauge',
-        //   value:'en'
-        // },
+ 
         {
           id: 1,
           name: this.$t('en'),
@@ -536,6 +550,7 @@ export default {
         
         const step1FieldVerification = [
         'first_name',
+        'dob',
         'phone',
       ]
       const step2FieldVerification = [
