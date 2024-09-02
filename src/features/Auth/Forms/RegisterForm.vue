@@ -246,6 +246,8 @@
               @functionIdParams="getDivisions"
             />
           </div>
+
+          
           <div class="w-1/2">
             <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
@@ -401,11 +403,7 @@ export default {
         }
       ],
       langauge: [
-        // {
-        //   id: 1,
-        //   name: 'chose your langauge',
-        //   value:'en'
-        // },
+ 
         {
           id: 1,
           name: this.$t('en'),

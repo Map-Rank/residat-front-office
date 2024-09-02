@@ -11,9 +11,23 @@
           /> -->
         </div>
         <div
-          class="w-full text-center text-white text-[20px] sm:text-[24px] lg:text-[38px] font-bold font-['Poppins'] lg:leading-auto"
+          class="w-full text-center text-white text-[20px] sm:text-[24px] lg:text-[32px] font-bold font-['Poppins'] lg:leading-auto"
         >
           {{ $t('connecting_communities') }}
+        </div>
+
+        <div class="w-full flex justify-center mt-4">
+          <div  class=" w-1/2 md:w-1/4 ">
+
+            <ButtonUi
+           
+            :label="$t('header_register')"
+            customCss="bg-secondary-normal text-center flex justify-center px-[40px] py-10"
+            textCss="text-center text-white"
+            @clickButton="navigateTo('register')"
+            :isRoundedFull="true"
+          ></ButtonUi>
+          </div>
         </div>
       </div>
     </section>
@@ -49,7 +63,7 @@
     <div class="self-stretch h-full flex flex-col justify-start items-start gap-5">
       <div class="flex justify-center text-center w-full">
 
-    <p class="text-center text-[18] md:text-[20] lg:text-xl font-semibold text-gray-800 ">
+    <p class="text-center text-[18px] md:text-[20px] lg:text-xl font-semibold text-gray-800 ">
       Register as a community user
     </p>
     
@@ -67,7 +81,7 @@
 
     <div class="flex justify-center text-center w-full">
 
-      <p class="text-center text-[18] md:text-[20] lg:text-xl font-semibold text-gray-800 ">
+      <p class="text-center text-[18px] md:text-[20px] lg:text-xl font-semibold text-gray-800 ">
         Register as institutional user (Goverment , NGOs, Business etc..)
       </p>
     </div>
