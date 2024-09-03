@@ -279,6 +279,18 @@ const deletePost = async (postId) => {
     throw error
   }
 }
+const deleteComment = async (commentId) => {
+  
+  let token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+  try {
+    console.log('Deleting post')
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deleteComment}/${commentId}`, token)
+    console.log('delete coment sucess 1!!!  ' + response.data)
+  } catch (error) {
+    console.error('Error deleting posts:', error)
+    throw error
+  }
+}
 
 const commentPost = async (postId, commentData) => {
 
@@ -307,5 +319,6 @@ export {
   getUserPosts,
   getUserProfile,
   getFilterPosts,
-  followUser
+  followUser,
+  deleteComment
 }

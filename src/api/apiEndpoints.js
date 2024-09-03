@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
   likePost: 'post/like',
   follow: 'follow',
   commentPost: 'post/comment',
+  deleteComment: 'delete-interaction',
   updatePost: 'post/update',
   sector: '/sector',
   deletePost: 'post/delete',
