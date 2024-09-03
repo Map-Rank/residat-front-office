@@ -14,10 +14,10 @@
             <loading-indicator />
           </div>
           <div
-            class="flex items-center justify-center mt-1"
+            class="flex items-center justify-center mt-1 "
             v-if="!loading && post.images && post.images.length > 0"
           >
-            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
+            <ImageSlider class="w-full " :images="post.images"></ImageSlider>
           </div>
 
           <!-- Post details and information  -->
