@@ -13,10 +13,13 @@
         />
       </div>
     </transition-group>
-    <a class="prev" @click="prev" href="#">&#10094;</a>
-    <a class="next" @click="next" href="#">&#10095;</a>
+
+    <!-- Conditionally display next and prev buttons if there are multiple images -->
+    <a class="prev" @click="prev" v-if="hasMultipleImages" href="#">&#10094;</a>
+    <a class="next" @click="next" v-if="hasMultipleImages" href="#">&#10095;</a>
   </div>
 </template>
+
 
 <script>
 export default {
@@ -63,6 +66,9 @@ export default {
   },
 
   computed: {
+    hasMultipleImages() {
+    return this.images.length > 1;
+  },
     currentImg() {
       return this.images[Math.abs(this.currentIndex) % this.images.length];
     },
