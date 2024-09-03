@@ -45,8 +45,9 @@ export default {
     imageHost: {}
   },
   methods: {
-    deleteUserComment() {
-      deleteComment(this.comment.id);
+    async deleteUserComment() {
+     await  deleteComment(this.comment.id);
+     this.$emit('refreshPost')
     }
   }
 }

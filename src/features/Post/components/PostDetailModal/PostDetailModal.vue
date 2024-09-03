@@ -62,7 +62,7 @@
                   :key="index"
                   class="flex items-start space-x-4"
                 >
-                  <CommentInfoBox :comment="comment" :image-host="imageHost" />
+                  <CommentInfoBox  @refreshPost="refreshPost()" :comment="comment" :image-host="imageHost" />
                 </div>
               </div>
 
@@ -215,6 +215,17 @@ export default {
       // this.modalStore.openModal(`https://dev.residat.com/show-post`)
     },
 
+    async refreshPost (){
+      this.loading = true;
+      try {
+        this.post = await getSpecificPost(this.postId);
+      } catch (error) {
+        this.loading = false;
+      } finally {
+        this.loading = false;
+      }
+
+    },
     async commentPost() {
       this.loading = true;
 
@@ -232,6 +243,7 @@ export default {
     NavigateToPostDetail(){
       this.$router.push({ name: 'show-post', params: { id: this.postId } })
     },
+
 
     async likePost() {
       // this.loading = true;
