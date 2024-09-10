@@ -327,35 +327,13 @@ export default {
       ],
 
       actors: [
-        {
-          title: 'Unicef',
-          logoUrl:
-            'https://th.bing.com/th/id/R.c215149a745003175ddd655e61354b5d?rik=Pqwr0cNGR4XuXA&pid=ImgRaw',
-          name: 'Unicef'
-        },
-        {
-          title: 'Wealth Health Organization',
-          logoUrl:
-            'https://logos-world.net/wp-content/uploads/2021/03/World-Health-Organization-WHO-Symbol.png',
-          name: 'World Health Organization'
-        },
-        {
-          title: 'Event 3',
-          logoUrl:
-            'https://th.bing.com/th/id/R.16993675fe4104ffd838eaf642447350?rik=z4n%2fwfldXMhA1g&pid=ImgRaw&r=0',
-          name: 'Government'
-        },
-        {
-          title: 'Event 3',
-          logoUrl: 'https://th.bing.com/th/id/OIP.5k9XKswGsc5diwfswIWqiQHaHa?rs=1&pid=ImgDetMain',
-          name: 'Health Aid International Organization'
-        },
-        {
-          title: 'Event 3',
-          logoUrl:
-            'https://logos-download.com/wp-content/uploads/2018/09/Economic_Cooperation_Organization_Logo.png',
-          name: 'Economic Cooperation Organization'
-        }
+        // {
+        //   title: 'Unicef',
+        //   logoUrl:
+        //     'https://th.bing.com/th/id/R.c215149a745003175ddd655e61354b5d?rik=Pqwr0cNGR4XuXA&pid=ImgRaw',
+        //   name: 'Unicef'
+        // },
+      
       ],
       tooltip: {
         theme: 'dark',
