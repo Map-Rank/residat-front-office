@@ -9,25 +9,28 @@
               : 'md:grid-cols-2'
           }  bg-black shadow rounded-lg md:w-4/5  mx-auto`"
         >
-          <!-- Display post images  -->
+          <!-- Skeleton Loader for Post Images -->
           <div v-if="loading" class="flex justify-center items-center">
-            <loading-indicator />
+            <div class="skeleton-loader-image"></div>
           </div>
           <div
-            class="flex items-center justify-center mt-1"
+            class="flex items-center justify-center mt-1 "
             v-if="!loading && post.images && post.images.length > 0"
           >
-            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
+            <ImageSlider class="w-full " :images="post.images"></ImageSlider>
           </div>
 
-          <!-- Post details and information  -->
-
+          <!-- Post details and information -->
           <div class="info h-[40vh] md:h-[70vh] grid grid-rows-custom pl-5 py-3">
-            <!-- user informations -->
+            <!-- User information Skeleton Loader -->
             <div class="relative pb-4 mr-5 items-start">
               <button @click="dismiss()" class="flex justify-end w-full">
                 <img src="@\assets\icons\dismiss.svg" alt="" class="" />
               </button>
+              <div
+                v-if="loading"
+                class="skeleton-loader-user-info max-h-[200px] overflow-y-auto flex items-start justify-between border-b-2"
+              ></div>
               <div
                 v-if="!loading"
                 class="max-h-[200px] overflow-y-auto flex items-start justify-between border-b-2"
@@ -36,8 +39,12 @@
               </div>
             </div>
 
-            <!-- list of Comment  -->
+            <!-- Comments Skeleton Loader for mobile view -->
             <div class="overflow-auto md:hidden">
+              <div v-if="loading" class="space-y-2">
+                <div class="skeleton-loader-comment"></div>
+                <div class="skeleton-loader-comment"></div>
+              </div>
               <div v-if="!loading" class="space-y-2">
                 <div class="flex items-start space-x-4" v-if="post.comments.length > 0">
                   <CommentInfoBox :comment="post.comments[0]" :image-host="imageHost" />
@@ -49,25 +56,23 @@
                   <a href="#" @click="NavigateToPostDetail()" class="text-secondary-normal">See all comments</a>
                 </div>
               </div>
-
-              <div v-if="loading" class="flex justify-center items-center">
-                <loading-indicator />
-              </div>
             </div>
 
+            <!-- Comments Skeleton Loader for desktop view -->
             <div class="overflow-auto hidden md:block">
+              <div v-if="loading" class="space-y-2">
+                <div class="skeleton-loader-comment"></div>
+                <div class="skeleton-loader-comment"></div>
+                <div class="skeleton-loader-comment"></div>
+              </div>
               <div v-if="!loading" class="space-y-2">
                 <div
                   v-for="(comment, index) in post.comments"
                   :key="index"
                   class="flex items-start space-x-4"
                 >
-                  <CommentInfoBox :comment="comment" :image-host="imageHost" />
+                  <CommentInfoBox  @refreshPost="refreshPost()" :comment="comment" :image-host="imageHost" />
                 </div>
-              </div>
-
-              <div v-if="loading" class="flex justify-center items-center">
-                <loading-indicator />
               </div>
             </div>
 
@@ -149,7 +154,6 @@ import { URL_LINK } from "@/constants";
 import ImageSlider from "@/components/gallery/ImageSlider.vue";
 import CommentInfoBox from "./components/CommentInfoBox.vue";
 import UserInfoPostDetails from "./components/UserInfoPostDetails.vue";
-import LoadingIndicator from "@/components/base/LoadingIndicator.vue";
 import {
   commentPost,
   getSpecificPost,
@@ -173,7 +177,6 @@ export default {
     }
   },
   components: {
-    LoadingIndicator,
     UserInfoPostDetails,
     CommentInfoBox,
     ImageSlider,
@@ -215,6 +218,17 @@ export default {
       // this.modalStore.openModal(`https://dev.residat.com/show-post`)
     },
 
+    async refreshPost (){
+      this.loading = true;
+      try {
+        this.post = await getSpecificPost(this.postId);
+      } catch (error) {
+        this.loading = false;
+      } finally {
+        this.loading = false;
+      }
+
+    },
     async commentPost() {
       this.loading = true;
 
@@ -232,6 +246,7 @@ export default {
     NavigateToPostDetail(){
       this.$router.push({ name: 'show-post', params: { id: this.postId } })
     },
+
 
     async likePost() {
       // this.loading = true;
@@ -268,7 +283,6 @@ export default {
 <style scoped>
 .modal-backdrop {
   position: fixed;
-
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -279,7 +293,6 @@ export default {
 .modal {
   background: #ffffff;
   width: 70%;
-
   overflow-x: auto;
   display: flex;
   flex-direction: column;
@@ -288,7 +301,6 @@ export default {
 
 .modal-header {
   position: relative;
-
   color: #4aae9b;
   justify-content: space-between;
 }
@@ -316,16 +328,51 @@ export default {
 .btn {
   text-align: center;
   font-feature-settings: "clig" off, "liga" off;
-
-  /* Desktop / Link Small */
   font-family: Poppins;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 28px; /* 175% */
+  line-height: 28px;
   letter-spacing: 0.75px;
 }
+
 .info {
   background: #f5f2f2;
+}
+
+/* Skeleton Loader for the image */
+.skeleton-loader-image {
+  width: 100%;
+  height: 50vh;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+/* Skeleton Loader for user information */
+.skeleton-loader-user-info {
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+/* Skeleton Loader for comments */
+.skeleton-loader-comment {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
 }
 </style>

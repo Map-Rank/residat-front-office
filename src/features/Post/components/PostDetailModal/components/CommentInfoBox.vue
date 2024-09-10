@@ -1,35 +1,58 @@
 <template>
   <avatar-placeholder
-  :username="`${comment.user.first_name} ${comment.user.second_name}`"
-></avatar-placeholder>
+    :username="`${comment.user.first_name} ${comment.user.second_name}`"
+  ></avatar-placeholder>
 
   <div>
     <div>
       <div>
         <h5 class="comment-user-name">{{ comment.user.first_name }}</h5>
-        <div class="comment-text">{{ comment.text }}</div>
+        <p class="comment-text">{{ comment.text }}</p>
         <div class="text-sm caption-1">{{ comment.created_at }}</div>
-      </div>
 
+        <!-- Delete Button -->
+        <div v-if="showDeleteComment">
+          <button @click="deleteUserComment" class="delete-comment-btn">Delete</button>
+        </div>
+
+      </div>
     </div>
   </div>
 </template>
+
 <script>
 import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
+import useAuthStore from '@/stores/auth'
+import {
+  deleteComment,
+ 
+} from "@/features/Post/services/postService";
 
 export default {
   name: 'CommentInfoBox',
   components:{
     AvatarPlaceholder
-
-  }
-  ,
+  },
+  data() {
+    const authStore = useAuthStore();
+    return {
+      authStore,
+      showDeleteComment: authStore?.user?.id === this.comment.user.id
+    };
+  },
   props: {
     comment: {},
     imageHost: {}
+  },
+  methods: {
+    async deleteUserComment() {
+     await  deleteComment(this.comment.id);
+     this.$emit('refreshPost')
+    }
   }
 }
 </script>
+
 <style scoped>
 
 .btn2 {
@@ -46,6 +69,17 @@ export default {
 @media only screen and (max-width: 600px) {
 }
 
+.delete-comment-btn {
+  color: red;
+  border: none;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.delete-comment-btn:hover {
+  text-decoration:underline;
+}
+
 .comment-user-name {
   color: #000;
 
@@ -57,16 +91,7 @@ export default {
   line-height: normal;
 }
 
-.comment-text {
-  color: #000;
 
-  /* Paragraphs/P4 */
-  font-family: Roboto;
-  font-size: 12px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 16px; /* 133.333% */
-}
 
 .caption-1 {
   color: var(--gray-normal, #6b6b6b);

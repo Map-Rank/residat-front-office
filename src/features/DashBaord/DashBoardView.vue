@@ -453,8 +453,7 @@ export default {
    
         
 
-    },
-    handleStateClick: async function (e) {
+    }, handleStateClick: async function (e) {
       if (e.target.tagName === 'path') {
         if (e.target.dataset.name) {
           this.selectedZone = e.target.dataset
@@ -479,39 +478,48 @@ export default {
 
     handleStateHover: function (e) {
       if (e.target.tagName === 'path') {
-       let name = e.target.dataset.name;
-       if (typeof name !== 'undefined') {
-           this.showTooltip(e, name);
-       }
-       
-
-        if (e.target.dataset.active === 'true') {
-          this.color = e.target.style.fill
-          e.target.setAttribute('fill', '#42b983')
-          e.target.setAttribute('stroke', '#ffffff')
+        let name = e.target.dataset.name;
+        if (typeof name !== 'undefined') {
+          this.showTooltip(e, name);
         }
+
+        // Check if the path is marked as active
+        // if (e.target.dataset.active === 'true') {
+          this.originalFillColor = e.target.style.fill || e.target.getAttribute('fill'); // Store original color
+          this.originalStrokeColor = e.target.style.stroke || e.target.getAttribute('stroke'); // Store original stroke
+
+          // Apply new fill and stroke styles for hover effect
+          // e.target.setAttribute('fill', '#42b983'); // Change fill color
+          e.target.setAttribute('stroke', '#ffff'); // Change stroke color
+          e.target.setAttribute('stroke-width', '10'); // Increase stroke width
+        // }
       }
     },
+
     handleStateLeave: function (e) {
       if (e.target.tagName === 'path') {
-        this.hideTooltip()
-        if (e.target.dataset.active === 'true') {
-          e.target.style.fill = this.color
-          e.target.style.strokeWidth = '0.25px'
-        }
+        this.hideTooltip();
+
+        // Reset to original fill and stroke values on mouse out
+        // if (e.target.dataset.active === 'true') {
+          e.target.setAttribute('fill', this.originalFillColor); // Reset the fill color
+          e.target.setAttribute('stroke', this.originalStrokeColor); // Reset the stroke color
+          e.target.setAttribute('stroke-width', '0.25px'); // Reset stroke width to original value
+        // }
       }
     },
 
     showTooltip: function (evt, text) {
-      const tooltip = document.getElementById('tooltip')
-      tooltip.innerHTML = text
-      tooltip.style.display = 'block'
-      tooltip.style.left = evt.pageX + 10 + 'px'
-      tooltip.style.top = evt.pageY + 10 + 'px'
+      const tooltip = document.getElementById('tooltip');
+      tooltip.innerHTML = text;
+      tooltip.style.display = 'block';
+      tooltip.style.left = evt.pageX + 10 + 'px';
+      tooltip.style.top = evt.pageY + 10 + 'px';
     },
+
     hideTooltip: function () {
-      var tooltip = document.getElementById('tooltip')
-      tooltip.style.display = 'none'
+      var tooltip = document.getElementById('tooltip');
+      tooltip.style.display = 'none';
     },
 
     reloadMap() {},
