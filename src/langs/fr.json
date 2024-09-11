@@ -71,6 +71,7 @@
   "welcome_to": "Bienvenue à",
   "select_location_title": "Choisissez un emplacement",
   "select_event_by_location": "filtre les evement par location",
+  "select_zone_by_location": "Parcourire la map par zone",
   "select_sector_title": "Choisissez un secteur",
   "input_placeholder": "À quoi pensez-vous?",
   "post": "Publier",

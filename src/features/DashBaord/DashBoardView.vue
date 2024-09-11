@@ -9,16 +9,14 @@
 
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative header-nav"
-      
     >
-    
-    <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
-      <div class="h-full bg-white flex items-center px-2">
-        <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>{{ zone.name }}</p>
+      <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
+        <div class="h-full bg-white flex items-center px-2">
+          <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
+          <p>{{ zone.name }}</p>
+        </div>
       </div>
-    </div>
-    
+
       <div class="lg:w-2/4 md:w-3/4" v-if="!isLoadingMap && inSubDivision">
         <div :class="{ hidden: !displayStatistics }">
           <div class="">
@@ -71,15 +69,22 @@
     </div>
 
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
-      
       <div class="col-span-1 md:col-span-2 lg:col-span-1">
         <div></div>
         <div class="mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
-          <div v-for="(key, index) in vectorKeys" :key="index" class="flex items-center gap-3 mb-2 cursor-pointer">
-            <img  v-if="key.type == 'IMAGE'" :src= key.value height="30px" width="30px"/>
-            <span  v-if="key.type == 'COLOR'" class="block w-4 h-4" :style="{ backgroundColor: key.value }"></span>
+          <div
+            v-for="(key, index) in vectorKeys"
+            :key="index"
+            class="flex items-center gap-3 mb-2 cursor-pointer"
+          >
+            <img v-if="key.type == 'IMAGE'" :src="key.value" height="30px" width="30px" />
             <span
-            @click="handleVectorClick(key)" 
+              v-if="key.type == 'COLOR'"
+              class="block w-4 h-4"
+              :style="{ backgroundColor: key.value }"
+            ></span>
+            <span
+              @click="handleVectorClick(key)"
               class="text-sm font-semibold"
               :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
               >{{ key.name }}</span
@@ -87,12 +92,14 @@
           </div>
         </div>
       </div>
-      <div class="flex md:col-span-6  " :class="!inSubDivision ? 'lg:col-span-7 min-h-[90vh]':'lg:col-span-5 min-h-[70vh]' ">
-        <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
-          <MapShimmer  :legendItems="5" />
-        </div>
-        
 
+      <div
+        class="flex md:col-span-6"
+        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
+      >
+        <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
+          <MapShimmer :legendItems="5" />
+        </div>
 
         <div
           v-if="isErrorLoadMap && !isLoadingMap"
@@ -103,8 +110,10 @@
             :errorMessage="errorMessage"
             @refreshPage="reloadMap()"
             :hideButton="true"
-          ></RefreshError>
+          >
+          </RefreshError>
         </div>
+
         <div id="tooltip" display="none" style="position: absolute; display: none"></div>
         <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <div class="h-[80vh]">
@@ -152,6 +161,26 @@
               </div>
             </div>
           </div> -->
+        </div>
+      </div>
+
+      <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow">
+          <zone-post-filter
+            :title="$t('select_zone_by_location')"
+            :props_regions="default_regions"
+            :props_divisions="default_divisions"
+            :props_sub_divisions="default_sub_divisions"
+            :filterPostFunctionWithId="selectZoneToSearch"
+            :updateZone="updateZone"
+          ></zone-post-filter>
+
+          <ButtonUi
+            :label="$t('search')"
+            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+            textCss="text-center text-white"
+            @clickButton="searchMap"
+          ></ButtonUi>
         </div>
       </div>
     </div>
@@ -207,11 +236,14 @@ import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
 import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
+import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'DashBoardView',
 
   components: {
+    ZonePostFilter,
     BaseDropdown,
     KeyActors,
     BaseBarChart,
@@ -271,6 +303,7 @@ export default {
   props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
   data() {
     return {
+      toast: useToast(),
       mapSvgPath: null,
       child_component: 'equipment',
       vectorKeys: [],
@@ -279,6 +312,7 @@ export default {
       graphLabel: '',
       zone: null,
       presentMapId: null,
+      zoneIdToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
       defaultMapSize: 1,
@@ -291,6 +325,7 @@ export default {
       displayStatistics: true,
       reportType: null,
       inSubDivision: false,
+      isZoneLoading: false,
       modalStates: {
         healthVisible: false,
         agricultureVisible: false,
@@ -326,6 +361,25 @@ export default {
         { id: 2, name: 'Drought', value: ReportType.DROUGHT }
       ],
 
+      default_regions: [
+        {
+          id: 0,
+          name: 'Choose a region'
+        }
+      ],
+      default_divisions: [
+        {
+          id: 0,
+          name: 'Choose a division'
+        }
+      ],
+      default_sub_divisions: [
+        {
+          id: 0,
+          name: 'Choose a sub-division'
+        }
+      ],
+
       actors: [
         // {
         //   title: 'Unicef',
@@ -333,7 +387,6 @@ export default {
         //     'https://th.bing.com/th/id/R.c215149a745003175ddd655e61354b5d?rik=Pqwr0cNGR4XuXA&pid=ImgRaw',
         //   name: 'Unicef'
         // },
-      
       ],
       tooltip: {
         theme: 'dark',
@@ -352,16 +405,40 @@ export default {
   },
 
   methods: {
+    searchMap() {
+      console.log(this.zoneIdToSearch)
+
+      if (this.zoneIdToSearch !== null && this.zoneIdToSearch !== 1) {
+        this.$router.push({
+          name: 'search-map',
+          params: {
+            searchId: this.zoneIdToSearch
+          }
+        })
+        return
+      }
+      this.toast.error('Select a zone please ')
+    },
+
+    async selectZoneToSearch(id) {
+      console.log(id)
+      this.zoneIdToSearch = id
+    },
+
+    updateZone(zone) {
+      console.log(zone)
+    },
+
     async getReport(zoneId) {
       this.isLoadingMap = true
 
       try {
         let response = await getReport(zoneId, this.reportType)
 
-        if(response.length == 0){
-          console.log('data is empty 11111111111111111111111111111');
+        if (response.length == 0) {
+          console.log('data is empty 11111111111111111111111111111')
 
-          if(this.zone.vector === null){
+          if (this.zone.vector === null) {
             this.isErrorLoadMap = true
             this.vectorKeys = [0]
             this.isLoadingMap = false
@@ -369,9 +446,9 @@ export default {
           }
 
           this.mapSvgPath = this.zone.vector?.path
-            this.vectorKeys = this.zone.vector?.keys
-            this.isLoadingMap = false
-            return
+          this.vectorKeys = this.zone.vector?.keys
+          this.isLoadingMap = false
+          return
         }
         this.mapSvgPath = response[0].vector.path
         this.vectorKeys = response[0].vector.keys
@@ -409,11 +486,11 @@ export default {
       }
     },
 
-    handleVectorClick (key) {
-      if (key!=null && key.name!=null) {
+    handleVectorClick(key) {
+      if (key != null && key.name != null) {
         this.selectedZone = key.name
         console.log(this.selectedZone)
-  
+
         console.log(this.selectedZone)
         console.log(this.presentMapId)
         this.$router.push({
@@ -428,10 +505,8 @@ export default {
         this.vectorKeys = [0]
         this.inSubDivision = false
       }
-   
-        
-
-    }, handleStateClick: async function (e) {
+    },
+    handleStateClick: async function (e) {
       if (e.target.tagName === 'path') {
         if (e.target.dataset.name) {
           this.selectedZone = e.target.dataset
@@ -456,48 +531,48 @@ export default {
 
     handleStateHover: function (e) {
       if (e.target.tagName === 'path') {
-        let name = e.target.dataset.name;
+        let name = e.target.dataset.name
         if (typeof name !== 'undefined') {
-          this.showTooltip(e, name);
+          this.showTooltip(e, name)
         }
 
         // Check if the path is marked as active
         // if (e.target.dataset.active === 'true') {
-          this.originalFillColor = e.target.style.fill || e.target.getAttribute('fill'); // Store original color
-          this.originalStrokeColor = e.target.style.stroke || e.target.getAttribute('stroke'); // Store original stroke
+        this.originalFillColor = e.target.style.fill || e.target.getAttribute('fill') // Store original color
+        this.originalStrokeColor = e.target.style.stroke || e.target.getAttribute('stroke') // Store original stroke
 
-          // Apply new fill and stroke styles for hover effect
-          // e.target.setAttribute('fill', '#42b983'); // Change fill color
-          e.target.setAttribute('stroke', '#ffff'); // Change stroke color
-          e.target.setAttribute('stroke-width', '10'); // Increase stroke width
+        // Apply new fill and stroke styles for hover effect
+        // e.target.setAttribute('fill', '#42b983'); // Change fill color
+        e.target.setAttribute('stroke', '#ffff') // Change stroke color
+        e.target.setAttribute('stroke-width', '10') // Increase stroke width
         // }
       }
     },
 
     handleStateLeave: function (e) {
       if (e.target.tagName === 'path') {
-        this.hideTooltip();
+        this.hideTooltip()
 
         // Reset to original fill and stroke values on mouse out
         // if (e.target.dataset.active === 'true') {
-          e.target.setAttribute('fill', this.originalFillColor); // Reset the fill color
-          e.target.setAttribute('stroke', this.originalStrokeColor); // Reset the stroke color
-          e.target.setAttribute('stroke-width', '0.25px'); // Reset stroke width to original value
+        e.target.setAttribute('fill', this.originalFillColor) // Reset the fill color
+        e.target.setAttribute('stroke', this.originalStrokeColor) // Reset the stroke color
+        e.target.setAttribute('stroke-width', '0.25px') // Reset stroke width to original value
         // }
       }
     },
 
     showTooltip: function (evt, text) {
-      const tooltip = document.getElementById('tooltip');
-      tooltip.innerHTML = text;
-      tooltip.style.display = 'block';
-      tooltip.style.left = evt.pageX + 10 + 'px';
-      tooltip.style.top = evt.pageY + 10 + 'px';
+      const tooltip = document.getElementById('tooltip')
+      tooltip.innerHTML = text
+      tooltip.style.display = 'block'
+      tooltip.style.left = evt.pageX + 10 + 'px'
+      tooltip.style.top = evt.pageY + 10 + 'px'
     },
 
     hideTooltip: function () {
-      var tooltip = document.getElementById('tooltip');
-      tooltip.style.display = 'none';
+      var tooltip = document.getElementById('tooltip')
+      tooltip.style.display = 'none'
     },
 
     reloadMap() {},
