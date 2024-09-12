@@ -81,7 +81,7 @@
               <div class="flex justify-between mr-3">
                 <div>
                   <icon-with-label
-                    :svgContentHover="'\\assets\\icons\\heart-fill.svg'"
+                    :svgContentHover="'\\assets\\icons\\heart-fill-green.svg'"
                     :svgContent="'\\assets\\icons\\heart-outline.svg'"
                     :labelTextRight="$t('like')"
                     :iconDesktopSize="'w-6 h-6'"

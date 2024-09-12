@@ -69,9 +69,27 @@
     </div>
 
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
-      <div class="col-span-1 md:col-span-2 lg:col-span-1">
-        <div></div>
-        <div class="mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
+      <div class=" w-full">
+        <div v-if="!isZoneLoading" class="md:hidden mb-4 p-4 bg-white rounded shadow w-full">
+          <zone-post-filter
+            :title="$t('select_zone_by_location')"
+            :props_regions="default_regions"
+            :props_divisions="default_divisions"
+            :props_sub_divisions="default_sub_divisions"
+            :filterPostFunctionWithId="selectZoneToSearch"
+            :updateZone="updateZone"
+          ></zone-post-filter>
+
+          <ButtonUi
+            :label="$t('search')"
+            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+            textCss="text-center text-white"
+            @clickButton="searchMap"
+          ></ButtonUi>
+        </div>
+     
+
+        <div class=" hidden sm:block mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
           <div
             v-for="(key, index) in vectorKeys"
             :key="index"
@@ -313,6 +331,7 @@ export default {
       zone: null,
       presentMapId: null,
       zoneIdToSearch: null,
+      zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
       defaultMapSize: 1,
@@ -408,15 +427,29 @@ export default {
     searchMap() {
       console.log(this.zoneIdToSearch)
 
-      if (this.zoneIdToSearch !== null && this.zoneIdToSearch !== 1) {
+      // if (this.zoneIdToSearch !== null && this.zoneIdToSearch !== 1) {
+      //   this.$router.push({
+      //     name: 'search-map',
+      //     params: {
+      //       searchId: this.zoneIdToSearch
+      //     }
+      //   })
+      //   return
+      // }
+
+      if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
         this.$router.push({
-          name: 'search-map',
+          name: 'dashboard',
           params: {
-            searchId: this.zoneIdToSearch
+            zoneId: this.zoneMapToSearch.id,
+            parentId: this.zoneMapToSearch.parent_id,
+            zoneName: this.zoneMapToSearch.name,
+            mapSize: this.defaultMapSize
           }
         })
         return
       }
+
       this.toast.error('Select a zone please ')
     },
 
@@ -426,6 +459,7 @@ export default {
     },
 
     updateZone(zone) {
+      this.zoneMapToSearch = zone
       console.log(zone)
     },
 
