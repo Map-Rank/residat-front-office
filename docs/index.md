@@ -8,7 +8,7 @@ hero:
   actions:
     - theme: brand
       text: Project Website
-      link: /https://dev.residat.com/community
+      link: /https://dev.residat.com/
  
 
 

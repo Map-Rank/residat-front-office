@@ -30,6 +30,13 @@ describe('DashBoardView.vue', () => {
   beforeEach(() => {
     // Mock initial data to avoid undefined access to zone properties
     wrapper = shallowMount(DashBoardView, {
+      global: {
+        mocks: {
+          $t: (msg) => msg, // Mocking the translation function
+          $i18n: { locale: 'en' }, // Mocking i18n
+        },
+      },
+
       props: {
         zoneId: 1,
         parentId: 1,
