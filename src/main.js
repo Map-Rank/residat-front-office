@@ -19,6 +19,7 @@ import { getFcmToken } from '@/firebaseConfig';
 import dateFormat from './utils/dateFormat'
 import { createVfm } from 'vue-final-modal'
 import 'vue-final-modal/style.css'
+import 'leaflet/dist/leaflet.css'
 
 
 

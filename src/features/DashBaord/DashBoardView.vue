@@ -1,4 +1,5 @@
 <template>
+  <MapComponent></MapComponent>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
     <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
@@ -110,14 +111,14 @@
           </div>
         </div>
       </div>
-
+      
       <div
         class="flex md:col-span-6"
         :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
       >
-        <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
+        <!-- <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
           <MapShimmer :legendItems="5" />
-        </div>
+        </div> -->
 
         <div
           v-if="isErrorLoadMap && !isLoadingMap"
@@ -133,8 +134,10 @@
         </div>
 
         <div id="tooltip" display="none" style="position: absolute; display: none"></div>
-        <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
+        
+        <!-- <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <div class="h-[80vh]">
+             
             <inline-svg
               @mousemove="handleStateHover"
               @mouseout="handleStateLeave"
@@ -147,7 +150,7 @@
               height=""
             />
           </div>
-          <!-- <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
+          <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
                 <img
@@ -178,12 +181,12 @@
                 />
               </div>
             </div>
-          </div> -->
-        </div>
+          </div>
+        </div> -->
       </div>
 
       <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow">
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow new-element">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
             :props_regions="default_regions"
@@ -244,7 +247,7 @@ import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import KeyActors from '@/components/common/KeyActors/KeyActor.vue'
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
 import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
-import InlineSvg from 'vue-inline-svg'
+// import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
@@ -253,9 +256,11 @@ import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
-import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
+// import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { useToast } from 'vue-toastification'
+import L from "leaflet"
+import MapComponent from '@/components/dashboard/MapComponent.vue'
 
 export default {
   name: 'DashBoardView',
@@ -266,12 +271,13 @@ export default {
     KeyActors,
     BaseBarChart,
     DegreeImpactDoughnutChart,
-    InlineSvg,
+    // InlineSvg,
     WaterStressChart,
     ButtonUi,
     RefreshError,
     Modal,
-    MapShimmer
+    MapComponent
+    // MapShimmer
   },
 
   watch: {
@@ -665,5 +671,8 @@ span {
 }
 .header-nav {
   margin-bottom: 1%;
+}
+.new-element {
+  position: absolute; top: 100px; z-index: 1000; right: 20px;
 }
 </style>
