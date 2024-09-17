@@ -31,7 +31,7 @@
             />
           </div>
           <div class="w-full">
-            <p class="label inline-block mb-1">{{ $t('choose_your_subdivision') }} </p>
+            <p class="label inline-block mb-1">{{ $t('choose_your_subdivision') }}</p>
             <div v-if="isSubdivisionLoading" class="flex h-full justify-center">
               <LoadingIndicator />
             </div>
@@ -53,6 +53,7 @@ import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import SectionTitle from '@/components/base/SectionTitle.vue'
+import { checkAuthentication } from '@/utils/authUtils.js'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
@@ -77,7 +78,7 @@ export default {
       isLoading: false,
 
       region_id: '1',
-      sectionTitle:this.$t('select_location_title'),
+      sectionTitle: this.title || this.$t('select_location_title'),
 
       division_id: '',
       Subdivision_id: '1',
@@ -90,16 +91,27 @@ export default {
   },
   methods: {
     returnZoneId(id) {
-      this.filterPostFunctionWithId(id)
+
+      if (!checkAuthentication()) {
+        return
+      }
+
+      if (id) {
+        this.filterPostFunctionWithId(id)
+      }
     },
 
-   returnZone(zone) {
-     if(this.updateZone !== null) {
-       this.updateZone(zone);
-       return
-     } 
-   },
-   
+    returnZone(zone) {
+
+      if (!checkAuthentication()) {
+        return
+      }
+      console.log('this is the zone ' + zone)
+      if (this.updateZone !== null && zone.id != null) {
+        this.updateZone(zone)
+        return
+      }
+    },
 
     async getRegions() {
       try {
@@ -110,12 +122,20 @@ export default {
     },
 
     async getDivisions(parent_id) {
+      if (!checkAuthentication()) {
+        return
+      }
+
+      if (parent_id == 1) {
+        this.divisions = [this.divisions[0]]
+        return
+      }
       try {
         this.isDivisionLoading = true
         //delete all element and allow the first only
         this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
         this.divisions = this.divisions.concat(await getZones(null, parent_id))
-        // this.sub_divisions = [this.sub_divisions[0]]
+        this.sub_divisions = [this.sub_divisions[0]]
       } catch (error) {
         console.log(error)
       } finally {
@@ -138,14 +158,15 @@ export default {
   props: {
     filterPostFunctionWithId: {},
     updateZone: {
-      type:Function
+      type: Function
     },
+    title: String,
     props_regions: {
       type: Array,
       default: () => [
         {
-          id: 0,
-          name: 'Choose a region'
+          id: 1,
+          name: 'Cameroon'
         }
       ]
     },

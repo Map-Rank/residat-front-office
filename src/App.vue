@@ -1,10 +1,12 @@
 <template>
-  <div></div>
+ 
   <div class="body flex flex-col min-h-screen">
     <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
+    <GuestHeader class="fixed  w-full z-10" v-if="showGuessHeader"></GuestHeader>
 
     <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
       <router-view></router-view>
+      <NotificationHandler />
     </main>
 
     <bottom-navigation-app-app
@@ -14,15 +16,12 @@
     ></bottom-navigation-app-app>
 
     <FeedbackButton />
-
+    
+    <ModalsContainer />
+    <AuthModal v-if="showAuthModal" @close="showAuthModal = false"  ></AuthModal>
  
 
-    <share-modal
-      :showModal="modalStore.showModal"
-      :postLink="modalStore.postLink"
-      :message="modalStore.message"
-      @close="modalStore.closeModal"
-    ></share-modal>
+
   </div>
 </template>
 
@@ -30,12 +29,14 @@
 import { mapState } from 'pinia'
 import useAuthStore from './stores/auth'
 import HeaderApp from './components/common/Header/index.vue'
-import FooterApp from './components/common/Footer/index.vue'
 import BottomNavigationAppApp from './components/common/BottomNavigator/index.vue'
 import usePostStore from '@/features/Post/store/postStore'
-import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
 import useModalStore from '@/stores/modalStore.js'
 import FeedbackButton from '@/components/base/FeedbackButton.vue'
+import NotificationHandler from './components/base/NotificationHandler.vue'
+import { ModalsContainer } from 'vue-final-modal'
+import GuestHeader from '@/components/common/Header/GuestHeader.vue'
+import AuthModal from '@/components/common/Modal/AuthModal.vue'; 
 
 export default {
   name: 'App',
@@ -43,21 +44,31 @@ export default {
     const modalStore = useModalStore()
 
     return {
-      modalStore
+      modalStore,
+      // showAuthModal: false, 
     }
   },
   components: {
     HeaderApp,
-    FooterApp,
-    ShareModal,
+    ModalsContainer,
+    NotificationHandler,
     FeedbackButton,
-    BottomNavigationAppApp
+    BottomNavigationAppApp,
+    GuestHeader,
+    AuthModal
   },
 
   computed: {
-    ...mapState(useAuthStore, ['hiddenClass']),
-    ...mapState(usePostStore, ['hideComponent'])
-  }
+    ...mapState(useAuthStore, ['hiddenClass','showClass','showGuessHeader']),
+    ...mapState(usePostStore, ['hideComponent']),
+    ...mapState(useModalStore, ['showAuthModal']),
+  },
+
+  methods: {
+    closeAuthModal() {
+      this.showAuthModal = false;
+    },
+  },
 }
 </script>
 
@@ -75,7 +86,7 @@ export default {
     position: fixed;
     bottom: 0;
     width: 100%;
-    z-index: 999;
+    z-index: 50;
   }
 }
 </style>

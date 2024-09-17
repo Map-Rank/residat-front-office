@@ -1,4 +1,4 @@
-<template>
+  <template>
   <div class="flex justify-center items-center h-screen bg-gray-100">
     <div class="w-3/2 bg-white shadow-lg rounded-lg p-5">
       <div class="text-center">
@@ -64,12 +64,10 @@ export default {
         })
         .catch((error) => {
           this.resetLink = false
-
-          // Handle error
           this.error = error;
         })
         .finally(() => {
-          this.resetLink = false
+          this.resetLink = true
         });
     },
   }

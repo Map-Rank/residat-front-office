@@ -26,10 +26,12 @@
 
         <!-- Dropdown Menu -->
         <div
-          v-show="isMenuVisible"
+          ref="menus"
+          v-show="currentMenu === 'menu'"
           class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
         >
           <button-ui
+            :leftIcon="'\\assets\\icons\\profile-fill.svg'"
             :label="$t('profile_page')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -38,6 +40,7 @@
           </button-ui>
 
           <button-ui
+             :leftIcon="'\\assets\\icons\\post-fill.svg'"
             :label="$t('create_post')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -45,6 +48,7 @@
           >
           </button-ui>
           <button-ui
+                :leftIcon="'\\assets\\icons\\event-fill.svg'"
             :label="$t('create_event')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -52,6 +56,7 @@
           >
           </button-ui>
           <button-ui
+          :leftIcon="'\\assets\\icons\\setting-fill.svg'"
             :label="$t('settings_privacy')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -60,6 +65,16 @@
           </button-ui>
 
           <button-ui
+          :leftIcon="'\\assets\\icons\\translate.svg'"
+            :label="$t('translate')"
+            :textCss="'text-left '"
+            :customCss="'items-left justify-start hover:bg-gray-100 block md:hidden'"
+            @clickButton="menuMethods(5)"
+          >
+          </button-ui>
+
+          <button-ui
+            :leftIcon="'\\assets\\icons\\logout-fill.svg'"
             :label="$t('logout')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -95,7 +110,7 @@
 
             <div
               ref="menu"
-              v-show="isMenulangauge"
+              v-show="currentMenu === 'language'"
               class="absolute left-0 mt-2 w-42 bg-white rounded-md shadow-lg z-10"
             >
               <button-ui
@@ -132,12 +147,13 @@
               :isActive="true"
               :bottom="true"
               @customFunction="toggleMenu"
+              imageCss="rounded-lg"
             ></icon-with-label>
 
             <!-- Dropdown Menu -->
             <div
               ref="menu"
-              v-show="isMenuVisible"
+              v-show="currentMenu === 'menu'"
               class="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10"
             >
               <button-ui
@@ -166,7 +182,7 @@
               >
               </button-ui>
               <button-ui
-                :leftIcon="'\\assets\\icons\\edit.svg'"
+                :leftIcon="'\\assets\\icons\\setting-fill.svg'"
                 :label="$t('settings_privacy')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -175,7 +191,7 @@
               </button-ui>
 
               <button-ui
-                :leftIcon="'\\assets\\icons\\logout.svg'"
+                :leftIcon="'\\assets\\icons\\logout-fill.svg'"
                 :label="$t('logout')"
                 :textCss="'text-left '"
                 :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -212,9 +228,65 @@
             :key="index"
             @clickIcon="closeAllMenu()"
           ></icon-with-label>
+
+          <div class="relative">
+            <!-- <icon-with-label
+              :textCss="'text-primary-normal text-xs'"
+              :svgContent="'assets\\icons\\notification-outline.svg'"
+              :svgContentHover="'assets\\icons\\notification-fill.svg'"
+              labelText="Notification"
+              :labelTextBottom="'Notification'"
+              :iconDesktopSize="this.iconSize"
+              :isActive="false"
+              :bottom="true"
+              @customFunction="toggleNotificationDropdown"
+            ></icon-with-label> -->
+            <!-- Circular Div at the top -->
+            <!-- <div
+            v-if="newMessagesCount"
+              class="absolute top-0 right-0 h-5 w-5 rounded-full bg-red-500 text-white flex items-center justify-center"
+            >
+              {{ newMessagesCount }}
+            </div> -->
+            <!-- Notification Dropdown -->
+            <!-- <div
+            ref="menus"
+              v-show="currentMenu === 'notification'"
+              class="absolute right-0 mt-2 w-72 bg-white rounded-md shadow-lg z-10 max-h-[80vh] overflow-y-auto no-scrollbar"
+            >
+              <div class="p-4 text-center">
+                <button @click="redirectToNotifications" class="text-blue-600 hover:underline">
+                  see more
+                </button>
+              </div>
+
+              <p class="text-center mb-4 " >{{$t('no_notification')}} </p>
+              <ul 
+              v-if="notifications.lenght > 0"
+              class="divide-y divide-gray-200">
+                <li
+                  v-for="(notification, index) in notifications"
+                  :key="index"
+                  class="p-4 hover:bg-gray-100"
+                >
+                  <div class="flex items-start space-x-4">
+                    <img :src="notification.image" alt="Profile" class="w-10 h-10 rounded-full" />
+                    <div>
+                      <p class="font-bold">{{ notification.title }}</p>
+                      <p>{{ notification.body }}</p>
+                      <p class="text-xs text-gray-500">{{ notification.time }}</p>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+            </div> -->
+          </div>
         </nav>
       </div>
     </div>
+
+    <ConfirmationModal ref="confirmationModal" @confirm="logout()" />
+
   </header>
 </template>
 
@@ -226,6 +298,8 @@ import SearchBar from '@/components/base/SearchBar.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import AppLogo from '@/components/base/AppLogo.vue'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
+import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
+
 
 export default {
   name: 'HeaderApp',
@@ -233,17 +307,19 @@ export default {
     SearchBar,
     IconWithLabel,
     ButtonUi,
-    AppLogo
+    AppLogo,
+    ConfirmationModal
+
   },
 
-  created() {
-    document.addEventListener('click', this.handleClickOutside)
-    this.lang = this.$i18n.locale
-  },
+  // created() {
+  //   document.addEventListener('click', this.handleClickOutside)
+  //   this.lang = this.$i18n.locale
+  // },
 
-  unmounted() {
-    document.removeEventListener('click', this.handleClickOutside)
-  },
+  // unmounted() {
+  //   document.removeEventListener('click', this.handleClickOutside)
+  // },
   data() {
     const authStore = useAuthStore()
     const router = useRouter()
@@ -251,13 +327,14 @@ export default {
     return {
       authStore,
       router,
-      isMenuVisible: false,
-      isMenulangauge: false,
+      newMessagesCount: null,
+      isNotificationDropdownVisible: false,
+      currentMenu: null,
       isActiveRoute: '',
       userProfileImage: authStore && authStore.user ? authStore.user.avatar : '',
-      isMenuOpen: false,
       iconSize: 'w-7 h-7',
       lang: 'en',
+      notifications: [],
       navItems: [
         {
           svgContent: '\\assets\\icons\\community-outline.svg',
@@ -278,7 +355,7 @@ export default {
         {
           svgContent: '\\assets\\icons\\chat-outline.svg',
           svgContentHover: '\\assets\\icons\\chat-fill.svg',
-          labelText: this.$t('chat_room'),
+          labelText: this.$t('inbox'),
           isActive: false,
           bottom: true,
           routerName: 'chat-room'
@@ -296,6 +373,30 @@ export default {
   },
 
   methods: {
+    openModal() {
+      this.$refs.confirmationModal.show();
+    },
+    redirectToNotifications() {
+      this.$router.push({ name: 'notification' })
+      this.isNotificationDropdownVisible = false
+      this.closeAllMenu()
+    },
+
+    handleClickOutside(event) {
+      const menus = this.$refs.menus
+      if (menus) {
+        let isClickOutside = true
+        menus.forEach((menu) => {
+          if (menu.contains(event.target)) {
+            isClickOutside = false
+          }
+        })
+
+        if (isClickOutside) {
+          this.currentMenu = null
+        }
+      }
+    },
     changeLanguage(lang) {
       this.lang = lang
       localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, lang)
@@ -311,19 +412,18 @@ export default {
       }
     },
 
+    toggleNotificationDropdown() {
+      this.currentMenu = this.currentMenu === 'notification' ? null : 'notification'
+    },
+
     toggleMenu() {
-      this.isMenulangauge = false
-      this.isMenuVisible = !this.isMenuVisible
+      this.currentMenu = this.currentMenu === 'menu' ? null : 'menu'
     },
     toggleMenuLangauge() {
-      this.isMenuVisible = false
-      this.isMenulangauge = !this.isMenulangauge
+      this.currentMenu = this.currentMenu === 'language' ? null : 'language'
     },
-    
-    closeAllMenu(){
-      this.isMenuVisible = false
-      this.isMenulangauge = false
-
+    closeAllMenu() {
+      this.currentMenu = null
     },
 
     menuMethods(index) {
@@ -344,17 +444,20 @@ export default {
           this.$router.push({ name: 'setting' })
           this.toggleMenu()
           break
-        case 4:
-          this.toggleMenu()
-          this.logout()
-          break
+          case 4:
+            this.openModal()
+            this.toggleMenu()
+            break
+            case 5:
+              this.$router.push({ name: 'change-langauge' })
+              this.toggleMenu()
+              break
       }
     },
 
     logout() {
       this.authStore.logOut()
       this.$router.push({ name: 'authentication' }).catch((err) => {
-        // Ignore the Vue Router error regarding navigating to the page we are currently on.
         if (err.name !== 'NavigationDuplicated') {
           console.error(err)
         }
@@ -368,5 +471,13 @@ export default {
 .search {
   background-color: var(--primary-light, #e6e8ec);
   border-color: #e6e8ec;
+}
+body {
+  scrollbar-width: none; /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
 </style>

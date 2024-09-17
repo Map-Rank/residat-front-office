@@ -1,46 +1,47 @@
 <template>
   <div class="container mx-auto p-6">
-    <div class="grid md:grid-cols-3 gap-4">
-      <!-- Main content -->
+    <!-- Flexbox container for responsive design -->
+    <div class="flex flex-col md:grid md:grid-cols-3 gap-4">
+      <!-- Sidebar widgets moved above main content for mobile, but remains in place for desktop -->
+      <div class="order-first md:order-last">
+        <AvatarEventShimmer v-if="isZoneLoading" :numShimmers="1" :componentHeight="'auto'" />
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow">
+          <zone-post-filter
+            :title="$t('select_event_by_location')"
+            :props_regions="default_regions"
+            :props_divisions="default_divisions"
+            :props_sub_divisions="default_sub_divisions"
+            :filterPostFunctionWithId="filterEventByZone"
+            :updateZone="updateZone"
+          ></zone-post-filter>
+        </div>
+      </div>
+
+      <!-- Main content area -->
       <div class="md:col-span-2">
-        <!-- <div v-if="topLoading" class="flex h-full justify-center">
-          <LoadingIndicator />
-        </div> -->
+        <!-- Shimmer loading indicator -->
         <AvatarEventShimmer v-if="topLoading" :numShimmers="8" :componentHeight="'auto'" />
 
+        <!-- Page refresh error -->
         <div v-if="showPageRefresh">
           <RefreshError
             :imgSize="400"
-            :imageUrl="'assets\\images\\Community\\loading.svg'"
+            :imageUrl="'assets\images\Community\loading.svg'"
             :errorMessage="errorMessage"
             @refreshPage="reloadEvents()"
           ></RefreshError>
         </div>
+
+        <!-- Event Box list when not loading -->
         <div v-if="!topLoading">
           <EventBox v-for="event in events" :key="event.id" :event="event" :show-menu="showMenu" />
-        </div>
-      </div>
-
-      <!-- Sidebar widgets -->
-      <div>
-        <AvatarEventShimmer v-if="isZoneLoading" :numShimmers="1" :componentHeight="'auto'" />
-
-        <div v-if="!isZoneLoading" class="">
-          <div class="mb-4 p-4 bg-white rounded shadow">
-            <zone-post-filter
-              :props_regions="default_regions"
-              :props_divisions="default_divisions"
-              :props_sub_divisions="default_sub_divisions"
-              :filterPostFunctionWithId="filterEventByZone"
-              :updateZone="updateZone"
-            ></zone-post-filter>
-
-          </div>
         </div>
       </div>
     </div>
   </div>
 </template>
+
+
 
 <script>
 import { getEvents } from '../../services/eventService'
@@ -51,11 +52,16 @@ import EventBox from './Components/EventBox.vue'
 import AvatarEventShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { getFilterEvents } from '@/services/eventService.js'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 export default {
   name: 'EventView',
   async created() {
     // this.fetcheventById()
+    if (checkAuthentication()) {
+      this.isUserConnected = true
+      }
+
     try {
       this.topLoading = true
       this.isZoneLoading = true
@@ -83,6 +89,8 @@ export default {
       showMenu: false,
       isMenuVisible: false,
       events: [],
+      
+      isUserConnected:false,
       popularEvents: [
         {
           id: 1,
@@ -145,9 +153,10 @@ export default {
 
     async fetchEvents() {
       this.hasNewEvents = false
+      console.log('fetching')
 
       try {
-        this.events = await getEvents(0, 10, this.authStore.user.token)
+        this.events = await getEvents(0, 10, this.authStore?.user?.token,this.isUserConnected)
         // this.recentEvents = await getEvents(0, 3, this.authStore.user.token)
       } catch (error) {
         console.error('Failed to load events:', error)
@@ -157,7 +166,7 @@ export default {
         this.isZoneLoading = false
         if (this.events.length == 0) {
           this.showPageRefresh = true
-          this.errorMessage = 'Could not get post refresh your page or check your connection'
+          this.errorMessage = 'Could not get event refresh your page or check your connection'
         } else {
           this.showPageRefresh = false
         }

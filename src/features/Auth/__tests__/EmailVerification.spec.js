@@ -40,5 +40,4 @@ describe('EmailVerification Component', () => {
     expect(wrapper.vm.resetLink).toBe(true);
   });
 
-  // Additional tests for handling response statuses and errors can be added
 });

@@ -2,7 +2,7 @@
   <div class="d-flex gap-8 items-center p-4  sm:mx-2 sm:mt- bg-white rounded-lg shadow-md mb-3">
     <div class="flex w-full">
      <div class="mr-4">
-       <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 rounded-full" />
+       <img :src='profilePictureUrl' alt="Profile" class="w-10 h-10 img" />
      </div>
      
       <!-- Input Field -->
@@ -42,6 +42,7 @@
 import ButtonUi from '../../base/ButtonUi.vue'
 import { useRoute } from 'vue-router'
 import usePostStore from '@/features/Post/store/postStore';
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 export default {
   name: 'PostInput',
@@ -65,11 +66,18 @@ export default {
 
   methods: {
     navigateCreatePost(){
-      this.postStore.setContentFromPostInput(this.content)
-      this.$router.push({ name: 'create-post', params:{prePostContent: this.content } })
+
+      if(checkAuthentication()){
+        this.postStore.setContentFromPostInput(this.content)
+        this.$router.push({ name: 'create-post', params:{prePostContent: this.content } })
+      }
     },
     navigateCreateEvent(){
-      this.$router.push({ name: 'create-event', params:{preEventTitle: this.content } })
+
+      if(checkAuthentication()){
+        this.$router.push({ name: 'create-event', params:{preEventTitle: this.content } })
+      }
+      
     },
   },
   components: {

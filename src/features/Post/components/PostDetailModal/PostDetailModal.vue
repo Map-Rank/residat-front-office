@@ -1,59 +1,87 @@
 <template>
-  <transition name="modal-fade h[100px]">
-    <div v-if="show" class="modal-backdrop  z-100 p-4 items-center ">
+  <transition name="modal-fade ">
+    <div v-if="show" class="modal-backdrop z-100 p-4 items-center">
       <div class="flex pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0 w-full">
         <div
-          :class="`box grid ${
-            post && post.medias && post.medias.length === 0 ? 'grid-cols-auto' : 'md:grid-cols-2'
+          :class="`box grid w-full ${
+            post && post.medias && post.medias.length === 0
+              ? 'grid-cols-auto'
+              : 'md:grid-cols-2'
           }  bg-black shadow rounded-lg md:w-4/5  mx-auto`"
         >
-          <!-- Display post images  -->
+          <!-- Skeleton Loader for Post Images -->
           <div v-if="loading" class="flex justify-center items-center">
-            <loading-indicator />
+            <div class="skeleton-loader-image"></div>
           </div>
           <div
-            class="flex items-center justify-center mt-1"
+            class="flex items-center justify-center mt-1 "
             v-if="!loading && post.images && post.images.length > 0"
           >
-            <ImageSlider class="w-full" :images="post.images"></ImageSlider>
+            <ImageSlider class="w-full " :images="post.images"></ImageSlider>
           </div>
 
-          <!-- Post details and information  -->
-
-          <div class="info h-[50vh] md:h-[70vh] grid grid-rows-custom pl-5 py-3">
-            <!-- user informations -->
+          <!-- Post details and information -->
+          <div class="info h-[40vh] md:h-[70vh] grid grid-rows-custom pl-5 py-3">
+            <!-- User information Skeleton Loader -->
             <div class="relative pb-4 mr-5 items-start">
               <button @click="dismiss()" class="flex justify-end w-full">
                 <img src="@\assets\icons\dismiss.svg" alt="" class="" />
               </button>
-              <div v-if="!loading" class="flex items-start justify-between border-b-2">
+              <div
+                v-if="loading"
+                class="skeleton-loader-user-info max-h-[200px] overflow-y-auto flex items-start justify-between border-b-2"
+              ></div>
+              <div
+                v-if="!loading"
+                class="max-h-[200px] overflow-y-auto flex items-start justify-between border-b-2"
+              >
                 <UserInfoPostDetails :image-host="imageHost" :post="post" />
               </div>
             </div>
 
-            <!-- list of Comment  -->
-            <div class="overflow-auto">
+            <!-- Comments Skeleton Loader for mobile view -->
+            <div class="overflow-auto md:hidden">
+              <div v-if="loading" class="space-y-2">
+                <div class="skeleton-loader-comment"></div>
+                <div class="skeleton-loader-comment"></div>
+              </div>
+              <div v-if="!loading" class="space-y-2">
+                <div class="flex items-start space-x-4" v-if="post.comments.length > 0">
+                  <CommentInfoBox :comment="post.comments[0]" :image-host="imageHost" />
+                </div>
+                <div class="flex items-start space-x-4" v-else>
+                  <p class="text-blue-600">Be the first to comment.</p>
+                </div>
+                <div class="flex items-start space-x-4" v-if="post.comments.length > 1">
+                  <a href="#" @click="NavigateToPostDetail()" class="text-secondary-normal">See all comments</a>
+                </div>
+              </div>
+            </div>
+
+            <!-- Comments Skeleton Loader for desktop view -->
+            <div class="overflow-auto hidden md:block">
+              <div v-if="loading" class="space-y-2">
+                <div class="skeleton-loader-comment"></div>
+                <div class="skeleton-loader-comment"></div>
+                <div class="skeleton-loader-comment"></div>
+              </div>
               <div v-if="!loading" class="space-y-2">
                 <div
                   v-for="(comment, index) in post.comments"
                   :key="index"
                   class="flex items-start space-x-4"
                 >
-                  <CommentInfoBox :comment="comment" :image-host="imageHost" />
+                  <CommentInfoBox  @refreshPost="refreshPost()" :comment="comment" :image-host="imageHost" />
                 </div>
-              </div>
-
-              <div v-if="loading" class="flex justify-center items-center">
-                <loading-indicator />
               </div>
             </div>
 
             <!-- comment interaction section -->
-            <div v-if="!loading"  class="space-y-2 w-full mr-3">
+            <div v-if="!loading" class="space-y-2 w-full mr-3">
               <div class="flex justify-between mr-3">
                 <div>
                   <icon-with-label
-                    :svgContentHover="'\\assets\\icons\\heart-fill.svg'"
+                    :svgContentHover="'\\assets\\icons\\heart-fill-green.svg'"
                     :svgContent="'\\assets\\icons\\heart-outline.svg'"
                     :labelTextRight="$t('like')"
                     :iconDesktopSize="'w-6 h-6'"
@@ -63,20 +91,36 @@
                     @customFunction="likePost()"
                   ></icon-with-label>
                 </div>
+                <div  class="md:hidden">
+                  <icon-with-label
+                    :svgContentHover="'\\assets\\icons\\comment-fill.svg'"
+                    :svgContent="'\\assets\\icons\\comment-outline.svg'"
+                    :labelTextRight="$t('comment')"
+                    :iconDesktopSize="'w-6 h-6'"
+                    :iconMobileSize="'w-5 h-5'"
+                    :isActive="post.liked"
+                    :right="true"
+                    @customFunction="NavigateToPostDetail()"
+                  ></icon-with-label>
+                </div>
                 <div class="flex justify-between pb-2">
                   <div class="flex items-center space-x-1">
                     <img src="@\assets\icons\heart-fill.svg" alt="" />
-                    <span class="caption-c1-bold">{{ post.like_count }} {{ $t('like') }}s</span>
+                    <span class="caption-c1-bold"
+                      >{{ post.like_count }}</span
+                    >
                     <img src="@\assets\icons\share-fill.svg" alt="" />
-                    <span @click="openShareModal()" class="ml-4 caption-c1-bold cursor-pointer"
-                      >{{ post.share_count }} {{ $t('share') }}s</span
+                    <span
+                      @click="openShareModal()"
+                      class="ml-4 caption-c1-bold cursor-pointer"
+                      >{{ post.share_count }} </span
                     >
                   </div>
                 </div>
               </div>
             </div>
 
-            <div class="flex justify-between space-x-4 mr-3">
+            <div class="md:flex justify-between space-x-4 mr-3 hidden ">
               <input
                 v-model="commentText"
                 type="text"
@@ -88,7 +132,7 @@
               <button
                 @click="
                   () => {
-                    commentPost()
+                    commentPost();
                   }
                 "
                 class="text-white px-6 py-2 rounded-lg bg-secondary-normal hover:bg-secondary-hover focus:outline-none"
@@ -106,43 +150,44 @@
 <script>
 // import { mapActions } from 'pinia'
 // import usePostStore from '../../store/postStore'
-import { URL_LINK } from '@/constants'
-import ImageSlider from '@/components/gallery/ImageSlider.vue'
-import CommentInfoBox from './components/CommentInfoBox.vue'
-import UserInfoPostDetails from './components/UserInfoPostDetails.vue'
-import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-import { commentPost, getSpecificPost, likePost } from '@/features/Post/services/postService'
-import IconWithLabel from '@/components/common/IconWithLabel/index.vue'
+import { URL_LINK } from "@/constants";
+import ImageSlider from "@/components/gallery/ImageSlider.vue";
+import CommentInfoBox from "./components/CommentInfoBox.vue";
+import UserInfoPostDetails from "./components/UserInfoPostDetails.vue";
+import {
+  commentPost,
+  getSpecificPost,
+  likePost,
+} from "@/features/Post/services/postService";
+import IconWithLabel from "@/components/common/IconWithLabel/index.vue";
 
-import useModalStore from '@/stores/modalStore.js'
+import useModalStore from "@/stores/modalStore.js";
 
 export default {
-  name: 'PostDetailModal',
+  name: "PostDetailModal",
 
   async created() {
-
-    this.loading = true
+    this.loading = true;
     try {
-      this.post = await getSpecificPost(this.postId)
+      this.post = await getSpecificPost(this.postId);
     } catch (error) {
-      console.error('An error occurred:', error)
+      console.error("An error occurred:", error);
     } finally {
-      this.loading = false
+      this.loading = false;
     }
   },
   components: {
-    LoadingIndicator,
     UserInfoPostDetails,
     CommentInfoBox,
     ImageSlider,
-    IconWithLabel
+    IconWithLabel,
   },
 
   props: {
-    postId: String
+    postId: Number,
   },
   data() {
-    const modalStore = useModalStore()
+    const modalStore = useModalStore();
 
     return {
       show: true,
@@ -150,79 +195,94 @@ export default {
       modalStore,
       currentImageIndex: 0,
       post: null,
-      commentText: '',
+      commentText: "",
       loading: true,
       // postId: null,
-      imageHost: URL_LINK.imageHostLink
-    }
+      imageHost: URL_LINK.imageHostLink,
+    };
   },
 
   computed: {
     currentImage() {
-      return this.post.medias[this.currentImageIndex].url
-    }
+      return this.post.medias[this.currentImageIndex].url;
+    },
   },
   methods: {
     // ...mapActions(usePostStore, ['togglePostDetails']),
     close() {
-      this.$emit('close')
+      this.$emit("close");
     },
 
     openShareModal() {
-      this.modalStore.openModal(`https://dev.residat.com/show-post/${this.post.id}`)
+      this.modalStore.openModal(`https://www.residat.com/show-post/${this.post.id}`);
       // this.modalStore.openModal(`https://dev.residat.com/show-post`)
     },
 
+    async refreshPost (){
+      this.loading = true;
+      try {
+        this.post = await getSpecificPost(this.postId);
+      } catch (error) {
+        this.loading = false;
+      } finally {
+        this.loading = false;
+      }
+
+    },
     async commentPost() {
-      this.loading = true
+      this.loading = true;
 
       try {
-        await commentPost(this.postId, { text: this.commentText })
-        this.post = await getSpecificPost(this.postId)
+        await commentPost(this.postId, { text: this.commentText });
+        this.post = await getSpecificPost(this.postId);
       } catch (error) {
-        this.loading = false
+        this.loading = false;
       } finally {
-        this.commentText = ''
-        this.loading = false
+        this.commentText = "";
+        this.loading = false;
       }
     },
 
+    NavigateToPostDetail(){
+      this.$router.push({ name: 'show-post', params: { id: this.postId } })
+    },
+
+
     async likePost() {
-      this.loading = true
+      // this.loading = true;
 
       try {
-        await likePost(this.postId)
-        this.post = await getSpecificPost(this.postId)
+        await likePost(this.postId);
+        this.post = await getSpecificPost(this.postId);
       } catch (error) {
-        this.loading = false
+        this.loading = false;
       } finally {
-        this.commentText = ''
-        this.loading = false
+        this.commentText = "";
+        this.loading = false;
       }
     },
     dismiss() {
-      this.$emit('close')
+      this.$emit("close");
       // this.togglePostDetails()
     },
     nextImage() {
       if (this.currentImageIndex < this.post.medias.length - 1) {
-        this.currentImageIndex + 1
+        this.currentImageIndex + 1;
       }
-      console.log(this.currentImageIndex)
+      console.log(this.currentImageIndex);
     },
     prevImage() {
       if (this.currentImageIndex > 0) {
-        this.currentImageIndex--
+        this.currentImageIndex--;
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
 .modal-backdrop {
   position: fixed;
-
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -233,7 +293,6 @@ export default {
 .modal {
   background: #ffffff;
   width: 70%;
-
   overflow-x: auto;
   display: flex;
   flex-direction: column;
@@ -242,7 +301,6 @@ export default {
 
 .modal-header {
   position: relative;
-
   color: #4aae9b;
   justify-content: space-between;
 }
@@ -269,20 +327,52 @@ export default {
 
 .btn {
   text-align: center;
-  font-feature-settings:
-    'clig' off,
-    'liga' off;
-
-  /* Desktop / Link Small */
+  font-feature-settings: "clig" off, "liga" off;
   font-family: Poppins;
   font-size: 16px;
   font-style: normal;
   font-weight: 600;
-  line-height: 28px; /* 175% */
+  line-height: 28px;
   letter-spacing: 0.75px;
 }
+
 .info {
   background: #f5f2f2;
 }
 
+/* Skeleton Loader for the image */
+.skeleton-loader-image {
+  width: 100%;
+  height: 50vh;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+/* Skeleton Loader for user information */
+.skeleton-loader-user-info {
+  width: 100%;
+  height: 150px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+/* Skeleton Loader for comments */
+.skeleton-loader-comment {
+  width: 100%;
+  height: 50px;
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 200% 100%;
+  animation: skeleton-loading 1.5s infinite;
+}
+
+@keyframes skeleton-loading {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
 </style>

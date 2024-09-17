@@ -1,6 +1,7 @@
 import { makeApiPostCall ,makeApiDeleteCall, makeApiGetCall,makeApiPutCall} from '@/api/api'
 import { API_ENDPOINTS } from '@/constants/index.js'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 // const user = localStorage.getItem(LOCAL_STORAGE_KEYS.userInfo)
@@ -9,7 +10,7 @@ const createEvent = async (eventData, authStore, onSuccess, onError) => {
 
   try {
     const formData = new FormData()
-
+    
     // Append user data to formData
     formData.append('title', eventData.title)
     formData.append('description', eventData.description)
@@ -18,13 +19,14 @@ const createEvent = async (eventData, authStore, onSuccess, onError) => {
     formData.append('date_debut', eventData.date_debut)
     formData.append('published_at', eventData.date_debut)
     formData.append('date_fin', eventData.date_fin)
-      formData.append('user_id', authStore.user.id)
+    formData.append('user_id', authStore.user.id)
     // formData.append('user_id', '1')
     formData.append('sector_id', eventData.sector_id)
     formData.append('zone_id', eventData.zone_id)
     formData.append('media', eventData.media)
-
-    const response = await makeApiPostCall(API_ENDPOINTS.event, formData, authToken, true)
+    
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+    const response = await makeApiPostCall(API_ENDPOINTS.event, formData, token, true)
 
     onSuccess()
 
@@ -99,7 +101,7 @@ const getFilterEvents = async (zoneId, sectorId, size, page) => {
 }
 
 
-const getEvents = async (page, size, token) => {
+const getEvents = async (page, size, token,isConnected = true) => {
   let defaultSize = 10
   let defaultPage = 0
 
@@ -113,8 +115,14 @@ const getEvents = async (page, size, token) => {
 
 
   try {
+    let url;
+
+    console.log('this is the usre state'+ isConnected)
+    isConnected ? url = API_ENDPOINTS.getEvents : url = API_ENDPOINTS.getEventsGuest
+
+
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getEvents}?${params.toString()}`,
+      `${url}?${params.toString()}`,
       token ? token : authToken
     )
 
@@ -128,8 +136,13 @@ const getEvents = async (page, size, token) => {
 
 const getSpecificEvent = async (id) => {
   try {
+    let url;
+    const isConnected = checkAuthentication()
+
+    isConnected ? url = API_ENDPOINTS.event : url = API_ENDPOINTS.getSingleEventsGuest
+
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.event}/${id.toString()}`,
+      `${url}/${id.toString()}`,
       authToken
     )
     return response.data.data
@@ -141,8 +154,11 @@ const getSpecificEvent = async (id) => {
 
 
 const deleteEvent = async (eventId) => {
+
+  const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.event}/${eventId}`, authToken)
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.event}/${eventId}`, token)
     console.log('delete event sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting event:', error)

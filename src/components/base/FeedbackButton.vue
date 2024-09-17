@@ -2,25 +2,36 @@
 <template>
   <div class="feedback-container">
     <button class="feedback-button" @click="toggleForm">
-      <p v-if="!showForm">Feedback</p>
-      <p v-if="showForm">Close</p>
+      <p v-if="!showForm">{{$t('contact_us')}}</p>
+      <p v-if="showForm">{{$t('close')}}</p>
     </button>
-    <div v-if="showForm" class="feedback-form">
-      <h3>Send us your feedback</h3>
-      <textarea v-model="feedback" placeholder="Enter your feedback here..." rows="4"></textarea>
-      <button @click="submitFeedback">Submit</button>
+    <div v-if="showForm" class="feedback-form w-[300px] md:w-[500px]">
+      <h3>{{$t('send_feedback')}}</h3>
+      <textarea v-model="formData.text" placeholder="Enter your feedback here..." rows="4"></textarea>
+      <button 
+      :disabled="isLoadingBtn" 
+      :class="
+        isLoadingBtn 
+          ? 'bg-gray-400 cursor-wait' 
+          : 'bg-secondary-normal hover:bg-secondary-hover'
+      " 
+      @click="submitFeedback"
+    >
+      {{ $t('submit') }}
+    </button>
       <h3></h3>
-      <a :href="'https://wa.me/690160047'" target="_blank">
-        <!-- <img src="/assets/icons/chat.svg" alt="Whatsapp icon"/> -->
-        Get to us on Whatsap
+      <a :href="'https://wa.me/+237620162316'" target="_blank"  class="flex items-center mt-2">
+        <img src="/assets/icons/colored/whatsapp.svg" class="h-10" alt="Whatsapp icon"/>
+        {{$t('get_on_whatsap')}}
       </a>
     </div>
-    <div v-if="showMessage" class="feedback-message hidden sm:block">Get to us if you have any problem.</div>
+    <!-- <div v-if="showMessage" class="feedback-message hidden sm:block">{{$t('get_to_us')}}</div> -->
   </div>
 </template>
 
 <script>
 import { useToast } from 'vue-toastification'
+import {createFeedback} from '@/services/feedbackService.js'
 
 export default {
   name: 'FeedbackButton',
@@ -30,8 +41,12 @@ export default {
     return {
       showForm: false,
       toast,
-
-      feedback: null,
+      formData:{
+        text:null,
+        page_link:null,
+        rating:10,
+      },
+      isLoadingBtn:false,
       showMessage: false,
       feedbackContainer: null
     }
@@ -39,8 +54,6 @@ export default {
   mounted() {
     this.startHideShowCycle()
     this.showFeedbackMessage()
-    // document.addEventListener('click', this.handleClickOutside);
-    // this.feedbackContainer = this.$refs.feedbackContainer;
   },
   beforeUnmount() {
     clearInterval(this.hideShowInterval)
@@ -61,28 +74,41 @@ export default {
     showFeedbackMessage() {
       this.messageTimeout = setTimeout(() => {
         this.showMessage = true
-      }, 30000) // Show message after 30 seconds
+      }, 30000)
     },
-    submitFeedback() {
-      //   const whatsappNumber = '+237690160047' // Replace with your WhatsApp number
-      //   const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(this.feedback)}`
-      //   window.open(whatsappUrl, '_blank')
-      //   this.showForm = false
-      //   this.feedback = ''
-      //   this.toast.success('Thank you for your feedback!')
 
-      if (this.feedback == null) {
-        this.toast.error('Please Enter a feedback')
-      } else {
-        // const email = 'konomelifuente@gmail.com' 
-        // const subject = 'MapandRank Feedback'
-        // const emailUrl = `mailto:${email}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(this.feedback)}`
-        // window.location.href = emailUrl
-        this.showForm = false
-        this.feedback = null
-        this.toast.success('Thank you for your feedback!')
-      }
-    }
+    handleSuccess() {
+        this.resetForm()
+        this.showForm = false;
+        this.toast.success('Thank you for your feedback!');
+      },
+  
+      resetForm() {
+          this.formData.text= '',
+          this.formData.page_link= ''
+
+      },
+      
+      handleError() {
+        this.isLoadingBtn = false;
+      },
+      
+   async submitFeedback() {
+     
+     if (this.formData.text == null) {
+       this.toast.error('Please Enter a feedback')
+       return
+     } 
+     
+     this.isLoadingBtn = true;
+          this.formData.page_link = window.location.href;
+     
+     let response = await createFeedback(this.formData, this.authStore, this.handleSuccess, this.handleError);
+     console.log(response);
+   
+    
+   }
+   
   }
 }
 </script>
@@ -103,7 +129,7 @@ export default {
   border-radius: 50px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  animation: float 2s ease-in-out infinite;
+
 }
 
 .feedback-button:hover {
@@ -126,7 +152,6 @@ export default {
   position: absolute;
   bottom: 60px;
   right: 0;
-  width: 300px;
   background-color: white;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -173,7 +198,7 @@ export default {
 @media screen and (max-width: 768px) {
   .feedback-container {
     position: fixed;
-    bottom:100px;
+    bottom:40px;
     right: 20px;
     z-index: 1000;
   }

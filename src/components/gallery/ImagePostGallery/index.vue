@@ -1,27 +1,25 @@
 <template>
   <div class="hover:cursor-pointer" @click.prevent="handleClick" v-if="Images">
-    <!-- Container for the first image -->
-    <div v-if="Images.length === 1" class="flex mb-0.5 h-[350px]">
+    <div v-if="Images.length === 1" class="flex mb-0.5 md:max-h-[500px] md:min-h-[350px] max-h-[400px] min-h-[350px]">
       <img
-        :src="formatHostImageUrl(Images[0].url)"
+        :src="Images[0].url"
         :alt="Images[0].alt"
         class="w-full h-auto object-cover"
       />
     </div>
 
-    <!-- Container for two images side by side -->
-    <div v-if="Images.length === 2" class="flex mb-0.5 h-[350px]">
-      <img :src="formatHostImageUrl(Images[0].url)" :alt="Images[0].alt" class="w-1/2 display_img" />
-      <img :src="formatHostImageUrl(Images[1].url)" :alt="Images[1].alt" class="w-1/2 display_img" />
+    <div v-if="Images.length === 2" class="flex mb-0.5 md:max-h-[500px] md:min-h-[350px] max-h-[400px] min-h-[350px]">
+      <img :src="Images[0].url" :alt="Images[0].alt" class="w-1/2 display_img" />
+      <img :src="Images[1].url" :alt="Images[1].alt" class="w-1/2 display_img" />
     </div>
 
-    <div v-if="Images.length === 3" class="grid grid-cols-3 gap-0.5 h-[350px]">
+    <div v-if="Images.length === 3" class="grid grid-cols-3 gap-0.5 md:max-h-[500px] md:min-h-[350px] max-h-[400px] min-h-[350px]">
       <img
         v-for="(image, index) in Images.slice(0, 3)"
-        :src="formatHostImageUrl(image.url)"
-        :alt="image.alt"
-        :key="image.src"
-        class="h-full w-full object-cover"
+        :src="image.url"
+       :alt="image.alt"
+        :key="index"
+        class=" w-full object-cover md:max-h-[500px] md:min-h-[350px]  max-h-[400px] min-h-[350px] "
       />
       <div
         v-if="Images.length > 3"
@@ -31,23 +29,21 @@
       </div>
     </div>
 
-    <!-- Container for the rest of the images displayed in a single row -->
-    <div v-if="Images.length > 3" class="flex gap-0.5 overflow-hidden  h-[350px]">
+    <div v-if="Images.length > 3" class="flex gap-0.5 overflow-hidden  md:max-h-[500px] md:min-h-[350px] max-h-[400px] min-h-[350px]">
       <img
         v-for="(image, index) in Images.slice(1, 4)"
-        :src="formatHostImageUrl(image.url)"
-        :alt="image.alt"
+        :src="image.url"
+       :alt="image.alt"
         :key="image.src"
         class="flex-grow h-auto w-4 object-cover"
         :style="{ 'flex-basis': calculateFlexBasis(index) }"
       />
 
-      <!-- "See more" box if there are more images than can be shown -->
       <div
         v-if="Images.length > 4"
-        class="flex-grow h-auto flex justify-center items-center bg-black opacity-50 cursor-pointer "
+        class="flex-grow h-auto flex justify-center items-center bg-black opacity-50 cursor-pointer text-white text-center"
       >
-        +{{ Images.length - 4 }} more
+        + {{ Images.length - 4 }} more
       </div>
     </div>
   </div>
@@ -55,14 +51,13 @@
 
 <script>
 import { URL_LINK } from '@/constants'
-import { formatHostImageUrl } from '@/utils/formating'
 
 export default {
   name: 'ImagePostGallery',
   data() {
     return {
       imageHost: URL_LINK.imageHostLink,
-      formatHostImageUrl
+      // formatHostImageUrl
     }
   },
   props: {

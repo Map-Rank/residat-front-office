@@ -1,5 +1,5 @@
 <template>
-  <SectionTitle :title="sectionTitle" :isLink="true" linkTo="event" />
+  <SectionTitle :title="sectionTitle" :isLink="true" :linkTo=navigationLink />
   <div class=" grid space-y-2">
     <div
       v-for="event in displayedEvents"
@@ -21,11 +21,11 @@
         </p>
         <p class="menu">
           {{ $t('date') }}
-          <span>{{ event.published_at }}</span>
+          <span>{{ event.published_at }} </span>
         </p>
         <p class="menu">
           {{ $t('location') }}
-          <span>{{ event.location }}</span>
+          <span> {{   truncateText(event.location  ,15 ) }}</span>
         </p>
       </div>
     </div>
@@ -35,6 +35,7 @@
 <script>
 import SectionTitle from '@/components/base/SectionTitle.vue'
 import { truncateText } from '@/utils/formating'
+
 
 export default {
   name: 'EventAlertBox',
@@ -57,7 +58,11 @@ export default {
       type: Array,
       required: true
     },
-    sectionTitle: String
+    sectionTitle: String,
+    navigationLink:{
+      type:String,
+      default:"event"
+    },
   },
   components: {
     SectionTitle

@@ -2,9 +2,7 @@
 <template>
     <div class=" w-full   bg-primary-light">
       <div class="flex-col bg-white  md:my-5 rounded-lg  p-5 md:p-10 mx-1 md:mx-4">
-        <div>
-          <AlertForm></AlertForm>
-        </div>
+   
   
         <vee-form ref="form" :validation-schema="schema">
             <div class="flex-col space-y-6" >
@@ -107,12 +105,10 @@
   import { useRouter } from 'vue-router'
   import { AlertStates } from '@/components'
   import useAlertStore from '@/stores/alertStore'
-  import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
-  // import BaseDropdown from '@/components/base/BaseDropdown.vue'
-  // import { getZones } from '@/services/zoneService.js'
-  // import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
-  // import TitleSubtitle from '@/components/base/TitleSubtitle.vue'
   import {UpdateUser} from '@/features/Auth/services/authService.js'
+  import { useToast } from "vue-toastification";
+  import { handleSingleFileUpload} from '@/utils/Image.js'
+
   
   export default {
   name: 'UpdateProfile',
@@ -120,7 +116,7 @@
   async created() {
     const zoneSector = useZoneStore()
     const authStore = useAuthStore()
-
+    
     this.formData = authStore.user
     // console.log(this.formData);
     try {
@@ -138,9 +134,11 @@
     const router = useRouter()
     const authStore = useAuthStore()
     const alertStore = useAlertStore()
+    const toast = useToast();
 
     return {
       authStore,
+      toast,
       alertStore,
       router,
       subDivision_id: '',
@@ -219,12 +217,7 @@
       reg_in_submission: false
     }
   },
-  components: {
-    AlertForm,
-    // BaseDropdown,
-    // LoadingIndicator,
-    // TitleSubtitle
-  },
+ 
 
   computed: {
     imageUrl() {
@@ -236,47 +229,17 @@
   },
   },
   methods: {
-    onFileChange(e) {
+   async onFileChange(e) {
       this.isImageFromLocal = true
-    const file = e.target.files[0];
+    const file = await handleSingleFileUpload(e, 2, ['image/jpeg', 'image/png'], true);
+
     if (file) {
       this.formData.avatar = file;
-      // console.log(this.formData.avatar)
     } else {
       this.formData.avatar = null;
     }
   },
-    // async getRegions() {
-    //   try {
-    //     this.regions = this.regions.concat(await getZones(2, null))
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // },
-
-    // async getDivisions(parent_id) {
-    //   try {
-    //     this.isDivisionLoading = true
-    //     this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
-    //     this.divisions = this.divisions.concat(await getZones(null, parent_id))
-    //   } catch (error) {
-    //     console.log(error)
-    //   } finally {
-    //     this.isDivisionLoading = false
-    //   }
-    // },
-
-    // async getSub_divisions(parent_id) {
-    //   this.isSubdivisionLoading = true
-    //   try {
-    //     this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
-    //     this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
-    //   } catch (error) {
-    //     console.log(error)
-    //   } finally {
-    //     this.isSubdivisionLoading = false
-    //   }
-    // },
+ 
 
     handleSelectedOptionIdChange(selectedOptionId) {
       this.zone_id = selectedOptionId
@@ -307,6 +270,7 @@
 
     handleSuccess() {
       console.log('Current User:', this.authStore.getCurrentUser)
+      this.toast.success( this.$t('update_profile_success'),{timeout:2000});
       // this.authStore.isloggedIn = true
       this.$router.push({ name: 'account-preferences' })
     },
@@ -321,22 +285,10 @@
 
     async submitForm() {
 
-      // if (this.subDivision_id == '') {
-      //   this.alertStore.setAlert(AlertStates.ERROR, 'Please select your subdivision')
-
-      //   return
-      // }
 
   if (!(this.formData.avatar instanceof File)) {
-    // console.log('====> is not of type file');
     this.formData.avatar = null; 
   } 
-  
-
-      this.alertStore.setAlert(
-        AlertStates.PROCESSING,
-        'please wait we are creating your account...'
-      )
 
       try {
         await UpdateUser(

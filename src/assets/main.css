@@ -1,5 +1,6 @@
 @import './base.css';
 @import './css/global.scss';
+@import "vue-toastification/dist/index.css";
 
 
 #app {
@@ -8,6 +9,18 @@
   font-weight: normal;
   font-family: 'Poppins', sans-serif;
 }
+
+
+/* Custom Toast Styles */
+.Vue-Toastification__toast--default.my-custom-toast-class {
+    background-color: #7aa64e51; /* Change this to your desired background color */
+    color: #242424; /* Change this to your desired text color */
+}
+
+.Vue-Toastification__toast-body.custom-body-class {
+    font-size: 16px; /* Change this to your desired font size */
+}
+
 
 
 

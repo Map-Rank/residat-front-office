@@ -222,6 +222,8 @@ import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import {createEvent} from '@/services/eventService.js'
 import { useToast } from "vue-toastification";
+import { handleSingleFileUpload} from '@/utils/Image.js'
+
 
 export default {
   name: 'CreateEvent',
@@ -301,7 +303,7 @@ export default {
         { p: 'Option 2', value: 'option2' }
       ],
       schema: {
-        title: 'required|min:3|max:50',
+        title: 'required|min:3|max:150',
         description: 'required|min:3|max:250',
         date_fin: 'required|dateNotBelowPresent',
         date_debut: 'required|dateNotBelowPresent',
@@ -317,7 +319,7 @@ export default {
         date_fin: '2023-12-06T13:10:59',
         media: null,
         selectedSectorId: [],
-        sector_id: '',
+        sector_id: null,
         zone_id: '',
         tos: true
       },
@@ -344,8 +346,9 @@ export default {
 
   methods: {
     
-    onFileChange(e) {
-      const file = e.target.files[0]
+    async onFileChange(e) {
+      // const file = e.target.files[0]
+      const file = await handleSingleFileUpload(e, 2, ['image/jpeg', 'image/png'], true);
       if (file) {
         this.formData.media = file
       } else {
@@ -424,8 +427,8 @@ export default {
 
     handleSuccess() {
       this.isCreatingEvent = false;
-      this.resetForm()
-      this.$router.push({ name: 'community' })
+       this.resetForm()
+       this.$router.push({ name: 'event' })
     },
 
     resetForm() {
@@ -466,8 +469,14 @@ export default {
             
             return
           }
-          if (this.formData.media == null) {
-            this.toast.error('Please select a Banner');
+          // if (this.formData.media == null) {
+          //   this.toast.error('Please select a Banner');
+          //   this.isLoadingBtn = false;
+            
+          //   return
+          // }
+          if (this.formData.sector_id == null) {
+            this.toast.error('Please select a Sector');
             this.isLoadingBtn = false;
             
             return

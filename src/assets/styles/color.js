@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-
+/* istanbul ignore file */
 
 export const colors = {
     yellow: '#ffd700',

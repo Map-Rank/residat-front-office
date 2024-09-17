@@ -1,5 +1,6 @@
 import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import { checkAuthentication } from '@/utils/authUtils.js';
 
 const currentDate = new Date().toISOString().split('T')[0]
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
@@ -12,7 +13,6 @@ const createPost = async (postData, onSuccess, onError) => {
     formData.append('published_at', currentDate)
     formData.append('zone_id', postData.zoneId)
 
-    // Append media files
     postData.images.forEach((image, index) => {
       if (
         [
@@ -28,19 +28,22 @@ const createPost = async (postData, onSuccess, onError) => {
           'audio/mp3'
         ].includes(image.type)
       ) {
+        console.log('thisis the image '+image);
         formData.append(`media[${index}]`, image, image.name)
       } else {
         console.log('not correct format')
       }
     })
-
+    
     postData.sectorId.forEach((id, index) => {
       formData.append(`sectors[${index}]`, id)
     })
+    
+    console.log('thisis the image '+ formData);
+    const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+    console.log(token)
 
-    console.log(postData)
-
-    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, authToken, true)
+    const response = await makeApiPostCall(API_ENDPOINTS.createPost, formData, token, true)
     if (onSuccess && typeof onSuccess === 'function') {
       onSuccess(response.data)
     }
@@ -116,7 +119,7 @@ const updatePost = async (postData, onSuccess, onError) => {
   }
 }
 
-const getPosts = async (page, size, token) => {
+const getPosts = async (page, size, token,isConnected = true) => {
   let defaultSize = 10
   let defaultPage = 0
 
@@ -128,12 +131,20 @@ const getPosts = async (page, size, token) => {
     page: page.toString()
   })
 
-
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiGetCall(
-      `${API_ENDPOINTS.getPosts}?${params.toString()}`,
-      token ? token : authToken
-    )
+    let response;
+    let url;
+    
+
+    isConnected ? url = API_ENDPOINTS.getPosts : url = API_ENDPOINTS.getPostsGuest
+
+       response = await makeApiGetCall(
+        `${url}?${params.toString()}`,
+        token ? token : localToken
+      )
+
+
 
     return response.data.data
   } catch (error) {
@@ -143,10 +154,19 @@ const getPosts = async (page, size, token) => {
 }
 
 const getSpecificPost = async (id) => {
+
+
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
+
+    let url;
+    const isConnected = checkAuthentication()
+
+    isConnected ? url = API_ENDPOINTS.post : url = API_ENDPOINTS.getSinglePostsGuest
+
     const response = await makeApiGetCall(
-      `${API_ENDPOINTS.post}/${id}`,
-      authToken
+      `${url}/${id}`,
+      localToken
     )
     return response.data.data
   } catch (error) {
@@ -157,9 +177,15 @@ const getSpecificPost = async (id) => {
 
 
 const filterPost = async (params) => {
+
+  if (!checkAuthentication()) {
+    return
+  }
+  
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+  
   try {
-    const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, authToken)
-    console.log('post filtered!!')
+    const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, localToken)
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -168,7 +194,7 @@ const filterPost = async (params) => {
 }
 
 const getFilterPosts = async (zoneId, sectorId, size, page) => {
-  let defaultSize = 20
+  let defaultSize = 10
   let defaultPage = 0
 
   size = size || defaultSize
@@ -188,8 +214,9 @@ const getFilterPosts = async (zoneId, sectorId, size, page) => {
 }
 
 const getUserPosts = async () => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, authToken)
+    const response = await makeApiGetCall(API_ENDPOINTS.getUserPosts, localToken)
     console.log(authToken)
     return response.data.data
   } catch (error) {
@@ -199,9 +226,10 @@ const getUserPosts = async () => {
 }
 
 const getUserProfile = async (id) => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
     const endpoint = `/profile/detail/${id}`;
-    const response = await makeApiGetCall(endpoint, authToken);
+    const response = await makeApiGetCall(endpoint, localToken);
     return response.data.data;
   } catch (error) {
     console.error('Error fetching user profile:', error);
@@ -210,8 +238,9 @@ const getUserProfile = async (id) => {
 };
 
 const likePost = async (postId) => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`, null, authToken)
+    await makeApiPostCall(`${API_ENDPOINTS.likePost}/${postId}`, null, localToken)
   } catch (error) {
     console.error('Error fetching posts:', error)
     throw error
@@ -219,8 +248,9 @@ const likePost = async (postId) => {
 }
 
 const followUser = async (userId) => {
+  const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    await makeApiPostCall(`${API_ENDPOINTS.follow}/${userId}`, null, authToken)
+    await makeApiPostCall(`${API_ENDPOINTS.follow}/${userId}`, null, localToken)
   } catch (error) {
     console.error('Error fetching posts:', error)
     throw error
@@ -238,9 +268,24 @@ const sharePost = async (postId) => {
 }
 
 const deletePost = async (postId) => {
+  
+  let token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deletePost}/${postId}`, authToken)
+    console.log('Deleting post')
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.post}/${postId}`, token)
     console.log('delete post sucess 1!!!  ' + response.data)
+  } catch (error) {
+    console.error('Error deleting posts:', error)
+    throw error
+  }
+}
+const deleteComment = async (commentId) => {
+  
+  let token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+  try {
+    console.log('Deleting post')
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deleteComment}/${commentId}`, token)
+    console.log('delete coment sucess 1!!!  ' + response.data)
   } catch (error) {
     console.error('Error deleting posts:', error)
     throw error
@@ -248,11 +293,13 @@ const deletePost = async (postId) => {
 }
 
 const commentPost = async (postId, commentData) => {
+
+  let token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
     await makeApiPostCall(
       `${API_ENDPOINTS.commentPost}/${postId}`,
       JSON.stringify({ text: commentData.text }),
-      authToken
+      token
     )
   } catch (error) {
     console.error('Error Commenting Post:', error)
@@ -272,5 +319,6 @@ export {
   getUserPosts,
   getUserProfile,
   getFilterPosts,
-  followUser
+  followUser,
+  deleteComment
 }

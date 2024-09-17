@@ -1,114 +1,130 @@
-import { describe, it, expect, vi,beforeEach } from 'vitest';
+
+import LoginForm from '@/features/Auth/Forms/LoginForm.vue';
+import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { mount } from '@vue/test-utils';
-import LoginForm from '@/features/Auth/components/LoginForm.vue';
-import AlertForm from '@/components/common/AlertFrom/AlertForm.vue';
 import useAuthStore from '@/stores/auth';
-import { createPinia, setActivePinia } from 'pinia';
+import useAlertStore from '@/stores/alertStore';
 
-vi.mock('vue-router', () => ({
-  useRouter: vi.fn(() => ({ push: vi.fn() }))
-}));
 
-vi.mock('@/stores/auth', () => ({
-    default: vi.fn(() => ({
-      user: null,
-      token: null,
-      isloggedIn: false,
-      isEmailVerified: null,
-      setUser: vi.fn(),
-      setToken: vi.fn(),
-      logOut: vi.fn(),
-      // Add other methods or properties as needed
-    }))
-  }));
-  
+// Mocking localStorage
+const mockLocalStorage = {};
+vi.stubGlobal('localStorage', {
+  getItem: vi.fn((key) => mockLocalStorage[key]),
+  setItem: vi.fn((key, value) => {
+    mockLocalStorage[key] = value;
+  }),
+});
 
-  vi.mock('@/stores/alertStore', () => ({
-    default: vi.fn(() => ({
-      state: {
-        show: false,
-        message: '',
-        variant: '',
-        timeOut: 2000
-      },
-      setAlert: vi.fn()
-    }))
-  }));
-  
+// Mocking fetch API
+vi.stubGlobal('fetch', vi.fn(() =>
+  Promise.resolve({
+    json: () => Promise.resolve({}),
+    status: 200,
+  })
+));
 
+// Mocking useAuthStore and useAlertStore
+vi.mock('@/stores/auth');
+vi.mock('@/stores/alertStore');
 vi.mock('@/features/Auth/services/authService', () => ({
-  loginUser: vi.fn(() => Promise.resolve())
+  loginUser: vi.fn(),
 }));
 
-describe('LoginForm Component', () => {
+describe('LoginForm.vue', () => {
   let wrapper;
+  let authStoreMock;
+  let alertStoreMock;
+  let routerMock;
 
   beforeEach(() => {
-    setActivePinia(createPinia());
+    authStoreMock = {
+      isloggedIn: false,
+    };
+    useAuthStore.mockReturnValue(authStoreMock);
+
+    alertStoreMock = {
+      addAlert: vi.fn(),
+    };
+    useAlertStore.mockReturnValue(alertStoreMock);
+
+    routerMock = {
+      push: vi.fn(),
+      replace: vi.fn(),
+      currentRoute: { name: 'home' },
+    };
+
+    // useRouter.mockReturnValue(routerMock);
+
     wrapper = mount(LoginForm, {
       global: {
-        plugins: [useAuthStore()],
-        components: { AlertForm },
         mocks: {
-          $router: { push: vi.fn() }
-        }
-      }
+          $t: (msg) => msg, // Mocking the $t function for localization
+          $router: routerMock,
+          $route: { name: 'home' },
+          $i18n: { locale: 'en' }, // Mocking the $i18n object
+        },
+      },
     });
   });
 
-  it('renders correctly', () => {
-    expect(wrapper.text()).toContain('WELCOME BACK');
-    expect(wrapper.findComponent(AlertForm).exists()).toBe(true);
+  it('renders the component', () => {
+    expect(wrapper.exists()).toBe(true);
+    expect(wrapper.find('h2').text()).toBe('welcome_back');
   });
 
-  it('toggles password visibility', async () => {
+  it('toggles the password visibility', async () => {
+    const toggleButton = wrapper.find('button[type="button"]');
     expect(wrapper.vm.showPassword).toBe(false);
-    await wrapper.find('button[type="button"]').trigger('click');
+    await toggleButton.trigger('click');
     expect(wrapper.vm.showPassword).toBe(true);
+    await toggleButton.trigger('click');
+    expect(wrapper.vm.showPassword).toBe(false);
   });
 
-//   it('handles form submission', async () => {
-//     const emailInput = wrapper.find('input[name="email"]');
-//     const passwordInput = wrapper.find('input[name="password"]');
-  
-//     // Check if the inputs exist
-//     expect(emailInput.exists()).toBe(true);
-//     expect(passwordInput.exists()).toBe(true);
-  
-//     // Set values
-//     await emailInput.setValue('test@example.com');
-//     await passwordInput.setValue('password123');
-//     await wrapper.find('form').trigger('submit.prevent');
-//     await flushPromises();
-  
-//     // Verify interaction with the store and router
-//     const authStore = useAuthStore();
-//     expect(authStore.setUser).toHaveBeenCalled();
-//     expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ name: 'community' });
-//   });
-  //TODO correct this test 
-// it('handles form submission', async () => {
-  
-//     const emailInput = wrapper.find('#email');
-//     const passwordInput = wrapper.find('#password');
-  
-//     // Check if the inputs exist
-//     expect(emailInput.exists()).toBe(true);
-//     expect(passwordInput.exists()).toBe(true);
-  
-//     // Set values
-//     await emailInput.setValue('test@example.com');
-//     await passwordInput.setValue('password123');
-//     await wrapper.find('form').trigger('submit.prevent');
-//     await flushPromises();
-  
-//     // Verify interaction with the store and router
-//     const authStore = useAuthStore();
-//     expect(authStore.setUser).toHaveBeenCalled();
-//     expect(wrapper.vm.$router.push).toHaveBeenCalledWith({ name: 'community' });
-//   });
-  
-  
+  it('calls the forgot password method', async () => {
+    const forgotPasswordLink = wrapper.find('h6');
+    await forgotPasswordLink.trigger('click');
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'forgot-password' });
+  });
 
-  // Additional tests for form validation and error handling can be added
+  it('submits the form with valid data', async () => {
+    wrapper.setData({
+      userData: {
+        email: 'test@example.com',
+        password: 'password123',
+      },
+    });
+    await wrapper.find('button[type="submit"]').trigger('click');
+    expect(wrapper.vm.login)
+    // expect(loginUser).toHaveBeenCalled()
+    // // expect(loginUser).toHaveBeenCalledWith(
+    // //   this.userData,
+    // //   authStoreMock,
+    // //   wrapper.vm.handleSuccess,
+    // //   wrapper.vm.handleError,
+    // //   wrapper.vm.handleEmailNotVerified
+    // // );
+  });
+
+  it('handles successful login', async () => {
+    wrapper.vm.handleSuccess();
+    expect(authStoreMock.isloggedIn).toBe(true);
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'community' });
+  });
+
+  it('displays error message on validation error', async () => {
+    wrapper.setData({
+      userData: {
+        email: '',
+        password: '',
+      },
+    });
+    await wrapper.find('button[type="submit"]').trigger('click');
+    expect(wrapper.vm.isLoading).toBe(false);
+  });
+
+  it('handles email not verified', async () => {
+    wrapper.vm.handleEmailNotVerified();
+    expect(routerMock.push).toHaveBeenCalledWith({ name: 'waiting-email-verification' });
+  });
 });

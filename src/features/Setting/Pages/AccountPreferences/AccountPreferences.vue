@@ -41,10 +41,10 @@ import SettingsSection from '@/features/Setting/components/SettingsSection.vue'
       iconSize: 'w-[30px] h-[30px]',
       profileItems: [
         { name: this.$t('name_location_enterprise'), route: 'update-profile' },
-        { name: this.$t('center_of_interest'), route: 'account-preferences' }
+        // { name: this.$t('center_of_interest'), route: 'account-preferences' }
       ],
       generalItems: [
-        { name: this.$t('language'), route: 'account-preferences' },
+        { name: this.$t('language'), route: 'change-langauge' },
         { name: this.$t('close_account'), route: 'account-preferences' }
       ],
 

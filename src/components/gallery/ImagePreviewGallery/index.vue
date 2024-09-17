@@ -18,7 +18,7 @@
           <img
             :src="
               ImagesFromHostToPreview != null
-                ? formatHostImageUrl(ImagesFromHostToPreview[0].url)
+                ? ImagesFromHostToPreview[0].url
                 : Images[0].url
             "
             :alt="'image'"
@@ -47,7 +47,7 @@
           <div class="image-container w-2/5 h-1/2">
             <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
             <img
-              :src="formatHostImageUrl(ImagesFromHostToPreview[0].url)"
+              :src="ImagesFromHostToPreview[0].url"
               :alt="'image'"
               class=""
             />
@@ -56,7 +56,7 @@
             <button class="delete-icon" @click.stop="removeImage(index)">❌</button>
 
             <img
-              :src="formatHostImageUrl(ImagesFromHostToPreview[1].url)"
+              :src="ImagesFromHostToPreview[1].url"
               :alt="'image'"
               class=""
             />
@@ -88,7 +88,7 @@
       <div v-if="ImagesFromHostToPreview.length > 2" class="flex gap-0.5 overflow-hidden">
         <img
           v-for="image in ImagesFromHostToPreview.slice(1, 4)"
-          :src="formatHostImageUrl(image.url)"
+          :src="image.url"
           :alt="image.alt"
           :key="image.url"
           class="flex-grow h-auto w-4 object-cover"
