@@ -71,6 +71,7 @@
   "welcome_to": "welcome to",
   "select_location_title": "Select Location",
   "select_event_by_location": "Select event by location",
+  "select_zone_by_location": "Navigate map by zone",
   "select_sector_title": "Select Sector",
   "input_placeholder": "What's on your mind?",
   "post": "Post",

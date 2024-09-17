@@ -79,6 +79,8 @@ export default {
 <style scoped>
 /* Container for the slider with relative positioning */
 .slider-container {
+  display: flex;
+  align-items: center;
   position: relative;
   max-width: 100%;
   margin: auto;
@@ -114,16 +116,16 @@ export default {
 /* Transition effects for smoother slide and fade transitions */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
-  transition: transform 0.2s ease, opacity 0.2s ease;
+  transition: transform 0.1s ease, opacity 0.3s ease;
   position: absolute;
   width: 100%;
-  opacity: 1;
+  opacity: 0.1;
 }
 
 .slide-fade-enter,
 .slide-fade-leave-to {
   transform: translateX(100%);
-  opacity: 0;
+  opacity: 1;
 }
 
 /* Navigation buttons */

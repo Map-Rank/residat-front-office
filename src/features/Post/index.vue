@@ -14,7 +14,9 @@
           <label
             @click="onClickFollow"
             class="flex items-center px-2 py-1 bg-white text-green-600 rounded-[8px] tracking-wide hover:text-white"
-            :class="[this.post?.is_following ? ' ' : 'hover:bg-primary-light cursor-pointer']"
+            :class="[
+              this.post?.is_following ? ' ' : 'hover:bg-primary-light cursor-pointer',
+            ]"
             style="min-width: max-content"
           >
             <img :src="iconSource" alt="" />
@@ -77,14 +79,15 @@
           @click="toggleReadMore"
           class="text-blue-700 cursor-pointer"
         >
-          {{ showFullDescription ? 'Read less' : 'Read more' }}
+          {{ showFullDescription ? "Read less" : "Read more" }}
         </span>
       </p>
     </div>
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showModal()"> </image-post-gallery>
+    <image-post-gallery :Images="postImages" @customFunction="showModal()">
+    </image-post-gallery>
 
     <!-- Post Interaction Area -->
     <footer class="px-5 pt-2">
@@ -114,49 +117,57 @@
         ></icon-with-label>
       </div>
 
- <!-- comment section -->
-<div v-if="showCommentBox" class="mt-3 w-full">
-  <!-- Display the last comment -->
-  <div v-if="post.comments && post.comments.length" class="flex items-center space-x-3">
-    <img
-      :src="post.comments[comments.length - 1].user.avatar"
-      alt="User profile"
-      class="w-8 h-8 rounded-full"
-    />
-    <div class="bg-gray-100 p-2 rounded-lg flex-grow">
-      <p class="text-gray-700">
-        <strong>{{ post.comments[comments.length - 1].user.first_name }}:</strong>
-        {{ post.comments[comments.length - 1].text }}
-      </p>
-    </div>
-  </div>
+      <!-- comment section -->
+      <div v-if="showCommentBox" class="mt-3 w-full">
+        <!-- Display the last comment -->
+        <div
+          v-if="post.comments && post.comments.length"
+          class="flex items-center space-x-3"
+        >
+          <img
+            :src="post.comments[comments.length - 1].user.avatar"
+            alt="User profile"
+            class="w-8 h-8 rounded-full"
+          />
+          <div class="bg-gray-100 p-2 rounded-lg flex-grow">
+            <p class="text-gray-700">
+              <strong>{{ post.comments[comments.length - 1].user.first_name }}:</strong>
+              {{ post.comments[comments.length - 1].text }}
+            </p>
+          </div>
+        </div>
 
-  <!-- Input for new comment -->
-  <div class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full">
-    <img :src="commentProfileImage" alt="User profile" class="w-10 h-10 rounded-full" />
-    <div class="border p-2 rounded-lg flex-grow">
-      <input
-        v-model="commentData.text"
-        type="text"
-        placeholder="Write a comment..."
-        class="bg-transparent w-full focus:outline-none rounded-md"
-      />
-    </div>
-    <button
-      @click.prevent="commentPost(commentData)"
-      class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
-      :disabled="isCommenting"
-      :class="
-        isCommenting
-          ? 'bg-gray-400 cursor-wait disabled'
-          : 'bg-secondary-normal hover:bg-secondary-hover'
-      "
-    >
-      {{ $t('post') }}
-    </button>
-  </div>
-</div>
-
+        <!-- Input for new comment -->
+        <div
+          class="flex space-x-3 items-center justify-between mt-3 overflow-hidden w-full"
+        >
+          <img
+            :src="commentProfileImage"
+            alt="User profile"
+            class="w-10 h-10 rounded-full"
+          />
+          <div class="border p-2 rounded-lg flex-grow">
+            <input
+              v-model="commentData.text"
+              type="text"
+              placeholder="Write a comment..."
+              class="bg-transparent w-full focus:outline-none rounded-md"
+            />
+          </div>
+          <button
+            @click.prevent="commentPost(commentData)"
+            class="btn bg-secondary-normal text-white px-3 py-2 rounded-lg focus:outline-none"
+            :disabled="isCommenting"
+            :class="
+              isCommenting
+                ? 'bg-gray-400 cursor-wait disabled'
+                : 'bg-secondary-normal hover:bg-secondary-hover'
+            "
+          >
+            {{ $t("post") }}
+          </button>
+        </div>
+      </div>
     </footer>
   </article>
 
@@ -170,44 +181,42 @@
   ></share-modal>
 
   <ConfirmationModal ref="confirmationModal" @confirm="deletePost()" />
-
 </template>
 
 <script>
-import '../../assets/css/global.scss'
-import IconWithLabel from '../../components/common/IconWithLabel/index.vue'
-import { mapActions, mapWritableState } from 'pinia'
-import usePostStore from './store/postStore'
+import "../../assets/css/global.scss";
+import IconWithLabel from "../../components/common/IconWithLabel/index.vue";
+import { mapActions, mapWritableState } from "pinia";
+import usePostStore from "./store/postStore";
 import {
   commentPost,
   deletePost,
   likePost,
   sharePost,
-  followUser
-} from '../Post/services/postService'
-import ButtonUi from '../../components/base/ButtonUi.vue'
-import { useRoute } from 'vue-router'
-import ImagePostGallery from '@/components/gallery/ImagePostGallery/index.vue'
-import UserPostInfo from '@/features/Post/components/UserPostInfo/UserPostInfo.vue'
-import InteractionPostStatistics from '@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue'
-import { URL_LINK } from '@/constants/url.js'
-import PostDetailModal from './components/PostDetailModal/PostDetailModal.vue'
-import useModalStore from '@/stores/modalStore.js'
-import ShareModal from '@/components/common/ShareModal/ShareModal.vue'
-import { useToast } from 'vue-toastification'
-import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
-import { checkAuthentication } from '@/utils/authUtils.js';
-import useAuthStore from '@/stores/auth'
-
+  followUser,
+} from "../Post/services/postService";
+import ButtonUi from "../../components/base/ButtonUi.vue";
+import { useRoute } from "vue-router";
+import ImagePostGallery from "@/components/gallery/ImagePostGallery/index.vue";
+import UserPostInfo from "@/features/Post/components/UserPostInfo/UserPostInfo.vue";
+import InteractionPostStatistics from "@/features/Post/components/InteractionPostStatistics/InteractionPostStatistics.vue";
+import { URL_LINK } from "@/constants/url.js";
+import PostDetailModal from "./components/PostDetailModal/PostDetailModal.vue";
+import useModalStore from "@/stores/modalStore.js";
+import ShareModal from "@/components/common/ShareModal/ShareModal.vue";
+import { useToast } from "vue-toastification";
+import ConfirmationModal from "@/components/common/Modal/ConfirmationModal.vue";
+import { checkAuthentication } from "@/utils/authUtils.js";
+import useAuthStore from "@/stores/auth";
 
 export default {
-  name: 'PostComponent',
-  emits: ['postFetch', 'updatePost'],
+  name: "PostComponent",
+  emits: ["postFetch", "updatePost"],
   data() {
-    const route = useRoute()
-    const modalStore = useModalStore()
-    const toast = useToast()
-    const authStore = useAuthStore()
+    const route = useRoute();
+    const modalStore = useModalStore();
+    const toast = useToast();
+    const authStore = useAuthStore();
 
     return {
       route,
@@ -215,18 +224,19 @@ export default {
       authStore,
       showShareModal: false,
       toast,
-      postLink: '',
-      commentProfileImage :  authStore && authStore.user ? authStore.user.avatar : this.userProfileImage,
-      messageShare: 'Check out this post!',
+      postLink: "",
+      commentProfileImage:
+        authStore && authStore.user ? authStore.user.avatar : this.userProfileImage,
+      messageShare: "Check out this post!",
       iconSource: this.post?.is_following
-        ? '/assets/icons/tick.svg'
-        : '/assets/icons/add-circle-dark-outline.svg',
-      labelText: this.post?.is_following ? this.$t('following') : this.$t('follow'),
+        ? "/assets/icons/tick.svg"
+        : "/assets/icons/add-circle-dark-outline.svg",
+      labelText: this.post?.is_following ? this.$t("following") : this.$t("follow"),
       isFollowing: false,
       maxDescriptionLength: 100,
       showFullDescription: false,
-      iconDesktopSize: 'w-6 h-6',
-      iconMobileSize: 'w-5 h-5',
+      iconDesktopSize: "w-6 h-6",
+      iconMobileSize: "w-5 h-5",
       isModalVisible: false,
       likeCount: this.like_count,
       customPost: this.post,
@@ -238,224 +248,221 @@ export default {
       isCommenting: false,
       commentData: {
         text: null,
-        image: ' '
+        image: " ",
       },
-      plusIcon: 'public\\assets\\icons\\add-circle-dark-outline.svg',
+      plusIcon: "public\\assets\\icons\\add-circle-dark-outline.svg",
       iconLabels: [
         {
-          svgContent: '\\assets\\icons\\heart-outline.svg',
-          svgContentHover: '\\assets\\icons\\heart-fill.svg',
-          labelText: this.$t('like'),
+          svgContent: "\\assets\\icons\\heart-outline.svg",
+          svgContentHover: "\\assets\\icons\\heart-fill.svg",
+          labelText: this.$t("like"),
           isActive: this.liked,
-          right: true
+          right: true,
         },
         {
-          svgContent: '\\assets\\icons\\comment-outline.svg',
-          svgContentHover: '\\assets\\icons\\comment-fill.svg',
-          labelText: this.$t('comment'),
+          svgContent: "\\assets\\icons\\comment-outline.svg",
+          svgContentHover: "\\assets\\icons\\comment-fill.svg",
+          labelText: this.$t("comment"),
           isActive: this.isCommenting,
-          right: true
+          right: true,
         },
         {
-          svgContent: '\\assets\\icons\\share-fill.svg',
-          svgContentHover: '\\assets\\icons\\share-fill.svg',
-          labelText: this.$t('share'),
-          right: true
-        }
-      ]
-    }
+          svgContent: "\\assets\\icons\\share-fill.svg",
+          svgContentHover: "\\assets\\icons\\share-fill.svg",
+          labelText: this.$t("share"),
+          right: true,
+        },
+      ],
+    };
   },
-
 
   computed: {
     formattedPostContent() {
-      return this.postContent.replace(/<p><\/p>/g, '<br>').replace(/\n/g, '<br>')
+      return this.postContent.replace(/<p><\/p>/g, "<br>").replace(/\n/g, "<br>");
     },
 
     shouldShowReadMore() {
-      return this.postContent.length > this.maxDescriptionLength
+      return this.postContent.length > this.maxDescriptionLength;
     },
-    ...mapWritableState(usePostStore, ['showPostDetails']),
+    ...mapWritableState(usePostStore, ["showPostDetails"]),
     slicedImages() {
-      return this.postImages.slice(1).filter((image, index) => index < 3)
-    }
+      return this.postImages.slice(1).filter((image, index) => index < 3);
+    },
   },
 
   methods: {
     openShareModal() {
-      console.log('open modal')
-      this.postLink = `https://www.residat.com/show-post/${this.post.id}`
-      this.showShareModal = true
+      console.log("open modal");
+      this.postLink = `https://www.residat.com/show-post/${this.post.id}`;
+      this.showShareModal = true;
     },
     closeShareModal() {
-      this.showShareModal = false
+      this.showShareModal = false;
     },
     setMessageShare(message) {
-      this.messageShare = message
+      this.messageShare = message;
     },
 
     toggleReadMore() {
-      this.showFullDescription = !this.showFullDescription
+      this.showFullDescription = !this.showFullDescription;
     },
 
     ...mapActions(usePostStore, [
-      'togglePostDetails',
-      'setpostToShowDetails',
-      'setpostToEdit',
-      'showDetails',
-      'setpostIdToShowDetails'
+      "togglePostDetails",
+      "setpostToShowDetails",
+      "setpostToEdit",
+      "showDetails",
+      "setpostIdToShowDetails",
     ]),
 
     async onClickFollow() {
       if (this.post.is_following) {
-        return
+        return;
       }
 
-      await followUser(this.post.creator[0].id)
+      await followUser(this.post.creator[0].id);
       // Change showMenu status
-      this.isFollowing = !this.isFollowing
+      this.isFollowing = !this.isFollowing;
       // Depending on the showMenu value, update icon source and text
       if (this.isFollowing) {
-        this.iconSource = '/assets/icons/tick.svg'
-        this.labelText = this.$t('following')
+        this.iconSource = "/assets/icons/tick.svg";
+        this.labelText = this.$t("following");
       } else {
-        this.iconSource = '/assets/icons/add-circle-dark-outline.svg'
-        this.labelText = this.$t('follow')
+        this.iconSource = "/assets/icons/add-circle-dark-outline.svg";
+        this.labelText = this.$t("follow");
       }
     },
     closeModal() {
-      this.isModalVisible = false
+      this.isModalVisible = false;
     },
     showModal() {
-      this.isModalVisible = true
+      this.isModalVisible = true;
     },
     openModal() {
       this.$refs.confirmationModal.show();
     },
 
-    async deletePost() {   
-        try {
-        await deletePost(this.postId)
+    async deletePost() {
+      try {
+        await deletePost(this.postId);
 
-        window.location.reload()
+        window.location.reload();
       } catch (error) {
-        console.error('Error deleting post:', error)
+        console.error("Error deleting post:", error);
       }
-       
     },
 
     viewPost() {
-      this.$router.push({ name: 'show-post', params: { id: this.post.id } })
+      this.$router.push({ name: "show-post", params: { id: this.post.id } });
     },
 
     editPost() {
-      console.log('edit post ')
+      console.log("edit post ");
 
       this.$router.push({
-        name: 'edit-post',
+        name: "edit-post",
         params: {
-          postId: this.post.id
-        }
-      })
+          postId: this.post.id,
+        },
+      });
     },
 
     async customFunction(index) {
-
       if (!checkAuthentication()) {
-        return
+        return;
       }
-        switch (index) {
+      switch (index) {
         case 0:
-          await likePost(this.postId)
+          await likePost(this.postId);
           if (this.customLike) {
-            this.customLike = false
-            this.customPost.like_count--
-            console.log(this.customLike)
+            this.customLike = false;
+            this.customPost.like_count--;
+            console.log(this.customLike);
           } else {
-            this.customLike = true
-            this.customPost.like_count++
+            this.customLike = true;
+            this.customPost.like_count++;
           }
-          break
+          break;
         case 1:
-          this.showCommentBox = !this.showCommentBox
-          console.log(this.post)
-          break
+          this.$router.push({ name: "show-post", params: { id: this.postId } });
+
+          // this.showCommentBox = !this.showCommentBox
+          console.log(this.post);
+          break;
         case 2:
-          this.openShareModal()
-          await sharePost(this.postId)
+          this.openShareModal();
+          await sharePost(this.postId);
           // this.$emit('postFetch')
-          break
+          break;
         case 3:
-          break
-      
-      
+          break;
       }
     },
 
     async commentPost(comment) {
       // await commentPost(this.postId, text)
-      console.log('this is text' + comment);
+      console.log("this is text" + comment);
       if (comment.text == null) {
-        this.toast.info('Please insert a comment')
-        return
+        this.toast.info("Please insert a comment");
+        return;
       }
-      
-      this.isCommenting = true
+
+      this.isCommenting = true;
       try {
-        await commentPost(this.postId, comment)
-        this.toast.success('Comment posted')
-        this.showCommentBox = false
-        this.commentData.text = null
-        this.showCommentBox = !this.showCommentBox
-        this.customPost.comment_count++
-        this.isCommenting = false
+        await commentPost(this.postId, comment);
+        this.toast.success("Comment posted");
+        this.showCommentBox = false;
+        this.commentData.text = null;
+        this.showCommentBox = !this.showCommentBox;
+        this.customPost.comment_count++;
+        this.isCommenting = false;
       } catch (error) {
-        console.error('Failed to post comment:', error)
-        this.isCommenting = false
+        console.error("Failed to post comment:", error);
+        this.isCommenting = false;
       } finally {
-        this.isCommenting = false
+        this.isCommenting = false;
       }
     },
 
     clickIcon(index) {
       this.iconLabels = this.iconLabels.map((item, i) => {
         if (i == index) {
-          return { ...item, isActive: !item.isActive }
+          return { ...item, isActive: !item.isActive };
         }
 
-        return item
-      })
+        return item;
+      });
     },
 
     handleFileChange(event) {
-      const file = event.target.files[0]
+      const file = event.target.files[0];
       if (file) {
-        this.$emit('handleFileChange', file)
+        this.$emit("handleFileChange", file);
       }
     },
 
     toggleMenu() {
-      this.isMenuVisible = !this.isMenuVisible
-      console.log(this.isMenuVisible)
+      this.isMenuVisible = !this.isMenuVisible;
+      console.log(this.isMenuVisible);
     },
 
     calculateFlexBasis() {
-      const numberOfImages = this.postImages.length - 1 // minus the first image
-      const maxImagesToShow = 3
+      const numberOfImages = this.postImages.length - 1; // minus the first image
+      const maxImagesToShow = 3;
       if (numberOfImages > maxImagesToShow) {
         // If more than 3 images, each gets an equal share of space
-        return `${100 / maxImagesToShow}%`
+        return `${100 / maxImagesToShow}%`;
       }
       // If fewer than 3 images, they grow equally to fill the space
-      return `${100 / numberOfImages}%`
+      return `${100 / numberOfImages}%`;
     },
 
     handleImageUpload(file) {
       this.images = file.map((file) => ({
         name: file.name,
-        url: URL.createObjectURL(file)
-      }))
-    }
+        url: URL.createObjectURL(file),
+      }));
+    },
   },
 
   components: {
@@ -466,7 +473,7 @@ export default {
     ImagePostGallery,
     PostDetailModal,
     ShareModal,
-    ConfirmationModal
+    ConfirmationModal,
   },
 
   props: {
@@ -484,12 +491,12 @@ export default {
     zoneName: String,
     showMenu: {
       type: Boolean,
-      default: false
+      default: false,
     },
 
-    post: Object
-  }
-}
+    post: Object,
+  },
+};
 </script>
 
 <style scoped>

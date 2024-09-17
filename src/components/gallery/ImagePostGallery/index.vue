@@ -41,9 +41,9 @@
 
       <div
         v-if="Images.length > 4"
-        class="flex-grow h-auto flex justify-center items-center bg-black opacity-50 cursor-pointer "
+        class="flex-grow h-auto flex justify-center items-center bg-black opacity-50 cursor-pointer text-white text-center"
       >
-        +{{ Images.length - 4 }} more
+        + {{ Images.length - 4 }} more
       </div>
     </div>
   </div>

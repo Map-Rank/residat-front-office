@@ -3,7 +3,7 @@
     <div v-if="show" class="modal-backdrop z-100 p-4 items-center">
       <div class="flex pt-4 sm:px-4 pb-10 mt-8 sm:block sm:p-0 w-full">
         <div
-          :class="`box grid ${
+          :class="`box grid w-full ${
             post && post.medias && post.medias.length === 0
               ? 'grid-cols-auto'
               : 'md:grid-cols-2'
@@ -81,7 +81,7 @@
               <div class="flex justify-between mr-3">
                 <div>
                   <icon-with-label
-                    :svgContentHover="'\\assets\\icons\\heart-fill.svg'"
+                    :svgContentHover="'\\assets\\icons\\heart-fill-green.svg'"
                     :svgContent="'\\assets\\icons\\heart-outline.svg'"
                     :labelTextRight="$t('like')"
                     :iconDesktopSize="'w-6 h-6'"

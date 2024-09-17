@@ -120,6 +120,18 @@ const router = createRouter({
         //   return '/community';
         // }
       },
+    {
+      path: '/search-map/:searchId?',
+      name: 'search-map',
+      component: DashBoardView,
+      // meta: { requiresAuth: true },
+      props: (route) => ({
+        searchId: route.params.searchId || 1,
+      }),
+      // redirect: (to) => {
+        //   return '/community';
+        // }
+      },
       
       {
         path: '/community',
