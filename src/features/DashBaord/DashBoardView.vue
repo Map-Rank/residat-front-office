@@ -96,7 +96,7 @@
         </div>
      
 
-        <div class=" hidden sm:block mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
+        <div class=" hidden sm:block mt-2 sm:mt-0 z-1 relative bg-white rounded-md py-4" v-if="vectorKeys && vectorKeys.length > 0">
           <div
             v-for="(key, index) in vectorKeys"
             :key="index"
