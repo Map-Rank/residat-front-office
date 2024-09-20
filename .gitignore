@@ -38,3 +38,4 @@ docs/.vitepress/cache
 docs/.vitepress/dist
 docs-frontend/.vitepress/dist
 docs-frontend/.vitepress/cache
+public/firebase-keys.json

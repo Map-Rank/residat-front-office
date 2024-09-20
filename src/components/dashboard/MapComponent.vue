@@ -10,7 +10,7 @@ export default {
   name: "MapComponent",
   setup() {
     onMounted(async () => {
-      const map = L.map("map").setView([7.3697, 12.3547], 7);
+      const map = L.map("map").setView([7.3697, 12.3547], 6);
 
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -67,6 +67,8 @@ export default {
         console.error("Erreur lors du chargement du GeoJSON :", error);
       }
     });
+
+    
   },
 };
 </script>

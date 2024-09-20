@@ -324,7 +324,7 @@ export default {
     }
   },
 
-  props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
+  props: ['zoneId', 'parentId', 'zoneName', 'mapSize','latitude','longitude','zoomIndex'],
   data() {
     return {
       toast: useToast(),
@@ -433,16 +433,6 @@ export default {
     searchMap() {
       console.log(this.zoneIdToSearch)
 
-      // if (this.zoneIdToSearch !== null && this.zoneIdToSearch !== 1) {
-      //   this.$router.push({
-      //     name: 'search-map',
-      //     params: {
-      //       searchId: this.zoneIdToSearch
-      //     }
-      //   })
-      //   return
-      // }
-
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
         this.$router.push({
           name: 'dashboard',
@@ -450,7 +440,9 @@ export default {
             zoneId: this.zoneMapToSearch.id,
             parentId: this.zoneMapToSearch.parent_id,
             zoneName: this.zoneMapToSearch.name,
-            mapSize: this.defaultMapSize
+            mapSize: this.defaultMapSize,
+            latitude: this.latitude,
+            longitude: this.longitude,
           }
         })
         return
