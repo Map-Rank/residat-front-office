@@ -1,10 +1,12 @@
 <template>
+
   <MapComponent
+  class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
   :latitude="latitude"
   :longitude="longitude"
   :zoomIndex="zoomIndex"
 />
-  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
+  <div class="z-10  bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
     <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
         <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
@@ -244,6 +246,8 @@
 
     <Modal v-show="isModalVisible" :label="graphLabel" @close="closeModal" />
   </div>
+
+
 </template>
 
 <script>
@@ -653,6 +657,23 @@ searchMap() {
 </script>
 
 <style scoped>
+
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.z-0 {
+  z-index: 0; /* Map will be behind other elements */
+}
+
+.z-10 {
+  z-index: 10; /* Ensure other elements are above the map */
+}
+
 span {
   font-size: 14px;
   font-family: 'Poppins';
