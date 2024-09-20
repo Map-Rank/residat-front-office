@@ -118,7 +118,7 @@ const router = createRouter({
         mapSize: route.params.mapSize,
         latitude: route.params.latitude || GEOSPACIAL_DATA.cameroonLatitude ,
         longitude: route.params.longitude || GEOSPACIAL_DATA.cameroonLongitude,
-        zoomIndex: route.params.longitude || GEOSPACIAL_DATA.cameroonZoomIndex,
+        zoomIndex: route.params.zoomIndex || GEOSPACIAL_DATA.cameroonZoomIndex,
       }),
       // redirect: (to) => {
         //   return '/community';

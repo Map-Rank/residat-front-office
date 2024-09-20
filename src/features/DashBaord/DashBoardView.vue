@@ -1,5 +1,9 @@
 <template>
-  <MapComponent></MapComponent>
+  <MapComponent
+  :latitude="latitude"
+  :longitude="longitude"
+  :zoomIndex="zoomIndex"
+/>
   <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
     <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
@@ -261,6 +265,7 @@ import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZoneP
 import { useToast } from 'vue-toastification'
 import L from "leaflet"
 import MapComponent from '@/components/dashboard/MapComponent.vue'
+import {getZoomIndexByLevel} from '@/utils/formating.js'
 
 export default {
   name: 'DashBoardView',
@@ -430,26 +435,35 @@ export default {
   },
 
   methods: {
-    searchMap() {
-      console.log(this.zoneIdToSearch)
+searchMap() {
 
-      if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
-        this.$router.push({
-          name: 'dashboard',
-          params: {
-            zoneId: this.zoneMapToSearch.id,
-            parentId: this.zoneMapToSearch.parent_id,
-            zoneName: this.zoneMapToSearch.name,
-            mapSize: this.defaultMapSize,
-            latitude: this.latitude,
-            longitude: this.longitude,
-          }
-        })
-        return
+  if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
+
+    const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id);
+    
+    this.$router.push({
+      name: 'dashboard',
+      params: {
+        zoneId: this.zoneMapToSearch.id,
+        parentId: this.zoneMapToSearch.parent_id,
+        zoneName: this.zoneMapToSearch.name,
+        mapSize: this.defaultMapSize,
+        latitude: this.zoneMapToSearch.latitude,
+        longitude: this.zoneMapToSearch.longitude,
+        zoomIndex: zoomLevelIndex,
       }
+    }).then(() => {
+      // Using window.location.reload() to reload the entire page
+      window.location.reload();
+    }).catch(err => {
+      console.error('Router push failed', err);
+    });
+    return;
+  }
 
-      this.toast.error('Select a zone please ')
-    },
+  this.toast.error('Select a zone please')
+},
+
 
     async selectZoneToSearch(id) {
       console.log(id)
@@ -458,7 +472,7 @@ export default {
 
     updateZone(zone) {
       this.zoneMapToSearch = zone
-      console.log(zone)
+      // console.log(zone)
     },
 
     async getReport(zoneId) {
