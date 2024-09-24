@@ -1,6 +1,6 @@
 <template>
   <div class="back flex justify-center items-center bg-gray-100 pt-[40px]">
-    <div class="bg-white shadow-lg rounded-lg p-5" style="width: 25%;">
+    <div class="bg-white shadow-lg rounded-lg p-5 lg:w-1/3" >
       <div class="text-center">
         <img
           src="/assets/images/Pages/Two factor authentication.svg"
@@ -101,7 +101,7 @@ export default {
     async reSend() {
       try{
         this.isLoading = true
-        this.toast.error(this.$t('please_wait_creating_account'));
+        this.toast.warning(this.$t('please_wait_creating_account'));
         await ForgotPassword(this.userData, this.handleSuccess, this.handleError,)
       }catch (error) {
         this.isLoading = false

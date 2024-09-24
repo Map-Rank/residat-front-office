@@ -25,4 +25,5 @@ export const API_ENDPOINTS = {
   getEvents: '/events',
   getEventsGuest: '/get-all-events',
   getSingleEventsGuest: '/one-event',
+  notifications:'/notifications'
 };
