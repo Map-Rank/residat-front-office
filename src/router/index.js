@@ -213,10 +213,15 @@ const router = createRouter({
    
 
     {
-      path: '/community',
+      path: '/community/:propZoneId?/:propSectorId?',
       name: 'community',
       component: CommunityView,
       // meta: { requiresAuth: true }
+      props: (route) => ({
+        propZoneId: route.params.propZoneId || 1,
+        propSectorId: route.params.propSectorId || [] ,
+  
+      })
     },
     {
       path: '/community/:zoneId?/:sectorId?',
@@ -224,7 +229,7 @@ const router = createRouter({
       component: CommunityView,
       // meta: { requiresAuth: true },
       props: (route) => ({
-        zoneId: route.params.zoneId || null,
+        zoneId: route.params.zoneId || 1,
         sectorId: route.params.sectorId || null ,
 
       })

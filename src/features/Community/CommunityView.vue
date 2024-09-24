@@ -6,10 +6,10 @@
       :style="computedBannerImage"
     >
       <h2
-        class="text-white  font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase"
+        class="text-white font-bold absolute bottom-0 left-2 md:left-14 mb-2 lg:left-100 md:bottom-5 uppercase"
       >
-      <!-- {{ $t('welcome_to') }} {{ zoneName }} -->
-       {{ zoneName }}
+        <!-- {{ $t('welcome_to') }} {{ zoneName }} -->
+        {{ zoneName }}
       </h2>
     </div>
 
@@ -32,23 +32,30 @@
                   <LoadingIndicator />
                 </div> -->
 
-                <DropdownShimmer v-if="isZoneFilterLoading" :numDropdowns="3" :componentHeight="'auto' " class="mb-4" />
-                
+                <DropdownShimmer
+                  v-if="isZoneFilterLoading"
+                  :numDropdowns="3"
+                  :componentHeight="'auto'"
+                  class="mb-4"
+                />
+
                 <div v-if="!isZoneFilterLoading">
-                  
                   <zone-post-filter
-        
-                  :key="componentKey"
+                    :key="componentKey"
                     :props_regions="default_regions"
                     :props_divisions="default_divisions"
                     :props_sub_divisions="default_sub_divisions"
-                    :filterPostFunctionWithId="filterPostByZone"
+                    :filterPostFunctionWithId="filterPost"
                     :updateZone="updateZone"
                   >
                   </zone-post-filter>
                 </div>
 
-                    <DropdownShimmer v-if="isZoneFilterLoading" :numDropdowns="3" :componentHeight="'auto'"  />
+                <DropdownShimmer
+                  v-if="isZoneFilterLoading"
+                  :numDropdowns="3"
+                  :componentHeight="'auto'"
+                />
                 <div class="mt-3" v-if="!isZoneFilterLoading">
                   <sector-side
                     :sectorArray="this.sectors"
@@ -60,20 +67,15 @@
 
               <!-- Main Content Area: Posts -->
               <main class="col-span-5 lg:px-4 md:px-0" ref="mainContent">
-             
-                
-                <post-input  :profilePictureUrl="userProfileImage">
-                </post-input>
+                <post-input :profilePictureUrl="userProfileImage"> </post-input>
 
                 <div v-if="topLoading">
-                    <PostShimmerLoading  class="mb-4" />
+                  <PostShimmerLoading class="mb-4" />
                 </div>
-
-               
 
                 <div v-if="showPageRefresh && !filteringActive">
                   <RefreshError
-                  :imgSize="400"
+                    :imgSize="400"
                     :imageUrl="'assets\\images\\Community\\loading.svg'"
                     :errorMessage="errorMessage"
                     @refreshPage="reloadPosts()"
@@ -115,29 +117,25 @@
                           :props_regions="default_regions"
                           :props_divisions="default_divisions"
                           :props_sub_divisions="default_sub_divisions"
-                          :filterPostFunctionWithId="filterPostByZone"
+                          :filterPostFunctionWithId="filterPost"
                           :updateZone="updateZone"
                         >
                         </zone-post-filter>
                       </div>
                       <div :class="{ hidden: showMobileFilterSectorPost }" class="sm:hidden mt-2">
                         <sector-side
-                    
-
                           :sectorArray="this.sectors"
-                    :updatesectorChecked="updateSectorChecked"
-                    :sectorId="sectorId"
+                          :updatesectorChecked="updateSectorChecked"
+                          :sectorId="sectorId"
                         ></sector-side>
                       </div>
                     </div>
                   </div>
                 </div>
-<!-- 
+                <!-- 
                 <post-input  :profilePictureUrl="userProfileImage">
                 </post-input> -->
                 <div v-if="!topLoading" class="space-y-2">
-
-
                   <div v-if="hasNewPosts" class="">
                     <div class="my-10 flex flex-col justify-center items-center">
                       <p class="text-center">Load new post.</p>
@@ -198,17 +196,25 @@
                   <LoadingIndicator />
                 </div> -->
 
-                <AvatarPostShimmer v-if="isloadingEvent" :numShimmers="3" :componentHeight="'auto'" />
-                
+                <AvatarPostShimmer
+                  v-if="isloadingEvent"
+                  :numShimmers="3"
+                  :componentHeight="'auto'"
+                />
+
                 <div class="hidden lg:block">
                   <event-alert-box
                     v-if="shouldDisplayEventAlert"
                     :sectionTitle="$t('section_title_upcoming_event')"
                     :events="events"
-                    />
+                  />
                 </div>
 
-                <AvatarPostShimmer v-if="isloadingEvent" :numShimmers="3" :componentHeight="'auto'" />
+                <AvatarPostShimmer
+                  v-if="isloadingEvent"
+                  :numShimmers="3"
+                  :componentHeight="'auto'"
+                />
 
                 <div v-if="!isloadingEvent">
                   <div class="hidden lg:mt-3 lg:block">
@@ -234,14 +240,14 @@
                       :props_regions="default_regions"
                       :props_divisions="default_divisions"
                       :props_sub_divisions="default_sub_divisions"
-                      :filterPostFunctionWithId="filterPostByZone"
+                      :filterPostFunctionWithId="filterPost"
                       :updateZone="updateZone"
                     ></zone-post-filter>
 
                     <sector-side
-                    :sectorArray="this.sectors"
-                    :updatesectorChecked="updateSectorChecked"
-                    :sectorId="sectorId"
+                      :sectorArray="this.sectors"
+                      :updatesectorChecked="updateSectorChecked"
+                      :sectorId="sectorId"
                     ></sector-side>
                   </div>
                 </div>
@@ -275,34 +281,49 @@ import { getSpecificZones, getZones } from '@/services/zoneService'
 import PostShimmerLoading from '@/components/common/ShimmerLoading/PostShimmerLoading.vue'
 import DropdownShimmer from '@/components/common/ShimmerLoading/DropdownShimmer.vue'
 import AvatarPostShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue'
-import { checkAuthentication } from '@/utils/authUtils.js';
+import { checkAuthentication } from '@/utils/authUtils.js'
 
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
   name: 'Community',
+  props: ['propZoneId', 'propSectorId'],
 
   async created() {
-    this.isUserConnected = checkAuthentication();
+    this.isUserConnected = checkAuthentication()
+    const sectorStore = useSectorStore()
+    const propSectorArray = Array.from(this.propSectorId.split(',').map(Number))
+
+    // this.sectors = sectorStore.getAllSectors
+
+  // Assuming getAllSectors() returns an array and not a function property
+  const allSectors = sectorStore.getAllSectors; 
+  this.sectors = allSectors.map(sector => ({
+    ...sector,
+    check: propSectorArray.includes(sector.id)
+  }));
+  
 
     try {
-      const { zoneId, sectorId } = this.$route.params;
-      const sectorIdArray = this.parseSectorIds(sectorId);
+      // const { zoneId, sectorId} = this.$route.params;
+      console.log('this is zoneId ' + this.propZoneId)
+      this.sectorId = this.parseSectorIds(this.propSectorId)
+      this.zoneId = this.propZoneId
 
-      if (zoneId) {
-        this.topLoading = true;
-        await this.loadData(zoneId, sectorIdArray);
+      if (this.propZoneId != 1) {
+        this.topLoading = true
+        await this.loadData(this.zoneId, this.sectorId)
       } else {
-        await this.fetchResources();
+        await this.fetchResources()
       }
     } catch (error) {
-      console.error('Initialization failed:', error);
-      this.showPageRefresh = true;
+      console.error('Initialization failed:', error)
+      this.showPageRefresh = true
     } finally {
-      this.topLoading = false;
+      this.topLoading = false
     }
 
-    this.updateCheckboxState();
-},
+    this.updateCheckboxState()
+  },
 
   watch: {
     async paramZone(newValue) {
@@ -314,13 +335,13 @@ export default {
         ;(this.default_regions = [
           {
             id: 1,
-            name:this.$t('cameroon')
+            name: this.$t('cameroon')
           }
         ]),
           (this.default_divisions = [
             {
               id: 0,
-              name:this.$t('choose_your_division')
+              name: this.$t('choose_your_division')
             }
           ]),
           (this.default_sub_divisions = [
@@ -331,7 +352,6 @@ export default {
           ])
 
         if (newValue.level_id == 4) {
-         
           const rest = await getZones(null, newValue.parent_id)
           const currentZone = {
             id: newValue.id,
@@ -350,12 +370,12 @@ export default {
 
           this.default_sub_divisions = sub_division
           this.default_divisions = [this.default_divisions[0]]
-          this.default_divisions = this.default_divisions.concat( division)
+          this.default_divisions = this.default_divisions.concat(division)
           this.default_regions = [this.default_regions[0]]
-          this.default_regions = this.default_regions.concat( region)
+          this.default_regions = this.default_regions.concat(region)
           this.zoneName = currentZone.name
           this.componentKey++
-          
+
           this.isZoneFilterLoading = false
         }
 
@@ -367,14 +387,14 @@ export default {
           }
           division = [currentZone, ...rest]
           console.log('Divisions updated:', division)
-          
+
           const spec_region = await getSpecificZones(newValue.parent_id)
           region = await getZones(null, spec_region.parent_id)
           console.log('region updated:', region)
 
           this.default_divisions = division
           this.default_regions = [this.default_regions[0]]
-          this.default_regions = this.default_regions.concat( region)
+          this.default_regions = this.default_regions.concat(region)
           this.zoneName = currentZone.name
           this.componentKey++
           this.isZoneFilterLoading = false
@@ -390,8 +410,6 @@ export default {
           this.zoneName = currentZone.name
           this.componentKey++
           this.isZoneFilterLoading = false
-
-
         }
       }
     }
@@ -404,13 +422,12 @@ export default {
   },
 
   data() {
-    const sectorStore = useSectorStore()
     const authStore = useAuthStore()
     const postStore = usePostStore()
     const modalStore = useModalStore()
 
     return {
-      zoneName: authStore.user?.zone.name == null ? "Welcome to residat" : authStore.user.zone.name,
+      zoneName: authStore.user?.zone.name == null ? 'Welcome to residat' : authStore.user.zone.name,
       paramZone: {},
       isZoneFilterLoading: false,
       profilePictureUrl: authStore.user?.avatar,
@@ -431,7 +448,7 @@ export default {
       isloadingEvent: false,
       topLoading: false,
       bottomLoading: false,
-      sectors: sectorStore.getAllSectors,
+      sectors: [],
       sectorId: [],
       zoneId: 1,
       loadingPosts: false,
@@ -482,43 +499,43 @@ export default {
 
   methods: {
     parseSectorIds(sectorIdString) {
-    return sectorIdString ? JSON.parse(`[${sectorIdString}]`).map(Number) : [];
-  },
+      return sectorIdString ? JSON.parse(`[${sectorIdString}]`).map(Number) : []
+    },
 
-  async loadData(zoneId, sectorIdArray) {
-    try {
-      [this.posts, this.paramZone] = await Promise.all([
-        getFilterPosts(zoneId, sectorIdArray),
-        getSpecificZones(zoneId)
-      ]);
-      if (this.posts.length < 1) this.showPageRefresh = true;
-    } catch (error) {
-      console.error('Error loading data:', error);
-      this.showPageRefresh = true;
-    } finally {
-      this.isZoneFilterLoading = false;
-    }
-  },
+    async loadData(zoneId, sectorIdArray) {
+      try {
+        ;[this.posts, this.paramZone] = await Promise.all([
+          getFilterPosts(zoneId, sectorIdArray),
+          getSpecificZones(zoneId)
+        ])
+        if (this.posts.length < 1) this.showPageRefresh = true
+      } catch (error) {
+        console.error('Error loading data:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.isZoneFilterLoading = false
+      }
+    },
 
-  updateCheckboxState() {
-    const urlSectorIds = this.parseSectorIds(this.$route.params.sectorId);
-    const storedSectorIds = this.getStoredSectorIds();
-    const initialSectorIds = urlSectorIds.length > 0 ? urlSectorIds : storedSectorIds;
-    
-    this.checked = initialSectorIds.includes(this.list?.id);
-    
-    if (!urlSectorIds.length) localStorage.removeItem('sectorId');
-  },
+    updateCheckboxState() {
+      const urlSectorIds = this.parseSectorIds(this.$route.params.sectorId)
+      const storedSectorIds = this.getStoredSectorIds()
+      const initialSectorIds = urlSectorIds.length > 0 ? urlSectorIds : storedSectorIds
 
-  getStoredSectorIds() {
-    try {
-      return JSON.parse(localStorage.getItem('sectorId') || '[]');
-    } catch (error) {
-      console.error('Failed to parse stored sector IDs:', error);
-      return [];
-    }
-  },
-    
+      this.checked = initialSectorIds.includes(this.list?.id)
+
+      if (!urlSectorIds.length) localStorage.removeItem('sectorId')
+    },
+
+    getStoredSectorIds() {
+      try {
+        return JSON.parse(localStorage.getItem('sectorId') || '[]')
+      } catch (error) {
+        console.error('Failed to parse stored sector IDs:', error)
+        return []
+      }
+    },
+
     async updateSubDivisions(zone) {
       let rest = await getZones(null, zone.parent_id)
       let currentZone = {
@@ -553,33 +570,34 @@ export default {
       }
       this.showMobileFilterSectorPost = !this.showMobileFilterSectorPost
     },
-    updateSectorChecked({ list, checked }) {
 
+    updateSectorChecked({ list, checked }) {
       if (!checkAuthentication()) {
         return
       }
 
-
       this.showPageRefresh = false
-      console.log(list.id)
+      console.log('this is the list ' + list.id)
 
       if (!list?.id) {
         console.error("Invalid 'list' object or missing 'id'")
         return
       }
 
-      const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
+      const urlSectorIds = this.propSectorId
+        ? Array.from(this.propSectorId.split(',').map(Number))
+        : []
 
-      if(urlSectorIds.length == 0){
+      if (urlSectorIds.length == 0) {
         localStorage.removeItem('sectorId')
       }
 
       this.sectorId = checked
         ? [...urlSectorIds, list.id]
-        : this.sectorId.filter((id) => id !== list.id);
+        : this.sectorId.filter((id) => id !== list.id)
 
       // console.log(this.sectorId)
-      this.filterPostBySectors()
+      this.filterPost()
     },
 
     async checkNewPosts() {
@@ -587,7 +605,7 @@ export default {
         return
       }
       try {
-        const latestPosts = await getPosts(0, 10, this.authStore?.user.token,this.isUserConnected)
+        const latestPosts = await getPosts(0, 10, this.authStore?.user.token, this.isUserConnected)
         this.hasNewPosts = latestPosts.some(
           (post) => !this.posts.find((existingPost) => existingPost.id === post.id)
         )
@@ -603,84 +621,12 @@ export default {
       this.zoneId = zone.id
     },
 
-    async filterPostBySectors() {
-
-      try {
-        this.topLoading = true
-        let id = this.$route.params.zoneId;
-        this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
-        this.$router.push(`/community/${id}/${this.sectorId}`);
-      } catch (error) {
-        console.error('Failed to load posts:', error)
-        this.showPageRefresh = true
-      } finally {
-        this.topLoading = false
-        this.filteringActive = true
-        if (this.posts.length == 0) {
-          this.showPageRefresh = true
-          this.errorMessage =
-            'No post found under this sector , chose another sector or uncheck sector'
-        } else {
-          this.showPageRefresh = false
-        }
-      
-      }
-
-    },
-
-    async filterPostByZone(id) {
-      console.log(id)
-
-        this.zoneId = id || 1
-        this.filteringActive = true
-        this.hasFetchAllPost = false
-  
-        try {
-          this.topLoading = true
-  
-          this.posts = await getFilterPosts(id != 0 ? id : null, this.sectorId, null, null)
-          this.$router.push(`/community/${id}`);
-  
-        } catch (error) {
-          console.error('Failed to load posts:', error)
-          this.showPageRefresh = true
-        } finally {
-          this.topLoading = false
-          this.filteringActive = false
-          if (this.posts.length === 0) {
-            this.showPageRefresh = true
-            console.log("this is howpager" + this.showPageRefresh)
-            console.log('No post found under this location , chose another location ')
-            // this.errorMessage = 'No post found under this location , chose another location '
-          } else {
-            this.showPageRefresh = false
-          }
-        
-      }
-
-    },
-
-    async reloadPosts() {
-      this.$router.push({ name: 'community' }).then(() => {
-    window.location.reload();
-  });
-    },
-
-    async fetchResources() {
-      this.topLoading = true
-      this.isloadingEvent = true
-      this.isZoneFilterLoading = true
-
-      await this.fetchPosts()
-      await this.fetchEvent()
-    },
-
     async fetchPosts() {
       this.hasNewPosts = false
 
       try {
-        this.posts = await getPosts(0, 10, this.authStore.user?.token ,this.isUserConnected)
-        this.recentPosts = await getPosts(0, 10, this.authStore.user?.token,this.isUserConnected)
+        this.posts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
+        this.recentPosts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
       } catch (error) {
         console.error('Failed to load posts:', error)
         this.showPageRefresh = true
@@ -695,9 +641,130 @@ export default {
       }
     },
 
+    async filterPost() {
+      try {
+        this.topLoading = true
+        // this.zoneId = this.propZoneId || 1
+        this.filteringActive = true
+        this.hasFetchAllPost = false
+
+        // let id = this.$route.params.zoneId;
+        // this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
+
+        this.$router.push({
+          name: 'community',
+          params: {
+            propZoneId: this.zoneId,
+            propSectorId: this.sectorId.join(',')
+          }
+        })
+      } catch (error) {
+        console.error('Failed to load posts:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+        this.filteringActive = true
+        if (this.posts.length == 0) {
+          this.showPageRefresh = true
+          this.errorMessage =
+            'No post found under this sector , chose another sector or uncheck sector'
+        } else {
+          this.showPageRefresh = false
+        }
+      }
+    },
+    // async filterPostBySectors() {
+
+    //   try {
+    //     this.topLoading = true
+    //     this.zoneId = id || 1
+    //     this.filteringActive = true
+    //     this.hasFetchAllPost = false
+
+    //     let id = this.$route.params.zoneId;
+    //     this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
+
+    //     this.$router.push({
+    //         name: 'community',
+    //         params: {
+    //           propZoneId: id,
+    //           propSectorId: this.sectorId
+    //         }
+    //       })
+    //   } catch (error) {
+    //     console.error('Failed to load posts:', error)
+    //     this.showPageRefresh = true
+    //   } finally {
+    //     this.topLoading = false
+    //     this.filteringActive = true
+    //     if (this.posts.length == 0) {
+    //       this.showPageRefresh = true
+    //       this.errorMessage =
+    //         'No post found under this sector , chose another sector or uncheck sector'
+    //     } else {
+    //       this.showPageRefresh = false
+    //     }
+
+    //   }
+
+    // },
+
+    // async filterPostByZone(id) {
+    //   console.log(id)
+
+    //     this.zoneId = id || 1
+    //     this.filteringActive = true
+    //     this.hasFetchAllPost = false
+
+    //     try {
+    //       this.topLoading = true
+
+    //       this.posts = await getFilterPosts(id != 0 ? id : null, this.sectorId, null, null)
+    //       this.$router.push({
+    //         name: 'community',
+    //         params: {
+    //           propZoneId: id,
+    //           propSectorId: this.sectorId
+    //         }
+    //       })
+
+    //     } catch (error) {
+    //       console.error('Failed to load posts:', error)
+    //       this.showPageRefresh = true
+    //     } finally {
+    //       this.topLoading = false
+    //       this.filteringActive = false
+    //       if (this.posts.length === 0) {
+    //         this.showPageRefresh = true
+    //         console.log("this is howpager" + this.showPageRefresh)
+    //         console.log('No post found under this location , chose another location ')
+    //         // this.errorMessage = 'No post found under this location , chose another location '
+    //       } else {
+    //         this.showPageRefresh = false
+    //       }
+
+    //   }
+
+    // },
+
+    async reloadPosts() {
+      this.$router.push({ name: 'community' }).then(() => {
+        window.location.reload()
+      })
+    },
+
+    async fetchResources() {
+      this.topLoading = true
+      this.isloadingEvent = true
+      this.isZoneFilterLoading = true
+
+      await this.fetchPosts()
+      await this.fetchEvent()
+    },
+
     async fetchEvent() {
       try {
-        this.events = await getEvents(0, 10, this.authStore.user?.token,this.isUserConnected)
+        this.events = await getEvents(0, 10, this.authStore.user?.token, this.isUserConnected)
       } catch (error) {
         console.error('Failed to load events:', error)
       } finally {
@@ -717,15 +784,15 @@ export default {
         if (this.filteringActive) {
           const nextPage = this.page + 1
           const size = 10
-          nextPagePosts = await getFilterPosts(zoneId, sectorId, size, nextPage);
+          nextPagePosts = await getFilterPosts(zoneId, sectorId, size, nextPage)
         } else {
           const nextPage = this.page + 1
           // console.log('this is the user sate '+ this.isUserConnected)
-          nextPagePosts = await getPosts(nextPage, this.size,null,this.isUserConnected)
+          nextPagePosts = await getPosts(nextPage, this.size, null, this.isUserConnected)
         }
 
         if (nextPagePosts.length === 0) {
-          this.bottomLoading = false 
+          this.bottomLoading = false
           this.hasFetchAllPost = true
           return
         }
@@ -760,8 +827,8 @@ export default {
         console.log(this.zoneId)
         console.log(this.$route.params.sectorId)
         const nextPage = this.page + 1
-          const size = 10
-        this.loadMorePosts(this.zoneId, this.$route.params.sectorId, size, nextPage); // Assuming sectorId is in route params
+        const size = 10
+        this.loadMorePosts(this.zoneId, this.$route.params.sectorId, size, nextPage) // Assuming sectorId is in route params
       }
     }
   },

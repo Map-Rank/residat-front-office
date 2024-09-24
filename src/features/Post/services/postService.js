@@ -153,6 +153,29 @@ const getPosts = async (page, size, token,isConnected = true) => {
   }
 }
 
+const getFilterPosts = async (zoneId, sectorId, size, page,isConnected = true) => {
+  let defaultSize = 10
+  let defaultPage = 0
+  let url;
+
+  size = size || defaultSize
+  page = page || defaultPage
+
+  isConnected ? url = API_ENDPOINTS.getPosts : url = API_ENDPOINTS.getPostsGuest
+
+  let params = new URLSearchParams({
+    size: size.toString(),
+    page: page.toString(),
+    zone_id: zoneId,
+  })
+
+  if (sectorId && sectorId.length > 0) {
+    params.append('sectors', JSON.stringify(sectorId));
+  }
+
+  return await filterPost(params,url)
+}
+
 const getSpecificPost = async (id) => {
 
 
@@ -176,7 +199,7 @@ const getSpecificPost = async (id) => {
 }
 
 
-const filterPost = async (params) => {
+const filterPost = async (params,url) => {
 
   if (!checkAuthentication()) {
     return
@@ -185,7 +208,7 @@ const filterPost = async (params) => {
   const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   
   try {
-    const response = await makeApiGetCall(`${API_ENDPOINTS.post}?${params.toString()}`, localToken)
+    const response = await makeApiGetCall(`${url}?${params.toString()}`, localToken)
     return response.data.data
   } catch (error) {
     console.error('Error fetching posts:', error)
@@ -193,25 +216,7 @@ const filterPost = async (params) => {
   }
 }
 
-const getFilterPosts = async (zoneId, sectorId, size, page) => {
-  let defaultSize = 10
-  let defaultPage = 0
 
-  size = size || defaultSize
-  page = page || defaultPage
-
-  let params = new URLSearchParams({
-    size: size.toString(),
-    page: page.toString(),
-    zone_id: zoneId,
-  })
-
-  if (sectorId && sectorId.length > 0) {
-    params.append('sectors', JSON.stringify(sectorId));
-  }
-
-  return await filterPost(params)
-}
 
 const getUserPosts = async () => {
   const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)

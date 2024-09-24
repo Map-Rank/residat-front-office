@@ -3,6 +3,7 @@
     <input
       :name="list.name"
       type="checkbox"
+      :value="list.check"
       :id="list.name"
       class="w-6 h-6 rounded text-primary-normal focus:ring-primary-light focus:ring form-checkbox"
       v-model="checked"
@@ -32,6 +33,10 @@ export default {
     }
   },
   created() {
+
+
+
+    
     const urlSectorIds = this.$route.params.sectorId
       ? Array.from(this.$route.params.sectorId.split(',').map(Number))
       : []
