@@ -219,7 +219,7 @@ const router = createRouter({
       // meta: { requiresAuth: true }
       props: (route) => ({
         propZoneId: route.params.propZoneId || 1,
-        propSectorId: route.params.propSectorId || [] ,
+        propSectorId: route.params.propSectorId || '' ,
   
       })
     },

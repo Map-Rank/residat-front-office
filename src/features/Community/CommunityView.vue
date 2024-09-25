@@ -152,7 +152,6 @@
                   <PostComponent
                     v-for="post in posts"
                     :key="post.id"
-                    @postFetch="fetchPosts"
                     :postId="post.id"
                     :username="`${post.creator[0]?.first_name} ${post.creator[0]?.last_name} `"
                     :postDate="post.humanize_date_creation"
@@ -219,14 +218,14 @@
                 <div v-if="!isloadingEvent">
                   <div class="hidden lg:mt-3 lg:block">
                     <recently-posted-side
-                      :recentPosts="recentPosts"
+                      :recentPosts="posts"
                       :maxPosts="3"
                     ></recently-posted-side>
                   </div>
 
                   <div class="block lg:hidden">
                     <recently-posted-side
-                      :recentPosts="recentPosts"
+                      :recentPosts="posts"
                       :maxPosts="2"
                     ></recently-posted-side>
                   </div>
@@ -500,19 +499,23 @@ if (typeof this.propSectorId === 'string') {
     try {
       // const { zoneId, sectorId} = this.$route.params;
       this.sectorId = this.parseSectorIds(this.propSectorId)
+
+      console.log('this is the lengh of sectors' + this.sectorId.length)
       
 
-      this.zoneId = this.propZoneId
+   this.zoneId = (this.propZoneId === null) ? 1 : this.propZoneId;
+   
       console.log('this is zoneId after assignment: ' + this.zoneId);
- 
+
+
       
-      if (this.propZoneId != 1) {
+      // if (this.propZoneId != 1) {
         this.topLoading = true
         console.log('this is zoneId after ' + this.zoneId)
         await this.loadData(this.zoneId, this.sectorId)
-      } else {
-        await this.fetchResources()
-      }
+      // } else {
+      //   // await this.fetchResources()
+      // }
     } catch (error) {
       console.error('Initialization failed:', error)
       this.showPageRefresh = true
@@ -530,10 +533,6 @@ if (typeof this.propSectorId === 'string') {
         // this.zoneId = this.propZoneId || 1
         this.filteringActive = true
         this.hasFetchAllPost = false
-
-        // let id = this.$route.params.zoneId;
-        // this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
-
 
         console.log('new zone navigation')
         this.$router.push({
@@ -607,24 +606,28 @@ if (typeof this.propSectorId === 'string') {
       return sectorIdString ? JSON.parse(`[${sectorIdString}]`).map(Number) : []
     },
 
-    async loadData(zoneId, sectorIdArray) {
-      let zone
-      try {
-        ;[this.posts, this.paramZone] = await Promise.all([
-          getFilterPosts(zoneId, sectorIdArray),
-          // getSpecificZones(zoneId)
-           zone = await  getSpecificZones(this.zoneId),
-               
-      this.updateZone(zone)
-        ])
-        if (this.posts.length < 1) this.showPageRefresh = true
-      } catch (error) {
-        console.error('Error loading data:', error)
-        this.showPageRefresh = true
-      } finally {
-        this.isZoneFilterLoading = false
-      }
-    },
+async loadData(zoneId, sectorIdArray) {
+
+  this.topLoading = true
+      this.isloadingEvent = true
+      this.isZoneFilterLoading = true
+
+
+  try {
+    this.posts = await getFilterPosts(zoneId, sectorIdArray);
+    // this.recentPosts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
+    await this.fetchEvent()
+    let zone = await getSpecificZones(this.zoneId);
+    this.updateZone(zone);
+    if (this.posts.length < 1) this.showPageRefresh = true;
+  } catch (error) {
+    console.error('Error loading data:', error);
+    this.showPageRefresh = true;
+  } finally {
+    this.isZoneFilterLoading = false;
+  }
+},
+
 
     updateCheckboxState() {
       const urlSectorIds = this.parseSectorIds(this.$route.params.sectorId)
@@ -723,79 +726,7 @@ if (typeof this.propSectorId === 'string') {
     },
 
 
-    // async filterPostBySectors() {
 
-    //   try {
-    //     this.topLoading = true
-    //     this.zoneId = id || 1
-    //     this.filteringActive = true
-    //     this.hasFetchAllPost = false
-
-    //     let id = this.$route.params.zoneId;
-    //     this.posts = await getFilterPosts(this.zoneId, this.sectorId.length ? this.sectorId : null )
-
-    //     this.$router.push({
-    //         name: 'community',
-    //         params: {
-    //           propZoneId: id,
-    //           propSectorId: this.sectorId
-    //         }
-    //       })
-    //   } catch (error) {
-    //     console.error('Failed to load posts:', error)
-    //     this.showPageRefresh = true
-    //   } finally {
-    //     this.topLoading = false
-    //     this.filteringActive = true
-    //     if (this.posts.length == 0) {
-    //       this.showPageRefresh = true
-    //       this.errorMessage =
-    //         'No post found under this sector , chose another sector or uncheck sector'
-    //     } else {
-    //       this.showPageRefresh = false
-    //     }
-
-    //   }
-
-    // },
-
-    // async filterPostByZone(id) {
-    //   console.log(id)
-
-    //     this.zoneId = id || 1
-    //     this.filteringActive = true
-    //     this.hasFetchAllPost = false
-
-    //     try {
-    //       this.topLoading = true
-
-    //       this.posts = await getFilterPosts(id != 0 ? id : null, this.sectorId, null, null)
-    //       this.$router.push({
-    //         name: 'community',
-    //         params: {
-    //           propZoneId: id,
-    //           propSectorId: this.sectorId
-    //         }
-    //       })
-
-    //     } catch (error) {
-    //       console.error('Failed to load posts:', error)
-    //       this.showPageRefresh = true
-    //     } finally {
-    //       this.topLoading = false
-    //       this.filteringActive = false
-    //       if (this.posts.length === 0) {
-    //         this.showPageRefresh = true
-    //         console.log("this is howpager" + this.showPageRefresh)
-    //         console.log('No post found under this location , chose another location ')
-    //         // this.errorMessage = 'No post found under this location , chose another location '
-    //       } else {
-    //         this.showPageRefresh = false
-    //       }
-
-    //   }
-
-    // },
 
     async reloadPosts() {
       this.$router.push({ name: 'community' }).then(() => {
@@ -803,14 +734,7 @@ if (typeof this.propSectorId === 'string') {
       })
     },
 
-    async fetchResources() {
-      this.topLoading = true
-      this.isloadingEvent = true
-      this.isZoneFilterLoading = true
-
-      await this.fetchPosts()
-      await this.fetchEvent()
-    },
+ 
 
     async fetchEvent() {
       try {
@@ -823,31 +747,28 @@ if (typeof this.propSectorId === 'string') {
       }
     },
 
-    async loadMorePosts(zoneId, sectorId) {
+    async loadMorePosts() {
       if (this.loadingPosts || this.showPageRefresh) return
-      let nextPagePosts = []
+      // let nextPagePosts = []
 
       this.loadingPosts = true
       this.bottomLoading = true
       this.postScrollLocked = true
       try {
-        if (this.filteringActive) {
-          const nextPage = this.page + 1
+     const nextPage = this.page + 1
           const size = 10
-          nextPagePosts = await getFilterPosts(zoneId, sectorId, size, nextPage)
-        } else {
-          const nextPage = this.page + 1
-          // console.log('this is the user sate '+ this.isUserConnected)
-          nextPagePosts = await getPosts(nextPage, this.size, null, this.isUserConnected)
-        }
+        this.nextPagePosts = await getFilterPosts(this.zoneId, this.sectorId,size,nextPage,this.isUserConnected);
 
-        if (nextPagePosts.length === 0) {
+        if (this.nextPagePosts.length === 0) {
+          console.log('this is the lenght of new post '+this.nextPagePosts.length )
           this.bottomLoading = false
           this.hasFetchAllPost = true
           return
         }
-
-        this.posts.push(...nextPagePosts)
+        
+        this.posts.push(...this.nextPagePosts)
+        console.log('this is the new post lenght '+this.posts.length )
+        this.hasFetchAllPost = false
         this.page++
       } catch (error) {
         console.error('Failed to load more posts:', error)
@@ -874,11 +795,7 @@ if (typeof this.propSectorId === 'string') {
       // When close to the bottom, attempt to load more posts.
       const nearBottom = scrollHeight - scrollTop <= clientHeight + 50 // Adjust threshold as necessary.
       if (nearBottom && !this.loadingPosts) {
-        console.log(this.zoneId)
-        console.log(this.$route.params.sectorId)
-        const nextPage = this.page + 1
-        const size = 10
-        this.loadMorePosts(this.zoneId, this.$route.params.sectorId, size, nextPage) // Assuming sectorId is in route params
+        this.loadMorePosts() // Assuming sectorId is in route params
       }
     }
   },
