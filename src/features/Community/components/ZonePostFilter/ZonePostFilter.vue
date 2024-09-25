@@ -58,7 +58,7 @@ import { checkAuthentication } from '@/utils/authUtils.js'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
 
-  name: 'SectorSide',
+  name: 'ZonePostFilter',
 
   async created() {
     try {
