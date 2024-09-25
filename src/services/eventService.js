@@ -116,8 +116,6 @@ const getEvents = async (page, size, token,isConnected = true) => {
 
   try {
     let url;
-
-    console.log('this is the usre state'+ isConnected)
     isConnected ? url = API_ENDPOINTS.getEvents : url = API_ENDPOINTS.getEventsGuest
 
 

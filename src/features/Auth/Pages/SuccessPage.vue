@@ -3,7 +3,7 @@
       <div class="text-center">
         <!-- Loader Bar -->
         <div class="relative w-full h-2 bg-gray-300">
-          <div class="absolute top-0 left-0 h-2 bg-secondary-normal" :style="{ width: loaderWidth }"></div>
+          <div class="absolute top-0 left-0 h-2 bg-secondary-normal" :style="{ width: loaderWidth } "></div>
         </div>
         <img src="/assets/images/AuthView/success.svg" alt="Success" class="mx-auto min-w-40 h-[150px] mt-6">
         <h1 class="text-2xl font-semibold text-secondary-normal mt-6">Submission Successful!</h1>
