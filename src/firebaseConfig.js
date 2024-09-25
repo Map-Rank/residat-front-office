@@ -24,7 +24,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
-navigator.serviceWorker.register('/public/firebase-messaging-sw.js')
+navigator.serviceWorker.register('/firebase-messaging-sw.js')
   .then((registration) => {
     // Use the service workers directly on the messaging instance
     messaging.swRegistration = registration;

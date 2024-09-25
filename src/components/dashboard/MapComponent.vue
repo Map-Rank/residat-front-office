@@ -3,38 +3,42 @@
 </template>
 
 <script>
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import L from 'leaflet';
 
 export default {
   name: 'MapComponent',
 
-  // Accept latitude, longitude, and zoom level as props
   props: {
     latitude: {
       type: String,
-      // default: 7.3697, // Default value
+      required: true,
     },
     longitude: {
       type: String,
-      // default: 12.3547, // Default value
+      required: true,
     },
     zoomIndex: {
       type: String,
-      // default: '6', // Default zoom level
+      required: true,
     },
   },
 
   setup(props) {
-    onMounted(async () => {
-      // Use props to set the view for the map
+    let map;
 
-      console.log()
-      const map = L.map('map').setView([props.latitude, props.longitude], props.zoomIndex);
+    // Function to initialize the map
+    const initializeMap = () => {
+      map = L.map('map').setView([props.latitude, props.longitude], props.zoomIndex);
 
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
+    };
+
+    onMounted(async () => {
+      // Initialize the map on component mount
+      initializeMap();
 
       // Fetch and display the GeoJSON and SVG layers
       try {
@@ -64,24 +68,40 @@ export default {
         const svgDocument = parser.parseFromString(svgText, 'image/svg+xml');
         const svgElement = svgDocument.querySelector('svg');
 
-        svgElement.querySelectorAll('[data-name][data-id]').forEach((section) => {
-          section.addEventListener('click', () => {
-            const name = section.getAttribute('data-name');
-            const id = section.getAttribute('data-id');
-            console.log(name);
-            alert(`Vous avez cliqué sur la région: ${name} avec l'ID: ${id}`);
-          });
-        });
+        // Uncomment the following lines if you want to handle click events on the SVG
+        // svgElement.querySelectorAll('[data-name][data-id]').forEach((section) => {
+        //   section.addEventListener('click', () => {
+        //     const name = section.getAttribute('data-name');
+        //     const id = section.getAttribute('data-id');
+        //     console.log(name);
+        //     alert(`Vous avez cliqué sur la région: ${name} avec l'ID: ${id}`);
+        //   });
+        // });
 
-        L.svgOverlay(svgElement, bounds).addTo(map);
+        //L.svgOverlay(svgElement, bounds).addTo(map);
       } catch (error) {
         console.error('Erreur lors du chargement du GeoJSON :', error);
       }
     });
+
+    // Watch for changes in latitude, longitude, or zoomIndex props and update the map accordingly
+    watch(
+      [() => props.latitude, () => props.longitude, () => props.zoomIndex],
+      ([newLatitude, newLongitude, newZoomIndex]) => {
+        if (map) {
+          // Use flyTo for smooth camera movement
+          map.flyTo([newLatitude, newLongitude], newZoomIndex, {
+            animate: true,
+            duration: 2, // Duration of the animation in seconds
+          });
+        }
+      }
+    );
+
+    return {};
   },
 };
 </script>
-
 
 <style scoped>
   #map {
@@ -89,9 +109,8 @@ export default {
     height: 100%;
   }
 
-  /* Ajoute ce style si des problèmes de clic persistent */
   svg [data-name][data-id] {
-    pointer-events: auto; /* Assure que les événements de clic sont autorisés */
-    cursor: pointer; /* Change le curseur sur les sections cliquables */
+    pointer-events: auto;
+    cursor: pointer;
   }
 </style>

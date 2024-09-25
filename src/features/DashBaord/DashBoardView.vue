@@ -439,34 +439,45 @@ export default {
   },
 
   methods: {
-searchMap() {
+  searchMap() {
 
-  if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
+    if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
 
-    const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id);
-    
-    this.$router.push({
-      name: 'dashboard',
-      params: {
-        zoneId: this.zoneMapToSearch.id,
-        parentId: this.zoneMapToSearch.parent_id,
-        zoneName: this.zoneMapToSearch.name,
-        mapSize: this.defaultMapSize,
-        latitude: this.zoneMapToSearch.latitude,
-        longitude: this.zoneMapToSearch.longitude,
-        zoomIndex: zoomLevelIndex,
-      }
-    }).then(() => {
-      // Using window.location.reload() to reload the entire page
-      window.location.reload();
-    }).catch(err => {
-      console.error('Router push failed', err);
-    });
-    return;
-  }
+      const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id);
+      
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          zoneId: this.zoneMapToSearch.id,
+          parentId: this.zoneMapToSearch.parent_id,
+          zoneName: this.zoneMapToSearch.name,
+          mapSize: this.defaultMapSize,
+          latitude: this.zoneMapToSearch.latitude,
+          longitude: this.zoneMapToSearch.longitude,
+          zoomIndex: zoomLevelIndex,
+        }
+      }).then(() => {
+        // Using window.location.reload() to reload the entire page
+        this.updateMap({
+          latitude: this.zoneMapToSearch.latitude,
+          longitude: this.zoneMapToSearch.longitude,
+          zoomIndex: zoomLevelIndex,
+        });
+      }).catch(err => {
+        console.error('Router push failed', err);
+      });
+      return;
+    }
 
-  this.toast.error('Select a zone please')
-},
+    this.toast.error('Select a zone please')
+  },
+
+  updateMap({ latitude, longitude, zoomIndex }) {
+    // Cette méthode met à jour les propriétés de votre carte Leaflet
+    if (this.map) {
+      this.map.setView([latitude, longitude], zoomIndex); // Mise à jour des coordonnées et du niveau de zoom
+    }
+  },
 
 
     async selectZoneToSearch(id) {
@@ -476,6 +487,7 @@ searchMap() {
 
     updateZone(zone) {
       this.zoneMapToSearch = zone
+      this.searchMap();
       // console.log(zone)
     },
 
