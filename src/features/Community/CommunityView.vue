@@ -297,7 +297,7 @@ export default {
     if (newZoneId !== this.zoneId || newZoneId != 1 ) { // Only make API call if zoneId has changed
       this.zoneId = newZoneId;
       await this.initializeData(); 
-      await this.handleZoneChange(newZoneId);
+      // await this.handleZoneChange(newZoneId);
     }
   },
   
@@ -583,13 +583,21 @@ if (typeof this.propSectorId === 'string') {
     },
 
 
-    async filterPost() {
+    async filterPost(id) {
+
+      console.log('selected' + id);
+
+      if(this.propZoneId === id){
+        console.error("same zone selected  so no navigation")
+        return
+      }
+      
       try {
         this.topLoading = true
-        // this.zoneId = this.propZoneId || 1
+        this.zoneId = id
         this.filteringActive = true
         this.hasFetchAllPost = false
-
+        
         this.$router.push({
           name: 'community',
           params: {

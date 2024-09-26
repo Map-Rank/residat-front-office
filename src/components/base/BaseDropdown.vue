@@ -34,6 +34,7 @@ export default {
   },
   methods: {
     updateSelectedOption() {
+    
       this.selectedOptionId = this.selectedOption.id
       this.selectedOptionName = this.selectedOption.name
       this.selectedOptionValue = this.selectedOption.value

@@ -19,7 +19,7 @@
           <div class="w-full">
             <p class="label inline-block mb-1">{{ $t('choose_your_division') }}</p>
             <div v-if="isDivisionLoading" class="flex h-full justify-center">
-              <LoadingIndicator />
+              <LoadingIndicator />`
             </div>
             <BaseDropdown
               v-if="!isLoading && !isDivisionLoading"
@@ -90,11 +90,13 @@ export default {
   methods: {
     returnZoneId(id) {
 
+      
       if (!checkAuthentication()) {
         return
       }
-
+      
       if (id) {
+    
         this.filterPostFunctionWithId(id)
       }
     },
@@ -105,10 +107,10 @@ export default {
         return
       }
       // console.log('this is the zone ' + zone)
-      if (this.updateZone !== null && zone.id != null) {
-        this.updateZone(zone)
-        return
-      }
+      // if (this.updateZone !== null && zone.id != null) {
+      //   this.updateZone(zone)
+      //   return
+      // }
     },
 
     async getRegions() {
@@ -155,9 +157,7 @@ export default {
   },
   props: {
     filterPostFunctionWithId: {},
-    updateZone: {
-      type: Function
-    },
+
     title: String,
     props_regions: {
       type: Array,
