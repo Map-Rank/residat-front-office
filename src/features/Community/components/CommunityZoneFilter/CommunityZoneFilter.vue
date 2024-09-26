@@ -13,7 +13,6 @@
               v-if="!isLoading"
               :options="regions"
               @selectedOptionId="returnZoneId"
-              @input="returnZone"
             />
           </div>
           <div class="w-full">
@@ -25,7 +24,6 @@
               v-if="!isLoading && !isDivisionLoading"
               @selectedOptionId="returnZoneId"
               :options="divisions"
-              @input="returnZone"
             />
           </div>
           <div class="w-full">
@@ -36,7 +34,6 @@
             <BaseDropdown
               v-if="!isLoading && !isSubdivisionLoading"
               @selectedOptionId="returnZoneId"
-              @input="returnZone"
               :options="sub_divisions"
             />
           </div>
@@ -48,7 +45,6 @@
 
 <script>
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
-import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
 import SectionTitle from '@/components/base/SectionTitle.vue'
 import { checkAuthentication } from '@/utils/authUtils.js'
@@ -59,16 +55,6 @@ export default {
   name: 'CommunityZoneFilter',
 
   async created() {
-    // try {
-    //   this.isLoading = true
-    //   if (this.props_regions.length == 1) {
-    //     await this.getRegions()
-    //   }
-    // } catch (error) {
-    //   console.error('Failed to load :', error)
-    // } finally {
-    //   this.isLoading = false
-    // }
   },
 
   data() {
@@ -101,59 +87,6 @@ export default {
       }
     },
 
-    returnZone(zone) {
-
-      if (!checkAuthentication()) {
-        return
-      }
-      // console.log('this is the zone ' + zone)
-      // if (this.updateZone !== null && zone.id != null) {
-      //   this.updateZone(zone)
-      //   return
-      // }
-    },
-
-    async getRegions() {
-      try {
-        this.regions = this.regions.concat(await getZones(2, null))
-      } catch (error) {
-        console.log(error)
-      }
-    },
-
-    async getDivisions(parent_id) {
-      if (!checkAuthentication()) {
-        return
-      }
-
-      if (parent_id == 1) {
-        this.divisions = [this.divisions[0]]
-        return
-      }
-      try {
-        this.isDivisionLoading = true
-        //delete all element and allow the first only
-        this.divisions = this.divisions.length > 0 ? [this.divisions[0]] : []
-        this.divisions = this.divisions.concat(await getZones(null, parent_id))
-        this.sub_divisions = [this.sub_divisions[0]]
-      } catch (error) {
-        console.log(error)
-      } finally {
-        this.isDivisionLoading = false
-      }
-    },
-
-    async getSub_divisions(parent_id) {
-      this.isSubdivisionLoading = true
-      try {
-        this.sub_divisions = this.sub_divisions.length > 0 ? [this.sub_divisions[0]] : []
-        this.sub_divisions = this.sub_divisions.concat(await getZones(null, parent_id))
-      } catch (error) {
-        console.log(error)
-      } finally {
-        this.isSubdivisionLoading = false
-      }
-    }
   },
   props: {
     filterPostFunctionWithId: {},
@@ -172,7 +105,7 @@ export default {
       type: Array,
       default: () => [
         {
-          id: 0,
+          id: null,
           name: 'Choose a division'
         }
       ]
@@ -181,7 +114,7 @@ export default {
       type: Array,
       default: () => [
         {
-          id: 0,
+          id: null,
           name: 'Choose a sub-division'
         }
       ]

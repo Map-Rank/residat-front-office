@@ -373,13 +373,13 @@ export default {
       ],
       default_divisions: [
         {
-          id: 0,
+          id: null,
           name: 'Choose a division'
         }
       ],
       default_sub_divisions: [
         {
-          id: 0,
+          id: null,
           name: 'Choose a sub-division'
         }
       ]
@@ -453,9 +453,7 @@ export default {
           this.default_divisions = this.default_divisions.concat(division)
           this.default_regions = [this.default_regions[0]]
           this.default_regions = this.default_regions.concat(region)
-          this.zoneName = currentZone.name
           this.componentKey++
-
           this.isZoneFilterLoading = false
         }
 
@@ -490,7 +488,7 @@ export default {
           region = [currentZone, ...rest]
           await this.getDivisions(newZone.id)
           this.default_regions = region
-          this.zoneName = currentZone.name
+          // this.zoneName = currentZone.name
           this.componentKey++
           this.isZoneFilterLoading = false
         }
@@ -513,9 +511,7 @@ export default {
         return
       }
       try {
-        // this.isDivisionLoading = true
-        //delete all element and allow the first only
-        // this.default_divisions = this.default_divisions.length > 0 ? [this.default_divisions[0]] : []
+
         this.default_divisions = this.default_divisions.concat(await getZones(null, parent_id))
         console.log('this is the size of division ' + this.default_divisions.length)
         // this.sub_divisions = [this.sub_divisions[0]]
@@ -585,19 +581,19 @@ if (typeof this.propSectorId === 'string') {
 
     async filterPost(id) {
 
-      console.log('selected' + id);
-
+      
+      
       if(this.propZoneId === id){
         console.error("same zone selected  so no navigation")
         return
       }
+      this.zoneId = id
+      
+      
       
       try {
-        this.topLoading = true
-        this.zoneId = id
-        this.filteringActive = true
-        this.hasFetchAllPost = false
-        
+        console.log('selected' + id);
+
         this.$router.push({
           name: 'community',
           params: {
@@ -605,20 +601,13 @@ if (typeof this.propSectorId === 'string') {
             propSectorId: this.sectorId.join(',')
           }
         })
+        console.log('selected !!!! ' + id);
+        
       } catch (error) {
-        console.error('Failed to load posts:', error)
-        this.showPageRefresh = true
-      } finally {
-        this.topLoading = false
-        this.filteringActive = true
-        if (this.posts.length == 0) {
-          this.showPageRefresh = true
-          this.errorMessage =
-            'No post found under this sector , chose another sector or uncheck sector'
-        } else {
-          this.showPageRefresh = false
-        }
+        
+          console.error('Failed to navigate', error)
       }
+
     },
 
     
@@ -741,10 +730,15 @@ async loadData(zoneId, sectorIdArray) {
     },
 
     updateZone(zone) {
-      this.page = 0
-      this.zoneName = zone.name
-      this.bannerUrlImage = zone.banner
+
       this.zoneId = zone.id
+      if(zone.id != 1){
+        console.log('updating zone name!!!!')
+        this.page = 0
+        this.zoneName = zone.name
+        this.bannerUrlImage = zone.banner
+      }
+
     },
 
     async fetchPosts() {

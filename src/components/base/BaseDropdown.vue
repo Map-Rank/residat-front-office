@@ -40,7 +40,7 @@ export default {
       this.selectedOptionValue = this.selectedOption.value
       // this.emitSelectedOptionId()
 
-      if (this.selectedOption && this.selectedOption.id != 0) {
+      if (this.selectedOption && this.selectedOption.id !== null) {
         this.$emit('input', this.selectedOption)
         this.$emit('functionIdParams', this.selectedOption.id)
         this.$emit('selectedOptionId', this.selectedOption.id)
