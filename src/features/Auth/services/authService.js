@@ -91,18 +91,19 @@ const institutionalRequest = async (
     const response = await makeApiPostCall('/create/request', formData, null, true)
     if (response.data.data.verified === false) {
       handleEmailNotVerified()
+      return
     }
 
     const user = response.data.data.user
     const token = response.data.data.user.token
-    // console.log('register successfull !!!!')
+    console.log('register successfull !!!!')
 
-    // authStore.setUser(user)
-    // localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
-    // localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
-    // localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
-    // localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
-    // onSuccess()
+    authStore.setUser(user)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
+    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
+    onSuccess()
 
     return response
   } catch (error) {
