@@ -4,11 +4,9 @@ import { getFcmToken } from '@/firebaseConfig.js'
 // import convertToDate from '../../../utils/dateFormat.js'
 // import { getFcmToken } from '@/firebaseConfig';
 
-
 const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const registerUser = async (userData, authStore, onSuccess, onError) => {
-
   try {
     const formData = new FormData()
 
@@ -31,7 +29,6 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
       formData.append('fcm_token', fcmToken)
     }
 
-
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData, null, true)
     const user = response.data.data
     const token = response.data.data.token
@@ -43,23 +40,26 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
     localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
     onSuccess()
-    // }
 
     return response
   } catch (error) {
     if (error.response?.data?.errors) {
-      onError(error.response.data.errors);
+      onError(error.response.data.errors)
     } else {
-      console.log('No errors found in the response.' + error);
+      console.log('No errors found in the response.' + error)
     }
 
     throw error
   }
 }
 
-
-const institutionalRequest = async (institutionData, authStore, onSuccess, onError) => {
-
+const institutionalRequest = async (
+  institutionData,
+  authStore,
+  onSuccess,
+  onError,
+  handleEmailNotVerified
+) => {
   try {
     const formData = new FormData()
 
@@ -69,46 +69,47 @@ const institutionalRequest = async (institutionData, authStore, onSuccess, onErr
     formData.append('email', institutionData.email)
     formData.append('phone', institutionData.phone)
     formData.append('password', institutionData.password)
+    //@konnofuente  this is data that can be consider in future update
     // formData.append('gender', institutionData.gender)
     formData.append('zone_id', institutionData.zone)
     formData.append('profile_picture', institutionData.profile_picture)
     formData.append('language', institutionData.lang)
     formData.append('password', institutionData.password)
+
+    //@konnofuente  this is data that can be consider in future update
     // formData.append('official_document', institutionData.documents[0])
-
     // institutionData.documents.forEach((doc, index) => {
-
     //     formData.append(`official_document[${index}]`, doc, doc.name)
 
     // })
-    // const response = await makeApiPostCall('/create/request', formData, null, true)
-    // console.log('request send  successfull !!!!')
-    // onSuccess()
 
     const fcmToken = await getFcmToken()
     if (fcmToken) {
       formData.append('fcm_token', fcmToken)
     }
 
-
     const response = await makeApiPostCall('/create/request', formData, null, true)
+    if (response.data.data.verified === false) {
+      handleEmailNotVerified()
+    }
+
     const user = response.data.data.user
     const token = response.data.data.user.token
-    console.log('register successfull !!!!')
+    // console.log('register successfull !!!!')
 
-    authStore.setUser(user)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
-    localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
-    localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
-    onSuccess()
+    // authStore.setUser(user)
+    // localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
+    // localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, token)
+    // localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    // localStorage.setItem(LOCAL_STORAGE_KEYS.appLanguage, user.language)
+    // onSuccess()
 
     return response
   } catch (error) {
     if (error.response?.data?.errors) {
-      onError(error.response.data.errors);
+      onError(error.response.data.errors)
     } else {
-      console.log('No errors found in the response.' + error);
+      console.log('No errors found in the response.' + error)
     }
 
     throw error
@@ -243,22 +244,21 @@ const ForgotPassword = async (userData, onSuccess, onError) => {
   formData.append('email', userData.email)
 
   try {
-    const endpoint = `/forgot-password`;
-    const response = await makeApiPostCall(endpoint, formData, true);
+    const endpoint = `/forgot-password`
+    const response = await makeApiPostCall(endpoint, formData, true)
     // console.log(response.status == 200);
     // return response.data.data;
     if (response.status == 200) {
-      onSuccess();
+      onSuccess()
     }
   } catch (error) {
     onError(error.response.data.errors)
-    console.error('Error fetching user profile:', error);
-    throw error;
+    console.error('Error fetching user profile:', error)
+    throw error
   }
-};
+}
 
 const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) => {
-
   // console.log(userData.email);
   const formData = new FormData()
   formData.append('email', emailFromUrl)
@@ -267,18 +267,27 @@ const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) 
   formData.append('token', token)
 
   try {
-    const endpoint = `/reset-password`;
-    const response = await makeApiPostCall(endpoint, formData, true);
+    const endpoint = `/reset-password`
+    const response = await makeApiPostCall(endpoint, formData, true)
     // console.log(response.status == 200);
     // return response.data.data;
     if (response.status == 200) {
-      onSuccess();
+      onSuccess()
     }
   } catch (error) {
     onError(error.response.data.errors)
-    console.error('Error fetching user profile:', error);
-    throw error;
+    console.error('Error fetching user profile:', error)
+    throw error
   }
-};
+}
 
-export { registerUser, institutionalRequest, loginUser, logOut, UpdateUser, UpdatePassword, ForgotPassword, ResetPassword }
+export {
+  registerUser,
+  institutionalRequest,
+  loginUser,
+  logOut,
+  UpdateUser,
+  UpdatePassword,
+  ForgotPassword,
+  ResetPassword
+}
