@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import useAuthStore from '../stores/auth.js' 
+import useAuthStore from '../stores/auth.js'
 
 import CommunityView from '../features/Community/CommunityView.vue'
 import ChatRoomView from '../features/ChatRoom/ChatRoomView.vue'
@@ -31,7 +31,8 @@ import ForgotPassword from '../features/Auth/ForgotPassword.vue'
 import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
 import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
-import {GEOSPACIAL_DATA} from '@/constants/geospacialData.js'
+import AccountValidation from '../features/Auth/components/AccountValidation.vue'
+import { GEOSPACIAL_DATA } from '@/constants/geospacialData.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -39,9 +40,8 @@ const router = createRouter({
     {
       path: '/social-profile',
       name: 'social-profile',
-      component: SocialProfile,
+      component: SocialProfile
       // meta: { requiresAuth: true }
-      
     },
     {
       path: '/notification',
@@ -49,7 +49,7 @@ const router = createRouter({
       component: NotificationView,
       meta: { requiresAuth: true },
       redirect: (to) => {
-        return '/community';
+        return '/community'
       }
     },
 
@@ -60,6 +60,11 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
+      path: '/verification-account',
+      name: 'verification-account',
+      component: AccountValidation
+    },
+    {
       path: '/vulnerabilities',
       name: 'vulnerabilities',
       component: VulnerabilitiesForms,
@@ -68,41 +73,40 @@ const router = createRouter({
     {
       path: '/event',
       name: 'event',
-      component: EventView,
+      component: EventView
       // meta: { requiresAuth: true }
     },
     {
       path: '/setting',
       name: 'setting',
       component: SettingView,
-      redirect: '/account-preferences', 
+      redirect: '/account-preferences',
       children: [
         {
-          path: '/account-preferences', 
+          path: '/account-preferences',
           name: 'account-preferences',
-          component: AccountPreferences,
+          component: AccountPreferences
         },
         {
-          path: '/account-preferences/update-profile', 
+          path: '/account-preferences/update-profile',
           name: 'update-profile',
-          component: UpdateProfile,
+          component: UpdateProfile
         },
         {
-          path: '/account-preferences/change-langauge', 
+          path: '/account-preferences/change-langauge',
           name: 'change-langauge',
-          component: LangaugeModal,
+          component: LangaugeModal
         },
         {
-          path: '/security-setting', 
+          path: '/security-setting',
           name: 'security-setting',
-          component: SecuritySetting,
+          component: SecuritySetting
         },
         {
-          path: '/security-setting/update-password', 
+          path: '/security-setting/update-password',
           name: 'update-password',
-          component: UpdatePassword,
-        },
-        
+          component: UpdatePassword
+        }
       ],
       meta: { requiresAuth: true }
     },
@@ -116,61 +120,61 @@ const router = createRouter({
         parentId: route.params.parentId,
         zoneName: route.params.zoneName,
         mapSize: route.params.mapSize,
-        latitude: route.params.latitude || GEOSPACIAL_DATA.cameroonLatitude ,
+        latitude: route.params.latitude || GEOSPACIAL_DATA.cameroonLatitude,
         longitude: route.params.longitude || GEOSPACIAL_DATA.cameroonLongitude,
-        zoomIndex: route.params.zoomIndex || GEOSPACIAL_DATA.cameroonZoomIndex,
-      }),
+        zoomIndex: route.params.zoomIndex || GEOSPACIAL_DATA.cameroonZoomIndex
+      })
       // redirect: (to) => {
-        //   return '/community';
-        // }
-      },
+      //   return '/community';
+      // }
+    },
     {
       path: '/search-map/:searchId?',
       name: 'search-map',
       component: DashBoardView,
       // meta: { requiresAuth: true },
       props: (route) => ({
-        searchId: route.params.searchId || 1,
-      }),
+        searchId: route.params.searchId || 1
+      })
       // redirect: (to) => {
-        //   return '/community';
-        // }
-      },
-      
-      {
-        path: '/community',
-        name: 'community',
-        component: CommunityView,
-        // meta: { requiresAuth: true }
-      },
-      
-      {
-        path: '/user-events',
-        name: 'user-events',
-        component: UserEventView,
-        meta: { requiresAuth: true }
-      },
-      {
-        path: '/forgot-password',
-        name: 'forgot-password',
-        component: ForgotPassword,
-        meta: { requiresAuth: false }
-      },
+      //   return '/community';
+      // }
+    },
 
-      {
-        path: '/reset-password',
-        name: 'reset-password',
-        component: ResetPassword,
-        meta: { requiresAuth: false }
-      },
-      
-      {
-        path: '/create-post/:prePostContent?',
-        name: 'create-post',
-        component: CreatePost,
+    {
+      path: '/community',
+      name: 'community',
+      component: CommunityView
+      // meta: { requiresAuth: true }
+    },
+
+    {
+      path: '/user-events',
+      name: 'user-events',
+      component: UserEventView,
+      meta: { requiresAuth: true }
+    },
+    {
+      path: '/forgot-password',
+      name: 'forgot-password',
+      component: ForgotPassword,
+      meta: { requiresAuth: false }
+    },
+
+    {
+      path: '/reset-password',
+      name: 'reset-password',
+      component: ResetPassword,
+      meta: { requiresAuth: false }
+    },
+
+    {
+      path: '/create-post/:prePostContent?',
+      name: 'create-post',
+      component: CreatePost,
       meta: { requiresAuth: true },
       props: (route) => ({
-        prePostContent: route.params.prePostContent || '',
+        prePostContent: route.params.prePostContent || ''
       })
     },
     {
@@ -179,7 +183,7 @@ const router = createRouter({
       component: CreatePost,
       meta: { requiresAuth: true },
       props: (route) => ({
-        postId: route.params.postId || null,
+        postId: route.params.postId || null
       })
     },
 
@@ -190,8 +194,8 @@ const router = createRouter({
       // props: true,
       // meta: { requiresAuth: true },
       props: (route) => ({
-        zoneId: route.params.zoneId ,
-        query:route.params.query ,
+        zoneId: route.params.zoneId,
+        query: route.params.query
       })
     },
     {
@@ -200,17 +204,16 @@ const router = createRouter({
       component: CreateEvent,
       meta: { requiresAuth: true },
       props: (route) => ({
-        preEventTitle: route.params.preEventTitle || '',
+        preEventTitle: route.params.preEventTitle || ''
       })
     },
-    
+
     {
       path: '/report',
       name: 'report',
-      component: ReportView,
+      component: ReportView
       // meta: { requiresAuth: true }
     },
-   
 
     {
       path: '/community/:propZoneId?/:propSectorId?',
@@ -219,8 +222,7 @@ const router = createRouter({
       // meta: { requiresAuth: true }
       props: (route) => ({
         propZoneId: route.params.propZoneId || 1,
-        propSectorId: route.params.propSectorId || '' ,
-  
+        propSectorId: route.params.propSectorId || ''
       })
     },
     {
@@ -230,8 +232,7 @@ const router = createRouter({
       // meta: { requiresAuth: true },
       props: (route) => ({
         zoneId: route.params.zoneId || 1,
-        sectorId: route.params.sectorId || null ,
-
+        sectorId: route.params.sectorId || null
       })
     },
     {
@@ -240,21 +241,20 @@ const router = createRouter({
       component: AuthView,
       meta: { requiresAuth: false },
       props: (route) => ({
-        tab: route.params.tab ,
-
+        tab: route.params.tab
       })
     },
     {
       path: '/authentication/success-submition',
       name: 'success-submition',
       component: SuccessPage,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: false }
     },
     {
       path: '/',
       name: 'landing-page',
       component: LandingPage,
-      meta: { requiresAuth: false },
+      meta: { requiresAuth: false }
       // meta: { requiresAuth: true },
       // redirect: (to) => {
       //   return '/community';
@@ -274,17 +274,16 @@ const router = createRouter({
       path: '/chat-room',
       name: 'chat-room',
       component: ChatRoomView,
-      meta: { requiresAuth: true },
+      meta: { requiresAuth: true }
       // redirect: (to) => {
       //   return '/community';
       // }
     },
 
-
     {
       path: '/show-post/:id',
       name: 'show-post',
-      component: ShowPost,
+      component: ShowPost
       // meta: { requiresAuth: true }
     },
     {
@@ -293,7 +292,7 @@ const router = createRouter({
       component: EventDetails,
       // meta: { requiresAuth: true },
       props: (route) => ({
-        eventId: route.params.eventId ,
+        eventId: route.params.eventId
       })
     },
     {
@@ -305,12 +304,11 @@ const router = createRouter({
     {
       path: '/view-profile-user/:id',
       name: 'view-profile-user',
-      component: ViewProfileUser,
+      component: ViewProfileUser
       // meta: { requiresAuth: true }
     }
   ]
 })
-
 
 router.beforeEach((to, from, next) => {
   const authStore = useAuthStore()
@@ -318,24 +316,17 @@ router.beforeEach((to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth) && authStore.user == null) {
     next({ name: 'landing-page' })
     next({ name: 'landing-page' })
-  }
-   else if (to.name === 'landing-page' && authStore.user != null) {
-    next({ name: 'community' }) 
-  }
-   else if (to.name === 'authentication' && authStore.user != null) {
-    next({ name: 'community' }) 
-  }
-   else if (to.name === 'reset-password' && authStore.user != null) {
-    next({ name: 'community' }) 
-  }
-   else if (to.name === 'forgot-password' && authStore.user != null) {
-    next({ name: 'community' }) 
-  }
-  
-  else {
+  } else if (to.name === 'landing-page' && authStore.user != null) {
+    next({ name: 'community' })
+  } else if (to.name === 'authentication' && authStore.user != null) {
+    next({ name: 'community' })
+  } else if (to.name === 'reset-password' && authStore.user != null) {
+    next({ name: 'community' })
+  } else if (to.name === 'forgot-password' && authStore.user != null) {
+    next({ name: 'community' })
+  } else {
     next()
   }
 })
-
 
 export default router
