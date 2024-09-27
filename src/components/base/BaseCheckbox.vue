@@ -34,23 +34,9 @@ export default {
   },
   methods: {
     updateCheckedItems() {
-      console.log('This is the checkbox list id ' + this.list.id);
+      // console.log('This is the checkbox list id ' + this.list.id);
+      // console.log('Change event emitted', { list: this.list, checked: this.checked });
       this.$emit('change', { list: this.list, checked: this.checked });
-      console.log('Change event emitted', { list: this.list, checked: this.checked });
-
-      let storedSectorIds = localStorage.getItem('sectorId')
-        ? JSON.parse(localStorage.getItem('sectorId'))
-        : [];
-
-      if (this.checked) {
-        if (!storedSectorIds.includes(this.list.id)) {
-          storedSectorIds.push(this.list.id);
-        }
-      } else {
-        storedSectorIds = storedSectorIds.filter((id) => id !== this.list.id);
-      }
-
-      localStorage.setItem('sectorId', JSON.stringify(storedSectorIds));
     }
   }
 }

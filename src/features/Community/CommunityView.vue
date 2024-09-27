@@ -46,7 +46,6 @@
                     :props_divisions="default_divisions"
                     :props_sub_divisions="default_sub_divisions"
                     :filterPostFunctionWithId="filterPost"
-              
                   >
                   </CommunityZoneFilter>
                 </div>
@@ -60,7 +59,6 @@
                   <sector-side
                     :sectorArray="this.sectors"
                     :updatesectorChecked="updateSectorChecked"
-                  
                   ></sector-side>
                 </div>
               </aside>
@@ -70,7 +68,7 @@
                 <post-input :profilePictureUrl="userProfileImage"> </post-input>
 
                 <div v-if="topLoading">
-                  <PostShimmerLoading  />
+                  <PostShimmerLoading />
                 </div>
 
                 <div v-if="showPageRefresh && !filteringActive">
@@ -118,7 +116,6 @@
                           :props_divisions="default_divisions"
                           :props_sub_divisions="default_sub_divisions"
                           :filterPostFunctionWithId="filterPost"
-                   
                         >
                         </CommunityZoneFilter>
                       </div>
@@ -126,7 +123,6 @@
                         <sector-side
                           :sectorArray="this.sectors"
                           :updatesectorChecked="updateSectorChecked"
-                    
                         ></sector-side>
                       </div>
                     </div>
@@ -217,17 +213,11 @@
 
                 <div v-if="!isloadingEvent">
                   <div class="hidden lg:mt-3 lg:block">
-                    <recently-posted-side
-                      :recentPosts="posts"
-                      :maxPosts="3"
-                    ></recently-posted-side>
+                    <recently-posted-side :recentPosts="posts" :maxPosts="3"></recently-posted-side>
                   </div>
 
                   <div class="block lg:hidden">
-                    <recently-posted-side
-                      :recentPosts="posts"
-                      :maxPosts="2"
-                    ></recently-posted-side>
+                    <recently-posted-side :recentPosts="posts" :maxPosts="2"></recently-posted-side>
                   </div>
 
                   <div v-if="topLoading" class="flex h-full justify-center">
@@ -240,13 +230,11 @@
                       :props_divisions="default_divisions"
                       :props_sub_divisions="default_sub_divisions"
                       :filterPostFunctionWithId="filterPost"
-                   
                     ></CommunityZoneFilter>
 
                     <sector-side
                       :sectorArray="this.sectors"
                       :updatesectorChecked="updateSectorChecked"
-                   
                     ></sector-side>
                   </div>
                 </div>
@@ -288,29 +276,32 @@ export default {
   props: ['propZoneId', 'propSectorId'],
 
   async created() {
-    this.initializeData();
+    this.initializeData()
   },
 
   watch: {
-  async propZoneId(newZoneId) {
-    console.log('change in zoneId!!!!!')
-    if (newZoneId !== this.zoneId || newZoneId != 1 ) { // Only make API call if zoneId has changed
-      this.zoneId = newZoneId;
-      await this.initializeData(); 
-      // await this.handleZoneChange(newZoneId);
+    async propZoneId(newZoneId) {
+      console.log('change in zoneId!!!!!')
+      if (newZoneId !== this.zoneId || newZoneId != 1) {
+        // Only make API call if zoneId has changed
+        this.zoneId = newZoneId
+        await this.initializeData()
+        // await this.handleZoneChange(newZoneId);
+      }
+    },
+
+    async propSectorId(newSectorId) {
+      console.log('change in sectorId!!!!! new id ' + newSectorId)
+      const newParsedSectors = this.parseSectorIds(newSectorId)
+      if (JSON.stringify(newParsedSectors) !== JSON.stringify(this.sectorId)) {
+        // Only update if sectorId has changed
+        this.sectorId = newParsedSectors
+        console.log('change in sectorId!!!!! new array ' + this.sectorId)
+        await this.initializeData()
+      }
     }
   },
-  
-  async propSectorId(newSectorId) {
-    console.log('change in sectorId!!!!!')
-    const newParsedSectors = this.parseSectorIds(newSectorId);
-    if (JSON.stringify(newParsedSectors) !== JSON.stringify(this.sectorId)) { // Only update if sectorId has changed
-      this.sectorId = newParsedSectors;
-      await this.initializeData();
-    }
-  }
-},
-  
+
   mounted() {
     this.$refs.mainContent.addEventListener('scroll', this.handleScroll)
   },
@@ -322,7 +313,7 @@ export default {
     const authStore = useAuthStore()
     const postStore = usePostStore()
     const modalStore = useModalStore()
-     const sectorStore = useSectorStore()
+    const sectorStore = useSectorStore()
 
     return {
       zoneName: authStore.user?.zone.name == null ? 'Welcome to residat' : authStore.user.zone.name,
@@ -397,41 +388,36 @@ export default {
   },
 
   methods: {
-
     async handleZoneChange(newZoneId) {
-
-      
-      let newZone = await getSpecificZones(newZoneId);
-      this.updateZone(newZone);
+      let newZone = await getSpecificZones(newZoneId)
+      this.updateZone(newZone)
       console.log('this is zone in handlezone level' + newZone.level_id)
-    try {
-      let region = null;
-      let division = null;
-      let sub_division = null;
+      try {
+        let region = null
+        let division = null
+        let sub_division = null
 
-      this.isZoneFilterLoading = true;
+        // Reset default zone data
+        this.default_regions = [
+          {
+            id: 1,
+            name: this.$t('cameroon')
+          }
+        ]
+        this.default_divisions = [
+          {
+            id: 0,
+            name: this.$t('choose_your_division')
+          }
+        ]
+        this.default_sub_divisions = [
+          {
+            id: 0,
+            name: this.$t('choose_your_subdivision')
+          }
+        ]
 
-      // Reset default zone data
-      this.default_regions = [
-        {
-          id: 1,
-          name: this.$t('cameroon')
-        }
-      ];
-      this.default_divisions = [
-        {
-          id: 0,
-          name: this.$t('choose_your_division')
-        }
-      ];
-      this.default_sub_divisions = [
-        {
-          id: 0,
-          name: this.$t('choose_your_subdivision')
-        }
-      ];
-
-      if (newZone.level_id == 4) {
+        if (newZone.level_id == 4) {
           const rest = await getZones(null, newZone.parent_id)
           const currentZone = {
             id: newZone.id,
@@ -479,7 +465,7 @@ export default {
           this.componentKey++
           this.isZoneFilterLoading = false
         }
-        if (newZone.level_id == 2 || newZone.level_id == 1 ) {
+        if (newZone.level_id == 2 || newZone.level_id == 1) {
           const rest = await getZones(null, newZone.parent_id ?? 1)
           const currentZone = {
             id: newZone.id,
@@ -492,16 +478,14 @@ export default {
           this.componentKey++
           this.isZoneFilterLoading = false
         }
+      } catch (error) {
+        console.error('Failed to load zone data:', error)
+      } finally {
+        this.isZoneFilterLoading = false
+      }
+    },
 
-      
-    } catch (error) {
-      console.error('Failed to load zone data:', error);
-    } finally {
-      this.isZoneFilterLoading = false;
-    }
-  },
-
-  async getDivisions(parent_id) {
+    async getDivisions(parent_id) {
       if (!checkAuthentication()) {
         return
       }
@@ -511,7 +495,6 @@ export default {
         return
       }
       try {
-
         this.default_divisions = this.default_divisions.concat(await getZones(null, parent_id))
         console.log('this is the size of division ' + this.default_divisions.length)
         // this.sub_divisions = [this.sub_divisions[0]]
@@ -525,8 +508,11 @@ export default {
     async getSub_divisions(parent_id) {
       // this.isSubdivisionLoading = true
       try {
-        this.default_sub_divisions = this.default_sub_divisions.length > 0 ? [this.default_sub_divisions[0]] : []
-        this.default_sub_divisions = this.default_sub_divisions.concat(await getZones(null, parent_id))
+        this.default_sub_divisions =
+          this.default_sub_divisions.length > 0 ? [this.default_sub_divisions[0]] : []
+        this.default_sub_divisions = this.default_sub_divisions.concat(
+          await getZones(null, parent_id)
+        )
       } catch (error) {
         console.log(error)
       } finally {
@@ -534,66 +520,55 @@ export default {
       }
     },
 
-
     async initializeData() {
+
+      console.log('intialising !!!!!!1')
       this.isUserConnected = checkAuthentication()
 
-if (typeof this.propSectorId === 'string') {
-    const propSectorArray = Array.from(this.propSectorId.split(',').map(Number));
+      if (typeof this.propSectorId === 'string') {
+        const propSectorArray = Array.from(this.propSectorId.split(',').map(Number))
 
-    // Assuming getAllSectors() returns an array and not a function property
-    const allSectors = this.sectorStore.getAllSectors;
-    this.sectors = allSectors.map(sector => ({
-      ...sector,
-      check: propSectorArray.includes(sector.id)
-    }));
-  } else {
-    this.sectors = this.sectorStore.getAllSectors;
-}
+        // Assuming getAllSectors() returns an array and not a function property
+        const allSectors = this.sectorStore.getAllSectors
+        this.sectors = allSectors.map((sector) => ({
+          ...sector,
+          check: propSectorArray.includes(sector.id)
+        }))
+      } else {
+        this.sectors = this.sectorStore.getAllSectors
+      }
 
-    try {
-      // const { zoneId, sectorId} = this.$route.params;
-      this.sectorId = this.parseSectorIds(this.propSectorId)
+      try {
+        // const { zoneId, sectorId} = this.$route.params;
+        this.sectorId = this.parseSectorIds(this.propSectorId)
 
-      
+        this.zoneId = this.propZoneId === null ? 1 : this.propZoneId
 
-   this.zoneId = (this.propZoneId === null) ? 1 : this.propZoneId;
-
-      
-      // if (this.propZoneId != 1) {
+        // if (this.propZoneId != 1) {
         this.topLoading = true
-       await  this.handleZoneChange(this.zoneId)
+        this.isZoneFilterLoading = true
+        await this.fetchEvent()
+        await this.handleZoneChange(this.zoneId)
         await this.loadData(this.zoneId, this.sectorId)
-
-      // } else {
-      //   // await this.fetchResources()
-      // }
-    } catch (error) {
-      console.error('Initialization failed:', error)
-      this.showPageRefresh = true
-    } finally {
-      this.topLoading = false
-    }
-
-    // this.updateCheckboxState()
+      } catch (error) {
+        console.error('Initialization failed:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+      }
     },
 
-
     async filterPost(id) {
+      if (id != null) {
+        this.zoneId = id
+      }
 
-      
-      
-      if(this.propZoneId === id){
-        console.error("same zone selected  so no navigation")
+      if (this.propZoneId === id) {
+        console.error('same zone selected  so no navigation')
         return
       }
-      this.zoneId = id
-      
-      
-      
-      try {
-        console.log('selected' + id);
 
+      try {
         this.$router.push({
           name: 'community',
           params: {
@@ -601,84 +576,65 @@ if (typeof this.propSectorId === 'string') {
             propSectorId: this.sectorId.join(',')
           }
         })
-        console.log('selected !!!! ' + id);
-        
+        console.log('selected zone !!!! ' + id)
       } catch (error) {
-        
-          console.error('Failed to navigate', error)
+        console.error('Failed to navigate', error)
       }
-
     },
 
-    
     updateSectorChecked({ list, checked }) {
-    if (!checkAuthentication()) {
-      return;
-    }
-
-    this.showPageRefresh = false;
-
-    // Validate if list object exists and has an 'id' property
-    if (!list?.id) {
-      console.error("Invalid 'list' object or missing 'id'");
-      return;
-    }
-
-    // Retrieve the current sector IDs from the URL or initialize as empty array
-    const urlSectorIds = typeof this.propSectorId === 'string'
-        ? this.propSectorId.split(',').map(Number)
-        : [];
-
-    let updatedSectorIds;
-
-    if (checked) {
-      // Add the list.id to sector IDs only if it's not already included
-      if (!urlSectorIds.includes(list.id)) {
-        updatedSectorIds = [...urlSectorIds, list.id];
-      } else {
-        updatedSectorIds = urlSectorIds;
+      if (!checkAuthentication()) {
+        return
       }
-    } else {
-      // Remove the list.id from sector IDs
-      updatedSectorIds = urlSectorIds.filter(id => id !== list.id);
-    }
 
-    // Update local sectorId state to trigger reactivity
-    this.sectorId = updatedSectorIds;
+      this.showPageRefresh = false
 
-    // Call filterPost to update the route and re-fetch posts
-    this.filterPost();
-  },
+      console.log('This is the list ' + list)
 
+      if (!list || typeof list.id === 'undefined') {
+    console.error("Invalid 'list' object or missing 'id'");
+    return;
+  }
 
+      // Retrieve the current sector IDs from the URL or initialize as empty array
+      const urlSectorIds =
+        typeof this.propSectorId === 'string' ? this.propSectorId.split(',').map(Number) : []
 
+      let updatedSectorIds
+
+      if (checked) {
+        console.log("This is he checkinh!!!!!!!!!!!'")
+        // Add the list.id to sector IDs only if it's not already included
+        if (!urlSectorIds.includes(list.id)) {
+          updatedSectorIds = [...urlSectorIds, list.id]
+        } else {
+          updatedSectorIds = urlSectorIds
+        }
+      } else {
+        // Remove the list.id from sector IDs
+        updatedSectorIds = urlSectorIds.filter((id) => id !== list.id)
+      }
+
+      // Update local sectorId state to trigger reactivity
+      this.sectorId = updatedSectorIds
+      this.filterPost(null)
+    },
 
     parseSectorIds(sectorIdString) {
       return sectorIdString ? JSON.parse(`[${sectorIdString}]`).map(Number) : []
     },
 
-async loadData(zoneId, sectorIdArray) {
+    async loadData(zoneId, sectorIdArray) {
+      this.topLoading = true
 
-  this.topLoading = true
-      this.isloadingEvent = true
-      this.isZoneFilterLoading = true
-
-
-  try {
-    this.posts = await getFilterPosts(zoneId, sectorIdArray);
-    // this.recentPosts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
-    await this.fetchEvent()
-    // let zone = await getSpecificZones(this.zoneId);
-    // this.updateZone(zone);
-    if (this.posts.length < 1) this.showPageRefresh = true;
-  } catch (error) {
-    console.error('Error loading data:', error);
-    this.showPageRefresh = true;
-  } finally {
-    this.isZoneFilterLoading = false;
-  }
-},
-
+      try {
+        this.posts = await getFilterPosts(zoneId, sectorIdArray)
+        if (this.posts.length < 1) this.showPageRefresh = true
+      } catch (error) {
+        console.error('Error loading data:', error)
+        this.showPageRefresh = true
+      }
+    },
 
     updateCheckboxState() {
       const urlSectorIds = this.parseSectorIds(this.$route.params.sectorId)
@@ -699,7 +655,6 @@ async loadData(zoneId, sectorIdArray) {
       }
     },
 
-
     toogleShowMobileFilterZonePost() {
       if (this.showMobileFilterSectorPost == false) {
         this.showMobileFilterSectorPost = true
@@ -713,7 +668,6 @@ async loadData(zoneId, sectorIdArray) {
       }
       this.showMobileFilterSectorPost = !this.showMobileFilterSectorPost
     },
-
 
     async checkNewPosts() {
       if (this.filteringActive) {
@@ -730,15 +684,13 @@ async loadData(zoneId, sectorIdArray) {
     },
 
     updateZone(zone) {
-
       this.zoneId = zone.id
-      if(zone.id != 1){
+      if (zone.id != 1) {
         console.log('updating zone name!!!!')
         this.page = 0
         this.zoneName = zone.name
         this.bannerUrlImage = zone.banner
       }
-
     },
 
     async fetchPosts() {
@@ -761,16 +713,11 @@ async loadData(zoneId, sectorIdArray) {
       }
     },
 
-
-
-
     async reloadPosts() {
       this.$router.push({ name: 'community' }).then(() => {
         window.location.reload()
       })
     },
-
- 
 
     async fetchEvent() {
       try {
@@ -791,19 +738,25 @@ async loadData(zoneId, sectorIdArray) {
       this.bottomLoading = true
       this.postScrollLocked = true
       try {
-     const nextPage = this.page + 1
-          const size = 10
-        this.nextPagePosts = await getFilterPosts(this.zoneId, this.sectorId,size,nextPage,this.isUserConnected);
+        const nextPage = this.page + 1
+        const size = 10
+        this.nextPagePosts = await getFilterPosts(
+          this.zoneId,
+          this.sectorId,
+          size,
+          nextPage,
+          this.isUserConnected
+        )
 
         if (this.nextPagePosts.length === 0) {
-          console.log('this is the lenght of new post '+this.nextPagePosts.length )
+          console.log('this is the lenght of new post ' + this.nextPagePosts.length)
           this.bottomLoading = false
           this.hasFetchAllPost = true
           return
         }
-        
+
         this.posts.push(...this.nextPagePosts)
-        console.log('this is the new post lenght '+this.posts.length )
+        console.log('this is the new post lenght ' + this.posts.length)
         this.hasFetchAllPost = false
         this.page++
       } catch (error) {
