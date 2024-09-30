@@ -1,9 +1,17 @@
 <template>
-  <div id="map" style="height: 100vh;"></div>
+  <div>
+    <div id="map" style="height: 100vh;"></div>
+    <!-- Div cachée qui sera affichée au clic sur un marqueur -->
+    <div v-if="showInfo" class="info-box">
+      <h3>{{ selectedRegion.name }}</h3>
+      <p>{{ selectedRegion.info }}</p>
+      <button @click="closeInfo">Fermer</button>
+    </div>
+  </div>
 </template>
 
 <script>
-import { onMounted, watch } from 'vue';
+import { onMounted, watch, ref } from 'vue';
 import L from 'leaflet';
 
 export default {
@@ -26,17 +34,19 @@ export default {
 
   setup(props) {
     let map;
+    const showInfo = ref(false); // État pour gérer l'affichage de la div
+    const selectedRegion = ref({ name: '', info: '' }); // Informations sur la région sélectionnée
 
-    // Coordinates for the regions (add more if necessary)
+    // Coordonnées des régions
     const regions = [
-      { name: 'Littoral', lat: 4.05, lng: 9.7 },
-      { name: 'Centre', lat: 4.5, lng: 11.5 },
-      { name: 'Nord', lat: 9.4, lng: 13.3 },
-      { name: 'Ouest', lat: 5.5, lng: 10.4 },
-      // Add other regions with their coordinates here
+      { name: 'Littoral', lat: 4.05, lng: 9.7, info: 'Informations sur Littoral.' },
+      { name: 'Centre', lat: 4.5, lng: 11.5, info: 'Informations sur Centre.' },
+      { name: 'Nord', lat: 9.4, lng: 13.3, info: 'Informations sur Nord.' },
+      { name: 'Ouest', lat: 5.5, lng: 10.4, info: 'Informations sur Ouest.' },
+      // Ajoutez d'autres régions avec leurs informations ici
     ];
 
-    // Function to initialize the map
+    // Fonction pour initialiser la carte
     const initializeMap = () => {
       map = L.map('map').setView([props.latitude, props.longitude], props.zoomIndex);
 
@@ -44,22 +54,32 @@ export default {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
 
-      // Add static markers for each region
+      // Ajouter des marqueurs pour chaque région
       regions.forEach(region => {
         const marker = L.marker([region.lat, region.lng]).addTo(map);
-        marker.bindPopup(`<b>${region.name}</b><br>Some information about ${region.name}.`);
         
         marker.on('click', () => {
-          marker.openPopup();
+          showRegionInfo(region); // Appel de la fonction pour afficher les informations
         });
       });
     };
 
+    // Fonction pour afficher les informations de la région
+    const showRegionInfo = (region) => {
+      selectedRegion.value = region; // Mettre à jour la région sélectionnée
+      showInfo.value = true; // Afficher la div
+    };
+
+    // Fonction pour fermer la div d'informations
+    const closeInfo = () => {
+      showInfo.value = false; // Cacher la div
+    };
+
     onMounted(async () => {
-      // Initialize the map on component mount
+      // Initialiser la carte lors du montage du composant
       initializeMap();
 
-      // Fetch and display the GeoJSON and SVG layers (optional, can be kept as is)
+      // Récupérer et afficher les couches GeoJSON et SVG (facultatif)
       try {
         const response = await fetch('assets/maps/national.geojson');
         if (!response.ok) {
@@ -93,21 +113,24 @@ export default {
       }
     });
 
-    // Watch for changes in latitude, longitude, or zoomIndex props and update the map accordingly
+    // Surveiller les changements de latitude, longitude ou zoomIndex
     watch(
       [() => props.latitude, () => props.longitude, () => props.zoomIndex],
       ([newLatitude, newLongitude, newZoomIndex]) => {
         if (map) {
-          // Use flyTo for smooth camera movement
           map.flyTo([newLatitude, newLongitude], newZoomIndex, {
             animate: true,
-            duration: 2, // Duration of the animation in seconds
+            duration: 2, // Durée de l'animation en secondes
           });
         }
       }
     );
 
-    return {};
+    return {
+      showInfo,
+      selectedRegion,
+      closeInfo,
+    };
   },
 };
 </script>
@@ -118,8 +141,14 @@ export default {
     height: 100%;
   }
 
-  svg [data-name][data-id] {
-    pointer-events: auto;
-    cursor: pointer;
+  .info-box {
+    position: absolute;
+    top: 75%;
+    left: 3%;
+    background-color: white;
+    border: 1px solid #ccc;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000; /* Pour s'assurer qu'elle soit au-dessus de la carte */
   }
 </style>
