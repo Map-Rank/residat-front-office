@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<!-- Creator: Esri ArcMap 10.8.0.12790 -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN"  "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg width="774.73701pt" height="404.24882pt" viewBox="0 0 774.73701 404.24882" enable-background="new 0 0 774.73701 404.24882"
+	version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" >
+	<g id="Layers">
+		<g id="Dziguilao">
+			<clipPath id="SVG_CP_1">
+				<path d="M0,404.24882L0,0L774.73701,0L774.73701,404.24882L0,404.24882z"/>
+			</clipPath>
+			<path clip-path="url(#SVG_CP_1)" fill="none" stroke="#000000" stroke-width="0.47528" stroke-miterlimit="10" stroke-linecap="round" stroke-linejoin="round" d="
+				M394.24068,320.79611L393.7654,340.75676L411.58822,352.16284L429.41103,361.43028L445.09511,375.21263L482.4042,385.90584L482.64184,387.3316
+				L477.88909,399.92582L463.86847,424.639M203.89301,424.639L226.46857,380.2028L254.03453,353.82623L290.15543,336.7171L331.02909,324.12288
+				L367.15,320.32086L394.24068,320.79611"/>
+		</g>
+	</g>
+</svg>

@@ -27,6 +27,15 @@ export default {
   setup(props) {
     let map;
 
+    // Coordinates for the regions (add more if necessary)
+    const regions = [
+      { name: 'Littoral', lat: 4.05, lng: 9.7 },
+      { name: 'Centre', lat: 4.5, lng: 11.5 },
+      { name: 'Nord', lat: 9.4, lng: 13.3 },
+      { name: 'Ouest', lat: 5.5, lng: 10.4 },
+      // Add other regions with their coordinates here
+    ];
+
     // Function to initialize the map
     const initializeMap = () => {
       map = L.map('map').setView([props.latitude, props.longitude], props.zoomIndex);
@@ -34,15 +43,25 @@ export default {
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
       }).addTo(map);
+
+      // Add static markers for each region
+      regions.forEach(region => {
+        const marker = L.marker([region.lat, region.lng]).addTo(map);
+        marker.bindPopup(`<b>${region.name}</b><br>Some information about ${region.name}.`);
+        
+        marker.on('click', () => {
+          marker.openPopup();
+        });
+      });
     };
 
     onMounted(async () => {
       // Initialize the map on component mount
       initializeMap();
 
-      // Fetch and display the GeoJSON and SVG layers
+      // Fetch and display the GeoJSON and SVG layers (optional, can be kept as is)
       try {
-        const response = await fetch('assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson');
+        const response = await fetch('assets/maps/national.geojson');
         if (!response.ok) {
           throw new Error('Erreur lors du chargement du fichier GeoJSON.');
         }
@@ -68,17 +87,7 @@ export default {
         const svgDocument = parser.parseFromString(svgText, 'image/svg+xml');
         const svgElement = svgDocument.querySelector('svg');
 
-        // Uncomment the following lines if you want to handle click events on the SVG
-        // svgElement.querySelectorAll('[data-name][data-id]').forEach((section) => {
-        //   section.addEventListener('click', () => {
-        //     const name = section.getAttribute('data-name');
-        //     const id = section.getAttribute('data-id');
-        //     console.log(name);
-        //     alert(`Vous avez cliqué sur la région: ${name} avec l'ID: ${id}`);
-        //   });
-        // });
-
-        //L.svgOverlay(svgElement, bounds).addTo(map);
+        // L.svgOverlay(svgElement, bounds).addTo(map);
       } catch (error) {
         console.error('Erreur lors du chargement du GeoJSON :', error);
       }

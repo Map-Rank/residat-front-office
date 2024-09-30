@@ -472,13 +472,6 @@ export default {
     this.toast.error('Select a zone please')
   },
 
-  updateMap({ latitude, longitude, zoomIndex }) {
-    // Cette méthode met à jour les propriétés de votre carte Leaflet
-    if (this.map) {
-      this.map.setView([latitude, longitude], zoomIndex); // Mise à jour des coordonnées et du niveau de zoom
-    }
-  },
-
 
     async selectZoneToSearch(id) {
       console.log(id)
