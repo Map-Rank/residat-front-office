@@ -69,13 +69,7 @@
                     <PostShimmerLoading  class="mb-4" />
                 </div>
 
-<<<<<<< Updated upstream
-               
-
-                <div v-if="showPageRefresh && !filteringActive">
-=======
                 <div v-if="showPageRefresh ">
->>>>>>> Stashed changes
                   <RefreshError
                   :imgSize="400"
                     :imageUrl="'assets\\images\\Community\\loading.svg'"
@@ -484,8 +478,6 @@ export default {
   },
 
   methods: {
-<<<<<<< Updated upstream
-=======
     async handleZoneChange(newZoneId) {
       let newZone = await getSpecificZones(newZoneId)
       this.updateZone(newZone)
@@ -719,7 +711,6 @@ export default {
       this.filterPost(null)
     },
 
->>>>>>> Stashed changes
     parseSectorIds(sectorIdString) {
     return sectorIdString ? JSON.parse(`[${sectorIdString}]`).map(Number) : [];
   },

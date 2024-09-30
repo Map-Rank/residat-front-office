@@ -268,7 +268,7 @@ import Modal from '@/components/common/Modal/Modal.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { useToast } from 'vue-toastification'
 import L from "leaflet"
-import MapComponent from '@/components/dashboard/MapComponent.vue'
+import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
 import {getZoomIndexByLevel} from '@/utils/formating.js'
 
 export default {
@@ -356,7 +356,7 @@ export default {
       showAllActors: false,
       isLoadingMap: false,
       isErrorLoadMap: false,
-      displayStatistics: true,
+      displayStatistics: false,
       reportType: null,
       inSubDivision: false,
       isZoneLoading: false,
