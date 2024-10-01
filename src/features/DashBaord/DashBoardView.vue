@@ -25,7 +25,7 @@
 
       <div class="lg:w-1/4 md:w-3/4 flex space-x-5">
         <div>
-          <div class="">
+          <!-- <div class="">
             <button-ui
               :label="$t('water_risk')"
               :color="'text-white'"
@@ -34,15 +34,19 @@
               @clickButton="toggleWaterStressGraphVisibility()"
             >
             </button-ui>
-          </div>
+          </div> -->
 
           <div class="mt-2" :class="{ hidden: isWaterStressGraphHidden }">
             <WaterStressChart></WaterStressChart>
           </div>
 
-          <!-- <div class="mt-2">
+          <div class="mt-2">
             <ZoneInfo :zone="this.zone" />
-          </div> -->
+          </div>
+
+          <div class="mt-2">
+             <post-slider  />
+          </div>
         </div>
       </div>
 
@@ -267,10 +271,10 @@ import Modal from '@/components/common/Modal/Modal.vue'
 // import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { useToast } from 'vue-toastification'
-import L from 'leaflet'
 import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
 import { getZoomIndexByLevel } from '@/utils/formating.js'
-// import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
+import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
+import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 
 export default {
   name: 'DashBoardView',
@@ -278,8 +282,9 @@ export default {
   components: {
     ZonePostFilter,
     BaseDropdown,
-    KeyActors,
-    // ZoneInfo,
+    // KeyActors,
+    PostSlider,
+    ZoneInfo,
     BaseBarChart,
     DegreeImpactDoughnutChart,
     // InlineSvg,

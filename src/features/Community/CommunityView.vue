@@ -783,34 +783,7 @@ export default {
       }
       this.showMobileFilterSectorPost = !this.showMobileFilterSectorPost
     },
-    updateSectorChecked({ list, checked }) {
-
-      if (!checkAuthentication()) {
-        return
-      }
-
-
-      this.showPageRefresh = false
-      console.log(list.id)
-
-      if (!list?.id) {
-        console.error("Invalid 'list' object or missing 'id'")
-        return
-      }
-
-      const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
-
-      if(urlSectorIds.length == 0){
-        localStorage.removeItem('sectorId')
-      }
-
-      this.sectorId = checked
-        ? [...urlSectorIds, list.id]
-        : this.sectorId.filter((id) => id !== list.id);
-
-      // console.log(this.sectorId)
-      this.filterPostBySectors()
-    },
+   
 
     async checkNewPosts() {
      
