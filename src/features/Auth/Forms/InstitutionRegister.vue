@@ -658,9 +658,9 @@ export default {
       this.$router.push({
         name: 'verification-account',
         params: {
-          heading: 'Registration Pending!',
+          heading: 'Welcome to Residat!',
           message:
-            'Thank you for registering! Please check your email to verify your account and complete the registration process.'
+            'As an institutional account, some verifications needs to be done on your account. Our administrative service will contact you and work you through this easy process. Thanks for choosing Residat.'
         }
       })
     },

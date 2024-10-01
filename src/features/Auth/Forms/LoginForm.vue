@@ -121,9 +121,9 @@ export default {
       this.$router.push({
         name: 'verification-account',
         params: {
-          heading: 'Login Verification Pending!',
+          heading: 'Welcome to Residat!',
           message:
-            'You have successfully logged in, but your email verification is still pending. Please check your email to verify your account.'
+            'As an institutional account, some verifications needs to be done on your account. Our administrative service will contact you and work you through this easy process. Thanks for choosing Residat.'
         }
       })
     },
