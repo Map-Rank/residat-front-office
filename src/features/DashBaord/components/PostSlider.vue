@@ -1,12 +1,12 @@
 <template>
-    <div class="relative w-full max-w-[400px] bg-white overflow-hidden">
+    <div class="relative w-full max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
       <!-- Horizontal slider for posts -->
-      <div ref="slider" class="flex transition-transform duration-300 ease-in-out gap-4">
+      <div ref="slider" class="flex transition-transform duration-300 ease-in-out gap-2">
         <!-- Loop through each post and display its content -->
         <div v-for="(post, index) in posts" :key="post.id" class="min-w-[400px] flex-shrink-0 p-4">
           <div class="bg-white shadow-md rounded-lg overflow-hidden">
             <!-- Post Image -->
-            <div v-if="post.images && post.images.length" class="w-full h-48">
+            <div v-if="post.images && post.images.length" class="w-full h-[10vh]">
               <img :src="post.images[0].url" alt="Post Image" class="w-full h-full object-cover" />
             </div>
             <!-- Post Creator Information -->
@@ -18,9 +18,9 @@
                   class="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
-                  <h4 class="font-bold text-gray-800">
+                  <h6 class="font-bold text-gray-800">
                     {{ post.creator[0]?.first_name }} {{ post.creator[0]?.last_name }}
-                  </h4>
+                  </h6>
                   <p class="text-gray-500 text-sm">{{ post.created_at }}</p>
                 </div>
               </div>

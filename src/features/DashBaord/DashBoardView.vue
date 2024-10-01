@@ -4,6 +4,7 @@
     :latitude="latitude"
     :longitude="longitude"
     :zoomIndex="zoomIndex"
+    @markerClick="markerClick"
   />
   <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
     <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
@@ -23,8 +24,8 @@
         </div>
       </div> -->
 
-      <div class="lg:w-1/4 md:w-3/4 flex space-x-5">
-        <div>
+      <div class="lg:w-1/4 md:w-3/4 grid gap-1">
+ 
           <!-- <div class="">
             <button-ui
               :label="$t('water_risk')"
@@ -36,18 +37,18 @@
             </button-ui>
           </div> -->
 
-          <div class="mt-2" :class="{ hidden: isWaterStressGraphHidden }">
+          <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
             <WaterStressChart></WaterStressChart>
           </div>
 
-          <div class="mt-2">
+          <div class="mt-2 max-h-[30vh] w-full">
             <ZoneInfo :zone="this.zone" />
           </div>
 
           <div class="mt-2">
              <post-slider  />
           </div>
-        </div>
+   
       </div>
 
       <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
@@ -446,6 +447,23 @@ export default {
   },
 
   methods: {
+
+
+    markerClick(zoneMarked){
+      this.$router
+          .push({
+            name: 'dashboard',
+            params: {
+              zoneId: zoneMarked.id,
+              parentId: zoneMarked.parent_id,
+              zoneName: zoneMarked.name,
+              mapSize: zoneMarked.defaultMapSize,
+              latitude: zoneMarked.latitude,
+              longitude: zoneMarked.longitude,
+              zoomIndex: zoneMarked.zoomLevelIndex
+            }
+          })
+    },
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
         const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id)
