@@ -119,7 +119,7 @@
                         >
                         </CommunityZoneFilter>
                       </div>
-                      <div :class="{ hidden: showMobileFilterSectorPost }" class="sm:hidden mt-2">
+                      <div v-if="!isZoneFilterLoading" :class="{ hidden: showMobileFilterSectorPost }" class="sm:hidden mt-2">
                         <sector-side
                           :sectorArray="this.sectors"
                           :updatesectorChecked="updateSectorChecked"
@@ -223,7 +223,7 @@
                   <div v-if="topLoading" class="flex h-full justify-center">
                     <LoadingIndicator />
                   </div>
-                  <div class="hidden md:grid md:space-y-3 lg:hidden mt-3">
+                  <div v-if="!isZoneFilterLoading" class="hidden md:grid md:space-y-3 lg:hidden mt-3">
                     <CommunityZoneFilter
                       :key="componentKey"
                       :props_regions="default_regions"
@@ -521,7 +521,6 @@ export default {
     },
 
     async initializeData() {
-
       console.log('intialising !!!!!!1')
       this.isUserConnected = checkAuthentication()
 
@@ -563,9 +562,6 @@ export default {
         this.zoneId = id
       }
 
-
-      
-
       if (this.propZoneId === id) {
         console.error('same zone selected  so no navigation')
         return
@@ -592,23 +588,22 @@ export default {
 
       this.showPageRefresh = false
 
-      console.log('This is the list ' + list)
+      console.log('This is the list ' + list.id)
 
-      if (!list || typeof list.id === 'undefined') {
-    console.error("Invalid 'list' object or missing 'id'");
-    return;
-  }
+      if (!list) {
+        console.error("Invalid 'list' object or missing 'id'")
+        return
+      }
 
-// Retrieve the current sector IDs from the URL or initialize as empty array
-const urlSectorIds = this.propSectorId && this.propSectorId.length > 0
-                      ? this.propSectorId.split(',').map(Number)
-                      : [];
+      // Retrieve the current sector IDs from the URL or initialize as empty array
+      const urlSectorIds =
+        this.propSectorId && this.propSectorId.length > 0
+          ? this.propSectorId.split(',').map(Number)
+          : []
 
-let updatedSectorIds;
-
+      let updatedSectorIds
 
       if (checked) {
-        console.log("This is he checkinh!!!!!!!!!!!'")
         // Add the list.id to sector IDs only if it's not already included
         if (!urlSectorIds.includes(list.id)) {
           updatedSectorIds = [...urlSectorIds, list.id]
@@ -638,25 +633,6 @@ let updatedSectorIds;
       } catch (error) {
         console.error('Error loading data:', error)
         this.showPageRefresh = true
-      }
-    },
-
-    updateCheckboxState() {
-      const urlSectorIds = this.parseSectorIds(this.$route.params.sectorId)
-      const storedSectorIds = this.getStoredSectorIds()
-      const initialSectorIds = urlSectorIds.length > 0 ? urlSectorIds : storedSectorIds
-
-      this.checked = initialSectorIds.includes(this.list?.id)
-
-      if (!urlSectorIds.length) localStorage.removeItem('sectorId')
-    },
-
-    getStoredSectorIds() {
-      try {
-        return JSON.parse(localStorage.getItem('sectorId') || '[]')
-      } catch (error) {
-        console.error('Failed to parse stored sector IDs:', error)
-        return []
       }
     },
 
