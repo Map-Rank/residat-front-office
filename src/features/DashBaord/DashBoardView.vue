@@ -450,6 +450,9 @@ export default {
 
 
     markerClick(zoneMarked){
+
+      console.log('marker is clicked');
+      console.log(zoneMarked)
       this.$router
           .push({
             name: 'dashboard',
@@ -457,12 +460,13 @@ export default {
               zoneId: zoneMarked.id,
               parentId: zoneMarked.parent_id,
               zoneName: zoneMarked.name,
-              mapSize: zoneMarked.defaultMapSize,
               latitude: zoneMarked.latitude,
               longitude: zoneMarked.longitude,
               zoomIndex: zoneMarked.zoomLevelIndex
             }
           })
+
+          console.log('the router complte')
     },
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {

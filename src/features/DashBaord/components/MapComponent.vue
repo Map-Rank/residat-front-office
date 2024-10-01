@@ -1,18 +1,19 @@
 <template>
   <div>
+    <!-- Map Container -->
     <div id="map" style="height: 100vh"></div>
-    <!-- Div cachée qui sera affichée au clic sur un marqueur -->
+
+    <!-- Info Box shown when a marker is clicked -->
     <div v-if="showInfo" class="info-box">
       <h3>{{ selectedRegion.name }}</h3>
       <p>{{ selectedRegion.info }}</p>
-      <button @click="closeInfo">Fermer</button>
+      <button @click="closeInfo">Close</button>
     </div>
   </div>
 </template>
 
 <script>
-import { onMounted, watch, ref } from 'vue'
-import L from 'leaflet'
+import L from 'leaflet';
 
 export default {
   name: 'MapComponent',
@@ -20,161 +21,197 @@ export default {
   props: {
     latitude: {
       type: String,
-      required: true
+      required: true,
     },
     longitude: {
       type: String,
-      required: true
+      required: true,
     },
     zoomIndex: {
       type: String,
-      required: true
-    }
+      required: true,
+    },
   },
 
-  setup(props) {
-    let map
-    const showInfo = ref(false) // État pour gérer l'affichage de la div
-    const selectedRegion = ref({ name: '', info: '' }) // Informations sur la région sélectionnée
+  data() {
+    return {
+      map: null, // Leaflet map instance
+      showInfo: false, // Controls the display of the info box
+      selectedRegion: {
+        name: '',
+        info: ''
+      }, // Holds the info of the selected region
+      zoneMarkeds: [
+        {
+          id: 1,
+          parentId: 3,
+          zoneName: 'Centre',
+          latitude: "4.4857",
+          longitude: "11.7468",
+          zoomIndex: 8,
+          name: 'Centre',
+          lat: 4.05,
+          lng: 9.7,
+          info: 'Informations sur Littoral.',
+        },
+        {
+          id: 5,
+          parentId: 5,
+          zoneName: 'Littoral',
+          latitude: "4.0483",
+          longitude: "9.7043",
+          zoomIndex: 8,
+          name: 'Littoral',
+          lat: 4.5,
+          lng: 11.5,
+          info: 'Informations sur Centre.',
+        },
+      ],
+    };
+  },
 
-    // Coordonnées des régions
-    const zoneMarkeds = [
-      {
-        zoneId: 1, // Assuming unique ID for Littoral
-        parentId: 0, // Assuming it has no parent, root zone
-        zoneName: 'Littoral',
-        mapSize: 1, // Assuming defaultMapSize is defined elsewhere
-        latitude: 4.0511,
-        longitude: 9.7679,
-        zoomIndex: 5, // Assuming zoomLevelIndex is defined elsewhere
-        name: 'Littoral',
-        lat: 4.05,
-        lng: 9.7,
-        info: 'Informations sur Littoral.'
-      },
-      {
-        zoneId: 2, // Assuming unique ID for Centre
-        parentId: 0, // Assuming it has no parent, root zone
-        zoneName: 'Centre',
-        mapSize: 1, // Assuming defaultMapSize is defined elsewhere
-        latitude: 4.5,
-        longitude: 11.5,
-        zoomIndex: 5, // Assuming zoomLevelIndex is defined elsewhere
-        name: 'Centre',
-        lat: 4.5,
-        lng: 11.5,
-        info: 'Informations sur Centre.'
-      }
-    ]
+  methods: {
+    // Initialize the map and load data
+    initializeMap() {
+      this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex);
 
-    // Fonction pour initialiser la carte
-    const initializeMap = () => {
-      map = L.map('map').setView([props.latitude, props.longitude], props.zoomIndex)
-
+      // Adding OpenStreetMap tile layer
       L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution:
-          '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-      }).addTo(map)
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+      }).addTo(this.map);
 
-      // Ajouter des marqueurs pour chaque région
-      zoneMarkeds.forEach((zoneMarked) => {
-        const marker = L.marker([zoneMarked.lat, zoneMarked.lng]).addTo(map)
+      // Add markers for each region
+      this.zoneMarkeds.forEach((zoneMarked) => {
+        const marker = L.marker([zoneMarked.lat, zoneMarked.lng]).addTo(this.map);
 
-        marker.on(
-          'click',
-          function () {
-            this.$emit('markerClick', { zoneMarked })
-            showRegionInfo(zoneMarked)
-          }.bind(this)
-        )
-      })
-    }
+        // Display region info and emit event on marker click
+        marker.on('click', () => {
+          this.showRegionInfo(zoneMarked);
 
-    // Fonction pour afficher les informations de la région
-    const showRegionInfo = (zoneMarked) => {
-      selectedRegion.value = zoneMarked // Mettre à jour la région sélectionnée
-      showInfo.value = true // Afficher la div
-    }
+          //       this.$router
+          // .push({
+          //   name: 'dashboard',
+          //   params: {
+          //     zoneId: zoneMarked.id,
+          //     parentId: zoneMarked.parentId,
+          //     zoneName: zoneMarked.name,
+          //     mapSize: zoneMarked.defaultMapSize,
+          //     latitude: zoneMarked.latitude,
+          //     longitude: zoneMarked.longitude,
+          //     zoomIndex: zoneMarked.zoomIndex
+          //   }
+          // })
 
-    // Fonction pour fermer la div d'informations
-    const closeInfo = () => {
-      showInfo.value = false // Cacher la div
-    }
+          // Emit an event with the clicked marker's zone data
+          this.$emit('markerClick', { zoneMarked });
+        });
+      });
 
-    onMounted(async () => {
-      // Initialiser la carte lors du montage du composant
-      initializeMap()
+      // Fetch and add GeoJSON and SVG layers
+      this.loadGeoJsonAndSvg();
+    },
 
-      // Récupérer et afficher les couches GeoJSON et SVG (facultatif)
+    // Show region info when marker is clicked
+    showRegionInfo(zoneMarked) {
+      this.selectedRegion = zoneMarked;
+      this.showInfo = true;
+    },
+
+    // Close the info box
+    closeInfo() {
+      this.showInfo = false;
+    },
+
+    // Load GeoJSON and SVG files and add to map
+    async loadGeoJsonAndSvg() {
       try {
-        const response = await fetch('assets/maps/national.geojson')
+        // Fetch GeoJSON file
+        const response = await fetch('assets/maps/national.geojson');
         if (!response.ok) {
-          throw new Error('Erreur lors du chargement du fichier GeoJSON.')
+          throw new Error('Error loading the GeoJSON file.');
         }
-        const cameroonGeoJSON = await response.json()
+        const cameroonGeoJSON = await response.json();
 
+        // Add GeoJSON layer to the map
         const geoJsonLayer = L.geoJSON(cameroonGeoJSON, {
           style: {
             color: 'blue',
             fillColor: 'none',
-            weight: 2
-          }
-        }).addTo(map)
+            weight: 2,
+          },
+        }).addTo(this.map);
 
-        const bounds = geoJsonLayer.getBounds()
+        const bounds = geoJsonLayer.getBounds();
 
-        const svgResponse = await fetch('assets/maps/3BZVgc3vIYjZsZHQuN87fpMP0a73pUPPhfjPovMp.svg')
+        // Fetch SVG file
+        const svgResponse = await fetch('assets/maps/3BZVgc3vIYjZsZHQuN87fpMP0a73pUPPhfjPovMp.svg');
         if (!svgResponse.ok) {
-          throw new Error('Erreur lors du chargement du fichier SVG.')
+          throw new Error('Error loading the SVG file.');
         }
 
-        const svgText = await svgResponse.text()
-        const parser = new DOMParser()
-        const svgDocument = parser.parseFromString(svgText, 'image/svg+xml')
-        const svgElement = svgDocument.querySelector('svg')
+        // Parse and overlay the SVG on the map
+        const svgText = await svgResponse.text();
+        const parser = new DOMParser();
+        const svgDocument = parser.parseFromString(svgText, 'image/svg+xml');
+        const svgElement = svgDocument.querySelector('svg');
 
-        // L.svgOverlay(svgElement, bounds).addTo(map);
+        // Overlay the SVG on the map
+        L.svgOverlay(svgElement, bounds).addTo(this.map);
       } catch (error) {
-        console.error('Erreur lors du chargement du GeoJSON :', error)
+        console.error('Error loading the GeoJSON or SVG file:', error);
       }
-    })
-
-    // Surveiller les changements de latitude, longitude ou zoomIndex
-    watch(
-      [() => props.latitude, () => props.longitude, () => props.zoomIndex],
-      ([newLatitude, newLongitude, newZoomIndex]) => {
-        if (map) {
-          map.flyTo([newLatitude, newLongitude], newZoomIndex, {
-            animate: true,
-            duration: 2 // Durée de l'animation en secondes
-          })
-        }
-      }
-    )
-
-    return {
-      showInfo,
-      selectedRegion,
-      closeInfo
     }
-  }
-}
+  },
+
+  watch: {
+    // Watch for changes in latitude, longitude, and zoomIndex to update the map
+    latitude(newLatitude) {
+      if (this.map) {
+        this.map.flyTo([newLatitude, this.longitude], this.zoomIndex, {
+          animate: true,
+          duration: 2, // Animation duration in seconds
+        });
+      }
+    },
+    longitude(newLongitude) {
+      if (this.map) {
+        this.map.flyTo([this.latitude, newLongitude], this.zoomIndex, {
+          animate: true,
+          duration: 2, // Animation duration in seconds
+        });
+      }
+    },
+    zoomIndex(newZoomIndex) {
+      if (this.map) {
+        this.map.flyTo([this.latitude, this.longitude], newZoomIndex, {
+          animate: true,
+          duration: 2, // Animation duration in seconds
+        });
+      }
+    }
+  },
+
+  mounted() {
+    // Initialize the map when the component is mounted
+    this.initializeMap();
+  },
+};
 </script>
 
 <style scoped>
+/* Styling for the map container and info box */
 #map {
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 .info-box {
   position: absolute;
-  top: 75%;
-  left: 3%;
+  top: 20px;
+  left: 20px;
   background-color: white;
+  padding: 10px;
   border: 1px solid #ccc;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
-  z-index: 1000; /* Pour s'assurer qu'elle soit au-dessus de la carte */
+  border-radius: 5px;
 }
 </style>
