@@ -30,6 +30,7 @@ const registerUser = async (userData, authStore, onSuccess, onError) => {
     }
 
     const response = await makeApiPostCall(API_ENDPOINTS.register, formData, null, true)
+
     const user = response.data.data
     const token = response.data.data.token
     console.log('register successfull !!!!')
@@ -161,7 +162,13 @@ const UpdateUser = async (userData, authStore, onSuccess, onError) => {
   }
 }
 
-const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
+const loginUser = async (
+  userCredentials,
+  authStore,
+  onSuccess,
+  onError,
+  handleEmailNotVerified
+) => {
   try {
     const formData = new FormData()
 
@@ -173,7 +180,11 @@ const loginUser = async (userCredentials, authStore, onSuccess, onError) => {
       formData.append('fcm_token', fcmToken)
     }
 
-    const response = await makeApiPostCall(API_ENDPOINTS.login, formData)
+    const response = await makeApiPostCall(API_ENDPOINTS.login, formData, null, true)
+    if (response.data.data.verified === false) {
+      handleEmailNotVerified()
+      return
+    }
 
     const user = response.data.data
     const token = response.data.data.token

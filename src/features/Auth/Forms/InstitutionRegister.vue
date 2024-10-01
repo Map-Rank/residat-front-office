@@ -655,7 +655,14 @@ export default {
 
     handleEmailNotVerified() {
       this.toast.error('Check your email to verifie your mail')
-      this.$router.push({ name: 'verification-account' })
+      this.$router.push({
+        name: 'verification-account',
+        params: {
+          heading: 'Registration Pending!',
+          message:
+            'Thank you for registering! Please check your email to verify your account and complete the registration process.'
+        }
+      })
     },
 
     handleSuccess() {

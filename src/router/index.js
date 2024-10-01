@@ -59,11 +59,7 @@ const router = createRouter({
       component: BroadcastNotification,
       meta: { requiresAuth: true }
     },
-    {
-      path: '/verification-account',
-      name: 'verification-account',
-      component: AccountValidation
-    },
+
     {
       path: '/vulnerabilities',
       name: 'vulnerabilities',
@@ -223,6 +219,15 @@ const router = createRouter({
       props: (route) => ({
         propZoneId: route.params.propZoneId || 1,
         propSectorId: route.params.propSectorId || ''
+      })
+    },
+    {
+      path: '/verification-account/:heading?/:message?',
+      name: 'verification-account',
+      component: AccountValidation,
+      props: (route) => ({
+        heading: route.params.heading,
+        message: route.params.message
       })
     },
     {
