@@ -244,7 +244,7 @@ const ForgotPassword = async (userData, onSuccess, onError) => {
 
   try {
     const endpoint = `/forgot-password`;
-    const response = await makeApiPostCall(endpoint, formData, true);
+    const response = await makeApiPostCall(endpoint, formData);
     // console.log(response.status == 200);
     // return response.data.data;
     if (response.status == 200) {
