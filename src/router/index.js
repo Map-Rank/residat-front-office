@@ -31,6 +31,7 @@ import ForgotPassword from '../features/Auth/ForgotPassword.vue'
 import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
 import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
+import {GEOSPACIAL_DATA} from '@/constants/geospacialData.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -106,7 +107,7 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/dashboard/:zoneId?/:parentId?/:zoneName?/:mapSize?',
+      path: '/dashboard/:zoneId?/:parentId?/:zoneName?/:mapSize?/:latitude?/:longitude?/:zoomIndex?',
       name: 'dashboard',
       component: DashBoardView,
       // meta: { requiresAuth: true },
@@ -114,7 +115,10 @@ const router = createRouter({
         zoneId: route.params.zoneId || 1,
         parentId: route.params.parentId,
         zoneName: route.params.zoneName,
-        mapSize: route.params.mapSize
+        mapSize: route.params.mapSize,
+        latitude: route.params.latitude || GEOSPACIAL_DATA.cameroonLatitude ,
+        longitude: route.params.longitude || GEOSPACIAL_DATA.cameroonLongitude,
+        zoomIndex: route.params.zoomIndex || GEOSPACIAL_DATA.cameroonZoomIndex,
       }),
       // redirect: (to) => {
         //   return '/community';

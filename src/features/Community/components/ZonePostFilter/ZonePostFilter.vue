@@ -106,7 +106,7 @@ export default {
       if (!checkAuthentication()) {
         return
       }
-      console.log('this is the zone ' + zone)
+      // console.log('this is the zone ' + zone)
       if (this.updateZone !== null && zone.id != null) {
         this.updateZone(zone)
         return

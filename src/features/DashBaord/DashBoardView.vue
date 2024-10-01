@@ -1,5 +1,12 @@
 <template>
-  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
+  <MapComponent
+    class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
+    :latitude="latitude"
+    :longitude="longitude"
+    :zoomIndex="zoomIndex"
+    @markerClick="markerClick"
+  />
+  <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
     <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
       <div class="h-full bg-white flex items-center px-4 space-x-4">
         <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
@@ -10,16 +17,16 @@
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative header-nav"
     >
-      <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
+      <!-- <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
         <div class="h-full bg-white flex items-center px-2">
           <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
           <p>{{ zone.name }}</p>
         </div>
-      </div>
+      </div> -->
 
-      <div class="lg:w-2/4 md:w-3/4" v-if="!isLoadingMap && inSubDivision">
-        <div :class="{ hidden: !displayStatistics }">
-          <div class="">
+      <div class="lg:w-1/4 md:w-3/4 grid gap-1">
+ 
+          <!-- <div class="">
             <button-ui
               :label="$t('water_risk')"
               :color="'text-white'"
@@ -28,12 +35,20 @@
               @clickButton="toggleWaterStressGraphVisibility()"
             >
             </button-ui>
-          </div>
+          </div> -->
 
-          <div :class="{ hidden: isWaterStressGraphHidden }">
+          <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
             <WaterStressChart></WaterStressChart>
           </div>
-        </div>
+
+          <div class="mt-2 max-h-[30vh] w-full">
+            <ZoneInfo :zone="this.zone" />
+          </div>
+
+          <div class="mt-2">
+             <post-slider  />
+          </div>
+   
       </div>
 
       <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
@@ -56,20 +71,20 @@
               </button-ui>
             </div>
 
-            <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
+            <!-- <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
               <key-actors
                 :sectionTitle="$t('key_actors')"
                 :actors="actors"
                 :showAll="showAllActors"
               />
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
     </div>
 
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
-      <div class=" w-full">
+      <div class="w-full">
         <div v-if="!isZoneLoading" class="md:hidden mb-4 p-4 bg-white rounded shadow w-full">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
@@ -87,9 +102,8 @@
             @clickButton="searchMap"
           ></ButtonUi>
         </div>
-     
 
-        <div class=" hidden sm:block mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
+        <!-- <div class=" hidden sm:block mt-2 sm:mt-0 z-1 relative bg-white rounded-md py-4" v-if="vectorKeys && vectorKeys.length > 0">
           <div
             v-for="(key, index) in vectorKeys"
             :key="index"
@@ -108,16 +122,16 @@
               >{{ key.name }}</span
             >
           </div>
-        </div>
+        </div> -->
       </div>
 
       <div
         class="flex md:col-span-6"
         :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
       >
-        <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
+        <!-- <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
           <MapShimmer :legendItems="5" />
-        </div>
+        </div> -->
 
         <div
           v-if="isErrorLoadMap && !isLoadingMap"
@@ -133,8 +147,10 @@
         </div>
 
         <div id="tooltip" display="none" style="position: absolute; display: none"></div>
-        <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
+
+        <!-- <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
           <div class="h-[80vh]">
+             
             <inline-svg
               @mousemove="handleStateHover"
               @mouseout="handleStateLeave"
@@ -147,7 +163,7 @@
               height=""
             />
           </div>
-          <!-- <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
+          <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
             <div class="hidden lg:flex justify-between p-4 space-x-3">
               <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
                 <img
@@ -178,12 +194,12 @@
                 />
               </div>
             </div>
-          </div> -->
-        </div>
+          </div>
+        </div> -->
       </div>
 
       <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow">
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow new-element">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
             :props_regions="default_regions"
@@ -244,7 +260,7 @@ import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import KeyActors from '@/components/common/KeyActors/KeyActor.vue'
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
 import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
-import InlineSvg from 'vue-inline-svg'
+// import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
@@ -253,9 +269,13 @@ import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
 import Modal from '@/components/common/Modal/Modal.vue'
-import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
+// import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { useToast } from 'vue-toastification'
+import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
+import { getZoomIndexByLevel } from '@/utils/formating.js'
+import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
+import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 
 export default {
   name: 'DashBoardView',
@@ -263,24 +283,27 @@ export default {
   components: {
     ZonePostFilter,
     BaseDropdown,
-    KeyActors,
+    // KeyActors,
+    PostSlider,
+    ZoneInfo,
     BaseBarChart,
     DegreeImpactDoughnutChart,
-    InlineSvg,
+    // InlineSvg,
     WaterStressChart,
     ButtonUi,
     RefreshError,
     Modal,
-    MapShimmer
+    MapComponent
+    // MapShimmer
   },
 
   watch: {
     $route: {
       immediate: true,
       async handler() {
-        this.isLoadingMap = true
+        // this.isLoadingMap = true
         this.isErrorLoadMap = false
-        this.inSubDivision = false
+        // this.inSubDivision = false
 
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
@@ -318,7 +341,7 @@ export default {
     }
   },
 
-  props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
+  props: ['zoneId', 'parentId', 'zoneName', 'mapSize', 'latitude', 'longitude', 'zoomIndex'],
   data() {
     return {
       toast: useToast(),
@@ -336,14 +359,14 @@ export default {
       selectedZone: null,
       defaultMapSize: 1,
       isSubDivisionGraph: false,
-      isWaterStressGraphHidden: true,
+      isWaterStressGraphHidden: false,
       isKeyActorsHidden: false,
       showAllActors: false,
       isLoadingMap: false,
       isErrorLoadMap: false,
-      displayStatistics: true,
+      displayStatistics: false,
       reportType: null,
-      inSubDivision: false,
+      inSubDivision: true,
       isZoneLoading: false,
       modalStates: {
         healthVisible: false,
@@ -424,33 +447,59 @@ export default {
   },
 
   methods: {
+
+
+    markerClick(zoneMarked){
+
+      console.log('marker is clicked');
+      console.log(zoneMarked)
+      this.$router
+          .push({
+            name: 'dashboard',
+            params: {
+              zoneId: zoneMarked.id,
+              parentId: zoneMarked.parent_id,
+              zoneName: zoneMarked.name,
+              latitude: zoneMarked.latitude,
+              longitude: zoneMarked.longitude,
+              zoomIndex: zoneMarked.zoomLevelIndex
+            }
+          })
+
+          console.log('the router complte')
+    },
     searchMap() {
-      console.log(this.zoneIdToSearch)
-
-      // if (this.zoneIdToSearch !== null && this.zoneIdToSearch !== 1) {
-      //   this.$router.push({
-      //     name: 'search-map',
-      //     params: {
-      //       searchId: this.zoneIdToSearch
-      //     }
-      //   })
-      //   return
-      // }
-
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
-        this.$router.push({
-          name: 'dashboard',
-          params: {
-            zoneId: this.zoneMapToSearch.id,
-            parentId: this.zoneMapToSearch.parent_id,
-            zoneName: this.zoneMapToSearch.name,
-            mapSize: this.defaultMapSize
-          }
-        })
+        const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id)
+
+        this.$router
+          .push({
+            name: 'dashboard',
+            params: {
+              zoneId: this.zoneMapToSearch.id,
+              parentId: this.zoneMapToSearch.parent_id,
+              zoneName: this.zoneMapToSearch.name,
+              mapSize: this.defaultMapSize,
+              latitude: this.zoneMapToSearch.latitude,
+              longitude: this.zoneMapToSearch.longitude,
+              zoomIndex: zoomLevelIndex
+            }
+          })
+          .then(() => {
+            // Using window.location.reload() to reload the entire page
+            this.updateMap({
+              latitude: this.zoneMapToSearch.latitude,
+              longitude: this.zoneMapToSearch.longitude,
+              zoomIndex: zoomLevelIndex
+            })
+          })
+          .catch((err) => {
+            console.error('Router push failed', err)
+          })
         return
       }
 
-      this.toast.error('Select a zone please ')
+      this.toast.error('Select a zone please')
     },
 
     async selectZoneToSearch(id) {
@@ -460,7 +509,8 @@ export default {
 
     updateZone(zone) {
       this.zoneMapToSearch = zone
-      console.log(zone)
+      this.searchMap()
+      // console.log(zone)
     },
 
     async getReport(zoneId) {
@@ -641,6 +691,22 @@ export default {
 </script>
 
 <style scoped>
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.z-0 {
+  z-index: 0; /* Map will be behind other elements */
+}
+
+.z-10 {
+  z-index: 10; /* Ensure other elements are above the map */
+}
+
 span {
   font-size: 14px;
   font-family: 'Poppins';
@@ -665,5 +731,11 @@ span {
 }
 .header-nav {
   margin-bottom: 1%;
+}
+.new-element {
+  position: absolute;
+  top: 100px;
+  z-index: 1000;
+  right: 20px;
 }
 </style>

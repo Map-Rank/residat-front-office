@@ -69,9 +69,7 @@
                     <PostShimmerLoading  class="mb-4" />
                 </div>
 
-               
-
-                <div v-if="showPageRefresh && !filteringActive">
+                <div v-if="showPageRefresh ">
                   <RefreshError
                   :imgSize="400"
                     :imageUrl="'assets\\images\\Community\\loading.svg'"
@@ -173,7 +171,7 @@
                 <div v-if="bottomLoading" class="flex my-7 h-full justify-center ite">
                   <LoadingIndicator />
                 </div>
-                <div v-if="filteringActive && !showPageRefresh && hasFetchAllPost">
+                <div v-if=" !showPageRefresh && hasFetchAllPost">
                   <div class="my-10 flex flex-col justify-center items-center">
                     <hr class="border-t-2 w-full border-gray-400 mb-4" />
 
@@ -424,7 +422,6 @@ export default {
         'https://th.bing.com/th/id/R.7147764e991976533b2e139e88e3387b?rik=cD6gGTeESR3MDg&riu=http%3a%2f%2freflectim.fr%2fwp-content%2fuploads%2f2016%2f03%2fyaounde-cameroun.jpg&ehk=Y3na93tbyKZceJwmnr7CyYDz4WbZ1%2fEemnmWrQSciZk%3d&risl=&pid=ImgRaw&r=0',
       hasNewPosts: false,
       hasFetchAllPost: false,
-      filteringActive: false,
       authStore,
       scrollLocked: false,
       postScrollLocked: false,
@@ -481,6 +478,239 @@ export default {
   },
 
   methods: {
+    async handleZoneChange(newZoneId) {
+      let newZone = await getSpecificZones(newZoneId)
+      this.updateZone(newZone)
+      console.log('this is zone in handlezone level' + newZone.level_id)
+      try {
+        let region = null
+        let division = null
+        let sub_division = null
+
+        // Reset default zone data
+        this.default_regions = [
+          {
+            id: 1,
+            name: this.$t('cameroon')
+          }
+        ]
+        this.default_divisions = [
+          {
+            id: 0,
+            name: this.$t('choose_your_division')
+          }
+        ]
+        this.default_sub_divisions = [
+          {
+            id: 0,
+            name: this.$t('choose_your_subdivision')
+          }
+        ]
+
+        if (newZone.level_id == 4) {
+          const rest = await getZones(null, newZone.parent_id)
+          const currentZone = {
+            id: newZone.id,
+            name: newZone.name
+          }
+          sub_division = [currentZone, ...rest]
+          console.log('Subdivisions updated:', sub_division)
+
+          const spec_division = await getSpecificZones(newZone.parent_id)
+          division = await getZones(null, spec_division.parent_id)
+          console.log('Divisions updated:', division)
+
+          const spec_region = await getSpecificZones(spec_division.parent_id)
+          region = await getZones(null, spec_region.parent_id)
+          console.log('region updated:', region)
+
+          this.default_sub_divisions = sub_division
+          this.default_divisions = [this.default_divisions[0]]
+          this.default_divisions = this.default_divisions.concat(division)
+          this.default_regions = [this.default_regions[0]]
+          this.default_regions = this.default_regions.concat(region)
+          this.componentKey++
+          this.isZoneFilterLoading = false
+        }
+
+        if (newZone.level_id == 3) {
+          const rest = await getZones(null, newZone.parent_id)
+          const currentZone = {
+            id: newZone.id,
+            name: newZone.name
+          }
+          division = [currentZone, ...rest]
+          console.log('Divisions updated:', division)
+
+          this.getSub_divisions(newZone.id)
+
+          const spec_region = await getSpecificZones(newZone.parent_id)
+          region = await getZones(null, spec_region.parent_id)
+          console.log('region updated:', region)
+
+          this.default_divisions = division
+          this.default_regions = [this.default_regions[0]]
+          this.default_regions = this.default_regions.concat(region)
+          // this.zoneName = currentZone.name
+          this.componentKey++
+          this.isZoneFilterLoading = false
+        }
+        if (newZone.level_id == 2 || newZone.level_id == 1) {
+          const rest = await getZones(null, newZone.parent_id ?? 1)
+          const currentZone = {
+            id: newZone.id,
+            name: newZone.name
+          }
+          region = [currentZone, ...rest]
+          await this.getDivisions(newZone.id)
+          this.default_regions = region
+          // this.zoneName = currentZone.name
+          this.componentKey++
+          this.isZoneFilterLoading = false
+        }
+      } catch (error) {
+        console.error('Failed to load zone data:', error)
+      } finally {
+        this.isZoneFilterLoading = false
+      }
+    },
+
+    async getDivisions(parent_id) {
+      if (!checkAuthentication()) {
+        return
+      }
+
+      if (parent_id == 1) {
+        this.default_divisions = [this.default_divisions[0]]
+        return
+      }
+      try {
+        this.default_divisions = this.default_divisions.concat(await getZones(null, parent_id))
+        console.log('this is the size of division ' + this.default_divisions.length)
+        // this.sub_divisions = [this.sub_divisions[0]]
+      } catch (error) {
+        console.log(error)
+      } finally {
+        this.isDivisionLoading = false
+      }
+    },
+
+    async getSub_divisions(parent_id) {
+      // this.isSubdivisionLoading = true
+      try {
+        this.default_sub_divisions =
+          this.default_sub_divisions.length > 0 ? [this.default_sub_divisions[0]] : []
+        this.default_sub_divisions = this.default_sub_divisions.concat(
+          await getZones(null, parent_id)
+        )
+      } catch (error) {
+        console.log(error)
+      } finally {
+        // this.isSubdivisionLoading = false
+      }
+    },
+
+    async initializeData() {
+
+      console.log('intialising !!!!!!1')
+      this.isUserConnected = checkAuthentication()
+
+      if (typeof this.propSectorId === 'string') {
+        const propSectorArray = Array.from(this.propSectorId.split(',').map(Number))
+
+        // Assuming getAllSectors() returns an array and not a function property
+        const allSectors = this.sectorStore.getAllSectors
+        this.sectors = allSectors.map((sector) => ({
+          ...sector,
+          check: propSectorArray.includes(sector.id)
+        }))
+      } else {
+        this.sectors = this.sectorStore.getAllSectors
+      }
+
+      try {
+        // const { zoneId, sectorId} = this.$route.params;
+        this.sectorId = this.parseSectorIds(this.propSectorId)
+
+        this.zoneId = this.propZoneId === null ? 1 : this.propZoneId
+
+        // if (this.propZoneId != 1) {
+        this.topLoading = true
+        this.isZoneFilterLoading = true
+        // isZoneFilterLoading
+        await this.fetchEvent()
+        await this.handleZoneChange(this.zoneId)
+        await this.loadData(this.zoneId, this.sectorId)
+      } catch (error) {
+        console.error('Initialization failed:', error)
+        this.showPageRefresh = true
+      } finally {
+        this.topLoading = false
+      }
+    },
+
+    async filterPost(id) {
+      if (id != null) {
+        this.zoneId = id
+      }
+
+      if (this.propZoneId === id) {
+        console.error('same zone selected  so no navigation')
+        return
+      }
+
+      try {
+        this.$router.push({
+          name: 'community',
+          params: {
+            propZoneId: this.zoneId,
+            propSectorId: this.sectorId.join(',')
+          }
+        })
+        console.log('selected zone !!!! ' + id)
+      } catch (error) {
+        console.error('Failed to navigate', error)
+      }
+    },
+
+    updateSectorChecked({ list, checked }) {
+      if (!checkAuthentication()) {
+        return
+      }
+
+      this.showPageRefresh = false
+
+      console.log('This is the list ' + list)
+
+      if (!list || typeof list.id === 'undefined') {
+    console.error("Invalid 'list' object or missing 'id'");
+    return;
+  }
+
+      // Retrieve the current sector IDs from the URL or initialize as empty array
+      const urlSectorIds =
+        typeof this.propSectorId === 'string' ? this.propSectorId.split(',').map(Number) : []
+
+      let updatedSectorIds
+
+      if (checked) {
+        console.log("This is he checkinh!!!!!!!!!!!'")
+        // Add the list.id to sector IDs only if it's not already included
+        if (!urlSectorIds.includes(list.id)) {
+          updatedSectorIds = [...urlSectorIds, list.id]
+        } else {
+          updatedSectorIds = urlSectorIds
+        }
+      } else {
+        // Remove the list.id from sector IDs
+        updatedSectorIds = urlSectorIds.filter((id) => id !== list.id)
+      }
+
+      // Update local sectorId state to trigger reactivity
+      this.sectorId = updatedSectorIds
+      this.filterPost(null)
+    },
+
     parseSectorIds(sectorIdString) {
     return sectorIdString ? JSON.parse(`[${sectorIdString}]`).map(Number) : [];
   },
@@ -553,39 +783,10 @@ export default {
       }
       this.showMobileFilterSectorPost = !this.showMobileFilterSectorPost
     },
-    updateSectorChecked({ list, checked }) {
-
-      if (!checkAuthentication()) {
-        return
-      }
-
-
-      this.showPageRefresh = false
-      console.log(list.id)
-
-      if (!list?.id) {
-        console.error("Invalid 'list' object or missing 'id'")
-        return
-      }
-
-      const urlSectorIds = this.$route.params.sectorId ? Array.from(this.$route.params.sectorId.split(',').map(Number)) : [];
-
-      if(urlSectorIds.length == 0){
-        localStorage.removeItem('sectorId')
-      }
-
-      this.sectorId = checked
-        ? [...urlSectorIds, list.id]
-        : this.sectorId.filter((id) => id !== list.id);
-
-      // console.log(this.sectorId)
-      this.filterPostBySectors()
-    },
+   
 
     async checkNewPosts() {
-      if (this.filteringActive) {
-        return
-      }
+     
       try {
         const latestPosts = await getPosts(0, 10, this.authStore?.user.token,this.isUserConnected)
         this.hasNewPosts = latestPosts.some(
@@ -702,7 +903,7 @@ export default {
         console.error('Failed to load events:', error)
       } finally {
         this.isloadingEvent = false
-        this.isZoneFilterLoading = false
+        // this.isZoneFilterLoading = false
       }
     },
 

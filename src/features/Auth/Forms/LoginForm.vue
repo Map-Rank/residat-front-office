@@ -158,6 +158,8 @@ export default {
               this.handleError,
               this.handleEmailNotVerified
             )
+
+            this.isLoading = false
           } catch (error) {
             this.isLoading = false
             return
