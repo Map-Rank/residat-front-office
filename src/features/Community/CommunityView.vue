@@ -563,6 +563,9 @@ export default {
         this.zoneId = id
       }
 
+
+      
+
       if (this.propZoneId === id) {
         console.error('same zone selected  so no navigation')
         return
@@ -596,11 +599,13 @@ export default {
     return;
   }
 
-      // Retrieve the current sector IDs from the URL or initialize as empty array
-      const urlSectorIds =
-        typeof this.propSectorId === 'string' ? this.propSectorId.split(',').map(Number) : []
+// Retrieve the current sector IDs from the URL or initialize as empty array
+const urlSectorIds = this.propSectorId && this.propSectorId.length > 0
+                      ? this.propSectorId.split(',').map(Number)
+                      : [];
 
-      let updatedSectorIds
+let updatedSectorIds;
+
 
       if (checked) {
         console.log("This is he checkinh!!!!!!!!!!!'")
@@ -726,7 +731,6 @@ export default {
         console.error('Failed to load events:', error)
       } finally {
         this.isloadingEvent = false
-        this.isZoneFilterLoading = false
       }
     },
 

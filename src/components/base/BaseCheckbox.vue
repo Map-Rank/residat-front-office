@@ -23,7 +23,10 @@ export default {
   props: {
     list: {
       type: Object,
-      required: true
+      required: true,
+      validator(value) {
+        return typeof value.id === 'number' && typeof value.name === 'string'
+      }
     }
   },
   data() {
@@ -34,6 +37,11 @@ export default {
   },
   methods: {
     updateCheckedItems() {
+
+      if (!this.list || typeof this.list.id === 'undefined') {
+        console.error("Invalid 'list' object or missing 'id'");
+        return;
+      }
       // console.log('This is the checkbox list id ' + this.list.id);
       // console.log('Change event emitted', { list: this.list, checked: this.checked });
       this.$emit('change', { list: this.list, checked: this.checked });
