@@ -31,17 +31,10 @@ export default {
       type: String,
       required: true,
     },
-  },
 
-  data() {
-    return {
-      map: null, // Leaflet map instance
-      showInfo: false, // Controls the display of the info box
-      selectedRegion: {
-        name: '',
-        info: ''
-      }, // Holds the info of the selected region
-      zoneMarkeds: [
+    zoneMarkeds: {
+      type: Array,
+      default: () => ([
         {
           id: 1,
           parentId: 3,
@@ -50,8 +43,6 @@ export default {
           longitude: "11.7468",
           zoomIndex: 8,
           name: 'Centre',
-          lat: 4.05,
-          lng: 9.7,
           info: 'Informations sur Littoral.',
         },
         {
@@ -62,54 +53,56 @@ export default {
           longitude: "9.7043",
           zoomIndex: 8,
           name: 'Littoral',
-          lat: 4.5,
-          lng: 11.5,
           info: 'Informations sur Centre.',
         },
-      ],
+      ]),
+    }
+  },
+
+  data() {
+    return {
+      map: null, // Leaflet map instance
+      showInfo: false, // Controls the display of the info box
+      selectedRegion: {
+        name: '',
+        info: ''
+      }, // Holds the info of the selected region
+   
     };
   },
 
   methods: {
     // Initialize the map and load data
-    initializeMap() {
-      this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex);
+// Initialize the map and load data
+initializeMap() {
+  this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex);
 
-      // Adding OpenStreetMap tile layer
-      L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-      }).addTo(this.map);
+  // Adding OpenStreetMap tile layer
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(this.map);
 
-      // Add markers for each region
-      this.zoneMarkeds.forEach((zoneMarked) => {
-        const marker = L.marker([zoneMarked.lat, zoneMarked.lng]).addTo(this.map);
+  // Add markers for each region, if zoneMarkeds is defined
+  if (this.zoneMarkeds && this.zoneMarkeds.length > 0) {
+    this.zoneMarkeds.forEach((zoneMarked) => {
+      const marker = L.marker([zoneMarked.latitude, zoneMarked.longitude]).addTo(this.map);
 
-        // Display region info and emit event on marker click
-        marker.on('click', () => {
-          this.showRegionInfo(zoneMarked);
+      // Display region info and emit event on marker click
+      marker.on('click', () => {
+        this.showRegionInfo(zoneMarked);
 
-          //       this.$router
-          // .push({
-          //   name: 'dashboard',
-          //   params: {
-          //     zoneId: zoneMarked.id,
-          //     parentId: zoneMarked.parentId,
-          //     zoneName: zoneMarked.name,
-          //     mapSize: zoneMarked.defaultMapSize,
-          //     latitude: zoneMarked.latitude,
-          //     longitude: zoneMarked.longitude,
-          //     zoomIndex: zoneMarked.zoomIndex
-          //   }
-          // })
-
-          // Emit an event with the clicked marker's zone data
-          this.$emit('markerClick', { zoneMarked });
-        });
+        // Emit an event with the clicked marker's zone data
+        this.$emit('markerClick', { zoneMarked });
       });
+    });
+  } else {
+    console.log('No zone markers available at initialization.');
+  }
 
-      // Fetch and add GeoJSON and SVG layers
-      this.loadGeoJsonAndSvg();
-    },
+  // Fetch and add GeoJSON and SVG layers
+  this.loadGeoJsonAndSvg();
+}
+,
 
     // Show region info when marker is clicked
     showRegionInfo(zoneMarked) {
@@ -156,7 +149,7 @@ export default {
         const svgElement = svgDocument.querySelector('svg');
 
         // Overlay the SVG on the map
-        L.svgOverlay(svgElement, bounds).addTo(this.map);
+        L.svgOverlay( bounds).addTo(this.map);
       } catch (error) {
         console.error('Error loading the GeoJSON or SVG file:', error);
       }

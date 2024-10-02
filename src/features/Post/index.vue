@@ -96,6 +96,7 @@
         :comment_count="customPost.comment_count"
         :like_count="like_count"
         :share_count="customPost.share_count"
+        :postId="this.post.id"
         @showPostDetails="showModal()"
       />
 

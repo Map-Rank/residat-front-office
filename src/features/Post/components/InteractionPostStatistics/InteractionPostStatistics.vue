@@ -22,6 +22,9 @@ export default {
     comment_count: {},
     like_count: {},
     share_count:{},
+    postId:{
+      type:String
+    },
 
   },
 
@@ -39,7 +42,8 @@ export default {
 
   methods:{
     showPostDetails() {
-      this.$emit('showPostDetails')
+      console.log('this is id'+ this.psotId)
+      this.$router.push({ name: "show-post", params: { id: this.postId } });
     },
   }
 }

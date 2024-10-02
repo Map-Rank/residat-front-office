@@ -1,9 +1,10 @@
 <template>
-  <MapComponent
+  <MapComponent 
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
     :zoomIndex="zoomIndex"
+    :zoneMarkeds="this.zoneMarkers"
     @markerClick="markerClick"
   />
   <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
@@ -46,7 +47,7 @@
           </div>
 
           <div class="mt-2">
-             <post-slider  />
+             <post-slider   />
           </div>
    
       </div>
@@ -292,21 +293,28 @@ export default {
     WaterStressChart,
     ButtonUi,
     RefreshError,
+   
     Modal,
     MapComponent
     // MapShimmer
+  },
+
+  async mounted() {
+    this.isLoadingMap = true
+    await this.fetchZoneMarkeds()
+    this.isLoadingMap = false
   },
 
   watch: {
     $route: {
       immediate: true,
       async handler() {
-        // this.isLoadingMap = true
+        this.isLoadingMap = true
         this.isErrorLoadMap = false
-        // this.inSubDivision = false
-
+        
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
+          this.zoneMarkers = this.zone
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
@@ -335,7 +343,6 @@ export default {
             this.vectorKeys = [0]
           }
         }
-
         this.isLoadingMap = false
       }
     }
@@ -354,6 +361,7 @@ export default {
       zone: null,
       presentMapId: null,
       zoneIdToSearch: null,
+      zoneMarkers:null,
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
@@ -362,7 +370,7 @@ export default {
       isWaterStressGraphHidden: false,
       isKeyActorsHidden: false,
       showAllActors: false,
-      isLoadingMap: false,
+      isLoadingMap: true,
       isErrorLoadMap: false,
       displayStatistics: false,
       reportType: null,
@@ -447,6 +455,17 @@ export default {
   },
 
   methods: {
+
+    async fetchZoneMarkeds() {
+      // Placeholder for actual fetching logic
+      try {
+        this.zoneMarkers = await getSpecificZones(1);
+        console.log('this is zone mark lengh' + this.zoneMarkers)
+      } catch (error) {
+        console.error('Failed to fetch zone markers:', error);
+      }
+    }
+  ,
 
 
     markerClick(zoneMarked){
