@@ -4,11 +4,7 @@
     <div id="map" style="height: 100vh"></div>
 
     <!-- Info Box shown when a marker is clicked -->
-    <div v-if="showInfo" class="info-box">
-      <h3>{{ selectedRegion.name }}</h3>
-      <p>{{ selectedRegion.info }}</p>
-      <button @click="closeInfo">Close</button>
-    </div>
+    
   </div>
 </template>
 
@@ -89,7 +85,6 @@ initializeMap() {
 
       // Display region info and emit event on marker click
       marker.on('click', () => {
-        this.showRegionInfo(zoneMarked);
 
         // Emit an event with the clicked marker's zone data
         this.$emit('markerClick', { zoneMarked });
@@ -104,16 +99,8 @@ initializeMap() {
 }
 ,
 
-    // Show region info when marker is clicked
-    showRegionInfo(zoneMarked) {
-      this.selectedRegion = zoneMarked;
-      this.showInfo = true;
-    },
 
-    // Close the info box
-    closeInfo() {
-      this.showInfo = false;
-    },
+
 
     // Load GeoJSON and SVG files and add to map
     async loadGeoJsonAndSvg() {
@@ -137,16 +124,10 @@ initializeMap() {
         const bounds = geoJsonLayer.getBounds();
 
         // Fetch SVG file
-        const svgResponse = await fetch('assets/maps/3BZVgc3vIYjZsZHQuN87fpMP0a73pUPPhfjPovMp.svg');
-        if (!svgResponse.ok) {
-          throw new Error('Error loading the SVG file.');
-        }
+      
 
         // Parse and overlay the SVG on the map
-        const svgText = await svgResponse.text();
-        const parser = new DOMParser();
-        const svgDocument = parser.parseFromString(svgText, 'image/svg+xml');
-        const svgElement = svgDocument.querySelector('svg');
+      
 
         // Overlay the SVG on the map
         L.svgOverlay( bounds).addTo(this.map);

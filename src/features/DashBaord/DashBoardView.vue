@@ -457,7 +457,9 @@ export default {
     async fetchZoneMarkeds() {
       // Placeholder for actual fetching logic
       try {
-        this.zoneMarkers = await getZones(2,null);
+        const zones = await getZones(2,null);
+        this.zoneMarkers.push(zones);
+        // this.zoneMarkers = await getZones(2,null);
         console.log('this is zone mark lengh  ' + this.zoneMarkers)
         // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
       } catch (error) {
