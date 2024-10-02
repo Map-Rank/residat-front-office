@@ -25,8 +25,7 @@
       </div> -->
 
       <div class="lg:w-1/4 md:w-3/4 grid gap-1">
- 
-          <!-- <div class="">
+        <!-- <div class="">
             <button-ui
               :label="$t('water_risk')"
               :color="'text-white'"
@@ -37,18 +36,17 @@
             </button-ui>
           </div> -->
 
-          <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
-            <WaterStressChart></WaterStressChart>
-          </div>
+        <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
+          <WaterStressChart></WaterStressChart>
+        </div>
 
-          <div class="mt-2 max-h-[30vh] w-full">
-            <ZoneInfo :zone="this.zone" />
-          </div>
+        <div class="mt-2 max-h-[30vh] w-full">
+          <ZoneInfo :zone="this.zone" />
+        </div>
 
-          <div class="mt-2">
-             <post-slider  />
-          </div>
-   
+        <div class="mt-2">
+          <post-slider status="RECENT" />
+        </div>
       </div>
 
       <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
@@ -447,26 +445,22 @@ export default {
   },
 
   methods: {
-
-
-    markerClick(zoneMarked){
-
-      console.log('marker is clicked');
+    markerClick(zoneMarked) {
+      console.log('marker is clicked')
       console.log(zoneMarked)
-      this.$router
-          .push({
-            name: 'dashboard',
-            params: {
-              zoneId: zoneMarked.id,
-              parentId: zoneMarked.parent_id,
-              zoneName: zoneMarked.name,
-              latitude: zoneMarked.latitude,
-              longitude: zoneMarked.longitude,
-              zoomIndex: zoneMarked.zoomLevelIndex
-            }
-          })
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          zoneId: zoneMarked.id,
+          parentId: zoneMarked.parent_id,
+          zoneName: zoneMarked.name,
+          latitude: zoneMarked.latitude,
+          longitude: zoneMarked.longitude,
+          zoomIndex: zoneMarked.zoomLevelIndex
+        }
+      })
 
-          console.log('the router complte')
+      console.log('the router complte')
     },
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
