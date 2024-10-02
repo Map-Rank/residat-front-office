@@ -1,9 +1,10 @@
 <template>
-  <MapComponent
+  <MapComponent 
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
     :zoomIndex="zoomIndex"
+    :zoneMarkeds="this.zoneMarkers"
     @markerClick="markerClick"
   />
   <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
@@ -43,6 +44,7 @@
         <div class="mt-2 max-h-[30vh] w-full">
           <ZoneInfo :zone="this.zone" />
         </div>
+
 
         <div class="mt-2">
           <post-slider status="RECENT" />
@@ -261,7 +263,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones,getZones } from '../../services/zoneService'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
@@ -290,21 +292,26 @@ export default {
     WaterStressChart,
     ButtonUi,
     RefreshError,
+   
     Modal,
     MapComponent
     // MapShimmer
+  },
+
+  async mounted() {
+    await this.fetchZoneMarkeds()
   },
 
   watch: {
     $route: {
       immediate: true,
       async handler() {
-        // this.isLoadingMap = true
+        this.isLoadingMap = true
         this.isErrorLoadMap = false
-        // this.inSubDivision = false
-
+        
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
+          // this.zoneMarkers = this.zone
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
@@ -333,7 +340,6 @@ export default {
             this.vectorKeys = [0]
           }
         }
-
         this.isLoadingMap = false
       }
     }
@@ -352,6 +358,7 @@ export default {
       zone: null,
       presentMapId: null,
       zoneIdToSearch: null,
+      zoneMarkers:[],
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
@@ -360,7 +367,7 @@ export default {
       isWaterStressGraphHidden: false,
       isKeyActorsHidden: false,
       showAllActors: false,
-      isLoadingMap: false,
+      isLoadingMap: true,
       isErrorLoadMap: false,
       displayStatistics: false,
       reportType: null,
@@ -445,8 +452,25 @@ export default {
   },
 
   methods: {
-    markerClick(zoneMarked) {
-      console.log('marker is clicked')
+
+    async fetchZoneMarkeds() {
+      // Placeholder for actual fetching logic
+      try {
+        const zones = await getZones(2,null);
+        this.zoneMarkers.push(zones);
+        // this.zoneMarkers = await getZones(2,null);
+        console.log('this is zone mark lengh  ' + this.zoneMarkers)
+        // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
+      } catch (error) {
+        console.error('Failed to fetch zone markers:', error);
+      }
+    }
+  ,
+
+
+    markerClick(zoneMarked){
+
+      console.log('marker is clicked');
       console.log(zoneMarked)
       this.$router.push({
         name: 'dashboard',
