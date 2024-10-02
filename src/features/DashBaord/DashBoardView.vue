@@ -264,7 +264,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones,getZones } from '../../services/zoneService'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
@@ -300,9 +300,7 @@ export default {
   },
 
   async mounted() {
-    this.isLoadingMap = true
     await this.fetchZoneMarkeds()
-    this.isLoadingMap = false
   },
 
   watch: {
@@ -314,7 +312,7 @@ export default {
         
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
-          this.zoneMarkers = this.zone
+          // this.zoneMarkers = this.zone
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
@@ -361,7 +359,7 @@ export default {
       zone: null,
       presentMapId: null,
       zoneIdToSearch: null,
-      zoneMarkers:null,
+      zoneMarkers:[],
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
@@ -459,8 +457,9 @@ export default {
     async fetchZoneMarkeds() {
       // Placeholder for actual fetching logic
       try {
-        this.zoneMarkers = await getSpecificZones(1);
-        console.log('this is zone mark lengh' + this.zoneMarkers)
+        this.zoneMarkers = await getZones(2,null);
+        console.log('this is zone mark lengh  ' + this.zoneMarkers)
+        // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
       } catch (error) {
         console.error('Failed to fetch zone markers:', error);
       }

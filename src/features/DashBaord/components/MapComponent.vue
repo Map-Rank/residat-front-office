@@ -83,7 +83,7 @@ initializeMap() {
   }).addTo(this.map);
 
   // Add markers for each region, if zoneMarkeds is defined
-  if (this.zoneMarkeds && this.zoneMarkeds.length > 0) {
+  if (this.zoneMarkeds) {
     this.zoneMarkeds.forEach((zoneMarked) => {
       const marker = L.marker([zoneMarked.latitude, zoneMarked.longitude]).addTo(this.map);
 
