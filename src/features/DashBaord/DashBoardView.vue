@@ -44,7 +44,7 @@
           <ZoneInfo :zone="this.zone" />
         </div>
 
-        <div class="mt-2">
+        <div class="mt-8">
           <post-slider status="RECENT" />
         </div>
       </div>
