@@ -45,7 +45,7 @@
         </div>
 
         <div class="mt-2">
-          <post-slider />
+          <post-slider status="RECENT" />
         </div>
       </div>
 

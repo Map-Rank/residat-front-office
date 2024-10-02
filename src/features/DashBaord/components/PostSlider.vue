@@ -24,12 +24,12 @@
 
                 <span
                   v-if="status === 'TRENDING'"
-                  class="bg-[#FFFDD0] px-2 py-1 rounded-lg text-xs text-white`"
+                  class="bg-[#FFFDD0] px-2 py-1 rounded-lg text-xs text-white"
                   >{{ status }}</span
                 >
                 <span
                   v-if="status === 'RECENT'"
-                  class="bg-[#1c50a3] px-2 py-1 rounded-lg text-xs text-white`"
+                  class="bg-[#1c50a3] px-2 py-1 rounded-lg text-xs text-white"
                   >{{ status }}</span
                 >
               </div>
@@ -80,8 +80,8 @@ export default {
   },
   props: {
     status: {
-      type: String,
-      default: labelStatus.TRENDING
+      type: String
+      // default: labelStatus.TRENDING
     },
 
     posts: {
