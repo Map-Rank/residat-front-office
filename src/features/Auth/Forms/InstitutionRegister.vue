@@ -274,7 +274,7 @@ eslint-disable vue/no-parsing-error
               />
             </div>
 
-            <div v-if="zone_to_cover > 2" class="w-1/2">
+            <div v-if="_to_cover > 2" class="w-1/2">
               <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
               <div v-if="isDivisionLoading" class="flex h-full justify-center">
                 <LoadingIndicator />

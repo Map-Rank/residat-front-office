@@ -1,5 +1,5 @@
 <template>
-  <div class="relative w-full max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
+  <div class="relative w-full max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg" v-if="hidden">
     <!-- Horizontal slider for posts -->
     <div ref="slider" class="flex transition-transform duration-300 ease-in-out gap-2">
       <!-- Loop through each post and display its content -->
@@ -82,6 +82,10 @@ export default {
     status: {
       type: String
       // default: labelStatus.TRENDING
+    },
+    hidden: {
+      type: Boolean,
+      default: false
     },
 
     posts: {

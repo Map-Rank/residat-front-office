@@ -12,10 +12,10 @@
       <p class="text-gray-600 text-[12px]"><strong>Latitude:</strong> {{ zone.latitude }}</p>
       <p class="text-gray-600 text-[12px]"><strong>Longitude:</strong> {{ zone.longitude }}</p>
       <p class="text-gray-600 text-[12px]">
-        <strong>Number of Civils:</strong> {{ zone.longitude }}
+        <strong>Number of Civils:</strong> {{ zone.numberCivil }}
       </p>
       <p class="text-gray-600 text-[12px]">
-        <strong>Number of Accidents:</strong> {{ zone.longitude }}
+        <strong>Number of Accidents:</strong> {{ zone.numberAccident }}
       </p>
     </div>
     <div v-else>

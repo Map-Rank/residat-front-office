@@ -45,7 +45,7 @@
         </div>
 
         <div class="mt-8">
-          <post-slider status="RECENT" />
+          <post-slider status="RECENT" :hidden="false" />
         </div>
       </div>
 
