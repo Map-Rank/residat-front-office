@@ -156,7 +156,7 @@ export default {
         const svgElement = svgDocument.querySelector('svg');
 
         // Overlay the SVG on the map
-        L.svgOverlay(svgElement, bounds).addTo(this.map);
+        // L.svgOverlay(bounds).addTo(this.map);
       } catch (error) {
         console.error('Error loading the GeoJSON or SVG file:', error);
       }
