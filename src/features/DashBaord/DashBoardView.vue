@@ -1,5 +1,5 @@
 <template>
-  <MapComponent 
+  <MapComponent
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
@@ -45,9 +45,8 @@
           <ZoneInfo :zone="this.zone" />
         </div>
 
-        <div class="mt-8">
-
-          <post-slider status="RECENT" />
+        <div class="mt-4">
+          <!-- <post-slider status="RECENT" /> -->
         </div>
       </div>
 
@@ -263,7 +262,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones,getZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones, getZones } from '../../services/zoneService'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
@@ -292,7 +291,7 @@ export default {
     WaterStressChart,
     ButtonUi,
     RefreshError,
-   
+
     Modal,
     MapComponent
     // MapShimmer
@@ -308,7 +307,7 @@ export default {
       async handler() {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
-        
+
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
           // this.zoneMarkers = this.zone
@@ -358,7 +357,7 @@ export default {
       zone: null,
       presentMapId: null,
       zoneIdToSearch: null,
-      zoneMarkers:[],
+      zoneMarkers: [],
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
@@ -452,25 +451,20 @@ export default {
   },
 
   methods: {
-
     async fetchZoneMarkeds() {
       // Placeholder for actual fetching logic
       try {
-        const zones = await getZones(2,null);
-        this.zoneMarkers.push(zones);
+        const zones = await getZones(2, null)
+        this.zoneMarkers.push(zones)
         // this.zoneMarkers = await getZones(2,null);
         console.log('this is zone mark lengh  ' + this.zoneMarkers)
         // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
       } catch (error) {
-        console.error('Failed to fetch zone markers:', error);
+        console.error('Failed to fetch zone markers:', error)
       }
-    }
-  ,
-
-
-    markerClick(zoneMarked){
-
-      console.log('marker is clicked');
+    },
+    markerClick(zoneMarked) {
+      console.log('marker is clicked')
       console.log(zoneMarked)
       this.$router.push({
         name: 'dashboard',
