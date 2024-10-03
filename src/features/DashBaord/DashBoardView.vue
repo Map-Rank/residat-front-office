@@ -3,8 +3,7 @@
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
-    :zoomIndex="zoomIndex"
-    :zoneMarkeds="this.zoneMarkers"
+    :zoomIndex="zoomIndex"    
     @markerClick="markerClick"
   />
   <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
@@ -299,7 +298,7 @@ export default {
   },
 
   async mounted() {
-    await this.fetchZoneMarkeds()
+    // await this.fetchZoneMarkeds()
   },
 
   watch: {
@@ -308,6 +307,7 @@ export default {
       async handler() {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
+          // await this.fetchZoneMarkeds()
         
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
