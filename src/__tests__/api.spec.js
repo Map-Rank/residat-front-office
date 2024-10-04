@@ -17,6 +17,11 @@ function toStructure(obj) {
 describe('API Service', () => {
   const authToken = 'fake-token';
   const responseData = { data: 'some data' };
+  const forgotPasswordResponce = {
+    "status": true,
+    "data": [],
+    "message": "We have emailed your password reset link."
+  };
   const sectorData = {
     status: true,
     data: [
@@ -34,39 +39,41 @@ describe('API Service', () => {
     mock.reset();
   });
 
-//   it('should make a GET request', async () => {
-//     mock.onGet(API_ENDPOINTS.sector).reply(200, sectorData);
+  it('should make a GET request', async () => {
+    mock.onGet(API_ENDPOINTS.sector).reply(200, sectorData);
 
-//     const response = await makeApiGetCall(API_ENDPOINTS.sector, authToken);
+    const response = await makeApiGetCall(API_ENDPOINTS.sector, authToken);
 
-//     expect(response.status).toBe(200);
-//     expect(toStructure(response.data)).toEqual(toStructure(sectorData));
-//   });
+    expect(response.status).toBe(200);
+    expect(toStructure(response.data)).toEqual(toStructure(sectorData));
+  });
 
-//   it('should make a POST request with JSON data', async () => {
-//     const postData = { key: 'value' };
-//     mock.onPost(API_ENDPOINTS.getPostsGuest).reply(200, responseData);
+  // it('should make a POST request with JSON data', async () => {
+  //   const formData = new FormData()
+  //   formData.append('email', 'user')
+  //   let data = JSON.stringify({
+  //     "email": "test@test.com"
+  //   });
 
-//     const response = await makeApiPostCall(API_ENDPOINTS.getPostsGuest, postData, authToken, false);
+  //   // mock.onPost(API_ENDPOINTS.getPostsGuest).reply(200, responseData);
 
-//     expect(response.status).toBe(200);
-//     expect(response.data).toEqual(responseData);
-//     expect(mock.history.post[0].headers.Authorization).toBe(`Bearer ${authToken}`);
-//     expect(mock.history.post[0].headers['Content-Type']).toBe('application/json');
-//   });
+  //   const response = await makeApiPostCall('/forgot-password', data,);
 
-//   it('should make a POST request with form-data', async () => {
-//     const formData = new FormData();
-//     formData.append('file', 'fake-file');
-//     mock.onPost(API_ENDPOINTS.uploadFile).reply(200, responseData);
+  //   expect(response.status).toBe(200);
+  //   expect(response.data).toEqual(forgotPasswordResponce);
+  // });
 
-//     const response = await makeApiPostCall(API_ENDPOINTS.uploadFile, formData, authToken, true);
+  // it('should make a POST request with form-data', async () => {
+  //   const formData = new FormData()
+  //   formData.append('email', 'test@test.com')
+  //   mock.onPost(API_ENDPOINTS.uploadFile).reply(200, responseData);
 
-//     expect(response.status).toBe(200);
-//     expect(response.data).toEqual(responseData);
-//     expect(mock.history.post[0].headers.Authorization).toBe(`Bearer ${authToken}`);
-//     expect(mock.history.post[0].headers['Content-Type']).toBe('multipart/form-data');
-//   });
+   
+  //   const response = await makeApiPostCall('/forgot-password', formData,);
+
+  //   expect(response.status).toBe(200);
+  //   expect(response.data).toEqual(forgotPasswordResponce);
+  // });
 
 //   it('should make a PUT request', async () => {
 //     const putData = { key: 'value' };
