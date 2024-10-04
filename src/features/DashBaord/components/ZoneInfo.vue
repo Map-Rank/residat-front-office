@@ -12,20 +12,25 @@
     <div v-if="zone" class="">
       <h2 class="text-[16px] font-bold">{{ zone.name }}</h2>
 
-      <div class="flex justify-between">
-        <div>
-          <p class="text-gray-600 text-[10px]"><strong>Latitude:</strong> {{ zone.latitude }}</p>
-          <p class="text-gray-600 text-[10px]"><strong>Longitude:</strong> {{ zone.longitude }}</p>
-        </div>
-        <div>
-          <p class="text-gray-600 text-[10px]">
-            <strong>Number of Civils:</strong> {{ zone.civils }}
-          </p>
-          <p class="text-gray-600 text-[10px]">
-            <strong>Number of Accidents:</strong> {{ zone.accidents }}
-          </p>
-        </div>
-      </div>
+   <div class="flex justify-between">
+     <div>
+       <p v-if="zone.latitude != null" class="text-gray-600 text-[10px]">
+         <strong>Latitude:</strong> {{ zone.latitude }}
+       </p>
+       <p v-if="zone.longitude != null" class="text-gray-600 text-[10px]">
+         <strong>Longitude:</strong> {{ zone.longitude }}
+       </p>
+     </div>
+     <div>
+       <p v-if="zone.civils != null" class="text-gray-600 text-[10px]">
+         <strong>Number of Civils:</strong> {{ zone.civils }}
+       </p>
+       <p v-if="zone.accidents != null" class="text-gray-600 text-[10px]">
+         <strong>Number of Accidents:</strong> {{ zone.accidents }}
+       </p>
+     </div>
+   </div>
+   
     </div>
     
     <!-- Skeleton loaders for text when no zone data is available -->

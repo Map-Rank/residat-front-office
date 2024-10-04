@@ -306,6 +306,7 @@ export default {
         
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
+          this.posts = await getFilterPosts(this.zoneId, null, 4);
           // this.zoneMarkers = this.zone
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
@@ -318,7 +319,7 @@ export default {
 
           if (zones.length > 0) {
             this.posts = await getFilterPosts(zones[0].id, null, 4);
-
+            
             if (zones[0].level_id == 4) {
               this.inSubDivision = true
               this.reportType = null
@@ -328,8 +329,9 @@ export default {
               this.getReport(this.zone.id)
               return
             }
-
+            
             this.zone = zones[0]
+            this.posts = await getFilterPosts(zones[0].id, null, 4);
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
             this.vectorKeys = this.zone.vector?.keys
