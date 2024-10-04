@@ -33,6 +33,7 @@ coverage
 #file
 public/storage
 public/report_images
+public/firebase-keys.json
 .env
 docs/.vitepress/cache
 docs/.vitepress/dist
