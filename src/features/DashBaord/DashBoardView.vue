@@ -36,6 +36,7 @@
 
         <div class="mt-8">
 
+
           <post-slider :posts="this.posts" status="RECENT" />
         </div>
       </div>

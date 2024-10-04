@@ -10,6 +10,7 @@
 
 <script>
 
+
 import { getZones } from '@/services/zoneService'
 
 import L from 'leaflet';
@@ -18,9 +19,18 @@ export default {
   name: 'MapComponent',
 
   props: {
-    latitude: String,
-    longitude: String,
-    zoomIndex: String,
+    latitude: {
+      type: String,
+      required: true
+    },
+    longitude: {
+      type: String,
+      required: true
+    },
+    zoomIndex: {
+      type: String,
+      required: true
+    }
   },
 
   data() {
@@ -94,6 +104,7 @@ async loadGeoJsonAndSvg() {
   },
 
   watch: {
+
     latitude(val) {
       this.map && this.map.flyTo([val, this.longitude], this.zoomIndex);
     },

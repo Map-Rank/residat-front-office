@@ -1,4 +1,5 @@
 <template>
+
   <div class="relative w-full max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
 
         <!-- Shimmer Loader -->
@@ -106,6 +107,10 @@ export default {
   props: {
     status: {
       type: String
+    },
+    hidden: {
+      type: Boolean,
+      default: false
     },
 
     posts: {

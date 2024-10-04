@@ -11,6 +11,7 @@
     <!-- Zone Details -->
     <div v-if="zone" class="">
       <h2 class="text-[16px] font-bold">{{ zone.name }}</h2>
+
       <div class="flex justify-between">
         <div>
           <p class="text-gray-600 text-[10px]"><strong>Latitude:</strong> {{ zone.latitude }}</p>
