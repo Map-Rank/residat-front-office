@@ -40,9 +40,10 @@
           <WaterStressChart></WaterStressChart>
         </div>
 
-        <div class="mt-2 max-h-[30vh] w-full">
-          <ZoneInfo :zone="this.zone" />
-        </div>
+      <div class="mt-2 max-h-[30vh] w-full">
+        <ZoneInfo :zone="zone" />
+      </div>
+      
 
         <div class="mt-8">
 
