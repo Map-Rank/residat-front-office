@@ -1,21 +1,34 @@
 <template>
-  <div class=" w-[100%] grid p-4 border rounded shadow-md bg-white">
+  <div class="w-[100%] grid p-4 border rounded shadow-md bg-white">
     <!-- Zone Banner -->
-    <div v-if="zone" class=" mb-1">
+    <div v-if="zone && zone.banner" class="mb-1">
       <img :src="zone.banner" alt="Zone Banner" class="w-full h-[15vh] object-cover rounded" />
     </div>
-    <div v-else class="skeleton-banner h-[10vh] mb-4 shimmer"></div>
     
+    <!-- Skeleton loader for banner when no zone data is available -->
+    <div v-if="!zone" class="skeleton-banner h-[10vh] mb-4 shimmer"></div>
+
     <!-- Zone Details -->
-    <div v-if="zone" class="zone-details">
-      <h2 class="text-[16px] font-bold ">{{ zone.name }}</h2>
-      <p class="text-gray-600 text-[14px]">
-        <strong>Latitude:</strong> {{ zone.latitude }}
-      </p>
-      <p class="text-gray-600 text-[14px]">
-        <strong>Longitude:</strong> {{ zone.longitude }}
-      </p>
+    <div v-if="zone" class="">
+      <h2 class="text-[16px] font-bold">{{ zone.name }}</h2>
+
+      <div class="flex justify-between">
+        <div>
+          <p class="text-gray-600 text-[10px]"><strong>Latitude:</strong> {{ zone.latitude }}</p>
+          <p class="text-gray-600 text-[10px]"><strong>Longitude:</strong> {{ zone.longitude }}</p>
+        </div>
+        <div>
+          <p class="text-gray-600 text-[10px]">
+            <strong>Number of Civils:</strong> {{ zone.civils }}
+          </p>
+          <p class="text-gray-600 text-[10px]">
+            <strong>Number of Accidents:</strong> {{ zone.accidents }}
+          </p>
+        </div>
+      </div>
     </div>
+    
+    <!-- Skeleton loaders for text when no zone data is available -->
     <div v-else>
       <div class="skeleton-text-wide shimmer mb-1"></div>
       <div class="skeleton-text-narrow shimmer"></div>
@@ -24,26 +37,24 @@
   </div>
 </template>
 
-  
-  <script>
-  export default {
-    name: "ZoneInfo",
-    props: {
-      zone: {
-        type: Object,
-        required: true,
-      },
-    },
-    methods: {
-    
-    },
-  };
-  </script>
-  
+<script>
+export default {
+  name: 'ZoneInfo',
+  props: {
+    zone: {
+      type: Object,
+      required: true
+    }
+  },
+  methods: {}
+}
+</script>
+
+
 <style scoped>
-
-
-.skeleton-banner, .skeleton-text-wide, .skeleton-text-narrow {
+.skeleton-banner,
+.skeleton-text-wide,
+.skeleton-text-narrow {
   background-color: #ccc;
   border-radius: 4px;
 }
@@ -52,7 +63,8 @@
   height: 10vh;
 }
 
-.skeleton-text-wide, .skeleton-text-narrow {
+.skeleton-text-wide,
+.skeleton-text-narrow {
   height: 16px;
   margin-bottom: 4px;
 }
@@ -80,5 +92,3 @@
   }
 }
 </style>
-
-  
