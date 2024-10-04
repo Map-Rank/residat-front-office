@@ -1,28 +1,17 @@
 <template>
-  <MapComponent
+  <MapComponent 
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
-    :zoomIndex="zoomIndex"
+    :zoomIndex="zoomIndex"    
     @markerClick="markerClick"
   />
   <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-    <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
-      <div class="h-full bg-white flex items-center px-4 space-x-4">
-        <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>{{ zone.name }}</p>
-      </div>
-    </div> -->
+
 
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative header-nav"
     >
-      <!-- <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
-        <div class="h-full bg-white flex items-center px-2">
-          <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-          <p>{{ zone.name }}</p>
-        </div>
-      </div> -->
 
       <div class="lg:w-1/4 md:w-3/4 grid gap-1">
         <!-- <div class="">
@@ -40,12 +29,15 @@
           <WaterStressChart></WaterStressChart>
         </div>
 
-        <div class="mt-2 max-h-[30vh] w-full">
-          <ZoneInfo :zone="this.zone" />
-        </div>
+      <div class="mt-2 max-h-[30vh] w-full">
+        <ZoneInfo :zone="zone" />
+      </div>
+      
 
         <div class="mt-8">
-          <post-slider status="RECENT" :hidden="false" />
+
+
+          <post-slider :posts="this.posts" status="RECENT" />
         </div>
       </div>
 
@@ -194,6 +186,9 @@
             </div>
           </div>
         </div> -->
+     
+     
+     
       </div>
 
       <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
@@ -261,7 +256,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones,getZones } from '../../services/zoneService'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
@@ -274,6 +269,7 @@ import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
 import { getZoomIndexByLevel } from '@/utils/formating.js'
 import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
+import {  getFilterPosts } from '@/features/Post/services/postService.js'
 
 export default {
   name: 'DashBoardView',
@@ -290,30 +286,39 @@ export default {
     WaterStressChart,
     ButtonUi,
     RefreshError,
+   
     Modal,
     MapComponent
     // MapShimmer
+  },
+
+  async mounted() {
+    // await this.fetchZoneMarkeds()
   },
 
   watch: {
     $route: {
       immediate: true,
       async handler() {
-        // this.isLoadingMap = true
+        this.isLoadingMap = true
         this.isErrorLoadMap = false
-        // this.inSubDivision = false
-
+          // await this.fetchZoneMarkeds()
+        
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
+          // this.zoneMarkers = this.zone
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
+          const zones = await getSpecificMapZones(this.parentId, this.zoneName, 1)
+       
 
           // console.log(zones)
 
           if (zones.length > 0) {
+            this.posts = await getFilterPosts(zones[0].id, null, 4);
+
             if (zones[0].level_id == 4) {
               this.inSubDivision = true
               this.reportType = null
@@ -333,7 +338,6 @@ export default {
             this.vectorKeys = [0]
           }
         }
-
         this.isLoadingMap = false
       }
     }
@@ -349,9 +353,11 @@ export default {
       hoverMapText: 'Map',
       isModalVisible: false,
       graphLabel: '',
+      posts:null,
       zone: null,
       presentMapId: null,
       zoneIdToSearch: null,
+      zoneMarkers:[],
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
@@ -360,7 +366,7 @@ export default {
       isWaterStressGraphHidden: false,
       isKeyActorsHidden: false,
       showAllActors: false,
-      isLoadingMap: false,
+      isLoadingMap: true,
       isErrorLoadMap: false,
       displayStatistics: false,
       reportType: null,
@@ -445,8 +451,25 @@ export default {
   },
 
   methods: {
-    markerClick(zoneMarked) {
-      console.log('marker is clicked')
+
+    async fetchZoneMarkeds() {
+      // Placeholder for actual fetching logic
+      try {
+        const zones = await getZones(2,null);
+        this.zoneMarkers.push(zones);
+        // this.zoneMarkers = await getZones(2,null);
+        console.log('this is zone mark lengh  ' + this.zoneMarkers)
+        // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
+      } catch (error) {
+        console.error('Failed to fetch zone markers:', error);
+      }
+    }
+  ,
+
+
+    markerClick(zoneMarked){
+
+      console.log('marker is clicked');
       console.log(zoneMarked)
       this.$router.push({
         name: 'dashboard',
@@ -456,7 +479,7 @@ export default {
           zoneName: zoneMarked.name,
           latitude: zoneMarked.latitude,
           longitude: zoneMarked.longitude,
-          zoomIndex: zoneMarked.zoomLevelIndex
+          zoomIndex: 9
         }
       })
 
@@ -501,10 +524,12 @@ export default {
       this.zoneIdToSearch = id
     },
 
-    updateZone(zone) {
+    async updateZone(zone) {
       this.zoneMapToSearch = zone
+
+
+    
       this.searchMap()
-      // console.log(zone)
     },
 
     async getReport(zoneId) {

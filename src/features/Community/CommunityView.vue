@@ -280,7 +280,9 @@ export default {
   },
 
   watch: {
+
     async propZoneId(newZoneId) {
+      this.showPageRefresh = false
       console.log('change in zoneId!!!!!')
       if (newZoneId !== this.zoneId || newZoneId != 1) {
         // Only make API call if zoneId has changed
@@ -291,6 +293,7 @@ export default {
     },
 
     async propSectorId(newSectorId) {
+    this.showPageRefresh = false
       console.log('change in sectorId!!!!! new id ' + newSectorId)
       const newParsedSectors = this.parseSectorIds(newSectorId)
       if (JSON.stringify(newParsedSectors) !== JSON.stringify(this.sectorId)) {
