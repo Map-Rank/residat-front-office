@@ -1,7 +1,27 @@
 <template>
   <div class="relative w-full max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
+
+        <!-- Shimmer Loader -->
+        <div  v-if="posts === null" class="animate-pulse flex space-x-4 p-8 bg-white">
+          <div class="flex-1 space-y-6 py-1">
+            <div class="h-16 shimmer rounded"></div>
+            <div class="space-y-3">
+              <div class="rounded-full shimmer h-10 w-10"></div>
+              <div class="grid grid-cols-3 gap-4">
+                <div class="h-2 shimmer rounded col-span-2"></div>
+                <div class="h-2 shimmer rounded col-span-1"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+  <!-- No Posts Message -->
+  <div v-if="posts && posts.length === 0" class="text-center py-10">
+    <span class="text-gray-500">No post in this zone</span>
+  </div>
+
     <!-- Horizontal slider for posts -->
-    <div ref="slider" class="flex transition-transform duration-300 ease-in-out gap-2">
+    <div v-else ref="slider" class="flex transition-transform duration-300 ease-in-out gap-2">
       <!-- Loop through each post and display its content -->
       <div v-for="(post, index) in posts" :key="index" class="min-w-[400px] flex-shrink-0 p-4">
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
@@ -66,11 +86,14 @@
         ]"
       ></span>
     </div>
+
+
+
+
   </div>
 </template>
 
 <script>
-import { labelStatus } from '@/constants/labelStatus.js'
 export default {
   name: 'PostSlider',
   data() {
@@ -78,116 +101,15 @@ export default {
       currentIndex: 0
     }
   },
+
+
   props: {
     status: {
       type: String
-      // default: labelStatus.TRENDING
     },
 
     posts: {
       type: Array,
-      default: () => [
-        {
-          id: 2028,
-          content: '<p>Test post content<\/p>',
-          images: [
-            {
-              id: 1197,
-              type: 'image/jpeg',
-              url: 'https://backoffice-dev.residat.com/storage/images/4742e5d6-bb78-448b-8933-12887c31e2bb.jpeg'
-            }
-          ],
-          creator: [
-            {
-              id: 4,
-              first_name: 'Stephen',
-              last_name: 'Jacques',
-              avatar: 'https://backoffice-dev.residat.com/storage/media/profile.png'
-            }
-          ],
-          created_at: '2024-02-26'
-        },
-        {
-          id: 2028,
-          content: '<p>Test post content<\/p>',
-          images: [
-            {
-              id: 1197,
-              type: 'image/jpeg',
-              url: 'https://backoffice-dev.residat.com/storage/images/4742e5d6-bb78-448b-8933-12887c31e2bb.jpeg'
-            }
-          ],
-          creator: [
-            {
-              id: 4,
-              first_name: 'Stephen',
-              last_name: 'Jacques',
-              avatar: 'https://backoffice-dev.residat.com/storage/media/profile.png'
-            }
-          ],
-          created_at: '2024-02-26'
-        },
-        {
-          id: 2028,
-          content: '<p>Test post content<\/p>',
-          images: [
-            {
-              id: 1197,
-              type: 'image/jpeg',
-              url: 'https://backoffice-dev.residat.com/storage/images/4742e5d6-bb78-448b-8933-12887c31e2bb.jpeg'
-            }
-          ],
-          creator: [
-            {
-              id: 4,
-              first_name: 'Stephen',
-              last_name: 'Jacques',
-              avatar: 'https://backoffice-dev.residat.com/storage/media/profile.png'
-            }
-          ],
-          created_at: '2024-02-26'
-        },
-        {
-          id: 2028,
-          content: '<p>Test post content<\/p>',
-          images: [
-            {
-              id: 1197,
-              type: 'image/jpeg',
-              url: 'https://backoffice-dev.residat.com/storage/images/4742e5d6-bb78-448b-8933-12887c31e2bb.jpeg'
-            }
-          ],
-          creator: [
-            {
-              id: 4,
-              first_name: 'Stephen',
-              last_name: 'Jacques',
-              avatar: 'https://backoffice-dev.residat.com/storage/media/profile.png'
-            }
-          ],
-          created_at: '2024-02-26'
-        },
-        {
-          id: 2029,
-          content: '<p>Another post content<\/p>',
-          images: [
-            {
-              id: 1198,
-              type: 'image/jpeg',
-              url: 'https://backoffice-dev.residat.com/storage/images/example2.jpeg'
-            }
-          ],
-          creator: [
-            {
-              id: 5,
-              first_name: 'Alice',
-              last_name: 'Smith',
-              avatar: 'https://backoffice-dev.residat.com/storage/media/profile2.png'
-            }
-          ],
-          created_at: '2024-03-01'
-        }
-      ]
     }
   },
   methods: {
@@ -221,4 +143,20 @@ export default {
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
+.shimmer {
+  animation: shimmer 1.5s infinite linear;
+  background: linear-gradient(to right, #ccc 8%, #ddd 18%, #ccc 33%);
+  background-size: 800px 104px;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
 </style>

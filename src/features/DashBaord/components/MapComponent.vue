@@ -55,7 +55,7 @@ export default {
         const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map);
         marker.on('click', () => {
           this.$emit('markerClick', zone);
-          this.map.flyTo([zone.latitude, zone.longitude], 9, { animate: true, duration: 2 });
+          this.map.flyTo([zone.latitude, zone.longitude], 9, { animate: true, duration: 4 });
         });
       });
     },

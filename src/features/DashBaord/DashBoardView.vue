@@ -7,22 +7,11 @@
     @markerClick="markerClick"
   />
   <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-    <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
-      <div class="h-full bg-white flex items-center px-4 space-x-4">
-        <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>{{ zone.name }}</p>
-      </div>
-    </div> -->
+
 
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative header-nav"
     >
-      <!-- <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
-        <div class="h-full bg-white flex items-center px-2">
-          <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-          <p>{{ zone.name }}</p>
-        </div>
-      </div> -->
 
       <div class="lg:w-1/4 md:w-3/4 grid gap-1">
         <!-- <div class="">
@@ -47,7 +36,7 @@
 
         <div class="mt-8">
 
-          <post-slider status="RECENT" />
+          <post-slider :posts="this.posts" status="RECENT" />
         </div>
       </div>
 
@@ -196,6 +185,9 @@
             </div>
           </div>
         </div> -->
+     
+     
+     
       </div>
 
       <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
@@ -276,6 +268,7 @@ import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
 import { getZoomIndexByLevel } from '@/utils/formating.js'
 import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
+import {  getFilterPosts } from '@/features/Post/services/postService.js'
 
 export default {
   name: 'DashBoardView',
@@ -317,11 +310,14 @@ export default {
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
+          const zones = await getSpecificMapZones(this.parentId, this.zoneName, 1)
+       
 
           // console.log(zones)
 
           if (zones.length > 0) {
+            this.posts = await getFilterPosts(zones[0].id, null, 4);
+
             if (zones[0].level_id == 4) {
               this.inSubDivision = true
               this.reportType = null
@@ -356,6 +352,7 @@ export default {
       hoverMapText: 'Map',
       isModalVisible: false,
       graphLabel: '',
+      posts:null,
       zone: null,
       presentMapId: null,
       zoneIdToSearch: null,
@@ -526,10 +523,12 @@ export default {
       this.zoneIdToSearch = id
     },
 
-    updateZone(zone) {
+    async updateZone(zone) {
       this.zoneMapToSearch = zone
+
+
+    
       this.searchMap()
-      // console.log(zone)
     },
 
     async getReport(zoneId) {
