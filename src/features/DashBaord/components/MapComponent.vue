@@ -1,10 +1,10 @@
 <template>
   <div>
-    <!-- Map Container -->
     <div id="map" style="height: 100vh"></div>
-
-    <!-- Info Box shown when a marker is clicked -->
-    
+    <!-- Dynamically show info-box when a region is selected -->
+    <div class="info-box" v-if="showInfo">
+      <!-- Data binding and event handling -->
+    </div>
   </div>
 </template>
 
@@ -18,146 +18,52 @@ export default {
   name: 'MapComponent',
 
   props: {
-    latitude: {
-      type: String,
-      required: true,
-    },
-    longitude: {
-      type: String,
-      required: true,
-    },
-    zoomIndex: {
-      type: String,
-      required: true,
-    },
-
-    // zoneMarkeds: {
-    //   type: Array,
-    //   default: () => ([
-    //     {
-    //       id: 1,
-    //       parentId: 3,
-    //       zoneName: 'Centre',
-    //       latitude: "4.4857",
-    //       longitude: "11.7468",
-    //       zoomIndex: 8,
-    //       name: 'Centre',
-    //       info: 'Informations sur Littoral.',
-    //     },
-    //     {
-    //       id: 5,
-    //       parentId: 5,
-    //       zoneName: 'Littoral',
-    //       latitude: "4.0483",
-    //       longitude: "9.7043",
-    //       zoomIndex: 8,
-    //       name: 'Littoral',
-    //       info: 'Informations sur Centre.',
-    //     },
-    //   ]),
-    // }
+    latitude: String,
+    longitude: String,
+    zoomIndex: String,
   },
 
   data() {
     return {
-      map: null, // Leaflet map instance
-      showInfo: false, // Controls the display of the info box
-      selectedRegion: {
-        name: '',
-        info: ''
-      }, // Holds the info of the selected region
-
-      
-    zoneMarkeds: [
-        // {
-        //   id: 1,
-        //   parentId: 3,
-        //   zoneName: 'Centre',
-        //   latitude: "4.4857",
-        //   longitude: "11.7468",
-        //   zoomIndex: 8,
-        //   name: 'Centre',
-        //   info: 'Informations sur Littoral.',
-        // },
-        // {
-        //   id: 5,
-        //   parentId: 5,
-        //   zoneName: 'Littoral',
-        //   latitude: "4.0483",
-        //   longitude: "9.7043",
-        //   zoomIndex: 8,
-        //   name: 'Littoral',
-        //   info: 'Informations sur Centre.',
-        // },
-      ],
-    
-   
+      map: null,
+      showInfo: false,
+      selectedRegion: {},
+      zoneMarkeds: [],
     };
   },
 
   methods: {
-    // Initialize the map and load data
-// Initialize the map and load data
-async initializeMap() {
-
-  // await this.fetchZoneMarkeds()
-
-  const zones = await getZones(2,null);
-  console.log(zones)
-  this.zoneMarkeds = zones;
-
-  this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex);
-
-  // Adding OpenStreetMap tile layer
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
-  }).addTo(this.map);
-
-  // Add markers for each region, if zoneMarkeds is defined
-  if (this.zoneMarkeds) {
-    this.zoneMarkeds.forEach((zoneMarked) => {
-      const marker = L.marker([zoneMarked.latitude, zoneMarked.longitude]).addTo(this.map);
-
-      // Display region info and emit event on marker click
-      marker.on('click', () => {
-
-        // Emit an event with the clicked marker's zone data
-        this.map.flyTo([zoneMarked.latitude, zoneMarked.longitude], 9, {
-          animate: true,
-          duration: 2, // Animation duration in seconds
-        });
-        this.$emit('markerClick', { zoneMarked });
-      });
-    });
-  } else {
-    console.log('No zone markers available at initialization.');
-  }
-
-  // Fetch and add GeoJSON and SVG layers
-  this.loadGeoJsonAndSvg();
-}
-,
 
 
-async fetchZoneMarkeds() {
-      // Placeholder for actual fetching logic
+    async initializeMap() {
       try {
-        const zones = await getZones(2,null);
-        this.zoneMarkeds.push(zones);
-        // this.zoneMarkers = await getZones(2,null);
-        console.log('this is zone mark lengh  ' + this.zoneMarkers)
-        // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
+        const zones = await getZones(2, null);
+        this.zoneMarkeds = zones;
+        this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+          attribution: '© OpenStreetMap contributors',
+        }).addTo(this.map);
+
+        this.addZoneMarkers();
+        this.loadGeoJsonAndSvg();
       } catch (error) {
-        console.error('Failed to fetch zone markers:', error);
+        console.error('Error initializing the map:', error);
       }
     },
-
+    addZoneMarkers() {
+      this.zoneMarkeds.forEach(zone => {
+        const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map);
+        marker.on('click', () => {
+          this.$emit('markerClick', zone);
+          this.map.flyTo([zone.latitude, zone.longitude], 9, { animate: true, duration: 2 });
+        });
+      });
+    },
 
 
     // Load GeoJSON and SVG files and add to map
 async loadGeoJsonAndSvg() {
   try {
-    // Fetch GeoJSON file
     const response = await fetch('assets/maps/national.geojson');
     if (!response.ok) {
       throw new Error('Error loading the GeoJSON file.');
@@ -188,46 +94,22 @@ async loadGeoJsonAndSvg() {
   },
 
   watch: {
-    // Watch for changes in latitude, longitude, and zoomIndex to update the map
-    latitude(newLatitude) {
-      if (this.map) {
-        this.map.flyTo([newLatitude, this.longitude], this.zoomIndex, {
-          animate: true,
-          duration: 2, // Animation duration in seconds
-        });
-      }
+    latitude(val) {
+      this.map && this.map.flyTo([val, this.longitude], this.zoomIndex);
     },
-    longitude(newLongitude) {
-      if (this.map) {
-        this.map.flyTo([this.latitude, newLongitude], this.zoomIndex, {
-          animate: true,
-          duration: 2, // Animation duration in seconds
-        });
-      }
+    longitude(val) {
+      this.map && this.map.flyTo([this.latitude, val], this.zoomIndex);
     },
-    zoomIndex(newZoomIndex) {
-      if (this.map) {
-        this.map.flyTo([this.latitude, this.longitude], newZoomIndex, {
-          animate: true,
-          duration: 2, // Animation duration in seconds
-        });
-      }
+    zoomIndex(val) {
+      this.map && this.map.setView([this.latitude, this.longitude], val);
     },
-    // zoneMarkeds(newZoomIndex) {
-    //   if (this.map) {
-    //     this.map.flyTo([this.latitude, this.longitude], newZoomIndex, {
-    //       animate: true,
-    //       duration: 2, // Animation duration in seconds
-    //     });
-    //   }
-    // }
   },
-
   async mounted() {
-    // Initialize the map when the component is mounted
     await this.initializeMap();
   },
 };
+
+
 </script>
 
 <style scoped>
