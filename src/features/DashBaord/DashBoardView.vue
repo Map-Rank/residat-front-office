@@ -478,7 +478,7 @@ export default {
           zoneName: zoneMarked.name,
           latitude: zoneMarked.latitude,
           longitude: zoneMarked.longitude,
-          zoomIndex: zoneMarked.zoomLevelIndex
+          zoomIndex: 9
         }
       })
 
