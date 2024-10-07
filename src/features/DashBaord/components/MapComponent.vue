@@ -74,11 +74,17 @@ export default {
     // Load GeoJSON and SVG files and add to map
 async loadGeoJsonAndSvg() {
   try {
-    const response = await fetch('assets/maps/national.geojson');
+    const response = await fetch('assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson');
+    if (!response.ok) {
+      throw new Error('Error loading the GeoJSON file.');
+    }
+
+    const responseFarNorth = await fetch('assets/maps/National_region/Far_North.json');
     if (!response.ok) {
       throw new Error('Error loading the GeoJSON file.');
     }
     const cameroonGeoJSON = await response.json();
+    const farNorthGeoJSON = await responseFarNorth.json();
 
     // Add GeoJSON layer to the map
     const geoJsonLayer = L.geoJSON(cameroonGeoJSON, {
@@ -89,12 +95,21 @@ async loadGeoJsonAndSvg() {
       },
     }).addTo(this.map);
 
+    const geoJsonLayerFarNorth = L.geoJSON(farNorthGeoJSON, {
+      style: {
+        color: 'blue',
+        fillColor: 'none',
+        weight: 2,
+      },
+    }).addTo(this.map);
+
     const bounds = geoJsonLayer.getBounds();
+    const farNorthbounds = geoJsonLayerFarNorth.getBounds();
 
     // Assume SVG content is fetched here and stored in `svgContent`
     const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
     svgElement.innerHTML = '<path d="..."/>'; // SVG path content goes here
-    L.svgOverlay(svgElement, bounds).addTo(this.map);
+    L.svgOverlay(svgElement, bounds, farNorthbounds).addTo(this.map);
 
   } catch (error) {
     console.error('Error loading the GeoJSON or SVG file:', error);
