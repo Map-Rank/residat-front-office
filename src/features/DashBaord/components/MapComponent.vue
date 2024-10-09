@@ -43,7 +43,7 @@ export default {
       showInfo: false,
       selectedRegion: {},
       zoneMarkeds: [],
-      geojson:'',
+      geojson:"assets/maps/National_region/Far_North.json",
     };
   },
 
@@ -80,39 +80,51 @@ export default {
     },
 
 
-    async  loadCameroonGeoJson(map) {
+    async  loadCameroonGeoJson() {
   try {
     const response = await fetch('assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson');
     if (!response.ok) {
       throw new Error('Error loading the Cameroon GeoJSON file.');
     }
     const cameroonGeoJSON = await response.json();
-    L.svgOverlay(cameroonGeoJSON, {
+
+    const geoJsonLayer  =L.geoJSON(cameroonGeoJSON, {
       style: {
         color: 'blue',
         fillColor: 'none',
         weight: 2,
       },
-    }).addTo(map);
+    }).addTo(this.map);
+
+
+    const bounds = geoJsonLayer.getBounds();
+    L.svgOverlay( bounds).addTo(this.map);
+
   } catch (error) {
     console.error('Failed to load and add Cameroon GeoJSON:', error);
   }
 },
 
-async  loadZoneGeoJson(map, zonePath) {
+async  loadZoneGeoJson(json) {
+
+  console.log(json)
   try {
-    const response = await fetch(zonePath);
+    const response = await fetch(json);
     if (!response.ok) {
       throw new Error('Error loading the Far North GeoJSON file.');
     }
-    const farNorthGeoJSON = await response.json();
-    L.svgOverlay(farNorthGeoJSON, {
+    const fetchedGeoJson = await response.json();
+
+    const geoJsonLayer =L.geoJSON(fetchedGeoJson, {
       style: {
         color: 'blue',
         fillColor: 'none',
         weight: 2,
       },
-    }).addTo(map);
+    }).addTo(this.map);
+    const zoneBounds = geoJsonLayer.getBounds();
+
+    L.svgOverlay(zoneBounds).addTo(this.map);
   } catch (error) {
     console.error('Failed to load and add Far North GeoJSON:', error);
   }
@@ -120,7 +132,7 @@ async  loadZoneGeoJson(map, zonePath) {
 
 async loadGeoJsonAndSvg() {
   this.loadCameroonGeoJson(this.map)
-  this.loadZoneGeoJson(this.map, this.geojson)
+  this.loadZoneGeoJson(this.geojson)
 }
 
 
