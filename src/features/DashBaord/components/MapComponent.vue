@@ -30,7 +30,11 @@ export default {
     zoomIndex: {
       type: String,
       required: true
-    }
+    },
+    propGeojson: {
+      type: String,
+      // required: true
+    },
   },
 
   data() {
@@ -39,10 +43,11 @@ export default {
       showInfo: false,
       selectedRegion: {},
       zoneMarkeds: [],
+      geojson:'',
     };
   },
 
-  methods: {
+  methods: {  
 
 
     async initializeMap() {
@@ -62,59 +67,62 @@ export default {
     },
     addZoneMarkers() {
       this.zoneMarkeds.forEach(zone => {
+        this.geojson = zone.geojson
+        console.log(this.geojson)
         const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map);
         marker.on('click', () => {
           this.$emit('markerClick', zone);
+
+
           this.map.flyTo([zone.latitude, zone.longitude], 9, { animate: true, duration: 4 });
         });
       });
     },
 
 
-    // Load GeoJSON and SVG files and add to map
-async loadGeoJsonAndSvg() {
+    async  loadCameroonGeoJson(map) {
   try {
     const response = await fetch('assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson');
     if (!response.ok) {
-      throw new Error('Error loading the GeoJSON file.');
-    }
-
-    const responseFarNorth = await fetch('assets/maps/National_region/Far_North.json');
-    if (!response.ok) {
-      throw new Error('Error loading the GeoJSON file.');
+      throw new Error('Error loading the Cameroon GeoJSON file.');
     }
     const cameroonGeoJSON = await response.json();
-    const farNorthGeoJSON = await responseFarNorth.json();
-
-    // Add GeoJSON layer to the map
-    const geoJsonLayer = L.geoJSON(cameroonGeoJSON, {
+    L.svgOverlay(cameroonGeoJSON, {
       style: {
         color: 'blue',
         fillColor: 'none',
         weight: 2,
       },
-    }).addTo(this.map);
-
-    const geoJsonLayerFarNorth = L.geoJSON(farNorthGeoJSON, {
-      style: {
-        color: 'blue',
-        fillColor: 'none',
-        weight: 2,
-      },
-    }).addTo(this.map);
-
-    const bounds = geoJsonLayer.getBounds();
-    const farNorthbounds = geoJsonLayerFarNorth.getBounds();
-
-    // Assume SVG content is fetched here and stored in `svgContent`
-    const svgElement = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-    svgElement.innerHTML = '<path d="..."/>'; // SVG path content goes here
-    L.svgOverlay(svgElement, bounds, farNorthbounds).addTo(this.map);
-
+    }).addTo(map);
   } catch (error) {
-    console.error('Error loading the GeoJSON or SVG file:', error);
+    console.error('Failed to load and add Cameroon GeoJSON:', error);
   }
+},
+
+async  loadZoneGeoJson(map, zonePath) {
+  try {
+    const response = await fetch(zonePath);
+    if (!response.ok) {
+      throw new Error('Error loading the Far North GeoJSON file.');
+    }
+    const farNorthGeoJSON = await response.json();
+    L.svgOverlay(farNorthGeoJSON, {
+      style: {
+        color: 'blue',
+        fillColor: 'none',
+        weight: 2,
+      },
+    }).addTo(map);
+  } catch (error) {
+    console.error('Failed to load and add Far North GeoJSON:', error);
+  }
+},
+
+async loadGeoJsonAndSvg() {
+  this.loadCameroonGeoJson(this.map)
+  this.loadZoneGeoJson(this.map, this.geojson)
 }
+
 
   },
 
@@ -128,6 +136,9 @@ async loadGeoJsonAndSvg() {
     },
     zoomIndex(val) {
       this.map && this.map.setView([this.latitude, this.longitude], val);
+    },
+    propGeojson(val) {
+      // this.map && this.map.setView([this.latitude, this.longitude], val);
     },
   },
   async mounted() {

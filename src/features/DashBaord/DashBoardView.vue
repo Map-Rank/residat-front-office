@@ -4,6 +4,7 @@
     :latitude="latitude"
     :longitude="longitude"
     :zoomIndex="zoomIndex"    
+    :propGeojson="geojson"    
     @markerClick="markerClick"
   />
   <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
@@ -324,6 +325,7 @@ export default {
               this.inSubDivision = true
               this.reportType = null
               this.zone = zones[0]
+              this.geojson = this.zone.geojson
               this.displayStatistics = true
               // this.inSubDivision = true
               this.getReport(this.zone.id)
@@ -331,6 +333,7 @@ export default {
             }
             
             this.zone = zones[0]
+            this.geojson = this.zone.geojson
             this.posts = await getFilterPosts(zones[0].id, null, 4);
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
@@ -357,6 +360,7 @@ export default {
       graphLabel: '',
       posts:null,
       zone: null,
+      geojson: '',
       presentMapId: null,
       zoneIdToSearch: null,
       zoneMarkers:[],
