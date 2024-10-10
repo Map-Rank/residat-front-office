@@ -510,11 +510,11 @@ export default {
           })
           .then(() => {
             // Using window.location.reload() to reload the entire page
-            this.updateMap({
-              latitude: this.zoneMapToSearch.latitude,
-              longitude: this.zoneMapToSearch.longitude,
-              zoomIndex: zoomLevelIndex
-            })
+            // this.updateMap({
+            //   latitude: this.zoneMapToSearch.latitude,
+            //   longitude: this.zoneMapToSearch.longitude,
+            //   zoomIndex: zoomLevelIndex
+            // })
           })
           .catch((err) => {
             console.error('Router push failed', err)

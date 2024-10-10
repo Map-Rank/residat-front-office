@@ -67,13 +67,21 @@ export default {
     },
     addZoneMarkers() {
       this.zoneMarkeds.forEach(zone => {
-        this.geojson = zone.geojson
-        console.log(this.geojson)
         const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map);
         marker.on('click', () => {
+          
+          
+          if (zone.geojson && zone.geojson != '') {
+            this.geojson = zone.geojson;
+            this.loadZoneGeoJson(this.geojson)
+            console.log("geojson is not empty");
+          } else {
+            this.geojson = '';
+              console.log("geojson is empty or null");
+          }
+          
+          // console.log(this.geojson)
           this.$emit('markerClick', zone);
-
-
           this.map.flyTo([zone.latitude, zone.longitude], 9, { animate: true, duration: 4 });
         });
       });
@@ -82,7 +90,7 @@ export default {
 
     async  loadCameroonGeoJson() {
   try {
-    const response = await fetch('assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson');
+    const response = await fetch("/assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson");
     if (!response.ok) {
       throw new Error('Error loading the Cameroon GeoJSON file.');
     }
@@ -108,10 +116,11 @@ export default {
 async  loadZoneGeoJson(json) {
 
   console.log(json)
+  // const Tjson = this.geojson
   try {
     const response = await fetch(json);
     if (!response.ok) {
-      throw new Error('Error loading the Far North GeoJSON file.');
+      throw new Error('Failed to fetch Zone geojson');
     }
     const fetchedGeoJson = await response.json();
 
@@ -126,13 +135,14 @@ async  loadZoneGeoJson(json) {
 
     L.svgOverlay(zoneBounds).addTo(this.map);
   } catch (error) {
-    console.error('Failed to load and add Far North GeoJSON:', error);
+    console.error('Failed to load zone Geojson:', error);
   }
 },
 
 async loadGeoJsonAndSvg() {
   this.loadCameroonGeoJson(this.map)
-  this.loadZoneGeoJson(this.geojson)
+  console.log('this is the geoj' + this.geojson)
+  // this.loadZoneGeoJson(this.geojson)
 }
 
 
