@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { getZones } from '@/services/zoneService'
+import { getZones, getSpecificMapZones } from '@/services/zoneService'
 import L from 'leaflet'
 
 export default {
@@ -52,10 +52,6 @@ export default {
       type: String,
       required: true
     },
-    propGeojson: {
-      type: String
-      // required: true
-    }
   },
 
   data() {
@@ -63,7 +59,13 @@ export default {
       map: null,
       showInfo: false,
       selectedRegion: {},
-      zoneMarkeds: [],
+
+
+      cameroonLayer: null,
+      regionLayer: null,  // To manage individual region layers
+      cachedZones: null,
+      clickedZone: null,
+       zoneMarkeds: [],
       geojson: 'assets/maps/National_region/Far_North.json',
       cachedZones: null,
       NewgeoJsonLayer: null,
@@ -73,24 +75,33 @@ export default {
     }
   },
 
-  _methods: {
+  mounted() {
+    this.initializeMap()
+  },
+
+  methods: {
     async initializeMap() {
       try {
+        // Fetch and cache zones if not already cached
         if (!this.cachedZones) {
           this.cachedZones = await getZones(2, null)
         }
         this.zoneMarkeds = this.cachedZones
+
+
+        // Initialize map
         this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map)
 
-        this.addZoneMarkers()
-        this.loadGeoJsonAndSvg()
+        // Load main Cameroon GeoJSON layer on mount
+        await this.loadCameroonGeoJson()
       } catch (error) {
         console.error('Error initializing the map:', error)
       }
     },
+
 
     addZoneMarkers() {
       const onMarkerClick = (zone) => {
@@ -111,22 +122,53 @@ export default {
 
     async loadCameroonGeoJson() {
       try {
-        const response = await fetch(
-          '/assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson'
-        )
+        const response = await fetch('/assets/maps/National_Region.json')
         if (!response.ok) {
           throw new Error('Error loading the Cameroon GeoJSON file.')
         }
+
         const cameroonGeoJSON = await response.json()
         this.NewgeoJsonLayer = L.geoJSON(cameroonGeoJSON, {
           style: { color: 'black', fillColor: 'none', weight: 2 }
         }).addTo(this.map)
-        // const bounds = geoJsonLayer.getBounds()
-        // L.svgOverlay('<svg></svg>', bounds).addTo(this.map)
+
+
+        // Add the GeoJSON layer to the map
+        this.cameroonLayer = L.geoJSON(cameroonGeoJSON, {
+          style: { color: 'black', fillColor: 'yellow', fillOpacity: 0, weight: 1 },
+          onEachFeature: (feature, layer) => {
+            layer.on('click', async () => {
+              console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
+              // Fetch and load region-specific GeoJSON
+              await this.loadRegionGeoJson(feature.properties.name)
+            })
+
+            layer.on('mouseover', () => {
+              layer.setStyle({ fillColor: 'blue', fillOpacity: 0.2 })
+              layer._path.style.cursor = 'pointer'
+              layer.bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                permanent: true,
+                direction: 'top',
+                offset: [0, -10]
+              }).openTooltip()
+            })
+
+            layer.on('mouseout', () => {
+              layer.setStyle({ fillColor: 'yellow', fillOpacity: 0 })
+              layer._path.style.cursor = ''
+              layer.closeTooltip()
+            })
+          }
+        }).addTo(this.map)
+
+        // Fit the map bounds to the Cameroon layer
+        const bounds = this.cameroonLayer.getBounds()
+        // this.map.fitBounds(bounds)
       } catch (error) {
-        console.error('Failed to load and add Cameroon GeoJSON:', error)
+        console.error('Failed to load Cameroon GeoJSON:', error)
       }
     },
+
 
     async loadHydroPolygonGeoJson() {
       try {
@@ -169,41 +211,58 @@ export default {
     },
 
     async loadZoneGeoJson(jsonPath) {
-      try {
-        const response = await fetch(jsonPath)
-        if (!response.ok) {
-          throw new Error('Failed to fetch Zone geojson')
-        }
-        const fetchedGeoJson = await response.json()
 
-        const geoJsonLayer = L.geoJSON(fetchedGeoJson, {
-          style: { color: 'blue', fillColor: 'none', weight: 3 },
-          clickable: true,
+    async loadRegionGeoJson(regionName) {
+      try {
+        if (this.regionLayer) {
+          this.map.removeLayer(this.regionLayer)  // Remove previous region layer if exists
+        }
+
+        // Fetch the GeoJSON for the selected region
+        this.clickedZone = await getSpecificMapZones(1, regionName, 1, 1)
+
+        if (this.clickedZone.length == 0 || this.clickedZone[0].geojson == "") {
+return
+}
+
+        const regionGeoJSON = await fetch(this.clickedZone[0].geojson)
+        const regionData = await regionGeoJSON.json()
+
+        // Add the new region layer to the map
+        this.regionLayer = L.geoJSON(regionData, {
+          style: { color: 'black', fillColor: 'yellow', fillOpacity: 0, weight: 1 },
           onEachFeature: (feature, layer) => {
-            // Click event listener for each division
-            layer.on('click', () => {
-              console.log(`Clicked on division: ${feature.properties.name || 'unknown'}`)
+            layer.on('click', async () => {
+              console.log(`Clicked on sub-region: ${feature.properties.name || 'unknown'}`)
+              // You can load the subdivision GeoJSON here
+          // await this.loadSubRegionGeoJson(feature.properties.name)
             })
 
-            // Hover effect for each division
             layer.on('mouseover', () => {
               layer.setStyle({ fillColor: 'blue', fillOpacity: 0.2 })
-              layer._path.style.cursor = 'pointer' // Set pointer cursor on hover
+              layer._path.style.cursor = 'pointer'
+              layer.bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                permanent: true,
+                direction: 'top',
+                offset: [0, -10]
+              }).openTooltip()
             })
 
-            // Reset style and cursor when mouse leaves the division
             layer.on('mouseout', () => {
-              layer.setStyle({ fillColor: 'none', fillOpacity: 0 })
-              layer._path.style.cursor = '' // Reset cursor style
+              layer.setStyle({ fillColor: 'yellow', fillOpacity: 0 })
+              layer._path.style.cursor = ''
+              layer.closeTooltip()
             })
           }
         }).addTo(this.map)
 
-        const zoneBounds = geoJsonLayer.getBounds()
-        this.map.fitBounds(zoneBounds)
+        // Adjust the map bounds to the selected region
+        const bounds = this.regionLayer.getBounds()
+        // this.map.fitBounds(bounds)
       } catch (error) {
-        console.error('Failed to load zone GeoJSON:', error)
+        console.error('Failed to load region GeoJSON:', error)
       }
+
     },
 
     loadGeoJsonAndSvg() {
@@ -231,33 +290,21 @@ export default {
     },
     propGeojson(val) {
       // You could add any logic if `propGeojson` changes.
-    }
-  },
 
-  async mounted() {
-    await this.initializeMap()
+    }
   }
 }
 </script>
 
 <style scoped>
-#map {
-  width: 100%;
-  height: 100vh;
-}
-
 .info-box {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: white;
+  top: 10px;
+  right: 10px;
+  background: white;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.leaflet-interactive {
-  pointer-events: auto; /* Ensures pointer events are enabled */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 
 .new-checkbox {
