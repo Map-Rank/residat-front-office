@@ -34,6 +34,7 @@
 
 <script>
 import { getZones, getSpecificMapZones } from '@/services/zoneService'
+import { getDisasters } from '@/services/disastersServices.js'
 import L from 'leaflet'
 
 export default {
@@ -69,7 +70,8 @@ export default {
       // NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
       toggleCameroon: false,
-      toggleHydroPolygonGeoJson: false
+      toggleHydroPolygonGeoJson: false,
+      allDisasters: null,
     }
   },
 
@@ -84,6 +86,7 @@ export default {
         if (!this.cachedZones) {
           this.cachedZones = await getZones(2, null)
         }
+        this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
 
 
