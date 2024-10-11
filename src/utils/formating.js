@@ -26,13 +26,13 @@ export function truncateText(text, maxLength) {
 
 export function getZoomIndexByLevel(level_id) {
   switch (level_id) {
-    case '1':
+    case 1:
       return 7; 
-    case '2':
+    case 2:
       return 9; 
-    case '3':
+    case 3:
       return 10; 
-    case '4':
+    case 4:
       return 11; 
     default:
       return 7; 

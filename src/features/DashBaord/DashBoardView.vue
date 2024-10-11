@@ -532,9 +532,6 @@ export default {
 
     async updateZone(zone) {
       this.zoneMapToSearch = zone
-
-
-    
       this.searchMap()
     },
 
