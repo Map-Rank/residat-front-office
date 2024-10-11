@@ -3,249 +3,10 @@
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
-    :zoomIndex="zoomIndex"    
+    :zoomIndex="zoomIndex"   
     @markerClick="markerClick"
   />
-  <div class="z-10 bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-
-
-    <div
-      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative header-nav"
-    >
-
-      <div class="lg:w-1/4 md:w-3/4 grid gap-1">
-        <!-- <div class="">
-            <button-ui
-              :label="$t('water_risk')"
-              :color="'text-white'"
-              :textCss="'text-white font-bold text-center'"
-              :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-              @clickButton="toggleWaterStressGraphVisibility()"
-            >
-            </button-ui>
-          </div> -->
-
-        <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
-          <WaterStressChart></WaterStressChart>
-        </div>
-
-      <div class="mt-2 max-h-[30vh] w-full">
-        <ZoneInfo :zone="zone" />
-      </div>
-      
-
-        <div class="mt-8">
-
-
-          <post-slider :posts="this.posts" status="RECENT" />
-        </div>
-      </div>
-
-      <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
-        <div :class="{ hidden: !displayStatistics }">
-          <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
-        </div>
-      </div>
-
-      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
-        <div class="md:block">
-          <div class="">
-            <div class="">
-              <button-ui
-                :label="$t('key_actors')"
-                :color="'text-white'"
-                :textCss="'text-white font-bold text-center'"
-                :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-                @clickButton="toggleShowAllActors()"
-              >
-              </button-ui>
-            </div>
-
-            <!-- <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
-              <key-actors
-                :sectionTitle="$t('key_actors')"
-                :actors="actors"
-                :showAll="showAllActors"
-              />
-            </div> -->
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
-      <div class="w-full">
-        <div v-if="!isZoneLoading" class="md:hidden mb-4 p-4 bg-white rounded shadow w-full">
-          <zone-post-filter
-            :title="$t('select_zone_by_location')"
-            :props_regions="default_regions"
-            :props_divisions="default_divisions"
-            :props_sub_divisions="default_sub_divisions"
-            :filterPostFunctionWithId="selectZoneToSearch"
-            :updateZone="updateZone"
-          ></zone-post-filter>
-
-          <ButtonUi
-            :label="$t('search')"
-            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
-            textCss="text-center text-white"
-            @clickButton="searchMap"
-          ></ButtonUi>
-        </div>
-
-        <!-- <div class=" hidden sm:block mt-2 sm:mt-0 z-1 relative bg-white rounded-md py-4" v-if="vectorKeys && vectorKeys.length > 0">
-          <div
-            v-for="(key, index) in vectorKeys"
-            :key="index"
-            class="flex items-center gap-3 mb-2 cursor-pointer"
-          >
-            <img v-if="key.type == 'IMAGE'" :src="key.value" height="30px" width="30px" />
-            <span
-              v-if="key.type == 'COLOR'"
-              class="block w-4 h-4"
-              :style="{ backgroundColor: key.value }"
-            ></span>
-            <span
-              @click="handleVectorClick(key)"
-              class="text-sm font-semibold"
-              :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
-              >{{ key.name }}</span
-            >
-          </div>
-        </div> -->
-      </div>
-
-      <div
-        class="flex md:col-span-6"
-        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
-      >
-        <!-- <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
-          <MapShimmer :legendItems="5" />
-        </div> -->
-
-        <div
-          v-if="isErrorLoadMap && !isLoadingMap"
-          class="flex h-full w-full justify-center items-center"
-        >
-          <RefreshError
-            :imageUrl="errorImage"
-            :errorMessage="errorMessage"
-            @refreshPage="reloadMap()"
-            :hideButton="true"
-          >
-          </RefreshError>
-        </div>
-
-        <div id="tooltip" display="none" style="position: absolute; display: none"></div>
-
-        <!-- <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
-          <div class="h-[80vh]">
-             
-            <inline-svg
-              @mousemove="handleStateHover"
-              @mouseout="handleStateLeave"
-              fill-opacity="1"
-              :color="'#fff'"
-              fill="black"
-              :src="mapSvgPath"
-              @click="handleStateClick"
-              width=""
-              height=""
-            />
-          </div>
-          <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
-            <div class="hidden lg:flex justify-between p-4 space-x-3">
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 1"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 2"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 3"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 4"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-            </div>
-          </div>
-        </div> -->
-     
-     
-     
-      </div>
-
-      <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow new-element">
-          <zone-post-filter
-            :title="$t('select_zone_by_location')"
-            :props_regions="default_regions"
-            :props_divisions="default_divisions"
-            :props_sub_divisions="default_sub_divisions"
-            :filterPostFunctionWithId="selectZoneToSearch"
-            :updateZone="updateZone"
-          ></zone-post-filter>
-
-          <ButtonUi
-            :label="$t('search')"
-            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
-            textCss="text-center text-white"
-            @clickButton="searchMap"
-          ></ButtonUi>
-        </div>
-      </div>
-    </div>
-
-    <div
-      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 md:space-x-3"
-      :class="{ hidden: !displayStatistics }"
-      v-if="!isLoadingMap && inSubDivision"
-    >
-      <div class="col-span-1">
-        <DegreeImpactDoughnutChart
-          :label="$t('degree_of_impact')"
-          canvasId="impactChart"
-          :percentage="20"
-        ></DegreeImpactDoughnutChart>
-      </div>
-      <div class="col-span-1">
-        <BaseBarChart
-          :canvas-id="'climateVulnerabilityIndex'"
-          :data="climateVulnerabilityIndex"
-          :label="$t('climate_vulnerability_index')"
-          @clickItem="displayChartItemModalStats"
-        ></BaseBarChart>
-      </div>
-      <div class="col-span-1">
-        <BaseBarChart
-          @clickItem="displayChartItemModalStats"
-          :canvas-id="'climateRiskThreats'"
-          :data="climateRiskThreats"
-          :label="$t('climate_risk_threats')"
-          :isHorizontal="true"
-          :barSpacing="30"
-        ></BaseBarChart>
-      </div>
-    </div>
-
-    <Modal v-show="isModalVisible" :label="graphLabel" @close="closeModal" />
-  </div>
+  
 </template>
 
 <script>
@@ -324,6 +85,7 @@ export default {
               this.inSubDivision = true
               this.reportType = null
               this.zone = zones[0]
+              this.geojson = this.zone.geojson
               this.displayStatistics = true
               // this.inSubDivision = true
               this.getReport(this.zone.id)
@@ -331,6 +93,7 @@ export default {
             }
             
             this.zone = zones[0]
+            this.geojson = this.zone.geojson
             this.posts = await getFilterPosts(zones[0].id, null, 4);
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
@@ -357,6 +120,7 @@ export default {
       graphLabel: '',
       posts:null,
       zone: null,
+      geojson: '',
       presentMapId: null,
       zoneIdToSearch: null,
       zoneMarkers:[],
@@ -506,11 +270,11 @@ export default {
           })
           .then(() => {
             // Using window.location.reload() to reload the entire page
-            this.updateMap({
-              latitude: this.zoneMapToSearch.latitude,
-              longitude: this.zoneMapToSearch.longitude,
-              zoomIndex: zoomLevelIndex
-            })
+            // this.updateMap({
+            //   latitude: this.zoneMapToSearch.latitude,
+            //   longitude: this.zoneMapToSearch.longitude,
+            //   zoomIndex: zoomLevelIndex
+            // })
           })
           .catch((err) => {
             console.error('Router push failed', err)
@@ -528,9 +292,6 @@ export default {
 
     async updateZone(zone) {
       this.zoneMapToSearch = zone
-
-
-    
       this.searchMap()
     },
 
