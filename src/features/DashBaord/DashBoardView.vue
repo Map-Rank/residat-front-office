@@ -3,11 +3,10 @@
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
-    :zoomIndex="zoomIndex"    
-    :propGeojson="geojson"    
+    :zoomIndex="zoomIndex"   
     @markerClick="markerClick"
   />
-
+  
 </template>
 
 <script>
