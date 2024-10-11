@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { getZones } from '@/services/zoneService'
+import { getZones, getSpecificMapZones } from '@/services/zoneService'
 import L from 'leaflet'
 
 export default {
@@ -28,10 +28,6 @@ export default {
       type: String,
       required: true
     },
-    propGeojson: {
-      type: String
-      // required: true
-    }
   },
 
   data() {
@@ -39,201 +35,146 @@ export default {
       map: null,
       showInfo: false,
       selectedRegion: {},
-      zoneMarkeds: [],
-      geojson: 'assets/maps/National_region/Far_North.json',
-      cachedZones: null
+      cameroonLayer: null,
+      regionLayer: null,  // To manage individual region layers
+      cachedZones: null,
+      clickedZone: null
     }
+  },
+
+  mounted() {
+    this.initializeMap()
   },
 
   methods: {
     async initializeMap() {
       try {
+        // Fetch and cache zones if not already cached
         if (!this.cachedZones) {
           this.cachedZones = await getZones(2, null)
         }
-        this.zoneMarkeds = this.cachedZones
+
+        // Initialize map
         this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map)
 
-        this.addZoneMarkers()
-        this.loadGeoJsonAndSvg()
+        // Load main Cameroon GeoJSON layer on mount
+        await this.loadCameroonGeoJson()
       } catch (error) {
         console.error('Error initializing the map:', error)
       }
     },
 
-    addZoneMarkers() {
-      const onMarkerClick = (zone) => {
-        if (zone.geojson && zone.geojson !== '') {
-          this.geojson = zone.geojson
-          this.loadZoneGeoJson(this.geojson)
-        } else {
-          console.log('GeoJSON is empty or null for this zone.')
-        }
-        this.$emit('markerClick', zone)
-      }
-
-      this.zoneMarkeds.forEach((zone) => {
-        const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map)
-        marker.on('click', () => onMarkerClick(zone))
-      })
-    },
-
     async loadCameroonGeoJson() {
       try {
-        const response = await fetch(
-          '/assets/maps/OSMB-7f46deeb2b40129c9869873dd7016e2ee5442531.geojson'
-        )
+        const response = await fetch('/assets/maps/National_Region.json')
         if (!response.ok) {
           throw new Error('Error loading the Cameroon GeoJSON file.')
         }
+
         const cameroonGeoJSON = await response.json()
-        const geoJsonLayer = L.geoJSON(cameroonGeoJSON, {
-          style: { color: 'blue', fillColor: 'none', weight: 2 }
-        }).addTo(this.map)
-        const bounds = geoJsonLayer.getBounds()
-        L.svgOverlay('<svg></svg>', bounds).addTo(this.map)
-      } catch (error) {
-        console.error('Failed to load and add Cameroon GeoJSON:', error)
-      }
-    },
 
-     onEachFeature(feature, layer) {
-      layer.on({
-        mouseover: function (e) {
-          var layer = e.target;
-          layer.setStyle({
-            color: "red" // Change stroke color on hover
-          });
-        },
-        mouseout: function (e) {
-          geojson.resetStyle(e.target); // Reset to original style when hover ends
-        }
-      });
-    },
-    
-        //   function   style(feature) {
-        //   return {
-        //     color: "blue",    // Stroke color
-        //     fillColor: "yellow", // Default fill color
-        //     weight: 2,
-        //     fillOpacity: 0.7,
-        //     interactive: true  // Ensure the fill area is interactive
-        //   };
-        // }
+        // Add the GeoJSON layer to the map
+        this.cameroonLayer = L.geoJSON(cameroonGeoJSON, {
+          style: { color: 'black', fillColor: 'yellow', fillOpacity: 0, weight: 1 },
+          onEachFeature: (feature, layer) => {
+            layer.on('click', async () => {
+              console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
+              // Fetch and load region-specific GeoJSON
+              await this.loadRegionGeoJson(feature.properties.name)
+            })
 
-        async loadZoneGeoJson(jsonPath) {
-  try {
-    const response = await fetch(jsonPath);
-    if (!response.ok) {
-      throw new Error('Failed to fetch Zone geojson');
-    }
-    const fetchedGeoJson = await response.json();
+            layer.on('mouseover', () => {
+              layer.setStyle({ fillColor: 'blue', fillOpacity: 0.2 })
+              layer._path.style.cursor = 'pointer'
+              layer.bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                permanent: true,
+                direction: 'top',
+                offset: [0, -10]
+              }).openTooltip()
+            })
 
-    const geoJsonLayer = L.geoJSON(fetchedGeoJson, {
-      style: {
-        color: 'blue',
-        fillColor: 'yellow',
-        fillOpacity: 0,
-        weight: 3, // Border weight on initial load
-        // interactive: true
-      },
-      onEachFeature: (feature, layer) => {
-        // Click event listener for each division
-        layer.on('click', () => {
-          console.log(`Clicked on division: ${feature.properties.name || 'unknown'}`);
-          // layer.setStyle({ weight: 0 }); // Remove border when clicked
-          // layer.setStyle({ weight: 3, color: 'blue', fillOpacity: 0 });
-          layer.setStyle({ color: 'blue', weight: 2, fillOpacity: 0 });
-        });
-
-        // Hover effect for each division
-        layer.on('mouseover', () => {
-          layer.setStyle({ fillColor: 'blue', fillOpacity: 0.2 });
-          layer._path.style.cursor = 'pointer'; // Set pointer cursor on hover
-
-          // Display tooltip and make it follow the mouse
-          layer.openTooltip();
-          layer.on('mousemove', (e) => {
-            layer.getTooltip().setLatLng(e.latlng);
-          });
-        });
-
-        // Reset style and cursor when mouse leaves the division
-        layer.on('mouseout', () => {
-          layer.setStyle({ fillColor: 'yellow', fillOpacity: 0, weight: 3 }); // Reset border weight
-          layer._path.style.cursor = ''; // Reset cursor style
-          layer.closeTooltip(); // Hide the tooltip
-        });
-
-        // Bind a tooltip with permanent: false so it only shows on hover
-        layer.bindTooltip(
-          `<div><b>${feature.properties.name || 'unknown'}</b></div>`, 
-          {
-            permanent: false,
-            direction: 'top',
-            offset: [0, -10] // Adjust offset to better position tooltip
+            layer.on('mouseout', () => {
+              layer.setStyle({ fillColor: 'yellow', fillOpacity: 0 })
+              layer._path.style.cursor = ''
+              layer.closeTooltip()
+            })
           }
-        );
+        }).addTo(this.map)
+
+        // Fit the map bounds to the Cameroon layer
+        const bounds = this.cameroonLayer.getBounds()
+        // this.map.fitBounds(bounds)
+      } catch (error) {
+        console.error('Failed to load Cameroon GeoJSON:', error)
       }
-    }).addTo(this.map);
+    },
 
-    // Fit the map bounds to the geoJson layer
-    const zoneBounds = geoJsonLayer.getBounds();
-    this.map.fitBounds(zoneBounds);
-  } catch (error) {
-    console.error('Failed to load zone GeoJSON:', error);
-  }
+    async loadRegionGeoJson(regionName) {
+      try {
+        if (this.regionLayer) {
+          this.map.removeLayer(this.regionLayer)  // Remove previous region layer if exists
+        }
+
+        // Fetch the GeoJSON for the selected region
+        this.clickedZone = await getSpecificMapZones(1, regionName, 1, 1)
+
+        if (this.clickedZone.length == 0 || this.clickedZone[0].geojson == "") {
+return
 }
-,
 
-    loadGeoJsonAndSvg() {
-      this.loadCameroonGeoJson()
-      console.log('Loaded Cameroon GeoJSON and SVG')
+        const regionGeoJSON = await fetch(this.clickedZone[0].geojson)
+        const regionData = await regionGeoJSON.json()
+
+        // Add the new region layer to the map
+        this.regionLayer = L.geoJSON(regionData, {
+          style: { color: 'black', fillColor: 'yellow', fillOpacity: 0, weight: 1 },
+          onEachFeature: (feature, layer) => {
+            layer.on('click', async () => {
+              console.log(`Clicked on sub-region: ${feature.properties.name || 'unknown'}`)
+              // You can load the subdivision GeoJSON here
+          // await this.loadSubRegionGeoJson(feature.properties.name)
+            })
+
+            layer.on('mouseover', () => {
+              layer.setStyle({ fillColor: 'blue', fillOpacity: 0.2 })
+              layer._path.style.cursor = 'pointer'
+              layer.bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                permanent: true,
+                direction: 'top',
+                offset: [0, -10]
+              }).openTooltip()
+            })
+
+            layer.on('mouseout', () => {
+              layer.setStyle({ fillColor: 'yellow', fillOpacity: 0 })
+              layer._path.style.cursor = ''
+              layer.closeTooltip()
+            })
+          }
+        }).addTo(this.map)
+
+        // Adjust the map bounds to the selected region
+        const bounds = this.regionLayer.getBounds()
+        // this.map.fitBounds(bounds)
+      } catch (error) {
+        console.error('Failed to load region GeoJSON:', error)
+      }
     }
-  },
-
-  watch: {
-    latitude(val) {
-      this.map && this.map.flyTo([val, this.longitude], this.zoomIndex)
-    },
-    longitude(val) {
-      this.map && this.map.flyTo([this.latitude, val], this.zoomIndex)
-    },
-    zoomIndex(val) {
-      this.map && this.map.setView([this.latitude, this.longitude], val)
-    },
-    propGeojson(val) {
-      // You could add any logic if `propGeojson` changes.
-    }
-  },
-
-  async mounted() {
-    await this.initializeMap()
   }
 }
 </script>
 
 <style scoped>
-#map {
-  width: 100%;
-  height: 100vh;
-}
-
 .info-box {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  background-color: white;
+  top: 10px;
+  right: 10px;
+  background: white;
   padding: 10px;
   border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.leaflet-interactive {
-  outline: none;
-  pointer-events: auto; /* Ensures pointer events are enabled */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
 </style>
