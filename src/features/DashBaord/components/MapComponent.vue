@@ -6,6 +6,30 @@
       <!-- Data binding and event handling -->
     </div>
   </div>
+  <div class="new-checkbox p-4">
+    <h3 class="text-lg font-semibold mb-2">Layers</h3>
+    <div class="space-y-2">
+      <label class="flex items-center">
+        <input
+          type="checkbox"
+          v-model="toggleCameroon"
+          @change="toggleLoadCameroonGeoJson"
+          class="form-checkbox h-4 w-4 text-blue-600"
+        />
+        <span class="ml-2 text-sm">Cameroon</span>
+      </label>
+
+      <label class="flex items-center">
+        <input
+          type="checkbox"
+          v-model="toggleHydroPolygonGeoJson"
+          @change="toggleLoadHydroPolygonGeoJson"
+          class="form-checkbox h-4 w-4 text-green-600"
+        />
+        <span class="ml-2 text-sm">Hydro Polygon Map</span>
+      </label>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -35,10 +59,19 @@ export default {
       map: null,
       showInfo: false,
       selectedRegion: {},
+
+
       cameroonLayer: null,
       regionLayer: null,  // To manage individual region layers
       cachedZones: null,
-      clickedZone: null
+      clickedZone: null,
+       zoneMarkeds: [],
+      geojson: 'assets/maps/National_region/Far_North.json',
+      cachedZones: null,
+      NewgeoJsonLayer: null,
+      NewhydroPolygonLayer: null,
+      toggleCameroon: false,
+      toggleHydroPolygonGeoJson: false
     }
   },
 
@@ -53,6 +86,8 @@ export default {
         if (!this.cachedZones) {
           this.cachedZones = await getZones(2, null)
         }
+        this.zoneMarkeds = this.cachedZones
+
 
         // Initialize map
         this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex)
@@ -67,6 +102,24 @@ export default {
       }
     },
 
+
+    addZoneMarkers() {
+      const onMarkerClick = (zone) => {
+        if (zone.geojson && zone.geojson !== '') {
+          this.geojson = zone.geojson
+          this.loadZoneGeoJson(this.geojson)
+        } else {
+          console.log('GeoJSON is empty or null for this zone.')
+        }
+        this.$emit('markerClick', zone)
+      }
+
+      this.zoneMarkeds.forEach((zone) => {
+        const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map)
+        marker.on('click', () => onMarkerClick(zone))
+      })
+    },
+
     async loadCameroonGeoJson() {
       try {
         const response = await fetch('/assets/maps/National_Region.json')
@@ -75,6 +128,10 @@ export default {
         }
 
         const cameroonGeoJSON = await response.json()
+        this.NewgeoJsonLayer = L.geoJSON(cameroonGeoJSON, {
+          style: { color: 'black', fillColor: 'none', weight: 2 }
+        }).addTo(this.map)
+
 
         // Add the GeoJSON layer to the map
         this.cameroonLayer = L.geoJSON(cameroonGeoJSON, {
@@ -111,6 +168,49 @@ export default {
         console.error('Failed to load Cameroon GeoJSON:', error)
       }
     },
+
+
+    async loadHydroPolygonGeoJson() {
+      try {
+        const responseHydro = await fetch('/assets/maps/Hydrography/Hydro_Polygon.geojson')
+        if (!responseHydro.ok) {
+          throw new Error('Error loading the Hydro_Polygon GeoJSON file.')
+        }
+        const hydroPolygonGeoJSON = await responseHydro.json()
+
+        this.NewhydroPolygonLayer = L.geoJSON(hydroPolygonGeoJSON, {
+          style: {
+            color: '#2c82c9',
+            fillColor: 'none',
+            weight: 2
+          }
+        }).addTo(this.map)
+
+        const hydrobounds = hydroPolygonLayer.getBounds()
+
+        // L.svgOverlay('<svg></svg>', hydrobounds).addTo(this.map)
+
+        console.log('Hydro_Polygon GeoJSON layer loaded successfully.')
+      } catch (error) {
+        console.error('Failed to load Hydro_Polygon GeoJSON:', error)
+      }
+    },
+    toggleLoadHydroPolygonGeoJson() {
+      if (this.toggleHydroPolygonGeoJson) {
+        this.loadHydroPolygonGeoJson()
+      } else {
+        this.map.removeLayer(this.NewhydroPolygonLayer)
+      }
+    },
+    toggleLoadCameroonGeoJson() {
+      if (this.toggleCameroon) {
+        this.loadCameroonGeoJson()
+      } else {
+        this.map.removeLayer(this.NewgeoJsonLayer)
+      }
+    },
+
+    async loadZoneGeoJson(jsonPath) {
 
     async loadRegionGeoJson(regionName) {
       try {
@@ -162,6 +262,35 @@ return
       } catch (error) {
         console.error('Failed to load region GeoJSON:', error)
       }
+
+    },
+
+    loadGeoJsonAndSvg() {
+      // this.loadCameroonGeoJson()
+      // this.loadHydroPolygonGeoJson()
+      console.log('Loaded Cameroon GeoJSON and SVG')
+    }
+  },
+  get methods() {
+    return this._methods
+  },
+  set methods(value) {
+    this._methods = value
+  },
+
+  watch: {
+    latitude(val) {
+      this.map && this.map.flyTo([val, this.longitude], this.zoomIndex)
+    },
+    longitude(val) {
+      this.map && this.map.flyTo([this.latitude, val], this.zoomIndex)
+    },
+    zoomIndex(val) {
+      this.map && this.map.setView([this.latitude, this.longitude], val)
+    },
+    propGeojson(val) {
+      // You could add any logic if `propGeojson` changes.
+
     }
   }
 }
@@ -176,5 +305,13 @@ return
   padding: 10px;
   border: 1px solid #ccc;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+.new-checkbox {
+  background-color: white;
+  position: absolute;
+  top: 25%;
+  z-index: 1000;
+  left: 2%;
 }
 </style>
