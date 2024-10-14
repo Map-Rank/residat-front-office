@@ -1,12 +1,190 @@
 <template>
-  <MapComponent 
+  <MapComponent
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
-    :zoomIndex="zoomIndex"   
+    :zoomIndex="zoomIndex"
     @markerClick="markerClick"
   />
-  
+
+  <div class="z-10  px-4 md:px-[50px] pt-1 w-full min-h-screen">
+    <div
+      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 "
+    >
+      <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
+        <!-- <div class="">
+            <button-ui
+              :label="$t('water_risk')"
+              :color="'text-white'"
+              :textCss="'text-white font-bold text-center'"
+              :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+              @clickButton="toggleWaterStressGraphVisibility()"
+            >
+            </button-ui>
+          </div> -->
+
+        <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
+          <WaterStressChart></WaterStressChart>
+        </div>
+
+        <div class="mt-2 max-h-[30vh] w-full">
+          <ZoneInfo :zone="zone" />
+        </div>
+
+        <div class="mt-8">
+          <post-slider :posts="posts" status="RECENT" />
+        </div>
+      </div>
+
+      <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
+        <div :class="{ hidden: !displayStatistics }">
+          <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+        </div>
+      </div>
+
+      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
+        <div class="md:block">
+          <div class="">
+            <div class="">
+              <button-ui
+                :label="$t('key_actors')"
+                :color="'text-white'"
+                :textCss="'text-white font-bold text-center'"
+                :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+                @clickButton="toggleShowAllActors()"
+              >
+              </button-ui>
+            </div>
+
+            
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
+      <div class="w-full">
+        <div v-if="!isZoneLoading" class="md:hidden mb-4 p-4 bg-white rounded shadow w-full">
+          <zone-post-filter
+            :title="$t('select_zone_by_location')"
+            :props_regions="default_regions"
+            :props_divisions="default_divisions"
+            :props_sub_divisions="default_sub_divisions"
+            :filterPostFunctionWithId="selectZoneToSearch"
+            :updateZone="updateZone"
+          ></zone-post-filter>
+
+          <ButtonUi
+            :label="$t('search')"
+            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+            textCss="text-center text-white"
+            @clickButton="searchMap"
+          ></ButtonUi>
+        </div>
+
+        <!-- <div class=" hidden sm:block mt-2 sm:mt-0 z-1 relative bg-white rounded-md py-4" v-if="vectorKeys && vectorKeys.length > 0">
+          <div
+            v-for="(key, index) in vectorKeys"
+            :key="index"
+            class="flex items-center gap-3 mb-2 cursor-pointer"
+          >
+            <img v-if="key.type == 'IMAGE'" :src="key.value" height="30px" width="30px" />
+            <span
+              v-if="key.type == 'COLOR'"
+              class="block w-4 h-4"
+              :style="{ backgroundColor: key.value }"
+            ></span>
+            <span
+              @click="handleVectorClick(key)"
+              class="text-sm font-semibold"
+              :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
+              >{{ key.name }}</span
+            >
+          </div>
+        </div> -->
+     
+      </div>
+
+      <div
+        class="flex md:col-span-6"
+        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
+      >
+        <!-- <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
+          <MapShimmer :legendItems="5" />
+        </div> -->
+
+        <div
+          v-if="isErrorLoadMap && !isLoadingMap"
+          class="flex h-full w-full justify-center items-center"
+        >
+          <RefreshError
+            :imageUrl="errorImage"
+            :errorMessage="errorMessage"
+            @refreshPage="reloadMap()"
+            :hideButton="true"
+          >
+          </RefreshError>
+        </div>
+
+        <div id="tooltip" display="none" style="position: absolute; display: none"></div>
+      </div>
+
+      <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow new-element">
+          <zone-post-filter
+            :title="$t('select_zone_by_location')"
+            :props_regions="default_regions"
+            :props_divisions="default_divisions"
+            :props_sub_divisions="default_sub_divisions"
+            :filterPostFunctionWithId="selectZoneToSearch"
+            :updateZone="updateZone"
+          ></zone-post-filter>
+
+          <ButtonUi
+            :label="$t('search')"
+            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+            textCss="text-center text-white"
+            @clickButton="searchMap"
+          ></ButtonUi>
+        </div>
+      </div>
+    </div>
+
+    <div
+      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 md:space-x-3"
+      :class="{ hidden: !displayStatistics }"
+      v-if="!isLoadingMap && inSubDivision"
+    >
+      <div class="col-span-1">
+        <DegreeImpactDoughnutChart
+          :label="$t('degree_of_impact')"
+          canvasId="impactChart"
+          :percentage="20"
+        ></DegreeImpactDoughnutChart>
+      </div>
+      <div class="col-span-1">
+        <BaseBarChart
+          :canvas-id="'climateVulnerabilityIndex'"
+          :data="climateVulnerabilityIndex"
+          :label="$t('climate_vulnerability_index')"
+          @clickItem="displayChartItemModalStats"
+        ></BaseBarChart>
+      </div>
+      <div class="col-span-1">
+        <BaseBarChart
+          @clickItem="displayChartItemModalStats"
+          :canvas-id="'climateRiskThreats'"
+          :data="climateRiskThreats"
+          :label="$t('climate_risk_threats')"
+          :isHorizontal="true"
+          :barSpacing="30"
+        ></BaseBarChart>
+      </div>
+    </div>
+
+    <Modal v-show="isModalVisible" :label="graphLabel" @close="closeModal" />
+  </div>
 </template>
 
 <script>
@@ -17,7 +195,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones,getZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones, getZones } from '../../services/zoneService'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
@@ -30,7 +208,7 @@ import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
 import { getZoomIndexByLevel } from '@/utils/formating.js'
 import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
-import {  getFilterPosts } from '@/features/Post/services/postService.js'
+import { getFilterPosts } from '@/features/Post/services/postService.js'
 
 export default {
   name: 'DashBoardView',
@@ -47,7 +225,7 @@ export default {
     WaterStressChart,
     ButtonUi,
     RefreshError,
-   
+
     Modal,
     MapComponent
     // MapShimmer
@@ -63,24 +241,23 @@ export default {
       async handler() {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
-          // await this.fetchZoneMarkeds()
-        
+        // await this.fetchZoneMarkeds()
+
         if (this.zoneId === 1) {
           this.zone = await getSpecificZones(this.zoneId)
-          this.posts = await getFilterPosts(this.zoneId, null, 4);
+          this.posts = await getFilterPosts(this.zoneId, null, 4)
           // this.zoneMarkers = this.zone
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
           const zones = await getSpecificMapZones(this.parentId, this.zoneName, 1)
-       
 
           // console.log(zones)
 
           if (zones.length > 0) {
-            this.posts = await getFilterPosts(zones[0].id, null, 4);
-            
+            this.posts = await getFilterPosts(zones[0].id, null, 4)
+
             if (zones[0].level_id == 4) {
               this.inSubDivision = true
               this.reportType = null
@@ -91,10 +268,10 @@ export default {
               this.getReport(this.zone.id)
               return
             }
-            
+
             this.zone = zones[0]
             this.geojson = this.zone.geojson
-            this.posts = await getFilterPosts(zones[0].id, null, 4);
+            this.posts = await getFilterPosts(zones[0].id, null, 4)
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
             this.vectorKeys = this.zone.vector?.keys
@@ -118,12 +295,12 @@ export default {
       hoverMapText: 'Map',
       isModalVisible: false,
       graphLabel: '',
-      posts:null,
+      posts: null,
       zone: null,
       geojson: '',
       presentMapId: null,
       zoneIdToSearch: null,
-      zoneMarkers:[],
+      zoneMarkers: [],
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
@@ -217,25 +394,20 @@ export default {
   },
 
   methods: {
-
     async fetchZoneMarkeds() {
       // Placeholder for actual fetching logic
       try {
-        const zones = await getZones(2,null);
-        this.zoneMarkers.push(zones);
+        const zones = await getZones(2, null)
+        this.zoneMarkers.push(zones)
         // this.zoneMarkers = await getZones(2,null);
         console.log('this is zone mark lengh  ' + this.zoneMarkers)
         // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
       } catch (error) {
-        console.error('Failed to fetch zone markers:', error);
+        console.error('Failed to fetch zone markers:', error)
       }
-    }
-  ,
-
-
-    markerClick(zoneMarked){
-
-      console.log('marker is clicked');
+    },
+    markerClick(zoneMarked) {
+      console.log('marker is clicked')
       console.log(zoneMarked)
       this.$router.push({
         name: 'dashboard',
@@ -519,5 +691,11 @@ span {
   top: 100px;
   z-index: 1000;
   right: 20px;
+}
+.left-element {
+  position: absolute;
+  top: 25%;
+  z-index: 1000;
+  left: 20px;
 }
 </style>
