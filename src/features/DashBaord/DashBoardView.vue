@@ -23,17 +23,17 @@
             </button-ui>
           </div> -->
 
-        <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
-          <WaterStressChart></WaterStressChart>
-        </div>
-
-        <div class="mt-2 max-h-[30vh] w-full">
-          <ZoneInfo :zone="zone" />
-        </div>
-
-        <div class="mt-8">
-          <post-slider :posts="posts" status="RECENT" />
-        </div>
+          
+          <div class="mt-2 max-h-[30vh] w-full">
+            <ZoneInfo :zone="zone" />
+          </div>
+          
+          <div class="mt-4">
+            <post-slider :posts="posts" status="RECENT" />
+          </div>
+          <div class="mt-2 w-[100%] max-h-[30vh]" :class="{ hidden: isWaterStressGraphHidden }">
+            <WaterStressChart></WaterStressChart>
+          </div>
       </div>
 
       <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
@@ -406,23 +406,28 @@ export default {
         console.error('Failed to fetch zone markers:', error)
       }
     },
-    markerClick(zoneMarked) {
-      console.log('marker is clicked')
-      console.log(zoneMarked)
-      this.$router.push({
-        name: 'dashboard',
-        params: {
-          zoneId: zoneMarked.id,
-          parentId: zoneMarked.parent_id,
-          zoneName: zoneMarked.name,
-          latitude: zoneMarked.latitude,
-          longitude: zoneMarked.longitude,
-          zoomIndex: 9
-        }
-      })
+markerClick(zoneMarked) {
+  console.log('Marker is clicked');
+  console.log(zoneMarked);
 
-      console.log('the router complte')
-    },
+  // Check if zoneMarked is an array and use the first item if it is
+  const zone = Array.isArray(zoneMarked) ? zoneMarked[0] : zoneMarked;
+
+  this.$router.push({
+    name: 'dashboard',
+    params: {
+      zoneId: zone.id,
+      parentId: zone.parent_id,
+      zoneName: zone.name,
+      latitude: zone.latitude,
+      longitude: zone.longitude,
+      zoomIndex: 9
+    }
+  });
+
+  console.log('The router complete');
+},
+
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
         const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id)

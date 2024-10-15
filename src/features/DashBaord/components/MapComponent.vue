@@ -69,7 +69,6 @@ export default {
       clickedZone: null,
       zoneMarkeds: [],
       geojson: 'assets/maps/National_region/Far_North.json',
-      cachedZones: null,
       // NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
       toggleCameroon: false,
@@ -106,6 +105,13 @@ export default {
       }
     },
 
+    clearTooltips() {
+      this.map.eachLayer((layer) => {
+        if (layer.getTooltip && layer.getTooltip()) {
+          layer.closeTooltip()
+        }
+      })
+    },
     addZoneMarkers() {
       const onMarkerClick = (zone) => {
         this.$emit('markerClick', zone)
@@ -132,7 +138,6 @@ export default {
           onEachFeature: (feature, layer) => {
             layer.on('click', async () => {
               console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
-   
 
               this.clickedZone = await getSpecificMapZones(null, feature.properties.name)
               this.$emit('markerClick', this.clickedZone)
@@ -238,6 +243,10 @@ export default {
               layer._path.style.cursor = ''
               layer.closeTooltip()
             })
+
+            this.map.on('zoomanim', () => {
+              layer.closeTooltip() // Close tooltip on zoom animation to avoid conflicts
+            })
           }
         }).addTo(this.map)
 
@@ -249,20 +258,26 @@ export default {
   },
 
   watch: {
-    latitude(val) {
-      this.map && this.map.flyTo([val, this.longitude], this.zoomIndex)
-    },
-    longitude(val) {
-      this.map && this.map.flyTo([this.latitude, val], this.zoomIndex)
-    },
-    zoomIndex(val) {
-      this.map && this.map.setView([this.latitude, this.longitude], val)
+  latitude(val) {
+    if (this.map) {
+      this.clearTooltips(); // Clear any active tooltips
+      this.map.flyTo([val, this.longitude], this.zoomIndex);
     }
-    // propGeojson(val) {
-    //   // You could add any logic if `propGeojson` changes.
-
-    // }
+  },
+  longitude(val) {
+    if (this.map) {
+      this.clearTooltips(); // Clear any active tooltips
+      this.map.flyTo([this.latitude, val], this.zoomIndex);
+    }
+  },
+  zoomIndex(val) {
+    if (this.map) {
+      this.clearTooltips(); // Clear any active tooltips
+      this.map.setView([this.latitude, this.longitude], val);
+    }
   }
+}
+
 }
 </script>
 
