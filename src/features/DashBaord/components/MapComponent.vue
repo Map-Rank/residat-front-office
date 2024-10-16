@@ -65,7 +65,7 @@ export default {
     }
   },
 
-  emits: ['zoneClick','disasterClick'],
+  emits: ['zoneClick', 'disasterClick'],
   inheritAttrs: false,
 
   data() {
@@ -132,7 +132,7 @@ export default {
 
     addDisasterMarkers() {
       const onMarkerClick = (zone) => {
-        this.$emit('zoneClick', zone)
+        this.$emit('disasterClick', zone)
       }
       // Only initialize if not already created
       if (!this.disasterMarkersLayer) {
@@ -161,17 +161,6 @@ export default {
         this.map.removeLayer(this.disasterMarkersLayer)
         this.disasterMarkersLayer = null // Reset to null after removing
       }
-    },
-
-    addMarkers(markers) {
-      const onMarkerClick = (zone) => {
-        this.$emit('zoneClick', zone)
-      }
-
-      markers.forEach((zone) => {
-        const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map)
-        marker.on('click', () => onMarkerClick(zone))
-      })
     },
 
     async loadCameroonGeoJson() {
