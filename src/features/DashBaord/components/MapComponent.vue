@@ -28,6 +28,16 @@
         />
         <span class="ml-2 text-sm">Hydro Polygon Map</span>
       </label>
+
+      <label class="flex items-center">
+        <input
+          type="checkbox"
+          v-model="toggleDisasterMarkers"
+          @change="toggleDisasters"
+          class="form-checkbox h-4 w-4 text-red-600"
+        />
+        <span class="ml-2 text-sm">Disaster Markers</span>
+      </label>
     </div>
   </div>
 </template>
@@ -68,12 +78,13 @@ export default {
       cachedZones: null,
       clickedZone: null,
       zoneMarkeds: [],
-      geojson: 'assets/maps/National_region/Far_North.json',
       // NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
       toggleCameroon: false,
       toggleHydroPolygonGeoJson: false,
-      allDisasters: null
+      allDisasters: null,
+      toggleDisasterMarkers: false,
+      disasterMarkersLayer: null
     }
   },
 
@@ -88,7 +99,7 @@ export default {
         if (!this.cachedZones) {
           this.cachedZones = await getZones(2, null)
         }
-        // this.allDisasters = await getDisasters()
+        this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
 
         // Initialize map
@@ -97,9 +108,7 @@ export default {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map)
 
-        // Load main Cameroon GeoJSON layer on mount
-        this.addZoneMarkers()
-        // await this.loadCameroonGeoJson()
+        // this.addMarkers(this.allDisasters)
       } catch (error) {
         console.error('Error initializing the map:', error)
       }
@@ -112,12 +121,54 @@ export default {
         }
       })
     },
-    addZoneMarkers() {
+
+    toggleDisasters() {
+      if (this.toggleDisasterMarkers) {
+        this.addDisasterMarkers()
+      } else {
+        this.removeDisasterMarkers()
+      }
+    },
+
+    addDisasterMarkers() {
+      const onMarkerClick = (zone) => {
+        this.$emit('markerClick', zone)
+      }
+      // Only initialize if not already created
+      if (!this.disasterMarkersLayer) {
+        this.disasterMarkersLayer = L.layerGroup()
+
+        this.allDisasters.forEach((disaster) => {
+          const marker = L.marker([disaster.latitude, disaster.longitude])
+          marker.on('click', () => onMarkerClick(disaster))
+
+          marker.bindTooltip(`<b>${disaster.locality}</b><br>${disaster.description}`, {
+            permanent: false,
+            direction: 'top',
+            offset: [0, -10]
+          })
+          marker.addTo(this.disasterMarkersLayer)
+        })
+      }
+
+      // Add the layer to the map
+      this.disasterMarkersLayer.addTo(this.map)
+    },
+
+    removeDisasterMarkers() {
+      // Check if the disasterMarkersLayer exists and is currently on the map
+      if (this.disasterMarkersLayer && this.map.hasLayer(this.disasterMarkersLayer)) {
+        this.map.removeLayer(this.disasterMarkersLayer)
+        this.disasterMarkersLayer = null // Reset to null after removing
+      }
+    },
+
+    addMarkers(markers) {
       const onMarkerClick = (zone) => {
         this.$emit('markerClick', zone)
       }
 
-      this.zoneMarkeds.forEach((zone) => {
+      markers.forEach((zone) => {
         const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map)
         marker.on('click', () => onMarkerClick(zone))
       })
@@ -199,6 +250,7 @@ export default {
         this.map.removeLayer(this.NewhydroPolygonLayer)
       }
     },
+
     toggleLoadCameroonGeoJson() {
       if (this.toggleCameroon) {
         this.loadCameroonGeoJson()
@@ -213,7 +265,9 @@ export default {
         if (this.regionLayer) {
           this.map.removeLayer(this.regionLayer) // Remove previous region layer if exists
         }
-        const regionGeoJSON = await fetch(zone[0].geojson)
+
+        console.log('this is the geojson path' + this.clickedZone[0].geojson)
+        const regionGeoJSON = await fetch(this.clickedZone[0].geojson)
         const regionData = await regionGeoJSON.json()
 
         // Add the new region layer to the map
@@ -258,26 +312,25 @@ export default {
   },
 
   watch: {
-  latitude(val) {
-    if (this.map) {
-      this.clearTooltips(); // Clear any active tooltips
-      this.map.flyTo([val, this.longitude], this.zoomIndex);
-    }
-  },
-  longitude(val) {
-    if (this.map) {
-      this.clearTooltips(); // Clear any active tooltips
-      this.map.flyTo([this.latitude, val], this.zoomIndex);
-    }
-  },
-  zoomIndex(val) {
-    if (this.map) {
-      this.clearTooltips(); // Clear any active tooltips
-      this.map.setView([this.latitude, this.longitude], val);
+    latitude(val) {
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.flyTo([val, this.longitude], this.zoomIndex)
+      }
+    },
+    longitude(val) {
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.flyTo([this.latitude, val], this.zoomIndex)
+      }
+    },
+    zoomIndex(val) {
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.setView([this.latitude, this.longitude], val)
+      }
     }
   }
-}
-
 }
 </script>
 
@@ -297,6 +350,6 @@ export default {
   position: absolute;
   top: 8%;
   z-index: 1000;
-  left: 2%;
+  right: 2%;
 }
 </style>

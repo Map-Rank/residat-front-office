@@ -1,6 +1,6 @@
 <template>
   <div
-    class="  h-full p-3 flex align-middle justify-center items-center bg-white rounded-lg"
+    class=" w-[100%] h-full p-3 flex  justify-center items-center bg-white rounded-lg"
   >
     <canvas ref="waterStressChart" style="width: 100%"></canvas>
   </div>

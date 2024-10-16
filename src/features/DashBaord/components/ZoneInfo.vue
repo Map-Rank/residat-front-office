@@ -1,5 +1,5 @@
 <template>
-  <div class="w-[60%] grid p-4 border rounded shadow-md bg-white">
+  <div class="w-full grid p-4 border rounded shadow-md bg-white">
     <!-- Zone Banner -->
     <div v-if="zone && zone.banner" class="mb-1">
       <img :src="zone.banner" alt="Zone Banner" class="w-full h-[15vh] object-cover rounded" />
@@ -47,7 +47,7 @@ export default {
   name: 'ZoneInfo',
   props: {
     zone: {
-      type: Object,
+      // type: Object,
       required: true
     }
   },

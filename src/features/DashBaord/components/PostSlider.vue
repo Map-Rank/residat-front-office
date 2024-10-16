@@ -1,6 +1,6 @@
 <template>
 
-  <div class="relative w-[60%] max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
+  <div class="relative w-[100%] max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
 
         <!-- Shimmer Loader -->
         <div  v-if="posts === null" class="animate-pulse flex space-x-4 p-8 bg-white">
@@ -24,7 +24,7 @@
     <!-- Horizontal slider for posts -->
     <div v-else ref="slider" class="flex transition-transform duration-300 ease-in-out gap-2">
       <!-- Loop through each post and display its content -->
-      <div v-for="(post, index) in posts" :key="index" class="min-w-[250px] flex-shrink-0 p-4">
+      <div v-for="(post, index) in posts" :key="index" class="min-w-[300px] flex-shrink-0 p-4">
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
           <!-- Post Image -->
           <div v-if="post.images && post.images.length" class="w-full h-[10vh]">
