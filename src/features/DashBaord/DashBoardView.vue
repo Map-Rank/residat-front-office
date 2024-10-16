@@ -4,7 +4,7 @@
     :latitude="latitude"
     :longitude="longitude"
     :zoomIndex="zoomIndex"
-    @markerClick="markerClick"
+    @zoneClick="zoneClick"
   />
 
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full min-h-screen">
@@ -301,12 +301,33 @@ export default {
         console.error('Failed to fetch zone markers:', error)
       }
     },
-    markerClick(zoneMarked) {
+    zoneClick(zoneMarked) {
       console.log('navigating after zone click')
       console.log(zoneMarked)
 
       // Check if zoneMarked is an array and use the first item if it is
       const zone = Array.isArray(zoneMarked) ? zoneMarked[0] : zoneMarked
+
+      this.$router.push({
+        name: 'dashboard',
+        params: {
+          zoneId: zone.id,
+          parentId: zone.parent_id,
+          zoneName: zone.name,
+          latitude: zone.latitude,
+          longitude: zone.longitude,
+          zoomIndex: 9
+        }
+      })
+
+      console.log('The router complete')
+    },
+    disasterClick(marker) {
+      console.log('navigating after zone click')
+      console.log(marker)
+
+      // Check if zoneMarked is an array and use the first item if it is
+      const zone = Array.isArray(marker) ? marker[0] : marker
 
       this.$router.push({
         name: 'dashboard',

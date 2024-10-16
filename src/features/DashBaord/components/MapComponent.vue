@@ -65,7 +65,7 @@ export default {
     }
   },
 
-  emits: ['markerClick'],
+  emits: ['zoneClick','disasterClick'],
   inheritAttrs: false,
 
   data() {
@@ -132,7 +132,7 @@ export default {
 
     addDisasterMarkers() {
       const onMarkerClick = (zone) => {
-        this.$emit('markerClick', zone)
+        this.$emit('zoneClick', zone)
       }
       // Only initialize if not already created
       if (!this.disasterMarkersLayer) {
@@ -165,7 +165,7 @@ export default {
 
     addMarkers(markers) {
       const onMarkerClick = (zone) => {
-        this.$emit('markerClick', zone)
+        this.$emit('zoneClick', zone)
       }
 
       markers.forEach((zone) => {
@@ -191,7 +191,7 @@ export default {
               console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
 
               this.clickedZone = await getSpecificMapZones(null, feature.properties.name)
-              this.$emit('markerClick', this.clickedZone)
+              this.$emit('zoneClick', this.clickedZone)
 
               if (this.clickedZone.length == 0 || this.clickedZone[0].geojson == '') {
                 return
