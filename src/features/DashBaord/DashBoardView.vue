@@ -1,12 +1,94 @@
 <template>
-  <MapComponent 
+  <MapComponent
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
     :latitude="latitude"
     :longitude="longitude"
-    :zoomIndex="zoomIndex"   
+    :zoomIndex="zoomIndex"
     @markerClick="markerClick"
   />
-  
+
+  <div class="z-10 px-4 md:px-[50px] pt-1 w-full min-h-screen">
+    <div
+      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
+    >
+      <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
+        <div class="mt-2 w-full min-h-[30vh]">
+          <WaterStressChart></WaterStressChart>
+        </div>
+
+        <div class="mt-4">
+          <button-ui
+            :label="$t('show_zone_stats')"
+            :color="'text-white'"
+            :textCss="'text-white font-bold text-center'"
+            :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+            @clickButton="toggleZoneStatistics()"
+          >
+          </button-ui>
+        </div>
+
+        <div :class="{ hidden: isZoneStatistics }">
+          <div class="mt-2 max-h-[30vh] w-full">
+            <ZoneInfo :zone="zone" />
+          </div>
+
+          <div class="mt-4">
+            <post-slider :posts="posts" status="RECENT" />
+          </div>
+        </div>
+      </div>
+
+      <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
+        <div :class="{ hidden: !displayStatistics }">
+          <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+        </div>
+      </div>
+
+      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
+        <div class="md:block">
+          <div class="">
+            <div class="">
+              <button-ui
+                :label="$t('key_actors')"
+                :color="'text-white'"
+                :textCss="'text-white font-bold text-center'"
+                :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+                @clickButton="toggleShowAllActors()"
+              >
+              </button-ui>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
+      <div
+        class="flex md:col-span-6"
+        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
+      ></div>
+
+      <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow navigator">
+          <zone-post-filter
+            :title="$t('select_zone_by_location')"
+            :props_regions="default_regions"
+            :props_divisions="default_divisions"
+            :props_sub_divisions="default_sub_divisions"
+            :filterPostFunctionWithId="selectZoneToSearch"
+            :updateZone="updateZone"
+          ></zone-post-filter>
+
+          <ButtonUi
+            :label="$t('search')"
+            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+            textCss="text-center text-white"
+            @clickButton="searchMap"
+          ></ButtonUi>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -17,7 +99,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones,getZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZones, getZones } from '../../services/zoneService'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
@@ -30,7 +112,7 @@ import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
 import { getZoomIndexByLevel } from '@/utils/formating.js'
 import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
-import {  getFilterPosts } from '@/features/Post/services/postService.js'
+import { getFilterPosts } from '@/features/Post/services/postService.js'
 
 export default {
   name: 'DashBoardView',
@@ -47,7 +129,7 @@ export default {
     WaterStressChart,
     ButtonUi,
     RefreshError,
-   
+
     Modal,
     MapComponent
     // MapShimmer
@@ -58,43 +140,33 @@ export default {
   },
 
   watch: {
-    $route: {
+    $route: { 
       immediate: true,
       async handler() {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
-          // await this.fetchZoneMarkeds()
-        
-        if (this.zoneId === 1) {
+        // await this.fetchZoneMarkeds()
+
+        if (this. Id === 1) {
           this.zone = await getSpecificZones(this.zoneId)
-          this.posts = await getFilterPosts(this.zoneId, null, 4);
+          this.posts = await getFilterPosts(this.zoneId, null, 4)
           // this.zoneMarkers = this.zone
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
           const zones = await getSpecificMapZones(this.parentId, this.zoneName, 1)
-       
 
-          // console.log(zones)
+          // console.log(zones) 
 
           if (zones.length > 0) {
-            this.posts = await getFilterPosts(zones[0].id, null, 4);
-            
-            if (zones[0].level_id == 4) {
-              this.inSubDivision = true
-              this.reportType = null
-              this.zone = zones[0]
-              this.geojson = this.zone.geojson
-              this.displayStatistics = true
-              // this.inSubDivision = true
-              this.getReport(this.zone.id)
-              return
-            }
-            
+            // this.posts = await getFilterPosts(zones[0].id, null, 4)
+
+ 
+
             this.zone = zones[0]
             this.geojson = this.zone.geojson
-            this.posts = await getFilterPosts(zones[0].id, null, 4);
+            this.posts = await getFilterPosts(zones[0].id, null, 4)
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
             this.vectorKeys = this.zone.vector?.keys
@@ -118,18 +190,18 @@ export default {
       hoverMapText: 'Map',
       isModalVisible: false,
       graphLabel: '',
-      posts:null,
+      posts: null,
       zone: null,
       geojson: '',
       presentMapId: null,
       zoneIdToSearch: null,
-      zoneMarkers:[],
+      zoneMarkers: [],
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
       defaultMapSize: 1,
       isSubDivisionGraph: false,
-      isWaterStressGraphHidden: false,
+      isZoneStatistics: true,
       isKeyActorsHidden: false,
       showAllActors: false,
       isLoadingMap: true,
@@ -217,40 +289,40 @@ export default {
   },
 
   methods: {
-
     async fetchZoneMarkeds() {
       // Placeholder for actual fetching logic
       try {
-        const zones = await getZones(2,null);
-        this.zoneMarkers.push(zones);
+        const zones = await getZones(2, null)
+        this.zoneMarkers.push(zones)
         // this.zoneMarkers = await getZones(2,null);
         console.log('this is zone mark lengh  ' + this.zoneMarkers)
         // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
       } catch (error) {
-        console.error('Failed to fetch zone markers:', error);
+        console.error('Failed to fetch zone markers:', error)
       }
-    }
-  ,
-
-
-    markerClick(zoneMarked){
-
-      console.log('marker is clicked');
+    },
+    markerClick(zoneMarked) {
+      console.log('navigating after zone click')
       console.log(zoneMarked)
+
+      // Check if zoneMarked is an array and use the first item if it is
+      const zone = Array.isArray(zoneMarked) ? zoneMarked[0] : zoneMarked
+
       this.$router.push({
         name: 'dashboard',
         params: {
-          zoneId: zoneMarked.id,
-          parentId: zoneMarked.parent_id,
-          zoneName: zoneMarked.name,
-          latitude: zoneMarked.latitude,
-          longitude: zoneMarked.longitude,
+          zoneId: zone.id,
+          parentId: zone.parent_id,
+          zoneName: zone.name,
+          latitude: zone.latitude,
+          longitude: zone.longitude,
           zoomIndex: 9
         }
       })
 
-      console.log('the router complte')
+      console.log('The router complete')
     },
+
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
         const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id)
@@ -395,46 +467,8 @@ export default {
       this.hideTooltip()
     },
 
-    handleStateHover: function (e) {
-      if (e.target.tagName === 'path') {
-        let name = e.target.dataset.name
-        if (typeof name !== 'undefined') {
-          this.showTooltip(e, name)
-        }
 
-        // Check if the path is marked as active
-        // if (e.target.dataset.active === 'true') {
-        this.originalFillColor = e.target.style.fill || e.target.getAttribute('fill') // Store original color
-        this.originalStrokeColor = e.target.style.stroke || e.target.getAttribute('stroke') // Store original stroke
 
-        // Apply new fill and stroke styles for hover effect
-        // e.target.setAttribute('fill', '#42b983'); // Change fill color
-        e.target.setAttribute('stroke', '#ffff') // Change stroke color
-        e.target.setAttribute('stroke-width', '10') // Increase stroke width
-        // }
-      }
-    },
-
-    handleStateLeave: function (e) {
-      if (e.target.tagName === 'path') {
-        this.hideTooltip()
-
-        // Reset to original fill and stroke values on mouse out
-        // if (e.target.dataset.active === 'true') {
-        e.target.setAttribute('fill', this.originalFillColor) // Reset the fill color
-        e.target.setAttribute('stroke', this.originalStrokeColor) // Reset the stroke color
-        e.target.setAttribute('stroke-width', '0.25px') // Reset stroke width to original value
-        // }
-      }
-    },
-
-    showTooltip: function (evt, text) {
-      const tooltip = document.getElementById('tooltip')
-      tooltip.innerHTML = text
-      tooltip.style.display = 'block'
-      tooltip.style.left = evt.pageX + 10 + 'px'
-      tooltip.style.top = evt.pageY + 10 + 'px'
-    },
 
     hideTooltip: function () {
       var tooltip = document.getElementById('tooltip')
@@ -443,8 +477,8 @@ export default {
 
     reloadMap() {},
 
-    toggleWaterStressGraphVisibility() {
-      this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
+    toggleZoneStatistics() {
+      this.isZoneStatistics = !this.isZoneStatistics
     },
     toggleKeyActorsVisibility() {
       this.isKeyActorsHidden = !this.isKeyActorsHidden
@@ -514,10 +548,16 @@ span {
 .header-nav {
   margin-bottom: 1%;
 }
-.new-element {
+.navigator {
   position: absolute;
-  top: 100px;
+  top: 25%;
   z-index: 1000;
-  right: 20px;
+  right: 2%;
+}
+.left-element {
+  position: absolute;
+  top: 15%;
+  z-index: 1000;
+  left: 20px;
 }
 </style>

@@ -28,6 +28,16 @@
         />
         <span class="ml-2 text-sm">Hydro Polygon Map</span>
       </label>
+
+      <label class="flex items-center">
+        <input
+          type="checkbox"
+          v-model="toggleDisasterMarkers"
+          @change="toggleDisasters"
+          class="form-checkbox h-4 w-4 text-red-600"
+        />
+        <span class="ml-2 text-sm">Disaster Markers</span>
+      </label>
     </div>
   </div>
 </template>
@@ -52,8 +62,11 @@ export default {
     zoomIndex: {
       type: String,
       required: true
-    },
+    }
   },
+
+  emits: ['markerClick'],
+  inheritAttrs: false,
 
   data() {
     return {
@@ -61,17 +74,17 @@ export default {
       showInfo: false,
       selectedRegion: {},
       cameroonLayer: null,
-      regionLayer: null,  // To manage individual region layers
+      regionLayer: null, // To manage individual region layers
       cachedZones: null,
       clickedZone: null,
-       zoneMarkeds: [],
-      geojson: 'assets/maps/National_region/Far_North.json',
-      cachedZones: null,
+      zoneMarkeds: [],
       // NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
       toggleCameroon: false,
       toggleHydroPolygonGeoJson: false,
       allDisasters: null,
+      toggleDisasterMarkers: false,
+      disasterMarkersLayer: null
     }
   },
 
@@ -89,28 +102,73 @@ export default {
         this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
 
-
         // Initialize map
         this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex)
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map)
 
-        // Load main Cameroon GeoJSON layer on mount
-        this.addZoneMarkers()
-        // await this.loadCameroonGeoJson()
+        // this.addMarkers(this.allDisasters)
       } catch (error) {
         console.error('Error initializing the map:', error)
       }
     },
 
+    clearTooltips() {
+      this.map.eachLayer((layer) => {
+        if (layer.getTooltip && layer.getTooltip()) {
+          layer.closeTooltip()
+        }
+      })
+    },
 
-    addZoneMarkers() {
+    toggleDisasters() {
+      if (this.toggleDisasterMarkers) {
+        this.addDisasterMarkers()
+      } else {
+        this.removeDisasterMarkers()
+      }
+    },
+
+    addDisasterMarkers() {
+      const onMarkerClick = (zone) => {
+        this.$emit('markerClick', zone)
+      }
+      // Only initialize if not already created
+      if (!this.disasterMarkersLayer) {
+        this.disasterMarkersLayer = L.layerGroup()
+
+        this.allDisasters.forEach((disaster) => {
+          const marker = L.marker([disaster.latitude, disaster.longitude])
+          marker.on('click', () => onMarkerClick(disaster))
+
+          marker.bindTooltip(`<b>${disaster.locality}</b><br>${disaster.description}`, {
+            permanent: false,
+            direction: 'top',
+            offset: [0, -10]
+          })
+          marker.addTo(this.disasterMarkersLayer)
+        })
+      }
+
+      // Add the layer to the map
+      this.disasterMarkersLayer.addTo(this.map)
+    },
+
+    removeDisasterMarkers() {
+      // Check if the disasterMarkersLayer exists and is currently on the map
+      if (this.disasterMarkersLayer && this.map.hasLayer(this.disasterMarkersLayer)) {
+        this.map.removeLayer(this.disasterMarkersLayer)
+        this.disasterMarkersLayer = null // Reset to null after removing
+      }
+    },
+
+    addMarkers(markers) {
       const onMarkerClick = (zone) => {
         this.$emit('markerClick', zone)
       }
 
-      this.zoneMarkeds.forEach((zone) => {
+      markers.forEach((zone) => {
         const marker = L.marker([zone.latitude, zone.longitude]).addTo(this.map)
         marker.on('click', () => onMarkerClick(zone))
       })
@@ -125,25 +183,32 @@ export default {
 
         const cameroonGeoJSON = await response.json()
 
-
         // Add the GeoJSON layer to the map
         this.cameroonLayer = L.geoJSON(cameroonGeoJSON, {
           style: { color: 'black', fillColor: 'yellow', fillOpacity: 0, weight: 1 },
           onEachFeature: (feature, layer) => {
             layer.on('click', async () => {
               console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
-              // Fetch and load region-specific GeoJSON
+
+              this.clickedZone = await getSpecificMapZones(null, feature.properties.name)
+              this.$emit('markerClick', this.clickedZone)
+
+              if (this.clickedZone.length == 0 || this.clickedZone[0].geojson == '') {
+                return
+              }
               await this.loadRegionGeoJson(feature.properties.name)
             })
 
             layer.on('mouseover', () => {
               layer.setStyle({ fillColor: 'blue', fillOpacity: 0.2 })
               layer._path.style.cursor = 'pointer'
-              layer.bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
-                permanent: true,
-                direction: 'top',
-                offset: [0, -10]
-              }).openTooltip()
+              layer
+                .bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                  permanent: true,
+                  direction: 'top',
+                  offset: [0, -10]
+                })
+                .openTooltip()
             })
 
             layer.on('mouseout', () => {
@@ -153,14 +218,10 @@ export default {
             })
           }
         }).addTo(this.map)
-
-        // Fit the map bounds to the Cameroon layer
-        // this.map.fitBounds(bounds)
       } catch (error) {
         console.error('Failed to load Cameroon GeoJSON:', error)
       }
     },
-
 
     async loadHydroPolygonGeoJson() {
       try {
@@ -177,7 +238,6 @@ export default {
             weight: 2
           }
         }).addTo(this.map)
-
       } catch (error) {
         console.error('Failed to load Hydro_Polygon GeoJSON:', error)
       }
@@ -190,6 +250,7 @@ export default {
         this.map.removeLayer(this.NewhydroPolygonLayer)
       }
     },
+
     toggleLoadCameroonGeoJson() {
       if (this.toggleCameroon) {
         this.loadCameroonGeoJson()
@@ -199,21 +260,13 @@ export default {
       }
     },
 
-
-
-    async loadRegionGeoJson(regionName) {
+    async loadRegionGeoJson(zone) {
       try {
         if (this.regionLayer) {
-          this.map.removeLayer(this.regionLayer)  // Remove previous region layer if exists
+          this.map.removeLayer(this.regionLayer) // Remove previous region layer if exists
         }
 
-        // Fetch the GeoJSON for the selected region
-        this.clickedZone = await getSpecificMapZones(1, regionName, 1, 1)
-
-        if (this.clickedZone.length == 0 || this.clickedZone[0].geojson == "") {
-return
-}
-
+        console.log('this is the geojson path' + this.clickedZone[0].geojson)
         const regionGeoJSON = await fetch(this.clickedZone[0].geojson)
         const regionData = await regionGeoJSON.json()
 
@@ -224,17 +277,19 @@ return
             layer.on('click', async () => {
               console.log(`Clicked on sub-region: ${feature.properties.name || 'unknown'}`)
               // You can load the subdivision GeoJSON here
-          // await this.loadSubRegionGeoJson(feature.properties.name)
+              // await this.loadSubRegionGeoJson(feature.properties.name)
             })
 
             layer.on('mouseover', () => {
               layer.setStyle({ fillColor: 'blue', fillOpacity: 0.2 })
               layer._path.style.cursor = 'pointer'
-              layer.bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
-                permanent: true,
-                direction: 'top',
-                offset: [0, -10]
-              }).openTooltip()
+              layer
+                .bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                  permanent: true,
+                  direction: 'top',
+                  offset: [0, -10]
+                })
+                .openTooltip()
             })
 
             layer.on('mouseout', () => {
@@ -242,39 +297,39 @@ return
               layer._path.style.cursor = ''
               layer.closeTooltip()
             })
+
+            this.map.on('zoomanim', () => {
+              layer.closeTooltip() // Close tooltip on zoom animation to avoid conflicts
+            })
           }
         }).addTo(this.map)
 
         // Adjust the map bounds to the selected region
-        const bounds = this.regionLayer.getBounds()
-        // this.map.fitBounds(bounds)
       } catch (error) {
         console.error('Failed to load region GeoJSON:', error)
       }
-
     }
-
-    // loadGeoJsonAndSvg() {
-    //   // this.loadCameroonGeoJson()
-    //   // this.loadHydroPolygonGeoJson()
-    //   console.log('Loaded Cameroon GeoJSON and SVG')
-    // }
   },
 
   watch: {
     latitude(val) {
-      this.map && this.map.flyTo([val, this.longitude], this.zoomIndex)
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.flyTo([val, this.longitude], this.zoomIndex)
+      }
     },
     longitude(val) {
-      this.map && this.map.flyTo([this.latitude, val], this.zoomIndex)
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.flyTo([this.latitude, val], this.zoomIndex)
+      }
     },
     zoomIndex(val) {
-      this.map && this.map.setView([this.latitude, this.longitude], val)
-    },
-    // propGeojson(val) {
-    //   // You could add any logic if `propGeojson` changes.
-
-    // }
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.setView([this.latitude, this.longitude], val)
+      }
+    }
   }
 }
 </script>
@@ -293,8 +348,8 @@ return
 .new-checkbox {
   background-color: white;
   position: absolute;
-  top: 25%;
+  top: 8%;
   z-index: 1000;
-  left: 2%;
+  right: 2%;
 }
 </style>
