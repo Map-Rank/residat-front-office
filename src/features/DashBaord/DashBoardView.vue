@@ -5,6 +5,7 @@
     :longitude="longitude"
     :zoomIndex="zoomIndex"
     @zoneClick="zoneClick"
+    @disasterClick="disasterClick"
   />
 
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full min-h-screen">
@@ -140,14 +141,14 @@ export default {
   },
 
   watch: {
-    $route: { 
+    $route: {
       immediate: true,
       async handler() {
         this.isLoadingMap = true
         this.isErrorLoadMap = false
         // await this.fetchZoneMarkeds()
 
-        if (this. Id === 1) {
+        if (this.Id === 1) {
           this.zone = await getSpecificZones(this.zoneId)
           this.posts = await getFilterPosts(this.zoneId, null, 4)
           // this.zoneMarkers = this.zone
@@ -157,12 +158,10 @@ export default {
         } else {
           const zones = await getSpecificMapZones(null, this.zoneName, 1)
 
-          // console.log(zones) 
+          // console.log(zones)
 
           if (zones.length > 0) {
             // this.posts = await getFilterPosts(zones[0].id, null, 4)
-
- 
 
             this.zone = zones[0]
             this.geojson = this.zone.geojson
@@ -323,20 +322,21 @@ export default {
       console.log('The router complete')
     },
     disasterClick(marker) {
-      console.log('navigating after zone click')
+      console.log('navigating after disaster click')
       console.log(marker)
 
       // Check if zoneMarked is an array and use the first item if it is
-      const zone = Array.isArray(marker) ? marker[0] : marker
+      // const markerC = Array.isArray(marker) ? marker[0] : marker
 
+      console.log()
       this.$router.push({
         name: 'dashboard',
         params: {
-          zoneId: zone.id,
-          // parentId: zone.parent_id,
-          zoneName: zone.name,
-          latitude: zone.latitude,
-          longitude: zone.longitude,
+          zoneId: marker.zone_id,
+          // parentId: marker.parent_id,
+          zoneName: marker.locality,
+          latitude: marker.latitude,
+          longitude: marker.longitude,
           zoomIndex: 9
         }
       })
@@ -487,9 +487,6 @@ export default {
       }
       this.hideTooltip()
     },
-
-
-
 
     hideTooltip: function () {
       var tooltip = document.getElementById('tooltip')
