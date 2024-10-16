@@ -155,7 +155,7 @@ export default {
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          const zones = await getSpecificMapZones(this.parentId, this.zoneName, 1)
+          const zones = await getSpecificMapZones(null, this.zoneName, 1)
 
           // console.log(zones) 
 
@@ -312,7 +312,7 @@ export default {
         name: 'dashboard',
         params: {
           zoneId: zone.id,
-          parentId: zone.parent_id,
+          // parentId: zone.parent_id,
           zoneName: zone.name,
           latitude: zone.latitude,
           longitude: zone.longitude,
@@ -333,7 +333,7 @@ export default {
         name: 'dashboard',
         params: {
           zoneId: zone.id,
-          parentId: zone.parent_id,
+          // parentId: zone.parent_id,
           zoneName: zone.name,
           latitude: zone.latitude,
           longitude: zone.longitude,
@@ -353,7 +353,7 @@ export default {
             name: 'dashboard',
             params: {
               zoneId: this.zoneMapToSearch.id,
-              parentId: this.zoneMapToSearch.parent_id,
+              // parentId: this.zoneMapToSearch.parent_id,
               zoneName: this.zoneMapToSearch.name,
               mapSize: this.defaultMapSize,
               latitude: this.zoneMapToSearch.latitude,
