@@ -308,61 +308,68 @@ export default {
       } catch (error) {
         console.error('Failed to load region GeoJSON:', error)
       }
+    },
+
+
+
+    async loadSubRegionGeoJson() {
+    try {
+      // Clear any existing sub-region layer if already loaded
+      if (this.subRegionLayer) {
+        this.map.removeLayer(this.subRegionLayer)
+      }
+  
+      // Fetch the GeoJSON data for the specific sub-region
+      console.log('this is the geojson path' + this.clickedDivision[0].geojson)
+      const subRegionGeoJSON = await fetch(this.clickedDivision[0].geojson)
+      if (!subRegionGeoJSON.ok) {
+        throw new Error('Error loading the Sub-region GeoJSON file.')
+      }
+      
+      const subRegionData = await subRegionGeoJSON.json()
+  
+      // Add the new sub-region layer to the map
+      this.subRegionLayer = L.geoJSON(subRegionData, {
+        style: { color: 'red', fillColor: 'orange', fillOpacity: 0.2, weight: 1 },
+        onEachFeature: (feature, layer) => {
+          layer.on('click', () => {
+            console.log(`Clicked on a specific area within the sub-region: ${feature.properties.name || 'unknown'}`)
+          })
+  
+          layer.on('mouseover', () => {
+            layer.setStyle({ fillColor: 'orange', fillOpacity: 0.4 })
+            layer._path.style.cursor = 'pointer'
+            layer
+              .bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                permanent: true,
+                direction: 'top',
+                offset: [0, -10]
+              })
+              .openTooltip()
+          })
+  
+          layer.on('mouseout', () => {
+            layer.setStyle({ fillColor: 'orange', fillOpacity: 0.2 })
+            layer._path.style.cursor = ''
+            layer.closeTooltip()
+          })
+  
+          this.map.on('zoomanim', () => {
+            layer.closeTooltip() // Close tooltip on zoom animation to avoid conflicts
+          })
+        }
+      }).addTo(this.map)
+  
+    } catch (error) {
+      console.error('Failed to load sub-region GeoJSON:', error)
     }
+  
+  
+  
   },
 
-  async loadSubRegionGeoJson() {
-  try {
-    // Clear any existing sub-region layer if already loaded
-    if (this.subRegionLayer) {
-      this.map.removeLayer(this.subRegionLayer)
-    }
+  },
 
-    // Fetch the GeoJSON data for the specific sub-region
-    console.log('this is the geojson path' + this.clickedDivision[0].geojson)
-    const subRegionGeoJSON = await fetch(this.clickedDivision[0].geojson)
-    if (!subRegionGeoJSON.ok) {
-      throw new Error('Error loading the Sub-region GeoJSON file.')
-    }
-    
-    const subRegionData = await subRegionGeoJSON.json()
-
-    // Add the new sub-region layer to the map
-    this.subRegionLayer = L.geoJSON(subRegionData, {
-      style: { color: 'red', fillColor: 'orange', fillOpacity: 0.2, weight: 1 },
-      onEachFeature: (feature, layer) => {
-        layer.on('click', () => {
-          console.log(`Clicked on a specific area within the sub-region: ${feature.properties.name || 'unknown'}`)
-        })
-
-        layer.on('mouseover', () => {
-          layer.setStyle({ fillColor: 'orange', fillOpacity: 0.4 })
-          layer._path.style.cursor = 'pointer'
-          layer
-            .bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
-              permanent: true,
-              direction: 'top',
-              offset: [0, -10]
-            })
-            .openTooltip()
-        })
-
-        layer.on('mouseout', () => {
-          layer.setStyle({ fillColor: 'orange', fillOpacity: 0.2 })
-          layer._path.style.cursor = ''
-          layer.closeTooltip()
-        })
-
-        this.map.on('zoomanim', () => {
-          layer.closeTooltip() // Close tooltip on zoom animation to avoid conflicts
-        })
-      }
-    }).addTo(this.map)
-
-  } catch (error) {
-    console.error('Failed to load sub-region GeoJSON:', error)
-  }
-},
 
 
   watch: {

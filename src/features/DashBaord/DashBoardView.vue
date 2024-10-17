@@ -125,12 +125,9 @@ export default {
     // KeyActors,
     PostSlider,
     ZoneInfo,
-    BaseBarChart,
-    DegreeImpactDoughnutChart,
     // InlineSvg,
     WaterStressChart,
     ButtonUi,
-    RefreshError,
 
     Modal,
     MapComponent
@@ -334,33 +331,10 @@ export default {
         // mapSize: ,
         latitude: zone.latitude,
         longitude: zone.longitude,
-        zoomIndex: 9
+        zoomIndex: 8
       })
-
-      // console.log('Navigating to Dashboard with Parameters:', {
-      //   zoneId: dashboardStore.zoneId,
-      //   parentId: dashboardStore.parentId,
-      //   zoneName: dashboardStore.zoneName,
-      //   mapSize: dashboardStore.mapSize,
-      //   latitude: dashboardStore.latitude,
-      //   longitude: dashboardStore.longitude,
-      //   zoomIndex: dashboardStore.zoomIndex
-      // })
-
-      // Navigate to the dashboard without parameters in the URL
       this.$router.push({ name: 'dashboard' })
 
-      // this.$router.push({
-      //   name: 'dashboard',
-      //   params: {
-      //     zoneId: zone.id,
-      //     parentId: zone.parent_id,
-      //     zoneName: zone.name,
-      //     latitude: zone.latitude,
-      //     longitude: zone.longitude,
-      //     zoomIndex: 9
-      //   }
-      // })
 
       console.log('The router complete')
     },
@@ -368,8 +342,6 @@ export default {
       console.log('navigating after disaster click')
       console.log(marker)
 
-      // Check if zoneMarked is an array and use the first item if it is
-      // const markerC = Array.isArray(marker) ? marker[0] : marker
 
       const dashboardStore = useDashboardStore()
 
@@ -380,24 +352,14 @@ export default {
         // mapSize: ,
         latitude: marker.latitude,
         longitude: marker.longitude,
-        zoomIndex: 9
+        zoomIndex: 8
       })
 
       // Navigate to the dashboard without parameters in the URL
       this.$router.push({ name: 'dashboard' })
 
       console.log()
-      // this.$router.push({
-      //   name: 'dashboard',
-      //   params: {
-      //     zoneId: marker.zone_id,
-      //     // parentId: marker.parent_id,
-      //     zoneName: marker.locality,
-      //     latitude: marker.latitude,
-      //     longitude: marker.longitude,
-      //     zoomIndex: 9
-      //   }
-      // })
+
 
       console.log('The router complete')
     },
@@ -420,31 +382,6 @@ export default {
         })
 
         this.$router.push({ name: 'dashboard' })
-
-        // this.$router
-        //   .push({
-        //     name: 'dashboard',
-        //     params: {
-        //       zoneId: this.zoneMapToSearch.id,
-        //       parentId: this.zoneMapToSearch.parent_id,
-        //       zoneName: this.zoneMapToSearch.name,
-        //       mapSize: this.defaultMapSize,
-        //       latitude: this.zoneMapToSearch.latitude,
-        //       longitude: this.zoneMapToSearch.longitude,
-        //       zoomIndex: zoomLevelIndex
-        //     }
-        //   })
-        //   .then(() => {
-        //     // Using window.location.reload() to reload the entire page
-        //     // this.updateMap({
-        //     //   latitude: this.zoneMapToSearch.latitude,
-        //     //   longitude: this.zoneMapToSearch.longitude,
-        //     //   zoomIndex: zoomLevelIndex
-        //     // })
-        //   })
-        //   .catch((err) => {
-        //     console.error('Router push failed', err)
-        //   })
         return
       }
 
@@ -552,9 +489,6 @@ export default {
   z-index: 0; /* Map will be behind other elements */
 }
 
-.z-10 {
-  z-index: 10; /* Ensure other elements are above the map */
-}
 
 span {
   font-size: 14px;
