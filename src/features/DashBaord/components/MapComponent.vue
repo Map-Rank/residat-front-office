@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="map" style="height: 100vh"></div>
+    <div id="map" style="height: 100vh;position: sticky;"></div>
     <!-- Dynamically show info-box when a region is selected -->
     <div class="info-box" v-if="showInfo">
       <!-- Data binding and event handling -->
@@ -52,15 +52,15 @@ export default {
 
   props: {
     latitude: {
-      type: String,
+      type: Number,
       required: true
     },
     longitude: {
-      type: String,
+      type: Number,
       required: true
     },
     zoomIndex: {
-      type: String,
+      type: Number,
       required: true
     }
   },
@@ -182,7 +182,7 @@ export default {
               console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
 
               this.clickedRegion = await getSpecificMapZones(null, feature.properties.name)
-              this.$emit('zoneClick', this.clickedRegion)
+              this.$emit('zoneClick', this.clickedRegion, )
 
               if (this.clickedRegion.length == 0 || this.clickedRegion[0].geojson == '') {
                 return
@@ -269,7 +269,7 @@ export default {
             layer.on('click', async () => {
               console.log(`Clicked on sub-region: ${feature.properties.name || 'unknown'}`)
               this.clickedDivision = await getSpecificMapZones(null, feature.properties.name)
-              this.$emit('zoneClick', this.clickedDivision)
+              this.$emit('zoneClick', this.clickedDivision,10)
 
               if (this.clickedDivision.length == 0 || this.clickedDivision[0].geojson == '') {
                 console.log('the division has no geojson')
@@ -330,7 +330,7 @@ export default {
   
       // Add the new sub-region layer to the map
       this.subRegionLayer = L.geoJSON(subRegionData, {
-        style: { color: 'red', fillColor: 'orange', fillOpacity: 0.2, weight: 1 },
+        style: { color: 'red', fillColor: 'orange', fillOpacity: 0, weight: 1 },
         onEachFeature: (feature, layer) => {
           layer.on('click', () => {
             console.log(`Clicked on a specific area within the sub-region: ${feature.properties.name || 'unknown'}`)
@@ -349,7 +349,7 @@ export default {
           })
   
           layer.on('mouseout', () => {
-            layer.setStyle({ fillColor: 'orange', fillOpacity: 0.2 })
+            layer.setStyle({ fillColor: 'orange', fillOpacity: 0 })
             layer._path.style.cursor = ''
             layer.closeTooltip()
           })
@@ -373,32 +373,43 @@ export default {
 
 
   watch: {
-    latitude(val) {
-      if (this.map) {
-        this.clearTooltips() // Clear any active tooltips
-        this.map.flyTo([val, this.longitude], this.zoomIndex)
-      }
-    },
-    longitude(val) {
-      if (this.map) {
-        this.clearTooltips() // Clear any active tooltips
-        this.map.flyTo([this.latitude, val], this.zoomIndex)
-      }
-    },
-    zoomIndex(val) {
-      if (this.map) {
-        this.clearTooltips() // Clear any active tooltips
-        this.map.setView([this.latitude, this.longitude], val)
-      }
-    }
+ latitude(val) {
+   if (this.map) {
+     this.clearTooltips(); // Clear any active tooltips
+     this.map.flyTo([val, this.longitude], this.zoomIndex, {
+       animate: true,
+       duration: 5 // Duration in seconds (default is usually 0.25 seconds)
+     });
+   }
+ },
+ longitude(val) {
+   if (this.map) {
+     this.clearTooltips(); // Clear any active tooltips
+     this.map.flyTo([this.latitude, val], this.zoomIndex, {
+       animate: true,
+       duration: 5 // Duration in seconds
+     });
+   }
+ },
+ 
+zoomIndex(val) {
+  if (this.map) {
+    this.clearTooltips(); // Clear any active tooltips
+    this.map.setView([this.latitude, this.longitude], val, {
+      animate: true,
+      duration: 5 // Less than flyTo to make zoom adjustment quicker but still smooth
+    });
+  }
+}
+
   }
 }
 </script>
 
 <style scoped>
 .info-box {
-  position: absolute;
-  top: 10px;
+  position: sticky;
+  top: 20px;
   right: 10px;
   background: white;
   padding: 10px;
