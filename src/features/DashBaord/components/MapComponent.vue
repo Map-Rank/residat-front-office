@@ -75,8 +75,10 @@ export default {
       selectedRegion: {},
       cameroonLayer: null,
       regionLayer: null, // To manage individual region layers
+      subRegionLayer: null, // To manage individual region layers
       cachedZones: null,
-      clickedZone: null,
+      clickedRegion: null,
+      clickedDivision: null,
       zoneMarkeds: [],
       // NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
@@ -179,13 +181,13 @@ export default {
             layer.on('click', async () => {
               console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
 
-              this.clickedZone = await getSpecificMapZones(null, feature.properties.name)
-              this.$emit('zoneClick', this.clickedZone)
+              this.clickedRegion = await getSpecificMapZones(null, feature.properties.name)
+              this.$emit('zoneClick', this.clickedRegion)
 
-              if (this.clickedZone.length == 0 || this.clickedZone[0].geojson == '') {
+              if (this.clickedRegion.length == 0 || this.clickedRegion[0].geojson == '') {
                 return
               }
-              await this.loadRegionGeoJson(feature.properties.name)
+              await this.loadRegionGeoJson()
             })
 
             layer.on('mouseover', () => {
@@ -246,6 +248,7 @@ export default {
       } else {
         this.map.removeLayer(this.cameroonLayer)
         this.map.removeLayer(this.regionLayer)
+        this.map.removeLayer(this.subRegionLayer)
       }
     },
 
@@ -255,8 +258,8 @@ export default {
           this.map.removeLayer(this.regionLayer) // Remove previous region layer if exists
         }
 
-        console.log('this is the geojson path' + this.clickedZone[0].geojson)
-        const regionGeoJSON = await fetch(this.clickedZone[0].geojson)
+        console.log('this is the geojson path' + this.clickedRegion[0].geojson)
+        const regionGeoJSON = await fetch(this.clickedRegion[0].geojson)
         const regionData = await regionGeoJSON.json()
 
         // Add the new region layer to the map
@@ -265,8 +268,16 @@ export default {
           onEachFeature: (feature, layer) => {
             layer.on('click', async () => {
               console.log(`Clicked on sub-region: ${feature.properties.name || 'unknown'}`)
+              this.clickedDivision = await getSpecificMapZones(null, feature.properties.name)
+              this.$emit('zoneClick', this.clickedDivision)
+
+              if (this.clickedDivision.length == 0 || this.clickedDivision[0].geojson == '') {
+                console.log('the division has no geojson')
+                return
+              }
+              await this.loadSubRegionGeoJson()
+             
               // You can load the subdivision GeoJSON here
-              // await this.loadSubRegionGeoJson(feature.properties.name)
             })
 
             layer.on('mouseover', () => {
@@ -299,6 +310,60 @@ export default {
       }
     }
   },
+
+  async loadSubRegionGeoJson() {
+  try {
+    // Clear any existing sub-region layer if already loaded
+    if (this.subRegionLayer) {
+      this.map.removeLayer(this.subRegionLayer)
+    }
+
+    // Fetch the GeoJSON data for the specific sub-region
+    console.log('this is the geojson path' + this.clickedDivision[0].geojson)
+    const subRegionGeoJSON = await fetch(this.clickedDivision[0].geojson)
+    if (!subRegionGeoJSON.ok) {
+      throw new Error('Error loading the Sub-region GeoJSON file.')
+    }
+    
+    const subRegionData = await subRegionGeoJSON.json()
+
+    // Add the new sub-region layer to the map
+    this.subRegionLayer = L.geoJSON(subRegionData, {
+      style: { color: 'red', fillColor: 'orange', fillOpacity: 0.2, weight: 1 },
+      onEachFeature: (feature, layer) => {
+        layer.on('click', () => {
+          console.log(`Clicked on a specific area within the sub-region: ${feature.properties.name || 'unknown'}`)
+        })
+
+        layer.on('mouseover', () => {
+          layer.setStyle({ fillColor: 'orange', fillOpacity: 0.4 })
+          layer._path.style.cursor = 'pointer'
+          layer
+            .bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+              permanent: true,
+              direction: 'top',
+              offset: [0, -10]
+            })
+            .openTooltip()
+        })
+
+        layer.on('mouseout', () => {
+          layer.setStyle({ fillColor: 'orange', fillOpacity: 0.2 })
+          layer._path.style.cursor = ''
+          layer.closeTooltip()
+        })
+
+        this.map.on('zoomanim', () => {
+          layer.closeTooltip() // Close tooltip on zoom animation to avoid conflicts
+        })
+      }
+    }).addTo(this.map)
+
+  } catch (error) {
+    console.error('Failed to load sub-region GeoJSON:', error)
+  }
+},
+
 
   watch: {
     latitude(val) {
