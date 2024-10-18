@@ -1,10 +1,11 @@
 <template>
   <MapComponent
     class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
-    :latitude="latitude"
-    :longitude="longitude"
-    :zoomIndex="zoomIndex"
-    @markerClick="markerClick"
+    :latitude="dashboard.latitude"
+    :longitude="dashboard.longitude"
+    :zoomIndex="dashboard.zoomIndex"
+    @zoneClick="zoneClick"
+    @disasterClick="disasterClick"
   />
 
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full min-h-screen">
@@ -93,14 +94,11 @@
 
 <script>
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
-import KeyActors from '@/components/common/KeyActors/KeyActor.vue'
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
-import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import { getSpecificZones, getSpecificMapZones, getZones } from '../../services/zoneService'
-import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
@@ -113,6 +111,7 @@ import { getZoomIndexByLevel } from '@/utils/formating.js'
 import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 import { getFilterPosts } from '@/features/Post/services/postService.js'
+import { useDashboardStore } from '@/stores/dashboardStore.js'
 
 export default {
   name: 'DashBoardView',
@@ -123,14 +122,10 @@ export default {
     // KeyActors,
     PostSlider,
     ZoneInfo,
-    BaseBarChart,
-    DegreeImpactDoughnutChart,
     // InlineSvg,
     WaterStressChart,
     ButtonUi,
-    RefreshError,
 
-    Modal,
     MapComponent
     // MapShimmer
   },
@@ -139,31 +134,33 @@ export default {
     // await this.fetchZoneMarkeds()
   },
 
-  watch: {
-    $route: { 
-      immediate: true,
-      async handler() {
+  created() {
+    // Access the store instance
+    this.dashboardStore = useDashboardStore()
+
+    // Watch for changes in the store's `zoneId` and react accordingly
+    this.$watch(
+      () => this.dashboardStore.zoneId,
+      async (newZoneId) => {
+        if (!newZoneId) return
+
         this.isLoadingMap = true
         this.isErrorLoadMap = false
-        // await this.fetchZoneMarkeds()
 
-        if (this. Id === 1) {
-          this.zone = await getSpecificZones(this.zoneId)
-          this.posts = await getFilterPosts(this.zoneId, null, 4)
-          // this.zoneMarkers = this.zone
+        if (this.Id === 1) {
+          this.zone = await getSpecificZones(this.dashboardStore.zoneId)
+          this.posts = await getFilterPosts(this.dashboardStore.zoneId, null, 4)
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          const zones = await getSpecificMapZones(this.parentId, this.zoneName, 1)
-
-          // console.log(zones) 
+          const zones = await getSpecificMapZones(
+            this.dashboardStore.parentId,
+            this.dashboardStore.zoneName,
+            1
+          )
 
           if (zones.length > 0) {
-            // this.posts = await getFilterPosts(zones[0].id, null, 4)
-
- 
-
             this.zone = zones[0]
             this.geojson = this.zone.geojson
             this.posts = await getFilterPosts(zones[0].id, null, 4)
@@ -175,12 +172,69 @@ export default {
             this.vectorKeys = [0]
           }
         }
+
         this.isLoadingMap = false
-      }
-    }
+      },
+      { immediate: true }
+    )
   },
 
-  props: ['zoneId', 'parentId', 'zoneName', 'mapSize', 'latitude', 'longitude', 'zoomIndex'],
+
+  // watch: {
+  //   $route: {
+  //     immediate: true,
+  //     async handler() {
+  //       this.isLoadingMap = true
+  //       this.isErrorLoadMap = false
+  //       // await this.fetchZoneMarkeds()
+
+  //       if (this.Id === 1) {
+  //         this.zone = await getSpecificZones(this.dashboard.zoneId)
+  //         this.posts = await getFilterPosts(this.dashboard.zoneId, null, 4)
+  //         // this.zoneMarkers = this.zone
+  //         this.presentMapId = this.dashboard.zone.id
+  //         this.mapSvgPath = this.dashboard.zone.vector.path
+  //         this.vectorKeys = this.dashboard.zone.vector.keys
+  //       } else {
+  //         const zones = await getSpecificMapZones(
+  //           this.dashboard.parentId,
+  //           this.dashboard.zoneName,
+  //           1
+  //         )
+
+  //         // console.log(zones)
+
+  //         if (zones.length > 0) {
+  //           // this.posts = await getFilterPosts(zones[0].id, null, 4)
+
+  //           this.zone = zones[0]
+  //           this.geojson = this.zone.geojson
+  //           this.posts = await getFilterPosts(zones[0].id, null, 4)
+  //           this.presentMapId = this.zone.id
+  //           this.mapSvgPath = this.zone.vector?.path
+  //           this.vectorKeys = this.zone.vector?.keys
+  //         } else {
+  //           this.isErrorLoadMap = true
+  //           this.vectorKeys = [0]
+  //         }
+  //       }
+  //       this.isLoadingMap = false
+  //     }
+  //   }
+  // },
+
+  computed: {
+    isSVG() {
+      return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
+    },
+    errorMessage() {
+      return ` ${this.dashboard.zoneName} map not yet available`
+    },
+
+    dashboard() {
+      return useDashboardStore()
+    }
+  },
   data() {
     return {
       toast: useToast(),
@@ -301,56 +355,70 @@ export default {
         console.error('Failed to fetch zone markers:', error)
       }
     },
-    markerClick(zoneMarked) {
+    zoneClick(zoneMarked,zoomIndex) {
       console.log('navigating after zone click')
       console.log(zoneMarked)
 
       // Check if zoneMarked is an array and use the first item if it is
       const zone = Array.isArray(zoneMarked) ? zoneMarked[0] : zoneMarked
 
-      this.$router.push({
-        name: 'dashboard',
-        params: {
-          zoneId: zone.id,
-          parentId: zone.parent_id,
-          zoneName: zone.name,
-          latitude: zone.latitude,
-          longitude: zone.longitude,
-          zoomIndex: 9
-        }
+      const dashboardStore = useDashboardStore()
+      // Set the parameters in the store
+      dashboardStore.setDashboardParams({
+        zoneId: zone.id,
+        parentId: zone.parent_id,
+        zoneName: zone.name,
+        // mapSize: ,
+        latitude: zone.latitude,
+        longitude: zone.longitude,
+        zoomIndex: zoomIndex ?? 8
       })
+      this.$router.push({ name: 'dashboard' })
+      console.log('The router complete')
+    },
+    disasterClick(marker) {
+      console.log('navigating after disaster click')
+      console.log(marker)
+
+
+      const dashboardStore = useDashboardStore()
+
+      // Set the parameters in the store
+      dashboardStore.setDashboardParams({
+        zoneId: marker.zone_id,
+        zoneName: marker.locality,
+        // mapSize: ,
+        latitude: marker.latitude,
+        longitude: marker.longitude,
+        zoomIndex: 8
+      })
+
+      // Navigate to the dashboard without parameters in the URL
+      this.$router.push({ name: 'dashboard' })
+
+      console.log()
+
 
       console.log('The router complete')
     },
 
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
-        const zoomLevelIndex = getZoomIndexByLevel(this.zoneMapToSearch.level_id)
 
-        this.$router
-          .push({
-            name: 'dashboard',
-            params: {
-              zoneId: this.zoneMapToSearch.id,
-              parentId: this.zoneMapToSearch.parent_id,
-              zoneName: this.zoneMapToSearch.name,
-              mapSize: this.defaultMapSize,
-              latitude: this.zoneMapToSearch.latitude,
-              longitude: this.zoneMapToSearch.longitude,
-              zoomIndex: zoomLevelIndex
-            }
-          })
-          .then(() => {
-            // Using window.location.reload() to reload the entire page
-            // this.updateMap({
-            //   latitude: this.zoneMapToSearch.latitude,
-            //   longitude: this.zoneMapToSearch.longitude,
-            //   zoomIndex: zoomLevelIndex
-            // })
-          })
-          .catch((err) => {
-            console.error('Router push failed', err)
-          })
+        const dashboardStore = useDashboardStore()
+
+        // Set the parameters in the store
+        dashboardStore.setDashboardParams({
+          zoneId: this.zoneMapToSearch.id,
+          parentId: this.zoneMapToSearch.parent_id,
+          zoneName: this.zoneMapToSearch.name,
+          // mapSize: ,
+          latitude: this.zoneMapToSearch.latitude,
+          longitude: this.zoneMapToSearch.longitude,
+          zoomIndex: 9
+        })
+
+        this.$router.push({ name: 'dashboard' })
         return
       }
 
@@ -424,59 +492,6 @@ export default {
       }
     },
 
-    handleVectorClick(key) {
-      if (key != null && key.name != null) {
-        this.selectedZone = key.name
-        console.log(this.selectedZone)
-
-        console.log(this.selectedZone)
-        console.log(this.presentMapId)
-        this.$router.push({
-          name: 'dashboard',
-          params: {
-            zoneId: 0,
-            parentId: this.presentMapId,
-            zoneName: this.selectedZone,
-            mapSize: this.defaultMapSize
-          }
-        })
-        this.vectorKeys = [0]
-        this.inSubDivision = false
-      }
-    },
-    handleStateClick: async function (e) {
-      if (e.target.tagName === 'path') {
-        if (e.target.dataset.name) {
-          this.selectedZone = e.target.dataset
-          this.hoverMapText = this.selectedZone.name
-
-          console.log(this.selectedZone)
-          this.$router.push({
-            name: 'dashboard',
-            params: {
-              zoneId: 0,
-              parentId: this.presentMapId,
-              zoneName: this.selectedZone.name,
-              mapSize: this.defaultMapSize
-            }
-          })
-          this.vectorKeys = [0]
-          this.inSubDivision = false
-        }
-      }
-      this.hideTooltip()
-    },
-
-
-
-
-    hideTooltip: function () {
-      var tooltip = document.getElementById('tooltip')
-      tooltip.style.display = 'none'
-    },
-
-    reloadMap() {},
-
     toggleZoneStatistics() {
       this.isZoneStatistics = !this.isZoneStatistics
     },
@@ -493,14 +508,6 @@ export default {
         return match ? match[1] : 'DefaultColor'
       }
       return 'DefaultColor'
-    }
-  },
-  computed: {
-    isSVG() {
-      return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
-    },
-    errorMessage() {
-      return ` ${this.zoneName} map not yet available`
     }
   }
 }
@@ -519,9 +526,6 @@ export default {
   z-index: 0; /* Map will be behind other elements */
 }
 
-.z-10 {
-  z-index: 10; /* Ensure other elements are above the map */
-}
 
 span {
   font-size: 14px;

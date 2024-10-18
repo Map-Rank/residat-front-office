@@ -107,19 +107,21 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/dashboard/:zoneId?/:parentId?/:zoneName?/:mapSize?/:latitude?/:longitude?/:zoomIndex?',
+      // path: '/dashboard/:zoneId?/:parentId?/:zoneName?/:mapSize?/:latitude?/:longitude?/:zoomIndex?',
+      path: '/dashboard',
       name: 'dashboard',
-      component: DashBoardView,
+      component: DashBoardView
+
       // meta: { requiresAuth: true },
-      props: (route) => ({
-        zoneId: route.params.zoneId || 1,
-        parentId: route.params.parentId,
-        zoneName: route.params.zoneName,
-        mapSize: route.params.mapSize,
-        latitude: route.params.latitude || GEOSPACIAL_DATA.cameroonLatitude,
-        longitude: route.params.longitude || GEOSPACIAL_DATA.cameroonLongitude,
-        zoomIndex: route.params.zoomIndex || GEOSPACIAL_DATA.cameroonZoomIndex
-      })
+      // props: (route) => ({
+      //   zoneId: route.params.zoneId || 1,
+      //   parentId: route.params.parentId,
+      //   zoneName: route.params.zoneName,
+      //   mapSize: route.params.mapSize,
+      //   latitude: route.params.latitude || GEOSPACIAL_DATA.cameroonLatitude,
+      //   longitude: route.params.longitude || GEOSPACIAL_DATA.cameroonLongitude,
+      //   zoomIndex: route.params.zoomIndex || GEOSPACIAL_DATA.cameroonZoomIndex
+      // })
       // redirect: (to) => {
       //   return '/community';
       // }
