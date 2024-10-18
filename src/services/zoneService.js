@@ -51,7 +51,7 @@ if (parent_id != null && parent_id !== '') {
 }
 
 if (name != null && name.trim() !== '') {
-  params.append('name', name.toString());
+  params.append('code', name.toString());
 }
 
 if (size != null && size !== '') {

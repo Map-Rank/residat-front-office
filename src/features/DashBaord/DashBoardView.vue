@@ -8,12 +8,12 @@
     @disasterClick="disasterClick"
   />
 
-  <div class="z-10 px-4 md:px-[50px] pt-1 w-full min-h-screen">
+  <div class="z-10 px-4 md:px-[50px] pt-1 w-full ">
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
     >
       <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-        <div class="mt-2 w-full min-h-[30vh]">
+        <div class="hidden md:block mt-2 w-full min-h-[30vh]">
           <WaterStressChart></WaterStressChart>
         </div>
 
@@ -45,7 +45,7 @@
         </div>
       </div>
 
-      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
+      <!-- <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -60,13 +60,13 @@
             </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
       <div
         class="flex md:col-span-6"
-        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
+        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
       ></div>
 
       <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
@@ -107,7 +107,6 @@ import Modal from '@/components/common/Modal/Modal.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { useToast } from 'vue-toastification'
 import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
-import { getZoomIndexByLevel } from '@/utils/formating.js'
 import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 import { getFilterPosts } from '@/features/Post/services/postService.js'
@@ -180,48 +179,6 @@ export default {
   },
 
 
-  // watch: {
-  //   $route: {
-  //     immediate: true,
-  //     async handler() {
-  //       this.isLoadingMap = true
-  //       this.isErrorLoadMap = false
-  //       // await this.fetchZoneMarkeds()
-
-  //       if (this.Id === 1) {
-  //         this.zone = await getSpecificZones(this.dashboard.zoneId)
-  //         this.posts = await getFilterPosts(this.dashboard.zoneId, null, 4)
-  //         // this.zoneMarkers = this.zone
-  //         this.presentMapId = this.dashboard.zone.id
-  //         this.mapSvgPath = this.dashboard.zone.vector.path
-  //         this.vectorKeys = this.dashboard.zone.vector.keys
-  //       } else {
-  //         const zones = await getSpecificMapZones(
-  //           this.dashboard.parentId,
-  //           this.dashboard.zoneName,
-  //           1
-  //         )
-
-  //         // console.log(zones)
-
-  //         if (zones.length > 0) {
-  //           // this.posts = await getFilterPosts(zones[0].id, null, 4)
-
-  //           this.zone = zones[0]
-  //           this.geojson = this.zone.geojson
-  //           this.posts = await getFilterPosts(zones[0].id, null, 4)
-  //           this.presentMapId = this.zone.id
-  //           this.mapSvgPath = this.zone.vector?.path
-  //           this.vectorKeys = this.zone.vector?.keys
-  //         } else {
-  //           this.isErrorLoadMap = true
-  //           this.vectorKeys = [0]
-  //         }
-  //       }
-  //       this.isLoadingMap = false
-  //     }
-  //   }
-  // },
 
   computed: {
     isSVG() {
@@ -390,7 +347,7 @@ export default {
         // mapSize: ,
         latitude: marker.latitude,
         longitude: marker.longitude,
-        zoomIndex: 8
+        zoomIndex: 10
       })
 
       // Navigate to the dashboard without parameters in the URL
@@ -554,14 +511,14 @@ span {
 }
 .navigator {
   position: absolute;
-  top: 25%;
-  z-index: 1000;
+  top: 30%;
+  z-index: 10;
   right: 2%;
 }
 .left-element {
   position: absolute;
-  top: 15%;
-  z-index: 1000;
+  top: 20%;
+  z-index: 5;
   left: 20px;
 }
 </style>

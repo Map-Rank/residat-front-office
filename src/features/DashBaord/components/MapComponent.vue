@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div id="map" style="height: 100vh;position: sticky;"></div>
+    <div id="map" style="height: 100vh; position: sticky"></div>
     <!-- Dynamically show info-box when a region is selected -->
     <div class="info-box" v-if="showInfo">
       <!-- Data binding and event handling -->
@@ -94,6 +94,54 @@ export default {
     this.initializeMap()
   },
 
+  computed: {
+    // Computed property to handle disaster marker colors and intensity
+    disasterMarkerStyles() {
+      return this.allDisasters.map((disaster) => {
+        let baseColor
+        let intensity
+
+        // Determine the base color based on the disaster type
+        if (disaster.type === 'FLOOD') {
+          baseColor = 'red' // Red for floods
+        } else if (disaster.type === 'DROUGHT') {
+          baseColor = 'rgba(205, 133, 63)' // Yellow for droughts
+        } else {
+          baseColor = 'gray' 
+        }
+
+        // Determine intensity based on the level of the disaster
+        if (disaster.level === 1) {
+          intensity = 0.3 // Low intensity
+        } else if (disaster.level === 2) {
+          intensity = 0.5 // Medium intensity
+        } else if (disaster.level > 3) {
+          intensity = 0.7 // High intensity
+        }
+
+        // Return the color and intensity for each disaster
+        return {
+          id: disaster.id, // You can use this ID for mapping in your template
+          description: disaster.description,
+          locality: disaster.locality,
+          latitude: disaster.latitude,
+          longitude: disaster.longitude,
+          image: disaster.image,
+          zone_id: disaster.zone_id,
+          level: disaster.level,
+          type: disaster.type,
+          start_period: disaster.start_period,
+          end_period: disaster.end_period,
+          created_at: disaster.created_at,
+          updated_at: disaster.updated_at,
+          color: baseColor,
+          intensity: intensity,
+          radius: 7 + disaster.level * 2 // Size of marker based on level
+        }
+      })
+    }
+  },
+
   methods: {
     async initializeMap() {
       try {
@@ -136,19 +184,32 @@ export default {
       const onMarkerClick = (zone) => {
         this.$emit('disasterClick', zone)
       }
+
       // Only initialize if not already created
       if (!this.disasterMarkersLayer) {
         this.disasterMarkersLayer = L.layerGroup()
 
-        this.allDisasters.forEach((disaster) => {
-          const marker = L.marker([disaster.latitude, disaster.longitude])
+        // Use the computed property `disasterMarkerStyles`
+        this.disasterMarkerStyles.forEach((disaster) => {
+          // Create a circle marker with color and intensity from the computed property
+          const marker = L.circleMarker([disaster.latitude, disaster.longitude], {
+            radius: disaster.radius, // Dynamic radius
+            color: disaster.color, // Dynamic color
+            fillColor: disaster.color, // Same color for fill
+            fillOpacity: disaster.intensity, // Dynamic intensity
+            weight: 2 // Border thickness
+          })
+
           marker.on('click', () => onMarkerClick(disaster))
 
+          // Bind a tooltip to the marker
           marker.bindTooltip(`<b>${disaster.locality}</b><br>${disaster.description}`, {
             permanent: false,
             direction: 'top',
             offset: [0, -10]
           })
+
+          // Add the marker to the disaster markers layer
           marker.addTo(this.disasterMarkersLayer)
         })
       }
@@ -182,7 +243,7 @@ export default {
               console.log(`Clicked on region: ${feature.properties.name || 'unknown'}`)
 
               this.clickedRegion = await getSpecificMapZones(null, feature.properties.name)
-              this.$emit('zoneClick', this.clickedRegion, )
+              this.$emit('zoneClick', this.clickedRegion)
 
               if (this.clickedRegion.length == 0 || this.clickedRegion[0].geojson == '') {
                 return
@@ -269,14 +330,14 @@ export default {
             layer.on('click', async () => {
               console.log(`Clicked on sub-region: ${feature.properties.name || 'unknown'}`)
               this.clickedDivision = await getSpecificMapZones(null, feature.properties.name)
-              this.$emit('zoneClick', this.clickedDivision,10)
+              this.$emit('zoneClick', this.clickedDivision, 10)
 
               if (this.clickedDivision.length == 0 || this.clickedDivision[0].geojson == '') {
                 console.log('the division has no geojson')
                 return
               }
               await this.loadSubRegionGeoJson()
-             
+
               // You can load the subdivision GeoJSON here
             })
 
@@ -310,98 +371,90 @@ export default {
       }
     },
 
-
-
     async loadSubRegionGeoJson() {
-    try {
-      // Clear any existing sub-region layer if already loaded
-      if (this.subRegionLayer) {
-        this.map.removeLayer(this.subRegionLayer)
-      }
-  
-      // Fetch the GeoJSON data for the specific sub-region
-      console.log('this is the geojson path' + this.clickedDivision[0].geojson)
-      const subRegionGeoJSON = await fetch(this.clickedDivision[0].geojson)
-      if (!subRegionGeoJSON.ok) {
-        throw new Error('Error loading the Sub-region GeoJSON file.')
-      }
-      
-      const subRegionData = await subRegionGeoJSON.json()
-  
-      // Add the new sub-region layer to the map
-      this.subRegionLayer = L.geoJSON(subRegionData, {
-        style: { color: 'red', fillColor: 'orange', fillOpacity: 0, weight: 1 },
-        onEachFeature: (feature, layer) => {
-          layer.on('click', () => {
-            console.log(`Clicked on a specific area within the sub-region: ${feature.properties.name || 'unknown'}`)
-          })
-  
-          layer.on('mouseover', () => {
-            layer.setStyle({ fillColor: 'orange', fillOpacity: 0.4 })
-            layer._path.style.cursor = 'pointer'
-            layer
-              .bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
-                permanent: true,
-                direction: 'top',
-                offset: [0, -10]
-              })
-              .openTooltip()
-          })
-  
-          layer.on('mouseout', () => {
-            layer.setStyle({ fillColor: 'orange', fillOpacity: 0 })
-            layer._path.style.cursor = ''
-            layer.closeTooltip()
-          })
-  
-          this.map.on('zoomanim', () => {
-            layer.closeTooltip() // Close tooltip on zoom animation to avoid conflicts
-          })
+      try {
+        // Clear any existing sub-region layer if already loaded
+        if (this.subRegionLayer) {
+          this.map.removeLayer(this.subRegionLayer)
         }
-      }).addTo(this.map)
-  
-    } catch (error) {
-      console.error('Failed to load sub-region GeoJSON:', error)
+
+        // Fetch the GeoJSON data for the specific sub-region
+        console.log('this is the geojson path' + this.clickedDivision[0].geojson)
+        const subRegionGeoJSON = await fetch(this.clickedDivision[0].geojson)
+        if (!subRegionGeoJSON.ok) {
+          throw new Error('Error loading the Sub-region GeoJSON file.')
+        }
+
+        const subRegionData = await subRegionGeoJSON.json()
+
+        // Add the new sub-region layer to the map
+        this.subRegionLayer = L.geoJSON(subRegionData, {
+          style: { color: 'red', fillColor: 'orange', fillOpacity: 0, weight: 1 },
+          onEachFeature: (feature, layer) => {
+            layer.on('click', () => {
+              console.log(
+                `Clicked on a specific area within the sub-region: ${feature.properties.name || 'unknown'}`
+              )
+            })
+
+            layer.on('mouseover', () => {
+              layer.setStyle({ fillColor: 'orange', fillOpacity: 0.4 })
+              layer._path.style.cursor = 'pointer'
+              layer
+                .bindTooltip(`<b>${feature.properties.name || 'unknown'}</b>`, {
+                  permanent: true,
+                  direction: 'top',
+                  offset: [0, -10]
+                })
+                .openTooltip()
+            })
+
+            layer.on('mouseout', () => {
+              layer.setStyle({ fillColor: 'orange', fillOpacity: 0 })
+              layer._path.style.cursor = ''
+              layer.closeTooltip()
+            })
+
+            this.map.on('zoomanim', () => {
+              layer.closeTooltip() // Close tooltip on zoom animation to avoid conflicts
+            })
+          }
+        }).addTo(this.map)
+      } catch (error) {
+        console.error('Failed to load sub-region GeoJSON:', error)
+      }
     }
-  
-  
-  
   },
-
-  },
-
-
 
   watch: {
- latitude(val) {
-   if (this.map) {
-     this.clearTooltips(); // Clear any active tooltips
-     this.map.flyTo([val, this.longitude], this.zoomIndex, {
-       animate: true,
-       duration: 5 // Duration in seconds (default is usually 0.25 seconds)
-     });
-   }
- },
- longitude(val) {
-   if (this.map) {
-     this.clearTooltips(); // Clear any active tooltips
-     this.map.flyTo([this.latitude, val], this.zoomIndex, {
-       animate: true,
-       duration: 5 // Duration in seconds
-     });
-   }
- },
- 
-zoomIndex(val) {
-  if (this.map) {
-    this.clearTooltips(); // Clear any active tooltips
-    this.map.setView([this.latitude, this.longitude], val, {
-      animate: true,
-      duration: 5 // Less than flyTo to make zoom adjustment quicker but still smooth
-    });
-  }
-}
+    latitude(val) {
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.flyTo([val, this.longitude], this.zoomIndex, {
+          animate: true,
+          duration: 5 // Duration in seconds (default is usually 0.25 seconds)
+        })
+      }
+    },
+    longitude(val) {
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.flyTo([this.latitude, val], this.zoomIndex, {
+          animate: true,
+          duration: 5 // Duration in seconds
+        })
+      }
+    },
 
+    zoomIndex(val) {
+      if (this.map) {
+        this.clearTooltips() // Clear any active tooltips
+        this.map.setView([this.latitude, this.longitude], val, {
+          animate: true,
+          duration: 5 // Less than flyTo to make zoom adjustment quicker but still smooth
+        })
+      }
+    }
   }
 }
 </script>
