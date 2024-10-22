@@ -19,16 +19,16 @@ jobs:
         node-version: '18'  # Match this with your project's node version
 
     - name: Install dependencies
-      run: npm install  # Installs your npm dependencies
+      run: yarn install  
 
     - name: Run Linting
-      run: npm run lint  # Lints your code using the eslint configuration in your project
+      run: yarn run lint 
 
     - name: Run Unit Tests
-      run: npm run test  # Runs your tests using vitest
+      run: yarn run test  
 
     - name: Build the Project
-      run: npm run build  # Builds your Vue.js app
+      run: yarn run build  
 
     # - name: Deploy to AWS S3
     #   uses: jakejarvis/s3-sync-action@v0.5.1  # Updated action
