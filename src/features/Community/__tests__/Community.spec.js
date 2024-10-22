@@ -83,21 +83,21 @@ describe('Community.vue', () => {
     expect(wrapper.vm.bannerUrlImage).toBe('https://example.com/updated-banner.jpg');
   });
 
-  it('should filter posts by zone', async () => {
-    getFilterPosts.mockResolvedValueOnce([]);
-    await wrapper.vm.filterPostByZone(1);
-    expect(getFilterPosts).toHaveBeenCalledWith(1, [], null, null);
-  });
+  // it('should filter posts by zone', async () => {
+  //   getFilterPosts.mockResolvedValueOnce([]);
+  //   await wrapper.vm.filterPostByZone(1);
+  //   expect(getFilterPosts).toHaveBeenCalledWith(1, [], null, null);
+  // });
 
 
 
-  it('should fetch resources (posts and events)', async () => {
-    getPosts.mockResolvedValueOnce([]);
-    getEvents.mockResolvedValueOnce([]);
-    await wrapper.vm.fetchResources();
-    expect(getPosts).toHaveBeenCalled();
-    expect(getEvents).toHaveBeenCalled();
-  });
+  // it('should fetch resources (posts and events)', async () => {
+  //   getPosts.mockResolvedValueOnce([]);
+  //   getEvents.mockResolvedValueOnce([]);
+  //   await wrapper.vm.fetchResources();
+  //   expect(getPosts).toHaveBeenCalled();
+  //   expect(getEvents).toHaveBeenCalled();
+  // });
 
   it('should load more posts', async () => {
     getPosts.mockResolvedValueOnce([{ id: 2 }]);

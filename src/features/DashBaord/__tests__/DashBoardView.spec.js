@@ -1,131 +1,97 @@
-import { mount, shallowMount } from '@vue/test-utils';
-import DashBoardView from '@/features/DashBaord/DashBoardView.vue';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { getSpecificZones, getReport } from '@/services/zoneService';
-import { Chart } from 'chart.js';
+import { shallowMount, createLocalVue } from '@vue/test-utils'
+import DashBoardView from '@/features/DashBaord/DashBoardView.vue'
+import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
+import WaterStressChart from '@/components/base/Charts/WaterStressChart.vue'
+import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
+import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
+import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
+import ButtonUi from '@/components/base/ButtonUi.vue'
+import BaseDropdown from '@/components/base/BaseDropdown.vue'
+import { useDashboardStore } from '@/stores/dashboardStore.js'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 
-// Mocking external services
-vi.mock('@/services/zoneService', () => ({
-  getSpecificZones: vi.fn(),
-  getReport: vi.fn(),
-}));
-
-// Mocking Chart.js
-vi.mock('chart.js', () => ({
-  Chart: vi.fn(() => ({
-    destroy: vi.fn(),
-    update: vi.fn(),
+vi.mock('@/stores/dashboardStore.js', () => ({
+  useDashboardStore: vi.fn(() => ({
+    latitude: 10,
+    longitude: 20,
+    zoomIndex: 5,
+    zoneId: null,
   })),
-}));
+}))
 
-vi.mock('vue-router', () => ({
-  useRouter: () => ({
-    push: vi.fn(),
-  }),
-}));
-
-describe('DashBoardView.vue', () => {
-  let wrapper;
+describe('DashBoardView', () => {
+  let wrapper
 
   beforeEach(() => {
-    // Mock initial data to avoid undefined access to zone properties
     wrapper = shallowMount(DashBoardView, {
       global: {
+        components: {
+          MapComponent,
+          WaterStressChart,
+          ZoneInfo,
+          PostSlider,
+          ZonePostFilter,
+          ButtonUi,
+          BaseDropdown,
+        },
+
         mocks: {
-          $t: (msg) => msg, // Mocking the translation function
-          $i18n: { locale: 'en' }, // Mocking i18n
+          $t: (msg) => msg,
+          $route: {
+            params: { zoneId: 1, sectorId: null },
+          },
+          // $router: routerMock,
         },
       },
+    })
+  })
 
-      props: {
-        zoneId: 1,
-        parentId: 1,
-        zoneName: 'Test Zone',
-        mapSize: 1,
-      },
-      data() {
-        return {
-          zone: { name: 'Test Zone', level_id: 1 }, // Mocking initial zone data
-          isLoadingMap: true,
-          isWaterStressGraphHidden: true,
-        };
-      },
-    });
-  });
-  
+  it('should render MapComponent with correct props', () => {
+    const mapComponent = wrapper.findComponent(MapComponent)
+    expect(mapComponent.exists()).toBe(true)
+    expect(mapComponent.props('latitude')).toBe(10)
+    expect(mapComponent.props('longitude')).toBe(20)
+    expect(mapComponent.props('zoomIndex')).toBe(5)
+  })
 
-  it('renders correctly', () => {
-    expect(wrapper.exists()).toBe(true);
-  });
+  it('should render WaterStressChart', () => {
+    const waterStressChart = wrapper.findComponent(WaterStressChart)
+    expect(waterStressChart.exists()).toBe(true)
+  })
 
-  it('calls getSpecificZones on mount', async () => {
-    await wrapper.vm.$nextTick();
-    expect(getSpecificZones).toHaveBeenCalledWith(1);
-  });
+  it('should render ZoneInfo component when isZoneStatistics is false', async () => {
+    await wrapper.setData({ isZoneStatistics: false })
+    const zoneInfo = wrapper.findComponent(ZoneInfo)
+    expect(zoneInfo.exists()).toBe(true)
+  })
 
-  it('displays the correct zone name in the go-back button', async () => {
-    // Set zone data to simulate the correct rendering condition
-    wrapper.setData({ zone: { name: 'Test Zone', level_id: 2 }, isLoadingMap: false });
-    await wrapper.vm.$nextTick();
-    
-    const goBackElement = wrapper.find('.goback p'); // Finding the <p> inside the goback class
-    expect(goBackElement.exists()).toBe(true); // Ensure the element exists
-    expect(goBackElement.text()).toBe('Test Zone'); // Ensure the correct text is rendered
-  });
-  
+  it('should render PostSlider component', () => {
+    const postSlider = wrapper.findComponent(PostSlider)
+    expect(postSlider.exists()).toBe(true)
+  })
 
-  // it('renders charts correctly', async () => {
-  //   // Ensure that the charts are being rendered by setting proper conditions
-  //   wrapper.setData({ isLoadingMap: false, inSubDivision: true });
-  //   await wrapper.vm.$nextTick();
-    
-  //   expect(Chart).toHaveBeenCalled(); // Ensure Chart has been called
-  // });
-  
+  it('should render ZonePostFilter component', () => {
+    const zonePostFilter = wrapper.findComponent(ZonePostFilter)
+    expect(zonePostFilter.exists()).toBe(true)
+  })
 
-  // it('toggles Water Stress Graph visibility on button click', async () => {
-  //   wrapper.setData({ inSubDivision: true, isLoadingMap: false, displayStatistics: true });
-  //   await wrapper.vm.$nextTick();
-  
-  //   const button = wrapper.find('button-ui'); // Find the button
-  //   expect(button.exists()).toBe(true); // Ensure button exists before triggering it
-  //   await button.trigger('click');
-    
-  //   expect(wrapper.vm.isWaterStressGraphHidden).toBe(false); // Check the visibility change
-  // });
-  
+  it('should call toggleZoneStatistics when button-ui is clicked', async () => {
+    const toggleZoneStatistics = vi.spyOn(wrapper.vm, 'toggleZoneStatistics')
+    const button = wrapper.findComponent(ButtonUi)
+    await button.vm.$emit('clickButton')
+    expect(toggleZoneStatistics).toHaveBeenCalled()
+  })
 
-  // it('handles vector key click and navigates correctly', async () => {
-  //   wrapper.setData({ vectorKeys: [{ name: 'Test Key' }], presentMapId: 1 });
-  //   await wrapper.vm.$nextTick();
-  
-  //   wrapper.vm.handleVectorClick({ name: 'Test Key' });
-  //   expect(wrapper.vm.selectedZone).toBe('Test Key'); // Verify the selected zone is updated
-  //   expect(wrapper.vm.$router.push).toHaveBeenCalledWith({
-  //     name: 'dashboard',
-  //     params: { zoneId: 0, parentId: 1, zoneName: 'Test Key', mapSize: 1 }
-  //   }); // Ensure correct routing
-  // });
+  // it('should render BaseDropdown when inSubDivision is true', async () => {
+  //   await wrapper.setData({ inSubDivision: true })
+  //   const baseDropdown = wrapper.findComponent(BaseDropdown)
+  //   expect(baseDropdown.exists()).toBe(true)
+  // })
 
-  // it('shows tooltip on hover and hides it on leave', async () => {
-  //   // Manually insert tooltip in the test DOM
-  //   document.body.innerHTML = '<div id="tooltip"></div>';
-    
-  //   const event = { target: { tagName: 'path', dataset: { name: 'Test Area' } } };
-  //   wrapper.vm.handleStateHover(event);
-  //   const tooltip = document.getElementById('tooltip');
-  //   expect(tooltip.innerHTML).toBe('Test Area'); // Check if tooltip shows the correct text
-    
-  //   wrapper.vm.handleStateLeave(event);
-  //   expect(tooltip.style.display).toBe('none'); // Check if tooltip is hidden
-  // });
-
-  // it('fetches the report based on zone ID', async () => {
-  //   wrapper.setData({ zone: { id: 1, level_id: 4 }, inSubDivision: true });
-  //   await wrapper.vm.getReport(1); // Call the method directly
-  //   await wrapper.vm.$nextTick(); // Ensure the DOM and state have updated
-    
-  //   expect(getReport).toHaveBeenCalledWith(1, null); // Check if getReport was called with correct arguments
-  // });
-  
-});
+  // it('should call searchMap when search button is clicked', async () => {
+  //   const searchMap = vi.spyOn(wrapper.vm, 'searchMap')
+  //   const searchButton = wrapper.findAllComponents(ButtonUi).at(1) // Assuming second button is search
+  //   await searchButton.vm.$emit('clickButton')
+  //   expect(searchMap).toHaveBeenCalled()
+  // })
+})
