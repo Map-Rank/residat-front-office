@@ -1,72 +1,42 @@
-# Sample workflow for building and deploying a VitePress site to GitHub Pages
-#
-name: Deploy VitePress site to Pages
+name: Vue.js CI/CD Pipeline
 
 on:
-  # Runs on pushes targeting the `main` branch. Change this to `master` if you're
-  # using the `master` branch as the default branch.
   push:
-    branches: [checkout-documentation]
-
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: pages
-  cancel-in-progress: false
+    branches:
+      - deploy  # This ensures the workflow runs only when code is pushed to the 'deploy' branch
 
 jobs:
-  # Build job
   build:
     runs-on: ubuntu-latest
+    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 0 # Not needed if lastUpdated is not enabled
-      # - uses: pnpm/action-setup@v3 # Uncomment this if you're using pnpm
-      # - uses: oven-sh/setup-bun@v1 # Uncomment this if you're using Bun
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          cache: npm # or pnpm / yarn
-      - name: Setup Pages
-        uses: actions/configure-pages@v4
-      - name: Install dependencies
-        run: npm ci # or pnpm install / yarn install / bun install
+    - name: Checkout repository
+      uses: actions/checkout@v3  # Pulls your project code
 
-      - name: Run Unit Tests
-        run: npm run test:unit
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'  # Match this with your project's node version
 
-      - name: Run Coverage Tests
-        run: npm run test:coverage
+    - name: Install dependencies
+      run: npm install  # Installs your npm dependencies
 
-      - name: Build with VitePress
-        run: npm run docs:build # or pnpm docs:build / yarn docs:build / bun run docs:build
-        
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: docs/.vitepress/dist
+    - name: Run Linting
+      run: npm run lint  # Lints your code using the eslint configuration in your project
 
-  # Deployment job
-  deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    needs: build
-    runs-on: ubuntu-latest
-    name: Deploy
-    steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+    - name: Run Unit Tests
+      run: npm run test  # Runs your tests using vitest
+
+    - name: Build the Project
+      run: npm run build  # Builds your Vue.js app
+
+    # - name: Deploy to AWS S3
+    #   uses: jakejarvis/s3-sync-action@v0.5.1  # Updated action
+    #   with:
+    #     args: --delete  
+    #   env:
+    #     AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}  # S3 bucket name
+    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS access key
+    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS secret key
+    #     AWS_REGION: 'us-east-1'  # Your AWS region
+    #     SOURCE_DIR: './dist'  # Build directory from Vite
