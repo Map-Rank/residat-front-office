@@ -25,7 +25,7 @@ jobs:
       run: npm run lint 
 
     - name: Run Unit Tests
-      run: yarn run test -- --runInBand --verbose  
+      run: yarn run test 
 
     - name: Build the Project
       run: yarn run build  
