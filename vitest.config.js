@@ -1,7 +1,6 @@
 import { defineConfig, mergeConfig } from 'vitest/config';
 import viteConfig from './vite.config.mjs';
 import { fileURLToPath, URL } from 'node:url';
-import { configDefaults } from 'vitest/config'
 
 export default mergeConfig(viteConfig, defineConfig({
     test: {

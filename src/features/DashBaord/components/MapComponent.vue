@@ -316,7 +316,7 @@ export default {
       }
     },
 
-    async loadRegionGeoJson(zone) {
+    async loadRegionGeoJson() {
       try {
         if (this.regionLayer) {
           this.map.removeLayer(this.regionLayer) // Remove previous region layer if exists

@@ -2,9 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createTestingPinia } from '@pinia/testing';
 import Community from '@/features/Community/CommunityView.vue';
-import { getPosts, getFilterPosts } from '@/features/Post/services/postService.js';
-import { getEvents } from '@/services/eventService.js';
-import { getSpecificZones, getZones } from '@/services/zoneService';
+import { getPosts} from '@/features/Post/services/postService.js';
 
 // Mock the services used in the component
 vi.mock('@/features/Post/services/postService.js', () => ({

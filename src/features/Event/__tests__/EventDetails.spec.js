@@ -2,7 +2,6 @@ import { mount, flushPromises } from '@vue/test-utils'
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import EventDetails from '@/features/Event/Pages/EventDetails.vue'
 import { getSpecificEvent, deleteEvent } from '@/services/eventService.js'
-import { useRouter } from 'vue-router'
 
 vi.mock('@/services/eventService.js', () => ({
   getSpecificEvent: vi.fn(),

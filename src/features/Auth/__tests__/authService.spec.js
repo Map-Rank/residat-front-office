@@ -1,12 +1,12 @@
 import {
-    registerUser,
-    institutionalRequest,
-    loginUser,
-    logOut,
+    // registerUser,
+    // institutionalRequest,
+    // loginUser,
+    // logOut,
     UpdateUser,
-    UpdatePassword,
-    ForgotPassword,
-    ResetPassword,
+    // UpdatePassword,
+    // ForgotPassword,
+    // ResetPassword,
   } from '@/features/Auth/services/authService.js';
   import { makeApiPostCall } from '@/api/api';
   import { getFcmToken } from '@/firebaseConfig.js';

@@ -4,7 +4,6 @@ import ChatRoomView from '@/features/ChatRoom/ChatRoomView.vue';
 import NotificationItem from '@/features/Notification/components/NotificationItem.vue';
 import AvatarEventShimmer from '@/components/common/ShimmerLoading/AvatarPostShimmer.vue';
 import { getNotifications } from '@/services/notificationService';
-import useAuthStore from '@/stores/auth';
 
 vi.mock('@/stores/auth', () => ({
   default: vi.fn(() => ({
@@ -24,11 +23,9 @@ vi.mock('vue-router', () => ({
 
 describe('ChatRoomView Component', () => {
   let wrapper;
-  let authStoreMock;
   let routerMock;
 
   beforeEach(() => {
-    authStoreMock = useAuthStore();
     routerMock = {
       push: vi.fn(),
     };

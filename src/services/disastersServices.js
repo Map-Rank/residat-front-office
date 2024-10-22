@@ -1,7 +1,6 @@
 import { makeApiGetCall } from '@/api/api'
 import { API_ENDPOINTS, LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
-const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
 const getDisasters = async () => {
     const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)

@@ -1,4 +1,4 @@
-import { shallowMount, createLocalVue } from '@vue/test-utils'
+import { shallowMount } from '@vue/test-utils'
 import DashBoardView from '@/features/DashBaord/DashBoardView.vue'
 import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
 import WaterStressChart from '@/components/base/Charts/WaterStressChart.vue'
@@ -7,7 +7,6 @@ import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
-import { useDashboardStore } from '@/stores/dashboardStore.js'
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 
 vi.mock('@/stores/dashboardStore.js', () => ({

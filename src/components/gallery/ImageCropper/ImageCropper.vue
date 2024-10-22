@@ -14,9 +14,11 @@
         }"
         @result="onCropResult"
       >
-        <div slot="stencil" slot-scope="{ coordinates, canvas, image }">
+        <template v-slot:stencil="{ coordinates, canvas, image }">
+<div  >
           <default-stencil :coordinates="coordinates" :canvas="canvas" :image="image" />
         </div>
+</template>
       </cropper >
       <div v-else>
         <button @click="openCropper">Crop Image</button>

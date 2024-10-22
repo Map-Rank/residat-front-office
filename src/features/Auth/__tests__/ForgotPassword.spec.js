@@ -1,7 +1,6 @@
 import { shallowMount } from '@vue/test-utils';
 import ForgotPassword from '@/features/Auth/ForgotPassword.vue';
 import { createTestingPinia } from '@pinia/testing';
-import { useToast } from 'vue-toastification';
 import { describe, it, expect, vi ,beforeEach } from 'vitest';
 
 // Mock the authService
