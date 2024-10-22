@@ -3,7 +3,6 @@ import { mount } from '@vue/test-utils';
 import CreatePost from '@/features/CreatePost/CreatePost.vue';
 import { getSpecificPost } from '@/features/Post/services/postService';
 import { useRouter } from 'vue-router';
-import { useToast } from 'vue-toastification';
 
 vi.mock('@/stores/auth', () => ({
   default: vi.fn(() => ({
@@ -43,11 +42,9 @@ vi.mock('vue-router', () => ({
 describe('CreatePost Component', () => {
   let wrapper;
   let routerMock;
-  let toastMock;
 
   beforeEach(() => {
     routerMock = useRouter();
-    toastMock = useToast();
 
     wrapper = mount(CreatePost, {
       props: {

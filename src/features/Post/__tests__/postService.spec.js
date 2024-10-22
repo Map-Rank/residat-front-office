@@ -1,11 +1,9 @@
 import {
     createPost,
     getPosts,
-    getSpecificPost,
     updatePost,
     deletePost,
     likePost,
-    sharePost,
   } from '@/features/Post/services/postService.js'; // Assuming postService.js as file
   import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall } from '@/api/api';
   import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js';

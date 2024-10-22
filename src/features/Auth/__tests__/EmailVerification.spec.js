@@ -1,7 +1,6 @@
 import { describe, it, expect, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import EmailVerification from '@/features/Auth/components/EmailVerification.vue';
-import { LOCAL_STORAGE_KEYS } from '@/constants/index.js';
 
 // Mocking localStorage
 const mockLocalStorage = {};

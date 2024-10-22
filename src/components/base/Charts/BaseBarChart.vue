@@ -83,10 +83,7 @@ export default {
         }
       },
         onClick: (e, activeEls) => {
-          let datasetIndex = activeEls[0].datasetIndex
           let dataIndex = activeEls[0].index
-          let datasetLabel = e.chart.data.datasets[datasetIndex].label
-          let value = e.chart.data.datasets[datasetIndex].data[dataIndex]
           let label = e.chart.data.labels[dataIndex]
           // console.log('In click', datasetLabel, label, value)
 

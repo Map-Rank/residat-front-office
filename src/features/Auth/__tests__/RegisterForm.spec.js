@@ -2,11 +2,6 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import RegisterForm from '@/features/Auth/Forms/RegisterForm.vue';
 import { useRouter } from 'vue-router';
-import useAuthStore from '@/stores/auth';
-import useSectorStore from '@/stores/sectorStore';
-import useZoneStore from '@/stores/zoneStore';
-import { registerUser } from '@/features/Auth/services/authService';
-import { useToast } from "vue-toastification";
 import { getZones } from '@/services/zoneService';
 
 vi.mock('@/stores/auth', () => ({
@@ -62,18 +57,10 @@ vi.mock('vue-toastification', () => ({
 
 describe('RegisterForm Component', () => {
   let wrapper;
-  let authStoreMock;
   let routerMock;
-  let toastMock;
-  let sectorStoreMock;
-  let zoneStoreMock;
 
   beforeEach(async () => {
-    authStoreMock = useAuthStore();
     routerMock = useRouter();
-    toastMock = useToast();
-    sectorStoreMock = useSectorStore();
-    zoneStoreMock = useZoneStore();
 
     getZones.mockResolvedValue([]);
     

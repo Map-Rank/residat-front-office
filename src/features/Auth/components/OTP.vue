@@ -103,7 +103,7 @@ export default {
   mounted() {
     this.countdown()
   },
-  destroyed() {
+  unmounted() {
     clearInterval(this.interval)
   }
 }

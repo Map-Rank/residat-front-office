@@ -4,7 +4,6 @@ import { createTestingPinia } from '@pinia/testing';
 import App from '@/App.vue';
 import HeaderApp from '@/components/common/Header/index.vue';
 import GuestHeader from '@/components/common/Header/GuestHeader.vue';
-import BottomNavigationAppApp from '@/components/common/BottomNavigator/index.vue';
 import FeedbackButton from '@/components/base/FeedbackButton.vue';
 import NotificationHandler from '@/components/base/NotificationHandler.vue';
 import { ModalsContainer } from 'vue-final-modal';

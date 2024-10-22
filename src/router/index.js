@@ -32,7 +32,6 @@ import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
 import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
 import AccountValidation from '../features/Auth/components/AccountValidation.vue'
-import { GEOSPACIAL_DATA } from '@/constants/geospacialData.js'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -48,6 +47,7 @@ const router = createRouter({
       name: 'notification',
       component: NotificationView,
       meta: { requiresAuth: true },
+      // eslint-disable-next-line no-unused-vars
       redirect: (to) => {
         return '/community'
       }

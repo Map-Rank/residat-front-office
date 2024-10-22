@@ -1,7 +1,6 @@
 import { describe, it, expect, beforeEach, vi } from 'vitest';
 import { mount } from '@vue/test-utils';
 import AboutUserInfo from '@/features/SocialProfile/components/AboutUserInfo/index.vue';
-import { useRouter } from 'vue-router';
 
 vi.mock('vue-router', () => ({
   useRouter: vi.fn(() => ({
@@ -11,10 +10,8 @@ vi.mock('vue-router', () => ({
 
 describe('AboutUserInfo Component', () => {
   let wrapper;
-  let routerMock;
 
   beforeEach(() => {
-    routerMock = useRouter();
   });
 
   describe('With all props provided', () => {

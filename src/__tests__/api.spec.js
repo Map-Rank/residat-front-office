@@ -3,7 +3,7 @@ import MockAdapter from 'axios-mock-adapter';
 import { describe, it, expect, afterEach } from 'vitest';
 import { API_ENDPOINTS } from '@/constants/index.js';
 
-import { makeApiPostCall, makeApiGetCall, makeApiDeleteCall, makeApiPutCall } from '@/api/api';
+import { makeApiGetCall,  } from '@/api/api';
 
 // Initialize Axios Mock Adapter
 const mock = new MockAdapter(axios);
@@ -16,12 +16,12 @@ function toStructure(obj) {
 
 describe('API Service', () => {
   const authToken = 'fake-token';
-  const responseData = { data: 'some data' };
-  const forgotPasswordResponce = {
-    "status": true,
-    "data": [],
-    "message": "We have emailed your password reset link."
-  };
+  // const responseData = { data: 'some data' };
+  // const forgotPasswordResponce = {
+  //   "status": true,
+  //   "data": [],
+  //   "message": "We have emailed your password reset link."
+  // };
   const sectorData = {
     status: true,
     data: [

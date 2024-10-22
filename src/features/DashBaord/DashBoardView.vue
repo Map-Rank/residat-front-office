@@ -94,6 +94,7 @@
 
 <script>
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
+// eslint-disable-next-line no-unused-vars
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
 // import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
@@ -102,7 +103,7 @@ import { getSpecificZones, getSpecificMapZones, getZones } from '../../services/
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
-import Modal from '@/components/common/Modal/Modal.vue'
+// import Modal from '@/components/common/Modal/Modal.vue'
 // import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { useToast } from 'vue-toastification'

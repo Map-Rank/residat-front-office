@@ -1,5 +1,5 @@
 import { shallowMount } from '@vue/test-utils';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect, beforeEach } from 'vitest';
 import Modal from '@/components/common/Modal/Modal.vue'; // Adjust the path as needed
 import { ChartItemData } from '@/constants/chartData.js';
 

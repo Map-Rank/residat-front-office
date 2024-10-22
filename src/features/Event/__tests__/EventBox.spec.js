@@ -1,4 +1,4 @@
-import { shallowMount, mount } from '@vue/test-utils';
+import { shallowMount } from '@vue/test-utils';
 import EventBox from '@/features/Event/Components/EventBox.vue';
 import ButtonUi from '@/components/base/ButtonUi.vue';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
