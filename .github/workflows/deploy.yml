@@ -22,7 +22,7 @@ jobs:
       run: yarn install  
 
     - name: Run Linting
-      run: yarn run lint 
+      run: npm run lint 
 
     - name: Run Unit Tests
       run: yarn run test  
