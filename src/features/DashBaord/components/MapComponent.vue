@@ -107,7 +107,7 @@ export default {
         } else if (disaster.type === 'DROUGHT') {
           baseColor = 'rgba(205, 133, 63)' // Yellow for droughts
         } else {
-          baseColor = 'gray' 
+          baseColor = 'gray'
         }
 
         // Determine intensity based on the level of the disaster
@@ -270,6 +270,9 @@ export default {
             })
           }
         }).addTo(this.map)
+
+        const bounds = this.cameroonLayer.getBounds()
+        this.map.fitBounds(bounds)
       } catch (error) {
         console.error('Failed to load Cameroon GeoJSON:', error)
       }
@@ -365,6 +368,9 @@ export default {
           }
         }).addTo(this.map)
 
+        const bounds = this.regionLayer.getBounds()
+        this.map.fitBounds(bounds)
+
         // Adjust the map bounds to the selected region
       } catch (error) {
         console.error('Failed to load region GeoJSON:', error)
@@ -420,6 +426,9 @@ export default {
             })
           }
         }).addTo(this.map)
+
+        const bounds = this.subRegionLayer.getBounds()
+        this.map.fitBounds(bounds)
       } catch (error) {
         console.error('Failed to load sub-region GeoJSON:', error)
       }
