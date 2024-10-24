@@ -30,13 +30,13 @@ jobs:
     - name: Build the Project
       run: yarn run build  
 
-    # - name: Deploy to AWS S3
-    #   uses: jakejarvis/s3-sync-action@v0.5.1  # Updated action
-    #   with:
-    #     args: --delete  
-    #   env:
-    #     AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}  # S3 bucket name
-    #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS access key
-    #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS secret key
-    #     AWS_REGION: 'us-east-1'  # Your AWS region
-    #     SOURCE_DIR: './dist'  # Build directory from Vite
+    - name: Deploy to AWS S3
+      uses: jakejarvis/s3-sync-action@v0.5.1  # Updated action
+      with:
+        args: --delete  
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_BUCKET_NAME }}  # S3 bucket name
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS access key
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS secret key
+        AWS_REGION: 'us-east-1'  # Your AWS region
+        SOURCE_DIR: './dist'  # Build directory from Vite
