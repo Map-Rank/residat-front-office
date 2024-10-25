@@ -39,4 +39,5 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}  # AWS access key
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  # AWS secret key
         AWS_REGION: ${{ secrets.AWS_REGION }}  # Your AWS region
-        SOURCE_DIR: ${{ secrets.SOURCE_DIR }}  # Build directory from Vite
+        SOURCE_DIR: dist  # Build directory from Vite
+        DEST_DIR: test/  # Build directory from Vite
