@@ -27,6 +27,3 @@ export default {
 };
 </script>
 
-<style scoped>
-/* Add any scoped styles for the logo component here */
-</style>
