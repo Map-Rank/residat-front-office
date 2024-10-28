@@ -6,10 +6,10 @@
       class="w-full  px- py-2 border border-gray-300 rounded-md shadow-sm bg-white text-gray-700 hover:border-gray-400 focus:outline-none focus:border-primary-normal"
     >
       <option  v-for="(option, index) in options" :key="index" :value="option">
-        <span class="text-sm">
+     
 
           {{ option.name }}
-        </span>
+       
       </option>
     </select>
   </div>
@@ -34,12 +34,13 @@ export default {
   },
   methods: {
     updateSelectedOption() {
+    
       this.selectedOptionId = this.selectedOption.id
       this.selectedOptionName = this.selectedOption.name
       this.selectedOptionValue = this.selectedOption.value
       // this.emitSelectedOptionId()
 
-      if (this.selectedOption && this.selectedOption.id != 0) {
+      if (this.selectedOption && this.selectedOption.id !== null) {
         this.$emit('input', this.selectedOption)
         this.$emit('functionIdParams', this.selectedOption.id)
         this.$emit('selectedOptionId', this.selectedOption.id)

@@ -68,6 +68,7 @@
   "inbox": "Inbox",
   "event": "Event",
   "search_location": "Search sub division",
+  "search": "Search",
   "welcome_to": "welcome to",
   "select_location_title": "Select Location",
   "select_event_by_location": "Select event by location",
@@ -211,6 +212,8 @@
   "header_sign_in": "Sign In",
   "header_logo_alt": "Logo",
   "header_burger_menu": "Menu",
-  "header_close_menu": "Close Menu"
+  "header_close_menu": "Close Menu",
+  "translate": "Translate",
+  "show_zone_stats": "Show Zone Statistics"
 
 }

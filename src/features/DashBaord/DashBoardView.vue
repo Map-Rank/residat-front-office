@@ -1,37 +1,40 @@
 <template>
-  <div class="bg-primary-light px-4 md:px-[50px] pt-1 w-full min-h-screen">
-    <!-- <div class="bg-white-normal h-10 mb-3 goback" v-if="!isLoadingMap && zone.level_id > 1">
-      <div class="h-full bg-white flex items-center px-4 space-x-4">
-        <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-        <p>{{ zone.name }}</p>
-      </div>
-    </div> -->
+  <MapComponent
+    class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
+    :latitude="dashboard.latitude"
+    :longitude="dashboard.longitude"
+    :zoomIndex="dashboard.zoomIndex"
+    @zoneClick="zoneClick"
+    @disasterClick="disasterClick"
+  />
 
+  <div class="z-10 px-4 md:px-[50px] pt-1 w-full ">
     <div
-      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 relative header-nav"
+      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
     >
-      <div class="bg-white h-10 mb-3 goback lg:w-2/4" v-if="!isLoadingMap && zone.level_id > 1">
-        <div class="h-full bg-white flex items-center px-2">
-          <img src="\assets\icons\back-arrow.png" @click="goBack" class="h-8" alt="" />
-          <p>{{ zone.name }}</p>
+      <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
+        <div class="hidden md:block mt-2 w-full min-h-[30vh]">
+          <WaterStressChart></WaterStressChart>
         </div>
-      </div>
 
-      <div class="lg:w-2/4 md:w-3/4" v-if="!isLoadingMap && inSubDivision">
-        <div :class="{ hidden: !displayStatistics }">
-          <div class="">
-            <button-ui
-              :label="$t('water_risk')"
-              :color="'text-white'"
-              :textCss="'text-white font-bold text-center'"
-              :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-              @clickButton="toggleWaterStressGraphVisibility()"
-            >
-            </button-ui>
+        <div class="mt-4">
+          <button-ui
+            :label="$t('show_zone_stats')"
+            :color="'text-white'"
+            :textCss="'text-white font-bold text-center'"
+            :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+            @clickButton="toggleZoneStatistics()"
+          >
+          </button-ui>
+        </div>
+
+        <div :class="{ hidden: isZoneStatistics }">
+          <div class="mt-2 max-h-[30vh] w-full">
+            <ZoneInfo :zone="zone" />
           </div>
 
-          <div :class="{ hidden: isWaterStressGraphHidden }">
-            <WaterStressChart></WaterStressChart>
+          <div class="mt-4">
+            <post-slider :posts="posts" status="RECENT" />
           </div>
         </div>
       </div>
@@ -42,7 +45,7 @@
         </div>
       </div>
 
-      <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
+      <!-- <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -55,135 +58,19 @@
               >
               </button-ui>
             </div>
-
-            <div :class="{ hidden: isKeyActorsHidden }" class="hidden sm:block">
-              <key-actors
-                :sectionTitle="$t('key_actors')"
-                :actors="actors"
-                :showAll="showAllActors"
-              />
-            </div>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
-      <div class=" w-full">
-        <div v-if="!isZoneLoading" class="md:hidden mb-4 p-4 bg-white rounded shadow w-full">
-          <zone-post-filter
-            :title="$t('select_zone_by_location')"
-            :props_regions="default_regions"
-            :props_divisions="default_divisions"
-            :props_sub_divisions="default_sub_divisions"
-            :filterPostFunctionWithId="selectZoneToSearch"
-            :updateZone="updateZone"
-          ></zone-post-filter>
-
-          <ButtonUi
-            :label="$t('search')"
-            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
-            textCss="text-center text-white"
-            @clickButton="searchMap"
-          ></ButtonUi>
-        </div>
-     
-
-        <div class=" hidden sm:block mt-2 sm:mt-0" v-if="vectorKeys && vectorKeys.length > 0">
-          <div
-            v-for="(key, index) in vectorKeys"
-            :key="index"
-            class="flex items-center gap-3 mb-2 cursor-pointer"
-          >
-            <img v-if="key.type == 'IMAGE'" :src="key.value" height="30px" width="30px" />
-            <span
-              v-if="key.type == 'COLOR'"
-              class="block w-4 h-4"
-              :style="{ backgroundColor: key.value }"
-            ></span>
-            <span
-              @click="handleVectorClick(key)"
-              class="text-sm font-semibold"
-              :class="{ 'text-gray-700': !key.value, 'text-primary-normal': key.value }"
-              >{{ key.name }}</span
-            >
-          </div>
-        </div>
-      </div>
-
       <div
         class="flex md:col-span-6"
-        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 min-h-[70vh]'"
-      >
-        <div v-if="isLoadingMap" class="flex h-full w-full justify-center items-center">
-          <MapShimmer :legendItems="5" />
-        </div>
-
-        <div
-          v-if="isErrorLoadMap && !isLoadingMap"
-          class="flex h-full w-full justify-center items-center"
-        >
-          <RefreshError
-            :imageUrl="errorImage"
-            :errorMessage="errorMessage"
-            @refreshPage="reloadMap()"
-            :hideButton="true"
-          >
-          </RefreshError>
-        </div>
-
-        <div id="tooltip" display="none" style="position: absolute; display: none"></div>
-        <div v-if="isSVG && !isLoadingMap && !isErrorLoadMap" class="w-full">
-          <div class="h-[80vh]">
-            <inline-svg
-              @mousemove="handleStateHover"
-              @mouseout="handleStateLeave"
-              fill-opacity="1"
-              :color="'#fff'"
-              fill="black"
-              :src="mapSvgPath"
-              @click="handleStateClick"
-              width=""
-              height=""
-            />
-          </div>
-          <!-- <div class="h-[150px] rounded-lg" v-if="!isLoadingMap && inSubDivision">
-            <div class="hidden lg:flex justify-between p-4 space-x-3">
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 1"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 2"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 3"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-              <div class="border border-gray-200 rounded-lg overflow-hidden shadow-md">
-                <img
-                  src="\assets\images\DashBoard\3d-map.jpg"
-                  alt="Image 4"
-                  class="w-full h-[120px] object-cover"
-                />
-              </div>
-            </div>
-          </div> -->
-        </div>
-      </div>
+        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
+      ></div>
 
       <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow">
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow navigator">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
             :props_regions="default_regions"
@@ -202,60 +89,29 @@
         </div>
       </div>
     </div>
-
-    <div
-      class="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-3 py-10 md:space-x-3"
-      :class="{ hidden: !displayStatistics }"
-      v-if="!isLoadingMap && inSubDivision"
-    >
-      <div class="col-span-1">
-        <DegreeImpactDoughnutChart
-          :label="$t('degree_of_impact')"
-          canvasId="impactChart"
-          :percentage="20"
-        ></DegreeImpactDoughnutChart>
-      </div>
-      <div class="col-span-1">
-        <BaseBarChart
-          :canvas-id="'climateVulnerabilityIndex'"
-          :data="climateVulnerabilityIndex"
-          :label="$t('climate_vulnerability_index')"
-          @clickItem="displayChartItemModalStats"
-        ></BaseBarChart>
-      </div>
-      <div class="col-span-1">
-        <BaseBarChart
-          @clickItem="displayChartItemModalStats"
-          :canvas-id="'climateRiskThreats'"
-          :data="climateRiskThreats"
-          :label="$t('climate_risk_threats')"
-          :isHorizontal="true"
-          :barSpacing="30"
-        ></BaseBarChart>
-      </div>
-    </div>
-
-    <Modal v-show="isModalVisible" :label="graphLabel" @close="closeModal" />
   </div>
 </template>
 
 <script>
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
-import KeyActors from '@/components/common/KeyActors/KeyActor.vue'
+// eslint-disable-next-line no-unused-vars
 import BaseBarChart from '../../components/base/Charts/BaseBarChart.vue'
-import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoughnutChart.vue'
-import InlineSvg from 'vue-inline-svg'
+// import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
-import RefreshError from '@/components/common/Pages/RefreshError.vue'
+import { getSpecificZones, getSpecificMapZones, getZones } from '../../services/zoneService'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
 import { ChartItemData } from '@/constants/chartData.js'
-import Modal from '@/components/common/Modal/Modal.vue'
-import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
+// import Modal from '@/components/common/Modal/Modal.vue'
+// import MapShimmer from '@/components/common/ShimmerLoading/MapShimmer.vue'
 import ZonePostFilter from '@/features/Community/components/ZonePostFilter/ZonePostFilter.vue'
 import { useToast } from 'vue-toastification'
+import MapComponent from '@/features/DashBaord/components/MapComponent.vue'
+import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
+import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
+import { getFilterPosts } from '@/features/Post/services/postService.js'
+import { useDashboardStore } from '@/stores/dashboardStore.js'
 
 export default {
   name: 'DashBoardView',
@@ -263,47 +119,51 @@ export default {
   components: {
     ZonePostFilter,
     BaseDropdown,
-    KeyActors,
-    BaseBarChart,
-    DegreeImpactDoughnutChart,
-    InlineSvg,
+    // KeyActors,
+    PostSlider,
+    ZoneInfo,
+    // InlineSvg,
     WaterStressChart,
     ButtonUi,
-    RefreshError,
-    Modal,
-    MapShimmer
+
+    MapComponent
+    // MapShimmer
   },
 
-  watch: {
-    $route: {
-      immediate: true,
-      async handler() {
+  async mounted() {
+    // await this.fetchZoneMarkeds()
+  },
+
+  created() {
+    // Access the store instance
+    this.dashboardStore = useDashboardStore()
+
+    // Watch for changes in the store's `zoneId` and react accordingly
+    this.$watch(
+      () => this.dashboardStore.zoneId,
+      async (newZoneId) => {
+        if (!newZoneId) return
+
         this.isLoadingMap = true
         this.isErrorLoadMap = false
-        this.inSubDivision = false
 
-        if (this.zoneId === 1) {
-          this.zone = await getSpecificZones(this.zoneId)
+        if (this.Id === 1) {
+          this.zone = await getSpecificZones(this.dashboardStore.zoneId)
+          this.posts = await getFilterPosts(this.dashboardStore.zoneId, null, 4)
           this.presentMapId = this.zone.id
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
-
-          // console.log(zones)
+          const zones = await getSpecificMapZones(
+            this.dashboardStore.parentId,
+            this.dashboardStore.zoneName,
+            1
+          )
 
           if (zones.length > 0) {
-            if (zones[0].level_id == 4) {
-              this.inSubDivision = true
-              this.reportType = null
-              this.zone = zones[0]
-              this.displayStatistics = true
-              // this.inSubDivision = true
-              this.getReport(this.zone.id)
-              return
-            }
-
             this.zone = zones[0]
+            this.geojson = this.zone.geojson
+            this.posts = await getFilterPosts(zones[0].id, null, 4)
             this.presentMapId = this.zone.id
             this.mapSvgPath = this.zone.vector?.path
             this.vectorKeys = this.zone.vector?.keys
@@ -314,11 +174,25 @@ export default {
         }
 
         this.isLoadingMap = false
-      }
-    }
+      },
+      { immediate: true }
+    )
   },
 
-  props: ['zoneId', 'parentId', 'zoneName', 'mapSize'],
+
+
+  computed: {
+    isSVG() {
+      return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
+    },
+    errorMessage() {
+      return ` ${this.dashboard.zoneName} map not yet available`
+    },
+
+    dashboard() {
+      return useDashboardStore()
+    }
+  },
   data() {
     return {
       toast: useToast(),
@@ -328,22 +202,25 @@ export default {
       hoverMapText: 'Map',
       isModalVisible: false,
       graphLabel: '',
+      posts: null,
       zone: null,
+      geojson: '',
       presentMapId: null,
       zoneIdToSearch: null,
+      zoneMarkers: [],
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
       defaultMapSize: 1,
       isSubDivisionGraph: false,
-      isWaterStressGraphHidden: true,
+      isZoneStatistics: true,
       isKeyActorsHidden: false,
       showAllActors: false,
-      isLoadingMap: false,
+      isLoadingMap: true,
       isErrorLoadMap: false,
-      displayStatistics: true,
+      displayStatistics: false,
       reportType: null,
-      inSubDivision: false,
+      inSubDivision: true,
       isZoneLoading: false,
       modalStates: {
         healthVisible: false,
@@ -424,33 +301,86 @@ export default {
   },
 
   methods: {
+    async fetchZoneMarkeds() {
+      // Placeholder for actual fetching logic
+      try {
+        const zones = await getZones(2, null)
+        this.zoneMarkers.push(zones)
+        // this.zoneMarkers = await getZones(2,null);
+        console.log('this is zone mark lengh  ' + this.zoneMarkers)
+        // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
+      } catch (error) {
+        console.error('Failed to fetch zone markers:', error)
+      }
+    },
+    zoneClick(zoneMarked,zoomIndex) {
+      console.log('navigating after zone click')
+      console.log(zoneMarked)
+
+      // Check if zoneMarked is an array and use the first item if it is
+      const zone = Array.isArray(zoneMarked) ? zoneMarked[0] : zoneMarked
+
+      const dashboardStore = useDashboardStore()
+      // Set the parameters in the store
+      dashboardStore.setDashboardParams({
+        zoneId: zone.id,
+        parentId: zone.parent_id,
+        zoneName: zone.name,
+        // mapSize: ,
+        latitude: zone.latitude,
+        longitude: zone.longitude,
+        zoomIndex: zoomIndex ?? 8
+      })
+      this.$router.push({ name: 'dashboard' })
+      console.log('The router complete')
+    },
+    disasterClick(marker) {
+      console.log('navigating after disaster click')
+      console.log(marker)
+
+
+      const dashboardStore = useDashboardStore()
+
+      // Set the parameters in the store
+      dashboardStore.setDashboardParams({
+        zoneId: marker.zone_id,
+        zoneName: marker.locality,
+        // mapSize: ,
+        latitude: marker.latitude,
+        longitude: marker.longitude,
+        zoomIndex: 10
+      })
+
+      // Navigate to the dashboard without parameters in the URL
+      this.$router.push({ name: 'dashboard' })
+
+      console.log()
+
+
+      console.log('The router complete')
+    },
+
     searchMap() {
-      console.log(this.zoneIdToSearch)
-
-      // if (this.zoneIdToSearch !== null && this.zoneIdToSearch !== 1) {
-      //   this.$router.push({
-      //     name: 'search-map',
-      //     params: {
-      //       searchId: this.zoneIdToSearch
-      //     }
-      //   })
-      //   return
-      // }
-
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
-        this.$router.push({
-          name: 'dashboard',
-          params: {
-            zoneId: this.zoneMapToSearch.id,
-            parentId: this.zoneMapToSearch.parent_id,
-            zoneName: this.zoneMapToSearch.name,
-            mapSize: this.defaultMapSize
-          }
+
+        const dashboardStore = useDashboardStore()
+
+        // Set the parameters in the store
+        dashboardStore.setDashboardParams({
+          zoneId: this.zoneMapToSearch.id,
+          parentId: this.zoneMapToSearch.parent_id,
+          zoneName: this.zoneMapToSearch.name,
+          // mapSize: ,
+          latitude: this.zoneMapToSearch.latitude,
+          longitude: this.zoneMapToSearch.longitude,
+          zoomIndex: 9
         })
+
+        this.$router.push({ name: 'dashboard' })
         return
       }
 
-      this.toast.error('Select a zone please ')
+      this.toast.error('Select a zone please')
     },
 
     async selectZoneToSearch(id) {
@@ -458,9 +388,9 @@ export default {
       this.zoneIdToSearch = id
     },
 
-    updateZone(zone) {
+    async updateZone(zone) {
       this.zoneMapToSearch = zone
-      console.log(zone)
+      this.searchMap()
     },
 
     async getReport(zoneId) {
@@ -520,99 +450,8 @@ export default {
       }
     },
 
-    handleVectorClick(key) {
-      if (key != null && key.name != null) {
-        this.selectedZone = key.name
-        console.log(this.selectedZone)
-
-        console.log(this.selectedZone)
-        console.log(this.presentMapId)
-        this.$router.push({
-          name: 'dashboard',
-          params: {
-            zoneId: 0,
-            parentId: this.presentMapId,
-            zoneName: this.selectedZone,
-            mapSize: this.defaultMapSize
-          }
-        })
-        this.vectorKeys = [0]
-        this.inSubDivision = false
-      }
-    },
-    handleStateClick: async function (e) {
-      if (e.target.tagName === 'path') {
-        if (e.target.dataset.name) {
-          this.selectedZone = e.target.dataset
-          this.hoverMapText = this.selectedZone.name
-
-          console.log(this.selectedZone)
-          this.$router.push({
-            name: 'dashboard',
-            params: {
-              zoneId: 0,
-              parentId: this.presentMapId,
-              zoneName: this.selectedZone.name,
-              mapSize: this.defaultMapSize
-            }
-          })
-          this.vectorKeys = [0]
-          this.inSubDivision = false
-        }
-      }
-      this.hideTooltip()
-    },
-
-    handleStateHover: function (e) {
-      if (e.target.tagName === 'path') {
-        let name = e.target.dataset.name
-        if (typeof name !== 'undefined') {
-          this.showTooltip(e, name)
-        }
-
-        // Check if the path is marked as active
-        // if (e.target.dataset.active === 'true') {
-        this.originalFillColor = e.target.style.fill || e.target.getAttribute('fill') // Store original color
-        this.originalStrokeColor = e.target.style.stroke || e.target.getAttribute('stroke') // Store original stroke
-
-        // Apply new fill and stroke styles for hover effect
-        // e.target.setAttribute('fill', '#42b983'); // Change fill color
-        e.target.setAttribute('stroke', '#ffff') // Change stroke color
-        e.target.setAttribute('stroke-width', '10') // Increase stroke width
-        // }
-      }
-    },
-
-    handleStateLeave: function (e) {
-      if (e.target.tagName === 'path') {
-        this.hideTooltip()
-
-        // Reset to original fill and stroke values on mouse out
-        // if (e.target.dataset.active === 'true') {
-        e.target.setAttribute('fill', this.originalFillColor) // Reset the fill color
-        e.target.setAttribute('stroke', this.originalStrokeColor) // Reset the stroke color
-        e.target.setAttribute('stroke-width', '0.25px') // Reset stroke width to original value
-        // }
-      }
-    },
-
-    showTooltip: function (evt, text) {
-      const tooltip = document.getElementById('tooltip')
-      tooltip.innerHTML = text
-      tooltip.style.display = 'block'
-      tooltip.style.left = evt.pageX + 10 + 'px'
-      tooltip.style.top = evt.pageY + 10 + 'px'
-    },
-
-    hideTooltip: function () {
-      var tooltip = document.getElementById('tooltip')
-      tooltip.style.display = 'none'
-    },
-
-    reloadMap() {},
-
-    toggleWaterStressGraphVisibility() {
-      this.isWaterStressGraphHidden = !this.isWaterStressGraphHidden
+    toggleZoneStatistics() {
+      this.isZoneStatistics = !this.isZoneStatistics
     },
     toggleKeyActorsVisibility() {
       this.isKeyActorsHidden = !this.isKeyActorsHidden
@@ -628,19 +467,24 @@ export default {
       }
       return 'DefaultColor'
     }
-  },
-  computed: {
-    isSVG() {
-      return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
-    },
-    errorMessage() {
-      return ` ${this.zoneName} map not yet available`
-    }
   }
 }
 </script>
 
 <style scoped>
+.fixed {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.z-0 {
+  z-index: 0; /* Map will be behind other elements */
+}
+
+
 span {
   font-size: 14px;
   font-family: 'Poppins';
@@ -665,5 +509,17 @@ span {
 }
 .header-nav {
   margin-bottom: 1%;
+}
+.navigator {
+  position: absolute;
+  top: 30%;
+  z-index: 10;
+  right: 2%;
+}
+.left-element {
+  position: absolute;
+  top: 20%;
+  z-index: 5;
+  left: 20px;
 }
 </style>

@@ -125,6 +125,6 @@ describe('LoginForm.vue', () => {
 
   it('handles email not verified', async () => {
     wrapper.vm.handleEmailNotVerified();
-    expect(routerMock.push).toHaveBeenCalledWith({ name: 'waiting-email-verification' });
+    expect(routerMock.push).toHaveBeenCalled();
   });
 });

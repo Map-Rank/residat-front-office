@@ -41,33 +41,39 @@ const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
       throw error;
     }
   }
+const getSpecificMapZones = async (parent_id, name, size, level_id, token) => {
+  let defaulWithVector = 1;
+  let params = new URLSearchParams();
 
-  const getSpecificMapZones = async (parent_id, name, size ,level_id, token) => {
+  // Check each parameter and only set if not null or undefined
+if (parent_id != null && parent_id !== '') {
+  params.append('parent_id', parent_id.toString());
+}
 
-    let defaulWithVector = 1
-    let params = new URLSearchParams({
-      name: name.toString(),
-      parent_id: parent_id.toString(),
-      size: size.toString(),
-      with_vector: defaulWithVector.toString(),
-      // with_vector: defaulWithVector,
-      // level_id: level_id.toString(),
-    })
-    
-    
-    try {
-      const response = await makeApiGetCall(
-        `${API_ENDPOINTS.zone}?${params.toString()}`,
-        token ? token : authToken
-        )
-        
-        // console.log(response.data);
-      return response.data.data
-    } catch (error) {
-      console.error('Error fetching posts:', error)
-      throw error
-    }
+if (name != null && name.trim() !== '') {
+  params.append('code', name.toString());
+}
+
+if (size != null && size !== '') {
+  params.append('size', size.toString());
+}
+
+if (defaulWithVector != null && defaulWithVector !== '') {
+  params.append('with_vector', defaulWithVector.toString());
+}
+
+
+  try {
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.zone}?${params.toString()}`,
+      token || authToken
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching zones:', error);
+    throw error;
   }
+};
 
   
 

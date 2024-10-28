@@ -17,6 +17,7 @@ export const API_ENDPOINTS = {
     notifications: '/notifications',
     createFeedback: '/create-feedback',
     createRequest: '/create/request',
+    disasters: '/disasters',
     // other endpoints...
   };
   

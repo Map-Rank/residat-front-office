@@ -1,12 +1,12 @@
 import {
-    registerUser,
-    institutionalRequest,
-    loginUser,
-    logOut,
+    // registerUser,
+    // institutionalRequest,
+    // loginUser,
+    // logOut,
     UpdateUser,
-    UpdatePassword,
-    ForgotPassword,
-    ResetPassword,
+    // UpdatePassword,
+    // ForgotPassword,
+    // ResetPassword,
   } from '@/features/Auth/services/authService.js';
   import { makeApiPostCall } from '@/api/api';
   import { getFcmToken } from '@/firebaseConfig.js';
@@ -37,8 +37,11 @@ import {
         logOut: vi.fn(),
         settoken: vi.fn(),
       };
-      global.localStorage.setItem = vi.fn();
-      global.localStorage.getItem = vi.fn();
+      // global.localStorage.setItem = vi.fn();
+      // global.localStorage.getItem = vi.fn();
+      vi.spyOn(global.localStorage, 'setItem');
+vi.spyOn(global.localStorage, 'getItem');
+
       getFcmToken.mockResolvedValue('fake_fcm_token');
     });
   
@@ -54,59 +57,60 @@ import {
       // Existing test code for handling errors during registration
     });
   
-    // it('should send an institutional request successfully', async () => {
-    //   const mockInstitutionData = {
-    //     company_name: 'Example Corp',
-    //     description: 'Example description',
-    //     email: 'example@example.com',
-    //     phone: '123456789',
-    //     password: 'password',
-    //     zone: '1',
-    //     lang: 'en',
-    //     profile_picture: new Blob(),
-    //   };
+  //   it('should send an institutional request successfully', async () => {
+  //     const mockInstitutionData = {
+  //       company_name: 'Example Corp',
+  //       description: 'Example description',
+  //       email: 'example@example.com',
+  //       phone: '123456789',
+  //       password: 'password',
+  //       zone: '1',
+  //       lang: 'en',
+  //       profile_picture: new Blob(),
+  //     };
   
-    //   const mockResponse = {
-    //     data: {
-    //       data: {
-    //         token: 'fake_token',
-    //         user: {
-    //           id: 1,
-    //           first_name: 'John',
-    //           last_name: 'Doe',
-    //           email: 'john.doe@example.com',
-    //         },
-    //       },
-    //     },
-    //   };
+  //     const mockResponse = {
+  //       data: {
+  //         data: {
+  //           token: 'fake_token',
+  //           user: {
+  //             id: 1,
+  //             first_name: 'John',
+  //             last_name: 'Doe',
+  //             email: 'john.doe@example.com',
+  //           },
+  //         },
+  //       },
+  //     };
   
-    //   makeApiPostCall.mockResolvedValue(mockResponse);
-    //   const onSuccess = vi.fn();
-    //   const onError = vi.fn();
+  //     makeApiPostCall.mockResolvedValue(mockResponse);
+  //     const onSuccess = vi.fn();
+  //     const onError = vi.fn();
   
-    //   await institutionalRequest(mockInstitutionData, authStore, onSuccess, onError);
+  //     await institutionalRequest(mockInstitutionData, authStore, onSuccess, onError);
   
-    //   expect(makeApiPostCall).toHaveBeenCalledWith(
-    //     '/create/request', // Ensure this matches the actual URL used in your code
-    //     expect.any(FormData),
-    //     null,
-    //     true
-    //   );
-    //   expect(authStore.setUser).toHaveBeenCalledWith({
-    //     id: 1,
-    //     first_name: 'John',
-    //     last_name: 'Doe',
-    //     email: 'john.doe@example.com',
-    //   });
-    //   expect(localStorage.setItem).toHaveBeenCalledWith('userInfo', JSON.stringify({
-    //     id: 1,
-    //     first_name: 'John',
-    //     last_name: 'Doe',
-    //     email: 'john.doe@example.com',
-    //   }));
-    //   expect(onSuccess).toHaveBeenCalled();
-    //   expect(onError).not.toHaveBeenCalled();
-    // });
+  //     expect(makeApiPostCall).toHaveBeenCalledWith(
+  //       '/create/request', // Ensure this matches the actual URL used in your code
+  //       expect.any(FormData),
+  //       null,
+  //       true
+  //     );
+  //     expect(authStore.setUser).toHaveBeenCalledWith({
+  //       id: 1,
+  //       first_name: 'John',
+  //       last_name: 'Doe',
+  //       email: 'john.doe@example.com',
+  //     });
+  //     expect(localStorage.setItem).toHaveBeenCalledWith('userInfo', JSON.stringify({
+  //       id: 1,
+  //       first_name: 'John',
+  //       last_name: 'Doe',
+  //       email: 'john.doe@example.com',
+  //     }));
+  //     expect(onSuccess).toHaveBeenCalled();
+  //     expect(onError).not.toHaveBeenCalled();
+  //   });
+  // });
   
     // it('should log in a user successfully', async () => {
     //   const mockUserCredentials = {

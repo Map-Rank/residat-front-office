@@ -1,3 +1,4 @@
+
 import { defineStore } from 'pinia'
 
 export default defineStore('component', {
@@ -13,5 +14,3 @@ export default defineStore('component', {
     }
   }
 })
-
-

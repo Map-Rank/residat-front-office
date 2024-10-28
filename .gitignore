@@ -33,8 +33,14 @@ coverage
 #file
 public/storage
 public/report_images
+public/firebase-keys.json
 .env
 docs/.vitepress/cache
 docs/.vitepress/dist
 docs-frontend/.vitepress/dist
 docs-frontend/.vitepress/cache
+public/firebase-keys.json
+template/
+
+tailwind.config.js
+tailwind.config.js

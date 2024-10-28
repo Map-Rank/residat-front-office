@@ -2,9 +2,7 @@
 <template>
   <div class="w-full bg-primary-light">
     <div class="flex-col bg-white md:my-5 rounded-lg p-5 md:p-10 mx-1 md:mx-4">
-      <div>
-        <AlertForm></AlertForm>
-      </div>
+    
 
       <vee-form ref="form" :validation-schema="schema">
         <div class="flex-col space-y-6">
@@ -141,7 +139,6 @@ import useAuthStore from '@/stores/auth'
 import { useRouter } from 'vue-router'
 import { AlertStates } from '@/components'
 import useAlertStore from '@/stores/alertStore'
-import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 import { UpdatePassword } from '@/features/Auth/services/authService.js'
 
 export default {
@@ -178,9 +175,7 @@ export default {
       reg_in_submission: false
     }
   },
-  components: {
-    AlertForm
-  },
+
 
   computed: {
     imageUrl() {

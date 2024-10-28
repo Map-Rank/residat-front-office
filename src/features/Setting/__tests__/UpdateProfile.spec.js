@@ -3,10 +3,9 @@ import { createPinia, setActivePinia } from 'pinia';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import UpdateProfile from '@/features/Setting/Pages/AccountPreferences/UpdateProfile.vue';
 import { UpdateUser } from '@/features/Auth/services/authService.js';
-import useAuthStore from '@/stores/auth';
-import useZoneStore from '@/stores/zoneStore.js';
-import { useRouter } from 'vue-router';
-import { useToast } from "vue-toastification";
+// import useAuthStore from '@/stores/auth';
+// import { useRouter } from 'vue-router';
+// import { useToast } from "vue-toastification";
 
 vi.mock('@/features/Auth/services/authService.js', () => ({
   UpdateUser: vi.fn(),
@@ -45,17 +44,17 @@ vi.mock('vue-toastification', () => ({
 
 describe('UpdateProfile.vue', () => {
   let wrapper;
-  let authStoreMock;
-  let routerMock;
-  let toastMock;
+  // let authStoreMock;
+  // let routerMock;
+  // let toastMock;
 
   beforeEach(() => {
     // Initialize Pinia before each test
     setActivePinia(createPinia());
 
-    authStoreMock = useAuthStore();
-    routerMock = useRouter();
-    toastMock = useToast();
+    // authStoreMock = useAuthStore();
+    // routerMock = useRouter();
+    // toastMock = useToast();
 
     wrapper = mount(UpdateProfile, {
       global: {

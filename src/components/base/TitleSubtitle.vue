@@ -27,7 +27,7 @@ label {
 
   font-style: normal;
   font-weight: 600;
-  line-height: 24px; /* 120% */
+  line-height: 24px; 
   letter-spacing: -0.3px;
 }
 span {
@@ -35,7 +35,7 @@ span {
 
   font-style: normal;
   font-weight: 400;
-  line-height: 24px; /* 120% */
+  line-height: 24px; 
   letter-spacing: -0.3px;
 }
 </style>  -->

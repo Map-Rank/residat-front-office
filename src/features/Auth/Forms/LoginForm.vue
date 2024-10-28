@@ -3,7 +3,6 @@
     <h2 class="text-center uppercase">{{ $t('welcome_back') }}</h2>
 
     <!-- Toggle Link -->
-   
 
     <vee-form ref="form" :validation-schema="schema" @submit="login">
       <!-- Conditional Email or Phone Input -->
@@ -19,7 +18,7 @@
         />
         <ErrorMessage class="text-danger-normal" name="credential" />
       </div>
-      
+
       <div v-else class="mb-2">
         <h3 for="phone" class="inline-block mb-2">{{ $t('phone_number') }}</h3>
         <vee-field
@@ -56,14 +55,20 @@
       </div>
 
       <!-- Forgot Password Link -->
-      <h6 class="text-right mt-3 hover:cursor-pointer" @click="forgotPassword">{{ $t('forgot_password') }}</h6>
+      <h6 class="text-right mt-3 hover:cursor-pointer" @click="forgotPassword">
+        {{ $t('forgot_password') }}
+      </h6>
 
       <!-- Submit Button -->
       <div class="flex justify-center">
         <button
           type="submit"
           @click.prevent="login()"
-          :class="this.isLoading ? 'bg-gray-400 cursor-wait ' : 'bg-secondary-normal hover:bg-secondary-hover'"
+          :class="
+            this.isLoading
+              ? 'bg-gray-400 cursor-wait '
+              : 'bg-secondary-normal hover:bg-secondary-hover'
+          "
           class="w-full sm:w-1/2 bg-secondary-normal text-white py-1.5 my-8 rounded-full transition hover:bg-secondary-hover"
           :disabled="this.isLoading"
         >
@@ -79,14 +84,12 @@ import useAuthStore from '../../../stores/auth'
 import { loginUser } from '../services/authService'
 
 import useAlertStore from '@/stores/alertStore'
-import { useToast } from "vue-toastification";
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'LoginForm',
   setup() {},
   data() {
- 
-
     return {
       authStore: useAuthStore(),
       alertStore: useAlertStore(),
@@ -106,21 +109,27 @@ export default {
         password: ''
       },
       inputMethod: 'email'
-    };
+    }
   },
   methods: {
-
     toggleInputMethod() {
-      this.inputMethod = this.inputMethod === 'email' ? 'phone' : 'email';
+      this.inputMethod = this.inputMethod === 'email' ? 'phone' : 'email'
     },
 
     handleEmailNotVerified() {
-      this.toast.error('Check your email to verifie your mail');
-      this.$router.push({ name: 'waiting-email-verification' })
+      this.toast.error('Check your email to verifie your mail')
+      this.$router.push({
+        name: 'verification-account',
+        params: {
+          heading: 'Welcome to Residat!',
+          message:
+            'As an institutional account, some verifications needs to be done on your account. Our administrative service will contact you and work you through this easy process. Thanks for choosing Residat.'
+        }
+      })
     },
-    
+
     handleSuccess() {
-      this.toast.success('Successfully login',{timeout:2000});
+      this.toast.success('Successfully login', { timeout: 2000 })
       this.authStore.isloggedIn = true
       this.$router.push({ name: 'community' })
     },
@@ -131,9 +140,9 @@ export default {
     handleError(errors) {
       this.isLoading = false
       if (errors.email && errors.email.length > 0) {
-        this.toast.error(errors.email[0]);
+        this.toast.error(errors.email[0])
       } else if (errors.zone_id && errors.zone_id.length > 0) {
-        this.toast.error(errors.zone_id[0]);
+        this.toast.error(errors.zone_id[0])
       }
     },
 
@@ -147,7 +156,7 @@ export default {
 
         const allFieldsValid = validationResults.every((result) => result.valid)
         if (allFieldsValid) {
-          this.toast.info(this.$t('please_wait_login_in'));
+          this.toast.info(this.$t('please_wait_login_in'))
           this.isLoading = true
 
           try {
@@ -158,6 +167,8 @@ export default {
               this.handleError,
               this.handleEmailNotVerified
             )
+
+            this.isLoading = false
           } catch (error) {
             this.isLoading = false
             return
@@ -166,12 +177,11 @@ export default {
       } catch (error) {
         console.error('Validation error:', error)
       }
-
     },
     forgotPassword() {
-      console.log("bonjour");
-      this.$router.push({ name: 'forgot-password'})
-    },
+      console.log('bonjour')
+      this.$router.push({ name: 'forgot-password' })
+    }
   }
 }
 </script>

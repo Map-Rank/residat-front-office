@@ -116,7 +116,7 @@ export default {
 /* Transition effects for smoother slide and fade transitions */
 .slide-fade-enter-active,
 .slide-fade-leave-active {
-  transition: transform 0.1s ease, opacity 0.3s ease;
+  transition: transform 0.1s ease, opacity 0.s ease;
   position: absolute;
   width: 100%;
   opacity: 0.1;

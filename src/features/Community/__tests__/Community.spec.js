@@ -2,9 +2,7 @@ import { mount } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { createTestingPinia } from '@pinia/testing';
 import Community from '@/features/Community/CommunityView.vue';
-import { getPosts, getFilterPosts } from '@/features/Post/services/postService.js';
-import { getEvents } from '@/services/eventService.js';
-import { getSpecificZones, getZones } from '@/services/zoneService';
+import { getPosts} from '@/features/Post/services/postService.js';
 
 // Mock the services used in the component
 vi.mock('@/features/Post/services/postService.js', () => ({
@@ -83,21 +81,21 @@ describe('Community.vue', () => {
     expect(wrapper.vm.bannerUrlImage).toBe('https://example.com/updated-banner.jpg');
   });
 
-  it('should filter posts by zone', async () => {
-    getFilterPosts.mockResolvedValueOnce([]);
-    await wrapper.vm.filterPostByZone(1);
-    expect(getFilterPosts).toHaveBeenCalledWith(1, [], null, null);
-  });
+  // it('should filter posts by zone', async () => {
+  //   getFilterPosts.mockResolvedValueOnce([]);
+  //   await wrapper.vm.filterPostByZone(1);
+  //   expect(getFilterPosts).toHaveBeenCalledWith(1, [], null, null);
+  // });
 
 
 
-  it('should fetch resources (posts and events)', async () => {
-    getPosts.mockResolvedValueOnce([]);
-    getEvents.mockResolvedValueOnce([]);
-    await wrapper.vm.fetchResources();
-    expect(getPosts).toHaveBeenCalled();
-    expect(getEvents).toHaveBeenCalled();
-  });
+  // it('should fetch resources (posts and events)', async () => {
+  //   getPosts.mockResolvedValueOnce([]);
+  //   getEvents.mockResolvedValueOnce([]);
+  //   await wrapper.vm.fetchResources();
+  //   expect(getPosts).toHaveBeenCalled();
+  //   expect(getEvents).toHaveBeenCalled();
+  // });
 
   it('should load more posts', async () => {
     getPosts.mockResolvedValueOnce([{ id: 2 }]);

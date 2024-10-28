@@ -2,9 +2,9 @@ import { mount, flushPromises } from '@vue/test-utils';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import UpdatePassword from '@/features/Setting/Pages/SecuritySetting/UpdatePassword.vue';
 import { UpdatePassword as updatePasswordService } from '@/features/Auth/services/authService.js';
-import useAuthStore from '@/stores/auth';
-import useAlertStore from '@/stores/alertStore';
-import { useRouter } from 'vue-router';
+// import useAuthStore from '@/stores/auth';
+// import useAlertStore from '@/stores/alertStore';
+// import { useRouter } from 'vue-router';
 
 vi.mock('@/features/Auth/services/authService.js', () => ({
   UpdatePassword: vi.fn(),
@@ -34,14 +34,14 @@ vi.mock('vue-router', () => ({
 
 describe('UpdatePassword.vue', () => {
   let wrapper;
-  let authStoreMock;
-  let alertStoreMock;
-  let routerMock;
+  // let authStoreMock;
+  // let alertStoreMock;
+  // let routerMock;
 
   beforeEach(() => {
-    authStoreMock = useAuthStore();
-    alertStoreMock = useAlertStore();
-    routerMock = useRouter();
+    // authStoreMock = useAuthStore();
+    // alertStoreMock = useAlertStore();
+    // routerMock = useRouter();
 
     wrapper = mount(UpdatePassword, {
       global: {

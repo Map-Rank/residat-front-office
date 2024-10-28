@@ -68,4 +68,9 @@ vi.mock('@/features/Post/services/postService', () => ({
   
       expect(wrapper.findComponent({ name: 'LoadingIndicator' }).exists()).toBe(true);
     });
+    it('display post images ', async () => {
+   
+  
+      expect(wrapper.findComponent({ name: 'ImageSlider' }).exists()).toBe(true);
+    });
   });

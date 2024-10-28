@@ -1,6 +1,6 @@
 import { mount } from '@vue/test-utils';
 import OTP from '@/features/Auth/components/OTP.vue';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { describe, it, expect,  beforeEach } from 'vitest';
 
 describe('OTP.vue', () => {
   let wrapper;

@@ -131,20 +131,9 @@ export default {
       this.$router.push({ path: 'community' }); 
     }
   },
-    dismiss() {
-      this.togglePostDetails();
-    },
-    nextImage() {
-      if (this.currentImageIndex < this.post.images.length - 1) {
-        this.currentImageIndex + 1;
-      }
-      console.log(this.currentImageIndex);
-    },
-    prevImage() {
-      if (this.currentImageIndex > 0) {
-        this.currentImageIndex--;
-      }
-    },
+ 
+  
+  
   },
 
 }
