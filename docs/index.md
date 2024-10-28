@@ -7,8 +7,8 @@ hero:
   tagline: Empowering communities with climate risk information.
   actions:
     - theme: brand
-      text: Project Website
-      link: /https://dev.residat.com/
+      text: Go Live
+      link: /https://www.residat.com/
  
 
 
@@ -39,17 +39,17 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 
 ## Introduction 🌟
 
-<a href="https://dev.residat.com/community">RESIDAT</a> is a digital platform designed to enhance community resilience by providing access to climate risk information in Cameroon. It leverages spatial data and citizen science reports to visualize climate risks through interactive GIS dashboards. The platform offers a suite of features including:
+<a href="https://www.residat.com/community">RESIDAT</a> is a digital platform designed to enhance community resilience by providing access to climate risk information in Cameroon. It leverages spatial data and citizen science reports to visualize climate risks through interactive GIS dashboards. The platform offers a suite of features including:
 
 - Visualization Dashboards: Interactive maps and graphs for understanding local climate risks and stakeholder activities.
 - Community Intelligence: A repository for stakeholders to publish, manage, and interact with climate adaptation reports.
 - Community Chat Rooms: Spaces for real-time discussion and exchange of climate-related information and services..
 
-<a href="https://dev.residat.com/community">RESIDAT</a> serves as a critical tool for local and regional climate authoritative bodies to send out mobile notifications and engage communities in proactive climate risk management.
+<a href="https://www.residat.com/community">RESIDAT</a> serves as a critical tool for local and regional climate authoritative bodies to send out mobile notifications and engage communities in proactive climate risk management.
 
 ## Context 💡
 
-<a href="https://dev.residat.com/community">RESIDAT</a> was born from the necessity to mitigate climate risks for communities in Cameroon. It targets the heart of climate vulnerability by providing critical, actionable data through GIS visualizations and real-time reports. The platform's goal is to empower communities and authorities to make informed decisions, enabling proactive and collaborative efforts towards climate resilience. In the face of increasing climate challenges, <a href="https://dev.residat.com/community">RESIDAT</a> stands as a beacon of innovation and solidarity.
+<a href="https://www.residat.com/community">RESIDAT</a> was born from the necessity to mitigate climate risks for communities in Cameroon. It targets the heart of climate vulnerability by providing critical, actionable data through GIS visualizations and real-time reports. The platform's goal is to empower communities and authorities to make informed decisions, enabling proactive and collaborative efforts towards climate resilience. In the face of increasing climate challenges, <a href="https://www.residat.com/community">RESIDAT</a> stands as a beacon of innovation and solidarity.
 
 ### Vision Statement
 
@@ -69,9 +69,9 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 
 ## Features ✨
 
-<a href="https://dev.residat.com/community">RESIDAT</a> offers a powerful suite of features designed to provide stakeholders with comprehensive climate risk data and facilitate community engagement in climate resilience:
+<a href="https://www.residat.com/community">RESIDAT</a> offers a powerful suite of features designed to provide stakeholders with comprehensive climate risk data and facilitate community engagement in climate resilience:
 
-- Interactive GIS Dashboards: Leveraging cutting-edge GIS technology, <a href="https://dev.residat.com/community">RESIDAT</a> provides dynamic maps and graphs that allow users to visualize and interact with climate risk data specific to their local communities.
+- Interactive GIS Dashboards: Leveraging cutting-edge GIS technology, <a href="https://www.residat.com/community">RESIDAT</a> provides dynamic maps and graphs that allow users to visualize and interact with climate risk data specific to their local communities.
 
 - Community Intelligence Reports: A dedicated space for stakeholders to publish, manage, and interact with reports on climate adaptation efforts. These reports provide valuable insights into local initiatives and challenges.
 
@@ -79,9 +79,9 @@ RESIDAT is a digital platform for sharing place-based information on climate ris
 
 - Mobile Notifications: Integration with mobile platforms ensures that stakeholders receive timely updates and warnings about climate hazards, enabling swift and informed responses to emerging risks.
 
-- Citizen Science Contributions: Encouraging local community members to contribute data and reports, <a href="https://dev.residat.com/community">RESIDAT</a> amplifies the reach and accuracy of climate risk information through citizen science.
+- Citizen Science Contributions: Encouraging local community members to contribute data and reports, <a href="https://www.residat.com/community">RESIDAT</a> amplifies the reach and accuracy of climate risk information through citizen science.
 
-- Data-Driven Insights: By analyzing spatial data and user-contributed reports, <a href="https://dev.residat.com/community">RESIDAT</a> provides actionable insights that support climate risk management and decision-making processes.
+- Data-Driven Insights: By analyzing spatial data and user-contributed reports, <a href="https://www.residat.com/community">RESIDAT</a> provides actionable insights that support climate risk management and decision-making processes.
 
 - Stakeholder Engagement Tools: Features designed to enhance collaboration among various actors, including local authorities, NGOs, businesses, and academia, to drive collective action in climate adaptation.
 

@@ -1,13 +1,10 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { mount, flushPromises } from '@vue/test-utils';
 import EditEvent from '@/features/Event/Components/EditEvent.vue';
-import useAuthStore from '@/stores/auth';
-import useSectorStore from '@/stores/sectorStore';
-import useZoneStore from '@/stores/zoneStore';
-import { getSpecificEvent, UpdateEvent } from '@/services/eventService';
+
+import { getSpecificEvent } from '@/services/eventService';
 import { getZones } from '@/services/zoneService';
 import { useRouter } from 'vue-router';
-import { useToast } from "vue-toastification";
 import { createTestingPinia } from '@pinia/testing';
 
 vi.mock('@/stores/auth', () => ({
@@ -55,18 +52,10 @@ vi.mock('vue-toastification', () => ({
 
 describe('EditEvent Component', () => {
   let wrapper;
-  let authStoreMock;
-  let routerMock;
-  let toastMock;
-  let sectorStoreMock;
-  let zoneStoreMock;
+  let routerMock
 
   beforeEach(async () => {
-    authStoreMock = useAuthStore();
     routerMock = useRouter();
-    toastMock = useToast();
-    sectorStoreMock = useSectorStore();
-    zoneStoreMock = useZoneStore();
 
     getZones.mockResolvedValue([]);
     getSpecificEvent.mockResolvedValue({

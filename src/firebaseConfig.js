@@ -3,11 +3,21 @@
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getMessaging, getToken, onMessage } from 'firebase/messaging';
+import {  getToken, onMessage } from 'firebase/messaging';
+import { getMessaging} from 'firebase/messaging/sw'
 import { useToast } from 'vue-toastification';
 
 const vapidKey = import.meta.env.FIREBASE_VAPIDKEY
 
+// const firebaseConfig = {
+//   apiKey: 'AIzaSyC_2oYB8rGVSgKVf9kTEiiUs27AacLhHbA',
+//   authDomain: 'rankit-74583.firebaseapp.com',
+//   projectId: 'rankit-74583',
+//   storageBucket: 'rankit-74583.appspot.com',
+//   messagingSenderId: '273830249825',
+//   appId: '1:273830249825:web:e9d42f73070dc2617c3120',
+//   measurementId: 'G-P7NLRFZEVB',
+// };
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
   authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
@@ -24,7 +34,7 @@ const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 const messaging = getMessaging(app);
 
-navigator.serviceWorker.register('/public/firebase-messaging-sw.js')
+navigator.serviceWorker.register('/firebase-messaging-sw.js')
   .then((registration) => {
     // Use the service workers directly on the messaging instance
     messaging.swRegistration = registration;

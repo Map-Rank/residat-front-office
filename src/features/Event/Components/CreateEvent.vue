@@ -2,9 +2,7 @@
 <template>
   <div class="flex items-center justify-center min-h-screen bg-gray-100">
     <div class="flex-col bg-white my-5 rounded-lg md:w-1/2 p-10 mx-4">
-      <div>
-        <AlertForm></AlertForm>
-      </div>
+
 
       <vee-form ref="form" :validation-schema="schema" @submit="createEvent">
         <div class="flex-col space-y-6">
@@ -201,9 +199,7 @@
               Create Event
             </button>
           </div>
-          <div>
-            <AlertForm></AlertForm>
-          </div>
+        
         </div>
       </vee-form>
     </div>
@@ -216,7 +212,6 @@ import useSectorStore from '@/stores/sectorStore.js'
 import useZoneStore from '@/stores/zoneStore.js'
 import { useRouter } from 'vue-router'
 import useAlertStore from '@/stores/alertStore'
-import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
 import BaseDropdown from '@/components/base/BaseDropdown.vue'
 import { getZones } from '@/services/zoneService.js'
 import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
@@ -329,7 +324,7 @@ export default {
     }
   },
   components: {
-    AlertForm,
+
     BaseDropdown,
     LoadingIndicator
   },

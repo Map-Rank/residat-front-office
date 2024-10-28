@@ -81,7 +81,7 @@ export default {
           this.modalStates.waterStressVisible = true
           break
         default:
-          console.log('No matching label found')
+          // console.log('No matching label found')
           break
       }
     },

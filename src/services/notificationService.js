@@ -128,7 +128,7 @@ const getNotifications = async (page, size, token) => {
 const getSpecificNotification = async (id) => {
     try {
         const response = await makeApiGetCall(
-            `${API_ENDPOINTS.notification}/${id.toString()}`,
+            `${API_ENDPOINTS.notifications}/${id.toString()}`,
             authToken
         )
         return response.data.data
@@ -141,7 +141,7 @@ const getSpecificNotification = async (id) => {
 
 const deleteNotification = async (notificationId) => {
     try {
-        const response = await makeApiDeleteCall(`${API_ENDPOINTS.notification}/${notificationId}`, authToken)
+        const response = await makeApiDeleteCall(`${API_ENDPOINTS.notifications}/${notificationId}`, authToken)
         console.log('delete notification sucess 1!!!  ' + response.data)
     } catch (error) {
         console.error('Error deleting notification:', error)

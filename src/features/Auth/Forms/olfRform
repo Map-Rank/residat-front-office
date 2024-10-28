@@ -332,7 +332,7 @@
   <script>
   import useAuthStore from '../../../stores/auth'
   import useSectorStore from '@/stores/sectorStore.js'
-  import useZoneStore from '@/stores/zoneStore.js'
+  import useStore from '@/stores/zoneStore.js'
   import { registerUser } from '../services/authService'
   import { useRouter } from 'vue-router'
   import BaseDropdown from '@/components/base/BaseDropdown.vue'

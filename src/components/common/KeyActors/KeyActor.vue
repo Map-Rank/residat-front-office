@@ -1,5 +1,5 @@
 <template>
-  <div v-for="(actor, index) in displayedActors" :key="actor.id" class="mt-3 p-1 bg-white rounded-xl flex items-center space-x-4">
+  <div v-for="(actor, ) in displayedActors" :key="actor.id" class="mt-3 p-1 bg-white rounded-xl flex items-center space-x-4">
     <div class="flex-shrink-0">
       <img :src="actor.logoUrl" alt="Event image" class="h-16 w-16 rounded-full border-2 border-white" />
     </div>

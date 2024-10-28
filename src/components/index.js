@@ -1,4 +1,3 @@
-export * from './common/AlertFrom/AlertForm.vue'
 export * from './common/AlertFrom/AlertState'
 export * from './common/BottomNavigator/index.vue'
 export * from './common/Footer/index.vue'

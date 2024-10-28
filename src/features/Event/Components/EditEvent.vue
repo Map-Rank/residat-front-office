@@ -2,9 +2,7 @@
 <template>
     <div class="flex items-center justify-center min-h-screen bg-gray-100">
       <div class="flex-col bg-white my-5 rounded-lg md:w-1/2 p-10 mx-4">
-        <div>
-          <AlertForm></AlertForm>
-        </div>
+
   
         <vee-form ref="form" :validation-schema="schema" @submit="updateEvent">
           <div class="flex-col space-y-6">
@@ -209,7 +207,6 @@
   import { useRouter } from 'vue-router'
   import { AlertStates } from '@/components'
   import useAlertStore from '@/stores/alertStore'
-  import AlertForm from '@/components/common/AlertFrom/AlertForm.vue'
   import BaseDropdown from '@/components/base/BaseDropdown.vue'
   import { getZones } from '@/services/zoneService.js'
   import LoadingIndicator from '@/components/base/LoadingIndicator.vue'
@@ -317,7 +314,6 @@ import {getSpecificEvent,UpdateEvent} from '@/services/eventService.js'
       }
     },
     components: {
-      AlertForm,
       BaseDropdown,
       LoadingIndicator
     },

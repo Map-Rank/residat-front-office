@@ -1,10 +1,9 @@
 <template>
- 
   <div class="body flex flex-col min-h-screen">
-    <header-app :class="hiddenClass" class="fixed  w-full z-10"></header-app>
-    <GuestHeader class="fixed  w-full z-10" v-if="showGuessHeader"></GuestHeader>
+    <header-app :class="hiddenClass" class="fixed w-full z-10"></header-app>
+    <GuestHeader class="fixed w-full z-10" v-if="showGuessHeader"></GuestHeader>
 
-    <main class="flex-grow h-full py-20 md:pb-0  overflow-hidden">
+    <main class="flex-grow h-full py-20 md:pb-0 overflow-hidden">
       <router-view></router-view>
       <NotificationHandler />
     </main>
@@ -16,12 +15,9 @@
     ></bottom-navigation-app-app>
 
     <FeedbackButton />
-    
+
     <ModalsContainer />
-    <AuthModal v-if="showAuthModal" @close="showAuthModal = false"  ></AuthModal>
- 
-
-
+    <AuthModal v-if="showAuthModal" @close="showAuthModal = false"></AuthModal>
   </div>
 </template>
 
@@ -36,7 +32,7 @@ import FeedbackButton from '@/components/base/FeedbackButton.vue'
 import NotificationHandler from './components/base/NotificationHandler.vue'
 import { ModalsContainer } from 'vue-final-modal'
 import GuestHeader from '@/components/common/Header/GuestHeader.vue'
-import AuthModal from '@/components/common/Modal/AuthModal.vue'; 
+import AuthModal from '@/components/common/Modal/AuthModal.vue'
 
 export default {
   name: 'App',
@@ -44,8 +40,8 @@ export default {
     const modalStore = useModalStore()
 
     return {
-      modalStore,
-      // showAuthModal: false, 
+      modalStore
+      // showAuthModal: false,
     }
   },
   components: {
@@ -59,16 +55,16 @@ export default {
   },
 
   computed: {
-    ...mapState(useAuthStore, ['hiddenClass','showClass','showGuessHeader']),
+    ...mapState(useAuthStore, ['hiddenClass', 'showClass', 'showGuessHeader']),
     ...mapState(usePostStore, ['hideComponent']),
-    ...mapState(useModalStore, ['showAuthModal']),
+    ...mapState(useModalStore, ['showAuthModal'])
   },
 
   methods: {
     closeAuthModal() {
-      this.showAuthModal = false;
-    },
-  },
+      this.showAuthModal = false
+    }
+  }
 }
 </script>
 

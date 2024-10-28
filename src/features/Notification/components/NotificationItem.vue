@@ -2,8 +2,8 @@
   <div ref="notificationItem" :class="['flex items-start p-4 border-b', isNew ? 'bg-blue-50' : 'bg-white']">
     <img :src="notification.banner" alt="User Avatar" class="w-12 h-12 rounded-full mr-4">
     <div class="flex-grow">
-      <p class="font-semibold">{{ notification.title }}</p>
-      <p class="text-sm text-gray-500">{{ notification.time }}</p>
+      <p class="font-semibold">{{ notification.titre_en }}</p>
+      <p class="text-sm text-gray-500">{{ notification.created_at }}</p>
     
       <p class="text-sm text-gray-700 mt-2">{{ notification.content_en }}</p>
     </div>
@@ -15,13 +15,17 @@
       </button>
       <div v-if="showMenu" class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg z-10">
         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mark as Read</a>
-        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Delete</a>
+        <a @click="deleteNotif()" class=" cursor-pointer block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Delete</a>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+
+import { deleteNotification } from "@/services/notificationService.js";
+import { useToast } from "vue-toastification";
+
 export default {
   name: 'NotificationItem',
   props: {
@@ -37,6 +41,7 @@ export default {
   data() {
     return {
       showMenu: false,
+      toast: useToast(),
     };
   },
   computed: {
@@ -47,12 +52,19 @@ export default {
   methods: {
     toggleMenu() {
       this.showMenu = !this.showMenu;
+      console.log('show menu'+ this.notification.id);
     },
     handleClickOutside(event) {
       if (!this.$refs.notificationItem.contains(event.target)) {
         this.showMenu = false;
       }
     },
+
+    async deleteNotif(){
+      await deleteNotification(this.notification.id)
+      this.toast.success('Notification succesfuly delated');
+      this.$emit('refreshNotificatoins')
+    }
   },
   mounted() {
     document.addEventListener('click', this.handleClickOutside);

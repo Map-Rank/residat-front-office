@@ -18,6 +18,5 @@ export function checkAuthentication() {
     return false;
   }
 
-  console.log('This user is logged in');
   return true;
 }

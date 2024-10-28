@@ -58,7 +58,7 @@ import { checkAuthentication } from '@/utils/authUtils.js'
 export default {
   // eslint-disable-next-line vue/multi-word-component-names
 
-  name: 'SectorSide',
+  name: 'ZonePostFilter',
 
   async created() {
     try {
@@ -106,7 +106,7 @@ export default {
       if (!checkAuthentication()) {
         return
       }
-      console.log('this is the zone ' + zone)
+      // console.log('this is the zone ' + zone)
       if (this.updateZone !== null && zone.id != null) {
         this.updateZone(zone)
         return

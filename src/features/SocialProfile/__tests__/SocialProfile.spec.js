@@ -3,7 +3,7 @@ import { mount } from '@vue/test-utils'
 import SocialProfile from '@/features/SocialProfile/SocialProfile.vue'
 import AboutUserInfo from '@/features/SocialProfile/components/AboutUserInfo/index.vue'
 import TopProfileInfo from '@/features/SocialProfile/components/TopProfileInfo/index.vue'
-import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
+import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
 // Mock the API call
 vi.mock('@/api/api', () => ({
