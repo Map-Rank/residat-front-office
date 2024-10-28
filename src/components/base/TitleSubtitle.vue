@@ -21,7 +21,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<!-- <style scoped>
 label {
   font-size: 18px;
 
@@ -38,4 +38,4 @@ span {
   line-height: 24px; /* 120% */
   letter-spacing: -0.3px;
 }
-</style>
+</style>  -->
