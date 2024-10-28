@@ -6,7 +6,7 @@ module.exports = {
   content: [
     './src/**/*.{html,js,jsx,ts,tsx}', // Adjust paths according to your project
   ],
-  // purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
+  purge: ['./index.html', './src/**/*.{vue,js,ts,jsx,tsx}'],
   theme: {
     extend: {
       colors: {
