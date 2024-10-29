@@ -41,3 +41,5 @@ docs-frontend/.vitepress/dist
 docs-frontend/.vitepress/cache
 public/firebase-keys.json
 template/
+report_images/
+storage/
