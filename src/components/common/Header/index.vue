@@ -353,6 +353,14 @@ export default {
           routerName: 'dashboard'
         },
         {
+          svgContent: '\\assets\\icons\\dashboard-outline.svg',
+          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+          labelText: this.$t('simulation'),
+          isActive: false,
+          bottom: true,
+          routerName: 'simulation'
+        },
+        {
           svgContent: '\\assets\\icons\\chat-outline.svg',
           svgContentHover: '\\assets\\icons\\chat-fill.svg',
           labelText: this.$t('inbox'),

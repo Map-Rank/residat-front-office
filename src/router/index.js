@@ -32,6 +32,7 @@ import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
 import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
 import AccountValidation from '../features/Auth/components/AccountValidation.vue'
+import SimulationView from '@/features/Simulation/SimulationView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -113,6 +114,21 @@ const router = createRouter({
 
 
     },
+    {
+      path: '/simulation/:zoneId?/:parentId?/:zoneName?/:mapSize?',
+      name: 'simulation',
+      component: SimulationView,
+      // meta: { requiresAuth: true },
+      props: (route) => ({
+        zoneId: route.params.zoneId || 1,
+        parentId: route.params.parentId,
+        zoneName: route.params.zoneName,
+        mapSize: route.params.mapSize
+      }),
+      // redirect: (to) => {
+        //   return '/community';
+        // }
+      },
     {
       path: '/search-map/:searchId?',
       name: 'search-map',
