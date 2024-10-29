@@ -353,8 +353,8 @@ export default {
           routerName: 'dashboard'
         },
         {
-          svgContent: '\\assets\\icons\\dashboard-outline.svg',
-          svgContentHover: '\\assets\\icons\\dashboard-fill.svg',
+          svgContent: '\\assets\\icons\\dashboard-outline.png',
+          svgContentHover: '\\assets\\icons\\dashboard-fill.png',
           labelText: this.$t('simulation'),
           isActive: false,
           bottom: true,

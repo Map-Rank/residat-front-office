@@ -44,3 +44,5 @@ template/
 
 tailwind.config.js
 tailwind.config.js
+report_images/
+storage/

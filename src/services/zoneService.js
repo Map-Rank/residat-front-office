@@ -73,9 +73,43 @@ if (defaulWithVector != null && defaulWithVector !== '') {
     console.error('Error fetching zones:', error);
     throw error;
   }
+}
+
+const getSpecificMapZonesWithName = async (parent_id, name, size, level_id, token) => {
+  let defaulWithVector = 1;
+  let params = new URLSearchParams();
+
+  // Check each parameter and only set if not null or undefined
+if (parent_id != null && parent_id !== '') {
+  params.append('parent_id', parent_id.toString());
+}
+
+if (name != null && name.trim() !== '') {
+  params.append('name', name.toString());
+}
+
+if (size != null && size !== '') {
+  params.append('size', size.toString());
+}
+
+if (defaulWithVector != null && defaulWithVector !== '') {
+  params.append('with_vector', defaulWithVector.toString());
+}
+
+
+  try {
+    const response = await makeApiGetCall(
+      `${API_ENDPOINTS.zone}?${params.toString()}`,
+      token || authToken
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error('Error fetching zones:', error);
+    throw error;
+  }
 };
 
   
 
 
-  export {getZones,getSpecificZones,getSpecificMapZones}
+  export {getZones,getSpecificZones,getSpecificMapZones,getSpecificMapZonesWithName}

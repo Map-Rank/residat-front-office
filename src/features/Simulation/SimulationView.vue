@@ -247,7 +247,7 @@ import DegreeImpactDoughnutChart from '@/components/base/Charts/DegreeImpactDoug
 import InlineSvg from 'vue-inline-svg'
 import WaterStressChart from '../../components/base/Charts/WaterStressChart.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
-import { getSpecificZones, getSpecificMapZones } from '../../services/zoneService'
+import { getSpecificZones, getSpecificMapZonesWithName } from '../../services/zoneService'
 import RefreshError from '@/components/common/Pages/RefreshError.vue'
 import { getReport } from '@/services/reportService.js'
 import { ReportType } from '@/constants/reportData.js'
@@ -287,7 +287,7 @@ export default {
           this.mapSvgPath = this.zone.vector.path
           this.vectorKeys = this.zone.vector.keys
         } else {
-          const zones = await getSpecificMapZones(this.parentId, this.zoneName, this.mapSize)
+          const zones = await getSpecificMapZonesWithName(this.parentId, this.zoneName, this.mapSize)
 
           // console.log(zones)
 
