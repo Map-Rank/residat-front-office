@@ -1,25 +1,23 @@
 <template>
-
   <div class="relative w-[100%] max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
-
-        <!-- Shimmer Loader -->
-        <div  v-if="posts === null" class="animate-pulse flex space-x-4 p-8 bg-white">
-          <div class="flex-1 space-y-6 py-1">
-            <div class="h-16 shimmer rounded"></div>
-            <div class="space-y-3">
-              <div class="rounded-full shimmer h-10 w-10"></div>
-              <div class="grid grid-cols-3 gap-4">
-                <div class="h-2 shimmer rounded col-span-2"></div>
-                <div class="h-2 shimmer rounded col-span-1"></div>
-              </div>
-            </div>
+    <!-- Shimmer Loader -->
+    <div v-if="posts === null" class="animate-pulse flex space-x-4 p-8 bg-white">
+      <div class="flex-1 space-y-6 py-1">
+        <div class="h-16 shimmer rounded"></div>
+        <div class="space-y-3">
+          <div class="rounded-full shimmer h-10 w-10"></div>
+          <div class="grid grid-cols-3 gap-4">
+            <div class="h-2 shimmer rounded col-span-2"></div>
+            <div class="h-2 shimmer rounded col-span-1"></div>
           </div>
         </div>
-        
-  <!-- No Posts Message -->
-  <div v-if="posts && posts.length === 0" class="text-center py-10">
-    <span class="text-gray-500">No post in this zone</span>
-  </div>
+      </div>
+    </div>
+
+    <!-- No Posts Message -->
+    <div v-if="posts && posts.length === 0" class="text-center py-10">
+      <span class="text-gray-500">No post in this zone</span>
+    </div>
 
     <!-- Horizontal slider for posts -->
     <div v-else ref="slider" class="flex transition-transform duration-300 ease-in-out gap-2">
@@ -34,8 +32,9 @@
           <div class="p-4">
             <div class="flex items-center gap-3 mb-2">
               <img
-                :src="post.creator[0]?.avatar || '/default-avatar.png'"
+                :src="post.creator[0]?.avatar || '/assets/images/Community/profile.png'"
                 alt="Avatar"
+                @error="handleImageError"
                 class="w-10 h-10 rounded-full object-cover"
               />
               <div>
@@ -87,10 +86,6 @@
         ]"
       ></span>
     </div>
-
-
-
-
   </div>
 </template>
 
@@ -103,7 +98,6 @@ export default {
     }
   },
 
-
   props: {
     status: {
       type: String
@@ -114,7 +108,7 @@ export default {
     },
 
     posts: {
-      type: Array,
+      type: Array
     }
   },
   methods: {
@@ -134,6 +128,9 @@ export default {
       const slider = this.$refs.slider
       const newTranslate = -this.currentIndex * 400
       slider.style.transform = `translateX(${newTranslate}px)`
+    },
+    handleImageError(event) {
+      event.target.src = '/assets/images/Community/profile.png'
     }
   }
 }
@@ -163,5 +160,4 @@ export default {
     background-position: 468px 0;
   }
 }
-
 </style>

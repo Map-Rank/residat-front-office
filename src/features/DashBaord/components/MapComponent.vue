@@ -482,7 +482,7 @@ export default {
 .new-checkbox {
   background-color: white;
   position: absolute;
-  top: 8%;
+  top: 12%;
   z-index: 1000;
   right: 2%;
 }

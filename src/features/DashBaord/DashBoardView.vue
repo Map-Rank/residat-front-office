@@ -8,7 +8,7 @@
     @disasterClick="disasterClick"
   />
 
-  <div class="z-10 px-4 md:px-[50px] pt-1 w-full ">
+  <div class="z-10 px-4 md:px-[50px] pt-1 w-full">
     <div
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
     >
@@ -70,7 +70,7 @@
       ></div>
 
       <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow navigator">
+        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow navigator mt-8">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
             :props_regions="default_regions"
@@ -178,8 +178,6 @@ export default {
       { immediate: true }
     )
   },
-
-
 
   computed: {
     isSVG() {
@@ -313,7 +311,7 @@ export default {
         console.error('Failed to fetch zone markers:', error)
       }
     },
-    zoneClick(zoneMarked,zoomIndex) {
+    zoneClick(zoneMarked, zoomIndex) {
       console.log('navigating after zone click')
       console.log(zoneMarked)
 
@@ -338,7 +336,6 @@ export default {
       console.log('navigating after disaster click')
       console.log(marker)
 
-
       const dashboardStore = useDashboardStore()
 
       // Set the parameters in the store
@@ -356,13 +353,11 @@ export default {
 
       console.log()
 
-
       console.log('The router complete')
     },
 
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
-
         const dashboardStore = useDashboardStore()
 
         // Set the parameters in the store
@@ -483,7 +478,6 @@ export default {
 .z-0 {
   z-index: 0; /* Map will be behind other elements */
 }
-
 
 span {
   font-size: 14px;
