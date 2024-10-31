@@ -3,7 +3,7 @@ name: Bug report
 about: Create a report to help us improve
 title: ''
 labels: bug
-assignees: MonkeyTechApp, konnofuente, cinthia-ro
+assignees: cinthia-ro, konnofuente, MonkeyTechApp
 
 ---
 
