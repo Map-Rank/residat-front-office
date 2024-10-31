@@ -505,14 +505,14 @@ span {
   margin-bottom: 1%;
 }
 .navigator {
-  position: absolute;
-  top: 30%;
+  position: fixed;
+  top: 210px;
   z-index: 10;
   right: 2%;
 }
 .left-element {
-  position: absolute;
-  top: 20%;
+  position: fixed;
+  top: 120px;
   z-index: 5;
   left: 20px;
 }
