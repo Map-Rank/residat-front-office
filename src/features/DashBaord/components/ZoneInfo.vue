@@ -1,10 +1,10 @@
 <template>
-  <div class="w-full grid p-4 border rounded shadow-md bg-white">
+  <div class="md:w-full grid p-4 border rounded shadow-md bg-white w-72 z-10">
     <!-- Zone Banner -->
     <div v-if="zone && zone.banner" class="mb-1">
       <img :src="zone.banner" alt="Zone Banner" class="w-full h-[15vh] object-cover rounded" />
     </div>
-    
+
     <!-- Skeleton loader for banner when no zone data is available -->
     <div v-if="!zone" class="skeleton-banner h-[10vh] mb-4 shimmer"></div>
 
@@ -12,27 +12,26 @@
     <div v-if="zone" class="">
       <h2 class="text-[16px] font-bold">{{ zone.name }}</h2>
 
-   <div class="flex justify-between">
-     <div>
-       <p v-if="zone.latitude != null" class="text-gray-600 text-[10px]">
-         <strong>Latitude:</strong> {{ zone.latitude }}
-       </p>
-       <p v-if="zone.longitude != null" class="text-gray-600 text-[10px]">
-         <strong>Longitude:</strong> {{ zone.longitude }}
-       </p>
-     </div>
-     <div>
-       <p v-if="zone.civils != null" class="text-gray-600 text-[10px]">
-         <strong>Number of Civils:</strong> {{ zone.civils }}
-       </p>
-       <p v-if="zone.accidents != null" class="text-gray-600 text-[10px]">
-         <strong>Number of Accidents:</strong> {{ zone.accidents }}
-       </p>
-     </div>
-   </div>
-   
+      <div class="flex justify-between">
+        <div>
+          <p v-if="zone.latitude != null" class="text-gray-600 text-[10px]">
+            <strong>Latitude:</strong> {{ zone.latitude }}
+          </p>
+          <p v-if="zone.longitude != null" class="text-gray-600 text-[10px]">
+            <strong>Longitude:</strong> {{ zone.longitude }}
+          </p>
+        </div>
+        <div>
+          <p v-if="zone.civils != null" class="text-gray-600 text-[10px]">
+            <strong>Number of Civils:</strong> {{ zone.civils }}
+          </p>
+          <p v-if="zone.accidents != null" class="text-gray-600 text-[10px]">
+            <strong>Number of Accidents:</strong> {{ zone.accidents }}
+          </p>
+        </div>
+      </div>
     </div>
-    
+
     <!-- Skeleton loaders for text when no zone data is available -->
     <div v-else>
       <div class="skeleton-text-wide shimmer mb-1"></div>
@@ -54,7 +53,6 @@ export default {
   methods: {}
 }
 </script>
-
 
 <style scoped>
 .skeleton-banner,

@@ -22,7 +22,7 @@
     <!-- Horizontal slider for posts -->
     <div v-else ref="slider" class="flex transition-transform duration-300 ease-in-out gap-2">
       <!-- Loop through each post and display its content -->
-      <div v-for="(post, index) in posts" :key="index" class="min-w-[300px] flex-shrink-0 p-4">
+      <div v-for="(post, index) in posts" :key="index" class="md:min-w-[300px] flex-shrink-0 p-4">
         <div class="bg-white shadow-md rounded-lg overflow-hidden">
           <!-- Post Image -->
           <div v-if="post.images && post.images.length" class="w-full h-[10vh]">

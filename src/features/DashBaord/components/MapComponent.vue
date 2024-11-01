@@ -6,7 +6,7 @@
       <!-- Data binding and event handling -->
     </div>
   </div>
-  <div class="new-checkbox p-4">
+  <div class="new-checkbox p-4 md:block hidden">
     <h3 class="text-lg font-semibold mb-2">Layers</h3>
     <div class="space-y-2">
       <label class="flex items-center">
