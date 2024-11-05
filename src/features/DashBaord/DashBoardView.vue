@@ -6,7 +6,9 @@
     :zoomIndex="dashboard.zoomIndex"
     @zoneClick="zoneClick"
     @disasterClick="disasterClick"
+    :show-layers="showLayers"
   />
+
   <div class="w-full optionButton px-5 md:hidden block">
     <div class="grid grid-cols-2 gap-2">
       <button-ui
@@ -30,10 +32,19 @@
         :color="'text-white'"
         :textCss="'text-white font-bold text-center'"
         :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-        @clickButton="toggleZoneStatistics()"
+        @clickButton="toggleLayer"
       >
       </button-ui>
     </div>
+  </div>
+  <div
+    v-if="showLayers && isMobileView"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+    @click.self="toggleLayer"
+  >
+    <button @click="toggleLayer" class="text-white buttonClose rounded p-2 bg-red-500">
+      close
+    </button>
   </div>
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full">
     <!-- web view of show zone statistics -->
@@ -317,8 +328,9 @@ export default {
       hoverMapText: 'Map',
       isModalVisible: false,
       ShowNavigationZone: false,
-      isMobileView: false,
+      showLayers: false,
       graphLabel: '',
+
       posts: null,
       zone: null,
       geojson: '',
@@ -574,6 +586,10 @@ export default {
     toggleNavigationZone() {
       this.ShowNavigationZone = !this.ShowNavigationZone
     },
+    toggleLayer() {
+      this.showLayers = !this.showLayers
+      console.log('bonjour')
+    },
 
     toggleKeyActorsVisibility() {
       this.isKeyActorsHidden = !this.isKeyActorsHidden
@@ -652,6 +668,13 @@ span {
   top: 50px;
   right: 40px;
 }
+.new-checkbox {
+  background-color: white;
+  position: fixed;
+  top: 80px;
+  z-index: 1000;
+  right: 2%;
+}
 @media (max-width: 780px) {
   .navigator {
     position: fixed;
@@ -663,7 +686,7 @@ span {
   .optionButton {
     position: fixed;
     top: 100px;
-    z-index: 10;
+    /* z-index: 5; */
   }
 }
 </style>

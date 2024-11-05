@@ -9,13 +9,18 @@
       </div>
 
       <div class="menu relative">
+        <!-- mobile view -->
         <icon-with-label
           class="dropdown"
           :svgContent="
-            authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+            authStore.user
+              ? this.userProfileImage
+              : require('@/assets/images/Community/profile.png')
           "
           :svgContentHover="
-            authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+            authStore.user
+              ? this.userProfileImage
+              : require('@/assets/images/Community/profile.png')
           "
           :labelTextBottom="authStore.user ? authStore.user.first_name : null"
           :iconDesktopSize="this.iconSize"
@@ -132,6 +137,7 @@
           </div>
 
           <div class="menu relative">
+            <!-- dashboard view -->
             <icon-with-label
               class="dropdown"
               :textCss="'text-primary-normal text-xs'"
@@ -292,6 +298,7 @@
 <script>
 import IconWithLabel from '../IconWithLabel/index.vue'
 import useAuthStore from '../../../stores/auth'
+
 import { useRouter } from 'vue-router'
 import SearchBar from '@/components/base/SearchBar.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
