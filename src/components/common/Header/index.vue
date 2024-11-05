@@ -9,20 +9,33 @@
       </div>
 
       <div class="menu relative">
-        <icon-with-label
+        <!-- <icon-with-label
           class="dropdown"
-          :svgContent="
-            authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
-          "
-          :svgContentHover="
-            authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
-          "
+          :svgContent="userProfileImage"
+          :svgContentHover="userProfileImage"
           :labelTextBottom="authStore.user ? authStore.user.first_name : null"
           :iconDesktopSize="this.iconSize"
           :isActive="true"
           :bottom="true"
           @customFunction="toggleMenu"
-        ></icon-with-label>
+        ></icon-with-label> -->
+        <icon-with-label
+              class="dropdown"
+              :textCss="'text-primary-normal text-xs'"
+              :svgContent="
+                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+              "
+              :svgContentHover="
+                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+              "
+              labelText="Profile"
+              :labelTextBottom="authStore.user ? authStore.user.first_name : null"
+              :iconDesktopSize="this.iconSize"
+              :isActive="true"
+              :bottom="true"
+              @customFunction="toggleMenu"
+              imageCss="rounded-lg"
+            ></icon-with-label>
 
         <!-- Dropdown Menu -->
         <div
@@ -40,7 +53,7 @@
           </button-ui>
 
           <button-ui
-             :leftIcon="'\\assets\\icons\\post-fill.svg'"
+            :leftIcon="'\\assets\\icons\\post-fill.svg'"
             :label="$t('create_post')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -48,7 +61,7 @@
           >
           </button-ui>
           <button-ui
-                :leftIcon="'\\assets\\icons\\event-fill.svg'"
+            :leftIcon="'\\assets\\icons\\event-fill.svg'"
             :label="$t('create_event')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -56,7 +69,7 @@
           >
           </button-ui>
           <button-ui
-          :leftIcon="'\\assets\\icons\\setting-fill.svg'"
+            :leftIcon="'\\assets\\icons\\setting-fill.svg'"
             :label="$t('settings_privacy')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100'"
@@ -65,7 +78,7 @@
           </button-ui>
 
           <button-ui
-          :leftIcon="'\\assets\\icons\\translate.svg'"
+            :leftIcon="'\\assets\\icons\\translate.svg'"
             :label="$t('translate')"
             :textCss="'text-left '"
             :customCss="'items-left justify-start hover:bg-gray-100 block md:hidden'"
@@ -286,7 +299,6 @@
     </div>
 
     <ConfirmationModal ref="confirmationModal" @confirm="logout()" />
-
   </header>
 </template>
 
@@ -298,8 +310,7 @@ import SearchBar from '@/components/base/SearchBar.vue'
 import ButtonUi from '@/components/base/ButtonUi.vue'
 import AppLogo from '@/components/base/AppLogo.vue'
 import { LOCAL_STORAGE_KEYS } from '@/constants/index.js'
-import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue';
-
+import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue'
 
 export default {
   name: 'HeaderApp',
@@ -309,7 +320,6 @@ export default {
     ButtonUi,
     AppLogo,
     ConfirmationModal
-
   },
 
   // created() {
@@ -331,7 +341,11 @@ export default {
       isNotificationDropdownVisible: false,
       currentMenu: null,
       isActiveRoute: '',
-      userProfileImage: authStore && authStore.user ? authStore.user.avatar : '',
+      userProfileImage: authStore.user && authStore.user ? authStore.user.avatar : '',
+      // userProfileImage:
+      //   authStore.user && authStore.user.avatar
+      //     ? authStore.user.avatar
+      //     : '/assets/images/Community/profile.png',
       iconSize: 'w-7 h-7',
       lang: 'en',
       notifications: [],
@@ -374,7 +388,7 @@ export default {
 
   methods: {
     openModal() {
-      this.$refs.confirmationModal.show();
+      this.$refs.confirmationModal.show()
     },
     redirectToNotifications() {
       this.$router.push({ name: 'notification' })
@@ -444,14 +458,14 @@ export default {
           this.$router.push({ name: 'setting' })
           this.toggleMenu()
           break
-          case 4:
-            this.openModal()
-            this.toggleMenu()
-            break
-            case 5:
-              this.$router.push({ name: 'change-langauge' })
-              this.toggleMenu()
-              break
+        case 4:
+          this.openModal()
+          this.toggleMenu()
+          break
+        case 5:
+          this.$router.push({ name: 'change-langauge' })
+          this.toggleMenu()
+          break
       }
     },
 

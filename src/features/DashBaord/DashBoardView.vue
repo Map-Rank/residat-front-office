@@ -6,11 +6,50 @@
     :zoomIndex="dashboard.zoomIndex"
     @zoneClick="zoneClick"
     @disasterClick="disasterClick"
+    :show-layers="showLayers"
   />
 
-  <div class="z-10 px-4 md:px-[50px] pt-1 w-full ">
+  <div class="w-full optionButton px-5 md:hidden block">
+    <div class="grid grid-cols-2 gap-2">
+      <button-ui
+        :label="$t('Zone statistics')"
+        :color="'text-white'"
+        :textCss="'text-white font-bold text-center text-[6px]'"
+        :customCss="'bg-secondary-normal flex justify-center rounded-lg p-1'"
+        @clickButton="toggleZoneStatisticsMobile"
+      >
+      </button-ui>
+      <button-ui
+        :label="$t('Navigate by Zone')"
+        :color="'text-white'"
+        :textCss="'text-white font-bold text-center'"
+        :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+        @clickButton="toggleNavigationZone"
+      >
+      </button-ui>
+      <button-ui
+        :label="$t('layers')"
+        :color="'text-white'"
+        :textCss="'text-white font-bold text-center'"
+        :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+        @clickButton="toggleLayer"
+      >
+      </button-ui>
+    </div>
+  </div>
+  <div
+    v-if="showLayers && isMobileView"
+    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+    @click.self="toggleLayer"
+  >
+    <button @click="toggleLayer" class="text-white buttonClose rounded p-2 bg-red-500">
+      close
+    </button>
+  </div>
+  <div class="z-10 px-4 md:px-[50px] pt-1 w-full">
+    <!-- web view of show zone statistics -->
     <div
-      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
+      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
     >
       <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
         <div class="hidden md:block mt-2 w-full min-h-[30vh]">
@@ -22,18 +61,18 @@
             :label="$t('show_zone_stats')"
             :color="'text-white'"
             :textCss="'text-white font-bold text-center'"
-            :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
+            :customCss="'bg-secondary-normal flex justify-center rounded-lg hidden md:block'"
             @clickButton="toggleZoneStatistics()"
           >
           </button-ui>
         </div>
 
         <div :class="{ hidden: isZoneStatistics }">
-          <div class="mt-2 max-h-[30vh] w-full">
+          <div class="mt-2 max-h-[30vh] md:w-full">
             <ZoneInfo :zone="zone" />
           </div>
 
-          <div class="mt-4">
+          <div class="mt-4 post-slider">
             <post-slider :posts="posts" status="RECENT" />
           </div>
         </div>
@@ -44,8 +83,48 @@
           <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
         </div>
       </div>
+    </div>
 
-      <!-- <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
+    <!-- mobile view of show zone statistics -->
+    <div
+      v-if="isZoneStatisticsMObile && isMobileView"
+      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+      @click.self="toggleZoneStatisticsMobile"
+    >
+      <div
+        class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
+      >
+        <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
+          <div class="hidden md:block mt-2 w-full min-h-[30vh]">
+            <WaterStressChart></WaterStressChart>
+          </div>
+
+          <div>
+            <div class="mt-2 max-h-[30vh] md:w-full">
+              <ZoneInfo :zone="zone" />
+            </div>
+
+            <div class="mt-7">
+              <post-slider :posts="posts" status="RECENT" />
+            </div>
+          </div>
+        </div>
+
+        <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
+          <div :class="{ hidden: !displayStatistics }">
+            <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+          </div>
+        </div>
+      </div>
+      <button
+        @click="toggleZoneStatisticsMobile"
+        class="text-white buttonClose rounded p-2 bg-red-500"
+      >
+        close
+      </button>
+    </div>
+
+    <!-- <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
         <div class="md:block">
           <div class="">
             <div class="">
@@ -61,16 +140,18 @@
           </div>
         </div>
       </div> -->
-    </div>
 
-    <div class="flex flex-row flex-wrap md:grid md:grid-cols-8 gap-2">
+    <!-- web version of show navigation zone -->
+    <div
+      class="flex flex-row flex-wrap gap-2 bottom-72 right-40 relative hidden sm:hidden md:block"
+    >
       <div
         class="flex md:col-span-6"
         :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
       ></div>
 
-      <div class="hidden md:block col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="mb-4 p-4 bg-white rounded shadow navigator">
+      <div class="col-span-1 md:col-span-2 lg:col-span-2">
+        <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigator mt-8">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
             :props_regions="default_regions"
@@ -88,6 +169,43 @@
           ></ButtonUi>
         </div>
       </div>
+    </div>
+
+    <!-- mobile view show navigation zone -->
+    <div
+      v-if="ShowNavigationZone && isMobileView"
+      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+      @click.self="toggleNavigationZone"
+    >
+      <div class="flex flex-row flex-wrap gap-2">
+        <div
+          class="flex md:col-span-6"
+          :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
+        ></div>
+
+        <div class="col-span-1 md:col-span-2 lg:col-span-2">
+          <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigator mt-8">
+            <zone-post-filter
+              :title="$t('select_zone_by_location')"
+              :props_regions="default_regions"
+              :props_divisions="default_divisions"
+              :props_sub_divisions="default_sub_divisions"
+              :filterPostFunctionWithId="selectZoneToSearch"
+              :updateZone="updateZone"
+            ></zone-post-filter>
+
+            <ButtonUi
+              :label="$t('search')"
+              customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+              textCss="text-center text-white"
+              @clickButton="searchMap"
+            ></ButtonUi>
+          </div>
+        </div>
+      </div>
+      <button @click="toggleNavigationZone" class="text-white buttonClose rounded p-2 bg-red-500">
+        Close
+      </button>
     </div>
   </div>
 </template>
@@ -130,8 +248,15 @@ export default {
     // MapShimmer
   },
 
-  async mounted() {
-    // await this.fetchZoneMarkeds()
+  // async mounted() {
+  //   // await this.fetchZoneMarkeds()
+  // },
+  mounted() {
+    window.addEventListener('resize', this.handleResize)
+    this.handleResize() // Initial check on mount
+  },
+  beforeDestroy() {
+    window.removeEventListener('resize', this.handleResize)
   },
 
   created() {
@@ -179,14 +304,15 @@ export default {
     )
   },
 
-
-
   computed: {
     isSVG() {
       return this.mapSvgPath && this.mapSvgPath.endsWith('.svg')
     },
     errorMessage() {
       return ` ${this.dashboard.zoneName} map not yet available`
+    },
+    isMobileView() {
+      return window.innerWidth < 768 // Adjust this breakpoint according to your design (e.g., md: 768px)
     },
 
     dashboard() {
@@ -201,7 +327,10 @@ export default {
       vectorKeys: [],
       hoverMapText: 'Map',
       isModalVisible: false,
+      ShowNavigationZone: false,
+      showLayers: false,
       graphLabel: '',
+
       posts: null,
       zone: null,
       geojson: '',
@@ -214,6 +343,7 @@ export default {
       defaultMapSize: 1,
       isSubDivisionGraph: false,
       isZoneStatistics: true,
+      isZoneStatisticsMObile: false,
       isKeyActorsHidden: false,
       showAllActors: false,
       isLoadingMap: true,
@@ -313,7 +443,7 @@ export default {
         console.error('Failed to fetch zone markers:', error)
       }
     },
-    zoneClick(zoneMarked,zoomIndex) {
+    zoneClick(zoneMarked, zoomIndex) {
       console.log('navigating after zone click')
       console.log(zoneMarked)
 
@@ -338,7 +468,6 @@ export default {
       console.log('navigating after disaster click')
       console.log(marker)
 
-
       const dashboardStore = useDashboardStore()
 
       // Set the parameters in the store
@@ -356,13 +485,11 @@ export default {
 
       console.log()
 
-
       console.log('The router complete')
     },
 
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
-
         const dashboardStore = useDashboardStore()
 
         // Set the parameters in the store
@@ -453,11 +580,26 @@ export default {
     toggleZoneStatistics() {
       this.isZoneStatistics = !this.isZoneStatistics
     },
+    toggleZoneStatisticsMobile() {
+      this.isZoneStatisticsMObile = !this.isZoneStatisticsMObile
+    },
+    toggleNavigationZone() {
+      this.ShowNavigationZone = !this.ShowNavigationZone
+    },
+    toggleLayer() {
+      this.showLayers = !this.showLayers
+      console.log('bonjour')
+    },
+
     toggleKeyActorsVisibility() {
       this.isKeyActorsHidden = !this.isKeyActorsHidden
     },
     toggleShowAllActors() {
       this.showAllActors = !this.showAllActors
+    },
+    handleResize() {
+      // Directly check the window size and update isMobileView
+      this.isMobileView = window.innerWidth < 768 // Adjust this breakpoint according to your design
     },
 
     extractColor(styleString) {
@@ -483,7 +625,6 @@ export default {
 .z-0 {
   z-index: 0; /* Map will be behind other elements */
 }
-
 
 span {
   font-size: 14px;
@@ -511,15 +652,41 @@ span {
   margin-bottom: 1%;
 }
 .navigator {
-  position: absolute;
-  top: 30%;
+  position: fixed;
+  top: 210px;
   z-index: 10;
   right: 2%;
 }
 .left-element {
   position: absolute;
-  top: 20%;
+  top: 120px;
   z-index: 5;
   left: 20px;
+}
+.buttonClose {
+  position: fixed;
+  top: 50px;
+  right: 40px;
+}
+.new-checkbox {
+  background-color: white;
+  position: fixed;
+  top: 80px;
+  z-index: 1000;
+  right: 2%;
+}
+@media (max-width: 780px) {
+  .navigator {
+    position: fixed;
+    top: 120px;
+    z-index: 10;
+    right: 10%;
+  }
+
+  .optionButton {
+    position: fixed;
+    bottom: 83px;
+    /* z-index: 5; */
+  }
 }
 </style>

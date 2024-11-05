@@ -6,7 +6,44 @@
       <!-- Data binding and event handling -->
     </div>
   </div>
-  <div class="new-checkbox p-4">
+  <div class="w-full h-full flex items-center justify-center min-h-screen">
+    <div class="checkboxMObile p-4" v-if="showLayers">
+      <h3 class="text-lg font-semibold mb-2">Layers</h3>
+      <div class="space-y-2">
+        <label class="flex items-center">
+          <input
+            type="checkbox"
+            v-model="toggleCameroon"
+            @change="toggleLoadCameroonGeoJson"
+            class="form-checkbox h-4 w-4 text-blue-600"
+          />
+          <span class="ml-2 text-sm">Cameroon</span>
+        </label>
+
+        <label class="flex items-center">
+          <input
+            type="checkbox"
+            v-model="toggleHydroPolygonGeoJson"
+            @change="toggleLoadHydroPolygonGeoJson"
+            class="form-checkbox h-4 w-4 text-green-600"
+          />
+          <span class="ml-2 text-sm">Hydro Polygon Map</span>
+        </label>
+
+        <label class="flex items-center">
+          <input
+            type="checkbox"
+            v-model="toggleDisasterMarkers"
+            @change="toggleDisasters"
+            class="form-checkbox h-4 w-4 text-red-600"
+          />
+          <span class="ml-2 text-sm">Disaster Markers</span>
+        </label>
+      </div>
+    </div>
+  </div>
+
+  <div class="new-checkbox p-4 md:block hidden">
     <h3 class="text-lg font-semibold mb-2">Layers</h3>
     <div class="space-y-2">
       <label class="flex items-center">
@@ -51,6 +88,10 @@ export default {
   name: 'MapComponent',
 
   props: {
+    showLayers: {
+      type: Boolean,
+      default: false
+    },
     latitude: {
       type: Number,
       required: true
@@ -63,6 +104,9 @@ export default {
       type: Number,
       required: true
     }
+    // toggleCameroon: Boolean,
+    // toggleHydroPolygonGeoJson: Boolean,
+    // toggleDisasterMarkers: Boolean
   },
 
   emits: ['zoneClick', 'disasterClick'],
@@ -80,7 +124,7 @@ export default {
       clickedRegion: null,
       clickedDivision: null,
       zoneMarkeds: [],
-      // NewgeoJsonLayer: null,
+      NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
       toggleCameroon: false,
       toggleHydroPolygonGeoJson: false,
@@ -309,10 +353,12 @@ export default {
     toggleLoadCameroonGeoJson() {
       if (this.toggleCameroon) {
         this.loadCameroonGeoJson()
+        console.log('cameroun map')
       } else {
         this.map.removeLayer(this.cameroonLayer)
         this.map.removeLayer(this.regionLayer)
         this.map.removeLayer(this.subRegionLayer)
+        console.log('cameroun map remove')
       }
     },
 
@@ -478,11 +524,18 @@ export default {
   border: 1px solid #ccc;
   box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
 }
+.checkboxMObile {
+  background-color: white;
+  position: fixed;
+  top: 300px;
+  z-index: 1000;
+  right: 30%;
+}
 
 .new-checkbox {
   background-color: white;
-  position: absolute;
-  top: 8%;
+  position: fixed;
+  top: 80px;
   z-index: 1000;
   right: 2%;
 }
