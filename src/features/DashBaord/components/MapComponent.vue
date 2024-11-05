@@ -527,9 +527,9 @@ export default {
 .checkboxMObile {
   background-color: white;
   position: fixed;
-  top: 200px;
+  top: 300px;
   z-index: 1000;
-  right: 50%;
+  right: 30%;
 }
 
 .new-checkbox {
