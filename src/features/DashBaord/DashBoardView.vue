@@ -685,7 +685,7 @@ span {
 
   .optionButton {
     position: fixed;
-    bottom: 80px;
+    bottom: 83px;
     /* z-index: 5; */
   }
 }
