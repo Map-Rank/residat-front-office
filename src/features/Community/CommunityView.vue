@@ -549,8 +549,11 @@ export default {
         this.topLoading = true
         this.isZoneFilterLoading = true
         await this.fetchEvent()
+        await this.fetchPosts()
         await this.handleZoneChange(this.zoneId)
-        await this.loadData(this.zoneId, this.sectorId)
+        if(this.isUserConnected && (this.zoneId || this.sectorId)){
+          await this.loadData(this.zoneId, this.sectorId)
+        }
       } catch (error) {
         console.error('Initialization failed:', error)
         this.showPageRefresh = true
@@ -676,7 +679,6 @@ export default {
 
     async fetchPosts() {
       this.hasNewPosts = false
-
       try {
         this.posts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
         this.recentPosts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
