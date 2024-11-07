@@ -195,13 +195,17 @@ export default {
         }
         this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
-
+        const minZoomLevel= 3.4;
         // Initialize map
-        this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex)
+        this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex )
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map)
-
+        this.map.on('zoomend', () => {
+      if (this.map.getZoom() < minZoomLevel) {
+        this.map.setZoom(minZoomLevel);
+      }
+    });
         // this.addMarkers(this.allDisasters)
       } catch (error) {
         console.error('Error initializing the map:', error)
@@ -527,9 +531,9 @@ export default {
 .checkboxMObile {
   background-color: white;
   position: fixed;
-  top: 300px;
+  top: 200px;
   z-index: 1000;
-  right: 30%;
+  right: 20%;
 }
 
 .new-checkbox {

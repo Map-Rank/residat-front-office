@@ -52,7 +52,7 @@
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
     >
       <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-        <div class="hidden md:block mt-2 w-full min-h-[30vh]">
+        <div class="hidden md:block mt-10 w-full min-h-[30vh]">
           <WaterStressChart></WaterStressChart>
         </div>
 

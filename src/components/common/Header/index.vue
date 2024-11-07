@@ -14,7 +14,7 @@
           :svgContent="userProfileImage"
           :svgContentHover="userProfileImage"
           :labelTextBottom="authStore.user ? authStore.user.first_name : null"
-          :iconDesktopSize="this.iconSize"
+          :iconDesktopSize="iconSize"
           :isActive="true"
           :bottom="true"
           @customFunction="toggleMenu"
@@ -23,10 +23,10 @@
               class="dropdown"
               :textCss="'text-primary-normal text-xs'"
               :svgContent="
-                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+                authStore.user ? userProfileImage : '/assets/images/Community/profile.png'
               "
               :svgContentHover="
-                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+                authStore.user ? userProfileImage :'/assets/images/Community/profile.png'
               "
               labelText="Profile"
               :labelTextBottom="authStore.user ? authStore.user.first_name : null"
@@ -342,10 +342,9 @@ export default {
       currentMenu: null,
       isActiveRoute: '',
       userProfileImage: authStore.user && authStore.user ? authStore.user.avatar : '',
-      // userProfileImage:
-      //   authStore.user && authStore.user.avatar
-      //     ? authStore.user.avatar
-      //     : '/assets/images/Community/profile.png',
+  //     userProfileImage: authStore.user && authStore.user
+  // ? authStore.user.avatar
+  // : '/assets/images/Community/profile.png',
       iconSize: 'w-7 h-7',
       lang: 'en',
       notifications: [],
@@ -385,6 +384,20 @@ export default {
       ]
     }
   },
+//   created() {
+//   console.log("User Profile Image Path:", this.userProfileImage);
+// },
+
+  // computed:{
+  //   userProfileImage()
+  //       {
+  //         const authStore = useAuthStore();
+
+  //   return authStore.user && authStore.user.avatar
+  //         ? authStore.user.avatar
+  //         : '/assets/images/Community/profile.png';
+  //        }
+  // },
 
   methods: {
     openModal() {

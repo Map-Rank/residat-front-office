@@ -88,7 +88,10 @@ export default {
       activeTab: "important",
       isLoading: true,
       notifications: [],
-      institutionalNotifications: [],
+      toast: useToast(),
+
+      // institutionalNotifications: [],
+      institutionalNotifications: null,
     };
   },
   computed: {
