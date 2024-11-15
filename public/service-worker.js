@@ -27,7 +27,11 @@ function setupNotificationInterval() {
   if (!self.notificationInterval) {
     self.notificationInterval = setInterval(
       () => {
-        if (authToken) fetchNewNotifications(authToken)
+
+        if (authToken){ 
+          console.log('appel notif-interval ' + authToken)
+
+          fetchNewNotifications(authToken)}
       },
       10 * 60 * 1000
     ) // 10 minutes
@@ -69,6 +73,8 @@ self.addEventListener('message', (event) => {
     console.log('AuthToken set in service worker:', authToken)
     // Fetch new notifications once token is set
     if (authToken) {
+      console.log('appel notif-authtoken ' + authToken)
+
       fetchNewNotifications(authToken)
     } else {
       console.error('Auth token is missing during activation.')
@@ -95,15 +101,15 @@ async function fetchNewNotifications(authToken) {
   const controller = new AbortController() // For timeout handling
   const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 seconds timeout
   const apiUrl = 'https://backoffice-dev.residat.com/api/notifications'
+  console.log('Starting fetchNewNotifications...  ' + authToken)
 
   try {
-    console.log('Starting fetchNewNotifications...')
-
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
+        Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${authToken}`
+        Authorization: 'Bearer ' + authToken
       },
       signal: controller.signal // Attach the abort controller's signal
     })
@@ -169,7 +175,9 @@ function checkConnectivity() {
 }
 
 self.addEventListener('sync', (event) => {
+
   if (event.tag === 'sync-fetch-notifications') {
+    console.log('appel notif-sinc ' + authToken)
     event.waitUntil(fetchNewNotifications(authToken))
   }
 })
