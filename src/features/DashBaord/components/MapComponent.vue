@@ -533,7 +533,7 @@ export default {
   position: fixed;
   top: 200px;
   z-index: 1000;
-  right: 20%;
+  right: 30%;
 }
 
 .new-checkbox {
