@@ -5,35 +5,35 @@ let lastNotification = null // Store the last notification in memory
 var authToken = null // Variable to store the token
 
 // Fonction pour récupérer le token depuis IndexedDB (exemple)
-function getAuthToken() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('authDB', 1);
+// function getAuthToken() {
+//   return new Promise((resolve, reject) => {
+//     const request = indexedDB.open('authDB', 1);
 
-    request.onsuccess = (event) => {
-      const db = event.target.result;
-      const transaction = db.transaction(['auth'], 'readonly');
-      const store = transaction.objectStore('auth');
-      const getTokenRequest = store.get('token'); // La clé est "token" comme dans votre capture d'écran
+//     request.onsuccess = (event) => {
+//       const db = event.target.result;
+//       const transaction = db.transaction(['auth'], 'readonly');
+//       const store = transaction.objectStore('auth');
+//       const getTokenRequest = store.get('token'); // La clé est "token" comme dans votre capture d'écran
 
 
-      getTokenRequest.onsuccess = () => {
-        const authToken = getTokenRequest.result ? getTokenRequest.result.value : null;
-        // Affiche le token dans la console
-        console.log("Token récupéré depuis IndexedDB:", authToken);
+//       getTokenRequest.onsuccess = () => {
+//         const authToken = getTokenRequest.result ? getTokenRequest.result.value : null;
+//         // Affiche le token dans la console
+//         console.log("Token récupéré depuis IndexedDB:", authToken);
 
-        resolve(authToken);
-      };
+//         resolve(authToken);
+//       };
 
-      getTokenRequest.onerror = () => {
-        reject('Erreur lors de la récupération du token');
-      };
-    };
+//       getTokenRequest.onerror = () => {
+//         reject('Erreur lors de la récupération du token');
+//       };
+//     };
 
-    request.onerror = () => {
-      reject('Erreur lors de l\'ouverture de la base de données');
-    };
-  });
-}
+//     request.onerror = () => {
+//       reject('Erreur lors de l\'ouverture de la base de données');
+//     };
+//   });
+// }
 
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing.')
@@ -45,7 +45,7 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim())
   registerBackgroundSync() // Register background sync on activate
   setupNotificationInterval() // Set up fallback polling
-  getAuthToken()
+  // getAuthToken()
 })
 
 self.addEventListener('message', event => {
@@ -78,7 +78,8 @@ self.addEventListener('message', (event) => {
   console.log('Service Worker received message:', event.data)
 
   if (event.data.type === 'START_NOTIFICATION_FETCH') {
-    fetchNewNotifications(event.data.token)
+     authToken = event.data.token
+     fetchNewNotifications(authToken)
   }
 
   // self.addEventListener('message', (event) => {
@@ -105,10 +106,10 @@ function showLastNotification() {
 }
 
 // Fetch new notifications and show them
-async function fetchNewNotifications() {
+async function fetchNewNotifications(authToken) {
   try {
     // Récupérer le token avant de faire la requête
-    const authToken = await getAuthToken();
+    // const authToken = await getAuthToken();
     console.log('Token récupéré:', authToken);
 
     if (!authToken) {
