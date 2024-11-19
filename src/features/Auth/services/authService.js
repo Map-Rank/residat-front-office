@@ -210,6 +210,14 @@ const loginUser = async (
         console.log('FCM token updated successfully.')
       }
 
+      // Notifier le service worker
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.controller?.postMessage({
+          type: 'START_NOTIFICATION_FETCH',
+          token: token,
+        });
+      }
+
       onSuccess()
     }
   } catch (error) {

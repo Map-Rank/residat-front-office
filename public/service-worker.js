@@ -1,7 +1,39 @@
 // Service Worker: Listen for connectivity changes and send notifications
+
 let lastStatus = true
 let lastNotification = null // Store the last notification in memory
-let authToken = null // Variable to store the token
+var authToken = null // Variable to store the token
+
+// Fonction pour récupérer le token depuis IndexedDB (exemple)
+function getAuthToken() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('authDB', 1);
+
+    request.onsuccess = (event) => {
+      const db = event.target.result;
+      const transaction = db.transaction(['auth'], 'readonly');
+      const store = transaction.objectStore('auth');
+      const getTokenRequest = store.get('token'); // La clé est "token" comme dans votre capture d'écran
+
+
+      getTokenRequest.onsuccess = () => {
+        const authToken = getTokenRequest.result ? getTokenRequest.result.value : null;
+        // Affiche le token dans la console
+        console.log("Token récupéré depuis IndexedDB:", authToken);
+
+        resolve(authToken);
+      };
+
+      getTokenRequest.onerror = () => {
+        reject('Erreur lors de la récupération du token');
+      };
+    };
+
+    request.onerror = () => {
+      reject('Erreur lors de l\'ouverture de la base de données');
+    };
+  });
+}
 
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing.')
@@ -13,29 +45,20 @@ self.addEventListener('activate', (event) => {
   event.waitUntil(self.clients.claim())
   registerBackgroundSync() // Register background sync on activate
   setupNotificationInterval() // Set up fallback polling
+  getAuthToken()
 })
+
+self.addEventListener('message', event => {
+  if (event.data.type === 'SET_TOKEN') {
+    authToken = event.data.token;
+  }
+});
 
 // Register Background Sync
 function registerBackgroundSync() {
   self.registration.sync.register('sync-fetch-notifications').catch((error) => {
     console.error('Sync registration failed:', error)
   })
-}
-
-// Set up periodic interval as a fallback
-function setupNotificationInterval() {
-  if (!self.notificationInterval) {
-    self.notificationInterval = setInterval(
-      () => {
-
-        if (authToken){ 
-          console.log('appel notif-interval ' + authToken)
-
-          fetchNewNotifications(authToken)}
-      },
-      10 * 60 * 1000
-    ) // 10 minutes
-  }
 }
 
 self.addEventListener('notificationclick', (event) => {
@@ -54,32 +77,17 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('message', (event) => {
   console.log('Service Worker received message:', event.data)
 
-  if (event.data.action === 'setLastNotification' && event.data.notification) {
-    lastNotification = event.data.notification
-  } else if (event.data.action === 'showLastNotification') {
-    showLastNotification()
-  } else if (event.data.action === 'checkConnectivity') {
-    checkConnectivity().then((isOnline) => {
-      if (isOnline !== lastStatus) {
-        showConnectivityNotification(isOnline)
-        lastStatus = isOnline
-      }
-    })
+  if (event.data.type === 'START_NOTIFICATION_FETCH') {
+    fetchNewNotifications(event.data.token)
   }
 
-  if (event.data.action === 'setAuthToken' && event.data.token) {
-    authToken = event.data.token
-    // console.log(event.data.token)
-    console.log('AuthToken set in service worker:', authToken)
-    // Fetch new notifications once token is set
-    if (authToken) {
-      console.log('appel notif-authtoken ' + authToken)
-
-      fetchNewNotifications(authToken)
-    } else {
-      console.error('Auth token is missing during activation.')
-    }
-  }
+  // self.addEventListener('message', (event) => {
+  //   if (event.data.action === 'setAuthToken') {
+  //     authToken = event.data.token;
+  //     console.log('authToken  ' + authToken)
+  //     // console.log('AuthToken set in service worker:', authToken);
+  //   }
+  // });
 })
 
 // Function to show the last notification stored in memory
@@ -97,57 +105,56 @@ function showLastNotification() {
 }
 
 // Fetch new notifications and show them
-async function fetchNewNotifications(authToken) {
-  const controller = new AbortController() // For timeout handling
-  const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 seconds timeout
-  const apiUrl = 'https://backoffice-dev.residat.com/api/notifications'
-  console.log('Starting fetchNewNotifications...  ' + authToken)
-
+async function fetchNewNotifications() {
   try {
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-        'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + authToken
-      },
-      signal: controller.signal // Attach the abort controller's signal
-    })
-    clearTimeout(timeoutId) // Clear timeout if request completed
+    // Récupérer le token avant de faire la requête
+    const authToken = await getAuthToken();
+    console.log('Token récupéré:', authToken);
 
-    if (!response.ok) {
-      throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`)
+    if (!authToken) {
+      console.error('Aucun token trouvé');
+      return;
     }
 
-    const notifications = await response.json()
-    console.log('Fetched new notifications:', notifications)
+    const controller = new AbortController(); // Pour gérer le timeout
+    const timeoutId = setTimeout(() => controller.abort(), 10000); // Timeout de 10 secondes
+    const apiUrl = 'http://backoffice-dev.residat.com/api/notifications?page=0';
 
-    if (Array.isArray(notifications) && notifications.length > 0) {
-      const mostRecentNotification = notifications.reduce(
-        (max, notification) => (notification.id > max.id ? notification : max),
-        notifications[0]
-      )
-
-      // Store the most recent notification in memory
-      lastNotification = mostRecentNotification
-
-      // Prepare notification options
-      const options = {
-        body: mostRecentNotification.content_en,
-        icon: '/assets/images/filter.png',
-        badge: '/assets/images/filter.png'
+    try {
+      const response = await fetch(apiUrl, {
+          method: 'GET',
+          headers: {
+              Accept: 'application/json',
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + authToken
+          },
+          signal: controller.signal
+      });
+  
+      clearTimeout(timeoutId); // Annuler le timeout
+  
+      console.log('Réponse complète:', response); // Ajout de log complet
+  
+      if (!response.ok) {
+          const responseBody = await response.text();
+          console.log('Réponse échouée:', responseBody);
+          throw new Error(`Échec: ${response.status} ${response.statusText}`);
       }
-
-      // Display the notification if permission is granted and registration exists
-      if (Notification.permission === 'granted' && self.registration) {
-        self.registration.showNotification(mostRecentNotification.title, options)
-      }
+  
+      const notifications = await response.json();
+      console.log('Notifications:', notifications); // Log des notifications
+    } catch (error) {
+        if (error.name === 'AbortError') {
+            console.error('La requête a expiré.');
+        } else {
+            console.error('Erreur:', error.message, error);
+        }
     }
   } catch (error) {
     if (error.name === 'AbortError') {
-      console.error('Fetch request timed out.')
+      console.error('La requête a expiré.');
     } else {
-      console.error('Error fetching notifications:', error)
+      console.error('Erreur lors de la récupération des notifications:', error);
     }
   }
 }
@@ -202,4 +209,22 @@ function notifyClients(isOnline) {
       client.postMessage({ isOnline })
     })
   })
+}
+
+
+// Set up periodic interval as a fallback
+function setupNotificationInterval() {
+  if (!self.notificationInterval) {
+    self.notificationInterval = setInterval(
+      () => {
+
+        if (authToken) {
+          console.log('appel notif-interval ' + authToken)
+
+          fetchNewNotifications(authToken)
+        }
+      },
+      10 * 60 * 1000
+    ) // 10 minutes
+  }
 }
