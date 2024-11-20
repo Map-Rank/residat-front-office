@@ -57,67 +57,185 @@ const authStore = useAuthStore()
 sectorStore.initializeStore()
 authStore.initializeAuthState()
 
-// Register Service Worker and Notification Permission
-if ('serviceWorker' in navigator && 'Notification' in window) {
-  navigator.serviceWorker
-    .register('/service-worker.js', { scope: '/' })
-    .then((registration) => {
-      console.log('Service Worker registered with scope:', registration.scope)
-      const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-      console.log('appel set before ' + authToken)
+const NOTIFICATION_CHECK_INTERVAL = 10 * 60 * 1000 // 10 minutes
 
-      // Request notification permission
-      if (Notification.permission === 'default') {
-        Notification.requestPermission().then((permission) => {
-          console.log(`Notification permission: ${permission}`)
-        })
-      }
+class ServiceWorkerManager {
+  constructor() {
+    this.registration = null
+  }
 
-      // Send auth token to Service Worker
-      // const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-      console.log('appel set before ' + authToken)
+  async init() {
+    if (!('serviceWorker' in navigator) || !('Notification' in window)) {
+      console.warn('Service Worker or Notifications not supported')
+      return
+    }
 
-      if (authToken && navigator.serviceWorker.controller) {
-        console.log('appel set token ' + authToken)
-
-        navigator.serviceWorker.controller.postMessage({
-          action: 'setAuthToken',
-          token: authToken
-        })
-      }
-
-      // Handle Service Worker messages
-      navigator.serviceWorker.addEventListener('message', (event) => {
-        const { action } = event.data
-        if (action === 'showLastNotification') {
-          console.log('Displaying last notification')
-        }
+    try {
+      // Register service worker
+      this.registration = await navigator.serviceWorker.register('/service-worker.js', {
+        scope: '/'
       })
 
-      // Set up periodic notification check every 10 minutes
-      setInterval(
-        () => {
-          navigator.serviceWorker.controller?.postMessage({ action: 'fetchNewNotifications' })
-        },
-        10 * 60 * 1000
-      )
+      console.log('Service Worker registered with new scope:', this.registration.scope)
+
+      // Check for updates immediately after registration
+      await this.registration.update()
+
+      await this.setupNotifications()
+      this.setupAuthToken()
+      this.setupMessageHandlers()
+      this.setupPeriodicCheck()
+      this.setupPushHandlers()
+
+      // Handle service worker updates
+      this.registration.addEventListener('updatefound', () => {
+        const newWorker = this.registration.installing
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // Notify user of update and reload
+            if (confirm('New version available! Would you like to update?')) {
+              newWorker.postMessage({ type: 'SKIP_WAITING' })
+              window.location.reload()
+            }
+          }
+        })
+      })
+    } catch (error) {
+      console.error('Service Worker registration failed:', error)
+    }
+  }
+
+  async setupNotifications() {
+    if (Notification.permission === 'default') {
+      const permission = await Notification.requestPermission()
+      console.log(`Notification permission: ${permission}`)
+    }
+  }
+
+  setupAuthToken() {
+    const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+    if (authToken && navigator.serviceWorker.controller) {
+      console.log('Setting auth token in service worker')
+      navigator.serviceWorker.controller.postMessage({
+        action: 'setAuthToken',
+        token: authToken
+      })
+    }
+  }
+
+  setupMessageHandlers() {
+    navigator.serviceWorker.addEventListener('message', (event) => {
+      const { action } = event.data
+      switch (action) {
+        case 'showLastNotification':
+          console.log('Displaying last notification')
+          break
+        // Add other message handlers here
+        default:
+          console.log('Unknown message action:', action)
+      }
     })
-    .catch((error) => console.error('Service Worker registration failed:', error))
+  }
 
-  // Listen for push notifications
-  navigator.serviceWorker.addEventListener('push', (event) => {
-    const { title, content_en } = event.data.json()
-    const options = {
-      body: content_en,
-      icon: '/assets/images/smile.png',
-      badge: '/assets/images/smile.png'
-    }
+  setupPeriodicCheck() {
+    setInterval(() => {
+      if (navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({
+          action: 'fetchNewNotifications'
+        })
+      }
+    }, NOTIFICATION_CHECK_INTERVAL)
+  }
 
-    if (Notification.permission === 'granted') {
-      event.waitUntil(self.registration.showNotification(title, options))
-    }
-  })
+  setupPushHandlers() {
+    navigator.serviceWorker.addEventListener('push', (event) => {
+      if (!event.data) return
+
+      try {
+        const { title, content_en } = event.data.json()
+        const options = {
+          body: content_en,
+          icon: '/assets/images/smile.png',
+          badge: '/assets/images/smile.png',
+          timestamp: Date.now()
+        }
+
+        if (Notification.permission === 'granted') {
+          event.waitUntil(this.registration.showNotification(title, options))
+        }
+      } catch (error) {
+        console.error('Error processing push notification:', error)
+      }
+    })
+  }
 }
+
+const swManager = new ServiceWorkerManager()
+swManager.init().catch((error) => {
+  console.error('Failed to initialize Service Worker Manager:', error)
+})
+
+// Register Service Worker and Notification Permission
+// if ('serviceWorker' in navigator && 'Notification' in window) {
+//   navigator.serviceWorker
+//     .register('/service-worker.js', { scope: '/' })
+//     .then((registration) => {
+//       console.log('Service Worker registered with scope:', registration.scope)
+//       const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+//       console.log('appel set before ' + authToken)
+
+//       // Request notification permission
+//       if (Notification.permission === 'default') {
+//         Notification.requestPermission().then((permission) => {
+//           console.log(`Notification permission: ${permission}`)
+//         })
+//       }
+
+//       // Send auth token to Service Worker
+//       // const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+//       console.log('appel set before ' + authToken)
+
+//       if (authToken && navigator.serviceWorker.controller) {
+//         console.log('appel set token ' + authToken)
+
+//         navigator.serviceWorker.controller.postMessage({
+//           action: 'setAuthToken',
+//           token: authToken
+//         })
+//       }
+
+//       // Handle Service Worker messages
+//       navigator.serviceWorker.addEventListener('message', (event) => {
+//         const { action } = event.data
+//         if (action === 'showLastNotification') {
+//           console.log('Displaying last notification')
+//         }
+//       })
+
+//       // Set up periodic notification check every 10 minutes
+//       setInterval(
+//         () => {
+//           navigator.serviceWorker.controller?.postMessage({ action: 'fetchNewNotifications' })
+//         },
+//         10 * 60 * 1000
+//       )
+//     })
+//     .catch((error) => console.error('Service Worker registration failed:', error))
+
+//   // Listen for push notifications
+//   navigator.serviceWorker.addEventListener('push', (event) => {
+//     const { title, content_en } = event.data.json()
+//     const options = {
+//       body: content_en,
+//       icon: '/assets/images/smile.png',
+//       badge: '/assets/images/smile.png'
+//     }
+
+//     if (Notification.permission === 'granted') {
+//       event.waitUntil(self.registration.showNotification(title, options))
+//     }
+//   })
+// }
 
 // Initialize Firebase Cloud Messaging (FCM)
 getFcmToken().then((token) => {
