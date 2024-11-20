@@ -5,6 +5,7 @@ let authToken = null // Variable to store the token
 
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing.')
+
   self.skipWaiting()
 })
 
@@ -27,11 +28,7 @@ function setupNotificationInterval() {
   if (!self.notificationInterval) {
     self.notificationInterval = setInterval(
       () => {
-
-        if (authToken){ 
-          console.log('appel notif-interval ' + authToken)
-
-          fetchNewNotifications(authToken)}
+        if (authToken) fetchNewNotifications(authToken)
       },
       10 * 60 * 1000
     ) // 10 minutes
@@ -45,7 +42,7 @@ self.addEventListener('notificationclick', (event) => {
       if (clientList.length > 0) {
         return clientList[0].focus()
       } else {
-        return self.clients.openWindow('https://residat.com') // or a dynamic URL
+        return self.clients.openWindow('https://residat.com') // or a dynamic
       }
     })
   )
@@ -73,8 +70,6 @@ self.addEventListener('message', (event) => {
     console.log('AuthToken set in service worker:', authToken)
     // Fetch new notifications once token is set
     if (authToken) {
-      console.log('appel notif-authtoken ' + authToken)
-
       fetchNewNotifications(authToken)
     } else {
       console.error('Auth token is missing during activation.')
@@ -97,20 +92,23 @@ function showLastNotification() {
 }
 
 // Fetch new notifications and show them
-async function fetchNewNotifications(authToken) {
+async function fetchNewNotifications(authToken, lastNotificationId = null) {
   const controller = new AbortController() // For timeout handling
   const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 seconds timeout
-  const apiUrl = 'https://backoffice-dev.residat.com/api/notifications'
-  console.log('Starting fetchNewNotifications...  ' + authToken)
-
+  // Ajoutez l'ID de la dernière notification dans l'URL si fourni
+  const apiUrl = lastNotificationId
+    ? `https://backoffice-dev.residat.com/api/notifications?last_id=${lastNotificationId}`
+    : 'https://backoffice-dev.residat.com/api/notifications'
   try {
+    console.log('Starting fetchNewNotifications...', lastNotificationId)
+
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
-        Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: 'Bearer ' + authToken
+        Authorization: `Bearer ${authToken}`
       },
+
       signal: controller.signal // Attach the abort controller's signal
     })
     clearTimeout(timeoutId) // Clear timeout if request completed
@@ -130,6 +128,7 @@ async function fetchNewNotifications(authToken) {
 
       // Store the most recent notification in memory
       lastNotification = mostRecentNotification
+      lastNotificationId = lastNotification.id
 
       // Prepare notification options
       const options = {
@@ -175,9 +174,7 @@ function checkConnectivity() {
 }
 
 self.addEventListener('sync', (event) => {
-
   if (event.tag === 'sync-fetch-notifications') {
-    console.log('appel notif-sinc ' + authToken)
     event.waitUntil(fetchNewNotifications(authToken))
   }
 })
