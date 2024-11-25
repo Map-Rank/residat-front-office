@@ -12,8 +12,8 @@ self.addEventListener('install', (event) => {
 self.addEventListener('activate', (event) => {
   console.log('Service Worker activated.')
   event.waitUntil(self.clients.claim())
-  registerBackgroundSync() // Register background sync on activate
-  setupNotificationInterval() // Set up fallback polling
+  // registerBackgroundSync() // Register background sync on activate
+  // setupNotificationInterval() // Set up fallback polling
 })
 
 // Register Background Sync
@@ -28,6 +28,7 @@ function setupNotificationInterval() {
   if (!self.notificationInterval) {
     self.notificationInterval = setInterval(
       () => {
+        console.log('fetch setupnotification', fetchNewNotifications)
         if (authToken) fetchNewNotifications(authToken)
       },
       10 * 60 * 1000
@@ -51,6 +52,19 @@ self.addEventListener('notificationclick', (event) => {
 self.addEventListener('message', (event) => {
   console.log('Service Worker received message:', event.data)
 
+  if (event.data.action === 'setAuthToken' && event.data.token) {
+    authToken = event.data.token
+    console.log(event.data.token, 'event data')
+    console.log('AuthToken set in service worker:', authToken)
+    // Fetch new notifications once token is set
+    if (authToken) {
+
+      fetchNewNotifications(authToken).catch((error) => console.error('Error fetching notifications:', error));
+    } else {
+      console.error('Auth token is missing during activation.')
+    }
+  }
+
   if (event.data.action === 'setLastNotification' && event.data.notification) {
     lastNotification = event.data.notification
   } else if (event.data.action === 'showLastNotification') {
@@ -64,17 +78,7 @@ self.addEventListener('message', (event) => {
     })
   }
 
-  if (event.data.action === 'setAuthToken' && event.data.token) {
-    authToken = event.data.token
-    // console.log(event.data.token)
-    console.log('AuthToken set in service worker:', authToken)
-    // Fetch new notifications once token is set
-    if (authToken) {
-      fetchNewNotifications(authToken)
-    } else {
-      console.error('Auth token is missing during activation.')
-    }
-  }
+ 
 })
 
 // Function to show the last notification stored in memory
@@ -107,7 +111,7 @@ async function fetchNewNotifications(authToken, lastNotificationId = null) {
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${authToken}`
+        Authorization: 'Bearer '+ authToken
       },
 
       signal: controller.signal // Attach the abort controller's signal
@@ -130,6 +134,7 @@ async function fetchNewNotifications(authToken, lastNotificationId = null) {
       // Store the most recent notification in memory
       lastNotification = mostRecentNotification
       lastNotificationId = lastNotification.id
+      console.log('the last notification is', lastNotificationId)
 
       // Prepare notification options
       const options = {
