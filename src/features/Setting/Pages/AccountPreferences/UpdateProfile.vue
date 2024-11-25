@@ -66,19 +66,19 @@
                     <ErrorMessage class="text-danger-normal" name="phone" />
                   </div>
                   <div class="mb-6">
-            <label class="inline-block mb-2">{{ $t('date of birth') }}</label>
-                    <vee-field
-                      name="date_of_birth"
-                      v-model="formData.date_of_birth"
-                      :rules="schema.date_of_birth"
-                      as="input"
-                      type="tel"
-                      class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-              :placeholder="$t('enter_phone_number')"
-                    />
-                    <ErrorMessage class="text-danger-normal" name="date_of_birth" />
-                  </div>
-    
+  <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
+  <vee-field
+    name="dob"
+    v-model="formattedDateOfBirth"
+    :rules="schema.dob"
+    as="input"
+    v-mask="'##/##/####'"
+    class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+    :placeholder="$t('select_date_of_birth')"
+  />
+  <ErrorMessage class="text-danger-normal" name="dob" />
+</div>
+
                   <!-- User Gender  -->
                   <div class="mb-6">
                     <label class="inline-block mb-2">{{ $t('gender') }}</label>
@@ -206,7 +206,6 @@
         tos: 'required|tos',
         company_name: 'min:3|max:50',
         location: 'required|min:3|max:50',
-        date_of_birth:'required'
       },
       formData: {
         id:'',
@@ -219,7 +218,7 @@
         location: '',
         country: '',
         gender: '',
-        date_of_birth: '',
+        date_of_birth: '2040-05-27 00:02:05',
         avatar:'',
         selectedSectors: [],
         zone: '',
@@ -234,6 +233,7 @@
  
 
   computed: {
+    
     imageUrl() {
       if(this.isImageFromLocal){
         return  URL.createObjectURL(this.formData.avatar);
@@ -241,6 +241,24 @@
         return  this.formData.avatar;
       }
   },
+  formattedDateOfBirth: {
+      get() {
+        // Reformater pour l'affichage en DD/MM/YYYY
+        if (this.formData.date_of_birth) {
+          const date = new Date(this.formData.date_of_birth);
+          const day = String(date.getDate()).padStart(2, '0');
+          const month = String(date.getMonth() + 1).padStart(2, '0'); // Les mois commencent à 0
+          const year = date.getFullYear();
+          return `${day}/${month}/${year}`;
+        }
+        return "";
+      },
+      set(value) {
+        // Convertir le format en YYYY-MM-DD HH:mm:ss pour le back-end
+        const [day, month, year] = value.split("/");
+        this.formData.date_of_birth = `${year}-${month}-${day} 00:00:00`;
+      },
+    },
   },
   methods: {
    async onFileChange(e) {
