@@ -65,6 +65,19 @@
                     />
                     <ErrorMessage class="text-danger-normal" name="phone" />
                   </div>
+                  <div class="mb-6">
+            <label class="inline-block mb-2">{{ $t('date of birth') }}</label>
+                    <vee-field
+                      name="date_of_birth"
+                      v-model="formData.date_of_birth"
+                      :rules="schema.date_of_birth"
+                      as="input"
+                      type="tel"
+                      class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+              :placeholder="$t('enter_phone_number')"
+                    />
+                    <ErrorMessage class="text-danger-normal" name="date_of_birth" />
+                  </div>
     
                   <!-- User Gender  -->
                   <div class="mb-6">
@@ -192,7 +205,8 @@
         confirm_password: 'required|passwords_mismatch:@password',
         tos: 'required|tos',
         company_name: 'min:3|max:50',
-        location: 'required|min:3|max:50'
+        location: 'required|min:3|max:50',
+        date_of_birth:'required'
       },
       formData: {
         id:'',
@@ -205,7 +219,7 @@
         location: '',
         country: '',
         gender: '',
-        date_of_birth: '2023-12-06T13:10:59',
+        date_of_birth: '',
         avatar:'',
         selectedSectors: [],
         zone: '',

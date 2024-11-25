@@ -10,7 +10,7 @@
           <div class="grid gap-3 py-4 text-left px-6">
             <div class="flex justify-between items-center pb-4">
               <div class="modal-close cursor-pointer z-50" @click="closeAuthModel">
-                <i class="fas fa-times"></i>
+                <!-- <i class="fas fa-times"></i> -->
               </div>
             </div>
             <div class="flex justify-center">
