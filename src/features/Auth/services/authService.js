@@ -142,7 +142,7 @@ const UpdateUser = async (userData, authStore, onSuccess, onError) => {
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.UpdateUser}/${userId}`,
       formData,
-      userData.token,
+      authToken,
       true
     )
     const user = response.data.data
