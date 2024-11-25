@@ -119,6 +119,7 @@ const institutionalRequest = async (
 }
 
 const UpdateUser = async (userData, authStore, onSuccess, onError) => {
+  
   try {
     const formData = new FormData()
     const userId = userData.id
@@ -138,7 +139,7 @@ const UpdateUser = async (userData, authStore, onSuccess, onError) => {
     if (userData.avatar !== null) {
       formData.append('avatar', userData.avatar)
     }
-
+    console.log(authToken)
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.UpdateUser}/${userId}`,
       formData,
