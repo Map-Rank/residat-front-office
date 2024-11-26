@@ -58,7 +58,7 @@ sectorStore.initializeStore()
 authStore.initializeAuthState()
 
 const NOTIFICATION_CHECK_INTERVAL = 10 * 60 * 1000 // 10 minutes
-const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
+
 
 class ServiceWorkerManager {
   constructor() {
@@ -74,18 +74,11 @@ class ServiceWorkerManager {
     try {
       // Register service worker
       this.registration = await navigator.serviceWorker.register('/service-worker.js', {
-        scope: '/'
+        // scope: '/'
       })
 
       console.log('Service Worker registered with new scope:', this.registration.scope)
-      
-      // Pass API Base URL to the Service Worker
-      if (this.registration.active) {
-        this.registration.active.postMessage({
-          type: 'SET_API_BASE_URL',
-          apiBaseUrl,
-        })
-      }
+
 
       // Check for updates immediately after registration
       await this.registration.update()
@@ -95,6 +88,10 @@ class ServiceWorkerManager {
       this.setupMessageHandlers()
       this.setupPeriodicCheck()
       this.setupPushHandlers()
+      this.setupApiBaseUrl();
+
+            // this.setApiBaseUrl(apiBaseUrl);
+
 
       // Handle service worker updates
       this.registration.addEventListener('updatefound', () => {
@@ -118,6 +115,20 @@ class ServiceWorkerManager {
     if (Notification.permission === 'default') {
       const permission = await Notification.requestPermission()
       console.log(`Notification permission: ${permission}`)
+    }
+  }
+
+  // New Method: Send API Base URL to the Service Worker
+  setupApiBaseUrl() {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+    if (apiBaseUrl && navigator.serviceWorker.controller) {
+      console.log('Sending API Base URL to Service Worker:', apiBaseUrl);
+      navigator.serviceWorker.controller.postMessage({
+        type: 'SET_API_BASE_URL',
+       url: apiBaseUrl ,
+      });
+    } else {
+      console.warn('No active Service Worker to send API Base URL.');
     }
   }
 
@@ -146,6 +157,17 @@ class ServiceWorkerManager {
     })
   }
 
+  // setApiBaseUrl(baseUrl) {
+  //   if (this.registration?.active) {
+  //     this.registration.active.postMessage({
+  //       type: 'SET_API_BASE_URL',
+  //       apiBaseUrl: baseUrl,
+  //     });
+  //     console.log('API Base URL sent to Service Worker:', baseUrl);
+  //   } else {
+  //     console.warn('No active Service Worker to send API Base URL.');
+  //   }
+  // }
   setupPeriodicCheck() {
     setInterval(() => {
       if (navigator.serviceWorker.controller) {

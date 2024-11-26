@@ -2,7 +2,7 @@
 let lastStatus = true
 let lastNotification = null // Store the last notification in memory
 let authToken = null // Variable to store the token
-let apiBaseUrl = ''
+let apiBaseUrl = null
 
 
 self.addEventListener('install', (event) => {
@@ -65,20 +65,21 @@ self.addEventListener('message', (event) => {
       }
     })
   }
-  if (event.data.type === 'SET_API_BASE_URL') {
-    apiBaseUrl = event.data.apiBaseUrl
+  if (event.data.type === 'SET_API_BASE_URL'&& event.data.url) {
+    apiBaseUrl = event.data.url
     console.log('API Base URL received:', apiBaseUrl)
+
   }
   if (event.data.action === 'setAuthToken' && event.data.token) {
     authToken = event.data.token
     // console.log(event.data.token)
     console.log('AuthToken set in service worker:', authToken)
     // Fetch new notifications once token is set
-    if (authToken) {
-      fetchNewNotifications(authToken)
-    } else {
-      console.error('Auth token is missing during activation.')
-    }
+    // if (authToken) {
+    //   fetchNewNotifications(authToken)
+    // } else {
+    //   console.error('Auth token is missing during activation.')
+    // }
   }
 })
 
@@ -104,6 +105,13 @@ async function fetchNewNotifications(authToken, lastNotificationId = null) {
   const controller = new AbortController(); // For timeout handling
   const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 seconds timeout
 
+
+  if (!apiBaseUrl) {
+    console.error('API base URL is not set. Unable to fetch notifications.');
+    return;
+  }
+
+  
   const apiUrl = lastNotificationId
     ? `${apiBaseUrl}notifications?last_id=${lastNotificationId}`
     : `${apiBaseUrl}notifications`;
