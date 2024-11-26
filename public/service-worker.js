@@ -113,8 +113,8 @@ async function fetchNewNotifications(authToken, lastNotificationId = null) {
 
   
   const apiUrl = lastNotificationId
-    ? `${apiBaseUrl}notifications?last_id=${lastNotificationId}`
-    : `${apiBaseUrl}notifications`;
+    ? `${apiBaseUrl}/notifications?last_id=${lastNotificationId}`
+    : `${apiBaseUrl}/notifications`;
 
   try {
     console.log('Fetching new notifications...', { apiUrl, lastNotificationId });
