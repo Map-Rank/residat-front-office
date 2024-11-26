@@ -71,8 +71,11 @@ export default {
 
   computed: {
     displayedEvents() {
-      return this.events.slice(this.currentIndex, this.currentIndex + 2)
-    }
+      if (Array.isArray(this.events)) {
+        return this.events.slice(this.currentIndex, this.currentIndex + 2);
+      }
+      return []; // Retourne un tableau vide si `events` n'est pas un tableau
+    },
 
   },
   methods: {

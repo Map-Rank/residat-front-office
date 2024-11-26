@@ -1,5 +1,5 @@
 import {
-    // registerUser,
+    registerUser,
     // institutionalRequest,
     // loginUser,
     // logOut,
@@ -11,6 +11,7 @@ import {
   import { makeApiPostCall } from '@/api/api';
   import { getFcmToken } from '@/firebaseConfig.js';
   import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
+  import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
   
   // Mock Firebase messaging
   vi.mock('firebase/messaging', () => ({
@@ -37,12 +38,14 @@ import {
         logOut: vi.fn(),
         settoken: vi.fn(),
       };
-      // global.localStorage.setItem = vi.fn();
-      // global.localStorage.getItem = vi.fn();
-      vi.spyOn(global.localStorage, 'setItem');
-vi.spyOn(global.localStorage, 'getItem');
-
-      getFcmToken.mockResolvedValue('fake_fcm_token');
+    
+      // Correct way to mock localStorage methods
+      global.localStorage = {
+        setItem: vi.fn(),
+        getItem: vi.fn(),
+      };
+    
+      getFcmToken.mockResolvedValue('mock_fcm_token');
     });
   
     afterEach(() => {
@@ -50,11 +53,102 @@ vi.spyOn(global.localStorage, 'getItem');
     });
   
     it('should register a user successfully', async () => {
-      // Existing test code for registerUser
+      const mockUserData = {
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'password123',
+        phone: '1234567890',
+        gender: 'male',
+        zone: '1',
+        lang: 'en'
+      };
+    
+      const mockResponse = {
+        data: {
+          data: {
+            token: 'fake_token',
+            id: 1,
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'john.doe@example.com',
+            language: 'en'
+          },
+        },
+      };
+    
+      getFcmToken.mockResolvedValue('mock_fcm_token');
+      makeApiPostCall.mockResolvedValue(mockResponse);
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+    
+      await registerUser(mockUserData, authStore, onSuccess, onError);
+    
+      expect(makeApiPostCall).toHaveBeenCalledWith(
+        API_ENDPOINTS.register,
+        expect.any(FormData),
+        null,
+        true
+      );
+    
+      // Vérifier le contenu du FormData
+      const formData = makeApiPostCall.mock.calls[0][1];
+      expect(formData.get('first_name')).toBe('John');
+      expect(formData.get('last_name')).toBe('Doe');
+      expect(formData.get('email')).toBe('john.doe@example.com');
+      expect(formData.get('phone')).toBe('1234567890');
+      expect(formData.get('gender')).toBe('male');
+      expect(formData.get('zone_id')).toBe('1');
+      expect(formData.get('language')).toBe('en');
+      expect(formData.get('fcm_token')).toBe('mock_fcm_token');
+    
+      expect(authStore.setUser).toHaveBeenCalledWith(mockResponse.data.data);
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(mockResponse.data.data));
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.authToken, 'fake_token');
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.isloggedIn, true);
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.appLanguage, 'en');
+      
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
     });
   
     it('should handle errors during registration', async () => {
-      // Existing test code for handling errors during registration
+      const mockUserData = {
+        first_name: 'John',
+        last_name: 'Doe',
+        email: 'john.doe@example.com',
+        password: 'password123',
+        phone: '1234567890',
+        gender: 'male',
+        zone: '1',
+        lang: 'en'
+      };
+    
+      const mockErrorResponse = {
+        response: {
+          data: {
+            errors: {
+              email: ['Email already exists']
+            }
+          }
+        }
+      };
+    
+      getFcmToken.mockResolvedValue('mock_fcm_token');
+      makeApiPostCall.mockRejectedValue(mockErrorResponse);
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+    
+      await expect(registerUser(mockUserData, authStore, onSuccess, onError)).rejects.toThrow();
+    
+      expect(makeApiPostCall).toHaveBeenCalledWith(
+        API_ENDPOINTS.register,
+        expect.any(FormData),
+        null,
+        true
+      );
+      expect(onSuccess).not.toHaveBeenCalled();
+      expect(onError).toHaveBeenCalledWith(mockErrorResponse.response.data.errors);
     });
   
   //   it('should send an institutional request successfully', async () => {
@@ -169,7 +263,7 @@ vi.spyOn(global.localStorage, 'getItem');
         gender: 'male',
         token: 'fake_token',
       };
-  
+    
       const mockResponse = {
         data: {
           data: {
@@ -180,17 +274,17 @@ vi.spyOn(global.localStorage, 'getItem');
           },
         },
       };
-  
+    
       makeApiPostCall.mockResolvedValue(mockResponse);
       const onSuccess = vi.fn();
       const onError = vi.fn();
-  
+    
       await UpdateUser(mockUserData, authStore, onSuccess, onError);
-  
+    
       expect(makeApiPostCall).toHaveBeenCalledWith(
-        '/profile/update/1', // Ensure this matches the actual URL used in your code
+        '/profile/update/1',
         expect.any(FormData),
-        'fake_token',
+        'fake_token', // Token est maintenant passé correctement
         true
       );
       expect(authStore.setUser).toHaveBeenCalledWith(mockResponse.data.data);
