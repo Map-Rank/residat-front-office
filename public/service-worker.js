@@ -2,6 +2,8 @@
 let lastStatus = true
 let lastNotification = null // Store the last notification in memory
 let authToken = null // Variable to store the token
+let apiBaseUrl = ''
+
 
 self.addEventListener('install', (event) => {
   console.log('Service Worker installing.')
@@ -63,7 +65,10 @@ self.addEventListener('message', (event) => {
       }
     })
   }
-
+  if (event.data.type === 'SET_API_BASE_URL') {
+    apiBaseUrl = event.data.apiBaseUrl
+    console.log('API Base URL received:', apiBaseUrl)
+  }
   if (event.data.action === 'setAuthToken' && event.data.token) {
     authToken = event.data.token
     // console.log(event.data.token)
@@ -76,6 +81,8 @@ self.addEventListener('message', (event) => {
     }
   }
 })
+
+
 
 // Function to show the last notification stored in memory
 function showLastNotification() {
@@ -92,65 +99,62 @@ function showLastNotification() {
 }
 
 // Fetch new notifications and show them
+// Fetch new notifications and show them
 async function fetchNewNotifications(authToken, lastNotificationId = null) {
-  const controller = new AbortController() // For timeout handling
-  const timeoutId = setTimeout(() => controller.abort(), 10000) // 10 seconds timeout
-  // Ajoutez l'ID de la dernière notification dans l'URL si fourni
+  const controller = new AbortController(); // For timeout handling
+  const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 seconds timeout
+
   const apiUrl = lastNotificationId
-    ? `https://backoffice-dev.residat.com/api/notifications?last_id=${lastNotificationId}`
-    : 'https://backoffice-dev.residat.com/api/notifications'
+    ? `${apiBaseUrl}notifications?last_id=${lastNotificationId}`
+    : `${apiBaseUrl}notifications`;
+
   try {
-    console.log('Starting fetchNewNotifications...', lastNotificationId)
+    console.log('Fetching new notifications...', { apiUrl, lastNotificationId });
 
     const response = await fetch(apiUrl, {
       method: 'GET',
       headers: {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${authToken}`
+        Authorization: `Bearer ${authToken}`,
       },
+      signal: controller.signal, // Attach the abort controller's signal
+    });
 
-      signal: controller.signal // Attach the abort controller's signal
-    })
-    clearTimeout(timeoutId) // Clear timeout if request completed
+    clearTimeout(timeoutId); // Clear timeout if request completed
 
     if (!response.ok) {
-      throw new Error(`Failed to fetch notifications: ${response.status} ${response.statusText}`)
+      throw new Error(`Failed to fetch notifications: ${response.statusText}`);
     }
 
-    const notifications = await response.json()
-    console.log('Fetched new notifications:', notifications)
+    const notifications = await response.json();
+    console.log('Fetched new notifications:', notifications);
 
     if (Array.isArray(notifications) && notifications.length > 0) {
       const mostRecentNotification = notifications.reduce(
         (max, notification) => (notification.id > max.id ? notification : max),
         notifications[0]
-      )
+      );
 
-      // Store the most recent notification in memory
-      lastNotification = mostRecentNotification
-      lastNotificationId = lastNotification.id
+      console.log('Most recent notification:', mostRecentNotification);
 
-      // Prepare notification options
-      const options = {
+      // Show the most recent notification
+      self.registration.showNotification(mostRecentNotification.title, {
         body: mostRecentNotification.content_en,
-        icon: '/assets/images/filter.png',
-        badge: '/assets/images/filter.png'
-      }
+        icon: '/assets/images/smile.png',
+        badge: '/assets/images/smile.png',
+      });
 
-      // Display the notification if permission is granted and registration exists
-      if (Notification.permission === 'granted' && self.registration) {
-        self.registration.showNotification(mostRecentNotification.title, options)
-      }
+      // Update last notification
+      lastNotification = mostRecentNotification;
+      lastNotificationId = lastNotification.id;
     }
   } catch (error) {
-    if (error.name === 'AbortError') {
-      console.error('Fetch request timed out.')
-    } else {
-      console.error('Error fetching notifications:', error)
-    }
+    console.error('Error fetching notifications:', error);
   }
 }
+
+
 
 // Use push notifications when new notifications are available
 self.addEventListener('push', (event) => {

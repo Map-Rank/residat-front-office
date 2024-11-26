@@ -68,9 +68,9 @@
                   <div class="mb-6">
   <label class="inline-block mb-2">{{ $t('date_of_birth') }}</label>
   <vee-field
-    name="dob"
+    name="date_of_birth"
     v-model="formattedDateOfBirth"
-    :rules="schema.dob"
+    :rules="schema.date_of_birth"
     as="input"
     v-mask="'##/##/####'"
     class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
@@ -206,6 +206,7 @@
         tos: 'required|tos',
         company_name: 'min:3|max:50',
         location: 'required|min:3|max:50',
+        date_of_birth:'required'
       },
       formData: {
         id:'',
@@ -254,9 +255,11 @@
         return "";
       },
       set(value) {
+        // Extract the original time from the existing date_of_birth value
+  const originalTime = this.formData.date_of_birth.split(" ")[1] ;
         // Convertir le format en YYYY-MM-DD HH:mm:ss pour le back-end
         const [day, month, year] = value.split("/");
-        this.formData.date_of_birth = `${year}-${month}-${day} 00:00:00`;
+        this.formData.date_of_birth = `${year}-${month}-${day} ${originalTime}`;
       },
     },
   },

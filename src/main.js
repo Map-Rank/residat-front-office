@@ -58,6 +58,7 @@ sectorStore.initializeStore()
 authStore.initializeAuthState()
 
 const NOTIFICATION_CHECK_INTERVAL = 10 * 60 * 1000 // 10 minutes
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL
 
 class ServiceWorkerManager {
   constructor() {
@@ -77,6 +78,14 @@ class ServiceWorkerManager {
       })
 
       console.log('Service Worker registered with new scope:', this.registration.scope)
+      
+      // Pass API Base URL to the Service Worker
+      if (this.registration.active) {
+        this.registration.active.postMessage({
+          type: 'SET_API_BASE_URL',
+          apiBaseUrl,
+        })
+      }
 
       // Check for updates immediately after registration
       await this.registration.update()
