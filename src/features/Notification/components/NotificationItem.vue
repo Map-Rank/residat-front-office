@@ -3,7 +3,7 @@
     <img :src="notification.banner" alt="User Avatar" class="w-12 h-12 rounded-full mr-4">
     <div class="flex-grow">
       <p class="font-semibold">{{ notification.titre_en }}</p>
-      <p class="text-sm text-gray-500">{{ notification.created_at }}</p>
+      <p class="text-[0.69rem] text-gray-500"> {{ formattedDate }}</p>
     
       <p class="text-sm text-gray-700 mt-2">{{ notification.content_en }}</p>
     </div>
@@ -47,6 +47,23 @@ export default {
   computed: {
     isNew() {
       return this.notification.isNew;
+    },
+    formattedDate() {
+      const date = new Date(this.notification.created_at);
+      const dateOptions = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      const timeOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      };
+      const formattedDate = date.toLocaleDateString('fr-FR', dateOptions);
+      const formattedTime = date.toLocaleTimeString('fr-FR', timeOptions);
+
+      return `créé le ${formattedDate} à ${formattedTime}`;
     },
   },
   methods: {
