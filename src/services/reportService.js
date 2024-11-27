@@ -1,12 +1,9 @@
 import { makeApiGetCall } from '@/api/api' 
 import {  API_ENDPOINTS,LOCAL_STORAGE_KEYS } from '@/constants/index.js'
 
-const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-
-
 
   const getReport = async (zoneId,reportType) => {
-
+    const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
     const params = new URLSearchParams({ 
         zone_id: zoneId.toString(),
     });
