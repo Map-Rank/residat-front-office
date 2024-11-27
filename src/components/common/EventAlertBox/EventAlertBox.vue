@@ -20,8 +20,10 @@
           <span>{{   truncateText(event.organized_by  ,25 ) }}</span>
         </p>
         <p class="menu">
-          {{ $t('date') }}
-          <span>{{ event.published_at }} </span>
+         
+          <!-- <span>{{ event.published_at }} </span> -->
+           <span> <span class="menu">{{ $t('date') }}</span> {{ formatDate(event.published_at) }}</span><br/>
+           <span><span class="menu">{{ $t('time') }}:</span> {{ formatTime(event.published_at) }}</span>
         </p>
         <p class="menu">
           {{ $t('location') }}
@@ -77,6 +79,8 @@ export default {
       return []; // Retourne un tableau vide si `events` n'est pas un tableau
     },
 
+  
+
   },
   methods: {
     startRotation() {
@@ -88,6 +92,16 @@ export default {
       if (this.currentIndex > this.events.length - 2) {
         this.currentIndex = 0;
       }
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return date.toLocaleDateString("fr-FR", options);
+    },
+    formatTime(dateString) {
+      const date = new Date(dateString);
+      const options = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+      return date.toLocaleTimeString("fr-FR", options);
     },
   },
 }

@@ -1,6 +1,8 @@
 {
   "fr": "French",
   "en": "English",
+  "Créé le":"Created on",
+  "à":"at",
   "chose_langauge": "Select your preferences language",
   "greeting": "Hello!",
   "farewell": "Goodbye!",
@@ -37,6 +39,7 @@
   "enter_password": "Enter Password",
   "enter_confirm_password": "Enter Confirm Password",
   "next": "next",
+  "time": "time",
   "specific_information": "Specific Information",
   "security_information": "Informations de securite",
   "profile_picture": "Profile Picture",

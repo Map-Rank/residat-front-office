@@ -13,7 +13,7 @@
         />
         <div class="hidden md:block absolute top-0 left-0 bg-black bg-opacity-70 text-white p-2 rounded-t-lg">
           <h1 class=" text-[24px] font-bold">{{ event.title }}</h1>
-          <p class="text-sm text-white">{{ event.humanize_date_creation }}</p>
+          <p class="text-sm text-white"> {{ event.humanize_date_creation }}</p>
         </div>
       </div>
 
@@ -27,7 +27,7 @@
           <div class="flex flex-col justify-center">
             <p class="text-lg font-semibold">By: {{ event.organized_by }}</p>
             <p class="text-sm text-gray-600">
-              <span class="text-[14px] text-body-darker font-semibold">Town : </span
+              <span class="text-[14px] text-body-darker font-semibold">Town :</span
               >{{ event.location }}
             </p>
             <p class="text-sm text-gray-600">

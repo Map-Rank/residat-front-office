@@ -1,6 +1,10 @@
 {
+  "Créé le":"Créé le",
+  "à":"à",
   "fr": "Francais",
+
   "en": "Anglais",
+  "time":"heure",
   "chose_langauge": "Choisir votre langaue de preference",
   "greeting": "Bonjour!",
   "farewell": "Au revoir!",
