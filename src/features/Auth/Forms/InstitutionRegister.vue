@@ -282,7 +282,7 @@ eslint-disable vue/no-parsing-error
               <BaseDropdown
                 v-if="!isLoading && !isDivisionLoading"
                 @selectedOptionId="handleSelectedDivisionIdChange"
-                :options="divisions"
+                :options="region_id ? divisions : [{ id: 0, name: $t('choose_your_region_first') }]"
                 @functionIdParams="getSub_divisions"
               />
             </div>
@@ -296,7 +296,7 @@ eslint-disable vue/no-parsing-error
             <BaseDropdown
               @selectedOptionId="handleSelectedSubdivisionIdChange"
               v-if="!isLoading && !isSubdivisionLoading"
-              :options="sub_divisions"
+              :options="division_id ? sub_divisions : [{ id: 0, name: $t('choose_your_division_first') }]"
             />
           </div>
         </div>
