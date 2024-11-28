@@ -30,15 +30,7 @@
           <span class="ml-2 text-sm">Hydro Polygon Map</span>
         </label>
 
-        <label class="flex items-center">
-          <input
-            type="checkbox"
-            v-model="toggleDisasterMarkers"
-            @change="toggleDisasters"
-            class="form-checkbox h-4 w-4 text-red-600"
-          />
-          <span class="ml-2 text-sm">Disaster Markers</span>
-        </label>
+       
       </div>
     </div>
   </div>
@@ -66,15 +58,7 @@
         <span class="ml-2 text-sm">Hydro Polygon Map</span>
       </label>
 
-      <label class="flex items-center">
-        <input
-          type="checkbox"
-          v-model="toggleDisasterMarkers"
-          @change="toggleDisasters"
-          class="form-checkbox h-4 w-4 text-red-600"
-        />
-        <span class="ml-2 text-sm">Disaster Markers</span>
-      </label>
+     
     </div>
   </div>
 </template>
@@ -129,13 +113,18 @@ export default {
       toggleCameroon: false,
       toggleHydroPolygonGeoJson: false,
       allDisasters: null,
-      toggleDisasterMarkers: false,
+      toggleDisasterMarkers: true,
       disasterMarkersLayer: null
     }
   },
 
+ 
+
+
   mounted() {
     this.initializeMap()
+
+
   },
 
   computed: {
@@ -180,7 +169,7 @@ export default {
           updated_at: disaster.updated_at,
           color: baseColor,
           intensity: intensity,
-          radius: 7 + disaster.level * 2 // Size of marker based on level
+          radius: 5 + disaster.level * 2 // Size of marker based on level
         }
       })
     }
@@ -195,14 +184,26 @@ export default {
         }
         this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
-
+        const minZoomLevel= 3.4;
         // Initialize map
-        this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex)
+        this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex )
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map)
+        this.map.on('zoomend', () => {
+      if (this.map.getZoom() < minZoomLevel) {
+        this.map.setZoom(minZoomLevel);
+      }
+    });
+// Wait for the map to be fully ready
+this.map.whenReady(() => {
+      console.log('Map is fully initialized and ready.');
 
-        // this.addMarkers(this.allDisasters)
+      // Add disaster markers if disasters are loaded
+      if (this.allDisasters && this.allDisasters.length) {
+        this.addDisasterMarkers();
+      }
+    });
       } catch (error) {
         console.error('Error initializing the map:', error)
       }
@@ -216,13 +217,7 @@ export default {
       })
     },
 
-    toggleDisasters() {
-      if (this.toggleDisasterMarkers) {
-        this.addDisasterMarkers()
-      } else {
-        this.removeDisasterMarkers()
-      }
-    },
+   
 
     addDisasterMarkers() {
       const onMarkerClick = (zone) => {
@@ -236,22 +231,28 @@ export default {
         // Use the computed property `disasterMarkerStyles`
         this.disasterMarkerStyles.forEach((disaster) => {
           // Create a circle marker with color and intensity from the computed property
-          const marker = L.circleMarker([disaster.latitude, disaster.longitude], {
-            radius: disaster.radius, // Dynamic radius
-            color: disaster.color, // Dynamic color
-            fillColor: disaster.color, // Same color for fill
-            fillOpacity: disaster.intensity, // Dynamic intensity
-            weight: 2 // Border thickness
-          })
+          const icon = L.divIcon({
+        className: 'custom-marker', // Add a custom class for styling
+        html: `<i class="fa fa-bell" style="color:${disaster.color}; font-size: ${10 + disaster.level * 2}px;"></i>`, // Bell icon with dynamic color and size
+        iconSize: [30, 30], // Adjust size if needed
+        iconAnchor: [10, 10], // Anchor at the center
+      });
+  // Create a marker with the custom icon
+  const marker = L.marker([disaster.latitude, disaster.longitude], {
+        icon: icon,
+      });
 
           marker.on('click', () => onMarkerClick(disaster))
 
           // Bind a tooltip to the marker
-          marker.bindTooltip(`<b>${disaster.locality}</b><br>${disaster.description}`, {
-            permanent: false,
-            direction: 'top',
-            offset: [0, -10]
-          })
+      marker.bindTooltip(
+        `<b>${disaster.locality}</b><br>${disaster.description}`,
+        {
+          permanent: false,
+          direction: 'top',
+          offset: [0, -10],
+        }
+      );
 
           // Add the marker to the disaster markers layer
           marker.addTo(this.disasterMarkersLayer)
@@ -262,13 +263,13 @@ export default {
       this.disasterMarkersLayer.addTo(this.map)
     },
 
-    removeDisasterMarkers() {
-      // Check if the disasterMarkersLayer exists and is currently on the map
-      if (this.disasterMarkersLayer && this.map.hasLayer(this.disasterMarkersLayer)) {
-        this.map.removeLayer(this.disasterMarkersLayer)
-        this.disasterMarkersLayer = null // Reset to null after removing
-      }
-    },
+    // removeDisasterMarkers() {
+    //   // Check if the disasterMarkersLayer exists and is currently on the map
+    //   if (this.disasterMarkersLayer && this.map.hasLayer(this.disasterMarkersLayer)) {
+    //     this.map.removeLayer(this.disasterMarkersLayer)
+    //     this.disasterMarkersLayer = null // Reset to null after removing
+    //   }
+    // },
 
     async loadCameroonGeoJson() {
       try {
@@ -527,7 +528,7 @@ export default {
 .checkboxMObile {
   background-color: white;
   position: fixed;
-  top: 300px;
+  top: 200px;
   z-index: 1000;
   right: 30%;
 }

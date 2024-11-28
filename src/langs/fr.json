@@ -1,6 +1,11 @@
 {
+  "Créé le":"Créé le",
+  "à":"à",
   "fr": "Francais",
+"choose_your_division_first":"Choisissez d'abord votre Division",
+ "choose_your_region_first":"Choisissez d'abord votre Région",
   "en": "Anglais",
+  "time":"heure",
   "chose_langauge": "Choisir votre langaue de preference",
   "greeting": "Bonjour!",
   "farewell": "Au revoir!",

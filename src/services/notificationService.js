@@ -109,6 +109,7 @@ const getNotifications = async (page, size, token) => {
         size: size.toString(),
         page: page.toString()
     })
+// Add the lastNotificationId to the parameters if it is provided
 
 
     try {
@@ -118,11 +119,12 @@ const getNotifications = async (page, size, token) => {
         )
 
         return response.data.data
-    } catch (error) {
+    } 
+    catch (error) {
         console.error('Error fetching posts:', error)
         throw error
     }
-}
+};
 
 
 const getSpecificNotification = async (id) => {
@@ -142,7 +144,7 @@ const getSpecificNotification = async (id) => {
 const deleteNotification = async (notificationId) => {
     try {
         const response = await makeApiDeleteCall(`${API_ENDPOINTS.notifications}/${notificationId}`, authToken)
-        console.log('delete notification sucess 1!!!  ' + response.data)
+        console.log('delete notification sucess !!!  ' + response.data)
     } catch (error) {
         console.error('Error deleting notification:', error)
         throw error

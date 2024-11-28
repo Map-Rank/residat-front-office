@@ -9,6 +9,21 @@
     :show-layers="showLayers"
   />
 
+  <!-- <div class="level-description ">
+<div class="p-3">
+  <div class=""> <span> float risk level </span> <div class="bg-"></div></div>
+  <div> <span> low water level </span></div>
+  <div> <span> normal risk level </span></div>
+  <div> <span> high risk  </span></div>
+  <div> <span> Drought risk  </span></div>
+
+
+
+ 
+</div>
+
+  </div> -->
+
   <div class="w-full optionButton px-5 md:hidden block">
     <div class="grid grid-cols-2 gap-2">
       <button-ui
@@ -52,7 +67,7 @@
       class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
     >
       <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-        <div class="hidden md:block mt-2 w-full min-h-[30vh]">
+        <div class="hidden md:block mt-10 w-full min-h-[30vh]">
           <WaterStressChart></WaterStressChart>
         </div>
 
@@ -674,6 +689,13 @@ span {
   top: 80px;
   z-index: 1000;
   right: 2%;
+}
+.level-description {
+  background-color: white;
+  position: fixed;
+  top: 80px;
+  z-index: 1000;
+  right: 20%;
 }
 @media (max-width: 780px) {
   .navigator {

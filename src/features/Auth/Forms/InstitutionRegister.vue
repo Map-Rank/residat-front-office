@@ -274,7 +274,7 @@ eslint-disable vue/no-parsing-error
               />
             </div>
 
-            <div v-if="_to_cover > 2" class="w-1/2">
+            <div v-if="zone_to_cover > 2" class="w-1/2">
               <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
               <div v-if="isDivisionLoading" class="flex h-full justify-center">
                 <LoadingIndicator />
@@ -282,7 +282,7 @@ eslint-disable vue/no-parsing-error
               <BaseDropdown
                 v-if="!isLoading && !isDivisionLoading"
                 @selectedOptionId="handleSelectedDivisionIdChange"
-                :options="divisions"
+                :options="region_id ? divisions : [{ id: 0, name: $t('choose_your_region_first') }]"
                 @functionIdParams="getSub_divisions"
               />
             </div>
@@ -296,7 +296,7 @@ eslint-disable vue/no-parsing-error
             <BaseDropdown
               @selectedOptionId="handleSelectedSubdivisionIdChange"
               v-if="!isLoading && !isSubdivisionLoading"
-              :options="sub_divisions"
+              :options="division_id ? sub_divisions : [{ id: 0, name: $t('choose_your_division_first') }]"
             />
           </div>
         </div>

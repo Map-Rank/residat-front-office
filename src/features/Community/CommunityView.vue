@@ -149,11 +149,11 @@
                     v-for="post in posts"
                     :key="post.id"
                     :postId="post.id"
-                    :username="`${post.creator[0]?.first_name} ${post.creator[0]?.last_name} `"
+                    :username="post.creator?.[0] ? `${post.creator[0]?.first_name} ${post.creator[0]?.last_name}` : 'Unknown User'"
                     :postDate="post.humanize_date_creation"
                     :postContent="post.content"
                     :liked="post.liked"
-                    :userProfileImage="`${post.creator[0].avatar}`"
+                    :userProfileImage="post.creator?.[0]?.avatar || ''"
                     :id="`${post.creator[0].id}`"
                     :like_count="post.like_count"
                     :comment_count="post.comment_count"
@@ -283,7 +283,7 @@ export default {
 
     async propZoneId(newZoneId) {
       this.showPageRefresh = false
-      console.log('change in zoneId!!!!!')
+      // console.log('change in zoneId!!!!!')
       if (newZoneId !== this.zoneId || newZoneId != 1) {
         // Only make API call if zoneId has changed
         this.zoneId = newZoneId
@@ -294,12 +294,12 @@ export default {
 
     async propSectorId(newSectorId) {
     this.showPageRefresh = false
-      console.log('change in sectorId!!!!! new id ' + newSectorId)
+      // console.log('change in sectorId!!!!! new id ' + newSectorId)
       const newParsedSectors = this.parseSectorIds(newSectorId)
       if (JSON.stringify(newParsedSectors) !== JSON.stringify(this.sectorId)) {
         // Only update if sectorId has changed
         this.sectorId = newParsedSectors
-        console.log('change in sectorId!!!!! new array ' + this.sectorId)
+        // console.log('change in sectorId!!!!! new array ' + this.sectorId)
         await this.initializeData()
       }
     }
@@ -384,16 +384,13 @@ export default {
         'background-image': `url('${this.bannerUrlImage}')`
       }
     },
-    shouldDisplayEventAlert() {
-      return this.events.length > 2
-    }
   },
 
   methods: {
     async handleZoneChange(newZoneId) {
       let newZone = await getSpecificZones(newZoneId)
       this.updateZone(newZone)
-      console.log('this is zone in handlezone level' + newZone.level_id)
+      // console.log('this is zone in handlezone level' + newZone.level_id)
       try {
         let region = null
         let division = null
@@ -426,15 +423,15 @@ export default {
             name: newZone.name
           }
           sub_division = [currentZone, ...rest]
-          console.log('Subdivisions updated:', sub_division)
+          // console.log('Subdivisions updated:', sub_division)
 
           const spec_division = await getSpecificZones(newZone.parent_id)
           division = await getZones(null, spec_division.parent_id)
-          console.log('Divisions updated:', division)
+          // console.log('Divisions updated:', division)
 
           const spec_region = await getSpecificZones(spec_division.parent_id)
           region = await getZones(null, spec_region.parent_id)
-          console.log('region updated:', region)
+          // console.log('region updated:', region)
 
           this.default_sub_divisions = sub_division
           this.default_divisions = [this.default_divisions[0]]
@@ -452,13 +449,13 @@ export default {
             name: newZone.name
           }
           division = [currentZone, ...rest]
-          console.log('Divisions updated:', division)
+          // console.log('Divisions updated:', division)
 
           this.getSub_divisions(newZone.id)
 
           const spec_region = await getSpecificZones(newZone.parent_id)
           region = await getZones(null, spec_region.parent_id)
-          console.log('region updated:', region)
+          // console.log('region updated:', region)
 
           this.default_divisions = division
           this.default_regions = [this.default_regions[0]]
@@ -498,7 +495,7 @@ export default {
       }
       try {
         this.default_divisions = this.default_divisions.concat(await getZones(null, parent_id))
-        console.log('this is the size of division ' + this.default_divisions.length)
+        // console.log('this is the size of division ' + this.default_divisions.length)
         // this.sub_divisions = [this.sub_divisions[0]]
       } catch (error) {
         console.log(error)
@@ -523,7 +520,7 @@ export default {
     },
 
     async initializeData() {
-      console.log('intialising !!!!!!1')
+      // console.log('intialising !!!!!!')
       this.isUserConnected = checkAuthentication()
 
       if (typeof this.propSectorId === 'string') {
@@ -549,8 +546,11 @@ export default {
         this.topLoading = true
         this.isZoneFilterLoading = true
         await this.fetchEvent()
+        await this.fetchPosts()
         await this.handleZoneChange(this.zoneId)
-        await this.loadData(this.zoneId, this.sectorId)
+        if(this.isUserConnected && (this.zoneId || this.sectorId)){
+          await this.loadData(this.zoneId, this.sectorId)
+        }
       } catch (error) {
         console.error('Initialization failed:', error)
         this.showPageRefresh = true
@@ -577,7 +577,7 @@ export default {
             propSectorId: this.sectorId.join(',')
           }
         })
-        console.log('selected zone !!!! ' + id)
+        // console.log('selected zone !!!! ' + id)
       } catch (error) {
         console.error('Failed to navigate', error)
       }
@@ -590,7 +590,7 @@ export default {
 
       this.showPageRefresh = false
 
-      console.log('This is the list ' + list.id)
+      // console.log('This is the list ' + list.id)
 
       if (!list) {
         console.error("Invalid 'list' object or missing 'id'")
@@ -667,7 +667,7 @@ export default {
     updateZone(zone) {
       this.zoneId = zone.id
       if (zone.id != 1) {
-        console.log('updating zone name!!!!')
+        // console.log('updating zone name!!!!')
         this.page = 0
         this.zoneName = zone.name
         this.bannerUrlImage = zone.banner
@@ -676,7 +676,6 @@ export default {
 
     async fetchPosts() {
       this.hasNewPosts = false
-
       try {
         this.posts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
         this.recentPosts = await getPosts(0, 10, this.authStore.user?.token, this.isUserConnected)
@@ -729,14 +728,14 @@ export default {
         )
 
         if (this.nextPagePosts.length === 0) {
-          console.log('this is the lenght of new post ' + this.nextPagePosts.length)
+          // console.log('this is the lenght of new post ' + this.nextPagePosts.length)
           this.bottomLoading = false
           this.hasFetchAllPost = true
           return
         }
 
         this.posts.push(...this.nextPagePosts)
-        console.log('this is the new post lenght ' + this.posts.length)
+        // console.log('this is the new post lenght ' + this.posts.length)
         this.hasFetchAllPost = false
         this.page++
       } catch (error) {
@@ -766,6 +765,11 @@ export default {
       if (nearBottom && !this.loadingPosts) {
         this.loadMorePosts() // Assuming sectorId is in route params
       }
+    },
+
+    shouldDisplayEventAlert() {
+      console.log(this.events.length)
+      return Array.isArray(this.events) && this.events.length > 2;
     }
   },
   components: {

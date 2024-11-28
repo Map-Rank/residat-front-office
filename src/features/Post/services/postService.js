@@ -133,13 +133,13 @@ const getPosts = async (page, size, token,isConnected = true) => {
 
   const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
   try {
-    let response;
+    // let response;
     let url;
     
 
     isConnected ? url = API_ENDPOINTS.getPosts : url = API_ENDPOINTS.getPostsGuest
-
-       response = await makeApiGetCall(
+    console.log(url);
+      const response = await makeApiGetCall(
         `${url}?${params.toString()}`,
         token ? token : localToken
       )
