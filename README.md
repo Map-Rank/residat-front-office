@@ -152,6 +152,6 @@ By contributing to RESIDAT, you agree to abide by these principles and behaviors
  * AGPL License for more details.
  *
  * You should have received a copy of the AGPL License
- * along with MapAndRank - Residat. If not, see <https://github.com/Map-Rank/residat-front-office?tab=AGPL-3.0-1-ov-file/>.
+ * along with MapAndRank - Residat. If not, see <https://github.com/Map-Rank/residat-front-office?tab=AGPL-3.0-1-ov-file>.
 
 

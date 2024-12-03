@@ -1,6 +1,6 @@
 import {
     registerUser,
-    // institutionalRequest,
+    institutionalRequest,
     // loginUser,
     // logOut,
     UpdateUser,
@@ -151,60 +151,77 @@ import {
       expect(onError).toHaveBeenCalledWith(mockErrorResponse.response.data.errors);
     });
   
-  //   it('should send an institutional request successfully', async () => {
-  //     const mockInstitutionData = {
-  //       company_name: 'Example Corp',
-  //       description: 'Example description',
-  //       email: 'example@example.com',
-  //       phone: '123456789',
-  //       password: 'password',
-  //       zone: '1',
-  //       lang: 'en',
-  //       profile_picture: new Blob(),
-  //     };
-  
-  //     const mockResponse = {
-  //       data: {
-  //         data: {
-  //           token: 'fake_token',
-  //           user: {
-  //             id: 1,
-  //             first_name: 'John',
-  //             last_name: 'Doe',
-  //             email: 'john.doe@example.com',
-  //           },
-  //         },
-  //       },
-  //     };
-  
-  //     makeApiPostCall.mockResolvedValue(mockResponse);
-  //     const onSuccess = vi.fn();
-  //     const onError = vi.fn();
-  
-  //     await institutionalRequest(mockInstitutionData, authStore, onSuccess, onError);
-  
-  //     expect(makeApiPostCall).toHaveBeenCalledWith(
-  //       '/create/request', // Ensure this matches the actual URL used in your code
-  //       expect.any(FormData),
-  //       null,
-  //       true
-  //     );
-  //     expect(authStore.setUser).toHaveBeenCalledWith({
-  //       id: 1,
-  //       first_name: 'John',
-  //       last_name: 'Doe',
-  //       email: 'john.doe@example.com',
-  //     });
-  //     expect(localStorage.setItem).toHaveBeenCalledWith('userInfo', JSON.stringify({
-  //       id: 1,
-  //       first_name: 'John',
-  //       last_name: 'Doe',
-  //       email: 'john.doe@example.com',
-  //     }));
-  //     expect(onSuccess).toHaveBeenCalled();
-  //     expect(onError).not.toHaveBeenCalled();
-  //   });
-  // });
+    it('should send an institutional request successfully', async () => {
+      const mockInstitutionData = {
+        company_name: 'TechCorp',
+        description: 'A leading tech company',
+        email: 'info@techcorp.com',
+        phone: '1234567890',
+        password: 'securepassword',
+        zone: '2',
+        profile_picture: new File(['dummy content'], 'profile.png', { type: 'image/png' }),
+        lang: 'en',
+      };
+    
+      const mockResponse = {
+        data: {
+          data: {
+            verified: true,
+            user: {
+              id: 1,
+              company_name: 'TechCorp',
+              email: 'info@techcorp.com',
+              language: 'en',
+              token: 'fake_token',
+            },
+          },
+        },
+      };
+    
+      getFcmToken.mockResolvedValue('mock_fcm_token');
+      makeApiPostCall.mockResolvedValue(mockResponse);
+    
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+      const handleEmailNotVerified = vi.fn();
+    
+      const authStore = {
+        setUser: vi.fn(),
+      };
+    
+      await institutionalRequest(mockInstitutionData, authStore, onSuccess, onError, handleEmailNotVerified);
+    
+      // Vérifier que `makeApiPostCall` a été appelé avec les bons arguments
+      expect(makeApiPostCall).toHaveBeenCalledWith(
+        '/create/request',
+        expect.any(FormData),
+        null,
+        true
+      );
+    
+      // Vérifier le contenu du FormData
+      const formData = makeApiPostCall.mock.calls[0][1];
+      expect(formData.get('company_name')).toBe('TechCorp');
+      expect(formData.get('description')).toBe('A leading tech company');
+      expect(formData.get('email')).toBe('info@techcorp.com');
+      expect(formData.get('phone')).toBe('1234567890');
+      expect(formData.get('password')).toBe('securepassword');
+      expect(formData.get('zone_id')).toBe('2');
+      expect(formData.get('profile_picture')).toBe(mockInstitutionData.profile_picture);
+      expect(formData.get('language')).toBe('en');
+      expect(formData.get('fcm_token')).toBe('mock_fcm_token');
+    
+      // Vérifier que les appels aux fonctions de gestion des données utilisateur et du succès ont été effectués
+      expect(authStore.setUser).toHaveBeenCalledWith(mockResponse.data.data.user);
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(mockResponse.data.data.user));
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.authToken, 'fake_token');
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.isloggedIn, true);
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.appLanguage, 'en');
+    
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+      expect(handleEmailNotVerified).not.toHaveBeenCalled();
+    });
   
     // it('should log in a user successfully', async () => {
     //   const mockUserCredentials = {
