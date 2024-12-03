@@ -184,7 +184,7 @@ export default {
         }
         this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
-        const minZoomLevel= 3.4;
+        const minZoomLevel= 6.3;
         // Initialize map
         this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex )
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {

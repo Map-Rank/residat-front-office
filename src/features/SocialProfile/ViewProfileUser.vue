@@ -104,7 +104,10 @@ export default {
       isLoading: true,
       id: this.$route.params.id,
       showPageRefresh: false,
+      followersCount: 0,
       errorMessage: 'Culd not load user informaiton',
+      customPost: this.post,
+
     }
   },
 
@@ -128,7 +131,8 @@ export default {
       this.userProfile = await getUserProfile(this.id)
       this.posts = this.userProfile.my_posts
     }
-  }
+  },
+ 
 }
 </script>
 

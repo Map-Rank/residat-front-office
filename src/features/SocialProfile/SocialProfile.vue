@@ -8,8 +8,8 @@
         v-if="!isLoading && userPost"
         :profile-image-url="''"
         :profileName="`${userPost.first_name} ${userPost.last_name}`"
-        :followersCount="0"
-        :profileImageUrl="userPost.avatar"
+-+        :profileImageUrl="userPost.avatar"
+        :followingCount="`${userPost.following_count}`"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />
@@ -80,7 +80,7 @@ import EventAlertBox from '@/components/common/EventAlertBox/EventAlertBox.vue'
 import AboutUserInfo from './components/AboutUserInfo/index.vue'
 import TopProfileInfo from './components/TopProfileInfo/index.vue'
 import PostComponent from '../Post/index.vue'
-// import { getUserPosts } from '@/features/Post/services/postService.js'
+import { getUserPosts } from '@/features/Post/services/postService.js'
 import {makeApiGetCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 import TopProfileShimmer from '@/components/common/ShimmerLoading/TopProfileShimmer.vue'

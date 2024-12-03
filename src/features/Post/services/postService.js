@@ -119,7 +119,7 @@ const updatePost = async (postData, onSuccess, onError) => {
   }
 }
 
-const getPosts = async (page, size, token,isConnected = true) => {
+const getPosts = async (page, size, token, isConnected = true) => {
   let defaultSize = 10
   let defaultPage = 0
 

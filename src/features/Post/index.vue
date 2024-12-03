@@ -86,7 +86,7 @@
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showModal()">
+    <image-post-gallery :Images="postImages" @customFunction="viewPost()">
     </image-post-gallery>
 
     <!-- Post Interaction Area -->

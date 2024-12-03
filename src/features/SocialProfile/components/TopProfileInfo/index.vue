@@ -24,6 +24,9 @@
       <p>
         <span>{{ followersCount }}</span> {{ $t('followers_count') }}
       </p>
+      <p>
+        <span>{{ followingCount }}</span> {{ $t('following_count') }}
+      </p>
       ·
       <p>
         <span>{{ postsCount }}</span> {{ $t('posts_count') }}
@@ -56,6 +59,10 @@ export default {
       required: true,
     },
     followersCount: {
+      type: [Number, String],
+      required: true,
+    },
+    followingCount: {
       type: [Number, String],
       required: true,
     },

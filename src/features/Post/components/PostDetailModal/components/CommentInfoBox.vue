@@ -6,7 +6,7 @@
   <div>
     <div>
       <div>
-        <h5 class="comment-user-name">{{ comment.user.first_name }}</h5>
+        <h5 class="comment-user-name cursor-pointer hover:underline" @click="viewProfileUser">{{ comment.user.first_name }}</h5>
         <p class="comment-text">{{ comment.text }}</p>
         <div class="text-sm caption-1">{{ comment.created_at }}</div>
 
@@ -23,6 +23,9 @@
 <script>
 import AvatarPlaceholder from '@/components/common/AvatarPlaceholder/AvatarPlaceholder.vue';
 import useAuthStore from '@/stores/auth'
+
+import { checkAuthentication } from '@/utils/authUtils.js';
+
 import {
   deleteComment,
  
@@ -48,7 +51,19 @@ export default {
     async deleteUserComment() {
      await  deleteComment(this.comment.id);
      this.$emit('refreshPost')
-    }
+    },
+    viewProfileUser() {
+
+if (!checkAuthentication()) {
+  return
+}
+
+this.$router.push({ name: 'view-profile-user', params: { id: this.comment.user.id } })
+
+},
+
+
+    
   }
 }
 </script>
