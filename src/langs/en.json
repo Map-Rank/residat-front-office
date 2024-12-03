@@ -220,6 +220,7 @@
   "header_burger_menu": "Menu",
   "header_close_menu": "Close Menu",
   "translate": "Translate",
-  "show_zone_stats": "Show Zone Statistics"
+  "show_zone_stats": "Show Zone Statistics",
+  "following_count":"following"
 
 }

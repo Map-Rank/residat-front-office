@@ -136,10 +136,10 @@ export default {
 
         // Determine the base color based on the disaster type
         if (disaster.type === 'FLOOD') {
-          baseColor = 'red' // Red for floods
+          baseColor = 'blue' // Red for floods
         } else if (disaster.type === 'DROUGHT') {
-          baseColor = 'rgba(205, 133, 63)' // Yellow for droughts
-        } else {
+          baseColor = 'red' // Yellow for droughts
+        }  else if(disaster.type === 'NORMAL') {
           baseColor = 'gray'
         }
 

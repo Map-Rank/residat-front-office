@@ -9,9 +9,10 @@
         v-if="!isLoading && userProfile"
         :profile-image-url="''"
         :profileName="`${userProfile.first_name} ${userProfile.last_name}`"
-        :followersCount="0"
+        :followersCount="`${userProfile.follower_count}`"
         :postsCount="posts.length"
         :profileImageUrl="userProfile.avatar"
+        :followingCount="`${userProfile.following_count}`"
         :isCurrentUser="true"
       />
     </div>
@@ -104,7 +105,7 @@ export default {
       isLoading: true,
       id: this.$route.params.id,
       showPageRefresh: false,
-      followersCount: 0,
+      // followersCount: 0,
       errorMessage: 'Culd not load user informaiton',
       customPost: this.post,
 
