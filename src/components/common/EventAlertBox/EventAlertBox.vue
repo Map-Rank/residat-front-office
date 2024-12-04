@@ -22,8 +22,8 @@
         <p class="menu">
          
           <!-- <span>{{ event.published_at }} </span> -->
-           <span> <span class="menu">{{ $t('date') }}</span> {{ formatDate(event.published_at) }}</span><br/>
-           <span><span class="menu">{{ $t('time') }}:</span> {{ formatTime(event.published_at) }}</span>
+           <span> <span class="menu">{{ $t('date') }}</span> {{ formatDate(event.date_debut) }}</span><br/>
+           <span><span class="menu">{{ $t('time') }}:</span> {{ formatTime(event.date_debut) }}</span>
         </p>
         <p class="menu">
           {{ $t('location') }}

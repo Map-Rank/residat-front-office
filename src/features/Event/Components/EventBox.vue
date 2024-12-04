@@ -53,7 +53,11 @@
               <span class="span ml-1">{{ event.humanize_date_creation }}</span>
               <br />
             </div>
-            <p class="span">Date: {{ event.published_at }}</p>
+            <div class=" flex gap-4">
+              <p> <strong class="font-semibold">{{ $t('date') }}</strong>  {{ formatDate(event.date_debut) }}</p><br/>
+           <p><strong class="font-semibold">{{ $t('time') }}:</strong> {{ formatTime(event.date_debut) }}</p>
+            </div>
+              
           </div>
         </div>
         <p class="text-gray-700 text-start mt-1 content">
@@ -123,6 +127,16 @@ export default {
         })
       }
    
+    },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return date.toLocaleDateString("fr-FR", options);
+    },
+    formatTime(dateString) {
+      const date = new Date(dateString);
+      const options = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+      return date.toLocaleTimeString("fr-FR", options);
     },
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible;

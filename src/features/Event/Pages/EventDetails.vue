@@ -30,9 +30,9 @@
               <span class="text-[14px] text-body-darker font-semibold">Town :</span
               >{{ event.location }}
             </p>
-            <p class="text-sm text-gray-600">
-              <span class="text-[14px] text-body-darker font-semibold">Date : </span
-              >{{ event.published_at }}
+            <p class="text-[14px] text-gray-600">
+              <span> <span class="text-[14px] text-body-darker font-semibold">{{ $t('date') }}</span > {{ formatDate(event.date_debut) }}</span><br/>
+              <span><span class="text-[14px]  text-body-darker font-semibold">{{ $t('time') }}:</span> {{ formatTime(event.date_debut) }}</span>
             </p>
           </div>
         </div>
@@ -116,6 +116,17 @@ export default {
     }
   },
   methods: {
+
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return date.toLocaleDateString("fr-FR", options);
+    },
+    formatTime(dateString) {
+      const date = new Date(dateString);
+      const options = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+      return date.toLocaleTimeString("fr-FR", options);
+    },
     toggleMenu() {
       this.isMenuVisible = !this.isMenuVisible
     },

@@ -4,9 +4,9 @@
     <div class="flex-grow">
       <p class="font-semibold">{{ notification.titre_en }}</p>
       <p class="text-[0.69rem] text-gray-500"><span class=""> {{ $t('Créé le') }} </span >  {{ formattedDate }} <span>{{ $t('à') }}</span> {{ formattedTime }}</p>
-    <div class="flex gap-6">
-      <p><span class="text-bold">By:</span> {{ notification.user.first_name }}  </p>
-    <p> <span class="text-bold">Zone:</span> {{ notification.zone.name }}</p>
+    <div class="flex md:gap-6 gap-3">
+      <p class="font-semibold text-[0.8rem]  text-gray-700">By: <span class=" text-gray-800">{{ notification.user.first_name }}</span> </p>
+    <p  class="font-semibold text-[0.8rem]  text-gray-700"> Zone: <span class=" text-gray-800">{{ notification.zone.name }}</span></p>
   </div>
       <p class="text-sm text-gray-700 mt-2">{{ notification.content_en }}</p>
     </div>
