@@ -1,12 +1,12 @@
 import {
     registerUser,
     institutionalRequest,
-    // loginUser,
+    loginUser,
     // logOut,
     UpdateUser,
-    // UpdatePassword,
-    // ForgotPassword,
-    // ResetPassword,
+    UpdatePassword,
+    ForgotPassword,
+    ResetPassword,
   } from '@/features/Auth/services/authService.js';
   import { makeApiPostCall } from '@/api/api';
   import { getFcmToken } from '@/firebaseConfig.js';
@@ -379,5 +379,195 @@ import {
     //   expect(onSuccess).toHaveBeenCalled();
     //   expect(onError).not.toHaveBeenCalled();
     // });
+
+    it('should register an institution successfully', async () => {
+      const mockInstitutionData = {
+        company_name: 'Test Company',
+        description: 'Description of the company',
+        email: 'company@example.com',
+        phone: '1234567890',
+        password: 'password123',
+        zone: '2',
+        lang: 'en',
+        profile_picture: new Blob(['profile_picture'], { type: 'image/png' })
+      };
+    
+      const mockResponse = {
+        data: {
+          data: {
+            verified: true,
+            user: {
+              token: 'fake_token',
+              id: 2,
+              email: 'company@example.com',
+              language: 'en'
+            }
+          }
+        }
+      };
+    
+      getFcmToken.mockResolvedValue('mock_fcm_token');
+      makeApiPostCall.mockResolvedValue(mockResponse);
+    
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+      const handleEmailNotVerified = vi.fn();
+    
+      await institutionalRequest(mockInstitutionData, authStore, onSuccess, onError, handleEmailNotVerified);
+    
+      expect(makeApiPostCall).toHaveBeenCalledWith('/create/request', expect.any(FormData), null, true);
+    
+      const formData = makeApiPostCall.mock.calls[0][1];
+      expect(formData.get('company_name')).toBe('Test Company');
+      expect(formData.get('description')).toBe('Description of the company');
+      expect(formData.get('email')).toBe('company@example.com');
+      expect(formData.get('phone')).toBe('1234567890');
+      expect(formData.get('zone_id')).toBe('2');
+      expect(formData.get('language')).toBe('en');
+      expect(formData.get('fcm_token')).toBe('mock_fcm_token');
+    
+      expect(authStore.setUser).toHaveBeenCalledWith(mockResponse.data.data.user);
+      expect(localStorage.setItem).toHaveBeenCalledWith(LOCAL_STORAGE_KEYS.authToken,'fake_token');
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+      expect(handleEmailNotVerified).not.toHaveBeenCalled();
+    });
+    
+    it('should handle unverified institution email', async () => {
+      const mockResponse = {
+        data: { data: { verified: false } }
+      };
+    
+      makeApiPostCall.mockResolvedValue(mockResponse);
+    
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+      const handleEmailNotVerified = vi.fn();
+    
+      await institutionalRequest({}, authStore, onSuccess, onError, handleEmailNotVerified);
+    
+      expect(handleEmailNotVerified).toHaveBeenCalled();
+      expect(onSuccess).not.toHaveBeenCalled();
+    });
+
+
+    it('should log in a user successfully', async () => {
+      // Données fictives de l'utilisateur
+      const mockCredentials = {
+        email: 'john.doe@example.com',
+        password: 'password123'
+      };
+    
+      // Structure de la réponse attendue de l'API
+      const mockResponse = {
+        data: {
+          data: {
+            token: 'fake_token',
+            id: 1,
+            first_name: 'John',
+            last_name: 'Doe',
+            email: 'john.doe@example.com',
+            language: 'en'
+          }
+        }
+      };
+    
+      // Mock des appels aux fonctions
+      getFcmToken.mockResolvedValue('mock_fcm_token');
+      makeApiPostCall.mockResolvedValue(mockResponse);
+    
+      // Création des mocks pour les callbacks
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+      const handleEmailNotVerified = vi.fn();
+    
+      // Appel de la fonction loginUser avec les données de test
+      await loginUser(mockCredentials, authStore, onSuccess, onError, handleEmailNotVerified);
+    
+      // Vérification des appels API avec les bonnes données
+      expect(makeApiPostCall).toHaveBeenCalledWith(API_ENDPOINTS.login, expect.any(FormData), null, true);
+    
+      // Vérification de l'enregistrement du token dans le localStorage
+      expect(authStore.setUser).toHaveBeenCalledWith(mockResponse.data.data);
+      expect(localStorage.setItem).toHaveBeenCalledWith(
+        LOCAL_STORAGE_KEYS.authToken,
+        'fake_token'
+      );
+    
+      // Vérification de l'appel de onSuccess et non de onError
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+    });
+
+    it('should update the user password successfully', async () => {
+      const mockUserData = {
+        old_password: 'oldPass123',
+        password: 'newPass123',
+        password_confirmation: 'newPass123'
+      };
+    
+      const mockResponse = { status: 200 };
+      makeApiPostCall.mockResolvedValue(mockResponse);
+    
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+    
+      await UpdatePassword(mockUserData, onSuccess, onError);
+    
+      expect(makeApiPostCall).toHaveBeenCalledWith(
+        `${API_ENDPOINTS.UpdatePassword}`,
+        expect.any(Object),
+        'fake_token',
+        true
+      );
+    
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+    });
+
+    it('should handle forgot password successfully', async () => {
+      const mockUserData = { email: 'john.doe@example.com' };
+    
+      const mockResponse = { status: 200 };
+      makeApiPostCall.mockResolvedValue(mockResponse);
+    
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+    
+      await ForgotPassword(mockUserData, onSuccess, onError);
+    
+      expect(makeApiPostCall).toHaveBeenCalledWith(
+        '/forgot-password',
+        expect.any(FormData),
+        true
+      );
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+    });
+
+    it('should reset the user password successfully', async () => {
+      const mockUserData = {
+        password: 'newPass123',
+        password_confirmation: 'newPass123'
+      };
+      const emailFromUrl = 'john.doe@example.com';
+      const token = 'resetToken123';
+    
+      const mockResponse = { status: 200 };
+      makeApiPostCall.mockResolvedValue(mockResponse);
+    
+      const onSuccess = vi.fn();
+      const onError = vi.fn();
+    
+      await ResetPassword(emailFromUrl, mockUserData, token, onSuccess, onError);
+    
+      expect(makeApiPostCall).toHaveBeenCalledWith(
+        '/reset-password',
+        expect.any(FormData),
+        true
+      );
+      expect(onSuccess).toHaveBeenCalled();
+      expect(onError).not.toHaveBeenCalled();
+    });
   });
   

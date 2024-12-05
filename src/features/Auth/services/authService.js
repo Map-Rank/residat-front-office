@@ -184,7 +184,7 @@ const loginUser = async (
     const token = response.data.data.token
 
     if (response.data) {
-      localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken) //TODO remove this and but it in logout function later
+      // localStorage.removeItem(LOCAL_STORAGE_KEYS.authToken) //TODO remove this and but it in logout function later
 
       authStore.setUser(user)
       authStore.settoken(token)
