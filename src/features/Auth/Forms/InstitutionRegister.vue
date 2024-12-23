@@ -653,15 +653,21 @@ export default {
       this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
     },
 
+    // handleEmailNotVerified() {
+    //   this.toast.error('Check your email to verifie your mail')
+    //   this.$router.push({
+    //     name: 'verification-account',
+    //     params: {
+    //       heading: 'Welcome to Residat!',
+    //       message:
+    //         'As an institutional account, some verifications needs to be done on your account. Our administrative service will contact you and work you through this easy process. Thanks for choosing Residat.'
+    //     }
+    //   })
+    // },
     handleEmailNotVerified() {
-      this.toast.error('Check your email to verifie your mail')
+      // this.toast.error('Check your email to verifie your mail')
       this.$router.push({
-        name: 'verification-account',
-        params: {
-          heading: 'Welcome to Residat!',
-          message:
-            'As an institutional account, some verifications needs to be done on your account. Our administrative service will contact you and work you through this easy process. Thanks for choosing Residat.'
-        }
+        name: 'ChoosePack',
       })
     },
 
@@ -694,7 +700,9 @@ export default {
         //   this.toast.error(this.$t("please_select_your_subdivision"));
         //   return;
         // }
-
+        this.$router.push({
+        name: 'ChoosePack',
+      })
         this.toast.info(this.$t('please_wait_creating_account'))
 
         try {

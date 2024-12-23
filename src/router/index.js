@@ -32,7 +32,9 @@ import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
 import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
 import AccountValidation from '../features/Auth/components/AccountValidation.vue'
-
+import ChoosePack from '../features/Subcription/ChoosePack.vue'
+import PaymentOption from '../features/Subcription/PaymentOption.vue'
+import PaymentMessage from '../features/Subcription/PaymentMessage.vue'
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -42,6 +44,8 @@ const router = createRouter({
       component: SocialProfile
       // meta: { requiresAuth: true }
     },
+    
+   
     {
       path: '/notification',
       name: 'notification',
@@ -58,6 +62,22 @@ const router = createRouter({
       name: 'broadcast-notification',
       component: BroadcastNotification,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/choose-your-pack',
+      name: 'ChoosePack',
+      component: ChoosePack,
+    },
+    
+    {
+      path: '/payment/:id',
+      name: 'PaymentOption',
+      component: PaymentOption
+    },
+    {
+      path: '/payment-message',
+      name: 'PaymentMessage',
+      component: PaymentMessage
     },
 
     {
