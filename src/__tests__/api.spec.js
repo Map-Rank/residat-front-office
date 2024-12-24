@@ -1,20 +1,38 @@
 import axios from 'axios';
 import MockAdapter from 'axios-mock-adapter';
-import { describe, it, expect, afterEach } from 'vitest';
+import { describe, it, expect, afterEach, vi } from 'vitest';
 import { API_ENDPOINTS } from '@/constants/index.js';
 
-import { makeApiGetCall,  } from '@/api/api';
+import { makeApiGetCall  } from '@/api/api';
+
+vi.mock('@/api/api', () => ({
+  makeApiPostCall: vi.fn(),
+  makeApiGetCall: vi.fn(),
+  makeApiDeleteCall: vi.fn(),
+}));
 
 // Initialize Axios Mock Adapter
-const mock = new MockAdapter(axios);
 
-function toStructure(obj) {
-  return JSON.parse(JSON.stringify(obj, (key, value) =>
-    typeof value === 'object' && value !== null ? Object.keys(value).sort() : typeof value
-  ));
-}
+const sectorData = {
+  status: true,
+  data: [
+    {
+      id: 1,
+      name: 'Agriculture',
+      created_at: '2024-06-09T16:37:00.000000Z',
+    },
+  ],
+  message: 'Values found',
+};
+
+// function toStructure(obj) {
+//   return JSON.parse(JSON.stringify(obj, (key, value) =>
+//     typeof value === 'object' && value !== null ? Object.keys(value).sort() : typeof value
+//   ));
+// }
 
 describe('API Service', () => {
+  const mock = new MockAdapter(axios);
   const authToken = 'fake-token';
   // const responseData = { data: 'some data' };
   // const forgotPasswordResponce = {
@@ -22,17 +40,6 @@ describe('API Service', () => {
   //   "data": [],
   //   "message": "We have emailed your password reset link."
   // };
-  const sectorData = {
-    status: true,
-    data: [
-      {
-        id: 1,
-        name: 'Agriculture',
-        created_at: '2024-06-09T16:37:00.000000Z',
-      },
-    ],
-    message: 'Values found',
-  };
 
   afterEach(() => {
     // Reset the mock after each test to avoid interference
@@ -40,16 +47,13 @@ describe('API Service', () => {
   });
 
   it('should make a GET request', async () => {
-    mock.onGet(API_ENDPOINTS.sector).reply(200, sectorData);
+    const mockResponse = { status: 200, data: sectorData };
+    makeApiGetCall.mockResolvedValueOnce(mockResponse);
 
-    try {
-      const response = await makeApiGetCall(API_ENDPOINTS.sector, authToken);
-      expect(response.status).toBe(200);
-      expect(toStructure(response.data)).toEqual(toStructure(sectorData));
-    } catch (error) {
-      // Handle error if the request fails
-      console.error(error);
-    }
+    const response = await makeApiGetCall(API_ENDPOINTS.sector, authToken);
+
+    expect(response.status).toBe(200);
+    expect(response.data).toEqual(sectorData);
   });
 
   // it('should make a POST request with JSON data', async () => {
