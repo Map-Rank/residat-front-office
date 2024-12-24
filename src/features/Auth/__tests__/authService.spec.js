@@ -2,7 +2,7 @@ import {
     registerUser,
     institutionalRequest,
     loginUser,
-    // logOut,
+    logOut,
     UpdateUser,
     UpdatePassword,
     ForgotPassword,
@@ -223,53 +223,6 @@ import {
       expect(handleEmailNotVerified).not.toHaveBeenCalled();
     });
   
-    // it('should log in a user successfully', async () => {
-    //   const mockUserCredentials = {
-    //     email: 'john.doe@example.com',
-    //     password: 'password',
-    //   };
-  
-    //   const mockResponse = {
-    //     data: {
-    //       data: {
-    //         token: 'fake_token',
-    //         user: {
-    //           id: 1,
-    //           first_name: 'John',
-    //           last_name: 'Doe',
-    //           email: 'john.doe@example.com',
-    //         },
-    //       },
-    //     },
-    //   };
-  
-    //   makeApiPostCall.mockResolvedValue(mockResponse);
-    //   const onSuccess = vi.fn();
-    //   const onError = vi.fn();
-  
-    //   await loginUser(mockUserCredentials, authStore, onSuccess, onError);
-  
-    //   expect(makeApiPostCall).toHaveBeenCalledWith(
-    //     '/login', // Ensure this matches the actual URL used in your code
-    //     expect.any(FormData)
-    //   );
-    //   expect(authStore.setUser).toHaveBeenCalledWith({
-    //     id: 1,
-    //     first_name: 'John',
-    //     last_name: 'Doe',
-    //     email: 'john.doe@example.com',
-    //   });
-    //   expect(localStorage.setItem).toHaveBeenCalledWith('userInfo', JSON.stringify({
-    //     id: 1,
-    //     first_name: 'John',
-    //     last_name: 'Doe',
-    //     email: 'john.doe@example.com',
-    //   }));
-    //   expect(localStorage.setItem).toHaveBeenCalledWith('authToken', 'fake_token');
-    //   expect(onSuccess).toHaveBeenCalled();
-    //   expect(onError).not.toHaveBeenCalled();
-    // });
-  
     it('should update a user successfully', async () => {
       const mockUserData = {
         id: 1,
@@ -309,11 +262,11 @@ import {
       expect(onError).not.toHaveBeenCalled();
     });
   
-    // it('should log out a user successfully', async () => {
-    //   await logOut(authStore);
-    //   expect(authStore.logOut).toHaveBeenCalled();
-    // //   expect(localStorage.setItem).toHaveBeenCalledWith('isloggedIn', false);
-    // });
+    it('should log out a user successfully', async () => {
+      await logOut(authStore);
+      expect(authStore.logOut).toHaveBeenCalled();
+    //   expect(localStorage.setItem).toHaveBeenCalledWith('isloggedIn', false);
+    });
   
     // it('should update password successfully', async () => {
     //   const mockUserData = {
@@ -503,7 +456,8 @@ import {
       const mockUserData = {
         old_password: 'oldPass123',
         password: 'newPass123',
-        password_confirmation: 'newPass123'
+        password_confirmation: 'newPass123',
+        token: 'fake_token',
       };
     
       const mockResponse = { status: 200 };

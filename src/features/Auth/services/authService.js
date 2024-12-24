@@ -229,7 +229,7 @@ const UpdatePassword = async (userData, onSuccess, onError) => {
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.UpdatePassword}`,
       formData,
-      authToken,
+      userData.token,
       true
     )
     console.log('============>  updated password !!!!')

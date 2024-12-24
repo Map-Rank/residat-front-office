@@ -24,6 +24,7 @@ describe('EventDetails Component', () => {
     description: 'This is a description of the event.',
     location: 'Test Location',
     published_at: '2023-12-01',
+    date_debut: '2023-12-01T10:00:00',
     organized_by: 'Test Organizer',
     humanize_date_creation: '1 day ago',
   }
@@ -37,18 +38,53 @@ describe('EventDetails Component', () => {
       },
       global: {
         mocks: {
-          $t: (msg) => msg, // Mock translation
+          $t: (key) => {
+            const translations = {
+              'date': 'Date',
+              'time': 'Time'
+            };
+            return translations[key] || key;
+          }
         },
+        // ... other global setup
       },
     })
   })
 
   it('renders correctly', async () => {
     await flushPromises()
-    expect(wrapper.text()).toContain(mockEvent.title)
-    expect(wrapper.text()).toContain(mockEvent.organized_by)
-    expect(wrapper.text()).toContain(mockEvent.location)
-    expect(wrapper.text()).toContain(mockEvent.published_at)
+    
+    // Use the same formatting methods as in the component
+    const formatDate = (dateString) => {
+      const date = new Date(dateString);
+      const options = { year: "numeric", month: "2-digit", day: "2-digit" };
+      return date.toLocaleDateString("fr-FR", options);
+    };
+  
+    const formatTime = (dateString) => {
+      const date = new Date(dateString);
+      const options = { hour: "2-digit", minute: "2-digit", second: "2-digit" };
+      return date.toLocaleTimeString("fr-FR", options);
+    };
+  
+    const formattedDate = formatDate(mockEvent.date_debut);
+    const formattedTime = formatTime(mockEvent.date_debut);
+  
+    const expectedTexts = [
+      mockEvent.title,
+      '1 day ago',
+      'Test Event',
+      'By: ' + mockEvent.organized_by,
+      'Town :' + mockEvent.location,
+      'Date ' + formattedDate,
+      'Time: ' + formattedTime,
+      'Details',
+      mockEvent.description
+    ];
+  
+    expectedTexts.forEach(text => {
+      expect(wrapper.text()).toContain(text);
+    });
   })
 
   it('fetches event data on mount', async () => {
