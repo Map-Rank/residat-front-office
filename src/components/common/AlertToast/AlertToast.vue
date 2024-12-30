@@ -24,17 +24,18 @@
           case AlertStates.INFO:
             toast.info(message);
             break;
-          case AlertStates.SUCCESS:
-            toast.success(message);
-            break;
-          case AlertStates.ERROR:
-            toast.error(message);
-            break;
-          case AlertStates.PROCESSING:
-            toast.info(message, { icon: '🔄', duration: 5000 }); // Customize the processing toast as needed
-            break;
-          default:
-            toast(message);
+            case AlertStates.SUCCESS:
+              toast.success(message);
+              break;
+              case AlertStates.ERROR:
+                toast.error(message);
+                break;
+                case AlertStates.PROCESSING:
+                  toast.info(message, { icon: '🔄', duration: 5000 }); // Customize the processing toast as needed
+                  break;
+                  default:
+                    toast.info(message);
+                    // toast(message);
         }
       };
   

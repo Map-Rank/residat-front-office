@@ -7,6 +7,8 @@ export default mergeConfig(viteConfig, defineConfig({
         testTimeout: 10000, // 10 seconds
         reporters: ['html'],
         environment: 'jsdom',
+        globals: true, // Makes `expect` globally available
+
         css: true,
         coverage: {
             provider: 'v8',

@@ -12,6 +12,8 @@
         </div>
         <div
           class="w-full text-center text-white text-[20px] sm:text-[24px] lg:text-[32px] font-bold font-['Poppins'] lg:leading-auto"
+         data-test="connecting-communities"
+
         >
           {{ $t('connecting_communities') }}
         </div>

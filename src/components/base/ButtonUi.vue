@@ -72,6 +72,7 @@ export default {
     handleClick() {
       if (!this.isDisabled && !this.loading) {
         this.$emit('clickButton')
+
       }
     }
   }

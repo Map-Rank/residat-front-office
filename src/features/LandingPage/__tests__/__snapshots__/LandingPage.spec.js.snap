@@ -1,0 +1,261 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`LandingPage > matches snapshot 1`] = `
+"<div data-v-248a62f1="" class="overflow-hidden">
+  <header data-v-0111c9f7="" data-v-248a62f1="" class="bg-white p-4 fixed top-0 w-full z-10">
+    <div data-v-0111c9f7="" class="container mx-auto flex justify-between items-center">
+      <div data-v-0111c9f7="" class="flex flex-row items-center space-x-5">
+        <router-link data-v-0111c9f7="" to="/community" alt="header_logo_alt"><img src="/src/assets/images/Logos/logo-small.svg" alt="Logo" class="h-15"></router-link>
+        <div data-v-0111c9f7="" class="menu langMenu relative">
+          <router-link data-v-07d8c6dc="" data-v-0111c9f7="" to="[object Object]" class="icon-with-label relative grid place-items-center dropdown">
+            <!-- Label on Top -->
+            <p data-v-07d8c6dc="" class="text-primary-normal text-xs" style="display: none;"></p><!-- Label on left -->
+            <p data-v-07d8c6dc="" class="text-primary-normal text-xs" style="display: none;"></p><!-- Image --><img data-v-07d8c6dc="" src="\\assets\\icons\\translate.svg" class="m-1 w-7 h-7 md:w-7 h-7 sm:undefined"><!-- Label on Right -->
+            <p data-v-07d8c6dc="" class="text-primary-normal text-xs" style="display: none;"></p><!-- Label on Bottom -->
+            <p data-v-07d8c6dc="" class="text-primary-normal text-xs text-primary-normal text-center">en</p>
+          </router-link>
+          <div data-v-0111c9f7="" class="absolute left-0 mt-2 w-42 bg-white rounded-md shadow-lg z-10" style="display: none;"><button data-v-956cceeb="" data-v-0111c9f7="" class="flex items-center gap-2 px-2 py-2 transition w-full items-left justify-start hover:bg-gray-100">
+              <!--v-if-->
+              <p data-v-956cceeb="" class="text-left flex-wrap text-wrap">en</p>
+              <!--v-if-->
+              <!--v-if-->
+            </button><button data-v-956cceeb="" data-v-0111c9f7="" class="flex items-center gap-2 px-2 py-2 transition w-full items-left justify-start hover:bg-gray-100">
+              <!--v-if-->
+              <p data-v-956cceeb="" class="text-left flex-wrap text-wrap">fr</p>
+              <!--v-if-->
+              <!--v-if-->
+            </button></div>
+        </div>
+      </div><!-- Burger Menu Icon for Mobile View --><button data-v-0111c9f7="" class="block lg:hidden text-primary-normal" aria-label="header_burger_menu"><svg data-v-0111c9f7="" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="w-8 h-8">
+          <path data-v-0111c9f7="" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"></path>
+        </svg></button><!-- Navbar Links for Large Screen -->
+      <nav data-v-0111c9f7="" class="hidden lg:block">
+        <ul data-v-0111c9f7="" class="flex space-x-4 text-primary-normal">
+          <li data-v-0111c9f7=""><a data-v-0111c9f7="" href="http://localhost:3000/#about-us" class="text-center text-primary-normal sm:text-[16px] lg:text-[16px] font-normal font-['Poppins'] leading-normal">header_about_us</a></li>
+          <li data-v-0111c9f7=""><a data-v-0111c9f7="" href="http://localhost:3000/#solution" class="text-center text-primary-normal sm:text-[16px] lg:text-[16px] font-normal font-['Poppins'] leading-normal">header_solution</a></li>
+          <li data-v-0111c9f7=""><a data-v-0111c9f7="" href="http://localhost:3000/#impact" class="text-center text-primary-normal sm:text-[16px] lg:text-[16px] font-normal font-['Poppins'] leading-normal">header_impact</a></li>
+        </ul>
+      </nav>
+      <div data-v-0111c9f7="" class="hidden lg:flex justify-between space-x-2"><button data-v-956cceeb="" data-v-0111c9f7="" class="flex items-center gap-2 px-2 py-2 transition rounded-full w-full bg-secondary-normal text-center flex justify-center px-[40px] py-10">
+          <!--v-if-->
+          <p data-v-956cceeb="" class="text-center text-white flex-wrap text-wrap">header_register</p>
+          <!--v-if-->
+          <!--v-if-->
+        </button><button data-v-956cceeb="" data-v-0111c9f7="" class="flex items-center gap-2 px-2 py-2 transition rounded-full w-full bg-secondary-normal text-center flex justify-center px-[40px] py-3">
+          <!--v-if-->
+          <p data-v-956cceeb="" class="text-center text-white flex-wrap text-wrap">header_sign_in</p>
+          <!--v-if-->
+          <!--v-if-->
+        </button></div>
+    </div><!-- Sidebar for Mobile View -->
+    <transition-stub data-v-0111c9f7="" name="slide" appear="false" persisted="false" css="true">
+      <!--v-if-->
+    </transition-stub>
+  </header>
+  <section data-v-248a62f1="" class="grid items-center text-white text-center py-16 h-auto md:h-[40vh]">
+    <div data-v-248a62f1="" class="container mx-auto px-4">
+      <div data-v-248a62f1="" class="flex justify-center mb-8 max-h-full max-w-full overflow-hidden">
+        <!-- <img
+            src="/assets/images/LandingPage/hero-image.png"
+            :alt="$t('connecting_communities')"
+            class="object-contain max-h-[30vh] lg:max-h-[300px]"
+          /> -->
+      </div>
+      <div data-v-248a62f1="" class="w-full text-center text-white text-[20px] sm:text-[24px] lg:text-[32px] font-bold font-['Poppins'] lg:leading-auto" data-test="connecting-communities">connecting_communities</div>
+      <div data-v-248a62f1="" class="w-full flex justify-center mt-4">
+        <div data-v-248a62f1="" class="w-1/2 md:w-1/4"><button data-v-956cceeb="" data-v-248a62f1="" class="flex items-center gap-2 px-2 py-2 transition rounded-full w-full bg-secondary-normal text-center flex justify-center px-[40px] py-10">
+            <!--v-if-->
+            <p data-v-956cceeb="" class="text-center text-white flex-wrap text-wrap">header_register</p>
+            <!--v-if-->
+            <!--v-if-->
+          </button></div>
+      </div>
+    </div>
+  </section><!-- about us -->
+  <div data-v-248a62f1="" id="about-us" class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]">
+    <div data-v-248a62f1="" class="flex flex-col w-full lg:w-[52%] justify-start items-start gap-8 lg:gap-[30px]">
+      <div data-v-e166f164="" data-v-248a62f1="" class="text-secondary-normal self-stretch text-center text-[38px] md:text-5xl font-bold font-[Poppins] leading-[44px] text-start">about_us</div>
+      <div data-v-248a62f1="" class="w-full text-black text-[16px] md:text-lg font-normal font-['Poppins'] md:leading-7">about_us_description</div>
+    </div>
+    <div data-v-248a62f1="" class="w-full lg:w-[45%] flex justify-center lg:justify-end mt-6 lg:mt-0"><img data-v-248a62f1="" class="h-auto max-h-[380px] w-full object-cover" src="/assets/images/LandingPage/about.png"></div>
+  </div>
+  <div data-v-248a62f1="" class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:pb-[50px] flex flex-col lg:flex-row justify-center items-center gap-8 lg:gap-[47px]">
+    <div data-v-248a62f1="">
+      <div data-v-248a62f1="" class="self-stretch h-full flex flex-col justify-start items-start gap-5">
+        <div data-v-248a62f1="" class="flex justify-center text-center w-full">
+          <p data-v-248a62f1="" class="text-center text-[18px] md:text-[20px] lg:text-xl font-semibold text-gray-800"> Register as a community user </p>
+        </div>
+        <div data-v-248a62f1="" class="flex justify-start items-start gap-2.5"><img data-v-248a62f1="" src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]">
+          <div data-v-248a62f1="" class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">about_us_list_1</div>
+        </div>
+        <div data-v-248a62f1="" class="flex justify-start items-start gap-2.5"><img data-v-248a62f1="" src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]">
+          <div data-v-248a62f1="" class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">about_us_list_2</div>
+        </div>
+        <div data-v-248a62f1="" class="flex justify-start items-start gap-2.5"><img data-v-248a62f1="" src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]">
+          <div data-v-248a62f1="" class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">about_us_list_3</div>
+        </div>
+      </div>
+    </div>
+    <div data-v-248a62f1="" class="self-stretch h-full flex flex-col justify-start items-start gap-5">
+      <div data-v-248a62f1="" class="flex justify-center text-center w-full">
+        <p data-v-248a62f1="" class="text-center text-[18px] md:text-[20px] lg:text-xl font-semibold text-gray-800"> Register as institutional user (Goverment , NGOs, Business etc..) </p>
+      </div>
+      <div data-v-248a62f1="" class="flex justify-start items-start gap-2.5"><img data-v-248a62f1="" src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]">
+        <div data-v-248a62f1="" class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">Send mass messages to users in target locations</div>
+      </div>
+      <div data-v-248a62f1="" class="flex justify-start items-start gap-2.5"><img data-v-248a62f1="" src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]">
+        <div data-v-248a62f1="" class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">Inform decision making with location/sector specific climate risks data</div>
+      </div>
+      <div data-v-248a62f1="" class="flex justify-start items-start gap-2.5"><img data-v-248a62f1="" src="/assets/images/LandingPage/check-icon.svg" class="w-[30px] h-[30px]">
+        <div data-v-248a62f1="" class="text-black text-[16px] md:text-lg font-normal font-['Poppins'] leading-7">Collaborate with key stakeholders to drive adaptation impacts</div>
+      </div>
+    </div>
+  </div><!-- solution section -->
+  <!-- <div id="solution" class="px-4">
+      <div class="w-full h-auto md:px-[60px] lg:px-[80px] py-[35px] flex-col justify-start items-center inline-flex">
+        <TitleLanding :text="$t('solution')"></TitleLanding>
+        <div
+          v-for="(solution, index) in solutions"
+          :key="index"
+          class="w-full lg:w-[90%] grid items-center md:flex justify-between md:items-start my-10"
+        >
+          <template v-if="index % 2 === 0">
+            <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+              <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+                {{ $t(solution.title) }}
+              </div>
+              <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+                {{ $t(solution.description) }}
+              </div>
+            </div>
+            <div class="md:hidden md:w-[55%] flex justify-center">
+              <img :src="solution.image" />
+            </div>
+            <div class="hidden md:block md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+              <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+                {{ $t(solution.title) }}
+              </div>
+              <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+                {{ $t(solution.description) }}
+              </div>
+            </div>
+            <div class="hidden md:flex md:w-[55%] justify-end">
+              <img :src="solution.image" />
+            </div>
+          </template>
+          <template v-else>
+            <div class="md:hidden md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+              <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+                {{ $t(solution.title) }}
+              </div>
+              <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+                {{ $t(solution.description) }}
+              </div>
+            </div>
+            <div class="md:hidden md:w-[55%] flex justify-center">
+              <img :src="solution.image" />
+            </div>
+            <div class="hidden md:block md:w-[55%] flex justify-end">
+              <img :src="solution.image" />
+            </div>
+            <div class="hidden md:block md:w-[45%] py-5 flex-col justify-start items-start gap-[10px] inline-flex">
+              <div class="text-black pb-3 md:pb-10 text-[28px] md:text-[30px] lg:text-[48px] font-bold font-['Poppins'] sm:leading-[44px]">
+                {{ $t(solution.title) }}
+              </div>
+              <div class="self-stretch h-[118px] text-black text-[16px] lg:text-[18px] font-normal font-['Poppins'] leading-7">
+                {{ $t(solution.description) }}
+              </div>
+            </div>
+          </template>
+        </div>
+      </div>
+    </div> -->
+  <!-- statistics
+    <div id="impact" class="w-full px-4 lg:px-16 py-8 bg-primary-normal flex flex-col justify-start items-center gap-8">
+      <div class="flex flex-col justify-start items-center gap-2 text-white text-center">
+        <div :class="classes" class="self-stretch text-center text-white text-[28px] md:text-[38px] font-bold font-['Poppins'] leading-[44px]">
+          {{ $t('impact') }}
+        </div>
+      </div>
+      <div class="w-full flex flex-wrap justify-center md:justify-around items-center gap-6 lg:gap-12">
+        <div v-for="(item, index) in statistics" :key="index" class="flex flex-col w-full md:w-auto justify-start items-center md:gap-3 text-center text-white">
+          <img :src="item.imgSrc" class="w-10 h-10 md:w-12 md:h-12" />
+          <div class="text-[24px] md:text-[36px] font-medium font-['Poppins'] leading-9">{{ item.number }}</div>
+          <div class="text-[14px] md:text-[20px] font-normal font-['Poppins'] leading-normal">{{ $t(item.description) }}</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="w-full py-16 bg-white flex flex-col justify-start items-center gap-10">
+      <div class="w-full bg-white flex flex-col justify-start items-center gap-10">
+        <div :class="classes" class="self-stretch text-center text-primary-normal text-[28px] md:text-[38px] font-bold font-['Poppins'] leading-[44px]">
+          {{ $t('demo') }}
+        </div>
+        <div class="relative w-full aspect-video">
+          <iframe class="absolute inset-0 w-full h-full" src="https://www.youtube.com/embed/your-video-id" frameborder="0" allowfullscreen></iframe>
+        </div>
+      </div>
+    </div> -->
+  <!-- improve and join -->
+  <!-- <div class="w-full px-4 sm-[50px] md:px-[80px] lg:px-[120px] py-8 lg:py-[70px] flex flex-col lg:flex-row justify-start items-start gap-8 lg:gap-[57px]">
+      <div class="flex flex-col w-full lg:w-[52%] justify-start items-start gap-8 lg:gap-[30px]">
+        <TitleLanding :text="$t('join_us')" class="text-start"></TitleLanding>
+        <div class="w-full text-black text-[16px] md:text-lg font-normal font-['Poppins'] md:leading-7">
+          {{ $t('join_us_description') }}
+        </div>
+        <div class="mt-4 flex w-3/4 space-x-2">
+          <ButtonUi
+            :label="$t('register')"
+            colorObject="bg-secondary-normal text-center w-auto"
+            customCss="text-center flex justify-center px-10 py-4"
+            textCss="text-center text-white"
+            :isRoundedFull="true"
+            @clickButton="navigateTo('register')"
+          ></ButtonUi>
+          <ButtonUi
+            :label="$t('sign_in')"
+            colorObject="bg-secondary-normal text-center w-auto"
+            customCss="text-center flex justify-center px-10 py-4"
+            textCss="text-center text-white"
+            :isRoundedFull="true"
+            @clickButton="navigateTo('signIn')"
+          ></ButtonUi>
+        </div>
+      </div>
+      <div class="w-full lg:w-[45%] flex justify-center lg:justify-end mt-6 lg:mt-0">
+        <img class="h-auto max-h-[556px] w-full object-cover" src="/assets/images/LandingPage/about.png" />
+      </div>
+    </div> -->
+  <!-- sponsors -->
+  <!-- <div class="container mx-auto px-4 pt-12 pb-10 flex flex-col justify-center items-center gap-10">
+      <div :class="classes" class="self-stretch text-center text-secondary-normal text-[28px] md:text-[38px] font-bold font-['Poppins'] leading-[44px]">
+        {{ $t('they_support_us') }}
+      </div>
+      <div class="w-full flex flex-col md:flex-row gap-10 justify-center md:justify-around items-center">
+        <img v-for="src in suppoterLogos" :key="src" :src="src" class="w-auto h-10 md:h-24" />
+      </div>
+    </div> -->
+  <footer data-v-fe614cb0="" data-v-248a62f1="" class="w-full bg-primary-normal py-15">
+    <div data-v-fe614cb0="" class="container mx-auto px-4 md:px-[20px] lg:px-24 flex flex-col md:flex-row justify-between items-center lg:items-start gap-8">
+      <!-- Logo Section -->
+      <div data-v-fe614cb0="" class="w-[40%] grid justify-center lg:justify-start items-start gap-2">
+        <div data-v-fe614cb0="" class="w-full flex justify-center md:justify-start"><img data-v-fe614cb0="" class="h-20" src="/assets/images/Logos/logo-small-white.svg" alt="footer_logo_alt"></div>
+        <p data-v-fe614cb0="" class="text-white text-center md:text-left text-base font-normal font-poppins">footer_tagline</p>
+      </div><!-- Links Sections -->
+      <div data-v-fe614cb0="" class="w-full md:w-1/4 grid justify-center md:justify-center lg:justify-start items-center md:items-center lg:items-start gap-4 text-center md:text-center lg:text-left">
+        <div data-v-fe614cb0="" class="text-white text-lg font-semibold font-poppins">footer_quick_links</div>
+        <div data-v-fe614cb0="" class="flex flex-col gap-2"><a data-v-fe614cb0="" href="#about-us" class="text-white text-base font-normal font-poppins">footer_about_us</a><a data-v-fe614cb0="" href="#solution" class="text-white text-base font-normal font-poppins">footer_solution</a><a data-v-fe614cb0="" href="#impact" class="text-white text-base font-normal font-poppins">footer_impact</a></div>
+      </div>
+      <div data-v-fe614cb0="" class="w-full md:w-1/4 grid justify-center md:justify-center lg:justify-start items-center md:items-center lg:items-start gap-4 text-center md:text-center lg:text-left">
+        <div data-v-fe614cb0="" class="text-white text-lg font-semibold font-poppins">footer_resources</div>
+        <div data-v-fe614cb0="" class="flex flex-col gap-2"><a data-v-fe614cb0="" href="#terms" class="text-white text-base font-normal font-poppins">footer_terms</a><a data-v-fe614cb0="" href="#cookies" class="text-white text-base font-normal font-poppins">footer_cookies</a></div>
+      </div>
+      <div data-v-fe614cb0="" class="w-full md:w-1/4 grid justify-center md:justify-center lg:justify-start items-center md:items-center lg:items-start gap-4 text-center md:text-center lg:text-left">
+        <div data-v-fe614cb0="" class="text-white text-lg font-semibold font-poppins">footer_social_media</div>
+        <div data-v-fe614cb0="" class="flex flex-col gap-2"><a data-v-fe614cb0="" href="https://web.facebook.com/profile.php?id=100064106499810" class="text-white text-base font-normal font-poppins">footer_facebook</a><a data-v-fe614cb0="" href="https://www.linkedin.com/company/100603971/" class="text-white text-base font-normal font-poppins">footer_linkedin</a></div>
+      </div>
+    </div>
+    <div data-v-fe614cb0="" class="text-center mt-14 text-white text-sm font-normal font-poppins leading-tight">footer_copyright</div>
+  </footer>
+</div>"
+`;
