@@ -66,6 +66,7 @@ describe('RegisterForm Component', () => {
     
     wrapper = mount(RegisterForm, {
       global: {
+        
         mocks: {
           $t: (msg) => msg,
           $router: routerMock,

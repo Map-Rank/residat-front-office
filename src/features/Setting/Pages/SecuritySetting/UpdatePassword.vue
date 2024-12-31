@@ -225,7 +225,9 @@ export default {
         this.alertStore.setAlert(AlertStates.ERROR, errors.email[0])
       } else if (errors.zone_id && errors.zone_id.length > 0) {
         this.alertStore.setAlert(AlertStates.ERROR, errors.zone_id[0])
-      }
+      }else {
+      this.alertStore.setAlert(AlertStates.ERROR, 'Password update failed');
+    }
     },
 
     async submitForm() {
@@ -237,7 +239,7 @@ export default {
       try {
         await UpdatePassword(this.formData, this.handleSuccess, this.handleError)
       } catch (error) {
-        console.log(error)
+        this.handleError(error)
       }
     },
 
