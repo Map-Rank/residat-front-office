@@ -90,7 +90,7 @@ const institutionalRequest = async (
     }
 
     const response = await makeApiPostCall('/create/request', formData, null, true)
-    if (response.data.data.verified === false) {
+    if (response.data.data.verified === false && response.data.data.type === 'COUNCIL') {
       handleEmailNotVerified()
       return
     }
@@ -175,7 +175,7 @@ const loginUser = async (
     }
 
     const response = await makeApiPostCall(API_ENDPOINTS.login, formData, null, true)
-    if (response.data.data.verified === false) {
+    if (response.data.data.verified === false && response.data.data.type === 'COUNCIL') {
       handleEmailNotVerified()
       return
     }

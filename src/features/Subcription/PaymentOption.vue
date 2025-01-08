@@ -211,6 +211,7 @@ export default {
     },
     handleOrangeMoneySubmit(data) {
       alert(`Orange Money Payment Successful! Number: ${data.orangeMoneyNumber}, Period: ${this.selectedPeriod} `)
+      
     },
   
     handleMobileMoneySubmit(data) {
