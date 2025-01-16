@@ -1,6 +1,6 @@
 <!-- src/pages/Notifications.vue -->
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container mx-auto px-4 pt-24 pb-10">
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">{{ isInstitution ? "Inbox" : "Inbox" }}</h1>
       <button

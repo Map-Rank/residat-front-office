@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-white p-4">
+  <header class="bg-white">
     <div class="container mx-auto flex justify-between items-center">
 
       <div class="flex flex-row items-center space-x-5">

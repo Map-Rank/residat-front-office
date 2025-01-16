@@ -6,7 +6,7 @@
       <!-- Data binding and event handling -->
     </div>
   </div>
-  <div class="w-full h-full flex items-center justify-center min-h-screen">
+  <div class=" flex items-center justify-center">
     <div class="checkboxMObile p-4" v-if="showLayers">
       <h3 class="text-lg font-semibold mb-2">Layers</h3>
       <div class="space-y-2">
@@ -38,7 +38,7 @@
   <div class="new-checkbox p-4 md:block hidden">
     <h3 class="text-lg font-semibold mb-2">Layers</h3>
     <div class="space-y-2">
-      <label class="flex items-center">
+      <!-- <label class="flex items-center">
         <input
           type="checkbox"
           v-model="toggleCameroon"
@@ -46,7 +46,7 @@
           class="form-checkbox h-4 w-4 text-blue-600"
         />
         <span class="ml-2 text-sm">Cameroon</span>
-      </label>
+      </label> -->
 
       <label class="flex items-center">
         <input
@@ -110,7 +110,7 @@ export default {
       zoneMarkeds: [],
       NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
-      toggleCameroon: false,
+      // toggleCameroon: false,
       toggleHydroPolygonGeoJson: false,
       allDisasters: null,
       toggleDisasterMarkers: true,
@@ -189,20 +189,27 @@ export default {
         this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex )
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
-        }).addTo(this.map)
+        }).addTo(this.map);
+        // Add zoom control with a custom position
+    L.control.zoom({
+      position: 'bottomright' // Set the zoom control position
+    }).addTo(this.map);
+
         this.map.on('zoomend', () => {
       if (this.map.getZoom() < minZoomLevel) {
         this.map.setZoom(minZoomLevel);
       }
     });
 // Wait for the map to be fully ready
-this.map.whenReady(() => {
+this.map.whenReady( async () => {
       console.log('Map is fully initialized and ready.');
 
       // Add disaster markers if disasters are loaded
       if (this.allDisasters && this.allDisasters.length) {
         this.addDisasterMarkers();
       }
+      await this.loadCameroonGeoJson();
+
     });
       } catch (error) {
         console.error('Error initializing the map:', error)
@@ -351,17 +358,17 @@ this.map.whenReady(() => {
       }
     },
 
-    toggleLoadCameroonGeoJson() {
-      if (this.toggleCameroon) {
-        this.loadCameroonGeoJson()
-        console.log('cameroun map')
-      } else {
-        this.map.removeLayer(this.cameroonLayer)
-        this.map.removeLayer(this.regionLayer)
-        this.map.removeLayer(this.subRegionLayer)
-        console.log('cameroun map remove')
-      }
-    },
+    // toggleLoadCameroonGeoJson() {
+    //   if (this.toggleCameroon) {
+    //     this.loadCameroonGeoJson()
+    //     console.log('cameroun map')
+    //   } else {
+    //     this.map.removeLayer(this.cameroonLayer)
+    //     this.map.removeLayer(this.regionLayer)
+    //     this.map.removeLayer(this.subRegionLayer)
+    //     console.log('cameroun map remove')
+    //   }
+    // },
 
     async loadRegionGeoJson() {
       try {

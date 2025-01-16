@@ -1,5 +1,5 @@
 <template>
-  <div class="relative">
+  <div class="relative mt-20">
     <!-- Fixed image in the background -->
     <div
       class="fixed hidden mb-3 md:block top-0 left-0 w-full h-[30%] bg-cover bg-center z-2 before:content-[''] before:absolute before:inset-0 before:bg-gradient-to-t before:from-black before:to-transparent"

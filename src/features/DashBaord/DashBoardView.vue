@@ -1,6 +1,6 @@
 <template>
   <MapComponent
-    class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
+    class="fixed mt-[80px] top-0 left-0  z-0"
     :latitude="dashboard.latitude"
     :longitude="dashboard.longitude"
     :zoomIndex="dashboard.zoomIndex"
@@ -64,14 +64,26 @@
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full">
     <!-- web view of show zone statistics -->
     <div
-      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
+      class="grid  space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
     >
-      <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-        <div class="hidden md:block mt-10 w-full min-h-[30vh]">
-          <WaterStressChart></WaterStressChart>
+      <div class="lg:w-[560px]  grid gap-1 left-element">
+        <div class="hidden md:block m w-full min-h-[30vh] relative bottom-[40px]" v-if="showWaterStressChart">
+          <button @click="closeWaterStressChart" class="absolute top-2 right-9 m-2 text-2xl bg-white  rounded-full">
+        ✖
+      </button>
+      
+          <WaterStressChart
+          :locality="selectedLocality"
+
+          ></WaterStressChart>
         </div>
 
-        <div class="mt-4">
+       
+
+       
+      </div>
+<div>
+  <div class="mt-4">
           <button-ui
             :label="$t('show_zone_stats')"
             :color="'text-white'"
@@ -80,9 +92,8 @@
             @clickButton="toggleZoneStatistics()"
           >
           </button-ui>
-        </div>
-
-        <div :class="{ hidden: isZoneStatistics }">
+        </div> 
+  <div :class="{ hidden: isZoneStatistics }">
           <div class="mt-2 max-h-[30vh] md:w-full">
             <ZoneInfo :zone="zone" />
           </div>
@@ -91,7 +102,8 @@
             <post-slider :posts="posts" status="RECENT" />
           </div>
         </div>
-      </div>
+</div>
+      <div></div>
 
       <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
         <div :class="{ hidden: !displayStatistics }">
@@ -110,7 +122,8 @@
         class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
       >
         <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-          <div class="hidden md:block mt-2 w-full min-h-[30vh]">
+          <div class="hidden md:block mt-2 w-full min-h-[30vh] bg-white" v-if="showChart">
+
             <WaterStressChart></WaterStressChart>
           </div>
 
@@ -355,8 +368,9 @@ export default {
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
+      selectedLocality: '',
       defaultMapSize: 1,
-      isSubDivisionGraph: false,
+      showWaterStressChart: false,
       isZoneStatistics: true,
       isZoneStatisticsMObile: false,
       isKeyActorsHidden: false,
@@ -492,16 +506,23 @@ export default {
         // mapSize: ,
         latitude: marker.latitude,
         longitude: marker.longitude,
+
         zoomIndex: 10
       })
 
       // Navigate to the dashboard without parameters in the URL
       this.$router.push({ name: 'dashboard' })
+      this.showWaterStressChart = true;
+      this.selectedLocality = marker.locality;
 
       console.log()
-
       console.log('The router complete')
     },
+
+    closeWaterStressChart() {
+      this.showWaterStressChart = false;
+    },
+
 
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
@@ -674,9 +695,9 @@ span {
 }
 .left-element {
   position: absolute;
-  top: 120px;
+  top: 100px;
   z-index: 5;
-  left: 20px;
+  left: 0px;
 }
 .buttonClose {
   position: fixed;
