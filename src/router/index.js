@@ -35,6 +35,9 @@ import AccountValidation from '../features/Auth/components/AccountValidation.vue
 import ChoosePack from '../features/Subcription/ChoosePack.vue'
 import PaymentOption from '../features/Subcription/PaymentOption.vue'
 import PaymentMessage from '../features/Subcription/PaymentMessage.vue'
+import SimulationView from "../features/Simulation/SimulationView.vue"
+
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -92,6 +95,20 @@ const router = createRouter({
       component: EventView
       // meta: { requiresAuth: true }
     },
+
+    {
+      path: '/simulation/:zoneId?/:parentId?/:zoneName?/:mapSize?',
+      name: 'simulation',
+      component: SimulationView,
+      // meta: { requiresAuth: true },
+      props: (route) => ({
+        zoneId: route.params.zoneId || 1,
+        parentId: route.params.parentId,
+        zoneName: route.params.zoneName,
+        mapSize: route.params.mapSize
+      }),
+    },
+
     {
       path: '/setting',
       name: 'setting',

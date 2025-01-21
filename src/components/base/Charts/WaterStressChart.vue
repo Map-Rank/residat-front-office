@@ -62,11 +62,12 @@ Current      </label>
     <p class="text-[1.1rem] font-semibold">Current Water Level: <span class="text-[1.1rem]">{{ currentWaterLevel }}</span></p>
     <p class="text-[1.1rem] font-semibold mt-5">Projection: <span class="text-[1.1rem]"></span></p>
     <p class="text-[1.1rem] font-semibold mt-5">Description <span class="text-[1.1rem]"></span></p>
-    <div class="border-2 relative right-[50px] mt-4  w-[130%] h-[200%]">
+    <div class="border-2 relative right-[50px] mt-4  w-[130%] h-[150%]">
     
   </div>
-  <p class="mt-10"> For more information click here<span> <button class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">similulation</button></span></p> 
-
+  <div class="pb-10">
+  <p class="mt-10"> For more information click here<span> <button @click="navigateToSimulation" class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">similulation</button></span></p> 
+</div>
 
   </div>
  
@@ -122,20 +123,16 @@ computed:{
   },
 },
   methods: {
-    // generateChartData(today) {
-    //   const startDate = subDays(today, 2)
-    //   const endDate = addDays(today, 3)
-    //   const chartData = []
 
-    //   for (let d = startDate; d <= endDate; d = addDays(d, 1)) {
-    //     chartData.push({
-    //       Date: d,
-    //       WaterStressLevel: this.getRandomWaterLevel() // Implement this method to get water level
-    //     })
-    //   }
+    navigateToSimulation() {
+      
 
-    //   return chartData
-    // },
+      this.$router.push({
+        name: 'simulation',
+   
+      });
+    },
+    
     generateChartData(today, range) {
       let startDate;
      let  endDate;
