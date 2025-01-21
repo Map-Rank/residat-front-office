@@ -1,22 +1,75 @@
 <template>
 
 <div
-  class="container  h-full max-h-[calc(93vh-10px)] px-5 pb-5 py-5 flex flex-col justify-center items-center bg-white rounded-lg overflow-y-auto"
+  class="container  h-full max-h-[calc(93vh-10px)] px-5  py-10 flex flex-col justify-center items-center bg-white rounded-lg overflow-y-auto"
 >  
-<div class=" relative top-[15px]">
-<p class="text-xl font-bold">{{locality}}</p>
+<div class=" relative ">
+<p class="text-2xl font-bold">{{locality}}</p>
 </div>
   <div class="w-full relative top-[60px]" style="height: 500px; ">
     <canvas ref="waterStressChart" class="w-full h-full"></canvas>
   </div>
-  
+   <!-- Time Range Checkboxes -->
+   <div class="relative top-[80px] flex flex-row text-center justify-items-center gap-5">
+      <label
+      class="text-center"
+      >
+        <input
+        class="w-[25px] h-[25px] font-normal"
+          type="checkbox"
+          value="1week"
+          v-model="selectedRange"
+          @change="updateChart"
+        />
+Current      </label>
+      <label>
+        <input
+        class="w-[25px] h-[25px]"
+
+          type="checkbox"
+          value="1month"
+          v-model="selectedRange"
+          @change="updateChart"
+        />
+        1 Month Ago
+      </label>
+      <label class="">
+        <input
+        class="w-[25px] h-[25px]"
+
+          type="checkbox"
+          value="1year"
+          v-model="selectedRange"
+          @change="updateChart"
+        />
+        1 Year Ago
+      </label>
+      <label>
+        <input
+        class="w-[25px] h-[25px]"
+
+          type="checkbox"
+          value="5years"
+          v-model="selectedRange"
+          @change="updateChart"
+        />
+        5 Years Ago
+      </label>
+    </div>
+
   <!-- Additional content -->
-  <div class="relative top-[90px]">
-    <p>Additional content here...</p>
-    <p>This section will scroll if the content exceeds the view height. Lorem ipsum, dolor sit amet consectetur adipisicing elit. Odit aut molestias iste, quia non eius. Voluptatibus exercitationem accusantium neque deleniti placeat culpa ratione suscipit iusto eligendi aliquid! Quis, doloremque dolore! lorent
-      Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit nesciunt earum, totam eos temporibus natus amet dignissimos molestiae aliquam, nam ipsa, quas deserunt a tempora voluptate repudiandae illo dolores vitae!
-    </p>
+  <div class="relative top-[120px] pb-10 fex flex-col justify-center gap-5">
+    <p class="text-[1.1rem] font-semibold">Current Water Level: <span class="text-[1.1rem]">{{ currentWaterLevel }}</span></p>
+    <p class="text-[1.1rem] font-semibold mt-5">Projection: <span class="text-[1.1rem]"></span></p>
+    <p class="text-[1.1rem] font-semibold mt-5">Description <span class="text-[1.1rem]"></span></p>
+    <div class="border-2 relative right-[50px] mt-4  w-[130%] h-[200%]">
+    
   </div>
+  <p class="mt-10"> For more information click here<span> <button class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">similulation</button></span></p> 
+
+
+  </div>
+ 
 </div>
 </template>
 
@@ -31,9 +84,13 @@ export default {
   name: 'WaterStressChart',
   data() {
     const today = new Date()
+    
     return {
       today,
-      chartData: this.generateChartData(today)
+      selectedRange: ["default"], // Default time range
+      chartInstance: null,
+
+      chartData: this.generateChartData(today, "default"),
     }
   },
   props: {
@@ -44,26 +101,112 @@ export default {
     Chart.register(ChartDataLabels)
     this.renderChart()
   },
+computed:{
+  currentWaterLevel() {
+    const todayFormatted = format(this.today, 'yyyy-MM-dd');
+    const todayData = this.chartData.find(
+      (d) => format(d.Date, 'yyyy-MM-dd') === todayFormatted
+    );
 
+    if (!todayData) return "No Data";
+
+    const level = todayData.WaterStressLevel;
+    if (level >= 0 && level < 30) return "Very Low Water";
+    if (level >= 30 && level < 45) return "Low Water";
+    if (level >= 45 && level < 55) return "Normal (Dry Season)";
+    if (level >= 55 && level < 65) return "Normal (Raining Season)";
+    if (level >= 65 && level < 80) return "High Water";
+    if (level >= 80) return "Very High Water";
+
+    return "Unknown Level";
+  },
+},
   methods: {
-    generateChartData(today) {
-      const startDate = subDays(today, 2)
-      const endDate = addDays(today, 3)
-      const chartData = []
+    // generateChartData(today) {
+    //   const startDate = subDays(today, 2)
+    //   const endDate = addDays(today, 3)
+    //   const chartData = []
 
-      for (let d = startDate; d <= endDate; d = addDays(d, 1)) {
+    //   for (let d = startDate; d <= endDate; d = addDays(d, 1)) {
+    //     chartData.push({
+    //       Date: d,
+    //       WaterStressLevel: this.getRandomWaterLevel() // Implement this method to get water level
+    //     })
+    //   }
+
+    //   return chartData
+    // },
+    generateChartData(today, range) {
+      let startDate;
+     let  endDate;
+
+      switch (range) {
+        case "1week":
+          startDate = subDays(today, 7);
+          break;
+        case "1month":
+          startDate = subDays(today, 30);
+          break;
+        case "1year":
+          startDate = subDays(today, 365);
+          break;
+        case "5years":
+          startDate = subDays(today, 365 * 5);
+          break;
+        default:
+          startDate = subDays(today, 2); // Default range from your existing code
+           endDate = addDays(today, 3);
+        } const chartData = [];
+      for (let d = startDate;   d <= today;  d = subDays(d, -1)) {
         chartData.push({
           Date: d,
-          WaterStressLevel: this.getRandomWaterLevel() // Implement this method to get water level
-        })
+          WaterStressLevel: this.getRandomWaterLevel(),
+        });
       }
-
-      return chartData
+      if (endDate > today) {
+    for (let d = addDays(today, 1); d <= endDate; d = addDays(d, 1)) {
+      chartData.push({
+        Date: d,
+        WaterStressLevel: this.getRandomWaterLevel(), // You can adjust this for future data
+      });
+    }
+  }
+      return chartData;
     },
 
+    // getRandomWaterLevel() {
+    //   return Math.floor(Math.random() * 101)
+    // },
     getRandomWaterLevel() {
-      return Math.floor(Math.random() * 101)
-    },
+      return Math.floor(Math.random() * 101);
+    },  
+    getTimeUnit() {
+  const lastSelectedRange = this.selectedRange.slice(-1)[0]; // Get the last selected range
+  switch (lastSelectedRange) {
+    case "1year":
+      return "month"; // Display intervals of 1 month
+    case "5years":
+      return "year"; // Display intervals of 1 year
+    default:
+      return "day"; // Default interval for shorter ranges
+  }
+},calculateCurrentWaterLevel() {
+    const today = format(this.today, 'yyyy-MM-dd');
+    const todayData = this.chartData.find((d) => format(d.Date, 'yyyy-MM-dd') === today);
+    
+    if (!todayData) return null;
+
+    const level = todayData.WaterStressLevel;
+
+    if (level >= 0 && level < 30) return "Very Low Water";
+    if (level >= 30 && level < 45) return "Low Water";
+    if (level >= 45 && level < 55) return "Normal (dry season)";
+    if (level >= 55 && level < 65) return "Normal (Raining season)";
+    if (level >= 65 && level < 80) return "High Water";
+    if (level >= 80) return "Very High Water";
+    
+    return "Unknown";
+  },
     renderChart() {
       const todayFormatted = format(this.today, 'yyyy-MM-dd')
 
@@ -119,7 +262,7 @@ export default {
           x: {
             type: 'time',
             time: {
-              unit: 'day'
+              unit: this.getTimeUnit(), // Dynamically determine the interval
             },
             title: {
               display: true,
@@ -249,7 +392,7 @@ export default {
 
                 borderWidth: 0,
                 label: {
-                  content: 'very height Water',
+                  content: 'very high Water',
                   ...fontStyle11
                 }
               }
@@ -273,13 +416,20 @@ export default {
           }
         ]
       }
-
-      new Chart(this.$refs.waterStressChart, {
-        type: 'line',
-        data: data,
-        options: options
-      })
-    }
-  }
+      if (this.chartInstance) {
+        this.chartInstance.destroy();
+      }
+      this.chartInstance = new Chart(this.$refs.waterStressChart, {
+        type: "line",
+        data,
+        options,
+      });
+    },
+    updateChart() {
+      const lastSelectedRange = this.selectedRange.slice(-1)[0]; // Get the last checked range
+      this.chartData = this.generateChartData(this.today, lastSelectedRange); // Update chart data
+      this.renderChart(); // Re-render the chart
+    },
+  },
 }
 </script>

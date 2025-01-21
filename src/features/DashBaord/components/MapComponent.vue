@@ -1,4 +1,5 @@
 <template>
+  <div ref="mapContainer" class="map-container">
   <div>
     <div id="map" style="height: 100vh; position: sticky"></div>
     <!-- Dynamically show info-box when a region is selected -->
@@ -34,11 +35,12 @@
       </div>
     </div>
   </div>
+</div>
 
-  <div class="new-checkbox p-4 md:block hidden">
+  <!-- <div class="new-checkbox p-4 md:block hidden">
     <h3 class="text-lg font-semibold mb-2">Layers</h3>
     <div class="space-y-2">
-      <!-- <label class="flex items-center">
+       <label class="flex items-center">
         <input
           type="checkbox"
           v-model="toggleCameroon"
@@ -46,13 +48,12 @@
           class="form-checkbox h-4 w-4 text-blue-600"
         />
         <span class="ml-2 text-sm">Cameroon</span>
-      </label> -->
+      </label> 
 
       <label class="flex items-center">
         <input
           type="checkbox"
           v-model="toggleHydroPolygonGeoJson"
-          @change="toggleLoadHydroPolygonGeoJson"
           class="form-checkbox h-4 w-4 text-green-600"
         />
         <span class="ml-2 text-sm">Hydro Polygon Map</span>
@@ -60,7 +61,7 @@
 
      
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -110,6 +111,9 @@ export default {
       zoneMarkeds: [],
       NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
+      // hydroPolygonGeoJSON: null, // Store the GeoJSON data
+      isHydroPolygonVisible: false, // Track visibility state
+
       // toggleCameroon: false,
       toggleHydroPolygonGeoJson: false,
       allDisasters: null,
@@ -186,7 +190,10 @@ export default {
         this.zoneMarkeds = this.cachedZones
         const minZoomLevel= 6.3;
         // Initialize map
-        this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex )
+          // Initialize map with zoom control disabled
+    this.map = L.map('map', {
+      zoomControl: false // Disable default zoom control
+    }).setView([this.latitude, this.longitude], this.zoomIndex);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
         }).addTo(this.map);
@@ -350,13 +357,39 @@ this.map.whenReady( async () => {
       }
     },
 
-    toggleLoadHydroPolygonGeoJson() {
-      if (this.toggleHydroPolygonGeoJson) {
-        this.loadHydroPolygonGeoJson()
-      } else {
-        this.map.removeLayer(this.NewhydroPolygonLayer)
+//     toggleHydroPolygonLayer(show) {
+//       this.isHydroPolygonVisible = show; // Update visibility state
+
+//       if (this.NewhydroPolygonLayer) {
+//         if (show) {
+//           if (!this.map.hasLayer(this.NewhydroPolygonLayer)) {
+//             this.NewhydroPolygonLayer.addTo(this.map);
+//           }        } else {
+// // Remove the layer from the map if it's currently added
+// if (this.map.hasLayer(this.NewhydroPolygonLayer)) {
+//             this.map.removeLayer(this.NewhydroPolygonLayer);
+//           }        }
+//       } else if (show) {
+//         this.loadHydroPolygonGeoJson();
+//       }
+//     },
+
+removeHydroPolygonLayer() {
+      // Remove the layer from the map if it exists
+      if (this.NewhydroPolygonLayer) {
+        this.map.removeLayer(this.NewhydroPolygonLayer);
+        this.NewhydroPolygonLayer = null;
       }
     },
+
+
+    // toggleLoadHydroPolygonGeoJson() {
+    //   if (this.toggleHydroPolygonGeoJson) {
+    //     this.loadHydroPolygonGeoJson()
+    //   } else {
+    //     this.map.removeLayer(this.NewhydroPolygonLayer)
+    //   }
+    // },
 
     // toggleLoadCameroonGeoJson() {
     //   if (this.toggleCameroon) {
@@ -538,6 +571,13 @@ this.map.whenReady( async () => {
   top: 200px;
   z-index: 1000;
   right: 30%;
+}
+
+/* Use `::v-deep` to target external library classes */
+::v-deep(.leaflet-control-zoom) {
+  position: relative;
+  right: 500px; /* Adjust as needed */
+  bottom: 80px;
 }
 
 .new-checkbox {

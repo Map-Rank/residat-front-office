@@ -4,7 +4,7 @@
     <header-app :class="hiddenClass" class="fixed w-full z-10"></header-app>
     <GuestHeader class="fixed w-full z-10" v-if="showGuessHeader"></GuestHeader>
 
-    <main class="flex-grow h-full  md:pb-0 overflow-hidden">
+    <main class="flex-grow h-full  md:pb-0 overflow-hidden pt-20">
       <router-view></router-view>
       <NotificationHandler />
     </main>

@@ -7,6 +7,8 @@
     @zoneClick="zoneClick"
     @disasterClick="disasterClick"
     :show-layers="showLayers"
+    ref="mapComponent"
+
   />
 
   <!-- <div class="level-description ">
@@ -66,7 +68,10 @@
     <div
       class="grid  space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
     >
+
       <div class="lg:w-[560px]  grid gap-1 left-element">
+        <transition name="fade-slide">
+
         <div class="hidden md:block m w-full min-h-[30vh] relative bottom-[40px]" v-if="showWaterStressChart">
           <button @click="closeWaterStressChart" class="absolute top-2 right-9 m-2 text-2xl bg-white  rounded-full">
         ✖
@@ -78,31 +83,13 @@
           ></WaterStressChart>
         </div>
 
-       
+      </transition>
+
 
        
       </div>
-<div>
-  <div class="mt-4">
-          <button-ui
-            :label="$t('show_zone_stats')"
-            :color="'text-white'"
-            :textCss="'text-white font-bold text-center'"
-            :customCss="'bg-secondary-normal flex justify-center rounded-lg hidden md:block'"
-            @clickButton="toggleZoneStatistics()"
-          >
-          </button-ui>
-        </div> 
-  <div :class="{ hidden: isZoneStatistics }">
-          <div class="mt-2 max-h-[30vh] md:w-full">
-            <ZoneInfo :zone="zone" />
-          </div>
 
-          <div class="mt-4 post-slider">
-            <post-slider :posts="posts" status="RECENT" />
-          </div>
-        </div>
-</div>
+
       <div></div>
 
       <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
@@ -170,16 +157,30 @@
       </div> -->
 
     <!-- web version of show navigation zone -->
+     
     <div
-      class="flex flex-row flex-wrap gap-2 bottom-72 right-40 relative hidden sm:hidden md:block"
+      class=" navigator  h-full max-h-[calc(100vh-10px)] flex flex-col gap-2 relative bg-white items-center justify-center w-[28%] overflow-y-auto  pt-[60px]"
     >
+    <div class=".new-checkbox">
+      <label for="hydroPolygonLayer">Show Hydro Polygon Layer</label>
+
+      <label class="flex items-center">
+          <input
+            type="checkbox"
+            v-model="showHydroPolygonLayer"
+            @change="toggleHydroPolygonLayer"
+            class="form-checkbox h-4 w-4 text-blue-600"
+          />
+          <span class="ml-2 text-sm">Hydrography map</span>
+        </label>
+    </div>
       <div
         class="flex md:col-span-6"
-        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
+        :class="!inSubDivision ? 'lg:col-span-5 min-h-[100vh]' : 'lg:col-span-5 '"
       ></div>
 
-      <div class="col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigator mt-8">
+      <div class="col-span-1 md:col-span-2 lg:col-span-2 w-[260px]">
+        <div v-if="!isZoneLoading" class="p-4 bg-white rounded shadow  ">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
             :props_regions="default_regions"
@@ -191,12 +192,35 @@
 
           <ButtonUi
             :label="$t('search')"
-            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+            customCss="bg-secondary-normal text-center flex justify-center  px-10 py-3"
             textCss="text-center text-white"
             @clickButton="searchMap"
           ></ButtonUi>
         </div>
       </div>
+      <div class="md:w-[80%] " >
+  <div class="mt-8">
+    
+    <p class="text-xl font-bold flex justify-center"> show zone stastic</p>
+          <!-- <button-ui
+            :label="$t('show_zone_stats')"
+            :color="'text-white'"
+            :textCss="'text-white font-bold text-center'"
+            :customCss="'bg-secondary-normal flex justify-center rounded-lg hidden md:block'"
+            @clickButton="toggleZoneStatistics()"
+          >
+          </button-ui> -->
+        </div> 
+  <div :class="{  isZoneStatistics }">
+          <div class="mt-2 max-h-[30vh] md:w-full">
+            <ZoneInfo :zone="zone" />
+          </div>
+
+          <div class="mt-4 post-slider">
+            <post-slider :posts="posts" status="RECENT" />
+          </div>
+        </div>
+</div>
     </div>
 
     <!-- mobile view show navigation zone -->
@@ -358,6 +382,7 @@ export default {
       ShowNavigationZone: false,
       showLayers: false,
       graphLabel: '',
+      showHydroPolygonLayer: false, // To control visibility of hydro layer
 
       posts: null,
       zone: null,
@@ -585,6 +610,7 @@ export default {
         this.isLoadingMap = false
       }
     },
+    
 
     updateReportType(type) {
       if (type) {
@@ -612,7 +638,14 @@ export default {
         this.$router.go(-1)
       }
     },
-
+    toggleHydroPolygonLayer() {
+      // this.$refs.mapComponent.toggleHydroPolygonLayer(this.showHydroPolygonLayer);
+      if (this.showHydroPolygonLayer) {
+        this.$refs.mapComponent.loadHydroPolygonGeoJson();
+      } else {
+        this.$refs.mapComponent.removeHydroPolygonLayer();
+      }
+    },
     toggleZoneStatistics() {
       this.isZoneStatistics = !this.isZoneStatistics
     },
@@ -658,6 +691,7 @@ export default {
   height: 100%;
 }
 
+
 .z-0 {
   z-index: 0; /* Map will be behind other elements */
 }
@@ -681,6 +715,11 @@ span {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.3s ease, transform 2s ease;
+}
 .goback {
   width: auto;
 }
@@ -689,9 +728,10 @@ span {
 }
 .navigator {
   position: fixed;
-  top: 210px;
-  z-index: 10;
-  right: 2%;
+  top: 60px;
+  z-index: 5;
+  right: 0;
+  padding-top: 290px;
 }
 .left-element {
   position: absolute;
@@ -699,6 +739,9 @@ span {
   z-index: 5;
   left: 0px;
 }
+/* .new-checkbox {
+ 
+} */
 .buttonClose {
   position: fixed;
   top: 50px;

@@ -1,5 +1,5 @@
 <template>
-  <div class="container mx-auto p-6">
+  <div class="container mx-auto p-6 ">
     <AvatarEventShimmer v-if="isLoading" :numShimmers="1" :componentHeight="'500px'" />
 
     <div v-if="!isLoading">
