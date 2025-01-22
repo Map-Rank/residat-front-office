@@ -157,10 +157,24 @@
       </div> -->
 
     <!-- web version of show navigation zone -->
-     
+     <div class="moreButton " >  
+
+  <button-ui
+        :label="$t('More options')"
+        :color="'text-white'"
+        :textCss="'text-white font-bold text-center'"
+        :customCss="'bg-secondary-normal flex justify-center rounded-lg shadow'"
+        @clickButton="toggleOption"
+      >
+    </button-ui>
+</div>
     <div
+    v-if="showMore"
       class=" navigator  h-full max-h-[calc(100vh-10px)] flex flex-col gap-2 relative bg-white items-center justify-center w-[28%] overflow-y-auto  pt-[60px]"
     >
+    <button @click="closeMoreOption" class="closeButton top-2 right-9 m-2 text-2xl bg-white  rounded-full">
+        ✖
+      </button>
     <div class=".new-checkbox">
       <label for="hydroPolygonLayer">Show Hydro Polygon Layer</label>
 
@@ -406,6 +420,8 @@ export default {
       reportType: null,
       inSubDivision: true,
       isZoneLoading: false,
+      showMore: false,
+  
       modalStates: {
         healthVisible: false,
         agricultureVisible: false,
@@ -620,7 +636,7 @@ export default {
       }
       if (this.zone.level_id && this.inSubDivision) this.getReport(this.zone.id)
     },
-
+   
     showModal() {
       this.isModalVisible = true
     },
@@ -638,6 +654,14 @@ export default {
         this.$router.go(-1)
       }
     },
+    closeMoreOption(){
+      this.showMore= false; 
+      
+    },
+    toggleOption(){
+      this.showMore= true;
+
+    }, 
     toggleHydroPolygonLayer() {
       // this.$refs.mapComponent.toggleHydroPolygonLayer(this.showHydroPolygonLayer);
       if (this.showHydroPolygonLayer) {
@@ -734,7 +758,7 @@ span {
   padding-top: 290px;
 }
 .left-element {
-  position: absolute;
+  position: fixed;
   top: 100px;
   z-index: 5;
   left: 0px;
@@ -753,6 +777,20 @@ span {
   top: 80px;
   z-index: 1000;
   right: 2%;
+}
+.closeButton{
+  position: fixed;
+  top: 63px;
+  z-index: 1000;
+  right: 2%;
+
+}
+.moreButton{
+  position: fixed;
+  top: 100px;
+  z-index: 3;
+  right: 4%;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */
 }
 .level-description {
   background-color: white;

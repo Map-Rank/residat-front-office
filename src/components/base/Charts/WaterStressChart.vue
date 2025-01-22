@@ -3,14 +3,14 @@
 <div
   class="container  h-full max-h-[calc(93vh-10px)] px-5  py-10 flex flex-col justify-center items-center bg-white rounded-lg overflow-y-auto"
 >  
-<div class=" relative ">
+<div class=" relative top-[55px]">
 <p class="text-2xl font-bold">{{locality}}</p>
 </div>
-  <div class="w-full relative top-[60px]" style="height: 500px; ">
-    <canvas ref="waterStressChart" class="w-full h-full"></canvas>
+  <div class="w-full relative top-[70px]" style="height: 500px; ">
+    <canvas ref="waterStressChart" style="box-sizing: border-box;display: block;height: 400px;width: 503px;" class="w-full h-full"></canvas>
   </div>
    <!-- Time Range Checkboxes -->
-   <div class="relative top-[80px] flex flex-row text-center justify-items-center gap-5">
+   <div class="relative top-[110px] flex flex-row text-center justify-items-center gap-5">
       <label
       class="text-center"
       >
@@ -58,13 +58,11 @@ Current      </label>
     </div>
 
   <!-- Additional content -->
-  <div class="relative top-[120px] pb-10 fex flex-col justify-center gap-5">
-    <p class="text-[1.1rem] font-semibold">Current Water Level: <span class="text-[1.1rem]">{{ currentWaterLevel }}</span></p>
-    <p class="text-[1.1rem] font-semibold mt-5">Projection: <span class="text-[1.1rem]"></span></p>
-    <p class="text-[1.1rem] font-semibold mt-5">Description <span class="text-[1.1rem]"></span></p>
-    <div class="border-2 relative right-[50px] mt-4  w-[130%] h-[150%]">
-    
-  </div>
+  <div class="relative top-[140px] pb-10 fex flex-col justify-center gap-5">
+    <p class="text-[1rem] font-semibold">Current Water Level: <span class="text-[1rem]">{{ currentWaterLevel }}</span></p>
+    <p class="text-[1rem] font-semibold mt-5">Projection: <span class="text-[1.1rem]"></span></p>
+    <p class="text-[1rem] font-semibold mt-5">Description: <span class="text-[0.9rem]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur veniam nihil, mollitia amet aliquid delectus natus vero nesciunt perspiciatis magni dicta, accusamus veritatis, omnis a voluptas recusandae facere rem adipisci.</span> <span class="text-[1.1rem]"></span></p>
+   
   <div class="pb-10">
   <p class="mt-10"> For more information click here<span> <button @click="navigateToSimulation" class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">similulation</button></span></p> 
 </div>

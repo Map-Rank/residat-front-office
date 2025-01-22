@@ -36,6 +36,7 @@ import ChoosePack from '../features/Subcription/ChoosePack.vue'
 import PaymentOption from '../features/Subcription/PaymentOption.vue'
 import PaymentMessage from '../features/Subcription/PaymentMessage.vue'
 import SimulationView from "../features/Simulation/SimulationView.vue"
+import Privacy from '../features/Setting/Pages/AccountPreferences/Privacy.vue'
 
 
 const router = createRouter({
@@ -65,6 +66,11 @@ const router = createRouter({
       name: 'broadcast-notification',
       component: BroadcastNotification,
       meta: { requiresAuth: true }
+    },
+    {
+      path: '/Privacy-Policy',
+      name: 'PrivacyPolicy',
+      component: Privacy,
     },
     {
       path: '/choose-your-pack',
