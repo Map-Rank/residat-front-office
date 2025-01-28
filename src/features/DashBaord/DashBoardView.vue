@@ -77,7 +77,7 @@
       
           <WaterStressChart
           :locality="selectedLocality"
-
+          :data="apiResponseData"
           ></WaterStressChart>
         </div>
 
@@ -321,7 +321,7 @@ import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 import { getFilterPosts } from '@/features/Post/services/postService.js'
 import { useDashboardStore } from '@/stores/dashboardStore.js'
 import { FlFilledLineHorizontal1 } from '@kalimahapps/vue-icons';
-
+import { fetchWaterStressData } from '../../services/graphInfo'
 export default {
   name: 'DashBoardView',
 
@@ -450,6 +450,9 @@ export default {
       isErrorLoadMap: false,
       displayStatistics: false,
       reportType: null,
+      apiResponseData: [],
+      loading: false,
+      error: null,
       inSubDivision: true,
       isZoneLoading: false,
       showMore: false,
@@ -566,7 +569,7 @@ export default {
       this.$router.push({ name: 'dashboard' })
       console.log('The router complete')
     },
-    disasterClick(marker) {
+    async disasterClick(marker) {
       console.log('navigating after disaster click')
       console.log(marker)
 
@@ -583,14 +586,25 @@ export default {
         zoomIndex: 10
       })
 
-      // Navigate to the dashboard without parameters in the URL
-      this.$router.push({ name: 'dashboard' })
-      this.showWaterStressChart = true;
-      this.selectedLocality = marker.locality;
+      this.loading = true;
+      this.error = null;
 
-      console.log()
-      console.log('The router complete')
+      try {
+        // Call the service to fetch data
+        this.apiResponseData = await fetchWaterStressData(marker.zone_id);
+        this.showWaterStressChart = true;
+        this.selectedLocality = marker.locality;
+
+        // Navigate to the dashboard without parameters in the URL
+        this.$router.push({ name: 'dashboard' });
+      } catch (error) {
+        this.error = error.message || 'Failed to fetch water stress data';
+      } finally {
+        this.loading = false;
+      }
     },
+  
+
 
     closeWaterStressChart() {
       this.showWaterStressChart = false;

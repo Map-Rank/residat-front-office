@@ -98,6 +98,7 @@ export default {
   props: {
     data: Array,
     locality: String,
+
   },
   mounted() {
     Chart.register(ChartDataLabels)
