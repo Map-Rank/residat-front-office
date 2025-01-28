@@ -1,16 +1,17 @@
 <template>
 
 <div
-  class="container  h-full max-h-[calc(93vh-10px)] px-5  py-10 flex flex-col justify-center items-center bg-white rounded-lg overflow-y-auto"
->  
-<div class=" relative top-[55px]">
+  class=" px-5  py-10 flex flex-col justify-center items-center bg-white rounded-lg "
+  
+  >  
+<div class=" ">
 <p class="text-2xl font-bold">{{locality}}</p>
 </div>
-  <div class="w-full relative top-[70px]" style="height: 500px; ">
-    <canvas ref="waterStressChart" style="box-sizing: border-box;display: block;height: 400px;width: 503px;" class="w-full h-full"></canvas>
+  <div class="w-full md:h-[430px] h-[300px] relative top-[20px]" >
+    <canvas ref="waterStressChart" style="box-sizing: border-box;display: block;width: 312px;" class="md:h-[400px] w-full h-[100px]"></canvas>
   </div>
    <!-- Time Range Checkboxes -->
-   <div class="relative top-[110px] flex flex-row text-center justify-items-center gap-5">
+   <div class=" flex flex-row text-center justify-items-center gap-5 mt-10">
       <label
       class="text-center"
       >
@@ -58,13 +59,13 @@ Current      </label>
     </div>
 
   <!-- Additional content -->
-  <div class="relative top-[140px] pb-10 fex flex-col justify-center gap-5">
+  <div class="mt-10 pb-10 fex flex-col justify-center gap-2 ">
     <p class="text-[1rem] font-semibold">Current Water Level: <span class="text-[1rem]">{{ currentWaterLevel }}</span></p>
     <p class="text-[1rem] font-semibold mt-5">Projection: <span class="text-[1.1rem]"></span></p>
-    <p class="text-[1rem] font-semibold mt-5">Description: <span class="text-[0.9rem]">Lorem ipsum dolor sit amet consectetur adipisicing elit. Pariatur veniam nihil, mollitia amet aliquid delectus natus vero nesciunt perspiciatis magni dicta, accusamus veritatis, omnis a voluptas recusandae facere rem adipisci.</span> <span class="text-[1.1rem]"></span></p>
+    <p class="text-[1rem] font-semibold mt-5">Description: <span class="text-[0.9rem]">{{descriptionWaterLevel}}</span> <span class="text-[1.1rem]"></span></p>
    
-  <div class="pb-10">
-  <p class="mt-10"> For more information click here<span> <button @click="navigateToSimulation" class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">similulation</button></span></p> 
+  <div class="mt-8">
+  <p class=""> For more information click here<span> <button @click="navigateToSimulation" class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">similulation</button></span></p> 
 </div>
 
   </div>
@@ -78,7 +79,7 @@ import 'chartjs-adapter-date-fns'
 import 'chartjs-plugin-annotation'
 import ChartDataLabels from 'chartjs-plugin-annotation'
 import { format, subDays, addDays } from 'date-fns'
-
+import { descriptionWaterLevel } from '../../../constants/descriptionWaterLevel'
 export default {
   name: 'WaterStressChart',
   data() {
@@ -90,6 +91,8 @@ export default {
       chartInstance: null,
 
       chartData: this.generateChartData(today, "default"),
+
+
     }
   },
   props: {
@@ -119,6 +122,10 @@ computed:{
 
     return "Unknown Level";
   },
+descriptionWaterLevel(){
+  return descriptionWaterLevel[this.currentWaterLevel].description
+}
+
 },
   methods: {
 
@@ -319,7 +326,7 @@ computed:{
 
                 borderWidth: 0,
                 label: {
-                  content: 'Very Low Water',
+                  content: 'Very Low',
                   ...fontStyle11
                 }
               },
@@ -330,21 +337,11 @@ computed:{
                 backgroundColor: 'rgba(205, 133, 63, 0.3)',
                 borderWidth: 0,
                 label: {
-                  content: 'Low Water',
+                  content: 'Low ',
                   ...fontStyle11
                 }
               },
-              // box30to50: {
-              //   type: 'box',
-              //   yMin: 30,
-              //   yMax: 50,
-              //   backgroundColor: 'rgba(205, 133, 63, 0.2)',
-              //   borderWidth: 0,
-              //   label: {
-              //     content: 'Normal',
-              //     ...fontStyle11
-              //   }
-              // },
+             
               box50to70: {
                 type: 'box',
                 yMin: 55,
@@ -375,7 +372,7 @@ computed:{
                 backgroundColor: 'rgba(33, 150, 243, 0.5)',
                 borderWidth: 0,
                 label: {
-                  content: 'High Water',
+                  content: 'High ',
                   ...fontStyle11
                 }
               },
@@ -387,7 +384,7 @@ computed:{
 
                 borderWidth: 0,
                 label: {
-                  content: 'very high Water',
+                  content: 'very high',
                   ...fontStyle11
                 }
               }

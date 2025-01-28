@@ -68,7 +68,7 @@ const router = createRouter({
       meta: { requiresAuth: true }
     },
     {
-      path: '/Privacy-Policy',
+      path: '/privacy-policy',
       name: 'PrivacyPolicy',
       component: Privacy,
     },

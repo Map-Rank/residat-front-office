@@ -188,7 +188,7 @@ export default {
         }
         this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
-        const minZoomLevel= 6.3;
+        const minZoomLevel= 5.46;
         // Initialize map
           // Initialize map with zoom control disabled
     this.map = L.map('map', {

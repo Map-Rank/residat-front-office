@@ -15,6 +15,7 @@
     "docs:dev": "vitepress dev docs"
   },
   "dependencies": {
+    "@kalimahapps/vue-icons": "^1.7.1",
     "@vee-validate/rules": "^4.11.8",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "autoprefixer": "^10.4.16",

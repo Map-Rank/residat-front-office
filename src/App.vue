@@ -1,7 +1,7 @@
 <template>
   <!-- <div class=" absoluted z-50 w-[20%] bg-black text-white p-6">{{statusMessage }}  </div> -->
   <div class="body flex flex-col min-h-screen">
-    <header-app :class="hiddenClass" class="fixed w-full z-10"></header-app>
+    <header-app :class="hiddenClass" class="fixed w-full z-10 p-4"></header-app>
     <GuestHeader class="fixed w-full z-10" v-if="showGuessHeader"></GuestHeader>
 
     <main class="flex-grow h-full  md:pb-0 overflow-hidden pt-20">

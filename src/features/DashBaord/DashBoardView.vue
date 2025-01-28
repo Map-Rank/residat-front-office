@@ -27,7 +27,7 @@
   </div> -->
 
   <div class="w-full optionButton px-5 md:hidden block">
-    <div class="grid grid-cols-2 gap-2">
+    <!-- <div class="grid grid-cols-2 gap-2">
       <button-ui
         :label="$t('Zone statistics')"
         :color="'text-white'"
@@ -52,7 +52,7 @@
         @clickButton="toggleLayer"
       >
       </button-ui>
-    </div>
+    </div> -->
   </div>
   <div
     v-if="showLayers && isMobileView"
@@ -64,18 +64,16 @@
     </button>
   </div>
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full">
-    <!-- web view of show zone statistics -->
-    <div
-      class="grid  space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
-    >
+     <!-- web view of show zone statistics -->
+   
 
-      <div class="lg:w-[560px]  grid gap-1 left-element">
+      <div class="lg:w-[30%]  grid gap-1 left-element md:block hidden">
         <transition name="fade-slide">
 
-        <div class="hidden md:block m w-full min-h-[30vh] relative bottom-[40px]" v-if="showWaterStressChart">
-          <button @click="closeWaterStressChart" class="absolute top-2 right-9 m-2 text-2xl bg-white  rounded-full">
-        ✖
-      </button>
+        <div class="   min-h-[30vh] relative bottom-[40px] container w-[600px]  h-full max-h-[calc(93vh-10px)] overflow-y-auto bg-red-400 " v-if="showWaterStressChart">
+          <button @click="closeWaterStressChart" class="absolute top-[10px] right-9 m-2 text-2xl bg-white  rounded-full">
+           ✖
+          </button>
       
           <WaterStressChart
           :locality="selectedLocality"
@@ -83,18 +81,44 @@
           ></WaterStressChart>
         </div>
 
-      </transition>
-
-
-       
+         </transition>
+        <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
+            <div :class="{ hidden: !displayStatistics }">
+              <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+        </div>
       </div>
+    </div>
 
+    <!-- mobile view -->
+      <div 
+      class="lg:w-[30%]  grid gap-1 left-element md:hidden block">
+        <transition name="fade-slide">
 
-      <div></div>
+        <div 
+        class="water-stress-chart-container"
+      :style="{ height: currentHeight + 'px' }"
+      v-if="showWaterStressChart"
+      @touchstart="handleTouchStart"
+      @touchmove="handleTouchMove"
+      @touchend="handleTouchEnd"
+         >
+          <button @click="closeWaterStressChart" class="absolute top-2 right-9 m-2 text-2xl bg-white  rounded-full">
+           ✖
+          </button>
+          <div> <FlFilledLineHorizontal1/> <span class="material-symbols-outlined">
+</span></div>
+          
 
-      <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
-        <div :class="{ hidden: !displayStatistics }">
-          <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+          <WaterStressChart
+          :locality="selectedLocality"
+
+          ></WaterStressChart>
+        </div>
+
+         </transition>
+        <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
+            <div :class="{ hidden: !displayStatistics }">
+              <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
         </div>
       </div>
     </div>
@@ -170,9 +194,9 @@
 </div>
     <div
     v-if="showMore"
-      class=" navigator  h-full max-h-[calc(100vh-10px)] flex flex-col gap-2 relative bg-white items-center justify-center w-[28%] overflow-y-auto  pt-[60px]"
+      class=" navigator  h-full md:max-h-[calc(100vh-10px)] max-h-[100hv]  flex flex-col gap-2 relative bg-white items-center justify-center w-[28%] overflow-y-auto  pt-[60px]"
     >
-    <button @click="closeMoreOption" class="closeButton top-2 right-9 m-2 text-2xl bg-white  rounded-full">
+    <button @click="closeMoreOption" class="closeButton top-5 right-9 m-2 text-2xl  rounded-full">
         ✖
       </button>
     <div class=".new-checkbox">
@@ -250,7 +274,7 @@
         ></div>
 
         <div class="col-span-1 md:col-span-2 lg:col-span-2">
-          <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigator mt-8">
+          <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigatorMobile mt-8">
             <zone-post-filter
               :title="$t('select_zone_by_location')"
               :props_regions="default_regions"
@@ -296,6 +320,7 @@ import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 import { getFilterPosts } from '@/features/Post/services/postService.js'
 import { useDashboardStore } from '@/stores/dashboardStore.js'
+import { FlFilledLineHorizontal1 } from '@kalimahapps/vue-icons';
 
 export default {
   name: 'DashBoardView',
@@ -410,6 +435,13 @@ export default {
       selectedLocality: '',
       defaultMapSize: 1,
       showWaterStressChart: false,
+      currentHeight: window.innerHeight * 0.3, // Start with 30% of viewport height
+      minHeight: window.innerHeight * 0.3, // Minimum height
+      maxHeight: window.innerHeight * 1.2, // Maximum height set to 140vh      // maxHeight: 'auto', // Maximum height
+      isDragging: false, // Track drag state
+      startY: 0, // Starting Y position for drag
+      startHeight: 0, // Starting height of the div
+
       isZoneStatistics: true,
       isZoneStatisticsMObile: false,
       isKeyActorsHidden: false,
@@ -562,6 +594,28 @@ export default {
 
     closeWaterStressChart() {
       this.showWaterStressChart = false;
+    },
+    handleTouchStart(event) {
+      this.isDragging = true;
+      this.startY = event.touches[0].clientY;
+      this.startHeight = this.currentHeight;
+    },
+    handleTouchMove(event) {
+      if (!this.isDragging) return;
+      const deltaY = this.startY - event.touches[0].clientY;
+      let newHeight = this.startHeight + deltaY;
+
+      // Constrain height within min and max bounds
+      if (newHeight < this.minHeight) {
+        newHeight = this.minHeight;
+      } else if (newHeight > this.maxHeight) {
+        newHeight = this.maxHeight;
+      }
+
+      this.currentHeight = newHeight;
+    },
+    handleTouchEnd() {
+      this.isDragging = false;
     },
 
 
@@ -757,6 +811,21 @@ span {
   right: 0;
   padding-top: 290px;
 }
+.navigatorMobile{
+  position: fixed;
+  top: 90px;
+  z-index: 10;
+  right: 10%;
+
+
+}
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
 .left-element {
   position: fixed;
   top: 100px;
@@ -799,12 +868,50 @@ span {
   z-index: 1000;
   right: 20%;
 }
+.water-stress-chart-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white; /* Adjust as needed */
+  min-height: 30vh; /* Minimum height when collapsed */
+  max-height: 120vh; /* Maximum height */
+  border-radius: 30px 30px 0 0; /* Rounded top corners */
+  transition: height 0.03s ease-in-out; /* Smooth height transition */
+  overflow-y: hidden; /* Scrollable content */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  z-index: 1000; /* Ensure it's above other elements */
+}
+
+.water-stress-chart-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.water-stress-chart-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.water-stress-chart-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Optional: Style drag handle */
+.drag-handle {
+  height: 10px;
+  width: 100px;
+  background-color: #ffffff;
+  margin: 0 auto;
+  border-radius: 5px;
+  cursor: ns-resize;
+}
 @media (max-width: 780px) {
   .navigator {
-    position: fixed;
-    top: 120px;
-    z-index: 10;
-    right: 10%;
+  position: fixed;
+        top: 93px;
+        z-index: 10;
+        right: 0%;
+        width: auto;
+
   }
 
   .optionButton {
