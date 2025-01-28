@@ -2,23 +2,21 @@ import { makeApiGetCall } from '@/api/api';
 import { API_ENDPOINTS } from '../constants/apiEndpoints';
 import { format } from 'date-fns';
 
-const fetchWaterStressData = async (zoneId, date) => {
-  try {
-    // Format date to match Laravel's expected format (YYYY-MM-DD)
-    const formattedDate = format(new Date(date), 'yyyy-MM-dd');
+const fetchWaterStressData = async (zoneId) => {
+    try {
+        // Format date to match Laravel's expected format (YYYY-MM-DD)
+        const formattedDate = format(new Date(), 'yyyy-MM-dd');
+        
+        // Construct the full URL with query parameters
+        const url = `${API_ENDPOINTS.predictions}?zone_id=${zoneId}&date=${formattedDate}`;
+        
+        // Make the API call with the constructed URL
+        const response = await makeApiGetCall(url);
     
-    // Construct URL with query parameters as expected by Laravel
-    const response = await makeApiGetCall(API_ENDPOINTS.predictions, {
-      params: {
-        zone_id: zoneId,
-        date: formattedDate
-      }
-    });
-
-    if (!response.data.success) {
-      throw new Error(response.data.message);
-    }
-
+        if (!response.data.success) {
+          throw new Error(response.data.message);
+        }
+    
     // // Transform the response to match your chart's expected format
     // const predictions = response.data.predictions;
     // return {

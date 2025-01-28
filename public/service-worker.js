@@ -6,7 +6,6 @@ let apiBaseUrl = null
 
 
 self.addEventListener('install', (event) => {
-  console.log('Service Worker installing.')
 
   self.skipWaiting()
 })
@@ -51,7 +50,6 @@ self.addEventListener('notificationclick', (event) => {
 })
 // Listen for messages from the main app (to set token, last notification, etc.)
 self.addEventListener('message', (event) => {
-  console.log('Service Worker received message:', event.data)
 
   if (event.data.action === 'setLastNotification' && event.data.notification) {
     lastNotification = event.data.notification
@@ -67,19 +65,11 @@ self.addEventListener('message', (event) => {
   }
   if (event.data.type === 'SET_API_BASE_URL'&& event.data.url) {
     apiBaseUrl = event.data.url
-    console.log('API Base URL received:', apiBaseUrl)
 
   }
   if (event.data.action === 'setAuthToken' && event.data.token) {
     authToken = event.data.token
-    // console.log(event.data.token)
-    console.log('AuthToken set in service worker:', authToken)
-    // Fetch new notifications once token is set
-    // if (authToken) {
-    //   fetchNewNotifications(authToken)
-    // } else {
-    //   console.error('Auth token is missing during activation.')
-    // }
+   
   }
 })
 
@@ -99,8 +89,7 @@ function showLastNotification() {
   }
 }
 
-// Fetch new notifications and show them
-// Fetch new notifications and show them
+
 async function fetchNewNotifications(authToken, lastNotificationId = null) {
   const controller = new AbortController(); // For timeout handling
   const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 seconds timeout
@@ -144,7 +133,6 @@ async function fetchNewNotifications(authToken, lastNotificationId = null) {
         notifications[0]
       );
 
-      console.log('Most recent notification:', mostRecentNotification);
 
       // Show the most recent notification
       self.registration.showNotification(mostRecentNotification.title, {

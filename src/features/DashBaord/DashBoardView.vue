@@ -320,8 +320,7 @@ import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 import { getFilterPosts } from '@/features/Post/services/postService.js'
 import { useDashboardStore } from '@/stores/dashboardStore.js'
-import { FlFilledLineHorizontal1 } from '@kalimahapps/vue-icons';
-import { fetchWaterStressData } from '../../services/graphInfo'
+import { fetchWaterStressData } from '../../services/graphInfo.js'
 export default {
   name: 'DashBoardView',
 
@@ -585,23 +584,28 @@ export default {
 
         zoomIndex: 10
       })
-
       this.loading = true;
-      this.error = null;
+this.error = null;
+this.showWaterStressChart = true;
+this.selectedLocality = marker.locality;
 
-      try {
-        // Call the service to fetch data
-        this.apiResponseData = await fetchWaterStressData(marker.zone_id);
-        this.showWaterStressChart = true;
-        this.selectedLocality = marker.locality;
+if (!marker.zone_id) {
+  this.error = 'Zone ID is required.';
+  this.loading = false;
+  return;
+}
 
-        // Navigate to the dashboard without parameters in the URL
-        this.$router.push({ name: 'dashboard' });
-      } catch (error) {
-        this.error = error.message || 'Failed to fetch water stress data';
-      } finally {
-        this.loading = false;
-      }
+try {
+  console.log('Fetching water stress data for zone ID:', marker.zone_id);
+  this.apiResponseData = await fetchWaterStressData(marker.zone_id);
+  
+  // Navigate to the dashboard without parameters in the URL
+  this.$router.push({ name: 'dashboard' });
+} catch (error) {
+  this.error = error.message || 'Failed to fetch water stress data';
+} finally {
+  this.loading = false;
+}
     },
   
 
