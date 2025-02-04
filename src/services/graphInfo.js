@@ -17,19 +17,7 @@ const fetchWaterStressData = async (zoneId) => {
           throw new Error(response.data.message);
         }
     
-    // // Transform the response to match your chart's expected format
-    // const predictions = response.data.predictions;
-    // return {
-    //   zoneName: response.data.zone,
-    //   date: response.data.date,
-    //   waterStressData: [
-    //     { Date: response.data.date, WaterStressLevel: predictions.day_1.risk * 100 },
-    //     { Date: addDays(new Date(response.data.date), 1), WaterStressLevel: predictions.day_2.risk * 100 },
-    //     { Date: addDays(new Date(response.data.date), 2), WaterStressLevel: predictions.day_3.risk * 100 },
-    //     { Date: addDays(new Date(response.data.date), 3), WaterStressLevel: predictions.day_4.risk * 100 },
-    //     { Date: addDays(new Date(response.data.date), 4), WaterStressLevel: predictions.day_5.risk * 100 }
-    //   ]
-    // };
+  
 
   } catch (error) {
     console.error('Error fetching water stress data:', error);

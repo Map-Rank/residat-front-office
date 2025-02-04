@@ -26,43 +26,8 @@
 
   </div> -->
 
-  <div class="w-full optionButton px-5 md:hidden block">
-    <!-- <div class="grid grid-cols-2 gap-2">
-      <button-ui
-        :label="$t('Zone statistics')"
-        :color="'text-white'"
-        :textCss="'text-white font-bold text-center text-[6px]'"
-        :customCss="'bg-secondary-normal flex justify-center rounded-lg p-1'"
-        @clickButton="toggleZoneStatisticsMobile"
-      >
-      </button-ui>
-      <button-ui
-        :label="$t('Navigate by Zone')"
-        :color="'text-white'"
-        :textCss="'text-white font-bold text-center'"
-        :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-        @clickButton="toggleNavigationZone"
-      >
-      </button-ui>
-      <button-ui
-        :label="$t('layers')"
-        :color="'text-white'"
-        :textCss="'text-white font-bold text-center'"
-        :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-        @clickButton="toggleLayer"
-      >
-      </button-ui>
-    </div> -->
-  </div>
-  <div
-    v-if="showLayers && isMobileView"
-    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-    @click.self="toggleLayer"
-  >
-    <button @click="toggleLayer" class="text-white buttonClose rounded p-2 bg-red-500">
-      close
-    </button>
-  </div>
+ 
+  
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full">
      <!-- web view of show zone statistics -->
    
@@ -71,7 +36,7 @@
         <transition name="fade-slide">
 
         <div class="   min-h-[30vh] relative bottom-[40px] container w-[600px]  h-full max-h-[calc(93vh-10px)] overflow-y-auto bg-red-400 " v-if="showWaterStressChart">
-          <button @click="closeWaterStressChart" class="absolute top-[10px] right-9 m-2 text-2xl bg-white  rounded-full">
+          <button @click="closeWaterStressChart" class="absolute top-[28px] right-9 m-2 text-2xl bg-white  rounded-full">
            ✖
           </button>
       
@@ -123,64 +88,8 @@
       </div>
     </div>
 
-    <!-- mobile view of show zone statistics -->
-    <div
-      v-if="isZoneStatisticsMObile && isMobileView"
-      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-      @click.self="toggleZoneStatisticsMobile"
-    >
-      <div
-        class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
-      >
-        <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-          <div class="hidden md:block mt-2 w-full min-h-[30vh] bg-white" v-if="showChart">
-
-            <WaterStressChart></WaterStressChart>
-          </div>
-
-          <div>
-            <div class="mt-2 max-h-[30vh] md:w-full">
-              <ZoneInfo :zone="zone" />
-            </div>
-
-            <div class="mt-7">
-              <post-slider :posts="posts" status="RECENT" />
-            </div>
-          </div>
-        </div>
-
-        <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
-          <div :class="{ hidden: !displayStatistics }">
-            <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
-          </div>
-        </div>
-      </div>
-      <button
-        @click="toggleZoneStatisticsMobile"
-        class="text-white buttonClose rounded p-2 bg-red-500"
-      >
-        close
-      </button>
-    </div>
-
-    <!-- <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
-        <div class="md:block">
-          <div class="">
-            <div class="">
-              <button-ui
-                :label="$t('key_actors')"
-                :color="'text-white'"
-                :textCss="'text-white font-bold text-center'"
-                :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-                @clickButton="toggleShowAllActors()"
-              >
-              </button-ui>
-            </div>
-          </div>
-        </div>
-      </div> -->
-
-    <!-- web version of show navigation zone -->
+    
+  
      <div class="moreButton " >  
 
   <button-ui
@@ -196,10 +105,10 @@
     v-if="showMore"
       class=" navigator  h-full md:max-h-[calc(100vh-10px)] max-h-[100hv]  flex flex-col gap-2 relative bg-white items-center justify-center w-[28%] overflow-y-auto  pt-[60px]"
     >
-    <button @click="closeMoreOption" class="closeButton top-5 right-9 m-2 text-2xl  rounded-full">
+    <button @click="closeMoreOption" class="closeButton top-10 right-9 m-2 text-2xl  rounded-full">
         ✖
       </button>
-    <div class=".new-checkbox">
+    <div class=" mt-[330px]">
       <label for="hydroPolygonLayer">Show Hydro Polygon Layer</label>
 
       <label class="flex items-center">
@@ -236,19 +145,12 @@
           ></ButtonUi>
         </div>
       </div>
-      <div class="md:w-[80%] " >
-  <div class="mt-8">
+      <div class="md:w-[80%] w-[76%] " >
+  <div class="mt-8 mb-24">
     
     <p class="text-xl font-bold flex justify-center"> show zone stastic</p>
-          <!-- <button-ui
-            :label="$t('show_zone_stats')"
-            :color="'text-white'"
-            :textCss="'text-white font-bold text-center'"
-            :customCss="'bg-secondary-normal flex justify-center rounded-lg hidden md:block'"
-            @clickButton="toggleZoneStatistics()"
-          >
-          </button-ui> -->
-        </div> 
+         
+        
   <div :class="{  isZoneStatistics }">
           <div class="mt-2 max-h-[30vh] md:w-full">
             <ZoneInfo :zone="zone" />
@@ -260,43 +162,9 @@
         </div>
 </div>
     </div>
+  </div> 
 
-    <!-- mobile view show navigation zone -->
-    <div
-      v-if="ShowNavigationZone && isMobileView"
-      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-      @click.self="toggleNavigationZone"
-    >
-      <div class="flex flex-row flex-wrap gap-2">
-        <div
-          class="flex md:col-span-6"
-          :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
-        ></div>
-
-        <div class="col-span-1 md:col-span-2 lg:col-span-2">
-          <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigatorMobile mt-8">
-            <zone-post-filter
-              :title="$t('select_zone_by_location')"
-              :props_regions="default_regions"
-              :props_divisions="default_divisions"
-              :props_sub_divisions="default_sub_divisions"
-              :filterPostFunctionWithId="selectZoneToSearch"
-              :updateZone="updateZone"
-            ></zone-post-filter>
-
-            <ButtonUi
-              :label="$t('search')"
-              customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
-              textCss="text-center text-white"
-              @clickButton="searchMap"
-            ></ButtonUi>
-          </div>
-        </div>
-      </div>
-      <button @click="toggleNavigationZone" class="text-white buttonClose rounded p-2 bg-red-500">
-        Close
-      </button>
-    </div>
+   
   </div>
 </template>
 
@@ -436,7 +304,7 @@ export default {
       showWaterStressChart: false,
       currentHeight: window.innerHeight * 0.3, // Start with 30% of viewport height
       minHeight: window.innerHeight * 0.3, // Minimum height
-      maxHeight: window.innerHeight * 1.2, // Maximum height set to 140vh      // maxHeight: 'auto', // Maximum height
+      maxHeight: window.innerHeight * 1.3, // Maximum height set to 140vh      // maxHeight: 'auto', // Maximum height
       isDragging: false, // Track drag state
       startY: 0, // Starting Y position for drag
       startHeight: 0, // Starting height of the div
@@ -745,16 +613,8 @@ try {
     toggleZoneStatistics() {
       this.isZoneStatistics = !this.isZoneStatistics
     },
-    toggleZoneStatisticsMobile() {
-      this.isZoneStatisticsMObile = !this.isZoneStatisticsMObile
-    },
-    toggleNavigationZone() {
-      this.ShowNavigationZone = !this.ShowNavigationZone
-    },
-    toggleLayer() {
-      this.showLayers = !this.showLayers
-      console.log('bonjour')
-    },
+   
+   
 
     toggleKeyActorsVisibility() {
       this.isKeyActorsHidden = !this.isKeyActorsHidden
@@ -824,10 +684,11 @@ span {
 }
 .navigator {
   position: fixed;
-  top: 60px;
+  top: 80px;
   z-index: 5;
   right: 0;
-  padding-top: 290px;
+  /* padding-top: 30px;
+  padding-bottom: 50px; */
 }
 .navigatorMobile{
   position: fixed;
@@ -858,16 +719,16 @@ span {
   top: 50px;
   right: 40px;
 }
-.new-checkbox {
+/* .new-checkbox {
   background-color: white;
   position: fixed;
   top: 80px;
   z-index: 1000;
   right: 2%;
-}
+} */
 .closeButton{
   position: fixed;
-  top: 63px;
+  top: 80px;
   z-index: 1000;
   right: 2%;
 
@@ -892,7 +753,7 @@ span {
   width: 100%;
   background-color: white; /* Adjust as needed */
   min-height: 30vh; /* Minimum height when collapsed */
-  max-height: 120vh; /* Maximum height */
+  max-height: 130vh; /* Maximum height */
   border-radius: 30px 30px 0 0; /* Rounded top corners */
   transition: height 0.03s ease-in-out; /* Smooth height transition */
   overflow-y: hidden; /* Scrollable content */
@@ -925,17 +786,15 @@ span {
 @media (max-width: 780px) {
   .navigator {
   position: fixed;
-        top: 93px;
+        top: 78px;
         z-index: 10;
         right: 0%;
         width: auto;
+        padding-top: 50px;
+        padding-bottom: 90px;
 
   }
 
-  .optionButton {
-    position: fixed;
-    bottom: 83px;
-    /* z-index: 5; */
-  }
+  
 }
 </style>
