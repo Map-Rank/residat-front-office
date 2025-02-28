@@ -3,7 +3,7 @@ export const API_ENDPOINTS = {
   login: '/login',
   register: '/register',
   createPost: '/post',
-  post:'/post',
+  post: '/post',
   getPosts: '/post',
   getPostsGuest: '/get-all-posts',
   getSinglePostsGuest: '/one-post',
@@ -25,5 +25,6 @@ export const API_ENDPOINTS = {
   getEvents: '/events',
   getEventsGuest: '/get-all-events',
   getSingleEventsGuest: '/one-event',
-  notifications:'/notifications'
+  notifications: '/notifications',
+  deleteYourAccount: '/delete-user'
 };

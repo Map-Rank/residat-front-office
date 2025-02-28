@@ -1,4 +1,4 @@
-import { makeApiPostCall } from '@/api/api'
+import { makeApiPostCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 import { getFcmToken } from '@/firebaseConfig.js'
 // import convertToDate from '../../../utils/dateFormat.js'
@@ -295,6 +295,19 @@ const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) 
   }
 }
 
+const deleteOwnAccount = async () => {
+
+  const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+
+  try {
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deleteYourAccount}`, token)
+    console.log('delete event sucess 1!!!  ' + response.data)
+  } catch (error) {
+    console.error('Error deleting event:', error)
+    throw error
+  }
+}
+
 export {
   registerUser,
   institutionalRequest,
@@ -303,5 +316,6 @@ export {
   UpdateUser,
   UpdatePassword,
   ForgotPassword,
-  ResetPassword
+  ResetPassword,
+  deleteOwnAccount
 }

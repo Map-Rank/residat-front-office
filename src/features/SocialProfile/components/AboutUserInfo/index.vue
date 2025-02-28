@@ -41,6 +41,17 @@
       {{ $t('update_profile_button') }}
     </button>
   </div>
+  <div v-if="deleteAccount" class="flex items-center mt-3">
+    <button
+      type="submit"
+      @click="showDeleteConfirmation"
+      :class="this.isLoading ? 'bg-gray-400 cursor-wait ' : 'bg-danger-normal hover:bg-danger-hover'"
+      :disabled="this.isLoading"
+      class="submit block w-full text-white py-1.5 rounded-full transition"
+    >
+      {{ $t('delete_account') }}
+    </button>
+  </div>
   <div v-if="!showUpdateProfile" class="flex items-center mt-3">
     <button
       type="submit"
@@ -52,12 +63,20 @@
     </button>
   </div>
 </div>
+<ConfirmationModal ref="confirmationModal" @confirm="ValidatedeleteAccount()" />
 
 </template>
 
 <script>
+import { deleteOwnAccount } from '@/features/Auth/services/authService'
+import useAuthStore from '../../../../stores/auth'
+import ConfirmationModal from '@/components/common/Modal/ConfirmationModal.vue'
+
 export default {
   name: 'AboutUserInfo',
+  components: {
+    ConfirmationModal
+  },
   props: {
     username: {
       type: String,
@@ -71,11 +90,19 @@ export default {
     website: String,
     showUpdateProfile:{
       type:Boolean,
-    default:false}
+      default:false
+    },
+    deleteAccount: {
+      type:Boolean,
+      default:false
+    }
   },
 
   data(){
+    const authStore = useAuthStore()
+
     return {
+      authStore,
       isLoading: false,
     }
   },
@@ -85,6 +112,20 @@ export default {
       this.isLoading = true;
       this.$router.push({ name: 'update-profile' })
     },
+    showDeleteConfirmation() {
+      console.log('Ouverture du modal');
+      this.$refs.confirmationModal.show('Are you sure you want to delete your account?')
+    },
+    ValidatedeleteAccount() {
+      deleteOwnAccount() // {{ edit_1 }} Appel de la fonction deleteOwnAccount
+        .then(() => { // {{ edit_2 }} Utilisation de then pour gérer la promesse
+          this.authStore.logOut(); // Déconnexion de l'utilisateur
+          return this.$router.push({ name: 'authentication' }); // Redirection vers la page d'authentification
+        })
+        .catch((error) => { // {{ edit_3 }} Gestion des erreurs
+          console.error('Error deleting account:', error);
+        });
+    }
   },
 }
 </script>

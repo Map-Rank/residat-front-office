@@ -341,6 +341,7 @@ export default {
     },
     openModal() {
       this.$refs.confirmationModal.show();
+      this.$refs.confirmationModal.show(this.$t('deleting_post'))
     },
 
     async deletePost() {

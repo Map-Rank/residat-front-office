@@ -98,8 +98,11 @@
   "submit_request": "Submit my request",
   "settings_privacy": "Settings & Privacy",
   "logout": "Logout",
+  "confirm_logout": "Are you sure you want to logout ?",
+  "delete_account": "Delete account",
 
   "your_editing_post": "Your Editing a post",
+  "deleting_post": "Do you want to delete this post ?",
   "share_your_thoughts": "Share your thoughts",
   "attach_images_optional": "Attach images (optional)",
   "add_image": "Add Image",

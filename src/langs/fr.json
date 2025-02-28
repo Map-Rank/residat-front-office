@@ -95,7 +95,11 @@
   "create_post": "Créer une publication",
   "settings_privacy": "Paramètres et confidentialité",
   "logout": "Déconnexion",
+  "confirm_logout": "Etes-vous sûr de vouloir vous déconnecter ?",
   "your_editing_post": "Vous modifiez une publication",
+  "deleting_post": "Voulez vous supprimer cette publication",
+  "delete_account": "Supprimer le compte",
+  
   "share_your_thoughts": "Partagez vos pensées",
   "attach_images_optional": "Joindre des images (facultatif)",
   "add_image": "Ajouter une image",
