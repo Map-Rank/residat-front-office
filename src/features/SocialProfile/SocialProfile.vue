@@ -30,6 +30,7 @@
             :joinDate="formatDate(userPost.created_at)"
             :website="'your-website-url.com'"
             :showUpdateProfile="true"
+            :deleteAccount="true"
           />
         </aside>
 

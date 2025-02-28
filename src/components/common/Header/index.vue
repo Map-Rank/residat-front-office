@@ -401,7 +401,7 @@ export default {
 
   methods: {
     openModal() {
-      this.$refs.confirmationModal.show()
+      this.$refs.confirmationModal.show(this.$t('confirm_logout'))
     },
     redirectToNotifications() {
       this.$router.push({ name: 'notification' })
