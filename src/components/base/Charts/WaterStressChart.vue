@@ -80,6 +80,8 @@ import 'chartjs-plugin-annotation'
 import ChartDataLabels from 'chartjs-plugin-annotation'
 import { format, subDays, addDays } from 'date-fns'
 import { descriptionWaterLevel } from '../../../constants/descriptionWaterLevel'
+import { fetchWaterStressData } from '../../../services/graphInfo'
+
 export default {
   name: 'WaterStressChart',
   data() {
@@ -89,59 +91,61 @@ export default {
       today,
       selectedRange: ["default"], // Default time range
       chartInstance: null,
-
       chartData: this.generateChartData(today, "default"),
-
-
+      floodRiskData: [],
+      droughtRiskData: []
     }
   },
   props: {
     data: Array,
     locality: String,
-
   },
   mounted() {
     Chart.register(ChartDataLabels)
-    this.renderChart()
+    this.fetchData()
   },
-computed:{
-  currentWaterLevel() {
-    const todayFormatted = format(this.today, 'yyyy-MM-dd');
-    const todayData = this.chartData.find(
-      (d) => format(d.Date, 'yyyy-MM-dd') === todayFormatted
-    );
+  computed:{
+    currentWaterLevel() {
+      const todayFormatted = format(this.today, 'yyyy-MM-dd');
+      const todayData = this.chartData.find(
+        (d) => format(d.Date, 'yyyy-MM-dd') === todayFormatted
+      );
 
-    if (!todayData) return "No Data";
+      if (!todayData) return "No Data";
 
-    const level = todayData.WaterStressLevel;
-    if (level >= 0 && level < 30) return "Very Low Water";
-    if (level >= 30 && level < 45) return "Low Water";
-    if (level >= 45 && level < 55) return "Normal (Dry Season)";
-    if (level >= 55 && level < 65) return "Normal (Raining Season)";
-    if (level >= 65 && level < 80) return "High Water";
-    if (level >= 80) return "Very High Water";
+      const level = todayData.WaterStressLevel;
+      if (level >= 0 && level < 30) return "Very Low Water";
+      if (level >= 30 && level < 45) return "Low Water";
+      if (level >= 45 && level < 55) return "Normal (Dry Season)";
+      if (level >= 55 && level < 65) return "Normal (Raining Season)";
+      if (level >= 65 && level < 80) return "High Water";
+      if (level >= 80) return "Very High Water";
 
-    return "Unknown Level";
+      return "Unknown Level";
+    },
+    descriptionWaterLevel(){
+      return descriptionWaterLevel[this.currentWaterLevel].description
+    }
   },
-descriptionWaterLevel(){
-  return descriptionWaterLevel[this.currentWaterLevel].description
-}
-
-},
   methods: {
-
+    async fetchData() {
+      try {
+        const data = await fetchWaterStressData(this.locality);
+        this.floodRiskData = data.floodRisk;
+        this.droughtRiskData = data.droughtRisk;
+        this.renderChart();
+      } catch (error) {
+        console.error('Erreur lors de la récupération des données:', error);
+      }
+    },
     navigateToSimulation() {
-      
-
       this.$router.push({
         name: 'simulation',
-   
       });
     },
-    
     generateChartData(today, range) {
       let startDate;
-     let  endDate;
+      let endDate;
 
       switch (range) {
         case "1week":
@@ -158,58 +162,56 @@ descriptionWaterLevel(){
           break;
         default:
           startDate = subDays(today, 2); // Default range from your existing code
-           endDate = addDays(today, 3);
-        } const chartData = [];
-      for (let d = startDate;   d <= today;  d = subDays(d, -1)) {
+          endDate = addDays(today, 3);
+      }
+      const chartData = [];
+      for (let d = startDate; d <= today; d = subDays(d, -1)) {
         chartData.push({
           Date: d,
           WaterStressLevel: this.getRandomWaterLevel(),
         });
       }
       if (endDate > today) {
-    for (let d = addDays(today, 1); d <= endDate; d = addDays(d, 1)) {
-      chartData.push({
-        Date: d,
-        WaterStressLevel: this.getRandomWaterLevel(), // You can adjust this for future data
-      });
-    }
-  }
+        for (let d = addDays(today, 1); d <= endDate; d = addDays(d, 1)) {
+          chartData.push({
+            Date: d,
+            WaterStressLevel: this.getRandomWaterLevel(), // You can adjust this for future data
+          });
+        }
+      }
       return chartData;
     },
-
-    // getRandomWaterLevel() {
-    //   return Math.floor(Math.random() * 101)
-    // },
     getRandomWaterLevel() {
       return Math.floor(Math.random() * 101);
-    },  
+    },
     getTimeUnit() {
-  const lastSelectedRange = this.selectedRange.slice(-1)[0]; // Get the last selected range
-  switch (lastSelectedRange) {
-    case "1year":
-      return "month"; // Display intervals of 1 month
-    case "5years":
-      return "year"; // Display intervals of 1 year
-    default:
-      return "day"; // Default interval for shorter ranges
-  }
-},calculateCurrentWaterLevel() {
-    const today = format(this.today, 'yyyy-MM-dd');
-    const todayData = this.chartData.find((d) => format(d.Date, 'yyyy-MM-dd') === today);
-    
-    if (!todayData) return null;
+      const lastSelectedRange = this.selectedRange.slice(-1)[0]; // Get the last selected range
+      switch (lastSelectedRange) {
+        case "1year":
+          return "month"; // Display intervals of 1 month
+        case "5years":
+          return "year"; // Display intervals of 1 year
+        default:
+          return "day"; // Default interval for shorter ranges
+      }
+    },
+    calculateCurrentWaterLevel() {
+      const today = format(this.today, 'yyyy-MM-dd');
+      const todayData = this.chartData.find((d) => format(d.Date, 'yyyy-MM-dd') === today);
+      
+      if (!todayData) return null;
 
-    const level = todayData.WaterStressLevel;
+      const level = todayData.WaterStressLevel;
 
-    if (level >= 0 && level < 30) return "Very Low Water";
-    if (level >= 30 && level < 45) return "Low Water";
-    if (level >= 45 && level < 55) return "Normal (dry season)";
-    if (level >= 55 && level < 65) return "Normal (Raining season)";
-    if (level >= 65 && level < 80) return "High Water";
-    if (level >= 80) return "Very High Water";
-    
-    return "Unknown";
-  },
+      if (level >= 0 && level < 30) return "Very Low Water";
+      if (level >= 30 && level < 45) return "Low Water";
+      if (level >= 45 && level < 55) return "Normal (dry season)";
+      if (level >= 55 && level < 65) return "Normal (Raining season)";
+      if (level >= 65 && level < 80) return "High Water";
+      if (level >= 80) return "Very High Water";
+      
+      return "Unknown";
+    },
     renderChart() {
       const todayFormatted = format(this.today, 'yyyy-MM-dd')
 
@@ -222,7 +224,6 @@ descriptionWaterLevel(){
           size: 11,
           family: 'Roboto, Arial, sans-serif', // Light-looking font
           weight: '380', // Light font weight
-
         }
       }
       const fontStyleLine = {
@@ -240,7 +241,7 @@ descriptionWaterLevel(){
 
       const options = {
         responsive: true,
-  maintainAspectRatio: false,
+        maintainAspectRatio: false,
         scales: {
           y: {
             beginAtZero: true,
@@ -248,20 +249,19 @@ descriptionWaterLevel(){
             min: 0,
             ticks: {
               callback: function (value, index, values) {
-          // Show only specific values
-          const importantValues = [0, 30, 45, 55, 65, 80, 100];
-          return importantValues.includes(value) ? "" : null;
-        },            stepSize: 5, // Optional: Controls spacing
-        color: '#000', // Optional: Customize tick label color
-        font: {
-          size: 11, // Optional: Customize tick font size
-        },
-
-      },
-      grid: {
-        color: '#e0e0e0', // Optional: Customize gridline color
-      },
-    },
+                // Show only specific values
+                const importantValues = [0, 30, 45, 55, 65, 80, 100];
+                return importantValues.includes(value) ? "" : null;
+              },            stepSize: 5, // Optional: Controls spacing
+              color: '#000', // Optional: Customize tick label color
+              font: {
+                size: 11, // Optional: Customize tick font size
+              },
+            },
+            grid: {
+              color: '#e0e0e0', // Optional: Customize gridline color
+            },
+          },
           x: {
             type: 'time',
             time: {
@@ -324,7 +324,6 @@ descriptionWaterLevel(){
                 yMin: 0,
                 yMax: 30,
                 backgroundColor: 'rgba(205, 133, 63, 0.5)',
-
                 borderWidth: 0,
                 label: {
                   content: 'Very Low',
@@ -342,7 +341,6 @@ descriptionWaterLevel(){
                   ...fontStyle11
                 }
               },
-             
               box50to70: {
                 type: 'box',
                 yMin: 55,
@@ -382,7 +380,6 @@ descriptionWaterLevel(){
                 yMin: 80,
                 yMax: 100,
                 backgroundColor: 'rgba(25, 118, 210, 0.6)',
-
                 borderWidth: 0,
                 label: {
                   content: 'very high',
@@ -406,6 +403,26 @@ descriptionWaterLevel(){
             tension: 0,
             pointRadius: 0, // Removes the circles
             pointHoverRadius: 0 // Ensures no hover effect on points
+          },
+          {
+            label: 'Niveau de risque d\'inondation',
+            data: this.floodRiskData.map((d) => ({ x: d[0], y: d[1] })),
+            fill: false,
+            borderColor: 'rgba(255, 0, 0, 1)',
+            borderWidth: 2,
+            tension: 0,
+            pointRadius: 0,
+            pointHoverRadius: 0
+          },
+          {
+            label: 'Niveau de risque de sécheresse',
+            data: this.droughtRiskData.map((d) => ({ x: d[0], y: d[1] })),
+            fill: false,
+            borderColor: 'rgba(0, 0, 255, 1)',
+            borderWidth: 2,
+            tension: 0,
+            pointRadius: 0,
+            pointHoverRadius: 0
           }
         ]
       }
