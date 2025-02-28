@@ -130,9 +130,10 @@ export default {
   methods: {
     async fetchData() {
       try {
-        const data = await fetchWaterStressData(this.locality);
-        this.floodRiskData = data.floodRisk;
-        this.droughtRiskData = data.droughtRisk;
+        // const data = await fetchWaterStressData(this.locality);
+        // this.floodRiskData = data.floodRisk;
+        // this.droughtRiskData = data.droughtRisk;
+        this.chartData = this.generateChartData(this.today, "1month");
         this.renderChart();
       } catch (error) {
         console.error('Erreur lors de la récupération des données:', error);
