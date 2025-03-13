@@ -84,6 +84,61 @@ const waterLevelBackgroundPlugin = {
       ctx.fillText(description, right - padding, textY);
       ctx.restore();
     });
+    
+    // Ajouter "Flood Risk" en haut à gauche avec fond rouge
+    ctx.save();
+    // Mesurer la taille du texte
+    ctx.font = "bold 12px Arial";
+    const floodText = "Flood Risk";
+    const floodMetrics = ctx.measureText(floodText);
+    const textPadding = 5;
+    const textWidth = floodMetrics.width + (textPadding * 2);
+    const textHeight = 18; // Hauteur approximative avec le padding
+    
+    // Dessiner le rectangle de fond rouge pour "Flood Risk"
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(
+      left + 10, // Position X (légèrement décalée du bord)
+      top + 10, // Position Y (légèrement décalée du haut)
+      textWidth,
+      textHeight
+    );
+    
+    // Écrire le texte "Flood Risk"
+    ctx.fillStyle = "#FFFFFF";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(
+      floodText,
+      left + 10 + textPadding,
+      top + 10 + (textHeight / 2)
+    );
+    
+    // Ajouter "Drought Risk" en bas à gauche avec fond rouge
+    const droughtText = "Drought Risk";
+    const droughtMetrics = ctx.measureText(droughtText);
+    const droughtTextWidth = droughtMetrics.width + (textPadding * 2);
+    
+    // Dessiner le rectangle de fond rouge pour "Drought Risk"
+    ctx.fillStyle = "#FF0000";
+    ctx.fillRect(
+      left + 10,
+      bottom - 10 - textHeight, // Position Y (décalée du bas)
+      droughtTextWidth,
+      textHeight
+    );
+    
+    // Écrire le texte "Drought Risk"
+    ctx.fillStyle = "#FFFFFF";
+    ctx.textAlign = "left";
+    ctx.textBaseline = "middle";
+    ctx.fillText(
+      droughtText,
+      left + 10 + textPadding,
+      bottom - 10 - (textHeight / 2)
+    );
+    
+    ctx.restore();
   }
 };
 
@@ -109,11 +164,11 @@ export default defineComponent({
         {
           label: `Water Level - ${props.locality}`,
           data: props.data.map(entry => entry.waterLevelIndex),
-          borderColor: 'rgb(0, 102, 153)',
-          backgroundColor: 'rgba(0, 102, 153, 0.2)',
-          borderWidth: 3,
-          pointRadius: 4,
-          pointBackgroundColor: 'rgb(0, 102, 153)',
+          borderColor: '#000000', // Ligne noire
+          backgroundColor: 'rgba(0, 0, 0, 0.1)',
+          borderWidth: 1.5, // Ligne plus fine
+          pointRadius: 3,
+          pointBackgroundColor: '#000000',
           fill: false,
           tension: 0.3
         }
