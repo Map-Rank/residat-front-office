@@ -35,24 +35,24 @@
       <div class="lg:w-[30%]  grid gap-1 left-element md:block hidden">
         <transition name="fade-slide">
 
-        <div class="   min-h-[30vh] relative bottom-[40px] container w-[600px]  h-full max-h-[calc(93vh-10px)] overflow-y-auto bg-red-400 " v-if="showWaterStressChart">
-          <button @click="closeWaterStressChart" class="absolute top-[28px] right-9 m-2 text-2xl bg-white  rounded-full">
-           ✖
-          </button>
-      
-          <WaterStressChart
-          :locality="selectedLocality"
-          :data="apiResponseData"
-          ></WaterStressChart>
-        </div>
+          <div class="   min-h-[30vh] relative bottom-[40px] container w-[600px]  h-full max-h-[calc(93vh-10px)] overflow-y-auto bg-red-400 " v-if="showWaterStressChart">
+            <button @click="closeWaterStressChart" class="absolute top-[28px] right-9 m-2 text-2xl bg-white  rounded-full">
+            ✖
+            </button>
+        
+            <WaterStressChart
+              :locality="selectedLocality"
+              :data="apiResponseData"
+              ></WaterStressChart>
+          </div>
 
-         </transition>
+        </transition>
         <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
             <div :class="{ hidden: !displayStatistics }">
               <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+            </div>
         </div>
       </div>
-    </div>
 
     <!-- mobile view -->
       <div 
@@ -75,7 +75,7 @@
           
 
           <WaterStressChart
-          :locality="selectedLocality"
+          :data="jsonData" :locality="selectedLocality"
 
           ></WaterStressChart>
         </div>
@@ -409,15 +409,15 @@ export default {
         const zones = await getZones(2, null)
         this.zoneMarkers.push(zones)
         // this.zoneMarkers = await getZones(2,null);
-        console.log('this is zone mark lengh  ' + this.zoneMarkers)
+        // console.log('this is zone mark lengh  ' + this.zoneMarkers)
         // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
       } catch (error) {
         console.error('Failed to fetch zone markers:', error)
       }
     },
     zoneClick(zoneMarked, zoomIndex) {
-      console.log('navigating after zone click')
-      console.log(zoneMarked)
+      // console.log('navigating after zone click')
+      // console.log(zoneMarked)
 
       // Check if zoneMarked is an array and use the first item if it is
       const zone = Array.isArray(zoneMarked) ? zoneMarked[0] : zoneMarked
@@ -434,11 +434,11 @@ export default {
         zoomIndex: zoomIndex ?? 8
       })
       this.$router.push({ name: 'dashboard' })
-      console.log('The router complete')
+      // console.log('The router complete')
     },
     async disasterClick(marker) {
-      console.log('navigating after disaster click')
-      console.log(marker)
+      // console.log('navigating after disaster click')
+      // console.log(marker)
 
       const dashboardStore = useDashboardStore()
 
@@ -453,27 +453,27 @@ export default {
         zoomIndex: 10
       })
       this.loading = true;
-this.error = null;
-this.showWaterStressChart = true;
-this.selectedLocality = marker.locality;
+      this.error = null;
+      this.showWaterStressChart = true;
+      this.selectedLocality = marker.locality;
 
-if (!marker.zone_id) {
-  this.error = 'Zone ID is required.';
-  this.loading = false;
-  return;
-}
+      if (!marker.zone_id) {
+        this.error = 'Zone ID is required.';
+        this.loading = false;
+        return;
+      }
 
-try {
-  console.log('Fetching water stress data for zone ID:', marker.zone_id);
-  this.apiResponseData = await fetchWaterStressData(marker.zone_id);
-  
-  // Navigate to the dashboard without parameters in the URL
-  this.$router.push({ name: 'dashboard' });
-} catch (error) {
-  this.error = error.message || 'Failed to fetch water stress data';
-} finally {
-  this.loading = false;
-}
+      try {
+        // console.log('Fetching water stress data for zone ID:', marker.zone_id);
+        this.apiResponseData = await fetchWaterStressData(marker.zone_id);
+        
+        // Navigate to the dashboard without parameters in the URL
+        this.$router.push({ name: 'dashboard' });
+      } catch (error) {
+        this.error = error.message || 'Failed to fetch water stress data';
+      } finally {
+        this.loading = false;
+      }
     },
   
 
@@ -528,7 +528,7 @@ try {
     },
 
     async selectZoneToSearch(id) {
-      console.log(id)
+      // console.log(id)
       this.zoneIdToSearch = id
     },
 
@@ -544,7 +544,7 @@ try {
         let response = await getReport(zoneId, this.reportType)
 
         if (response.length == 0) {
-          console.log('data is empty 11111111111111111111111111111')
+          // console.log('data is empty 11111111111111111111111111111')
 
           if (this.zone.vector === null) {
             this.isErrorLoadMap = true
