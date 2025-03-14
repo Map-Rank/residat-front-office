@@ -46,98 +46,70 @@ ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale
 const waterLevelBackgroundPlugin = {
   id: 'waterLevelBackground',
   beforeDraw: (chart) => {
-    const { ctx, chartArea: { top, bottom, left, right, width, height }, scales: { y } } = chart;
+    const { ctx, chartArea: { top, bottom, left, right, height }, scales: { y } } = chart;
 
-    // Définition des niveaux avec couleurs et descriptions
-    const levelColors = [
-      { max: 30, color: "#f4d3c4", description: "Very low water" },
-      { max: 45, color: "#f7e3c3", description: "Low water" },
-      { max: 55, color: "#ffffff", description: "Normal Dry season" },
-      { max: 65, color: "#c4e2ff", description: "Normal Rainy season" },
-      { max: 80, color: "#76baff", description: "High Water" },
-      { max: 100, color: "#357ABD", description: "Very High Water" }
-    ];
+    // Créer un dégradé avec les nouvelles couleurs
+    const gradient = ctx.createLinearGradient(left, top, left, bottom);
+    gradient.addColorStop(0, "#90CAF9"); // Couleur 1
+    gradient.addColorStop(0.25, "#64B5F6"); // Couleur 2
+    gradient.addColorStop(0.5, "#BBDEFB"); // Couleur 3
+    gradient.addColorStop(0.75, "#FFE0B2"); // Couleur 4
+    gradient.addColorStop(1, "#FFCC80"); // Couleur 5
 
-    // Dessiner les zones de couleur et ajouter les descriptions
-    levelColors.forEach(({ max, color, description }, index) => {
-      const minValue = index > 0 ? levelColors[index - 1].max : 0;
-      const maxValue = max;
-      
-      // Dessiner le fond de la zone
-      ctx.fillStyle = color;
-      const yMaxPixel = y.getPixelForValue(maxValue);
-      const yMinPixel = y.getPixelForValue(minValue);
-      const rectHeight = yMinPixel - yMaxPixel;
-      
-      ctx.fillRect(left, yMaxPixel, right - left, rectHeight);
-      
-      // Ajouter le texte de description
-      ctx.save();
-      ctx.fillStyle = "#555555";
-      ctx.font = "bold 12px Arial";
-      ctx.textAlign = "right";
-      ctx.textBaseline = "middle";
-      const textY = yMaxPixel + rectHeight / 2;
-      
-      // Positionnement du texte à l'intérieur de la zone
-      const padding = 10;
-      ctx.fillText(description, right - padding, textY);
-      ctx.restore();
-    });
+    // Dessiner le fond de la zone avec le dégradé
+    const yMaxPixel = y.getPixelForValue(100); // Max value
+    const yMinPixel = y.getPixelForValue(0);   // Min value
+
+    ctx.fillStyle = gradient;
+    ctx.fillRect(left, yMinPixel, right - left, yMaxPixel - yMinPixel);
     
-    // Ajouter "Flood Risk" en haut à gauche avec fond rouge
+    // Ajouter le texte "Flood Risk" en haut à droite
     ctx.save();
-    // Mesurer la taille du texte
-    ctx.font = "bold 12px Arial";
+    ctx.fillStyle = "#FF0000"; // Fond rouge
     const floodText = "Flood Risk";
     const floodMetrics = ctx.measureText(floodText);
-    const textPadding = 5;
-    const textWidth = floodMetrics.width + (textPadding * 2);
-    const textHeight = 18; // Hauteur approximative avec le padding
-    
-    // Dessiner le rectangle de fond rouge pour "Flood Risk"
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(
-      left + 10, // Position X (légèrement décalée du bord)
-      top + 10, // Position Y (légèrement décalée du haut)
-      textWidth,
-      textHeight
-    );
+    const floodTextWidth = floodMetrics.width + 10; // Ajout de padding
+    const floodTextHeight = 20; // Hauteur approximative
+
+    // Dessiner le rectangle de fond rouge
+    ctx.fillRect(right - floodTextWidth - 10, top + 10, floodTextWidth, floodTextHeight);
     
     // Écrire le texte "Flood Risk"
-    ctx.fillStyle = "#FFFFFF";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillText(
-      floodText,
-      left + 10 + textPadding,
-      top + 10 + (textHeight / 2)
-    );
-    
-    // Ajouter "Drought Risk" en bas à gauche avec fond rouge
+    ctx.fillStyle = "#FFFFFF"; // Texte en blanc
+    ctx.font = "bold 12px Arial";
+    ctx.fillText(floodText, right - floodTextWidth - 5, top + 10 + (floodTextHeight / 2));
+
+    // Ajouter le texte "Drought Risk" en bas à droite
     const droughtText = "Drought Risk";
     const droughtMetrics = ctx.measureText(droughtText);
-    const droughtTextWidth = droughtMetrics.width + (textPadding * 2);
-    
-    // Dessiner le rectangle de fond rouge pour "Drought Risk"
-    ctx.fillStyle = "#FF0000";
-    ctx.fillRect(
-      left + 10,
-      bottom - 10 - textHeight, // Position Y (décalée du bas)
-      droughtTextWidth,
-      textHeight
-    );
+    const droughtTextWidth = droughtMetrics.width + 10; // Ajout de padding
+
+    // Dessiner le rectangle de fond orange
+    ctx.fillStyle = "#FFA500"; // Fond orange
+    ctx.fillRect(right - droughtTextWidth - 10, bottom - 30, droughtTextWidth, floodTextHeight);
     
     // Écrire le texte "Drought Risk"
-    ctx.fillStyle = "#FFFFFF";
-    ctx.textAlign = "left";
-    ctx.textBaseline = "middle";
-    ctx.fillText(
-      droughtText,
-      left + 10 + textPadding,
-      bottom - 10 - (textHeight / 2)
-    );
-    
+    ctx.fillStyle = "#FFFFFF"; // Texte en blanc
+    ctx.fillText(droughtText, right - droughtTextWidth - 5, bottom - 15);
+
+    // Afficher les étiquettes des niveaux d'eau à l'intérieur du graphique
+    const labels = [
+      { value: 0, text: "Very low water" },
+      { value: 30, text: "Low water" },
+      { value: 55, text: "Normal Dry season" },
+      { value: 65, text: "Normal Rainy season" },
+      { value: 80, text: "High Water" },
+      { value: 100, text: "Very High Water" }
+    ];
+
+    ctx.fillStyle = "#000000"; // Texte en noir
+    ctx.font = "bold 12px Arial"; // Augmenter la taille de la police
+    labels.forEach((label, index) => {
+      const yPos = y.getPixelForValue(label.value);
+      const margin = (label.value === 0) ? 10 : (label.value === 100) ? -10 : 5; // Marge pour Very low water et Very High Water
+      ctx.fillText(label.text, left + 15, yPos - margin); // Positionner le texte légèrement à gauche
+    });
+
     ctx.restore();
   }
 };
@@ -167,7 +139,7 @@ export default defineComponent({
           borderColor: '#000000', // Ligne noire
           backgroundColor: 'rgba(0, 0, 0, 0.1)',
           borderWidth: 1.5, // Ligne plus fine
-          pointRadius: 3,
+          pointRadius: 0, // Cacher les points
           pointBackgroundColor: '#000000',
           fill: false,
           tension: 0.3
@@ -206,7 +178,10 @@ export default defineComponent({
             text: 'Date'
           },
           grid: {
-            color: 'rgba(0, 0, 0, 0.1)'
+            color: 'rgba(0, 0, 0, 0.1)',
+            drawTicks: false, // Cacher les traits de graduation
+            drawBorder: false, // Cacher la bordure
+            lineWidth: 0 // Cacher les lignes verticales
           }
         },
         y: {
@@ -217,7 +192,13 @@ export default defineComponent({
           beginAtZero: true,
           max: 100,
           grid: {
-            color: 'rgba(0, 0, 0, 0.1)'
+            color: 'rgba(0, 0, 0, 0.1)',
+            drawTicks: false,
+            drawBorder: false,
+            lineWidth: 0
+          },
+          ticks: {
+            display: false
           }
         }
       }
