@@ -1,234 +1,318 @@
 <template>
-  <div class="px-5 py-10 flex flex-col justify-center items-center bg-white rounded-lg">  
-    <div>
-      <p class="text-2xl font-bold">{{ locality }}</p>
+  <div
+    class="px-5 py-10 flex flex-col justify-center items-center bg-white rounded-lg"
+  >  
+    <div class="">
+      <p class="text-2xl font-bold">{{locality}}</p>
     </div>
     <div class="w-full md:h-[430px] h-[300px] relative top-[20px]">
-      <Line :data='chartData' :options='chartOptions' />
+      <canvas ref="waterStressChart" style="box-sizing: border-box;display: block;width: 312px;" class="md:h-[400px] w-full h-[100px]"></canvas>
     </div>
 
     <!-- Additional content -->
-    <div class="mt-10 pb-10 flex flex-col justify-center gap-2">
-      <p class="text-[1rem] font-semibold">Current Water Level: <span class="text-[1rem]">{{ currentWaterLevel.toFixed(2) }}%</span></p>
-      <p class="text-[1rem] font-semibold mt-5">Description: <span class="text-[0.9rem]">{{ descriptionWaterLevel }}</span></p>
+    <div class="mt-10 pb-10 fex flex-col justify-center gap-2">
+      <p class="text-[1rem] font-semibold">Current Water Level: <span class="text-[1rem]">{{ currentWaterLevel }}</span></p>
+      <p class="text-[1rem] font-semibold mt-5">Projection: <span class="text-[1.1rem]"></span></p>
+      <p class="text-[1rem] font-semibold mt-5">Description: <span class="text-[0.9rem]">{{descriptionWaterLevel}}</span> <span class="text-[1.1rem]"></span></p>
       
       <div class="mt-8">
-        <p>For more information click here
-          <span>
-            <button @click="navigateToSimulation" class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">
-              Simulation
-            </button>
-          </span>
-        </p> 
+        <p class=""> For more information click here<span> <button @click="navigateToSimulation" class="bg-secondary-normal ml-8 text-[1rem] px-4 py-2 rounded text-white font-bold text-center">similulation</button></span></p> 
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { Line } from 'vue-chartjs';
-import { useRouter } from 'vue-router'
-import { defineComponent, computed } from 'vue';
-import {
-  Chart as ChartJS,
-  Title,
-  Tooltip,
-  Legend,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement
-} from 'chart.js';
+import { Chart } from 'chart.js'
+import 'chartjs-adapter-date-fns'
+import 'chartjs-plugin-annotation'
+import ChartDataLabels from 'chartjs-plugin-annotation'
+import { format, parseISO } from 'date-fns'
+import { descriptionWaterLevel } from '../../../constants/descriptionWaterLevel'
 
-ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement);
-
-// Plugin pour colorer le fond du graphique selon le niveau d'eau et ajouter les descriptions
-const waterLevelBackgroundPlugin = {
-  id: 'waterLevelBackground',
-  beforeDraw: (chart) => {
-    const { ctx, chartArea: { top, bottom, left, right, height }, scales: { y } } = chart;
-
-    // Créer un dégradé avec les nouvelles couleurs
-    const gradient = ctx.createLinearGradient(left, top, left, bottom);
-    gradient.addColorStop(0, "#90CAF9"); // Couleur 1
-    gradient.addColorStop(0.25, "#64B5F6"); // Couleur 2
-    gradient.addColorStop(0.5, "#BBDEFB"); // Couleur 3
-    gradient.addColorStop(0.75, "#FFE0B2"); // Couleur 4
-    gradient.addColorStop(1, "#FFCC80"); // Couleur 5
-
-    // Dessiner le fond de la zone avec le dégradé
-    const yMaxPixel = y.getPixelForValue(100); // Max value
-    const yMinPixel = y.getPixelForValue(0);   // Min value
-
-    ctx.fillStyle = gradient;
-    ctx.fillRect(left, yMinPixel, right - left, yMaxPixel - yMinPixel);
-    
-    // Ajouter le texte "Flood Risk" en haut à droite
-    ctx.save();
-    ctx.fillStyle = "#FF0000"; // Fond rouge
-    const floodText = "Flood Risk";
-    const floodMetrics = ctx.measureText(floodText);
-    const floodTextWidth = floodMetrics.width + 10; // Ajout de padding
-    const floodTextHeight = 20; // Hauteur approximative
-
-    // Dessiner le rectangle de fond rouge
-    ctx.fillRect(right - floodTextWidth - 10, top + 10, floodTextWidth, floodTextHeight);
-    
-    // Écrire le texte "Flood Risk"
-    ctx.fillStyle = "#FFFFFF"; // Texte en blanc
-    ctx.font = "bold 12px Arial";
-    ctx.fillText(floodText, right - floodTextWidth - 5, top + 10 + (floodTextHeight / 2));
-
-    // Ajouter le texte "Drought Risk" en bas à droite
-    const droughtText = "Drought Risk";
-    const droughtMetrics = ctx.measureText(droughtText);
-    const droughtTextWidth = droughtMetrics.width + 10; // Ajout de padding
-
-    // Dessiner le rectangle de fond orange
-    ctx.fillStyle = "#FFA500"; // Fond orange
-    ctx.fillRect(right - droughtTextWidth - 10, bottom - 30, droughtTextWidth, floodTextHeight);
-    
-    // Écrire le texte "Drought Risk"
-    ctx.fillStyle = "#FFFFFF"; // Texte en blanc
-    ctx.fillText(droughtText, right - droughtTextWidth - 5, bottom - 15);
-
-    // Afficher les étiquettes des niveaux d'eau à l'intérieur du graphique
-    const labels = [
-      { value: 0, text: "Very low water" },
-      { value: 30, text: "Low water" },
-      { value: 55, text: "Normal Dry season" },
-      { value: 65, text: "Normal Rainy season" },
-      { value: 80, text: "High Water" },
-      { value: 100, text: "Very High Water" }
-    ];
-
-    ctx.fillStyle = "#000000"; // Texte en noir
-    ctx.font = "bold 12px Arial"; // Augmenter la taille de la police
-    labels.forEach((label, index) => {
-      const yPos = y.getPixelForValue(label.value);
-      const margin = (label.value === 0) ? 10 : (label.value === 100) ? -10 : 5; // Marge pour Very low water et Very High Water
-      ctx.fillText(label.text, left + 15, yPos - margin); // Positionner le texte légèrement à gauche
-    });
-
-    ctx.restore();
-  }
-};
-
-ChartJS.register(waterLevelBackgroundPlugin);
-
-export default defineComponent({
+export default {
   name: 'WaterStressChart',
-  components: { Line },
+  data() {
+    return {
+      today: new Date(),
+      chartInstance: null,
+      loading: true,
+      error: null
+    }
+  },
   props: {
+    data: {
+      type: Array,
+      required: true
+    },
     locality: {
       type: String,
       required: true
     },
-    data: {
-      type: Array,
-      required: true
+  },
+  mounted() {
+    Chart.register(ChartDataLabels)
+    this.renderChart()
+  },
+  computed: {
+    chartData() {
+      // Utiliser les données reçues en props directement
+      return this.data || [];
+    },
+    currentWaterLevel() {
+      if (!this.chartData.length) return "No Data";
+      
+      // Get today's data (should be the first item in the array)
+      const todayData = this.chartData[0];
+      
+      if (!todayData) return "No Data";
+      
+      const level = todayData.waterLevelIndex;
+      if (level >= 0 && level < 30) return "Very Low Water";
+      if (level >= 30 && level < 45) return "Low Water";
+      if (level >= 45 && level < 55) return "Normal (Dry Season)";
+      if (level >= 55 && level < 65) return "Normal (Raining Season)";
+      if (level >= 65 && level < 80) return "High Water";
+      if (level >= 80) return "Very High Water";
+      
+      return "Unknown Level";
+    },
+    descriptionWaterLevel() {
+      // Fix the key to match the constants file
+      const key = this.currentWaterLevel === "Normal (Dry Season)" ? "Normal Water Level (Dry Season)" :
+                 this.currentWaterLevel === "Normal (Raining Season)" ? "Normal Water level (Rainy Season)" :
+                 this.currentWaterLevel;
+      
+      return descriptionWaterLevel[key]?.description || "No description available";
     }
   },
-  setup(props) {
-    const chartData = computed(() => ({
-      labels: props.data.map(entry => entry.date),
-      datasets: [
-        {
-          label: `Water Level - ${props.locality}`,
-          data: props.data.map(entry => entry.waterLevelIndex),
-          borderColor: '#000000', // Ligne noire
-          backgroundColor: 'rgba(0, 0, 0, 0.1)',
-          borderWidth: 1.5, // Ligne plus fine
-          pointRadius: 0, // Cacher les points
-          pointBackgroundColor: '#000000',
-          fill: false,
-          tension: 0.3
+  methods: {
+    navigateToSimulation() {
+      this.$router.push({
+        name: 'simulation',
+      });
+    },
+    
+    getTimeUnit() {
+      return "day"; // We're showing 5 days of data, so day is appropriate
+    },
+    
+    renderChart() {
+      if (!this.chartData.length) return;
+      
+      const todayFormatted = format(this.today, 'yyyy-MM-dd');
+      
+      const fontStyle11 = {
+        display: true,
+        position: 'start',
+        fontStyle: 'thin',
+        color: "#000",
+        font: {
+          size: 11,
+          family: 'Roboto, Arial, sans-serif',
+          weight: '380',
         }
-      ]
-    }));
-
-    const chartOptions = {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: 'top' },
-        waterLevelBackground: true,
-        tooltip: {
-          callbacks: {
-            label: function(context) {
-              const value = context.raw;
-              let description = "";
-              
-              if (value < 30) description = "Very low water";
-              else if (value < 45) description = "Low water";
-              else if (value < 55) description = "Normal Dry season";
-              else if (value < 65) description = "Normal Rainy season";
-              else if (value < 80) description = "High Water";
-              else description = "Very High Water";
-              
-              return [`Level: ${value}%`, `Status: ${description}`];
+      };
+      
+      const fontStyleLine = {
+        display: true,
+        position: 'end',
+        borderWidth: 0,
+        backgroundColor: '#ff0000',
+        color: '#fff',
+        fontStyle: 'bold',
+        font: {
+          size: 12,
+          family: 'Helvetica, Arial, sans-serif'
+        }
+      };
+      
+      const options = {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            max: 100,
+            min: 0,
+            ticks: {
+              callback: function (value, index, values) {
+                const importantValues = [0, 30, 45, 55, 65, 80, 100];
+                return importantValues.includes(value) ? "" : null;
+              },
+              stepSize: 5,
+              color: '#000',
+              font: {
+                size: 11,
+              },
+            },
+            grid: {
+              color: '#e0e0e0',
+            },
+          },
+          x: {
+            type: 'time',
+            time: {
+              unit: this.getTimeUnit(),
+            },
+            title: {
+              display: true,
+              text: 'Time'
+            }
+          }
+        },
+        plugins: {
+          annotation: {
+            annotations: {
+              line90: {
+                type: 'line',
+                yMin: 90,
+                yMax: 90,
+                borderColor: 'yellow',
+                borderWidth: 0,
+                label: {
+                  content: 'flood risk',
+                  ...fontStyleLine
+                }
+              },
+              line10: {
+                type: 'line',
+                borderDash: [5, 5],
+                yMin: 10,
+                yMax: 10,
+                borderColor: 'rgba(255, 0, 0, 1)',
+                borderWidth: 0,
+                label: {
+                  content: 'drought risk',
+                  ...fontStyleLine
+                }
+              },
+              todayLine: {
+                type: 'line',
+                xMin: todayFormatted,
+                xMax: todayFormatted,
+                borderColor: 'blue',
+                borderWidth: 2,
+                borderDash: [5, 5],
+                label: {
+                  content: 'Today',
+                  enabled: true,
+                  position: 'top'
+                }
+              },
+              line50: {
+                type: 'line',
+                yMin: 55,
+                yMax: 55,
+                borderColor: 'rgba(0, 128, 0, 1)',
+                borderWidth: 2
+              },
+              box0to10: {
+                type: 'box',
+                yMin: 0,
+                yMax: 30,
+                backgroundColor: 'rgba(205, 133, 63, 0.5)',
+                borderWidth: 0,
+                label: {
+                  content: 'Very Low',
+                  ...fontStyle11
+                }
+              },
+              box10to30: {
+                type: 'box',
+                yMin: 30,
+                yMax: 45,
+                backgroundColor: 'rgba(205, 133, 63, 0.3)',
+                borderWidth: 0,
+                label: {
+                  content: 'Low ',
+                  ...fontStyle11
+                }
+              },
+              box50to70: {
+                type: 'box',
+                yMin: 55,
+                yMax: 65,
+                backgroundColor: 'rgba(66, 165, 245, 0.4)',
+                borderWidth: 0,
+                label: {
+                  content: 'Normal (Raining season)',
+                  ...fontStyle11
+                }
+              },
+              box45to55: {
+                type: 'box',
+                yMin: 45,
+                yMax: 55,
+                backgroundColor: 'rgba(235, 183, 133, 0.15)',
+                borderWidth: 0,
+                label: {
+                  content: 'Normal (dry season)',
+                  ...fontStyle11
+                }
+              },
+              box70to90: {
+                type: 'box',
+                yMin: 65,
+                yMax: 80,
+                backgroundColor: 'rgba(33, 150, 243, 0.5)',
+                borderWidth: 0,
+                label: {
+                  content: 'High ',
+                  ...fontStyle11
+                }
+              },
+              box90to100: {
+                type: 'box',
+                yMin: 80,
+                yMax: 100,
+                backgroundColor: 'rgba(25, 118, 210, 0.6)',
+                borderWidth: 0,
+                label: {
+                  content: 'very high',
+                  ...fontStyle11
+                }
+              }
             }
           }
         }
-      },
-      scales: {
-        x: {
-          title: {
-            display: true,
-            text: 'Date'
-          },
-          grid: {
-            color: 'rgba(0, 0, 0, 0.1)',
-            drawTicks: false, // Cacher les traits de graduation
-            drawBorder: false, // Cacher la bordure
-            lineWidth: 0 // Cacher les lignes verticales
+      };
+      
+      const data = {
+        labels: this.chartData.map(d => parseISO(d.date)),
+        datasets: [
+          {
+            label: 'Water Risk Level',
+            data: this.chartData.map(d => ({ 
+              x: parseISO(d.date), 
+              y: d.waterLevelIndex 
+            })),
+            fill: false,
+            borderColor: 'rgb(0, 0, 0)',
+            borderWidth: 2,
+            tension: 0,
+            pointRadius: 0,
+            pointHoverRadius: 0
           }
-        },
-        y: {
-          title: {
-            display: true,
-            text: "Niveau d'eau (%)"
-          },
-          beginAtZero: true,
-          max: 100,
-          grid: {
-            color: 'rgba(0, 0, 0, 0.1)',
-            drawTicks: false,
-            drawBorder: false,
-            lineWidth: 0
-          },
-          ticks: {
-            display: false
-          }
-        }
+        ]
+      };
+      
+      if (this.chartInstance) {
+        this.chartInstance.destroy();
       }
-    };
-
-    const currentWaterLevel = computed(() => {
-      const lastFiveDays = props.data.slice(-5);
-      if (lastFiveDays.length === 0) return 0;
-      const sum = lastFiveDays.reduce((acc, entry) => acc + entry.waterLevelIndex, 0);
-      return sum / lastFiveDays.length;
-    });
-
-    const descriptionWaterLevel = computed(() => {
-      if (currentWaterLevel.value < 30) return "Very low water";
-      if (currentWaterLevel.value < 45) return "Low water";
-      if (currentWaterLevel.value < 55) return "Normal Dry season";
-      if (currentWaterLevel.value < 65) return "Normal Rainy season";
-      if (currentWaterLevel.value < 80) return "High Water";
-      return "Very High Water";
-    });
-
-    const router = useRouter();
-
-    const navigateToSimulation = () => {
-      router.push({ name: 'simulation' }).then(() => {
-        window.location.reload();
+      
+      this.chartInstance = new Chart(this.$refs.waterStressChart, {
+        type: "line",
+        data,
+        options,
       });
-    };
-
-    return { chartData, chartOptions, currentWaterLevel, descriptionWaterLevel, navigateToSimulation };
+    }
+  },
+  watch: {
+    data: {
+      handler: 'renderChart',
+      deep: true
+    }
   }
-});
+}
 </script>
