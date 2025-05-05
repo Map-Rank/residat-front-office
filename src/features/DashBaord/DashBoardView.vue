@@ -74,10 +74,10 @@
 </span></div>
           
 
-          <WaterStressChart
-          :data="jsonData" :locality="selectedLocality"
-
-          ></WaterStressChart>
+<WaterStressChart
+              :locality="selectedLocality"
+              :data="apiResponseData"
+              ></WaterStressChart>
         </div>
 
          </transition>
