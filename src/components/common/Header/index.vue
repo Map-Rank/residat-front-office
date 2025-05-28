@@ -1,5 +1,5 @@
 <template>
-  <header class="py-1 md:px-8 lg:px-100 bg-white">
+  <header class="md:py-4 py-2 md:px-8 lg:px-100 bg-white shadow-md ">
     <!-- Mobile view: Hamburger icon -->
     <div class="flex justify-between items-center space-x-2 sm:space-x-6 py-1 p-4 md:hidden">
       <app-logo></app-logo>
@@ -14,7 +14,7 @@
           :svgContent="userProfileImage"
           :svgContentHover="userProfileImage"
           :labelTextBottom="authStore.user ? authStore.user.first_name : null"
-          :iconDesktopSize="this.iconSize"
+          :iconDesktopSize="iconSize"
           :isActive="true"
           :bottom="true"
           @customFunction="toggleMenu"
@@ -23,10 +23,10 @@
               class="dropdown"
               :textCss="'text-primary-normal text-xs'"
               :svgContent="
-                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+                authStore.user ? userProfileImage : '/assets/images/Community/profile.png'
               "
               :svgContentHover="
-                authStore.user ? this.userProfileImage : 'assets\\images\\Community\\profile.png'
+                authStore.user ? userProfileImage :'/assets/images/Community/profile.png'
               "
               labelText="Profile"
               :labelTextBottom="authStore.user ? authStore.user.first_name : null"
@@ -342,10 +342,9 @@ export default {
       currentMenu: null,
       isActiveRoute: '',
       userProfileImage: authStore.user && authStore.user ? authStore.user.avatar : '',
-      // userProfileImage:
-      //   authStore.user && authStore.user.avatar
-      //     ? authStore.user.avatar
-      //     : '/assets/images/Community/profile.png',
+  //     userProfileImage: authStore.user && authStore.user
+  // ? authStore.user.avatar
+  // : '/assets/images/Community/profile.png',
       iconSize: 'w-7 h-7',
       lang: 'en',
       notifications: [],
@@ -385,10 +384,24 @@ export default {
       ]
     }
   },
+//   created() {
+//   console.log("User Profile Image Path:", this.userProfileImage);
+// },
+
+  // computed:{
+  //   userProfileImage()
+  //       {
+  //         const authStore = useAuthStore();
+
+  //   return authStore.user && authStore.user.avatar
+  //         ? authStore.user.avatar
+  //         : '/assets/images/Community/profile.png';
+  //        }
+  // },
 
   methods: {
     openModal() {
-      this.$refs.confirmationModal.show()
+      this.$refs.confirmationModal.show(this.$t('confirm_logout'))
     },
     redirectToNotifications() {
       this.$router.push({ name: 'notification' })

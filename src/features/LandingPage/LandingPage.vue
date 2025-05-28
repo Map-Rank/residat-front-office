@@ -1,4 +1,4 @@
-<template>
+pp<template>
   <div class="overflow-hidden">
     <HeaderLanding class="fixed top-0 w-full z-10"></HeaderLanding>
     <section class="grid items-center text-white text-center py-16 h-auto md:h-[40vh]">

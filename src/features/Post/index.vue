@@ -86,7 +86,7 @@
 
     <!-- Post Images -->
 
-    <image-post-gallery :Images="postImages" @customFunction="showModal()">
+    <image-post-gallery :Images="postImages" @customFunction="viewPost()">
     </image-post-gallery>
 
     <!-- Post Interaction Area -->
@@ -341,6 +341,7 @@ export default {
     },
     openModal() {
       this.$refs.confirmationModal.show();
+      this.$refs.confirmationModal.show(this.$t('deleting_post'))
     },
 
     async deletePost() {

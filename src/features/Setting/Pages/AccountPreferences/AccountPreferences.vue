@@ -10,6 +10,12 @@
               title="General Prefences"
               :items="generalItems"
             ></settings-section>
+            <div class="" @click="navigateToPrivacy" >
+            <settings-section
+              title="Security"
+              :items="policyItems"
+            ></settings-section>
+          </div>
           </div>
       </div>
     </div>
@@ -35,6 +41,14 @@ import SettingsSection from '@/features/Setting/components/SettingsSection.vue'
         return false
       }
     },
+
+    navigateToPrivacy(){
+      this.$router.push({
+        name: 'PrivacyPolicy',
+   
+      });
+    }
+
     },
     data() {
     return {
@@ -46,6 +60,9 @@ import SettingsSection from '@/features/Setting/components/SettingsSection.vue'
       generalItems: [
         { name: this.$t('language'), route: 'change-langauge' },
         { name: this.$t('close_account'), route: 'account-preferences' }
+      ],
+      policyItems: [
+        { name: this.$t('Policy Privacy'), route: 'Privacy-Policy' },
       ],
 
     };

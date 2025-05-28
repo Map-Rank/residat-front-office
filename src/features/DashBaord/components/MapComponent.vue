@@ -1,4 +1,5 @@
 <template>
+  <div ref="mapContainer" class="map-container">
   <div>
     <div id="map" style="height: 100vh; position: sticky"></div>
     <!-- Dynamically show info-box when a region is selected -->
@@ -6,7 +7,7 @@
       <!-- Data binding and event handling -->
     </div>
   </div>
-  <div class="w-full h-full flex items-center justify-center min-h-screen">
+  <div class=" flex items-center justify-center">
     <div class="checkboxMObile p-4" v-if="showLayers">
       <h3 class="text-lg font-semibold mb-2">Layers</h3>
       <div class="space-y-2">
@@ -30,23 +31,16 @@
           <span class="ml-2 text-sm">Hydro Polygon Map</span>
         </label>
 
-        <label class="flex items-center">
-          <input
-            type="checkbox"
-            v-model="toggleDisasterMarkers"
-            @change="toggleDisasters"
-            class="form-checkbox h-4 w-4 text-red-600"
-          />
-          <span class="ml-2 text-sm">Disaster Markers</span>
-        </label>
+       
       </div>
     </div>
   </div>
+</div>
 
-  <div class="new-checkbox p-4 md:block hidden">
+  <!-- <div class="new-checkbox p-4 md:block hidden">
     <h3 class="text-lg font-semibold mb-2">Layers</h3>
     <div class="space-y-2">
-      <label class="flex items-center">
+       <label class="flex items-center">
         <input
           type="checkbox"
           v-model="toggleCameroon"
@@ -54,29 +48,20 @@
           class="form-checkbox h-4 w-4 text-blue-600"
         />
         <span class="ml-2 text-sm">Cameroon</span>
-      </label>
+      </label> 
 
       <label class="flex items-center">
         <input
           type="checkbox"
           v-model="toggleHydroPolygonGeoJson"
-          @change="toggleLoadHydroPolygonGeoJson"
           class="form-checkbox h-4 w-4 text-green-600"
         />
         <span class="ml-2 text-sm">Hydro Polygon Map</span>
       </label>
 
-      <label class="flex items-center">
-        <input
-          type="checkbox"
-          v-model="toggleDisasterMarkers"
-          @change="toggleDisasters"
-          class="form-checkbox h-4 w-4 text-red-600"
-        />
-        <span class="ml-2 text-sm">Disaster Markers</span>
-      </label>
+     
     </div>
-  </div>
+  </div> -->
 </template>
 
 <script>
@@ -126,16 +111,24 @@ export default {
       zoneMarkeds: [],
       NewgeoJsonLayer: null,
       NewhydroPolygonLayer: null,
-      toggleCameroon: false,
+      // hydroPolygonGeoJSON: null, // Store the GeoJSON data
+      isHydroPolygonVisible: false, // Track visibility state
+
+      // toggleCameroon: false,
       toggleHydroPolygonGeoJson: false,
       allDisasters: null,
-      toggleDisasterMarkers: false,
+      toggleDisasterMarkers: true,
       disasterMarkersLayer: null
     }
   },
 
+ 
+
+
   mounted() {
     this.initializeMap()
+
+
   },
 
   computed: {
@@ -147,10 +140,10 @@ export default {
 
         // Determine the base color based on the disaster type
         if (disaster.type === 'FLOOD') {
-          baseColor = 'red' // Red for floods
+          baseColor = 'blue' // Red for floods
         } else if (disaster.type === 'DROUGHT') {
-          baseColor = 'rgba(205, 133, 63)' // Yellow for droughts
-        } else {
+          baseColor = 'red' // Yellow for droughts
+        }  else if(disaster.type === 'NORMAL') {
           baseColor = 'gray'
         }
 
@@ -180,7 +173,7 @@ export default {
           updated_at: disaster.updated_at,
           color: baseColor,
           intensity: intensity,
-          radius: 7 + disaster.level * 2 // Size of marker based on level
+          radius: 5 + disaster.level * 2 // Size of marker based on level
         }
       })
     }
@@ -195,14 +188,36 @@ export default {
         }
         this.allDisasters = await getDisasters()
         this.zoneMarkeds = this.cachedZones
-
+        const minZoomLevel= 5.46;
         // Initialize map
-        this.map = L.map('map').setView([this.latitude, this.longitude], this.zoomIndex)
+          // Initialize map with zoom control disabled
+    this.map = L.map('map', {
+      zoomControl: false // Disable default zoom control
+    }).setView([this.latitude, this.longitude], this.zoomIndex);
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           attribution: '© OpenStreetMap contributors'
-        }).addTo(this.map)
+        }).addTo(this.map);
+        // Add zoom control with a custom position
+    L.control.zoom({
+      position: 'bottomright' // Set the zoom control position
+    }).addTo(this.map);
 
-        // this.addMarkers(this.allDisasters)
+        this.map.on('zoomend', () => {
+      if (this.map.getZoom() < minZoomLevel) {
+        this.map.setZoom(minZoomLevel);
+      }
+    });
+// Wait for the map to be fully ready
+this.map.whenReady( async () => {
+      console.log('Map is fully initialized and ready.');
+
+      // Add disaster markers if disasters are loaded
+      if (this.allDisasters && this.allDisasters.length) {
+        this.addDisasterMarkers();
+      }
+      await this.loadCameroonGeoJson();
+
+    });
       } catch (error) {
         console.error('Error initializing the map:', error)
       }
@@ -216,13 +231,7 @@ export default {
       })
     },
 
-    toggleDisasters() {
-      if (this.toggleDisasterMarkers) {
-        this.addDisasterMarkers()
-      } else {
-        this.removeDisasterMarkers()
-      }
-    },
+   
 
     addDisasterMarkers() {
       const onMarkerClick = (zone) => {
@@ -236,22 +245,28 @@ export default {
         // Use the computed property `disasterMarkerStyles`
         this.disasterMarkerStyles.forEach((disaster) => {
           // Create a circle marker with color and intensity from the computed property
-          const marker = L.circleMarker([disaster.latitude, disaster.longitude], {
-            radius: disaster.radius, // Dynamic radius
-            color: disaster.color, // Dynamic color
-            fillColor: disaster.color, // Same color for fill
-            fillOpacity: disaster.intensity, // Dynamic intensity
-            weight: 2 // Border thickness
-          })
+          const icon = L.divIcon({
+        className: 'custom-marker', // Add a custom class for styling
+        html: `<i class="fa fa-bell" style="color:${disaster.color}; font-size: ${10 + disaster.level * 2}px;"></i>`, // Bell icon with dynamic color and size
+        iconSize: [30, 30], // Adjust size if needed
+        iconAnchor: [10, 10], // Anchor at the center
+      });
+  // Create a marker with the custom icon
+  const marker = L.marker([disaster.latitude, disaster.longitude], {
+        icon: icon,
+      });
 
           marker.on('click', () => onMarkerClick(disaster))
 
           // Bind a tooltip to the marker
-          marker.bindTooltip(`<b>${disaster.locality}</b><br>${disaster.description}`, {
-            permanent: false,
-            direction: 'top',
-            offset: [0, -10]
-          })
+      marker.bindTooltip(
+        `<b>${disaster.locality}</b><br>${disaster.description}`,
+        {
+          permanent: false,
+          direction: 'top',
+          offset: [0, -10],
+        }
+      );
 
           // Add the marker to the disaster markers layer
           marker.addTo(this.disasterMarkersLayer)
@@ -262,13 +277,13 @@ export default {
       this.disasterMarkersLayer.addTo(this.map)
     },
 
-    removeDisasterMarkers() {
-      // Check if the disasterMarkersLayer exists and is currently on the map
-      if (this.disasterMarkersLayer && this.map.hasLayer(this.disasterMarkersLayer)) {
-        this.map.removeLayer(this.disasterMarkersLayer)
-        this.disasterMarkersLayer = null // Reset to null after removing
-      }
-    },
+    // removeDisasterMarkers() {
+    //   // Check if the disasterMarkersLayer exists and is currently on the map
+    //   if (this.disasterMarkersLayer && this.map.hasLayer(this.disasterMarkersLayer)) {
+    //     this.map.removeLayer(this.disasterMarkersLayer)
+    //     this.disasterMarkersLayer = null // Reset to null after removing
+    //   }
+    // },
 
     async loadCameroonGeoJson() {
       try {
@@ -342,25 +357,51 @@ export default {
       }
     },
 
-    toggleLoadHydroPolygonGeoJson() {
-      if (this.toggleHydroPolygonGeoJson) {
-        this.loadHydroPolygonGeoJson()
-      } else {
-        this.map.removeLayer(this.NewhydroPolygonLayer)
+//     toggleHydroPolygonLayer(show) {
+//       this.isHydroPolygonVisible = show; // Update visibility state
+
+//       if (this.NewhydroPolygonLayer) {
+//         if (show) {
+//           if (!this.map.hasLayer(this.NewhydroPolygonLayer)) {
+//             this.NewhydroPolygonLayer.addTo(this.map);
+//           }        } else {
+// // Remove the layer from the map if it's currently added
+// if (this.map.hasLayer(this.NewhydroPolygonLayer)) {
+//             this.map.removeLayer(this.NewhydroPolygonLayer);
+//           }        }
+//       } else if (show) {
+//         this.loadHydroPolygonGeoJson();
+//       }
+//     },
+
+removeHydroPolygonLayer() {
+      // Remove the layer from the map if it exists
+      if (this.NewhydroPolygonLayer) {
+        this.map.removeLayer(this.NewhydroPolygonLayer);
+        this.NewhydroPolygonLayer = null;
       }
     },
 
-    toggleLoadCameroonGeoJson() {
-      if (this.toggleCameroon) {
-        this.loadCameroonGeoJson()
-        console.log('cameroun map')
-      } else {
-        this.map.removeLayer(this.cameroonLayer)
-        this.map.removeLayer(this.regionLayer)
-        this.map.removeLayer(this.subRegionLayer)
-        console.log('cameroun map remove')
-      }
-    },
+
+    // toggleLoadHydroPolygonGeoJson() {
+    //   if (this.toggleHydroPolygonGeoJson) {
+    //     this.loadHydroPolygonGeoJson()
+    //   } else {
+    //     this.map.removeLayer(this.NewhydroPolygonLayer)
+    //   }
+    // },
+
+    // toggleLoadCameroonGeoJson() {
+    //   if (this.toggleCameroon) {
+    //     this.loadCameroonGeoJson()
+    //     console.log('cameroun map')
+    //   } else {
+    //     this.map.removeLayer(this.cameroonLayer)
+    //     this.map.removeLayer(this.regionLayer)
+    //     this.map.removeLayer(this.subRegionLayer)
+    //     console.log('cameroun map remove')
+    //   }
+    // },
 
     async loadRegionGeoJson() {
       try {
@@ -527,9 +568,16 @@ export default {
 .checkboxMObile {
   background-color: white;
   position: fixed;
-  top: 300px;
+  top: 200px;
   z-index: 1000;
   right: 30%;
+}
+
+/* Use `::v-deep` to target external library classes */
+::v-deep(.leaflet-control-zoom) {
+  position: relative;
+  right: 500px; /* Adjust as needed */
+  bottom: 80px;
 }
 
 .new-checkbox {

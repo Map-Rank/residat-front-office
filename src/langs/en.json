@@ -1,6 +1,10 @@
 {
   "fr": "French",
+  "choose_your_division_first":"Choose Your Division First",
+  "choose_your_region_first":"Choose Your Region First",
   "en": "English",
+  "Créé le":"Created on",
+  "à":"at",
   "chose_langauge": "Select your preferences language",
   "greeting": "Hello!",
   "farewell": "Goodbye!",
@@ -37,6 +41,7 @@
   "enter_password": "Enter Password",
   "enter_confirm_password": "Enter Confirm Password",
   "next": "next",
+  "time": "Time",
   "specific_information": "Specific Information",
   "security_information": "Informations de securite",
   "profile_picture": "Profile Picture",
@@ -98,8 +103,11 @@
   "submit_request": "Submit my request",
   "settings_privacy": "Settings & Privacy",
   "logout": "Logout",
+  "confirm_logout": "Are you sure you want to logout ?",
+  "delete_account": "Delete account",
 
   "your_editing_post": "Your Editing a post",
+  "deleting_post": "Do you want to delete this post ?",
   "share_your_thoughts": "Share your thoughts",
   "attach_images_optional": "Attach images (optional)",
   "add_image": "Add Image",
@@ -215,6 +223,7 @@
   "header_burger_menu": "Menu",
   "header_close_menu": "Close Menu",
   "translate": "Translate",
-  "show_zone_stats": "Show Zone Statistics"
+  "show_zone_stats": "Show Zone Statistics",
+  "following_count":"following"
 
 }

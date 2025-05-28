@@ -15,11 +15,12 @@
     "docs:dev": "vitepress dev docs"
   },
   "dependencies": {
+    "@kalimahapps/vue-icons": "^1.7.1",
     "@vee-validate/rules": "^4.11.8",
     "@vue-leaflet/vue-leaflet": "^0.10.1",
     "autoprefixer": "^10.4.16",
     "axios": "^1.6.2",
-    "chart.js": "^4.4.1",
+    "chart.js": "^4.4.8",
     "chartjs-adapter-date-fns": "^3.0.0",
     "chartjs-plugin-annotation": "^3.0.1",
     "date-fns": "^3.3.1",
@@ -33,6 +34,7 @@
     "vee-validate": "^4.11.8",
     "vue": "^3.3.4",
     "vue-advanced-cropper": "^2.8.9",
+    "vue-chartjs": "^5.3.2",
     "vue-final-modal": "^4.5.4",
     "vue-i18n": "^9.13.1",
     "vue-inline-svg": "^3.1.2",

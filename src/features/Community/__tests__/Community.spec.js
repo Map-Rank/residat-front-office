@@ -51,11 +51,18 @@ describe('Community.vue', () => {
     expect(wrapper.find('h2').text()).toContain('Welcome to residat');
   });
 
-  it('should call fetchPosts on component mount', () => {
-    const fetchPostsSpy = vi.spyOn(wrapper.vm, 'fetchPosts');
-    wrapper.vm.$nextTick(() => {
-      expect(fetchPostsSpy).toHaveBeenCalled();
-    });
+  it('should call fetchPosts when initializeData is executed', async () => {
+    const fetchPostsSpy = vi.spyOn(wrapper.vm, 'fetchPosts'); // Espionne la méthode fetchPosts
+    const initializeDataSpy = vi.spyOn(wrapper.vm, 'initializeData'); // Espionne initializeData
+  
+    // Exécute initializeData
+    await wrapper.vm.initializeData();
+  
+    // Vérifie que initializeData a été appelée
+    expect(initializeDataSpy).toHaveBeenCalled();
+  
+    // Vérifie que fetchPosts a été appelée par initializeData
+    expect(fetchPostsSpy).toHaveBeenCalled();
   });
 
   it('should toggle the mobile filter for zones', async () => {

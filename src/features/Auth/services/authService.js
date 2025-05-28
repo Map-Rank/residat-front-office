@@ -1,4 +1,4 @@
-import { makeApiPostCall } from '@/api/api'
+import { makeApiPostCall, makeApiDeleteCall } from '@/api/api'
 import { LOCAL_STORAGE_KEYS, API_ENDPOINTS } from '@/constants/index.js'
 import { getFcmToken } from '@/firebaseConfig.js'
 // import convertToDate from '../../../utils/dateFormat.js'
@@ -90,7 +90,7 @@ const institutionalRequest = async (
     }
 
     const response = await makeApiPostCall('/create/request', formData, null, true)
-    if (response.data.data.verified === false) {
+    if (response.data.data.verified === false && response.data.data.type === 'COUNCIL') {
       handleEmailNotVerified()
       return
     }
@@ -122,19 +122,15 @@ const UpdateUser = async (userData, authStore, onSuccess, onError) => {
   try {
     const formData = new FormData()
     const userId = userData.id
-    // console.log(userData)
-    console.log('==============> this is the token' + userData.token)
+    const token = userData.token || localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
 
-    // Append user data to formData
     formData.append('first_name', userData.first_name)
     formData.append('last_name', userData.last_name)
-    // formData.append('email', userData.email)
     formData.append('phone', userData.phone)
     formData.append('date_of_birth', userData.date_of_birth)
     formData.append('gender', userData.gender)
-    // formData.append('zone_id', userData.zone)
-    // formData.append('avatar', userData.avatar)
     formData.append('_method', 'PUT')
+    
     if (userData.avatar !== null) {
       formData.append('avatar', userData.avatar)
     }
@@ -142,19 +138,17 @@ const UpdateUser = async (userData, authStore, onSuccess, onError) => {
     const response = await makeApiPostCall(
       `${API_ENDPOINTS.UpdateUser}/${userId}`,
       formData,
-      userData.token,
+      token,  // Utiliser le token de userData ou du localStorage
       true
     )
+
     const user = response.data.data
-    console.log('============> register update user !!!!')
 
     authStore.setUser(user)
     localStorage.setItem(LOCAL_STORAGE_KEYS.userInfo, JSON.stringify(user))
-    // localStorage.setItem(LOCAL_STORAGE_KEYS.authToken, userData.token)
     localStorage.setItem(LOCAL_STORAGE_KEYS.isloggedIn, true)
+    
     onSuccess()
-    // }
-
     return response
   } catch (error) {
     onError(error.response.data.errors)
@@ -181,7 +175,7 @@ const loginUser = async (
     }
 
     const response = await makeApiPostCall(API_ENDPOINTS.login, formData, null, true)
-    if (response.data.data.verified === false) {
+    if (response.data.data.verified === false && response.data.data.type === 'COUNCIL') {
       handleEmailNotVerified()
       return
     }
@@ -295,6 +289,19 @@ const ResetPassword = async (emailFromUrl, userData, token, onSuccess, onError) 
   }
 }
 
+const deleteOwnAccount = async () => {
+
+  const token = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+
+  try {
+    const response = await makeApiDeleteCall(`${API_ENDPOINTS.deleteYourAccount}`, token)
+    console.log('delete event sucess 1!!!  ' + response.data)
+  } catch (error) {
+    console.error('Error deleting event:', error)
+    throw error
+  }
+}
+
 export {
   registerUser,
   institutionalRequest,
@@ -303,5 +310,6 @@ export {
   UpdateUser,
   UpdatePassword,
   ForgotPassword,
-  ResetPassword
+  ResetPassword,
+  deleteOwnAccount
 }

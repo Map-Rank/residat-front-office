@@ -18,6 +18,10 @@ export const API_ENDPOINTS = {
     createFeedback: '/create-feedback',
     createRequest: '/create/request',
     disasters: '/disasters',
+    packages: '/packages',
+    predictions: '/predictions',
+    packageDetails: (id) => `/packages/${id}`, // For fetching package by ID
+
     // other endpoints...
   };
   

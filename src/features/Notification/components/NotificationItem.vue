@@ -3,8 +3,11 @@
     <img :src="notification.banner" alt="User Avatar" class="w-12 h-12 rounded-full mr-4">
     <div class="flex-grow">
       <p class="font-semibold">{{ notification.titre_en }}</p>
-      <p class="text-sm text-gray-500">{{ notification.created_at }}</p>
-    
+      <p class="text-[0.69rem] text-gray-500"><span class=""> {{ $t('Créé le') }} </span >  {{ formattedDate }} <span>{{ $t('à') }}</span> {{ formattedTime }}</p>
+    <div class="flex md:gap-6 gap-3">
+      <p class="font-semibold text-[0.8rem]  text-gray-700">By: <span class=" text-gray-800">{{ notification.user.first_name }}</span> </p>
+    <p  class="font-semibold text-[0.8rem]  text-gray-700"> Zone: <span class=" text-gray-800">{{ notification.zone.name }}</span></p>
+  </div>
       <p class="text-sm text-gray-700 mt-2">{{ notification.content_en }}</p>
     </div>
     <div class="relative" v-if="isInstitution">
@@ -48,7 +51,29 @@ export default {
     isNew() {
       return this.notification.isNew;
     },
-  },
+    formattedDate() {
+      const date = new Date(this.notification.created_at);
+      const dateOptions = {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      };
+      return date.toLocaleDateString('fr-FR', dateOptions);
+    },
+    formattedTime(){
+      const date = new Date(this.notification.created_at);
+
+      const timeOptions = {
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+      };
+    return  date.toLocaleTimeString('fr-FR', timeOptions);
+
+    }
+      
+      
+    },
   methods: {
     toggleMenu() {
       this.showMenu = !this.showMenu;

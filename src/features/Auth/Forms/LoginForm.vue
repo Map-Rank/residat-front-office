@@ -47,7 +47,8 @@
             class="w-full py-2 focus:outline-none px-4 text-gray-800 transition-colors duration-200 ease-in-out block flex-1 min-w-0"
             :placeholder="$t('password')"
           ></vee-field>
-          <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none">
+          <button @click="togglePasswordVisibility" type="button" class="p-2 focus:outline-none ">
+            <i :class="showPassword ? 'fas fa-eye' : 'fas fa-eye-slash'"></i>
             <!-- Toggle Password Visibility Icons -->
           </button>
         </div>

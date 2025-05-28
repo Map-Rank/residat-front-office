@@ -8,8 +8,9 @@
         v-if="!isLoading && userPost"
         :profile-image-url="''"
         :profileName="`${userPost.first_name} ${userPost.last_name}`"
-        :followersCount="0"
+        :followersCount="`${userPost.follower_count}`"
         :profileImageUrl="userPost.avatar"
+        :followingCount="`${userPost.following_count}`"
         :postsCount="posts.length"
         :isCurrentUser="true"
       />
@@ -29,6 +30,7 @@
             :joinDate="formatDate(userPost.created_at)"
             :website="'your-website-url.com'"
             :showUpdateProfile="true"
+            :deleteAccount="true"
           />
         </aside>
 

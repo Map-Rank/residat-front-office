@@ -1,157 +1,133 @@
 <template>
   <MapComponent
-    class="fixed mt-[80px] top-0 left-0 w-full h-full z-0"
+    class="fixed mt-[80px] top-0 left-0  z-0"
     :latitude="dashboard.latitude"
     :longitude="dashboard.longitude"
     :zoomIndex="dashboard.zoomIndex"
     @zoneClick="zoneClick"
     @disasterClick="disasterClick"
     :show-layers="showLayers"
+    ref="mapComponent"
+
   />
 
-  <div class="w-full optionButton px-5 md:hidden block">
-    <div class="grid grid-cols-2 gap-2">
-      <button-ui
-        :label="$t('Zone statistics')"
-        :color="'text-white'"
-        :textCss="'text-white font-bold text-center text-[6px]'"
-        :customCss="'bg-secondary-normal flex justify-center rounded-lg p-1'"
-        @clickButton="toggleZoneStatisticsMobile"
-      >
-      </button-ui>
-      <button-ui
-        :label="$t('Navigate by Zone')"
-        :color="'text-white'"
-        :textCss="'text-white font-bold text-center'"
-        :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-        @clickButton="toggleNavigationZone"
-      >
-      </button-ui>
-      <button-ui
-        :label="$t('layers')"
-        :color="'text-white'"
-        :textCss="'text-white font-bold text-center'"
-        :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-        @clickButton="toggleLayer"
-      >
-      </button-ui>
-    </div>
-  </div>
-  <div
-    v-if="showLayers && isMobileView"
-    class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-    @click.self="toggleLayer"
-  >
-    <button @click="toggleLayer" class="text-white buttonClose rounded p-2 bg-red-500">
-      close
-    </button>
-  </div>
+  <!-- <div class="level-description ">
+<div class="p-3">
+  <div class=""> <span> float risk level </span> <div class="bg-"></div></div>
+  <div> <span> low water level </span></div>
+  <div> <span> normal risk level </span></div>
+  <div> <span> high risk  </span></div>
+  <div> <span> Drought risk  </span></div>
+
+
+
+ 
+</div>
+
+  </div> -->
+
+ 
+  
   <div class="z-10 px-4 md:px-[50px] pt-1 w-full">
-    <!-- web view of show zone statistics -->
-    <div
-      class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1 hidden md:block"
-    >
-      <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-        <div class="hidden md:block mt-2 w-full min-h-[30vh]">
-          <WaterStressChart></WaterStressChart>
-        </div>
+     <!-- web view of show zone statistics -->
+   
 
-        <div class="mt-4">
-          <button-ui
-            :label="$t('show_zone_stats')"
-            :color="'text-white'"
-            :textCss="'text-white font-bold text-center'"
-            :customCss="'bg-secondary-normal flex justify-center rounded-lg hidden md:block'"
-            @clickButton="toggleZoneStatistics()"
-          >
-          </button-ui>
-        </div>
+      <div class="lg:w-[30%]  grid gap-1 left-element md:block hidden">
+        <transition name="fade-slide">
 
-        <div :class="{ hidden: isZoneStatistics }">
-          <div class="mt-2 max-h-[30vh] md:w-full">
-            <ZoneInfo :zone="zone" />
+          <div class="   min-h-[30vh] relative bottom-[40px] container w-[600px]  h-full max-h-[calc(93vh-10px)] overflow-y-auto bg-red-400 " v-if="showWaterStressChart">
+            <button @click="closeWaterStressChart" class="absolute top-[28px] right-9 m-2 text-2xl bg-white  rounded-full">
+            ✖
+            </button>
+        
+            <WaterStressChart
+              :locality="selectedLocality"
+              :data="apiResponseData"
+              ></WaterStressChart>
           </div>
 
-          <div class="mt-4 post-slider">
-            <post-slider :posts="posts" status="RECENT" />
-          </div>
-        </div>
-      </div>
-
-      <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
-        <div :class="{ hidden: !displayStatistics }">
-          <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
-        </div>
-      </div>
-    </div>
-
-    <!-- mobile view of show zone statistics -->
-    <div
-      v-if="isZoneStatisticsMObile && isMobileView"
-      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-      @click.self="toggleZoneStatisticsMobile"
-    >
-      <div
-        class="grid mt-4 space-y-4 md:space-y-0 md:flex md:space-x-4 row-auto md:justify-between md:h-10 z-1"
-      >
-        <div class="lg:w-1/4 md:w-3/4 grid gap-1 left-element">
-          <div class="hidden md:block mt-2 w-full min-h-[30vh]">
-            <WaterStressChart></WaterStressChart>
-          </div>
-
-          <div>
-            <div class="mt-2 max-h-[30vh] md:w-full">
-              <ZoneInfo :zone="zone" />
-            </div>
-
-            <div class="mt-7">
-              <post-slider :posts="posts" status="RECENT" />
-            </div>
-          </div>
-        </div>
-
+        </transition>
         <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
-          <div :class="{ hidden: !displayStatistics }">
-            <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
-          </div>
+            <div :class="{ hidden: !displayStatistics }">
+              <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+            </div>
         </div>
       </div>
-      <button
-        @click="toggleZoneStatisticsMobile"
-        class="text-white buttonClose rounded p-2 bg-red-500"
-      >
-        close
-      </button>
+
+    <!-- mobile view -->
+      <div 
+      class="lg:w-[30%]  grid gap-1 left-element md:hidden block">
+        <transition name="fade-slide">
+
+        <div 
+        class="water-stress-chart-container"
+      :style="{ height: currentHeight + 'px' }"
+      v-if="showWaterStressChart"
+      @touchstart="handleTouchStart"
+      @touchmove="handleTouchMove"
+      @touchend="handleTouchEnd"
+         >
+          <button @click="closeWaterStressChart" class="absolute top-2 right-9 m-2 text-2xl bg-white  rounded-full">
+           ✖
+          </button>
+          <div> <FlFilledLineHorizontal1/> <span class="material-symbols-outlined">
+</span></div>
+          
+
+<WaterStressChart
+              :locality="selectedLocality"
+              :data="apiResponseData"
+              ></WaterStressChart>
+        </div>
+
+         </transition>
+        <div class="lg:w-1/4" v-if="!isLoadingMap && inSubDivision">
+            <div :class="{ hidden: !displayStatistics }">
+              <BaseDropdown @selectedOptionValue="updateReportType" :options="hazard" />
+        </div>
+      </div>
     </div>
 
-    <!-- <div class="lg:w-1/3 hidden lg:block" v-if="!isLoadingMap && inSubDivision">
-        <div class="md:block">
-          <div class="">
-            <div class="">
-              <button-ui
-                :label="$t('key_actors')"
-                :color="'text-white'"
-                :textCss="'text-white font-bold text-center'"
-                :customCss="'bg-secondary-normal flex justify-center rounded-lg'"
-                @clickButton="toggleShowAllActors()"
-              >
-              </button-ui>
-            </div>
-          </div>
-        </div>
-      </div> -->
+    
+  
+     <div class="moreButton " >  
 
-    <!-- web version of show navigation zone -->
+  <button-ui
+        :label="$t('More options')"
+        :color="'text-white'"
+        :textCss="'text-white font-bold text-center'"
+        :customCss="'bg-secondary-normal flex justify-center rounded-lg shadow'"
+        @clickButton="toggleOption"
+      >
+    </button-ui>
+</div>
     <div
-      class="flex flex-row flex-wrap gap-2 bottom-72 right-40 relative hidden sm:hidden md:block"
+    v-if="showMore"
+      class=" navigator  h-full md:max-h-[calc(100vh-10px)] max-h-[100hv]  flex flex-col gap-2 relative bg-white items-center justify-center w-[28%] overflow-y-auto  pt-[60px]"
     >
+    <button @click="closeMoreOption" class="closeButton top-10 right-9 m-2 text-2xl  rounded-full">
+        ✖
+      </button>
+    <div class=" mt-[330px]">
+      <label for="hydroPolygonLayer">Show Hydro Polygon Layer</label>
+
+      <label class="flex items-center">
+          <input
+            type="checkbox"
+            v-model="showHydroPolygonLayer"
+            @change="toggleHydroPolygonLayer"
+            class="form-checkbox h-4 w-4 text-blue-600"
+          />
+          <span class="ml-2 text-sm">Hydrography map</span>
+        </label>
+    </div>
       <div
         class="flex md:col-span-6"
-        :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
+        :class="!inSubDivision ? 'lg:col-span-5 min-h-[100vh]' : 'lg:col-span-5 '"
       ></div>
 
-      <div class="col-span-1 md:col-span-2 lg:col-span-2">
-        <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigator mt-8">
+      <div class="col-span-1 md:col-span-2 lg:col-span-2 w-[260px]">
+        <div v-if="!isZoneLoading" class="p-4 bg-white rounded shadow  ">
           <zone-post-filter
             :title="$t('select_zone_by_location')"
             :props_regions="default_regions"
@@ -163,50 +139,32 @@
 
           <ButtonUi
             :label="$t('search')"
-            customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
+            customCss="bg-secondary-normal text-center flex justify-center  px-10 py-3"
             textCss="text-center text-white"
             @clickButton="searchMap"
           ></ButtonUi>
         </div>
       </div>
-    </div>
+      <div class="md:w-[80%] w-[76%] " >
+  <div class="mt-8 mb-24">
+    
+    <p class="text-xl font-bold flex justify-center"> show zone stastic</p>
+         
+        
+  <div :class="{  isZoneStatistics }">
+          <div class="mt-2 max-h-[30vh] md:w-full">
+            <ZoneInfo :zone="zone" />
+          </div>
 
-    <!-- mobile view show navigation zone -->
-    <div
-      v-if="ShowNavigationZone && isMobileView"
-      class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-      @click.self="toggleNavigationZone"
-    >
-      <div class="flex flex-row flex-wrap gap-2">
-        <div
-          class="flex md:col-span-6"
-          :class="!inSubDivision ? 'lg:col-span-5 min-h-[90vh]' : 'lg:col-span-5 '"
-        ></div>
-
-        <div class="col-span-1 md:col-span-2 lg:col-span-2">
-          <div v-if="!isZoneLoading" class="md:mb-4 p-4 bg-white rounded shadow navigator mt-8">
-            <zone-post-filter
-              :title="$t('select_zone_by_location')"
-              :props_regions="default_regions"
-              :props_divisions="default_divisions"
-              :props_sub_divisions="default_sub_divisions"
-              :filterPostFunctionWithId="selectZoneToSearch"
-              :updateZone="updateZone"
-            ></zone-post-filter>
-
-            <ButtonUi
-              :label="$t('search')"
-              customCss="bg-secondary-normal text-center flex justify-center px-10 py-3"
-              textCss="text-center text-white"
-              @clickButton="searchMap"
-            ></ButtonUi>
+          <div class="mt-4 post-slider">
+            <post-slider :posts="posts" status="RECENT" />
           </div>
         </div>
-      </div>
-      <button @click="toggleNavigationZone" class="text-white buttonClose rounded p-2 bg-red-500">
-        Close
-      </button>
+</div>
     </div>
+  </div> 
+
+   
   </div>
 </template>
 
@@ -230,7 +188,7 @@ import ZoneInfo from '@/features/DashBaord/components/ZoneInfo.vue'
 import PostSlider from '@/features/DashBaord/components/PostSlider.vue'
 import { getFilterPosts } from '@/features/Post/services/postService.js'
 import { useDashboardStore } from '@/stores/dashboardStore.js'
-
+import { fetchWaterStressData } from '../../services/graphInfo.js'
 export default {
   name: 'DashBoardView',
 
@@ -330,6 +288,7 @@ export default {
       ShowNavigationZone: false,
       showLayers: false,
       graphLabel: '',
+      showHydroPolygonLayer: false, // To control visibility of hydro layer
 
       posts: null,
       zone: null,
@@ -340,8 +299,16 @@ export default {
       zoneMapToSearch: null,
       errorImage: '\\assets\\images\\DashBoard\\error-map.svg',
       selectedZone: null,
+      selectedLocality: '',
       defaultMapSize: 1,
-      isSubDivisionGraph: false,
+      showWaterStressChart: false,
+      currentHeight: window.innerHeight * 0.3, // Start with 30% of viewport height
+      minHeight: window.innerHeight * 0.3, // Minimum height
+      maxHeight: window.innerHeight * 1.3, // Maximum height set to 140vh      // maxHeight: 'auto', // Maximum height
+      isDragging: false, // Track drag state
+      startY: 0, // Starting Y position for drag
+      startHeight: 0, // Starting height of the div
+
       isZoneStatistics: true,
       isZoneStatisticsMObile: false,
       isKeyActorsHidden: false,
@@ -350,8 +317,13 @@ export default {
       isErrorLoadMap: false,
       displayStatistics: false,
       reportType: null,
+      apiResponseData: [],
+      loading: false,
+      error: null,
       inSubDivision: true,
       isZoneLoading: false,
+      showMore: false,
+  
       modalStates: {
         healthVisible: false,
         agricultureVisible: false,
@@ -437,15 +409,15 @@ export default {
         const zones = await getZones(2, null)
         this.zoneMarkers.push(zones)
         // this.zoneMarkers = await getZones(2,null);
-        console.log('this is zone mark lengh  ' + this.zoneMarkers)
+        // console.log('this is zone mark lengh  ' + this.zoneMarkers)
         // console.log('Type of zoneMarkeds: ' + typeof this.zoneMarkeds);
       } catch (error) {
         console.error('Failed to fetch zone markers:', error)
       }
     },
     zoneClick(zoneMarked, zoomIndex) {
-      console.log('navigating after zone click')
-      console.log(zoneMarked)
+      // console.log('navigating after zone click')
+      // console.log(zoneMarked)
 
       // Check if zoneMarked is an array and use the first item if it is
       const zone = Array.isArray(zoneMarked) ? zoneMarked[0] : zoneMarked
@@ -462,11 +434,11 @@ export default {
         zoomIndex: zoomIndex ?? 8
       })
       this.$router.push({ name: 'dashboard' })
-      console.log('The router complete')
+      // console.log('The router complete')
     },
-    disasterClick(marker) {
-      console.log('navigating after disaster click')
-      console.log(marker)
+    async disasterClick(marker) {
+      // console.log('navigating after disaster click')
+      // console.log(marker)
 
       const dashboardStore = useDashboardStore()
 
@@ -477,16 +449,61 @@ export default {
         // mapSize: ,
         latitude: marker.latitude,
         longitude: marker.longitude,
+
         zoomIndex: 10
       })
+      this.loading = true;
+      this.error = null;
+      this.showWaterStressChart = true;
+      this.selectedLocality = marker.locality;
 
-      // Navigate to the dashboard without parameters in the URL
-      this.$router.push({ name: 'dashboard' })
+      if (!marker.zone_id) {
+        this.error = 'Zone ID is required.';
+        this.loading = false;
+        return;
+      }
 
-      console.log()
-
-      console.log('The router complete')
+      try {
+        // console.log('Fetching water stress data for zone ID:', marker.zone_id);
+        this.apiResponseData = await fetchWaterStressData(marker.zone_id);
+        
+        // Navigate to the dashboard without parameters in the URL
+        this.$router.push({ name: 'dashboard' });
+      } catch (error) {
+        this.error = error.message || 'Failed to fetch water stress data';
+      } finally {
+        this.loading = false;
+      }
     },
+  
+
+
+    closeWaterStressChart() {
+      this.showWaterStressChart = false;
+    },
+    handleTouchStart(event) {
+      this.isDragging = true;
+      this.startY = event.touches[0].clientY;
+      this.startHeight = this.currentHeight;
+    },
+    handleTouchMove(event) {
+      if (!this.isDragging) return;
+      const deltaY = this.startY - event.touches[0].clientY;
+      let newHeight = this.startHeight + deltaY;
+
+      // Constrain height within min and max bounds
+      if (newHeight < this.minHeight) {
+        newHeight = this.minHeight;
+      } else if (newHeight > this.maxHeight) {
+        newHeight = this.maxHeight;
+      }
+
+      this.currentHeight = newHeight;
+    },
+    handleTouchEnd() {
+      this.isDragging = false;
+    },
+
 
     searchMap() {
       if (this.zoneMapToSearch !== null && this.zoneIdToSearch !== 1) {
@@ -511,7 +528,7 @@ export default {
     },
 
     async selectZoneToSearch(id) {
-      console.log(id)
+      // console.log(id)
       this.zoneIdToSearch = id
     },
 
@@ -527,7 +544,7 @@ export default {
         let response = await getReport(zoneId, this.reportType)
 
         if (response.length == 0) {
-          console.log('data is empty 11111111111111111111111111111')
+          // console.log('data is empty 11111111111111111111111111111')
 
           if (this.zone.vector === null) {
             this.isErrorLoadMap = true
@@ -549,6 +566,7 @@ export default {
         this.isLoadingMap = false
       }
     },
+    
 
     updateReportType(type) {
       if (type) {
@@ -558,7 +576,7 @@ export default {
       }
       if (this.zone.level_id && this.inSubDivision) this.getReport(this.zone.id)
     },
-
+   
     showModal() {
       this.isModalVisible = true
     },
@@ -576,20 +594,27 @@ export default {
         this.$router.go(-1)
       }
     },
+    closeMoreOption(){
+      this.showMore= false; 
+      
+    },
+    toggleOption(){
+      this.showMore= true;
 
+    }, 
+    toggleHydroPolygonLayer() {
+      // this.$refs.mapComponent.toggleHydroPolygonLayer(this.showHydroPolygonLayer);
+      if (this.showHydroPolygonLayer) {
+        this.$refs.mapComponent.loadHydroPolygonGeoJson();
+      } else {
+        this.$refs.mapComponent.removeHydroPolygonLayer();
+      }
+    },
     toggleZoneStatistics() {
       this.isZoneStatistics = !this.isZoneStatistics
     },
-    toggleZoneStatisticsMobile() {
-      this.isZoneStatisticsMObile = !this.isZoneStatisticsMObile
-    },
-    toggleNavigationZone() {
-      this.ShowNavigationZone = !this.ShowNavigationZone
-    },
-    toggleLayer() {
-      this.showLayers = !this.showLayers
-      console.log('bonjour')
-    },
+   
+   
 
     toggleKeyActorsVisibility() {
       this.isKeyActorsHidden = !this.isKeyActorsHidden
@@ -622,6 +647,7 @@ export default {
   height: 100%;
 }
 
+
 .z-0 {
   z-index: 0; /* Map will be behind other elements */
 }
@@ -645,6 +671,11 @@ span {
   padding-left: 10px;
   padding-right: 10px;
 }
+
+.fade-slide-enter-active,
+.fade-slide-leave-active {
+  transition: opacity 0.3s ease, transform 2s ease;
+}
 .goback {
   width: auto;
 }
@@ -653,40 +684,117 @@ span {
 }
 .navigator {
   position: fixed;
-  top: 210px;
+  top: 80px;
+  z-index: 5;
+  right: 0;
+  /* padding-top: 30px;
+  padding-bottom: 50px; */
+}
+.navigatorMobile{
+  position: fixed;
+  top: 90px;
   z-index: 10;
-  right: 2%;
+  right: 10%;
+
+
+}
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
 }
 .left-element {
-  position: absolute;
-  top: 120px;
+  position: fixed;
+  top: 100px;
   z-index: 5;
-  left: 20px;
+  left: 0px;
 }
+/* .new-checkbox {
+ 
+} */
 .buttonClose {
   position: fixed;
   top: 50px;
   right: 40px;
 }
-.new-checkbox {
+/* .new-checkbox {
   background-color: white;
   position: fixed;
   top: 80px;
   z-index: 1000;
   right: 2%;
+} */
+.closeButton{
+  position: fixed;
+  top: 80px;
+  z-index: 1000;
+  right: 2%;
+
+}
+.moreButton{
+  position: fixed;
+  top: 100px;
+  z-index: 3;
+  right: 4%;
+  /* box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); */
+}
+.level-description {
+  background-color: white;
+  position: fixed;
+  top: 80px;
+  z-index: 1000;
+  right: 20%;
+}
+.water-stress-chart-container {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  background-color: white; /* Adjust as needed */
+  min-height: 30vh; /* Minimum height when collapsed */
+  max-height: 130vh; /* Maximum height */
+  border-radius: 30px 30px 0 0; /* Rounded top corners */
+  transition: height 0.03s ease-in-out; /* Smooth height transition */
+  overflow-y: hidden; /* Scrollable content */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  z-index: 1000; /* Ensure it's above other elements */
+}
+
+.water-stress-chart-container::-webkit-scrollbar {
+  width: 8px;
+}
+
+.water-stress-chart-container::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 4px;
+}
+
+.water-stress-chart-container::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Optional: Style drag handle */
+.drag-handle {
+  height: 10px;
+  width: 100px;
+  background-color: #ffffff;
+  margin: 0 auto;
+  border-radius: 5px;
+  cursor: ns-resize;
 }
 @media (max-width: 780px) {
   .navigator {
-    position: fixed;
-    top: 120px;
-    z-index: 10;
-    right: 10%;
+  position: fixed;
+        top: 78px;
+        z-index: 10;
+        right: 0%;
+        width: auto;
+        padding-top: 50px;
+        padding-bottom: 90px;
+
   }
 
-  .optionButton {
-    position: fixed;
-    bottom: 83px;
-    /* z-index: 5; */
-  }
+  
 }
 </style>

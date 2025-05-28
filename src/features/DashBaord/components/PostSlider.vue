@@ -1,5 +1,5 @@
 <template>
-  <div class="relative md:w-[100%] w-[80%] max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
+  <div class="relative w-[100%] max-w-[50vh] bg-gray-200 overflow-hidden rounded-lg">
     <!-- Shimmer Loader -->
     <div v-if="posts === null" class="animate-pulse flex space-x-4 p-8 bg-white">
       <div class="flex-1 space-y-6 py-1">

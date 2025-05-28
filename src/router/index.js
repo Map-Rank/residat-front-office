@@ -32,6 +32,12 @@ import ResetPassword from '../features/Auth/ResetPassword.vue'
 import LandingPage from '@/features/LandingPage/LandingPage.vue'
 import SuccessPage from '@/features/Auth/Pages/SuccessPage.vue'
 import AccountValidation from '../features/Auth/components/AccountValidation.vue'
+import ChoosePack from '../features/Subcription/ChoosePack.vue'
+import PaymentOption from '../features/Subcription/PaymentOption.vue'
+import PaymentMessage from '../features/Subcription/PaymentMessage.vue'
+import SimulationView from "../features/Simulation/SimulationView.vue"
+import Privacy from '../features/Setting/Pages/AccountPreferences/Privacy.vue'
+
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -42,6 +48,8 @@ const router = createRouter({
       component: SocialProfile
       // meta: { requiresAuth: true }
     },
+    
+   
     {
       path: '/notification',
       name: 'notification',
@@ -59,6 +67,27 @@ const router = createRouter({
       component: BroadcastNotification,
       meta: { requiresAuth: true }
     },
+    {
+      path: '/privacy-policy',
+      name: 'PrivacyPolicy',
+      component: Privacy,
+    },
+    {
+      path: '/choose-your-pack',
+      name: 'ChoosePack',
+      component: ChoosePack,
+    },
+    
+    {
+      path: '/payment/:id',
+      name: 'PaymentOption',
+      component: PaymentOption
+    },
+    {
+      path: '/payment-message',
+      name: 'PaymentMessage',
+      component: PaymentMessage
+    },
 
     {
       path: '/vulnerabilities',
@@ -72,6 +101,20 @@ const router = createRouter({
       component: EventView
       // meta: { requiresAuth: true }
     },
+
+    {
+      path: '/simulation/:zoneId?/:parentId?/:zoneName?/:mapSize?',
+      name: 'simulation',
+      component: SimulationView,
+      // meta: { requiresAuth: true },
+      props: (route) => ({
+        zoneId: route.params.zoneId || 1,
+        parentId: route.params.parentId,
+        zoneName: route.params.zoneName,
+        mapSize: route.params.mapSize
+      }),
+    },
+
     {
       path: '/setting',
       name: 'setting',

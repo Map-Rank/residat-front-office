@@ -15,19 +15,15 @@
   <script>
   export default {
     name: 'ConfirmationModal',
-    props: {
-      message: {
-        type: String,
-        default: 'Are you sure you want to proceed?'
-      },
-    },
     data() {
       return {
-        isVisible: false
+        isVisible: false,
+        message:''
       };
     },
     methods: {
-      show() {
+      show(message) {
+        this.message = message;
         this.isVisible = true;
       },
       hide() {

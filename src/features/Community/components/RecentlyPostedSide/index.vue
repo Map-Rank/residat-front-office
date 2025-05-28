@@ -43,8 +43,9 @@ export default {
       sectionTitle: this.$t('section_title_recently_posted')
     }
   },
-  computed: {
+  onMounted: {
     limitedPosts() {
+      console.log();
       return this.recentPosts.slice(0, this.maxPosts);
     }
   },

@@ -1,6 +1,6 @@
 <!-- src/pages/Notifications.vue -->
 <template>
-  <div class="container mx-auto p-4">
+  <div class="container mx-auto px-4 pt-24 pb-10">
     <div class="flex justify-between items-center mb-4">
       <h1 class="text-2xl font-bold">{{ isInstitution ? "Inbox" : "Inbox" }}</h1>
       <button
@@ -52,6 +52,11 @@
         </div>
       </div>
     </div>
+
+    <!-- <button @click="recentNotif" class="bg-white text-black p-6"  >recent post</button> -->
+    <div >
+      <!-- <RecentNotification/>  -->
+    </div>
   </div>
 </template>
 
@@ -60,25 +65,36 @@ import NotificationItem from "../Notification/components/NotificationItem.vue";
 import AvatarEventShimmer from "@/components/common/ShimmerLoading/AvatarPostShimmer.vue";
 import { getNotifications } from "@/services/notificationService.js";
 import useAuthStore from "@/stores/auth.js";
-
+// import { sendNewNotification } from "../../main";
+// import RecentNotification from "../Notification/components/RecentNotification.vue";
 export default {
   name: "ChatRoomView",
   components: {
     NotificationItem,
     AvatarEventShimmer,
+    // RecentNotification
   },
 
-  async created() {
+  async mounted() {
     try {
       await this.fetchNotifications();
-      // const authStore = useAuthStore();
+      console.log('all notification', this.notifications)
 
-      // const user = authStore.user;
-      // this.isInstitution = user.role[0].name == "admin" ? true : false;
     } catch (error) {
       console.error("Failed to load posts:", error);
     }
+
+   
   },
+//  async beforedmounted(){
+//   try {
+//       await this.fetchNewNotifications();
+//       console.log('all notification', this.notifications)
+
+//     } catch (error) {
+//       console.error("Failed to load posts:", error);
+//     }
+//  },
   data() {
     const authStore = useAuthStore();
     return {
@@ -88,7 +104,10 @@ export default {
       activeTab: "important",
       isLoading: true,
       notifications: [],
-      institutionalNotifications: [],
+      showRecentNotif: false,
+
+      // institutionalNotifications: [],
+      institutionalNotifications: null,
     };
   },
   computed: {
@@ -97,6 +116,10 @@ export default {
     },
   },
   methods: {
+recentNotif(){
+  this.showRecentNotif=!this.showRecentNotif
+},
+
     createNotification() {
       this.$router.push({ name: "broadcast-notification" });
     },
@@ -112,16 +135,23 @@ export default {
         }
       );
     },
+
     async fetchNotifications() {
       this.hasNewEvents = false;
       this.isLoading = true;
+      // const lastNotification = JSON.parse(localStorage.getItem('lastNotification'));
+      // console.log("Last stored notification:", lastNotification);
       try {
-        this.notifications = await getNotifications(0, 10, this.authStore.user.token);
+        let token = this.authStore.user.token        
+        this.notifications = await getNotifications(0, 10, token, 0);
         this.institutionalNotifications = await getNotifications(
           0,
           10,
           this.authStore.user.token
         );
+        console.log('all notification', this.notifications)
+      //  Store the last notification in localStorage
+      
       } catch (error) {
         console.error("Failed to load notifications:", error);
         this.showPageRefresh = true;
@@ -129,6 +159,10 @@ export default {
         this.isLoading = false;
       }
     },
+    
+
+
+
   },
 };
 </script>

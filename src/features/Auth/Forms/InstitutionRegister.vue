@@ -274,7 +274,7 @@ eslint-disable vue/no-parsing-error
               />
             </div>
 
-            <div v-if="_to_cover > 2" class="w-1/2">
+            <div v-if="zone_to_cover > 2" class="w-1/2">
               <label class="inline-block mb-2">{{ $t('choose_your_division') }}</label>
               <div v-if="isDivisionLoading" class="flex h-full justify-center">
                 <LoadingIndicator />
@@ -282,7 +282,7 @@ eslint-disable vue/no-parsing-error
               <BaseDropdown
                 v-if="!isLoading && !isDivisionLoading"
                 @selectedOptionId="handleSelectedDivisionIdChange"
-                :options="divisions"
+                :options="region_id ? divisions : [{ id: 0, name: $t('choose_your_region_first') }]"
                 @functionIdParams="getSub_divisions"
               />
             </div>
@@ -296,7 +296,7 @@ eslint-disable vue/no-parsing-error
             <BaseDropdown
               @selectedOptionId="handleSelectedSubdivisionIdChange"
               v-if="!isLoading && !isSubdivisionLoading"
-              :options="sub_divisions"
+              :options="division_id ? sub_divisions : [{ id: 0, name: $t('choose_your_division_first') }]"
             />
           </div>
         </div>
@@ -653,15 +653,21 @@ export default {
       this.currentStep = this.currentStep === this.step_2 ? this.step_1 : this.step_2
     },
 
+    // handleEmailNotVerified() {
+    //   this.toast.error('Check your email to verifie your mail')
+    //   this.$router.push({
+    //     name: 'verification-account',
+    //     params: {
+    //       heading: 'Welcome to Residat!',
+    //       message:
+    //         'As an institutional account, some verifications needs to be done on your account. Our administrative service will contact you and work you through this easy process. Thanks for choosing Residat.'
+    //     }
+    //   })
+    // },
     handleEmailNotVerified() {
-      this.toast.error('Check your email to verifie your mail')
+      // this.toast.error('Check your email to verifie your mail')
       this.$router.push({
-        name: 'verification-account',
-        params: {
-          heading: 'Welcome to Residat!',
-          message:
-            'As an institutional account, some verifications needs to be done on your account. Our administrative service will contact you and work you through this easy process. Thanks for choosing Residat.'
-        }
+        name: 'ChoosePack',
       })
     },
 
@@ -694,7 +700,9 @@ export default {
         //   this.toast.error(this.$t("please_select_your_subdivision"));
         //   return;
         // }
-
+        this.$router.push({
+        name: 'ChoosePack',
+      })
         this.toast.info(this.$t('please_wait_creating_account'))
 
         try {
