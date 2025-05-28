@@ -90,7 +90,7 @@ class ServiceWorkerManager {
       this.setupPushHandlers()
       this.setupApiBaseUrl();
 
-            // this.setApiBaseUrl(apiBaseUrl);
+      // this.setApiBaseUrl(apiBaseUrl);
 
 
       // Handle service worker updates
@@ -125,7 +125,7 @@ class ServiceWorkerManager {
       console.log('Sending API Base URL to Service Worker:', apiBaseUrl);
       navigator.serviceWorker.controller.postMessage({
         type: 'SET_API_BASE_URL',
-       url: apiBaseUrl ,
+        url: apiBaseUrl,
       });
     } else {
       console.warn('No active Service Worker to send API Base URL.');
@@ -207,66 +207,21 @@ swManager.init().catch((error) => {
 })
 
 // Register Service Worker and Notification Permission
-// if ('serviceWorker' in navigator && 'Notification' in window) {
-//   navigator.serviceWorker
-//     .register('/service-worker.js', { scope: '/' })
-//     .then((registration) => {
-//       console.log('Service Worker registered with scope:', registration.scope)
-//       const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-//       console.log('appel set before ' + authToken)
-
-//       // Request notification permission
-//       if (Notification.permission === 'default') {
-//         Notification.requestPermission().then((permission) => {
-//           console.log(`Notification permission: ${permission}`)
-//         })
-//       }
-
-//       // Send auth token to Service Worker
-//       // const authToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
-//       console.log('appel set before ' + authToken)
-
-//       if (authToken && navigator.serviceWorker.controller) {
-//         console.log('appel set token ' + authToken)
-
-//         navigator.serviceWorker.controller.postMessage({
-//           action: 'setAuthToken',
-//           token: authToken
-//         })
-//       }
-
-//       // Handle Service Worker messages
-//       navigator.serviceWorker.addEventListener('message', (event) => {
-//         const { action } = event.data
-//         if (action === 'showLastNotification') {
-//           console.log('Displaying last notification')
-//         }
-//       })
-
-//       // Set up periodic notification check every 10 minutes
-//       setInterval(
-//         () => {
-//           navigator.serviceWorker.controller?.postMessage({ action: 'fetchNewNotifications' })
-//         },
-//         10 * 60 * 1000
-//       )
-//     })
-//     .catch((error) => console.error('Service Worker registration failed:', error))
-
-//   // Listen for push notifications
-//   navigator.serviceWorker.addEventListener('push', (event) => {
-//     const { title, content_en } = event.data.json()
-//     const options = {
-//       body: content_en,
-//       icon: '/assets/images/smile.png',
-//       badge: '/assets/images/smile.png'
-//     }
-
-//     if (Notification.permission === 'granted') {
-//       event.waitUntil(self.registration.showNotification(title, options))
-//     }
-//   })
-// }
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('/firebase-messaging-sw.js')
+    .then((registration) => {
+      console.log('Service Worker enregistré avec succès:', registration.scope);
+      // Vérifier les permissions
+      if (Notification.permission === 'default') {
+        Notification.requestPermission().then((permission) => {
+          console.log('Permission de notification:', permission);
+        });
+      }
+    })
+    .catch((error) => {
+      console.error('Erreur lors de l\'enregistrement du Service Worker:', error);
+    });
+}
 
 // Initialize Firebase Cloud Messaging (FCM)
 getFcmToken().then((token) => {

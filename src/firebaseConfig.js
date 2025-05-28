@@ -3,8 +3,8 @@
 
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import {  getToken, onMessage } from 'firebase/messaging';
-import { getMessaging} from 'firebase/messaging/sw'
+import { getToken, onMessage } from 'firebase/messaging';
+import { getMessaging } from 'firebase/messaging/sw'
 import { useToast } from 'vue-toastification';
 
 const vapidKey = import.meta.env.FIREBASE_VAPIDKEY
@@ -42,25 +42,26 @@ navigator.serviceWorker.register('/firebase-messaging-sw.js')
 
 export const getFcmToken = async () => {
   const toast = useToast();
-  
-  
   try {
     const permission = await Notification.requestPermission();
     if (permission === 'granted') {
       console.log('Notification permission granted.');
       const currentToken = await getToken(messaging, { vapidKey: vapidKey });
       if (currentToken) {
-        // console.log('FCM Token:', currentToken);
+        console.log('FCM Token:', currentToken);
+        // Stocker le token dans le localStorage
+        localStorage.setItem('fcm_token', currentToken);
         return currentToken;
       } else {
-        console.log('No registration token available. Request permission to generate one.');
+        console.error('No registration token available.');
+        toast.error('Erreur lors de la génération du token de notification');
       }
     } else {
-      toast.warning('Please enable notification on your browser, in for your to recieve important notificatios');
-      console.log('Unable to get permission to notify.');
+      toast.warning('Veuillez activer les notifications dans votre navigateur');
     }
   } catch (err) {
-    console.log('An error occurred while retrieving token. ', err);
+    console.error('Erreur lors de la récupération du token:', err);
+    toast.error('Erreur lors de la configuration des notifications');
   }
   return null;
 };

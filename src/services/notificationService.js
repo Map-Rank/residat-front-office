@@ -19,12 +19,12 @@ const createNotification = async (notificationData, authStore, onSuccess, onErro
         formData.append('user_id', authStore.user.id)
         formData.append('zone_id', notificationData.zone_id)
 
-      if (notificationData.media) {
-        formData.append('image', notificationData.media);
-      }
-      
+        if (notificationData.media) {
+            formData.append('image', notificationData.media);
+        }
 
-      const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
+
+        const localToken = localStorage.getItem(LOCAL_STORAGE_KEYS.authToken)
         console.log("this is the api" + API_ENDPOINTS.notifications)
 
         const response = await makeApiPostCall("/notifications", formData, localToken, true)
@@ -44,15 +44,15 @@ const UpdateNotification = async (notificationId, notificationData, authStore, o
     try {
         const formData = new FormData()
 
-         // Append user data to formData
-         formData.append('titre_en', notificationData.title)
-         formData.append('titre_fr', notificationData.title)
-         formData.append('content_en', notificationData.content)
-         formData.append('content_fr', notificationData.content)
-         formData.append('firebase_id', authStore.user.id)
-         formData.append('user_id', authStore.user.id)
-         formData.append('zone_id', notificationData.zone_id)
-         formData.append('image', notificationData.media)
+        // Append user data to formData
+        formData.append('titre_en', notificationData.title)
+        formData.append('titre_fr', notificationData.title)
+        formData.append('content_en', notificationData.content)
+        formData.append('content_fr', notificationData.content)
+        formData.append('firebase_id', authStore.user.id)
+        formData.append('user_id', authStore.user.id)
+        formData.append('zone_id', notificationData.zone_id)
+        formData.append('image', notificationData.media)
 
         const response = await makeApiPutCall(`${API_ENDPOINTS.notifications}/${notificationId}`, formData, authToken, true)
 
@@ -109,7 +109,7 @@ const getNotifications = async (page, size, token) => {
         size: size.toString(),
         page: page.toString()
     })
-// Add the lastNotificationId to the parameters if it is provided
+    // Add the lastNotificationId to the parameters if it is provided
 
 
     try {
@@ -119,7 +119,7 @@ const getNotifications = async (page, size, token) => {
         )
 
         return response.data.data
-    } 
+    }
     catch (error) {
         console.error('Error fetching posts:', error)
         throw error

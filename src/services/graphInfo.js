@@ -1,10 +1,10 @@
 import { makeApiGetCall } from '@/api/api';
 import { API_ENDPOINTS } from '../constants/apiEndpoints';
-import { format } from 'date-fns';
+import { format, subDays } from 'date-fns';
 
 const fetchWaterStressData = async (zoneId) => {
   try {
-    const formattedDate = format(new Date(), 'yyyy-MM-dd');
+    const formattedDate = format(subDays(new Date(), 2), 'yyyy-MM-dd');
     const url = `${API_ENDPOINTS.predictions}?zone_id=${zoneId}&date=${formattedDate}`;
 
     const res = await makeApiGetCall(url);
